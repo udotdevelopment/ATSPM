@@ -1,0 +1,37 @@
+﻿@model MOE.Common.Models.ViewModel.RouteEdit.ApproachRouteDetailViewModel
+@{
+    ViewBag.Title = "Phases/Directions For Route";
+}
+
+<h2>@Model.RouteName</h2>
+
+<p>
+    @Html.ActionLink("Add Approach", "Create", new { id = Model.RouteID})
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Route
+        </th>
+        <th>
+            Order
+        </th>
+    </tr>
+
+@foreach (var item in Model.Approaches) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Approach.ApproachRouteDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApproachOrder)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.RouteDetailID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.RouteDetailID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.RouteDetailID })
+        </td>
+    </tr>
+}
+
+</table>

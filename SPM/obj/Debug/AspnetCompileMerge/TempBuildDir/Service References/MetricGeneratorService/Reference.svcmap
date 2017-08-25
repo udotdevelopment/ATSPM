@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="080e4fb9-a9be-4fae-8dd6-1e040af74486" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8733/Design_Time_Addresses/MOEWcfServiceLibrary/ChartGenerator/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="ab882573-7a3a-4d72-96d5-4cc0a019a4ff" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/MOEWcfServiceLibrary/ChartGenerator/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="f234a7a7-80fc-454a-8d99-9df7d709cd6e" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/MOEWcfServiceLibrary/ChartGenerator/mex" />
+    <MetadataFile FileName="MOE.Common.Business.WCFServiceLibrary.xsd" MetadataType="Schema" ID="d800f5d5-ef23-4aaf-a18b-839d9e90a2c0" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/MOEWcfServiceLibrary/ChartGenerator/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="40b2df52-30f6-4ab5-bc15-067b8bcd269b" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/MOEWcfServiceLibrary/ChartGenerator/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="bba3d317-9e7b-4936-a293-0f98fa23e8dc" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/MOEWcfServiceLibrary/ChartGenerator/mex" />
+    <MetadataFile FileName="MOE.Common.Business.ApproachVolume.xsd" MetadataType="Schema" ID="2c5f7906-234e-4608-9569-12ffbe7feadd" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/MOEWcfServiceLibrary/ChartGenerator/mex" />
+    <MetadataFile FileName="MOE.Common.Business.Helpers.xsd" MetadataType="Schema" ID="843204ef-7640-4c34-9a55-07521ed26595" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/MOEWcfServiceLibrary/ChartGenerator/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

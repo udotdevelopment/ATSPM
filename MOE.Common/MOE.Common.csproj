@@ -356,6 +356,7 @@
     <Compile Include="Business\WatchDog\WatchDogScan.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Data\MOE1.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -375,10 +376,8 @@
     <Compile Include="Migrations\201611290015315_SPMWatchDog.Designer.cs">
       <DependentUpon>201611290015315_SPMWatchDog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704032058572_Version4.0.1.cs" />
-    <Compile Include="Migrations\201704032058572_Version4.0.1.Designer.cs">
-      <DependentUpon>201704032058572_Version4.0.1.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Migrations\201702162037176_4.0.1.cs" />
+    <Compile Include="Migrations\201702162037176_4.0.1.Designer.cs" />
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\Custom\ActionLog.cs" />
@@ -508,6 +507,7 @@
     <Compile Include="Business\WCFServiceLibrary\SplitMonitorOptions.cs" />
     <Compile Include="Data\LinkPivot.cs">
       <DependentUpon>LinkPivot.xsd</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Data\LinkPivot.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -763,9 +763,7 @@
     <EmbeddedResource Include="Migrations\201611290015315_SPMWatchDog.resx">
       <DependentUpon>201611290015315_SPMWatchDog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704032058572_Version4.0.1.resx">
-      <DependentUpon>201704032058572_Version4.0.1.cs</DependentUpon>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702162037176_4.0.1.resx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\Caseiro.Mvc.PagedList.csproj">

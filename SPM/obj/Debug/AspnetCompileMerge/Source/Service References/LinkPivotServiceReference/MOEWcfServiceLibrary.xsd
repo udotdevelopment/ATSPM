@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/MOEWcfServiceLibrary" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/MOEWcfServiceLibrary" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfAdjustmentObject">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AdjustmentObject" nillable="true" type="tns:AdjustmentObject" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAdjustmentObject" nillable="true" type="tns:ArrayOfAdjustmentObject" />
+  <xs:complexType name="AdjustmentObject">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AOGDownstreamBefore" type="xs:double" />
+      <xs:element minOccurs="0" name="AOGDownstreamPredicted" type="xs:double" />
+      <xs:element minOccurs="0" name="AOGUpstreamBefore" type="xs:double" />
+      <xs:element minOccurs="0" name="AOGUpstreamPredicted" type="xs:double" />
+      <xs:element minOccurs="0" name="Adjustment" type="xs:int" />
+      <xs:element minOccurs="0" name="AogTotalBefore" type="xs:double" />
+      <xs:element minOccurs="0" name="AogTotalPredicted" type="xs:double" />
+      <xs:element minOccurs="0" name="Delta" type="xs:int" />
+      <xs:element minOccurs="0" name="DownSignalId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DownstreamApproachDirection" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DownstreamLocation" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DownstreamVolume" type="xs:double" />
+      <xs:element minOccurs="0" name="LinkNumber" type="xs:int" />
+      <xs:element minOccurs="0" name="Location" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PAOGDownstreamBefore" type="xs:double" />
+      <xs:element minOccurs="0" name="PAOGDownstreamPredicted" type="xs:double" />
+      <xs:element minOccurs="0" name="PAOGUpstreamBefore" type="xs:double" />
+      <xs:element minOccurs="0" name="PAOGUpstreamPredicted" type="xs:double" />
+      <xs:element minOccurs="0" name="PAogTotalBefore" type="xs:double" />
+      <xs:element minOccurs="0" name="PAogTotalPredicted" type="xs:double" />
+      <xs:element minOccurs="0" name="ResultChartLocation" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SignalId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UpstreamApproachDirection" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UpstreamVolume" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AdjustmentObject" nillable="true" type="tns:AdjustmentObject" />
+  <xs:complexType name="DisplayObject">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DownstreamAfterPCDPath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DownstreamAfterTitle" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DownstreamBeforePCDPath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DownstreamBeforeTitle" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExistingAOG" type="xs:double" />
+      <xs:element minOccurs="0" name="ExistingPAOG" type="xs:double" />
+      <xs:element minOccurs="0" name="PredictedAOG" type="xs:double" />
+      <xs:element minOccurs="0" name="PredictedPAOG" type="xs:double" />
+      <xs:element minOccurs="0" name="UpstreamAfterPCDPath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UpstreamAfterTitle" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UpstreamBeforePCDPath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UpstreamBeforeTitle" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DisplayObject" nillable="true" type="tns:DisplayObject" />
+</xs:schema>
