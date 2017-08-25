@@ -1,0 +1,98 @@
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\ATSPM Logo-01.png
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\CheckSignalWithTitle.png
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\close.png
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\NewUDOTLogo.png
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\pointer_shadow.png
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\rightArrow.png
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\SignalPerformanceMetrics.jpg
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\SPMLogo.png
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\2014-9-10 World Congress Measuring performance.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\ActionsByMetric.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\ITE SPM Webinar Part 1 - April 9, 2014.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\ITE SPM Webinar Part 2 - May 7, 2014.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\ITE SPM Webinar Part 3 - June 11, 2014.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\SPM's - Arizona - September 26, 2014.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\SPM's - ITS 3 C  September 5, 2014.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\SPM's - ITS California - October 16, 2014.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\SPM's - Southern District ITE  March 31, 2014.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\ATSPM_CO-WY_ITE___ITS_Rocky_Mtn_10-20-16.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\ATSPM_EDC4_Minnesota_10-25-16.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\ATSPM_ITS_CA_9-21-16.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\ATSPM_UDOT_Conference_11-2-16.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\EmergencyTrafficSignalResponsePlanUDOT5-6-16.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Images\TSMP_UDOT_v1-2_2-5-16.pdf
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Reports\ActionDetail.rdlc
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Reports\ActionsByMetric.rdlc
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\SPM.dll.config
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\SPM.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\SPM.pdb
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Antlr3.Runtime.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Caseiro.Mvc.PagedList.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\EntityFramework.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\EntityFramework.SqlServer.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Security.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Security.Facebook.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Security.Google.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Security.Twitter.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Threading.Tasks.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Threading.Tasks.Extensions.Desktop.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Threading.Tasks.Extensions.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Web.Infrastructure.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\MOE.Common.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\MvcCheckBoxList.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Newtonsoft.Json.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Owin.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\System.Web.Helpers.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\System.Web.Mvc.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\System.Web.Optimization.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\System.Web.Razor.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\System.Web.WebPages.Deployment.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\System.Web.WebPages.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\System.Web.WebPages.Razor.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\WebGrease.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\AlexPilotti.FTPS.Client.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\SharpSnmpLib.Portable.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\SharpSnmpLib.Full.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\MOE.Common.pdb
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Antlr3.Runtime.pdb
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Threading.Tasks.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Threading.Tasks.Extensions.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Threading.Tasks.Extensions.Desktop.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Newtonsoft.Json.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\System.Web.Helpers.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\System.Web.Mvc.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\System.Web.Optimization.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\System.Web.Razor.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\System.Web.WebPages.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\System.Web.WebPages.Deployment.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\System.Web.WebPages.Razor.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\EntityFramework.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\EntityFramework.SqlServer.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Security.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Security.Facebook.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Security.Google.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Security.Twitter.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\AlexPilotti.FTPS.Client.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\SharpSnmpLib.Portable.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\bin\SharpSnmpLib.Full.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\obj\Release\SPM.csprojResolveAssemblyReference.cache
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\obj\Release\RdlCompile.cache
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\obj\Release\RdlCompile.compiled
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\obj\Release\SPM.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\obj\Release\SPM.pdb

@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="MOE" targetNamespace="http://tempuri.org/MOE.xsd" xmlns:mstns="http://tempuri.org/MOE.xsd" xmlns="http://tempuri.org/MOE.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="3" FunctionsComponentName="QueriesTableAdapter_Disabled" GeneratorFunctionsComponentClassName="QueriesTableAdapter_Disabled" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" UserFunctionsComponentName="QueriesTableAdapter_Disabled" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="MOEConnectionString" IsAppSettingsProperty="true" Modifier="Assembly" Name="MOEConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.MOEConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="Region2ConnectionString" IsAppSettingsProperty="true" Modifier="Assembly" Name="Region2ConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.Region2ConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="MOEConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="MOEConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.MOE.Common.Properties.Settings.GlobalReference.Default.MOEConnectionString" Provider="System.Data.SqlClient" />
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="MOEConnectionString1" IsAppSettingsProperty="true" Modifier="Assembly" Name="MOEConnectionString1 (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.MOE.Common.Properties.Settings.GlobalReference.Default.MOEConnectionString1" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="MOE" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="MOE" msprop:Generator_UserDSName="MOE">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="VolumeExport" msprop:Generator_TableClassName="VolumeExportDataTable" msprop:Generator_TableVarName="tableVolumeExport" msprop:Generator_RowChangedName="VolumeExportRowChanged" msprop:Generator_TablePropName="VolumeExport" msprop:Generator_RowDeletingName="VolumeExportRowDeleting" msprop:Generator_RowChangingName="VolumeExportRowChanging" msprop:Generator_RowEvHandlerName="VolumeExportRowChangeEventHandler" msprop:Generator_RowDeletedName="VolumeExportRowDeleted" msprop:Generator_RowClassName="VolumeExportRow" msprop:Generator_UserTableName="VolumeExport" msprop:Generator_RowEvArgName="VolumeExportRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SignalId" msprop:Generator_ColumnVarNameInTable="columnSignalId" msprop:Generator_ColumnPropNameInRow="SignalId" msprop:Generator_ColumnPropNameInTable="SignalIdColumn" msprop:Generator_UserColumnName="SignalId" type="xs:string" minOccurs="0" />
+              <xs:element name="DateTime" msprop:Generator_ColumnVarNameInTable="columnDateTime" msprop:Generator_ColumnPropNameInRow="DateTime" msprop:Generator_ColumnPropNameInTable="DateTimeColumn" msprop:Generator_UserColumnName="DateTime" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="Direction1Volume" msprop:Generator_ColumnVarNameInTable="columnDirection1Volume" msprop:Generator_ColumnPropNameInRow="Direction1Volume" msprop:Generator_ColumnPropNameInTable="Direction1VolumeColumn" msprop:Generator_UserColumnName="Direction1Volume" type="xs:int" minOccurs="0" />
+              <xs:element name="Direction2Volume" msprop:Generator_ColumnVarNameInTable="columnDirection2Volume" msprop:Generator_ColumnPropNameInRow="Direction2Volume" msprop:Generator_ColumnPropNameInTable="Direction2VolumeColumn" msprop:Generator_UserColumnName="Direction2Volume" type="xs:int" minOccurs="0" />
+              <xs:element name="Direction3Volume" msprop:Generator_ColumnVarNameInTable="columnDirection3Volume" msprop:Generator_ColumnPropNameInRow="Direction3Volume" msprop:Generator_ColumnPropNameInTable="Direction3VolumeColumn" msprop:Generator_UserColumnName="Direction3Volume" type="xs:int" minOccurs="0" />
+              <xs:element name="Direction4Volume" msprop:Generator_ColumnVarNameInTable="columnDirection4Volume" msprop:Generator_ColumnPropNameInRow="Direction4Volume" msprop:Generator_ColumnPropNameInTable="Direction4VolumeColumn" msprop:Generator_UserColumnName="Direction4Volume" type="xs:int" minOccurs="0" />
+              <xs:element name="Direction1Directional" msprop:Generator_ColumnVarNameInTable="columnDirection1Directional" msprop:Generator_ColumnPropNameInRow="Direction1Directional" msprop:Generator_ColumnPropNameInTable="Direction1DirectionalColumn" msprop:Generator_UserColumnName="Direction1Directional" type="xs:double" minOccurs="0" />
+              <xs:element name="Direction2Directional" msprop:Generator_ColumnVarNameInTable="columnDirection2Directional" msprop:Generator_ColumnPropNameInRow="Direction2Directional" msprop:Generator_ColumnPropNameInTable="Direction2DirectionalColumn" msprop:Generator_UserColumnName="Direction2Directional" type="xs:double" minOccurs="0" />
+              <xs:element name="Direction3Directional" msprop:Generator_ColumnVarNameInTable="columnDirection3Directional" msprop:Generator_ColumnPropNameInRow="Direction3Directional" msprop:Generator_ColumnPropNameInTable="Direction3DirectionalColumn" msprop:Generator_UserColumnName="Direction3Directional" type="xs:double" minOccurs="0" />
+              <xs:element name="Direction4Directional" msprop:Generator_ColumnVarNameInTable="columnDirection4Directional" msprop:Generator_ColumnPropNameInRow="Direction4Directional" msprop:Generator_ColumnPropNameInTable="Direction4DirectionalColumn" msprop:Generator_UserColumnName="Direction4Directional" type="xs:double" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Archived_Metrics" msprop:Generator_TableClassName="Archived_MetricsDataTable" msprop:Generator_TableVarName="tableArchived_Metrics" msprop:Generator_RowChangedName="Archived_MetricsRowChanged" msprop:Generator_TablePropName="Archived_Metrics" msprop:Generator_RowDeletingName="Archived_MetricsRowDeleting" msprop:Generator_RowChangingName="Archived_MetricsRowChanging" msprop:Generator_RowEvHandlerName="Archived_MetricsRowChangeEventHandler" msprop:Generator_RowDeletedName="Archived_MetricsRowDeleted" msprop:Generator_RowClassName="Archived_MetricsRow" msprop:Generator_UserTableName="Archived_Metrics" msprop:Generator_RowEvArgName="Archived_MetricsRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Timestamp" msprop:Generator_ColumnVarNameInTable="columnTimestamp" msprop:Generator_ColumnPropNameInRow="Timestamp" msprop:Generator_ColumnPropNameInTable="TimestampColumn" msprop:Generator_UserColumnName="Timestamp" type="xs:dateTime" />
+              <xs:element name="Detector" msprop:Generator_ColumnVarNameInTable="columnDetector" msprop:Generator_ColumnPropNameInRow="Detector" msprop:Generator_ColumnPropNameInTable="DetectorColumn" msprop:Generator_UserColumnName="Detector" type="xs:string" />
+              <xs:element name="Volume" msprop:Generator_ColumnVarNameInTable="columnVolume" msprop:Generator_ColumnPropNameInRow="Volume" msprop:Generator_ColumnPropNameInTable="VolumeColumn" msprop:Generator_UserColumnName="Volume" type="xs:int" minOccurs="0" />
+              <xs:element name="speed" msprop:Generator_ColumnVarNameInTable="columnspeed" msprop:Generator_ColumnPropNameInRow="speed" msprop:Generator_ColumnPropNameInTable="speedColumn" msprop:Generator_UserColumnName="speed" type="xs:int" minOccurs="0" />
+              <xs:element name="delay" msprop:Generator_ColumnVarNameInTable="columndelay" msprop:Generator_ColumnPropNameInRow="delay" msprop:Generator_ColumnPropNameInTable="delayColumn" msprop:Generator_UserColumnName="delay" type="xs:int" minOccurs="0" />
+              <xs:element name="AoR" msprop:Generator_ColumnVarNameInTable="columnAoR" msprop:Generator_ColumnPropNameInRow="AoR" msprop:Generator_ColumnPropNameInTable="AoRColumn" msprop:Generator_UserColumnName="AoR" type="xs:int" minOccurs="0" />
+              <xs:element name="BinSize" msprop:Generator_ColumnVarNameInTable="columnBinSize" msprop:Generator_ColumnPropNameInRow="BinSize" msprop:Generator_ColumnPropNameInTable="BinSizeColumn" msprop:Generator_UserColumnName="BinSize" type="xs:int" />
+              <xs:element name="SpeedHits" msprop:Generator_ColumnVarNameInTable="columnSpeedHits" msprop:Generator_ColumnPropNameInRow="SpeedHits" msprop:Generator_ColumnPropNameInTable="SpeedHitsColumn" msprop:Generator_UserColumnName="SpeedHits" type="xs:int" minOccurs="0" />
+              <xs:element name="BinGreenTime" msprop:Generator_ColumnVarNameInTable="columnBinGreenTime" msprop:Generator_ColumnPropNameInRow="BinGreenTime" msprop:Generator_ColumnPropNameInTable="BinGreenTimeColumn" msprop:Generator_UserColumnName="BinGreenTime" type="xs:int" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Controller_Event_Log" msprop:Generator_TableClassName="Controller_Event_LogDataTable" msprop:Generator_TableVarName="tableController_Event_Log" msprop:Generator_RowChangedName="Controller_Event_LogRowChanged" msprop:Generator_TablePropName="Controller_Event_Log" msprop:Generator_RowDeletingName="Controller_Event_LogRowDeleting" msprop:Generator_RowChangingName="Controller_Event_LogRowChanging" msprop:Generator_RowEvHandlerName="Controller_Event_LogRowChangeEventHandler" msprop:Generator_RowDeletedName="Controller_Event_LogRowDeleted" msprop:Generator_RowClassName="Controller_Event_LogRow" msprop:Generator_UserTableName="Controller_Event_Log" msprop:Generator_RowEvArgName="Controller_Event_LogRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SignalID" msprop:Generator_ColumnVarNameInTable="columnSignalID" msprop:Generator_ColumnPropNameInRow="SignalID" msprop:Generator_ColumnPropNameInTable="SignalIDColumn" msprop:Generator_UserColumnName="SignalID" type="xs:string" minOccurs="0" />
+              <xs:element name="Timestamp" msprop:Generator_ColumnVarNameInTable="columnTimestamp" msprop:Generator_ColumnPropNameInRow="Timestamp" msprop:Generator_ColumnPropNameInTable="TimestampColumn" msprop:Generator_UserColumnName="Timestamp" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="EventCode" msprop:Generator_ColumnVarNameInTable="columnEventCode" msprop:Generator_ColumnPropNameInRow="EventCode" msprop:Generator_ColumnPropNameInTable="EventCodeColumn" msprop:Generator_UserColumnName="EventCode" type="xs:int" minOccurs="0" />
+              <xs:element name="EventParam" msprop:Generator_ColumnVarNameInTable="columnEventParam" msprop:Generator_ColumnPropNameInRow="EventParam" msprop:Generator_ColumnPropNameInTable="EventParamColumn" msprop:Generator_UserColumnName="EventParam" type="xs:int" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

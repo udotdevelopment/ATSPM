@@ -1,0 +1,60 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FTPfromAllControllers.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SNMPTimeout" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">350</Value>
+    </Setting>
+    <Setting Name="SNMPRetry" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="ImportAfterFTP" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="SNMPPort" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">161</Value>
+    </Setting>
+    <Setting Name="FTPActiveMode" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="WaitBetweenFiles" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="MaxThreads" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="forceNonParallel" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="WriteToConsole" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DestinationTableName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Controller_Event_Log</Value>
+    </Setting>
+    <Setting Name="EarliestAcceptableDate" Type="System.DateTime" Scope="Application">
+      <Value Profile="(Default)">2010-01-01</Value>
+    </Setting>
+    <Setting Name="BulkCopyBatchSize" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">5000</Value>
+    </Setting>
+    <Setting Name="BulkCopyTimeOut" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="DeleteFiles" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DeleteFilesAfterFTP" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="HostDir" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\Temp\ControllerLogs\</Value>
+    </Setting>
+    <Setting Name="FTPTimeout" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="DealWithMoab" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

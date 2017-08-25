@@ -1,0 +1,76 @@
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Automated Traffic Signal Performance Metrics</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    
+     
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-9 col-sm-12">
+            <img class="img-responsive BrandImage" src="~/Images/ATSPM Logo-01.png" title="Automated Traffic Signal Performance Measures" alt="Automated Traffic Signal Performance Measures icon" />
+        </div><div class="col-md-3 col-sm-12">
+                  <a href="http://udot.utah.gov" class="udotDiv navbar-brand pull-right" title="Utah Department of Transportation">
+                      <img src="~/Images/NewUDOTLogo.png" alt="UDOT Logo" />
+                  </a>
+</div>
+    </div>
+    <div>
+        <nav class="navbar navbar-inverse navbar-static-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+                <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        @{Html.RenderAction("_MainMenuPartial", "Menus");}
+                    </ul>
+                    @if (Request.IsAuthenticated)
+                    {
+                        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "menuItem" })
+                                </li>
+                                <li><a class="menuItem" href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                            </ul>
+                        }
+                    }
+                    else
+                    {
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "menuItem" })</li>
+                            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "menuItem" })</li>
+                        </ul>
+                    }
+                </div>
+            </div>
+        </nav>
+    </div>
+    @RenderBody()
+            <hr />
+            <footer>
+                <p>Automated Traffic Signal Performance Measures Ver 4.0.1</p>
+            </footer>
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

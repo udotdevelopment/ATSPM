@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>AlexFTPS</id>
+    <version>$version$</version>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://www.gnu.org/licenses/lgpl.html</licenseUrl>
+    <projectUrl>http://ftps.codeplex.com</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>AlexFTPS is a free FTP/FTPS client and class library available on any platform supporting the .Net Framework 2.0 or Mono 2.0 and above. It's written to overcome the limits of .Net's System.Net.FTPWebRequest in terms of FTPS support. See http://ftps.codeplex.com for more details!</description>
+    <tags>FTP FTPS</tags>
+  </metadata>
+</package>

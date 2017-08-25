@@ -1,0 +1,42 @@
+﻿@model MOE.Common.Models.ApproachRouteDetail
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ApproachRouteDetail</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Approach.SignalID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Approach.SignalID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApproachRoute.RouteName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApproachRoute.RouteName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApproachOrder)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApproachOrder)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.RouteDetailID }) |
+    @Html.ActionLink("Back to List", "Index", new { id = Model.ApproachRouteId })
+</p>

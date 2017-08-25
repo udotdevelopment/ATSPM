@@ -1,0 +1,782 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{87951632-A7BE-4E04-B62C-C4FC2FC0CD5A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MOE.Common</RootNamespace>
+    <AssemblyName>MOE.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>SecurityRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=16.1.0.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxControlToolkit.16.1.0.0\lib\net40\AjaxControlToolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AlexPilotti.FTPS.Client, Version=1.1.0.27735, Culture=neutral, PublicKeyToken=48316da1e84b328d, processorArchitecture=MSIL">
+      <HintPath>..\packages\AlexFTPS.1.1.0.27735\lib\net20\AlexPilotti.FTPS.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Authentication, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Authentication.1.0.0\lib\net451\Microsoft.AspNetCore.Authentication.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Authentication.Cookies, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Authentication.Cookies.1.0.0\lib\net451\Microsoft.AspNetCore.Authentication.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Cryptography.Internal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Cryptography.Internal.1.0.0\lib\net451\Microsoft.AspNetCore.Cryptography.Internal.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Cryptography.KeyDerivation.1.0.0\lib\net451\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.DataProtection, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.DataProtection.1.0.0\lib\net451\Microsoft.AspNetCore.DataProtection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.DataProtection.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.DataProtection.Abstractions.1.0.0\lib\net451\Microsoft.AspNetCore.DataProtection.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Hosting.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Hosting.Abstractions.1.0.0\lib\net451\Microsoft.AspNetCore.Hosting.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Hosting.Server.Abstractions.1.0.0\lib\net451\Microsoft.AspNetCore.Hosting.Server.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.1.0.0\lib\net451\Microsoft.AspNetCore.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Abstractions.1.0.0\lib\net451\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Extensions.1.0.0\lib\net451\Microsoft.AspNetCore.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Features, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Features.1.0.0\lib\net451\Microsoft.AspNetCore.Http.Features.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Identity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Identity.1.0.0\lib\net451\Microsoft.AspNetCore.Identity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Identity.EntityFrameworkCore.1.0.0\lib\net451\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.WebUtilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.WebUtilities.1.0.0\lib\net451\Microsoft.AspNetCore.WebUtilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.EntityFrameworkCore.1.0.0\lib\net451\Microsoft.EntityFrameworkCore.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Relational, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.EntityFrameworkCore.Relational.1.0.0\lib\net451\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Caching.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Caching.Memory, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Caching.Memory.1.0.0\lib\net451\Microsoft.Extensions.Caching.Memory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.1.0.0\lib\netstandard1.1\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.FileProviders.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.FileProviders.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.FileProviders.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.1.0.0\lib\netstandard1.1\Microsoft.Extensions.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.1.0.0\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.ObjectPool, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.ObjectPool.1.0.0\lib\net451\Microsoft.Extensions.ObjectPool.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Options.1.0.0\lib\netstandard1.0\Microsoft.Extensions.Options.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.1.0.0\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.WebEncoders, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.WebEncoders.1.0.0\lib\netstandard1.0\Microsoft.Extensions.WebEncoders.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Net.Http.Headers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.Headers.1.0.0\lib\netstandard1.1\Microsoft.Net.Http.Headers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.XmlTransform, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvcCheckBoxList, Version=1.4.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvcCheckBoxList.1.4.5\lib\net45\MvcCheckBoxList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NuGet.Core, Version=2.12.0.817, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\NuGet.Core.2.12.0\lib\net40-Client\NuGet.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Remotion.Linq, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Remotion.Linq.2.1.1\lib\net45\Remotion.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpSnmpLib.Full, Version=9.0.20811.1, Culture=neutral, PublicKeyToken=4c00852d3788e005, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lextm.SharpSnmpLib.9.0.2\lib\net45\SharpSnmpLib.Full.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpSnmpLib.Portable, Version=9.0.20811.1, Culture=neutral, PublicKeyToken=4c00852d3788e005, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lextm.SharpSnmpLib.9.0.2\lib\net45\SharpSnmpLib.Portable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.2.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.0.0\lib\portable-net45+win8+wpa81\System.Diagnostics.DiagnosticSource.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Interactive.Async, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Interactive.Async.3.0.0\lib\net45\System.Interactive.Async.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.4.0.0\lib\netstandard1.0\System.Text.Encodings.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.DataVisualization" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.Owin, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.3\lib\net45\System.Web.Http.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Business\ActionLog\ChartData.cs" />
+    <Compile Include="Business\ApproachVolume\MetricInfo.cs" />
+    <Compile Include="Business\BulkCopyOptions.cs" />
+    <Compile Include="Business\ChartFactory.cs" />
+    <Compile Include="Business\ChartTitleFactory.cs" />
+    <Compile Include="Business\CustomReport\CustomChart.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Business\CustomReport\Cycle.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Business\CustomReport\GraphSeries.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Business\CustomReport\Phase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Business\CustomReport\Plan.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Business\CustomReport\Signal.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Business\Helpers\ApproachVolumeTable.cs" />
+    <Compile Include="Business\Helpers\ConfigurationRecord.cs" />
+    <Compile Include="Business\TMC\TMCData.cs" />
+    <Compile Include="Business\TMC\TMCInfo.cs" />
+    <Compile Include="Business\PCD\Cycle.cs" />
+    <Compile Include="Business\PCD\PCDMetric.cs" />
+    <Compile Include="Business\PCD\Phase.cs" />
+    <Compile Include="Business\PCD\PhaseFactory.cs" />
+    <Compile Include="Business\PCD\Plan.cs" />
+    <Compile Include="Business\PCD\PlanFactory.cs" />
+    <Compile Include="Business\TMC\TMCViewModel.cs" />
+    <Compile Include="Business\WatchDog\WatchDogScan.cs" />
+    <Compile Include="Data\MOE.cs">
+      <DependentUpon>MOE.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Data\MOE1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MOE.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Settings.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611101941171_Version4.0.cs" />
+    <Compile Include="Migrations\201611101941171_Version4.0.Designer.cs">
+      <DependentUpon>201611101941171_Version4.0.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611290015315_SPMWatchDog.cs" />
+    <Compile Include="Migrations\201611290015315_SPMWatchDog.Designer.cs">
+      <DependentUpon>201611290015315_SPMWatchDog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702162037176_4.0.1.cs" />
+    <Compile Include="Migrations\201702162037176_4.0.1.Designer.cs" />
+    <Compile Include="Models\Application.cs" />
+    <Compile Include="Models\ApplicationSettings.cs" />
+    <Compile Include="Models\Custom\ActionLog.cs" />
+    <Compile Include="Models\Custom\ApproachRoute.cs" />
+    <Compile Include="Models\DatabaseInitializer.cs" />
+    <Compile Include="Models\DetectionHardware.cs" />
+    <Compile Include="Models\ExternalLink.cs" />
+    <Compile Include="Models\FAQ.cs" />
+    <Compile Include="Models\Repositories\ActionChart.cs" />
+    <Compile Include="Models\Repositories\ApplicationSettingsRepository.cs" />
+    <Compile Include="Models\Repositories\ActionLogRepository.cs" />
+    <Compile Include="Models\Repositories\ApplicationSettingsRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\ActionRepository.cs" />
+    <Compile Include="Models\Repositories\ActionLogRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\ActionRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\ApplicationEventRepository.cs" />
+    <Compile Include="Business\AdvancedSpeedDataExport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Business\AdvancedVolumeDataExport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Business\AnalysisPhase.cs" />
+    <Compile Include="Business\AnalysisPhaseCollection.cs" />
+    <Compile Include="Business\AnalysisPhaseCycle.cs" />
+    <Compile Include="Business\AnalysisPhaseCycleCollection.cs" />
+    <Compile Include="Business\ApproachVolume\Approach.cs" />
+    <Compile Include="Business\ApproachVolume\ApproachVolumeChart.cs" />
+    <Compile Include="Business\ApproachSpeed\AvgSpeedBucket.cs" />
+    <Compile Include="Business\ApproachSpeed\AvgSpeedBucketCollection.cs" />
+    <Compile Include="Business\ControllerEvent.cs" />
+    <Compile Include="Business\ArriveOnRedChart.cs" />
+    <Compile Include="Business\CycleEngine.cs" />
+    <Compile Include="Business\ListToTableConverter.cs" />
+    <Compile Include="Business\LogDecoder\ASC3Decoder.cs" />
+    <Compile Include="Business\PEDDelay\PedHourlyTotal.cs" />
+    <Compile Include="Business\PEDDelay\PedCycle.cs" />
+    <Compile Include="Business\PEDDelay\PEDDelayChart.cs" />
+    <Compile Include="Business\PEDDelay\PedDelaySignal.cs" />
+    <Compile Include="Business\PEDDelay\PedPhase.cs" />
+    <Compile Include="Business\PEDDelay\PedPlan.cs" />
+    <Compile Include="Business\PlanBase.cs" />
+    <Compile Include="Business\Preempt\PreemptCycle.cs" />
+    <Compile Include="Business\Preempt\PreemptCycleEngine.cs" />
+    <Compile Include="Business\Preempt\PreemptDetailChart.cs" />
+    <Compile Include="Business\Preempt\PreemptRequestChart.cs" />
+    <Compile Include="Business\Preempt\PreemptServiceMetric.cs" />
+    <Compile Include="Business\RecordsExport.cs" />
+    <Compile Include="Business\RLM\RedLightMonitorChart.cs" />
+    <Compile Include="Business\RLM\RLMChart.cs" />
+    <Compile Include="Business\RLM\RLMDetectorDataPoint.cs" />
+    <Compile Include="Business\RLM\RLMCycle.cs" />
+    <Compile Include="Business\DelayChart.cs" />
+    <Compile Include="Business\Detector.cs" />
+    <Compile Include="Business\DetectorCollection.cs" />
+    <Compile Include="Business\DetectorDataPoint.cs" />
+    <Compile Include="Business\Export\AdvancedExport.cs" />
+    <Compile Include="Business\Export\Detectors.cs" />
+    <Compile Include="Business\InfoBox.cs" />
+    <Compile Include="Business\Inrix\GraphLine.cs" />
+    <Compile Include="Business\Inrix\Segment.cs" />
+    <Compile Include="Business\Inrix\InrixCumulativeFreqChart.cs" />
+    <Compile Include="Business\Inrix\GroupCollection.cs" />
+    <Compile Include="Business\Inrix\Route.cs" />
+    <Compile Include="Business\Inrix\Group.cs" />
+    <Compile Include="Business\Inrix\TMC.cs" />
+    <Compile Include="Business\Inrix\TMCCollection.cs" />
+    <Compile Include="Business\Inrix\TravelTimeRecord.cs" />
+    <Compile Include="Business\Cycle.cs" />
+    <Compile Include="Business\LinkPivot.cs" />
+    <Compile Include="Business\LinkPivotPair.cs" />
+    <Compile Include="Business\LinkPivotPCDDisplay.cs" />
+    <Compile Include="Business\MaxTimeHDLogClient.cs" />
+    <Compile Include="Business\Pin.cs" />
+    <Compile Include="Business\PinCollection.cs" />
+    <Compile Include="Business\RLM\RLMPlan.cs" />
+    <Compile Include="Business\Plan.cs" />
+    <Compile Include="Business\RLM\RLMPlanCollection.cs" />
+    <Compile Include="Business\PlanCollection.cs" />
+    <Compile Include="Business\RLM\RLMSignalPhaseCollection.cs" />
+    <Compile Include="Business\Route.cs" />
+    <Compile Include="Business\ScriptGenerator\GenerateAddData.cs" />
+    <Compile Include="Business\Signal.cs" />
+    <Compile Include="Business\RLM\RLMSignalPhase.cs" />
+    <Compile Include="Business\ControllerEventLogs.cs" />
+    <Compile Include="Business\SignalControllers\BaseController.cs" />
+    <Compile Include="Business\SignalPhase.cs" />
+    <Compile Include="Business\SignalPhaseCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Business\Signals.cs" />
+    <Compile Include="Business\SiteSecurity\IdentityConfig.cs" />
+    <Compile Include="Business\SiteSecurity\SPMUser.cs" />
+    <Compile Include="Business\SiteSecurity\SPMRole.cs" />
+    <Compile Include="Business\SiteSecurity\SPMUserManager.cs" />
+    <Compile Include="Business\ApproachSpeed\SpeedExportApproachDirection.cs" />
+    <Compile Include="Business\ApproachSpeed\SpeedExportApproachDirectionCollection.cs" />
+    <Compile Include="Business\ApproachSpeed\SpeedExportAvgSpeed.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Business\ApproachSpeed\SpeedExportAvgSpeedBin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Business\ApproachSpeed\SpeedExportAvgSpeedCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Business\SplitFail\SplitFailDetectorActivationCollection.cs" />
+    <Compile Include="Business\SplitFail\SplitFailChart.cs" />
+    <Compile Include="Business\SplitFail\SplitFailDetectorActivation.cs" />
+    <Compile Include="Business\TMC\TMCMetric.cs" />
+    <Compile Include="Business\Volume.cs" />
+    <Compile Include="Business\VolumeCollection.cs" />
+    <Compile Include="Business\WCFServiceLibrary\AoROptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachVolumeOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachDelayOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\DotSizeItem.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PedDelayOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PCDOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PhaseTerminationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PreemptDetailOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PreemptServiceMetricOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PreemptServiceRequestOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\YellowAndRedOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachSpeedOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\SplitFailOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\TMCOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\SplitMonitorOptions.cs" />
+    <Compile Include="Data\LinkPivot.cs">
+      <DependentUpon>LinkPivot.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Data\LinkPivot.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LinkPivot.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607071722420_Initial.cs" />
+    <Compile Include="Migrations\201607071722420_Initial.Designer.cs">
+      <DependentUpon>201607071722420_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Accordian.cs" />
+    <Compile Include="Models\ActionLog.cs" />
+    <Compile Include="Models\Action.cs" />
+    <Compile Include="Models\Agency.cs" />
+    <Compile Include="Models\Alert_Day_Types.cs" />
+    <Compile Include="Models\ApplicationEvent.cs" />
+    <Compile Include="Models\Approach.cs" />
+    <Compile Include="Models\ApproachRoute.cs" />
+    <Compile Include="Models\ApproachRouteDetail.cs" />
+    <Compile Include="Models\Archived_Metrics.cs" />
+    <Compile Include="Models\ControllerType.cs" />
+    <Compile Include="Models\Custom\MetricComment.cs" />
+    <Compile Include="Models\Custom\Approach.cs" />
+    <Compile Include="Models\Custom\Controller_Event_Log.cs" />
+    <Compile Include="Models\Custom\Detectors.cs" />
+    <Compile Include="Models\Custom\Signal.cs" />
+    <Compile Include="Models\Custom\SignalWithDetection.cs" />
+    <Compile Include="Models\DetectionType.cs" />
+    <Compile Include="Models\DetectionTypeGraph_Detectors.cs" />
+    <Compile Include="Models\DetectorMetrics.cs" />
+    <Compile Include="Models\DirectionType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\DownloadAgreement.cs" />
+    <Compile Include="Models\Detector.cs" />
+    <Compile Include="Models\Inrix\Datum.cs" />
+    <Compile Include="Models\Inrix\Group.cs" />
+    <Compile Include="Models\Inrix\Group_Members.cs" />
+    <Compile Include="Models\Inrix\Inrix.cs" />
+    <Compile Include="Models\Inrix\Repositories\DataRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\DataRepositoryFactory.cs" />
+    <Compile Include="Models\Inrix\Repositories\GroupMemberRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\GroupRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\IDataRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\IGroupMemberRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\IGroupRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\IRouteMembersRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\IRouteRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\ISegmentMembersRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\ISegmentRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\ITMCRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\RouteMembersRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\RouteRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\RouteRepositoryFactory.cs" />
+    <Compile Include="Models\Inrix\Repositories\SegmentMembersRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\SegmentRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\TMCRepository.cs" />
+    <Compile Include="Models\Inrix\Route.cs" />
+    <Compile Include="Models\Inrix\Route_Members.cs" />
+    <Compile Include="Models\Inrix\Segment.cs" />
+    <Compile Include="Models\Inrix\Segment_Members.cs" />
+    <Compile Include="Models\Inrix\TMC.cs" />
+    <Compile Include="Models\LaneType.cs" />
+    <Compile Include="Models\LastUpdate.cs" />
+    <Compile Include="Models\Menu.cs" />
+    <Compile Include="Models\DetectorComment.cs" />
+    <Compile Include="Models\Repositories\ApplicationEventRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\ApproachRouteDetailsRepository.cs" />
+    <Compile Include="Models\Repositories\ApproachRouteDetailsRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\ApproachRouteRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\ControllerTypeRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\DetectionHardwareRepository.cs" />
+    <Compile Include="Models\Repositories\DetectionHardwareRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\IApplicationSettingsRepository.cs" />
+    <Compile Include="Models\Repositories\IActionLogRepository.cs" />
+    <Compile Include="Models\Repositories\IApplicationEventRepository.cs" />
+    <Compile Include="Models\Repositories\IDetectionHardwareRepository.cs" />
+    <Compile Include="Models\Repositories\IGenericRepository.cs" />
+    <Compile Include="Models\Repositories\IApproachRouteDetailsRepository.cs" />
+    <Compile Include="Models\Repositories\IDirectionTypeRepository.cs" />
+    <Compile Include="Models\Repositories\ILaneTypeRepository.cs" />
+    <Compile Include="Models\Repositories\IDetectionTypeRepository.cs" />
+    <Compile Include="Models\Repositories\IFAQRepository.cs" />
+    <Compile Include="Models\Repositories\ISPMWatchDogErrorEventRepository.cs" />
+    <Compile Include="Models\Repositories\FAQRepository.cs" />
+    <Compile Include="Models\Repositories\FAQRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\MenuRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\MetricCommentRepositoryFactory.cs" />
+    <Compile Include="Models\MetricsFilterType.cs" />
+    <Compile Include="Models\MetricType.cs" />
+    <Compile Include="Models\MovementType.cs" />
+    <Compile Include="Models\Program_Message.cs" />
+    <Compile Include="Models\Program_Settings.cs" />
+    <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\Repositories\ApproachRepository.cs" />
+    <Compile Include="Models\Repositories\ApproachRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\ApproachRouteRepository.cs" />
+    <Compile Include="Models\Repositories\ArchivedMetricsRepository.cs" />
+    <Compile Include="Models\Repositories\ArchivedMetricsRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\ControllerTypeRepository.cs" />
+    <Compile Include="Models\Repositories\ControllerEventLogRepository.cs" />
+    <Compile Include="Models\Repositories\ControllerEventLogRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\DetectorCommentRepository.cs" />
+    <Compile Include="Models\Repositories\DetectorCommentRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\DetectorRepository.cs" />
+    <Compile Include="Models\Repositories\DetectorRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\IApproachRepository.cs" />
+    <Compile Include="Models\Repositories\IApproachRouteRepository.cs" />
+    <Compile Include="Models\Repositories\IArchivedMetricsRepository.cs" />
+    <Compile Include="Models\Repositories\IControllerTypeRepository.cs" />
+    <Compile Include="Models\Repositories\IControllerEventLogRepository.cs" />
+    <Compile Include="Models\Repositories\IDetectorCommentRepository.cs" />
+    <Compile Include="Models\Repositories\IDetectorRepository.cs" />
+    <Compile Include="Models\Repositories\IMetricCommentRepository.cs" />
+    <Compile Include="Models\Repositories\IMetricFilterTypesRepository.cs" />
+    <Compile Include="Models\Repositories\IMenuRepository.cs" />
+    <Compile Include="Models\Repositories\IMovementTypeRepository.cs" />
+    <Compile Include="Models\Repositories\IMetricTypeRepository.cs" />
+    <Compile Include="Models\Repositories\IRegionsRepository.cs" />
+    <Compile Include="Models\Repositories\IRouteDetectorsRepository.cs" />
+    <Compile Include="Models\Repositories\IRouteRepository.cs" />
+    <Compile Include="Models\Repositories\ISignalsRepository.cs" />
+    <Compile Include="Models\Repositories\ISPMMenuRepository.cs" />
+    <Compile Include="Models\Repositories\MetricCommentRepository.cs" />
+    <Compile Include="Models\Repositories\MetricFilterTypesRepository.cs" />
+    <Compile Include="Models\Repositories\MetricFilterTypesRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\DirectionTypeRepository.cs" />
+    <Compile Include="Models\Repositories\DirectionTypeRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\LaneTypeRepository.cs" />
+    <Compile Include="Models\Repositories\DetectionTypeRepository.cs" />
+    <Compile Include="Models\Repositories\AgencyRepository.cs" />
+    <Compile Include="Models\Repositories\AgencyRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\MovementTypeRepository.cs" />
+    <Compile Include="Models\Repositories\LaneTypeRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\DetectionTypeRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\MovementTypeRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\MenuRepository.cs" />
+    <Compile Include="Models\Repositories\SPMMenuRepository.cs" />
+    <Compile Include="Models\Repositories\SPMMenuRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\SignalsRepositoryTest.cs" />
+    <Compile Include="Models\Repositories\SPMWatchDogErrorEventRepository.cs" />
+    <Compile Include="Models\Repositories\SPMWatchDogErrorEventRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\MetricTypeRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\RegionsRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\MetricTypeRepository.cs" />
+    <Compile Include="Models\Repositories\RegionsRepository.cs" />
+    <Compile Include="Models\Repositories\RouteDetectorRepository.cs" />
+    <Compile Include="Models\Repositories\RouteDetectorRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\RouteRepository.cs" />
+    <Compile Include="Models\Repositories\SignalsRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\RouteRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\SignalFTPInfo.cs" />
+    <Compile Include="Models\Repositories\SignalsRepository.cs" />
+    <Compile Include="Business\WCFServiceLibrary\MetricOptions.cs" />
+    <Compile Include="Models\Route.cs" />
+    <Compile Include="Models\Route_Detectors.cs" />
+    <Compile Include="Models\Signal.cs" />
+    <Compile Include="Models\Speed_Events.cs" />
+    <Compile Include="Models\SPM.cs" />
+    <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\MetricComment.cs" />
+    <Compile Include="Models\SPMWatchDogErrorEvent.cs" />
+    <Compile Include="Models\ViewModel\Chart\FillSignalsViewModel.cs" />
+    <Compile Include="Models\ViewModel\Chart\SignalSearchViewModel.cs" />
+    <Compile Include="Models\ViewModel\Chart\DefaultChartsViewModel.cs" />
+    <Compile Include="Models\ViewModel\Chart\MetricsListViewModel.cs" />
+    <Compile Include="Models\ViewModel\Chart\PreemptViewModel.cs" />
+    <Compile Include="Models\ViewModel\Chart\SignalInfoBoxViewModel.cs" />
+    <Compile Include="Models\ViewModel\Day.cs" />
+    <Compile Include="Models\ViewModel\LinkPivotAdjustment.cs" />
+    <Compile Include="Models\ViewModel\LinkPivotApproachLink.cs" />
+    <Compile Include="Models\ViewModel\LinkPivotPCDOptions.cs" />
+    <Compile Include="Models\ViewModel\LinkPivotPCDsViewModel.cs" />
+    <Compile Include="Models\ViewModel\LinkPivotResultViewModel.cs" />
+    <Compile Include="Models\ViewModel\LinkPivotViewModel.cs" />
+    <Compile Include="Models\ViewModel\MetricUsage\ChartViewModel.cs" />
+    <Compile Include="Models\ViewModel\MetricUsage\MetricUsageViewModel.cs" />
+    <Compile Include="Models\ViewModel\RouteEdit\ApproachRouteDetailViewModel.cs" />
+    <Compile Include="Models\ViewModel\RouteEdit\RouteListViewModel.cs" />
+    <Compile Include="Models\ViewModel\WebConfigTool\WebConfigToolViewModel.cs" />
+    <Compile Include="Models\ViewModel\_MainMenu\MenuItem.cs" />
+    <Compile Include="Models\WatchDogApplicationSettings.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Business\RouteConsistencyCheck.cs" />
+    <Compile Include="Business\SPMChartOptions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Migrations\CreateAndPopulateMOEDB.sql" />
+    <Content Include="Migrations\CustomStuffForExistingUpgrade.txt" />
+    <Content Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="Data\LinkPivot.xsc">
+      <DependentUpon>LinkPivot.xsd</DependentUpon>
+    </None>
+    <None Include="Data\LinkPivot.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>LinkPivot.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Data\LinkPivot.xss">
+      <DependentUpon>LinkPivot.xsd</DependentUpon>
+    </None>
+    <None Include="Data\MOE.xsc">
+      <DependentUpon>MOE.xsd</DependentUpon>
+    </None>
+    <None Include="Data\MOE.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>MOE1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Data\MOE.xss">
+      <DependentUpon>MOE.xsd</DependentUpon>
+    </None>
+    <None Include="Data\Settings.xsc">
+      <DependentUpon>Settings.xsd</DependentUpon>
+    </None>
+    <None Include="Data\Settings.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Data\Settings.xss">
+      <DependentUpon>Settings.xsd</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Business\KML\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201607071722420_Initial.resx">
+      <DependentUpon>201607071722420_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611101941171_Version4.0.resx">
+      <DependentUpon>201611101941171_Version4.0.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611290015315_SPMWatchDog.resx">
+      <DependentUpon>201611290015315_SPMWatchDog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702162037176_4.0.1.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\Caseiro.Mvc.PagedList.csproj">
+      <Project>{0c799bba-8a0b-43c8-87ee-1a50360c16e1}</Project>
+      <Name>Caseiro.Mvc.PagedList</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

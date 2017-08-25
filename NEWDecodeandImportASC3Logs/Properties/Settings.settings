@@ -1,0 +1,47 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="NEWDecodeandImportASC3Logs.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ASC3LogsPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\\MOE\controllerlogs\</Value>
+    </Setting>
+    <Setting Name="WriteToConsole" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="CSVOutPAth" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\temp\CSVs</Value>
+    </Setting>
+    <Setting Name="DeleteFile" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="forceNonParallel" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="MaxThreads" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="SPMConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=MOE;Initial Catalog=MOE;Persist Security Info=True;User ID=SPM;Password=CHANGEME&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=MOE;Initial Catalog=MOE;Persist Security Info=True;User ID=SPM;Password=CHANGEME</Value>
+    </Setting>
+    <Setting Name="DestinationTableNAme" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Controller_Event_Log</Value>
+    </Setting>
+    <Setting Name="EarliestAcceptableDate" Type="System.DateTime" Scope="Application">
+      <Value Profile="(Default)">2010-01-01</Value>
+    </Setting>
+    <Setting Name="BulkCopyBatchSize" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">5000</Value>
+    </Setting>
+    <Setting Name="BulkCopyTimeOut" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="MaxThreadsMain" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

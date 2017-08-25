@@ -1,0 +1,59 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DecodeTrafficwareLogs.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="TWLogsPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\temp\TWLogs</Value>
+    </Setting>
+    <Setting Name="WriteToConsole" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DeleteFiles" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="LogPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\Temp\Logs\</Value>
+    </Setting>
+    <Setting Name="DecoderPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\SPMS\ProccessLogs\SiemensDecoder.exe</Value>
+    </Setting>
+    <Setting Name="TimeOut" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">1000</Value>
+    </Setting>
+    <Setting Name="LogsPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\\MOE\ASC3Logs</Value>
+    </Setting>
+    <Setting Name="CSVOutPAth" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\temp\CSVs</Value>
+    </Setting>
+    <Setting Name="DeleteFile" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="forceNonParallel" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="MaxThreads" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="DestinationTableName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Controller_Event_Log</Value>
+    </Setting>
+    <Setting Name="EarliestAcceptableDate" Type="System.DateTime" Scope="Application">
+      <Value Profile="(Default)">2010-01-01</Value>
+    </Setting>
+    <Setting Name="BulkCopyBatchSize" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">5000</Value>
+    </Setting>
+    <Setting Name="BulkCopyTimeOut" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="SPM" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=MOE;Initial Catalog=moe;User ID=spm;Password=CHANGEME&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=MOE;Initial Catalog=moe;User ID=spm;Password=CHANGEME</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

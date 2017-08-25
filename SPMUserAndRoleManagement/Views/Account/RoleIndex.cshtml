@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "RoleIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<p>&nbsp;</p>
+<div class="spacerBody">
+    @Html.ActionLink("Create New Role", "RoleCreate") | @Html.ActionLink("Add Role to User", "RoleAddToUser")
+    <h2>Role index</h2>
+    @foreach (string s in Model)
+    {
+        <p>
+            @s
+            <span onclick=" return confirm('Are you sure to delete?') ">
+                <a href="/Account/RoleDelete?RoleName=@s" class="delLink">Delete</a>
+            </span>
+        </p>
+    }
+</div>

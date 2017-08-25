@@ -1,0 +1,33 @@
+﻿@model IEnumerable<MOE.Common.Models.Signal>
+
+
+<table class="table table-striped table-bordered table-condensed ">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SignalID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PrimaryName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SecondaryName)
+        </th>
+       
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.SignalID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PrimaryName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SecondaryName)
+        </td>
+       
+    </tr>
+}
+
+</table>

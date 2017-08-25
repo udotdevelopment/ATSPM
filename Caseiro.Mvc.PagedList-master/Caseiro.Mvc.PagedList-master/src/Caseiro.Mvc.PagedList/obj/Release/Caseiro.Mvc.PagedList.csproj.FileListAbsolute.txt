@@ -1,0 +1,17 @@
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\Caseiro.Mvc.PagedList.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\Caseiro.Mvc.PagedList.pdb
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\Microsoft.Web.Infrastructure.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\System.Web.Helpers.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\System.Web.Mvc.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\System.Web.Razor.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\System.Web.WebPages.Deployment.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\System.Web.WebPages.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\System.Web.WebPages.Razor.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\System.Web.Helpers.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\System.Web.Mvc.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\System.Web.Razor.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\System.Web.WebPages.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\System.Web.WebPages.Deployment.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Release\System.Web.WebPages.Razor.xml
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\obj\Release\Caseiro.Mvc.PagedList.dll
+C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\obj\Release\Caseiro.Mvc.PagedList.pdb

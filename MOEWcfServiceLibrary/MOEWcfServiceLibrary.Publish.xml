@@ -1,0 +1,54 @@
+<publishData>
+  <publishTarget publishUrl="\\srwtcmoe\d$\UDOT\TestMoeWcfLibrary\">
+    <file relUrl="bin/SharpSnmpLib.Portable.dll" publishTime="01/03/2017 15:49:59" />
+    <file relUrl="bin/Microsoft.Owin.Security.dll" publishTime="01/03/2017 15:49:59" />
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.xml" publishTime="01/03/2017 15:49:59" />
+    <file relUrl="bin/System.Web.WebPages.dll" publishTime="01/03/2017 15:49:56" />
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="01/03/2017 15:49:59" />
+    <file relUrl="bin/MOE.Common.pdb" publishTime="03/28/2017 13:49:45" />
+    <file relUrl="bin/MvcCheckBoxList.dll" publishTime="01/03/2017 15:49:58" />
+    <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="01/03/2017 15:49:58" />
+    <file relUrl="bin/MOEWcfServiceLibrary.pdb" publishTime="03/28/2017 13:49:46" />
+    <file relUrl="bin/System.Web.Razor.dll" publishTime="01/03/2017 15:49:56" />
+    <file relUrl="bin/Microsoft.Owin.dll" publishTime="01/03/2017 15:49:58" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Core.xml" publishTime="01/03/2017 15:49:57" />
+    <file relUrl="bin/Microsoft.Owin.xml" publishTime="01/03/2017 15:49:58" />
+    <file relUrl="bin/AlexPilotti.FTPS.Client.dll" publishTime="01/03/2017 15:49:57" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="01/03/2017 15:49:57" />
+    <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="01/03/2017 15:49:56" />
+    <file relUrl="bin/AlexPilotti.FTPS.Client.xml" publishTime="01/03/2017 15:49:57" />
+    <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="01/03/2017 15:49:56" />
+    <file relUrl="bin/MOE.Common.dll" publishTime="03/28/2017 13:49:45" />
+    <file relUrl="bin/System.Web.Mvc.xml" publishTime="01/03/2017 15:49:56" />
+    <file relUrl="bin/SharpSnmpLib.Full.xml" publishTime="01/03/2017 15:49:59" />
+    <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="03/01/2017 11:00:46" />
+    <file relUrl="bin/System.Web.Razor.xml" publishTime="01/03/2017 15:49:56" />
+    <file relUrl="bin/SharpSnmpLib.Full.dll" publishTime="01/03/2017 15:49:59" />
+    <file relUrl="bin/System.Web.WebPages.xml" publishTime="01/03/2017 15:49:56" />
+    <file relUrl="bin/System.Web.Mvc.dll" publishTime="01/03/2017 15:49:56" />
+    <file relUrl="bin/MOEWcfServiceLibrary.dll" publishTime="03/28/2017 13:49:46" />
+    <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="03/01/2017 11:00:46" />
+    <file relUrl="bin/Microsoft.Owin.Security.Cookies.xml" publishTime="01/03/2017 15:49:59" />
+    <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="03/28/2017 10:25:23" />
+    <file relUrl="bin/SnmpSharpNet.dll" publishTime="01/03/2017 15:49:59" />
+    <file relUrl="MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="03/28/2017 13:51:26" />
+    <file relUrl="bin/EntityFramework.SqlServer.xml" publishTime="01/03/2017 15:49:58" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="01/03/2017 15:49:57" />
+    <file relUrl="bin/Microsoft.Owin.Security.xml" publishTime="01/03/2017 15:49:59" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="01/03/2017 15:49:57" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Owin.dll" publishTime="01/03/2017 15:49:57" />
+    <file relUrl="MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="03/28/2017 13:51:26" />
+    <file relUrl="bin/System.Web.WebPages.Deployment.dll" publishTime="01/03/2017 15:49:56" />
+    <file relUrl="bin/Microsoft.Owin.Security.Cookies.dll" publishTime="01/03/2017 15:49:59" />
+    <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="01/03/2017 15:49:56" />
+    <file relUrl="Web.config" publishTime="03/28/2017 10:25:23" />
+    <file relUrl="bin/Newtonsoft.Json.xml" publishTime="01/03/2017 15:49:59" />
+    <file relUrl="bin/EntityFramework.dll" publishTime="01/03/2017 15:49:58" />
+    <file relUrl="bin/Owin.dll" publishTime="01/03/2017 15:49:59" />
+    <file relUrl="bin/SharpSnmpLib.Portable.xml" publishTime="01/03/2017 15:49:59" />
+    <file relUrl="bin/EntityFramework.xml" publishTime="01/03/2017 15:49:58" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Core.dll" publishTime="01/03/2017 15:49:57" />
+    <file relUrl="bin/Newtonsoft.Json.dll" publishTime="01/03/2017 15:49:59" />
+    <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="01/03/2017 15:49:56" />
+  </publishTarget>
+</publishData>
