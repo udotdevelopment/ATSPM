@@ -1,8 +1,0 @@
-C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\FTPTimerService\bin\Debug\FTPTimerService.exe.config
-C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\FTPTimerService\bin\Debug\FTPTimerService.exe
-C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\FTPTimerService\bin\Debug\FTPTimerService.pdb
-C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\FTPTimerService\obj\Debug\FTPTimerService.csprojResolveAssemblyReference.cache
-C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\FTPTimerService\obj\Debug\FTPTimerService.Installer1.resources
-C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\FTPTimerService\obj\Debug\FTPTimerService.csproj.GenerateResource.Cache
-C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\FTPTimerService\obj\Debug\FTPTimerService.exe
-C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\FTPTimerService\obj\Debug\FTPTimerService.pdb
