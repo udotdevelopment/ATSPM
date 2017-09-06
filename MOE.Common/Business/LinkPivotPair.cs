@@ -367,15 +367,14 @@ namespace MOE.Common.Business
                         upstreamBias = 1 + (bias / 100);
                     }
                     //set the original values to compare against
-                    _AOGTotalBefore = (aOGDownstreamBefore * downstreamBias) + 
-                        (aOGUpstreamBefore * upstreamBias);
-                    _PAOGTotalBefore = Math.Round(_AOGTotalBefore/((totalVolumeDownstream*downstreamBias)+(totalVolumeUpstream*upstreamBias)),2)*100;
-                    double maxBiasArrivalOnGreen = _AOGTotalBefore;
+                    _AOGTotalBefore = aOGDownstreamBefore + aOGUpstreamBefore;
+                    _PAOGTotalBefore = Math.Round(_AOGTotalBefore / ((totalVolumeDownstream) + (totalVolumeUpstream)), 2) * 100;
+                    double maxBiasArrivalOnGreen = (aOGDownstreamBefore * downstreamBias) + (aOGUpstreamBefore * upstreamBias);
                     maxArrivalOnGreen = aOGDownstreamBefore + aOGUpstreamBefore;
 
 
                     //add the total to the results grid
-                    resultsGraph.Add(0, maxArrivalOnGreen);
+                    resultsGraph.Add(0, maxBiasArrivalOnGreen);
                     upstreamResultsGraph.Add(0, aOGUpstreamBefore * upstreamBias);
                     downstreamResultsGraph.Add(0, aOGDownstreamBefore * downstreamBias);
                     aOGUpstreamPredicted = aOGUpstreamBefore;
@@ -405,8 +404,8 @@ namespace MOE.Common.Business
                         }
                         //Add the total aog to the dictionary
                         resultsGraph.Add(i, totalBiasArrivalOnGreen);
-                        upstreamResultsGraph.Add(i, totalUpstreamAog);
-                        downstreamResultsGraph.Add(i, totalDownstreamAog);
+                        upstreamResultsGraph.Add(i, totalUpstreamAog * upstreamBias);
+                        downstreamResultsGraph.Add(i, totalDownstreamAog * downstreamBias);
 
                         if (totalBiasArrivalOnGreen > maxBiasArrivalOnGreen)
                         {
