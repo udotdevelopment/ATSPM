@@ -55,7 +55,7 @@ namespace MOE.Common.Models
         public virtual DbSet<Action> Actions { get; set; }
         public virtual DbSet<ActionLog> ActionLogs { get; set; }
         public virtual DbSet<ApproachRouteDetail> ApproachRouteDetails { get; set; }
-        public virtual DbSet<Archived_Metrics> Archived_Metrics { get; set; }
+        public virtual DbSet<SignalAggregationData> SignalAggregationDatas { get; set; }
         public virtual DbSet<ControllerType> ControllerType { get; set; }
         public virtual DbSet<Program_Settings> Program_Settings { get; set; }
         public virtual DbSet<Route_Detectors> Route_Detectors { get; set; }
@@ -143,11 +143,7 @@ namespace MOE.Common.Models
                 .IsRequired()
                 .HasMaxLength(50)
                 .HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAnnotation(new IndexAttribute("IX_DetectorIDUnique") { IsUnique = true }));
-
-
-            modelBuilder.Entity<Archived_Metrics>()
-                .Property(e => e.DetectorID)
-                .IsUnicode(false);
+            
 
             modelBuilder.Entity<ControllerType>()
                 .Property(e => e.Description)
