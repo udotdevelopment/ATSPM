@@ -397,7 +397,7 @@ namespace MOE.Common.Business
                             downstreamPCD[index].LinkPivotAddSeconds(1);
                             totalBiasArrivalOnGreen += (upstreamPCD[index].TotalArrivalOnGreen * upstreamBias) +
                                 (downstreamPCD[index].TotalArrivalOnGreen * downstreamBias);
-                            totalArrivalOnGreen =+ (upstreamPCD[index].TotalArrivalOnGreen) +
+                            totalArrivalOnGreen += (upstreamPCD[index].TotalArrivalOnGreen) +
                                 (downstreamPCD[index].TotalArrivalOnGreen);
                             totalUpstreamAog += upstreamPCD[index].TotalArrivalOnGreen;
                             totalDownstreamAog += downstreamPCD[index].TotalArrivalOnGreen;
