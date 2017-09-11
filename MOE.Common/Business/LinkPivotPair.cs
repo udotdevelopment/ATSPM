@@ -446,17 +446,17 @@ namespace MOE.Common.Business
                         
                         double totalArrivalOnGreen = 0;
                         double totalUpstreamAog = 0;
-                        double totalDownstreamAog = 0;                        
+                        double totalDownstreamAog = 0;
 
                         for (int index = 0; index < dates.Count; index++)
                         {
-                            upstreamPCD[index].LinkPivotAddSeconds(-1);
-                            downstreamPCD[index].LinkPivotAddSeconds(1);                            
-                            totalArrivalOnGreen += (upstreamPCD[index].TotalArrivalOnGreen) +
-                                (downstreamPCD[index].TotalArrivalOnGreen);
+                            upstreamPCD[index].LinkPivotAddSeconds(-1); 
+                            downstreamPCD[index].LinkPivotAddSeconds(1);
                             totalUpstreamAog += upstreamPCD[index].TotalArrivalOnGreen;
                             totalDownstreamAog += downstreamPCD[index].TotalArrivalOnGreen;
                         }
+
+                        totalArrivalOnGreen = totalDownstreamAog + totalUpstreamAog;
                         //Add the total aog to the dictionary
                         resultsGraph.Add(i, totalArrivalOnGreen);
                         upstreamResultsGraph.Add(i, totalUpstreamAog);
