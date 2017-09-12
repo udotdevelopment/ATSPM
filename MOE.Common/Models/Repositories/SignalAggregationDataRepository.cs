@@ -56,5 +56,19 @@ namespace MOE.Common.Models.Repositories
                 select cel).Count();
             return count;
         }
+
+        public void SaveSignalData(SignalAggregationData signalAggregationData)
+        {
+            try
+            {
+                db.SignalAggregationDatas.Add(signalAggregationData);
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                IApplicationEventRepository applicationEventRepository = ApplicationEventRepositoryFactory.Create();
+                applicationEventRepository.QuickAdd("DataAggregation", "SignalAggregationDataRepository", "SaveSignalData", ApplicationEvent.SeverityLevels.High, e.Message);
+            }
+        }
     }
 }

@@ -66,6 +66,11 @@ namespace MOE.Common.Models
         public virtual DbSet<ApplicationSettings> ApplicationSettings { get; set; }
         public virtual DbSet<WatchDogApplicationSettings> WatchdogApplicationSettings { get; set; }
         public virtual DbSet<DetectionHardware> DetectionHardwares { get; set; }
+        public virtual DbSet<PreemptionAggregationData> PreemptionAggregationDatas { get; set; }
+        public virtual DbSet<PriorityAggregationData> PriorityAggregationDatas { get; set; }
+        public virtual DbSet<ApproachAggregationData> ApproachAggregationDatas { get; set; }
+        public virtual DbSet<ApproachSpeedAggregationData> ApproachSpeedAggregationDatas { get; set; }
+        public virtual DbSet<DetectorAggregationData> DetectorAggregationDatas { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

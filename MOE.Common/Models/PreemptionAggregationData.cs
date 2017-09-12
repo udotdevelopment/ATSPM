@@ -6,7 +6,7 @@ using System.Data.Entity.Spatial;
 
 namespace MOE.Common.Models
 {
-    public class PreemptChannelAggregationData
+    public class PreemptionAggregationData
     {
 
         [Key]
@@ -21,6 +21,9 @@ namespace MOE.Common.Models
         public string SignalID { get; set; }
 
         public virtual Signal Signal { get; set; }
+
+        [Required]
+        public int PreemptNumber { get; set; }
 
         [Required]
         public int PreemptRequests { get; set; }

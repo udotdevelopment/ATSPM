@@ -35,6 +35,7 @@ namespace MOE.Common.Models.Repositories
             db.Configuration.LazyLoadingEnabled = false;
             List<Models.Signal> signals = (from r in db.Signals
                                            where r.Enabled == true
+                                           //&& r.SignalID == "7063"
                                            select r).ToList();
             return signals;
         }

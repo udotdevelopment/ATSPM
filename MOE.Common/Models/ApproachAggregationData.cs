@@ -16,8 +16,7 @@ namespace MOE.Common.Models
         public DateTime BinStartTime { get; set; }
 
         [Required]
-        [StringLength(10)]
-        public string ApproachID { get; set; }
+        public int ApproachID { get; set; }
 
         public virtual Approach Approach { get; set; }
 
@@ -38,19 +37,7 @@ namespace MOE.Common.Models
 
         [Required]
         public int SplitFailures { get; set; }
-
-        [Required]
-        public double SummedSpeed { get; set; }
-
-        [Required]
-        public double SpeedVolume { get; set; }
-
-        [Required]
-        public double Speed85th { get; set; }
-
-        [Required]
-        public double Speed15th { get; set; }
-
+        
         [Required]
         public int ArrivalsOnGreen { get; set; }
 
@@ -65,7 +52,5 @@ namespace MOE.Common.Models
 
         [Required]
         public int TotalRedLightViolations { get; set; }
-
-
     }
 }

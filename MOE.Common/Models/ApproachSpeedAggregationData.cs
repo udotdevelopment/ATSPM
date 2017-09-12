@@ -6,12 +6,8 @@ using System.Data.Entity.Spatial;
 
 namespace MOE.Common.Models
 {
-    public class PriorityAggregationData
+    public class ApproachSpeedAggregationData
     {
-        public PriorityAggregationData()
-        {
-        }
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
@@ -20,24 +16,21 @@ namespace MOE.Common.Models
         public DateTime BinStartTime { get; set; }
 
         [Required]
-        [StringLength(10)]
-        public string SignalID { get; set; }
+        public int ApproachID { get; set; }
 
-        public virtual Signal Signal { get; set; }
-
-        [Required]
-        public int PriorityNumber { get; set; }
+        public virtual Approach Approach { get; set; }
 
         [Required]
-        public int TotalCycles { get; set; }
+        public double SummedSpeed { get; set; }
 
         [Required]
-        public int PriorityRequests { get; set; }
+        public double SpeedVolume { get; set; }
 
         [Required]
-        public int PriorityServiceEarlyGreen { get; set; }
+        public double Speed85th { get; set; }
 
         [Required]
-        public int PriorityServiceExtendedGreen { get; set; }
+        public double Speed15th { get; set; }
+        
     }
 }

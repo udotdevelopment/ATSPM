@@ -343,8 +343,10 @@
     <Compile Include="Business\CustomReport\Signal.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Business\DataAggregation\DataAggregation.cs" />
     <Compile Include="Business\Helpers\ApproachVolumeTable.cs" />
     <Compile Include="Business\Helpers\ConfigurationRecord.cs" />
+    <Compile Include="Business\Speed\DetectorSpeed.cs" />
     <Compile Include="Business\TMC\TMCData.cs" />
     <Compile Include="Business\TMC\TMCInfo.cs" />
     <Compile Include="Business\PCD\Cycle.cs" />
@@ -386,6 +388,7 @@
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
+    <Compile Include="Models\ApproachSpeedAggregationData.cs" />
     <Compile Include="Models\ApproachAggregationData.cs" />
     <Compile Include="Models\Custom\ActionLog.cs" />
     <Compile Include="Models\Custom\ApproachRoute.cs" />
@@ -394,9 +397,12 @@
     <Compile Include="Models\DetectorAggregationData.cs" />
     <Compile Include="Models\ExternalLink.cs" />
     <Compile Include="Models\FAQ.cs" />
-    <Compile Include="Models\PreemptChannelAggregationData.cs" />
+    <Compile Include="Models\PreemptionAggregationData.cs" />
     <Compile Include="Models\PriorityAggregationData.cs" />
     <Compile Include="Models\Repositories\ActionChart.cs" />
+    <Compile Include="Models\Repositories\ISpeedEventRepository.cs" />
+    <Compile Include="Models\Repositories\SpeedEventRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\SpeedEventRepository.cs" />
     <Compile Include="Models\Repositories\ApplicationSettingsRepository.cs" />
     <Compile Include="Models\Repositories\ActionLogRepository.cs" />
     <Compile Include="Models\Repositories\ApplicationSettingsRepositoryFactory.cs" />
@@ -587,6 +593,12 @@
     <Compile Include="Models\Repositories\ApproachRouteDetailsRepository.cs" />
     <Compile Include="Models\Repositories\ApproachRouteDetailsRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\ApproachRouteRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\IPreemptAggregationDatasRepository.cs" />
+    <Compile Include="Models\Repositories\IPriorityAggregationDatasRepository.cs" />
+    <Compile Include="Models\Repositories\PreemptAggregationDatasRepository.cs" />
+    <Compile Include="Models\Repositories\PriorityAggregationDatasRepository.cs" />
+    <Compile Include="Models\Repositories\PreemptAggregationDatasRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\PriorityAggregationDatasRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\SignalAggregationDataRepository.cs" />
     <Compile Include="Models\Repositories\SignalAggregationDataRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\ControllerTypeRepositoryFactory.cs" />

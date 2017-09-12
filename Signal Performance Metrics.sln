@@ -57,7 +57,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileByFileASC3Decoder", "Fi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportChecker", "ImportChecker\ImportChecker.csproj", "{0A3C1A0B-7388-4D46-84A4-674C119CAEA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchiveMetricData", "ArchiveMetricData\ArchiveMetricData.csproj", "{90FFF51A-9263-4C04-84C1-A2813200E25D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AggregateATSPMData", "ArchiveMetricData\AggregateATSPMData.csproj", "{90FFF51A-9263-4C04-84C1-A2813200E25D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -609,9 +609,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{90FFF51A-9263-4C04-84C1-A2813200E25D} = {FF3E4208-1F85-4029-8093-543DA106846C}
 	EndGlobalSection
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True

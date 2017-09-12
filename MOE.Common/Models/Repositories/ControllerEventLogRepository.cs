@@ -9,6 +9,15 @@ namespace MOE.Common.Models.Repositories
     public class ControllerEventLogRepository:IControllerEventLogRepository
     {
         Models.SPM db = new SPM();
+
+        public List<Controller_Event_Log> GetAllAggregationCodes(string signalID, DateTime startTime, DateTime endTime)
+        {
+            List<int> codes = new List<int> { 150, 114, 113, 112, 105, 102, 1, 8, 9, 82, 81, 45 };
+            var records = db.Controller_Event_Log
+                .Where(c => c.SignalID == signalID && c.Timestamp >= startTime && c.Timestamp <= endTime && codes.Contains(c.EventCode))
+                .ToList();
+            return records;
+        }
         public int GetDetectorActivationCount(string signalID,
              DateTime startTime, DateTime endTime, int detectorChannel)
         {
