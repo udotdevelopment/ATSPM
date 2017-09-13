@@ -22,7 +22,6 @@ namespace MOE.Common.Models.Repositories
 
         public List<Models.Signal> EagerLoadAllSignals()
         {
-
             List<Models.Signal> signals = db.Signals
                 .Include(signal => signal.Approaches.Select(a => a.Detectors))
                 .Include(signal => signal.Approaches.Select(a => a.DirectionType))               
@@ -69,7 +68,7 @@ namespace MOE.Common.Models.Repositories
         }
 
         public Models.Signal GetSignalBySignalID(string signalID)
-        {            
+        {
             return db.Signals.Find(signalID);
         }
 

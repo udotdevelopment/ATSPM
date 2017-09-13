@@ -72,7 +72,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             ShowPlanStripes = true;
             ShowPedActivity = true;
             SelectedConsecutiveCount = 1;
-            CreateLegend();
+            //CreateLegend();
         }
 
         private void CreateLegend()
