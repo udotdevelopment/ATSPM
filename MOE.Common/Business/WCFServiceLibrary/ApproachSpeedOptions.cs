@@ -186,6 +186,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
             eightyFifthSeries.XValueType = ChartValueType.DateTime;
             //pointSeries.MarkerSize = Convert.ToInt32(uxDotSizeDropDownList.SelectedValue);
 
+            Series fifteenthSeries = new Series();
+            fifteenthSeries.ChartType = SeriesChartType.Line;
+            fifteenthSeries.Color = Color.Orange;
+            fifteenthSeries.Name = "15th Percentile Speed";
+            fifteenthSeries.XValueType = ChartValueType.DateTime;
+
             //Add the Posted Speed series
             Series postedspeedSeries = new Series();
             postedspeedSeries.ChartType = SeriesChartType.Line;
@@ -196,6 +202,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             chart.Series.Add(postedspeedSeries);
             chart.Series.Add(eightyFifthSeries);
+            chart.Series.Add(fifteenthSeries);
             chart.Series.Add(pointSeries);
 
             //Add the Posts series to ensure the chart is the size of the selected timespan
@@ -232,14 +239,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
             DateTime endDate, int binSize)
         {
             DetectorSpeed detectorSpeed = new DetectorSpeed(detector, startDate, endDate, binSize);
-            foreach (MOE.Common.Business.Plan plan in detectorSpeed.Plans.PlanList)
+            foreach (Plan plan in detectorSpeed.Plans.PlanList)
             {
                 if (plan.AvgSpeedBucketCollection.Items.Count > 0)
                 {
-                    foreach (MOE.Common.Business.AvgSpeedBucket bucket in plan.AvgSpeedBucketCollection.Items)
+                    foreach (AvgSpeedBucket bucket in plan.AvgSpeedBucketCollection.Items)
                     {
                         chart.Series["Average MPH"].Points.AddXY(bucket.StartTime, bucket.AvgSpeed);
                         chart.Series["85th Percentile Speed"].Points.AddXY(bucket.StartTime, bucket.EightyFifth);
+                        chart.Series["15th Percentile Speed"].Points.AddXY(bucket.StartTime, bucket.FifteenthPercentile);
                         if (ShowPlanStatistics && ShowPostedSpeed)
                         {
                             chart.Series["Posted Speed"].Points.AddXY(bucket.StartTime, detector.Approach.MPH);
@@ -284,29 +292,29 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
 
                 //Add a corrisponding custom label for each strip
-                CustomLabel Plannumberlabel = new CustomLabel();
-                Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
-                Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
+                CustomLabel plannumberLabel = new CustomLabel();
+                plannumberLabel.FromPosition = plan.StartTime.ToOADate();
+                plannumberLabel.ToPosition = plan.EndTime.ToOADate();
                 switch (plan.PlanNumber)
                 {
                     case 254:
-                        Plannumberlabel.Text = "Free";
+                        plannumberLabel.Text = "Free";
                         break;
                     case 255:
-                        Plannumberlabel.Text = "Flash";
+                        plannumberLabel.Text = "Flash";
                         break;
                     case 0:
-                        Plannumberlabel.Text = "Unknown";
+                        plannumberLabel.Text = "Unknown";
                         break;
                     default:
-                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+                        plannumberLabel.Text = "Plan " + plan.PlanNumber.ToString();
 
                         break;
                 }
 
-                Plannumberlabel.LabelMark = LabelMarkStyle.LineSideMark;
-                Plannumberlabel.ForeColor = Color.Black;
-                Plannumberlabel.RowIndex = 3;
+                plannumberLabel.LabelMark = LabelMarkStyle.LineSideMark;
+                plannumberLabel.ForeColor = Color.Black;
+                plannumberLabel.RowIndex = 3;
 
                 CustomLabel avgLabel = new CustomLabel();
 
@@ -328,7 +336,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
                 if (ShowPlanStatistics)
                 {
-                    chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(Plannumberlabel);
+                    chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(plannumberLabel);
                     if (ShowAverageSpeed)
                     {
                         chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(avgLabel);

@@ -12,6 +12,7 @@ namespace MOE.Common.Models.Repositories
         List<Models.Signal> GetAllEnabledSignals();
         List<Models.Signal> GetAllWithGraphDetectors();
         List<Models.Signal> EagerLoadAllSignals();
+        List<Models.Signal> EagerLoadAllEnabledSignals();
         Models.Signal GetSignalBySignalID(string signalID);
         SignalFTPInfo GetSignalFTPInfoByID(string signalID);
         void AddOrUpdate(MOE.Common.Models.Signal signal);

@@ -160,14 +160,15 @@ namespace MOE.Common.Models
         public List<Detector> GetDetectorsForMetricType(int metricTypeID)
         {
             List<Detector> detectorsForMetricType = new List<Detector>();
-            foreach (Detector d in this.Detectors)
-            {
-                if (d.DetectorSupportsThisMetric(metricTypeID))
+             ;
+            if (Detectors != null)
+                foreach (Detector d in Detectors)
                 {
-                    detectorsForMetricType.Add(d);
-                    
+                    if (d.DetectorSupportsThisMetric(metricTypeID))
+                    {
+                        detectorsForMetricType.Add(d);
+                    }
                 }
-            }
             return detectorsForMetricType;
         }
     }

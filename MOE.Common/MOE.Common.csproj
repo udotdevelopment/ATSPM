@@ -400,6 +400,9 @@
     <Compile Include="Models\PreemptionAggregationData.cs" />
     <Compile Include="Models\PriorityAggregationData.cs" />
     <Compile Include="Models\Repositories\ActionChart.cs" />
+    <Compile Include="Models\Repositories\ApproachSpeedAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\ApproachSpeedAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\IApproachSpeedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\ISpeedEventRepository.cs" />
     <Compile Include="Models\Repositories\SpeedEventRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\SpeedEventRepository.cs" />

@@ -223,7 +223,7 @@ namespace MOE.Common.Business
             this.approach = approach;
             this.startDate = startDate;
             this.endDate = endDate;
-            this.direction = approach.DirectionType.Description;
+            if (approach.DirectionType != null) this.direction = approach.DirectionType.Description;
             this.showVolume = showVolume;
             this.binSize = binSize;
            
