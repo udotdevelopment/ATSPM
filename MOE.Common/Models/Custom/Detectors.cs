@@ -61,11 +61,7 @@ namespace MOE.Common.Models
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
-
+            return false;
         }
 
         public double GetOffset()

@@ -44,16 +44,13 @@ namespace FTPfromAllControllers
                                Properties.Settings.Default.EarliestAcceptableDate, Properties.Settings.Default.BulkCopyBatchSize, Properties.Settings.Default.BulkCopyTimeOut);
 
 
-            //MOE.Common.Data.Signals.SignalFTPparamsDataTable SignalsDT = new MOE.Common.Data.Signals.SignalFTPparamsDataTable();
-            //MOE.Common.Data.SignalsTableAdapters.SignalFTPparamsTableAdapter SignalsTA = new MOE.Common.Data.SignalsTableAdapters.SignalFTPparamsTableAdapter();
-
-            //SignalsTA.Fill(SignalsDT);
+  
 
             MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
 
             var SignalsDT = from r in db.Signals
                             join f in db.ControllerType on r.ControllerTypeID equals f.ControllerTypeID
-                            where r.ControllerTypeID != 4
+                            where r.ControllerTypeID != 4 &&  r.End > DateTime.Today
                             select new
                             {
                                 SignalId = r.SignalID,

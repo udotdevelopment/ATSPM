@@ -23,7 +23,7 @@ namespace MOE.Common.Models
 
         [Required]
         public string SignalID { get; set; }
-        public Signal Signal { get; set; }
+   
 
         [StringLength(100)]
         [Required]

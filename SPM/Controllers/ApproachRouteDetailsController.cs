@@ -25,22 +25,18 @@ namespace SPM.Controllers
             {
                 return Content("<h1>Route Not Found");
             }
-            else
-            {
-
-                MOE.Common.Models.ViewModel.RouteEdit.ApproachRouteDetailViewModel viewModel =
-                    new MOE.Common.Models.ViewModel.RouteEdit.ApproachRouteDetailViewModel();
-                viewModel.Approaches = new List<ApproachRouteDetail>();
-                viewModel.RouteID = id;
-                viewModel.RouteName = route.RouteName;
-                viewModel.Approaches = db.ApproachRouteDetails
-                    .Include(a => a.Approach)
-                    .Include(a => a.ApproachRoute)
-                    .Where(a => a.ApproachRouteId == id)
-                    .OrderBy(a => a.ApproachOrder)
-                    .ToList();
-                return View(viewModel);
-            }
+            MOE.Common.Models.ViewModel.RouteEdit.ApproachRouteDetailViewModel viewModel =
+                new MOE.Common.Models.ViewModel.RouteEdit.ApproachRouteDetailViewModel();
+            viewModel.Approaches = new List<ApproachRouteDetail>();
+            viewModel.RouteID = id;
+            viewModel.RouteName = route.RouteName;
+            viewModel.Approaches = db.ApproachRouteDetails
+                
+                .Include(a => a.ApproachRoute)
+                .Where(a => a.ApproachRouteId == id)
+                .OrderBy(a => a.Order)
+                .ToList();
+            return View(viewModel);
         }
 
         // GET: ApproachRouteDetails/Details/5
@@ -80,8 +76,8 @@ namespace SPM.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index", new { id = approachRouteDetail.ApproachRouteId });
             }
-
-            ViewBag.ApproachID = new SelectList(db.Approaches, "ApproachID", "ApproachRouteDescription", approachRouteDetail.ApproachID);
+            
+            ViewBag.ApproachID = new SelectList(db.Approaches, "ApproachID", "ApproachRouteDescription", approachRouteDetail.SignalId);
             ViewBag.ApproachRouteId = new SelectList(db.ApproachRoutes, "ApproachRouteId", "RouteName", approachRouteDetail.ApproachRouteId);
             return View(approachRouteDetail);
         }
@@ -98,7 +94,7 @@ namespace SPM.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ApproachID = new SelectList(db.Approaches, "ApproachID", "ApproachRouteDescription", approachRouteDetail.ApproachID);
+            ViewBag.ApproachID = new SelectList(db.Approaches, "ApproachID", "ApproachRouteDescription", approachRouteDetail.SignalId);
             ViewBag.ApproachRouteId = new SelectList(db.ApproachRoutes, "ApproachRouteId", "RouteName", approachRouteDetail.ApproachRouteId);
             return View(approachRouteDetail);
         }
@@ -116,7 +112,7 @@ namespace SPM.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index", new { id = approachRouteDetail.ApproachRouteId });
             }
-            ViewBag.ApproachID = new SelectList(db.Approaches, "ApproachID", "ApproachRouteDescription", approachRouteDetail.ApproachID);
+            ViewBag.ApproachID = new SelectList(db.Approaches, "ApproachID", "ApproachRouteDescription", approachRouteDetail.SignalId);
             ViewBag.ApproachRouteId = new SelectList(db.ApproachRoutes, "ApproachRouteId", "RouteName", approachRouteDetail.ApproachRouteId);
             return View(approachRouteDetail);
         }

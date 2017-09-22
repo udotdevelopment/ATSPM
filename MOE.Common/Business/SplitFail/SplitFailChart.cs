@@ -401,17 +401,13 @@ namespace MOE.Common.Business.SplitFail
                                 continue;
                             }
                             //if the next activaiton starts during the current, but ends later, atler current end time, and remove next, and start over. 
-                            else if (next.DetectorOn >= current.DetectorOn && next.DetectorOn < current.DetectorOff && next.DetectorOff > current.DetectorOff)
+                            if (next.DetectorOn >= current.DetectorOn && next.DetectorOn < current.DetectorOff && next.DetectorOff > current.DetectorOff)
                             {
                                 current.DetectorOff = next.DetectorOff;
                                 c.Activations.Activations.RemoveAt(i + 1);
                                 continue;
                             }
-                            else
-                            {
-                                i++;
-                            }
-
+                            i++;
                         }
 
 

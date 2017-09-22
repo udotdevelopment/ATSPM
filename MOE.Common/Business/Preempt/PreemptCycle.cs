@@ -47,48 +47,35 @@ namespace MOE.Common.Business.Preempt
                 {
                     return (EntryStarted - CycleStart).TotalSeconds;
                 }
-                                
-                else
-                {
-                    return 0;
-                }
+
+                return 0;
             }
         }
 
       
         public Double TimeToService{
-            get{
-
+            get
+            {
                 if (BeginTrackClearance > DateTime.MinValue && CycleStart > DateTime.MinValue && BeginTrackClearance >= CycleStart)
                 {
                     if (HasDelay)
                     {
                         return (BeginTrackClearance - EntryStarted).TotalSeconds;
                     }
-                    else
-                    {
-                          return (BeginTrackClearance - CycleStart).TotalSeconds;
-                    }
+                    return (BeginTrackClearance - CycleStart).TotalSeconds;
                 }
 
-                else if (BeginDwellService > DateTime.MinValue && CycleStart > DateTime.MinValue && BeginDwellService >= CycleStart)
+                if (BeginDwellService > DateTime.MinValue && CycleStart > DateTime.MinValue && BeginDwellService >= CycleStart)
                 {
-                      if (HasDelay)
+                    if (HasDelay)
                     {
                         return (BeginDwellService - EntryStarted).TotalSeconds;
-                      }
-                      else
-                      {
+                    }
                     return (BeginDwellService - CycleStart).TotalSeconds;
-                      }
                 }
 
-                else
-                {
-                    return 0;
-                }
-
-               }
+                return 0;
+            }
         }
 
         public Double DwellTime
@@ -99,10 +86,7 @@ namespace MOE.Common.Business.Preempt
                 {
                     return (CycleEnd - BeginDwellService).TotalSeconds;
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
         
@@ -114,15 +98,11 @@ namespace MOE.Common.Business.Preempt
         {
             get
             {
-
                 if (CycleStart > DateTime.MinValue && MaxPresenceExceeded > DateTime.MinValue && MaxPresenceExceeded > CycleStart)
                 {
                     return (MaxPresenceExceeded - CycleStart).TotalSeconds;
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 
@@ -131,15 +111,11 @@ namespace MOE.Common.Business.Preempt
         {
             get
             {
-
                 if (CycleStart > DateTime.MinValue && EntryStarted > DateTime.MinValue && EntryStarted > CycleStart)
                 {
                     return (EntryStarted - CycleStart).TotalSeconds;
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 
@@ -147,15 +123,11 @@ namespace MOE.Common.Business.Preempt
         {
             get
             {
-
                 if (BeginDwellService > DateTime.MinValue && BeginTrackClearance > DateTime.MinValue &&  BeginDwellService > BeginTrackClearance)
                 {
                     return (BeginDwellService - BeginTrackClearance).TotalSeconds;
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 
@@ -163,15 +135,11 @@ namespace MOE.Common.Business.Preempt
         {
             get
             {
-
                 if (CycleStart > DateTime.MinValue && GateDown > DateTime.MinValue && GateDown > CycleStart)
                 {
                     return (GateDown - CycleStart).TotalSeconds;
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
         

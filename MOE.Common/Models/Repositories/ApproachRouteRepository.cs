@@ -27,22 +27,18 @@ namespace MOE.Common.Models.Repositories
             {
             return route;
             }
-            else
             {
-
-                {
-                    MOE.Common.Models.Repositories.IApplicationEventRepository repository =
-                        MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                    MOE.Common.Models.ApplicationEvent error = new ApplicationEvent();
-                    error.ApplicationName = "MOE.Common";
-                    error.Class = "Models.Repository.ApproachRouteRepository";
-                    error.Function = "GetByRouteID";
-                    error.Description = "No ApproachRoute for ID.  Attempted ID# = " + routeID.ToString();
-                    error.SeverityLevel = ApplicationEvent.SeverityLevels.High;
-                    error.Timestamp = DateTime.Now;
-                    repository.Add(error);
-                    throw (new Exception("There is no ApproachRoute for this ID"));
-                }
+                MOE.Common.Models.Repositories.IApplicationEventRepository repository =
+                    MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
+                MOE.Common.Models.ApplicationEvent error = new ApplicationEvent();
+                error.ApplicationName = "MOE.Common";
+                error.Class = "Models.Repository.ApproachRouteRepository";
+                error.Function = "GetByRouteID";
+                error.Description = "No ApproachRoute for ID.  Attempted ID# = " + routeID.ToString();
+                error.SeverityLevel = ApplicationEvent.SeverityLevels.High;
+                error.Timestamp = DateTime.Now;
+                repository.Add(error);
+                throw (new Exception("There is no ApproachRoute for this ID"));
             }
         }
 

@@ -40,14 +40,14 @@ namespace MOE.Common.Business
         /// <param name="bias"></param>
         /// <param name="biasDirection"></param>
         /// <param name="days"></param>
-        public LinkPivot(int routeId, DateTime startDate, DateTime endDate, int cycleTime, string chartLocation,
+        public  LinkPivot(int routeId, DateTime startDate, DateTime endDate, int cycleTime, string chartLocation,
             string direction, double bias, string biasDirection, List<DayOfWeek> days)
         {
             MOE.Common.Models.SPM db = new Models.SPM();
             var _ApproachRouteDetail = (from ard in db.ApproachRouteDetails
                                         .Include("Approach")
                                         where ard.ApproachRouteId == routeId
-                                        orderby ard.ApproachOrder
+                                        orderby ard.Order
                                         select ard).ToList();
 
 
@@ -66,9 +66,9 @@ namespace MOE.Common.Business
                 //Parallel.ForEach(indices, i =>
                 foreach(int i in indices)
                 {
-                    pairedApproaches.Add(new LinkPivotPair(_ApproachRouteDetail[i].Approach.SignalID, GetOppositeDirection(_ApproachRouteDetail[i].Approach.DirectionType),
-                            _ApproachRouteDetail[i].Approach.Signal.PrimaryName + " " + _ApproachRouteDetail[i].Approach.Signal.SecondaryName, _ApproachRouteDetail[i - 1].Approach.SignalID,
-                            GetOppositeDirection(_ApproachRouteDetail[i - 1].Approach.DirectionType), _ApproachRouteDetail[i - 1].Approach.Signal.PrimaryName + " " + _ApproachRouteDetail[i - 1].Approach.Signal.SecondaryName,
+                    pairedApproaches.Add(new LinkPivotPair(_ApproachRouteDetail[i].SignalId, GetOppositeDirection(_ApproachRouteDetail[i].DirectionType1),
+                            _ApproachRouteDetail[i].Signal.PrimaryName + " " + _ApproachRouteDetail[i].Signal.SecondaryName, _ApproachRouteDetail[i - 1].SignalId,
+                            GetOppositeDirection(_ApproachRouteDetail[i - 1].DirectionType1), _ApproachRouteDetail[i - 1].Signal.PrimaryName + " " + _ApproachRouteDetail[i - 1].Signal.SecondaryName,
                             startDate, endDate, cycleTime, chartLocation, bias, biasDirection, dates, i + 1));
                 }
                 //);
@@ -82,9 +82,9 @@ namespace MOE.Common.Business
                 //Parallel.ForEach(indices, i =>
                 foreach(int i in indices)
                 {
-                    pairedApproaches.Add(new LinkPivotPair(_ApproachRouteDetail[i].Approach.SignalID, _ApproachRouteDetail[i].Approach.DirectionType.Description,
-                            _ApproachRouteDetail[i].Approach.Signal.PrimaryName + " " + _ApproachRouteDetail[i].Approach.Signal.SecondaryName, _ApproachRouteDetail[i + 1].Approach.SignalID, _ApproachRouteDetail[i + 1].Approach.DirectionType.Description,
-                            _ApproachRouteDetail[i+1].Approach.Signal.PrimaryName + " " + _ApproachRouteDetail[i+1].Approach.Signal.SecondaryName, startDate, endDate, cycleTime, chartLocation, bias, biasDirection, dates, i+1));
+                    pairedApproaches.Add(new LinkPivotPair(_ApproachRouteDetail[i].SignalId, _ApproachRouteDetail[i].DirectionType1.Description,
+                            _ApproachRouteDetail[i].Signal.PrimaryName + " " + _ApproachRouteDetail[i].Signal.SecondaryName, _ApproachRouteDetail[i + 1].SignalId, _ApproachRouteDetail[i + 1].DirectionType1.Description,
+                            _ApproachRouteDetail[i+1].Signal.PrimaryName + " " + _ApproachRouteDetail[i+1].Signal.SecondaryName, startDate, endDate, cycleTime, chartLocation, bias, biasDirection, dates, i+1));
                 }
                 //);
             }
@@ -98,8 +98,8 @@ namespace MOE.Common.Business
             //    //build a reverse sort LinkPivotPair list
             //   for (int i = detailTable.Rows.Count-1; i > 0; i--)
             //   {
-            //       pairedApproaches.Add(new LinkPivotPair(detailTable[i].SignalID, detailTable[i].Direction,
-            //           detailTable[i].Location, detailTable[i - 1].SignalID, detailTable[i - 1].Direction,
+            //       pairedApproaches.Add(new LinkPivotPair(detailTable[i].SignalId, detailTable[i].Direction,
+            //           detailTable[i].Location, detailTable[i - 1].SignalId, detailTable[i - 1].Direction,
             //           detailTable[i - 1].Location, startDate, endDate, cycleTime, chartLocation, bias, biasDirection, dates));
             //   }
             //}
@@ -108,8 +108,8 @@ namespace MOE.Common.Business
             //    //build a LinkPivotPair list as ordered in the database
             //    for (int i = 0; i < detailTable.Rows.Count - 1; i++)
             //    {
-            //        pairedApproaches.Add(new LinkPivotPair(detailTable[i].SignalID, detailTable[i].Direction,
-            //            detailTable[i].Location, detailTable[i + 1].SignalID, detailTable[i + 1].Direction,
+            //        pairedApproaches.Add(new LinkPivotPair(detailTable[i].SignalId, detailTable[i].Direction,
+            //            detailTable[i].Location, detailTable[i + 1].SignalId, detailTable[i + 1].Direction,
             //            detailTable[i + 1].Location, startDate, endDate, cycleTime, chartLocation, bias, biasDirection, dates));
             //    }
             //}
@@ -119,7 +119,7 @@ namespace MOE.Common.Business
             {
                 //Make sure the list is in the correct order after parrallel processing
                 var lpps = from pair in pairedApproaches
-                           where pair.SignalId == _ApproachRouteDetail[i].Approach.SignalID
+                           where pair.SignalId == _ApproachRouteDetail[i].SignalId
                           select pair;
 
                 foreach (var lpp in lpps)
@@ -139,14 +139,14 @@ namespace MOE.Common.Business
             if (direction == "Upstream")
             {
                 //End row for upstream is index 0
-                adjustment.AddLinkPivotAdjustmentRow(_ApproachRouteDetail[0].Approach.SignalID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, _ApproachRouteDetail[0].Approach.Signal.PrimaryName + " " + _ApproachRouteDetail[0].Approach.Signal.SecondaryName,
+                adjustment.AddLinkPivotAdjustmentRow(_ApproachRouteDetail[0].SignalId, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, _ApproachRouteDetail[0].Signal.PrimaryName + " " + _ApproachRouteDetail[0].Signal.SecondaryName,
                     "","","","","",0,0,0,0,1,0,0);
             }
             else
             {
                 //End row for downstream is last row in the detail table
-                adjustment.AddLinkPivotAdjustmentRow(_ApproachRouteDetail[_ApproachRouteDetail.Count - 1].Approach.SignalID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                    _ApproachRouteDetail[_ApproachRouteDetail.Count - 1].Approach.Signal.PrimaryName + " " + _ApproachRouteDetail[_ApproachRouteDetail.Count - 1].Approach.Signal.SecondaryName, "", "", "", "", "", 0, 0, 0, 0, _ApproachRouteDetail.Count, 0, 0);
+                adjustment.AddLinkPivotAdjustmentRow(_ApproachRouteDetail[_ApproachRouteDetail.Count - 1].SignalId, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    _ApproachRouteDetail[_ApproachRouteDetail.Count - 1].Signal.PrimaryName + " " + _ApproachRouteDetail[_ApproachRouteDetail.Count - 1].Signal.SecondaryName, "", "", "", "", "", 0, 0, 0, 0, _ApproachRouteDetail.Count, 0, 0);
             }
 
             int cumulativeChange = 0;

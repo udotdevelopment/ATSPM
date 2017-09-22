@@ -81,7 +81,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             base.CreateMetric();
             MOE.Common.Models.Repositories.ISignalsRepository signalRepository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            Signal = signalRepository.GetSignalBySignalID(SignalID);
+            Signal = signalRepository.GetVersionOfSignalByDate(SignalID, StartDate);
             this.MetricTypeID = 6;
             
             Chart chart = new Chart();            

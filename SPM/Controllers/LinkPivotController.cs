@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MOE.Common;
+using MOE.Common.Models;
 
 namespace SPM.Controllers
 {
@@ -37,8 +38,17 @@ namespace SPM.Controllers
             List<MOE.Common.Models.ApproachRouteDetail> app = (from a in db.ApproachRouteDetails
                                                                where a.ApproachRouteId == id
                                                                select a).ToList();
-            List<MOE.Common.Models.Signal> signals = (from a in app
-                                                      select a.Approach.Signal).ToList();
+
+            MOE.Common.Models.Repositories.ISignalsRepository sr = MOE.Common.Models.Repositories
+                .SignalsRepositoryFactory.Create();
+
+            List <MOE.Common.Models.Signal> signals = new List<Signal>();
+
+            foreach (var a in app)
+            {
+                signals.Add(sr.GetLatestVersionOfSignalBySignalID(a.SignalId));
+
+            }
             // return Json(signals, JsonRequestBehavior.AllowGet);
             return PartialView("FillSignals", signals);
         }
@@ -153,10 +163,7 @@ namespace SPM.Controllers
 
                 return PartialView("LinkPivotResult", lprvm);
             }
-            else
-            {
-                return View(lpvm);
-            }
+            return View(lpvm);
         }
         [HttpPost]
         public ActionResult LinkPivotPCDOptions(MOE.Common.Models.ViewModel.LinkPivotViewModel lpvm)
@@ -221,10 +228,7 @@ namespace SPM.Controllers
                 pcdModel.UpstreamAfterTitle = display.UpstreamAfterTitle;
                 return PartialView("PCDs", pcdModel);
             }
-            else
-            {
-                return View();
-            }
+            return View();
         }
 
         // GET: LinkPivot/Details/5

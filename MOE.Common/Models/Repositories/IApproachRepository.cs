@@ -11,7 +11,9 @@ namespace MOE.Common.Models.Repositories
          List<Models.Approach> GetAllApproaches();
          Models.Approach GetApproachByApproachID(int approachID);
          void AddOrUpdate(MOE.Common.Models.Approach approach);
-         //Approach Add(MOE.Common.Models.Approach approach);
+
+        Models.Approach FindAppoachByVersionIdPhaseOverlapAndDirection(int versionId, int phaseNumber, bool isOverlap,
+            int directionTypeId);
          void Remove(MOE.Common.Models.Approach approach);
          void Remove(int approachID);
     }

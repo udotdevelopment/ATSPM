@@ -729,8 +729,7 @@ namespace AlexPilotti.FTPS.Client
                     // Give a more detailed description, insteand of, e.g.: "Could not get file size".
                     if (ex.ErrorCode == 550)
                         throw new FTPException("Could not get the requested remote file", ex);
-                    else
-                        throw ex;
+                    throw ex;
                 }
 
             using (Stream s = GetFile(remoteFileName))

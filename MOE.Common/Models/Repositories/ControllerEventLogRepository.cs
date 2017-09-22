@@ -109,12 +109,8 @@ namespace MOE.Common.Models.Repositories
                  {
                      return events;
                  }
-                 else
-                 {
-                     List<MOE.Common.Models.Controller_Event_Log> EmptyEvents = new List<MOE.Common.Models.Controller_Event_Log>();
-                     return EmptyEvents;
-
-                 }
+                 List<MOE.Common.Models.Controller_Event_Log> EmptyEvents = new List<MOE.Common.Models.Controller_Event_Log>();
+                 return EmptyEvents;
              }
              catch (Exception ex)
              {

@@ -40,10 +40,7 @@ namespace MOE.Common.Business
                 {
                     return Convert.ToInt32(Math.Round(Speeds.Where(d => d.MPH >= minSpeedFilter).Average(d => d.MPH), 0));
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 

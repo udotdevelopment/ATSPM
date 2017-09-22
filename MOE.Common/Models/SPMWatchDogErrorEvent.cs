@@ -19,7 +19,7 @@ namespace MOE.Common.Models
         [Required]
         public string SignalID { get; set; }
 
-        public virtual Signal Signal { get; set; }
+        
         
         public string DetectorID { get; set; }
       

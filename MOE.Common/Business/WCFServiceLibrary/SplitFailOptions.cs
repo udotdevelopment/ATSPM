@@ -66,7 +66,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
 
             MOE.Common.Models.Repositories.ISignalsRepository sr = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            MOE.Common.Models.Signal signal = sr.GetSignalBySignalID(SignalID);
+            MOE.Common.Models.Signal signal = sr.GetVersionOfSignalByDate(SignalID, StartDate);
 
 
 
