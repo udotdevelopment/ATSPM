@@ -7,7 +7,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MOE.Common.Business.WatchDog
@@ -16,9 +15,9 @@ namespace MOE.Common.Business.WatchDog
     {
         public MOE.Common.Models.WatchDogApplicationSettings Settings { get; set; }
         public DateTime ScanDate { get; set; }
-        public ConcurrentBag<MOE.Common.Models.Signal> signalsWithRecords =
+        public ConcurrentBag<MOE.Common.Models.Signal> SignalsWithRecords =
             new ConcurrentBag<MOE.Common.Models.Signal>();
-        public ConcurrentBag<MOE.Common.Models.Signal> signalsNoRecords =
+        public ConcurrentBag<MOE.Common.Models.Signal> SignalsNoRecords =
             new ConcurrentBag<MOE.Common.Models.Signal>();
         ConcurrentBag<MOE.Common.Models.SPMWatchDogErrorEvent> ForceOffErrors = 
             new ConcurrentBag<MOE.Common.Models.SPMWatchDogErrorEvent>();
@@ -91,7 +90,7 @@ namespace MOE.Common.Business.WatchDog
             ParallelOptions options = new ParallelOptions();
             options.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism;
             
-            Parallel.ForEach(signalsWithRecords, options, signal =>
+            Parallel.ForEach(SignalsWithRecords, options, signal =>
             {                
                 CheckForLowDetectorHits(signal);
             }
@@ -124,12 +123,12 @@ namespace MOE.Common.Business.WatchDog
             if (controllerEventLogRepository.GetRecordCount(signal.SignalID, dateToCheck.AddDays(-1), dateToCheck) > Settings.MinimumRecords)
             {
                 Console.WriteLine("Signal " + signal.SignalID + "Has Current records");
-                signalsWithRecords.Add(signal);
+                SignalsWithRecords.Add(signal);
             }
             else
             {
                 Console.WriteLine("Signal " + signal.SignalID + "Does Not Have Current records");
-                signalsNoRecords.Add(signal);
+                SignalsNoRecords.Add(signal);
                 MOE.Common.Models.SPMWatchDogErrorEvent error = new MOE.Common.Models.SPMWatchDogErrorEvent();
                 error.SignalID = signal.SignalID;
                 error.DetectorID = "0";
@@ -483,11 +482,7 @@ namespace MOE.Common.Business.WatchDog
             {
                 return dets.FirstOrDefault().DetChannel;
             }
-            else
-            {
-                return 0;
-            }
-
+            return 0;
         }
 
 
@@ -505,12 +500,7 @@ namespace MOE.Common.Business.WatchDog
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
-
-
+            return false;
         }
 
         static private string FindDetector(MOE.Common.Models.Signal Signal, int Channel)
@@ -525,10 +515,7 @@ namespace MOE.Common.Business.WatchDog
                 {
                     return gd.DetectorID;
                 }
-                else
-                {
-                    return "0";
-                }
+                return "0";
             }
             catch
             {

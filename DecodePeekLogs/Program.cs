@@ -315,10 +315,6 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalID"],
 
 
                                 }
-                                else
-                                {
-                                    //insertErrorCount++;
-                                }
 
                                 //If it gets this far, the file has been opened
                                 fileHasBeenRead = true;

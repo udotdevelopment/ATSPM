@@ -27,22 +27,18 @@ namespace MOE.Common.Models.Repositories
             {
                 return routes;
             }
-            else
             {
-
-                {
-                    MOE.Common.Models.Repositories.IApplicationEventRepository repository =
-                        MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                    MOE.Common.Models.ApplicationEvent error = new ApplicationEvent();
-                    error.ApplicationName = "MOE.Common";
-                    error.Class = "Models.Repository.ApproachRouteDetailsRepository";
-                    error.Function = "GetByRouteID";
-                    error.Description = "No ApproachRoute for ID.  Attempted ID# = " + routeID.ToString();
-                    error.SeverityLevel = ApplicationEvent.SeverityLevels.High;
-                    error.Timestamp = DateTime.Now;
-                    repository.Add(error);
-                    throw (new Exception("There is no ApproachRouteDetail for this ID"));
-                }
+                MOE.Common.Models.Repositories.IApplicationEventRepository repository =
+                    MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
+                MOE.Common.Models.ApplicationEvent error = new ApplicationEvent();
+                error.ApplicationName = "MOE.Common";
+                error.Class = "Models.Repository.ApproachRouteDetailsRepository";
+                error.Function = "GetByRouteID";
+                error.Description = "No ApproachRoute for ID.  Attempted ID# = " + routeID.ToString();
+                error.SeverityLevel = ApplicationEvent.SeverityLevels.High;
+                error.Timestamp = DateTime.Now;
+                repository.Add(error);
+                throw (new Exception("There is no ApproachRouteDetail for this ID"));
             }
         }
 
@@ -74,16 +70,16 @@ namespace MOE.Common.Models.Repositories
             }
         }
 
-        public void UpdateByRouteAndApproachID(int routeID, int approachID, int newOrderNumber)
+        public void UpdateByRouteAndApproachID(int routeID, string signalId, int newOrderNumber)
         {
             Models.ApproachRouteDetail RouteDetail = (from r in db.ApproachRouteDetails
                                                  where r.ApproachRouteId == routeID 
-                                                 && r.ApproachID == approachID
-                                                 select r).FirstOrDefault();
+                                                 && r.SignalId == signalId
+                                                      select r).FirstOrDefault();
             if (RouteDetail != null)
             {
                 Models.ApproachRouteDetail newRouteDetail = new Models.ApproachRouteDetail();
-                newRouteDetail.ApproachOrder = newOrderNumber;
+                newRouteDetail.Order = newOrderNumber;
 
                 try
                 {

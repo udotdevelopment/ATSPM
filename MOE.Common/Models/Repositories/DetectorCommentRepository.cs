@@ -30,10 +30,7 @@ namespace MOE.Common.Models.Repositories
             {
                 return comment;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         public Models.DetectorComment GetDetectorCommentByDetectorCommentID(int detectorCommentID)

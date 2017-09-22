@@ -1,4 +1,4 @@
-namespace MOE.Common.Migrations
+ namespace MOE.Common.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;

@@ -95,10 +95,7 @@ namespace MOE.Common.Business
                 {
                     return pedDuration;
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 

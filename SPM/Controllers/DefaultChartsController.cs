@@ -559,11 +559,7 @@ namespace SPM.Controllers
             {
                 return comment.CommentText;
             }
-            else
-            {
-                return "";
-            }
-
+            return "";
         }
 
         private MOE.Common.Models.MetricType GetMetricType(int id)

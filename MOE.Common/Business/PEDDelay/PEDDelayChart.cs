@@ -211,12 +211,12 @@ namespace MOE.Common.Business.PEDDelay
                 iNearest = (iNumberToRound - iRest) + iToNearest;
                 return iNearest;
             }
-            else if (iRest > (iToNearest / 2))
+            if (iRest > (iToNearest / 2))
             {
                 iNearest = (iNumberToRound - iRest) + iToNearest;
                 return iNearest;
             }
-            else if (iRest < (iToNearest / 2))
+            if (iRest < (iToNearest / 2))
             {
                 iNearest = (iNumberToRound - iRest);
                 return iNearest;

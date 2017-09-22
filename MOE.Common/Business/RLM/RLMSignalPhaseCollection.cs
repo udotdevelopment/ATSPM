@@ -45,11 +45,11 @@ namespace MOE.Common.Business
             int metricTypeID = 11;
             MOE.Common.Models.Repositories.ISignalsRepository repository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = repository.GetSignalBySignalID(signalID);
+            var signal = repository.GetVersionOfSignalByDate(signalID, startDate);
             this.severeRedLightViolationsSeconds = srlvSeconds;
             var approachesForMetric = signal.GetApproachesForSignalThatSupportMetric(metricTypeID);
             //If there are phases in the database add the charts
-            if (approachesForMetric.Count() > 0)
+            if (approachesForMetric.Any())
             {
                 foreach (MOE.Common.Models.Approach approach in approachesForMetric)
                 {                    

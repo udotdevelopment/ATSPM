@@ -11,17 +11,50 @@ namespace MOE.Common.Models
     {        
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int RouteDetailID { get; set; }
+        public int RouteDetailId { get; set; }
+
         [Required]
-        [Display(Name="Approach Route")]
+        [Display(Name="Route")]
         public int ApproachRouteId { get; set; }
         public virtual ApproachRoute ApproachRoute { get; set; }
+
         [Required]
-        [Display(Name = "Approach Order")]
-        public int ApproachOrder { get; set; }
+        [Display(Name = "Signal Order")]
+        public int Order { get; set; }
+
         [Required]
-        [Display(Name = "Approach")]
-        public int ApproachID { get; set; }
-        public virtual Approach Approach { get; set; }
+        [Display(Name = "Signal")]     
+        public string SignalId { get; set; }
+
+        [Display(Name = "Direction One")]    
+        public virtual DirectionType DirectionType1 { get; set; }
+  
+        [Display(Name = "Direction Two")]       
+        public virtual DirectionType DirectionType2 { get; set; }
+
+
+        [Display(Name = "Phase For Direction One")]
+        public int PhaseDirection1 { get; set; }
+        public bool IsPhaseDirection1Overlap { get; set; }
+
+
+        [Display(Name = "Phase For Direction Two")]
+        public int PhaseDirection2 { get; set; }
+        public bool IsPhaseDirection2Overlap { get; set; }
+
+        [NotMapped]
+        public MOE.Common.Models.Signal Signal
+        {
+            get
+            {
+                MOE.Common.Models.Repositories.ISignalsRepository sr =
+                    MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+
+                return sr.GetLatestVersionOfSignalBySignalID(SignalId);
+
+            }
+
+        }
+
     }
 }

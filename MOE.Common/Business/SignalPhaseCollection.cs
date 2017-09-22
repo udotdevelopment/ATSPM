@@ -48,7 +48,7 @@ namespace MOE.Common.Business
         {
             MOE.Common.Models.Repositories.ISignalsRepository repository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = repository.GetSignalBySignalID(signalID);
+            var signal = repository.GetVersionOfSignalByDate(signalID, startDate);
      
             List<Models.Approach> approaches = signal.GetApproachesForSignalThatSupportMetric(metricTypeID);
             if (signal.Approaches != null && approaches.Count > 0)

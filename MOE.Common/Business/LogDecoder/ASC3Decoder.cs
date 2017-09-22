@@ -207,23 +207,9 @@ namespace MOE.Common.Business.LogDecoder
 
                     }
                     //this is what we do when the datestring doesn't parse
-                    else
-                    {
-                       // return false;
-                        
-                    }
-
-
-
                 }
 
                     //this is what we do when the datestring doesn't parse
-                else
-                {
-                    //return false;
-                }
-
-
 
 
                 //return true;

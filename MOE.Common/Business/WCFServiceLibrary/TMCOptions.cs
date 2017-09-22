@@ -82,7 +82,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             MOE.Common.Models.Repositories.ISignalsRepository repository =
             MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            Common.Models.Signal signal = repository.GetSignalBySignalID(SignalID);
+            Common.Models.Signal signal = repository.GetVersionOfSignalByDate(SignalID, StartDate);
             TmcInfo = new MOE.Common.Business.TMC.TMCInfo();
             MOE.Common.Business.PlanCollection plans = new MOE.Common.Business.PlanCollection(StartDate, EndDate, SignalID);
 

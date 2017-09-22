@@ -138,10 +138,7 @@ namespace MOE.Common.Models
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public List<Models.Detector> GetDetectorsForSignalThatSupportAMetricByApproachDirection(int MetricTypeID, string Direction)
@@ -264,11 +261,7 @@ namespace MOE.Common.Models
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
-                
+            return false;
         }
        
 

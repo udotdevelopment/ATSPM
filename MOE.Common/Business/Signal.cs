@@ -788,12 +788,7 @@ namespace MOE.Common.Business
                                 return true;
 
                             }
-                            else
-                            {
-                                return SplitBulkToDB(elTable, Options);
-
-                            }
-
+                            return SplitBulkToDB(elTable, Options);
                         }
                     }
                     catch
@@ -815,10 +810,7 @@ namespace MOE.Common.Business
                         {
                             return true;
                         }
-                      else
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                     catch 
                     {
@@ -941,19 +933,10 @@ namespace MOE.Common.Business
                                     return false;
                                 }
                             }
-                            else
-                            {
-                                Options.Connection.Close();
-                                return false;
-                            }
-
-
-
-
-
+                            Options.Connection.Close();
+                            return false;
                         }
-                        else
-                        { return false;}
+                        return false;
                     }
 
 
@@ -968,7 +951,6 @@ namespace MOE.Common.Business
 
                 public static bool  SplitBulkToDB(DataTable elTable, BulkCopyOptions Options)
                 {
-
                     if (elTable.Rows.Count > 0)
                     {
                         DataTable topDT = new DataTable();
@@ -1050,10 +1032,7 @@ namespace MOE.Common.Business
                   
                             return true;
                     }
-                    else
-                    {
-                        return false;
-                    }
+                    return false;
                 }
 
                 public static bool LineByLineWriteToDB(DataTable elTable)
