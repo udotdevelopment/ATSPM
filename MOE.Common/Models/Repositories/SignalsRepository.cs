@@ -78,7 +78,11 @@ namespace MOE.Common.Models.Repositories
 
         public Models.Signal GetSignalBySignalID(string signalID)
         {
-            return db.Signals.Find(signalID);
+            return db.Signals
+                .Where(signal => signal.SignalID == signalID)
+                .Include(signal => signal.Approaches.Select(a => a.Detectors))
+                .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                .ToList().FirstOrDefault();
         }
 
         public bool DoesSignalHaveDetection(string signalID)

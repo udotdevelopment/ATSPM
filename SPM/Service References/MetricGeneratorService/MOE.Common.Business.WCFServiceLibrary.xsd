@@ -113,7 +113,7 @@
       <xs:extension base="tns:MetricOptions">
         <xs:sequence>
           <xs:element minOccurs="0" name="BinSize" type="xs:int" />
-          <xs:element minOccurs="0" name="SeverLevel" type="xs:double" />
+          <xs:element minOccurs="0" name="SevereLevelSeconds" type="xs:double" />
           <xs:element minOccurs="0" name="ShowAverageTimeRedLightViolations" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowAverageTimeYellowOccurences" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowPercentRedLightViolations" type="xs:boolean" />

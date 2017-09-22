@@ -347,6 +347,7 @@
     <Compile Include="Business\Helpers\ApproachVolumeTable.cs" />
     <Compile Include="Business\Helpers\ConfigurationRecord.cs" />
     <Compile Include="Business\Speed\DetectorSpeed.cs" />
+    <Compile Include="Business\SplitFail\SplitFailPhase.cs" />
     <Compile Include="Business\TMC\TMCData.cs" />
     <Compile Include="Business\TMC\TMCInfo.cs" />
     <Compile Include="Business\PCD\Cycle.cs" />

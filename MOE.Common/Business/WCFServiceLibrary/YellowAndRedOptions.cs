@@ -20,7 +20,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     {
         [DataMember]
         [Display(Name = "Severe Red Light Violations")]
-        public double SeverLevel { get; set; }
+        public double SevereLevelSeconds { get; set; }
         [DataMember]
         public int BinSize { get; set; }
         [DataMember]
@@ -49,7 +49,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public bool ShowAverageTimeYellowOccurences { get; set; }
 
         public YellowAndRedOptions(string signalID, DateTime startDate, DateTime endDate, double yAxisMax, double y2AxisMax,
-            int binSize, int metricTypeID, Double severLevel, bool showRedLightViolations, bool showSevereRedLightViolations,
+            int binSize, int metricTypeID, Double severeLevelSeconds, bool showRedLightViolations, bool showSevereRedLightViolations,
             bool showPercentRedLightViolations, bool showPercentSevereRedLightViolations, bool showAverageTimeRedLightViolations, 
             bool showYellowLightOccurrences, bool showPercentYellowLightOccurrences, bool showAverageTimeYellowOccurences)
         {
@@ -59,7 +59,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             YAxisMax = yAxisMax;
             Y2AxisMax = y2AxisMax;
             MetricTypeID = metricTypeID;
-            SeverLevel = severLevel;
+            SevereLevelSeconds = severeLevelSeconds;
             ShowRedLightViolations = showRedLightViolations;
             ShowSevereRedLightViolations = showSevereRedLightViolations;
             ShowPercentRedLightViolations = showPercentRedLightViolations;
@@ -80,7 +80,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public void SetDefaults()
         {
             YAxisMax = 15;
-            SeverLevel = 4.0;
+            SevereLevelSeconds = 4.0;
             ShowRedLightViolations = true;
             ShowSevereRedLightViolations = true;
             ShowPercentRedLightViolations = true;
@@ -98,7 +98,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             //string MetricLocation = ConfigurationManager.AppSettings["ImageLocation"];
 
             MOE.Common.Business.RLMSignalPhaseCollection signalphasecollection =
-              new MOE.Common.Business.RLMSignalPhaseCollection(StartDate, EndDate, SignalID, BinSize, SeverLevel);
+              new MOE.Common.Business.RLMSignalPhaseCollection(StartDate, EndDate, SignalID, BinSize, SevereLevelSeconds);
 
             if (signalphasecollection.SignalPhaseList.Count > 0)
             {

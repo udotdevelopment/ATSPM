@@ -10,16 +10,16 @@ namespace MOE.Common.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public DateTime BinStartTime { get; set; }
-
+        [ForeignKey("Id")]
+        public virtual Detector Detector { get; set; }
         [Required]
         [StringLength(10)]
-        public string DetectorID { get; set; }
+        public string DetectorId { get; set; }
 
-        public virtual Detector Detector { get; set; }
 
         [Required]
         public int Volume { get; set; }

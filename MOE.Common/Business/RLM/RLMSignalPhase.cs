@@ -178,6 +178,9 @@ namespace MOE.Common.Business
 
         }
 
+        public RLMSignalPhase()
+        {
+        }
 
         private void GetSignalPhaseData(DateTime startDate, DateTime endDate, bool showVolume, int binSize, bool usePermissivePhase)
         {

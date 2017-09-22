@@ -14,6 +14,8 @@ using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
+using MOE.Common.Business.SplitFail;
+using MOE.Common.Business.WCFServiceLibrary;
 
 namespace MOE.Common.Business.DataAggregation
 {
@@ -27,6 +29,8 @@ namespace MOE.Common.Business.DataAggregation
             new ConcurrentQueue<ApproachSpeedAggregationData>();
         private ConcurrentQueue<ApproachAggregationData> _approachAggregationConcurrentQueue =
             new ConcurrentQueue<ApproachAggregationData>();
+        private ConcurrentQueue<DetectorAggregationData> _detectorAggregationConcurrentQueue =
+            new ConcurrentQueue<DetectorAggregationData>();
 
 
         public void StartAggregation(string[] args)
@@ -38,8 +42,10 @@ namespace MOE.Common.Business.DataAggregation
             SPM db = new SPM();
             db.Configuration.LazyLoadingEnabled = false;
             var signals = db.Signals
-                .Where(signal => signal.Enabled == true)
-                .Include(signal => signal.Approaches.Select(a => a.Detectors))
+                .Where(signal => signal.Enabled == true && signal.SignalID == "7111")
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes.Select(dt => dt.MetricTypes))))
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
                 .Include(signal => signal.Approaches.Select(a => a.DirectionType))
                 .ToList();
             var options = new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"]) };
@@ -60,8 +66,98 @@ namespace MOE.Common.Business.DataAggregation
                     Console.WriteLine("Saving Approach Data to Database...");
                     BulkSaveApproachData();
                 }
+                if (_approachSpeedAggregationConcurrentQueue.Count > 0)
+                {
+                    Console.WriteLine("Saving Approach Speed Data to Database...");
+                    BulkSaveApproachSpeedData();
+                }
+                if (_detectorAggregationConcurrentQueue.Count > 0)
+                {
+                    Console.WriteLine("Saving Detector Data to Database...");
+                    BulkSaveDetectorData();
+                }
             }
             _startDate = _startDate.AddDays(1);
+        }
+
+        private void BulkSaveDetectorData()
+        {
+            DataTable detectorAggregationTable = new DataTable();
+            detectorAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
+            detectorAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
+            detectorAggregationTable.Columns.Add(new DataColumn("DetectorID", typeof(string)));
+            detectorAggregationTable.Columns.Add(new DataColumn("Volume", typeof(double)));
+            while (_detectorAggregationConcurrentQueue.TryDequeue(out var detectorAggregationData))
+            {
+                DataRow dataRow = detectorAggregationTable.NewRow();
+                dataRow["BinStartTime"] = detectorAggregationData.BinStartTime;
+                dataRow["DetectorID"] = detectorAggregationData.DetectorId;
+                dataRow["Volume"] = detectorAggregationData.Volume;
+                detectorAggregationTable.Rows.Add(dataRow);
+            }
+            string connectionString =
+                System.Configuration.ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
+                sqlBulkCopy.DestinationTableName = "DetectorAggregationDatas";
+                sqlBulkCopy.BulkCopyTimeout = 180;
+                sqlBulkCopy.BatchSize = 50000;
+                try
+                {
+                    connection.Open();
+                    sqlBulkCopy.WriteToServer(detectorAggregationTable);
+                    connection.Close();
+                }
+                catch (Exception e)
+                {
+                    IApplicationEventRepository applicationEventRepository = ApplicationEventRepositoryFactory.Create();
+                    applicationEventRepository.QuickAdd("AggregateAtspmData", "AggregateAtspmData", "BulkSave", ApplicationEvent.SeverityLevels.High, e.Message);
+                }
+            }
+        }
+
+        private void BulkSaveApproachSpeedData()
+        {
+            DataTable approachSpeedAggregationTable = new DataTable();
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("ApproachID", typeof(int)));
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("SummedSpeed", typeof(double)));
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("SpeedVolume", typeof(double)));
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("Speed85th", typeof(double)));
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("Speed15th", typeof(double)));
+            while (_approachSpeedAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
+            {
+                DataRow dataRow = approachSpeedAggregationTable.NewRow();
+                dataRow["BinStartTime"] = approachAggregationData.BinStartTime;
+                dataRow["ApproachID"] = approachAggregationData.ApproachID;
+                dataRow["SummedSpeed"] = approachAggregationData.SummedSpeed;
+                dataRow["SpeedVolume"] = approachAggregationData.SpeedVolume;
+                dataRow["Speed85th"] = approachAggregationData.Speed85th;
+                dataRow["Speed15th"] = approachAggregationData.Speed15th;
+                approachSpeedAggregationTable.Rows.Add(dataRow);
+            }
+            string connectionString =
+                System.Configuration.ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
+                sqlBulkCopy.DestinationTableName = "ApproachSpeedAggregationDatas";
+                sqlBulkCopy.BulkCopyTimeout = 180;
+                sqlBulkCopy.BatchSize = 50000;
+                try
+                {
+                    connection.Open();
+                    sqlBulkCopy.WriteToServer(approachSpeedAggregationTable);
+                    connection.Close();
+                }
+                catch (Exception e)
+                {
+                    IApplicationEventRepository applicationEventRepository = ApplicationEventRepositoryFactory.Create();
+                    applicationEventRepository.QuickAdd("AggregateAtspmData", "AggregateAtspmData", "BulkSave", ApplicationEvent.SeverityLevels.High, e.Message);
+                }
+            }
         }
 
         private void BulkSaveApproachData()
@@ -94,7 +190,7 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["SplitFailures"] = approachAggregationData.SplitFailures;
                 dataRow["ArrivalsOnGreen"] = approachAggregationData.ArrivalsOnGreen;
                 dataRow["ArrivalsOnRed"] = approachAggregationData.ArrivalsOnRed;
-                dataRow["ArrivalsOnYellow"] = approachAggregationData.ArrivalsOnYellow;
+                dataRow["ArrivalsOnYellow"] = 0;
                 dataRow["SevereRedLightViolations"] = approachAggregationData.SevereRedLightViolations;
                 dataRow["TotalRedLightViolations"] = approachAggregationData.TotalRedLightViolations;
                 approachAggregationTable.Rows.Add(dataRow);
@@ -217,8 +313,23 @@ namespace MOE.Common.Business.DataAggregation
                     {
                         SetApproachSpeedAggregationData(startTime, endTime, signalApproach);
                         SetApproachAggregationData(startTime, endTime, records, signalApproach);
+                        SetDetectorAggregationData(startTime, endTime, records, signalApproach);
                     }
                 }
+            }
+        }
+
+        private void SetDetectorAggregationData(DateTime startTime, DateTime endTime, List<Controller_Event_Log> records, Approach signalApproach)
+        {
+            foreach (var detector in signalApproach.Detectors)
+            {
+                DetectorAggregationData detectorAggregationData = new DetectorAggregationData
+                {
+                    DetectorId = detector.DetectorID,
+                    BinStartTime = startTime,
+                    Volume = records.Count(r => r.EventCode == 82 && r.EventParam == detector.DetChannel)
+                };
+                _detectorAggregationConcurrentQueue.Enqueue(detectorAggregationData);
             }
         }
 
@@ -226,25 +337,63 @@ namespace MOE.Common.Business.DataAggregation
         {
             MOE.Common.Business.SignalPhase signalPhase =
                 new SignalPhase(startTime, endTime, signalApproach, false, 15, 6);
-            ApproachAggregationData approachAggregationData = new ApproachAggregationData
+            SplitFailPhase splitFailPhase = new SplitFailPhase();
+            RLMSignalPhase yellowRedAcuationsPhase = new RLMSignalPhase();
+            if (signalApproach.GetDetectorsForMetricType(11).Any())
+            {
+                YellowAndRedOptions options = new YellowAndRedOptions();
+                options.SetDefaults();
+                yellowRedAcuationsPhase = new RLMSignalPhase(startTime, endTime, 15, options.SevereLevelSeconds, 11, signalApproach, false);
+            }
+            if (signalApproach.GetDetectorsForMetricType(12).Any())
+            {
+                splitFailPhase = SetSplitFail(startTime, endTime, records, signalApproach, signalPhase);
+            }
+            ApproachAggregationData approachAggregationData = SetApproachAggregationDataRecord(startTime, records, signalApproach, signalPhase, splitFailPhase);
+            _approachAggregationConcurrentQueue.Enqueue(approachAggregationData);
+        }
+
+        private SplitFailPhase SetSplitFail(DateTime startTime, DateTime endTime, List<Controller_Event_Log> records, Approach signalApproach, SignalPhase signalPhase)
+        {
+            MOE.Common.Business.CustomReport.Phase phase = new MOE.Common.Business.CustomReport.Phase(signalApproach, startTime,
+                            endTime, new List<int> { 1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64 }, 1, false);
+            SplitFailOptions splitFailOptions = new SplitFailOptions();
+            splitFailOptions.SetDefaults();
+            splitFailOptions.StartDate = startTime;
+            splitFailOptions.EndDate = endTime;
+            SplitFailPhase splitFailPhase = new SplitFailPhase(signalApproach.ProtectedPhaseNumber, signalApproach, splitFailOptions, phase);
+            
+            if (signalApproach.PermissivePhaseNumber != null && signalApproach.PermissivePhaseNumber > 0)
+            {
+                MOE.Common.Business.CustomReport.Phase permPhase = new MOE.Common.Business.CustomReport.Phase(signalApproach,
+                    startTime, endTime, new List<int> { 1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64 }, 1, true);
+                SplitFailPhase splitFailPhasePermissive = new SplitFailPhase(signalApproach.ProtectedPhaseNumber, signalApproach, splitFailOptions, phase);
+                ApproachAggregationData approachAggregationDataPermissive = SetApproachAggregationDataRecord(startTime, records, signalApproach, signalPhase, splitFailPhase);
+                _approachAggregationConcurrentQueue.Enqueue(approachAggregationDataPermissive);
+            }
+
+            return splitFailPhase;
+        }
+
+        private static ApproachAggregationData SetApproachAggregationDataRecord(DateTime startTime, List<Controller_Event_Log> records, Approach signalApproach, SignalPhase signalPhase, SplitFailPhase splitFailPhase)
+        {
+            return new ApproachAggregationData
             {
                 ApproachID = signalApproach.ApproachID,
                 PedActuations = records.Count(r =>
-                    r.EventCode == 45 && r.EventParam == signalApproach.ProtectedPhaseNumber),
+                                r.EventCode == 45 && r.EventParam == signalApproach.ProtectedPhaseNumber),
                 TotalCycles = records.Count(r =>
-                    r.EventCode == 61 && r.EventParam == signalApproach.ProtectedPhaseNumber),
+                                r.EventCode == 61 && r.EventParam == signalApproach.ProtectedPhaseNumber),
                 GreenTime = signalPhase.TotalGreenTime,
                 YellowTime = signalPhase.TotalYellowTime,
                 RedTime = signalPhase.TotalRedTime,
                 ArrivalsOnGreen = Convert.ToInt32(signalPhase.TotalArrivalOnGreen),
                 ArrivalsOnRed = Convert.ToInt32(signalPhase.TotalArrivalOnRed),
-                ArrivalsOnYellow = 0,
                 BinStartTime = startTime,
-                SplitFailures = 0,
+                SplitFailures = splitFailPhase.TotalFails,
                 SevereRedLightViolations = 0,
                 TotalRedLightViolations = 0
             };
-            _approachAggregationConcurrentQueue.Enqueue(approachAggregationData);
         }
 
         private void SetApproachSpeedAggregationData(DateTime startTime, DateTime endTime, Approach signalApproach)

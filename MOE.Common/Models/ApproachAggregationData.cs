@@ -36,21 +36,20 @@ namespace MOE.Common.Models
         public int PedActuations { get; set; }
 
         [Required]
-        public int SplitFailures { get; set; }
+        public int? SplitFailures { get; set; }
         
         [Required]
-        public int ArrivalsOnGreen { get; set; }
+        public int? ArrivalsOnGreen { get; set; }
 
         [Required]
-        public int ArrivalsOnRed { get; set; }
+        public int? ArrivalsOnRed { get; set; }
 
         [Required]
-        public int ArrivalsOnYellow { get; set; }
+        public int? SevereRedLightViolations { get; set; }
 
         [Required]
-        public int SevereRedLightViolations { get; set; }
+        public int? TotalRedLightViolations { get; set; }
 
-        [Required]
-        public int TotalRedLightViolations { get; set; }
+        public int? ArrivalsOnYellow { get; set; }
     }
 }

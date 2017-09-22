@@ -13,11 +13,11 @@ namespace MOE.Common.Business.SplitFail
         public Chart chart = new Chart();
         public WCFServiceLibrary.SplitFailOptions Options { get; set; }
         public MOE.Common.Business.CustomReport.Phase Phase  { get; set; }
-
-        public SplitFailChart(WCFServiceLibrary.SplitFailOptions options,
-            MOE.Common.Business.CustomReport.Phase phase)
+        public SplitFailPhase SplitFailPhase { get;}
+        public SplitFailChart(CustomReport.Phase phase, WCFServiceLibrary.SplitFailOptions options, SplitFailPhase splitFailPhase)
         {
             Options = options;
+            SplitFailPhase = splitFailPhase;
             Phase = phase;
             TimeSpan reportTimespan = Options.EndDate - Options.StartDate;
 
@@ -199,353 +199,50 @@ namespace MOE.Common.Business.SplitFail
 
         protected void AddDataToChart(Chart chart)
         {
-
-
-            List<ControllerEventLogs> Tables = new List<ControllerEventLogs>();
-            List<DateTime> SplitFails = new List<DateTime>();
-
-            int totalFails = 0;
-
-
-
-            Models.Repositories.ISignalsRepository signalRepository =
-                 Models.Repositories.SignalsRepositoryFactory.Create();
-            //var signal = signalRepository.GetSignalBySignalID(phase.SignalID);
-            var ApproachDetectors = Phase.Approach.GetDetectorsForMetricType(12);
-            
-            //get occupancy events for each lane for the approach.
-            if (ApproachDetectors.Count() > 0)
+            foreach (var gorGapOut in SplitFailPhase.GorGapOut)
             {
-                foreach (Models.Detector row in ApproachDetectors)
+                chart.Series["GOR - GapOut"].Points.AddXY(gorGapOut.Item1, gorGapOut.Item2);
+            }
+            foreach (var rorGapOut in SplitFailPhase.RorGapOut)
+            {
+                chart.Series["ROR - GapOut"].Points.AddXY(rorGapOut.Item1, rorGapOut.Item2);
+            }
+            foreach (var gorForceOff in SplitFailPhase.GorForceOff)
+            {
+                chart.Series["GOR - ForceOff"].Points.AddXY(gorForceOff.Item1, gorForceOff.Item2);
+            }
+            foreach (var rorForceOff in SplitFailPhase.RorForceOff)
+            {
+                chart.Series["ROR - ForceOff"].Points.AddXY(rorForceOff.Item1, rorForceOff.Item2);
+            }
+            if (Options.ShowFailLines)
+            {
+                foreach (var splitFail in SplitFailPhase.SplitFails)
                 {
-
-                    MOE.Common.Business.ControllerEventLogs TEMPdetectortable = new ControllerEventLogs(Phase.SignalID, Options.StartDate, Options.EndDate, 
-                    row.DetChannel, new List<int>(){81,82});
-
-
-                    if (TEMPdetectortable.Events.Count > 0)
-                    {
-                        Tables.Add(TEMPdetectortable);
-                    }
-
+                    chart.Series["SplitFail"].Points.AddXY(splitFail, 100);
                 }
-
-
-
-                Dictionary<string, string> statistics = new Dictionary<string, string>();
-                if (Tables.Count > 0 )
+            }
+            DateTime counterTime = Options.StartDate;
+            if (Options.ShowPercentFailLines)
+            {
+                foreach (var percentFail in SplitFailPhase.PercentFails)
                 {
-                    //for (int CurCycleIndex = 0; CurCycleIndex < phase.Cycles.Count -1 ; CurCycleIndex++)
-                    //int tempCycleCounter = 0;
-                    //Parallel.ForEach(phase.Cycles, c =>
-                    foreach (MOE.Common.Business.CustomReport.Cycle c in Phase.Cycles)
-                    {
-                        //tempCycleCounter++;
-                        //SplitFailDetectorActivationCollection activations = new SplitFailDetectorActivationCollection();
-
-
-                        //for each lane
-                        //Parallel.ForEach(Tables, table =>
-                        foreach (ControllerEventLogs table in Tables)
-                        {
-
-                            int channel = table.Events[0].EventParam;
-
-                            List<MOE.Common.Models.Controller_Event_Log> DetectorHitsForCycle = new List<MOE.Common.Models.Controller_Event_Log>();
-
-
-                            //Parallel.ForEach(table.Events, e =>
-                            foreach (MOE.Common.Models.Controller_Event_Log e in table.Events)
-                            {
-
-                                if (e.Timestamp >= c.CycleStart && e.Timestamp <= c.CycleEnd)
-                                {
-                                    DetectorHitsForCycle.Add(e);
-                                }
-                            }
-                            //);
-
-                            if (DetectorHitsForCycle.Count > 0)
-                            {
-                                var eventsInOrder = DetectorHitsForCycle.OrderBy(r => r.Timestamp);
-                                if (eventsInOrder.Count() > 1)
-                                {
-                                    for (int i = 0; i < eventsInOrder.Count() - 1; i++)
-                                    {
-
-
-                                        MOE.Common.Models.Controller_Event_Log current = eventsInOrder.ElementAt(i);
-
-                                        MOE.Common.Models.Controller_Event_Log next = eventsInOrder.ElementAt(i + 1);
-
-
-                                        if (current.Timestamp.Ticks == next.Timestamp.Ticks)
-                                        {
-                                          
-                                            continue;
-                                        }
-
-                                        //If the first event is 'Off', then set 'On' to cyclestart
-                                        if (i == 0 && current.EventCode == 81)
-                                        {
-                                            SplitFailDetectorActivation da = new SplitFailDetectorActivation();
-                                            da.DetectorOn = c.CycleStart;
-                                            da.DetectorOff = current.Timestamp;
-
-                                            c.Activations.AddActivation(da);
-                                            
-
-
-
-
-                                        }
-
-                                        //This is the prefered sequence; an 'On'  followed by an 'off'
-                                        if (current.EventCode == 82 && next.EventCode == 81)
-                                        {
-                                            SplitFailDetectorActivation da = new SplitFailDetectorActivation();
-                                            da.DetectorOn = current.Timestamp;
-                                            da.DetectorOff = next.Timestamp;
-                                            c.Activations.AddActivation(da);
-                                            continue;
-
-                                        }
-
-                                        //if we are at the penultimate event, and the last event is 'on', set 'off' as CycleEnd.
-                                        if (i + 2 == eventsInOrder.Count() && next.EventCode == 82)
-                                        {
-                                            SplitFailDetectorActivation da = new SplitFailDetectorActivation();
-                                            da.DetectorOn = next.Timestamp;
-                                            da.DetectorOff = c.CycleEnd;
-                                            c.Activations.AddActivation(da);
-                                            continue;
-
-
-                                        }
-
-
-
-
-                                    }
-                                }
-                                else
-                                {
-                                    SplitFailDetectorActivation da = new SplitFailDetectorActivation();
-                                    MOE.Common.Models.Controller_Event_Log current = eventsInOrder.First();
-                                    switch (current.EventCode)
-                                    {
-
-
-                                        //if the only event is off
-                                        case 81:
-                                            da.DetectorOn = c.CycleStart;
-                                            da.DetectorOff = current.Timestamp;
-                                            c.Activations.AddActivation(da);
-
-                                            break;
-                                        //if the only event is on
-                                        case 82:
-
-                                            da.DetectorOn = current.Timestamp;
-                                            da.DetectorOff = c.CycleEnd;
-                                            c.Activations.AddActivation(da);
-
-                                            break;
-                                    }
-                                }
-                            }
-                            //if there are no hits in the cycle, we need to determine if the a previous detector activaition lasts the entire cycle
-                            else if (DetectorHitsForCycle.Count <= 0)
-                            {
-
-                                SplitFailDetectorActivation da = new SplitFailDetectorActivation();
-
-                                DateTime earlierTime = c.CycleStart.AddMinutes(-30);
-
-
-                                List<int> li = new List<int> { 81, 82 };
-
-                                ControllerEventLogs cs = new ControllerEventLogs(Phase.SignalID, earlierTime, c.CycleStart, channel, li);
-
-                                //if the last detecotr eventCodes was ON, and there is no matching off event, assume the detector was on for the whole cycle
-                                if (cs.Events.Count > 0 && cs.Events.LastOrDefault().EventCode == 82)
-                                {
-
-
-                                    da.DetectorOn = c.CycleStart;
-                                    da.DetectorOff = c.CycleEnd;
-                                    c.Activations.AddActivation(da);
-                                }
-                                //}
-                            }
-                        }
-                        //);
-                        //end of Lane loop
-
-
-
-
-
-
-
-                        //merge the detectors for the different lanes
-                        for (int i = 0; i < c.Activations.Activations.Count - 1; )
-                        {
-                            SplitFailDetectorActivation current = c.Activations.Activations.ElementAt(i).Value;
-                            SplitFailDetectorActivation next = c.Activations.Activations.ElementAt(i + 1).Value;
-
-                            //if the next activaiton is between the previos one, remove the nextone and start again.
-                            if (next.DetectorOn >= current.DetectorOn && next.DetectorOff <= current.DetectorOff)
-                            {
-                                c.Activations.Activations.RemoveAt(i + 1);
-                                continue;
-                            }
-                            //if the next activaiton starts during the current, but ends later, atler current end time, and remove next, and start over. 
-                            else if (next.DetectorOn >= current.DetectorOn && next.DetectorOn < current.DetectorOff && next.DetectorOff > current.DetectorOff)
-                            {
-                                current.DetectorOff = next.DetectorOff;
-                                c.Activations.Activations.RemoveAt(i + 1);
-                                continue;
-                            }
-                            else
-                            {
-                                i++;
-                            }
-
-                        }
-
-
-
-                        //if (c.Activations.Activations.Count > 0 && c.CycleStart > startDate && c.CycleStart < endDate)
-                        if (c.CycleStart > Options.StartDate && c.CycleStart < Options.EndDate)
-                        {
-
-                            double gor = c.Activations.GreenOccupancy(c) * 100;
-                            double ror = c.Activations.StartOfRedOccupancy(c, Options.FirstSecondsOfRed) * 100;
-
-                            if (c.TerminationEvent == MOE.Common.Business.CustomReport.Cycle.TerminationCause.GapOut)
-                            {
-
-                                chart.Series["GOR - GapOut"].Points.AddXY(c.CycleStart, gor);
-                                chart.Series["ROR - GapOut"].Points.AddXY(c.CycleStart, ror);
-
-                            }
-
-                            else
-                            {
-                                chart.Series["GOR - ForceOff"].Points.AddXY(c.CycleStart, gor);
-                                chart.Series["ROR - ForceOff"].Points.AddXY(c.CycleStart, ror);
-
-                            }
-
-
-                            if ((gor > 79 && ror > 79))
-                            {
-                                if (Options.ShowFailLines)
-                                {
-                                    chart.Series["SplitFail"].Points.AddXY(c.CycleStart, 100);
-                                }
-                                SplitFails.Add(c.CycleStart);
-                                totalFails++;
-
-                            }
-                        }
-                    }
-                    //);
-                    
-                    
-                    statistics.Add("Total Split Failures ", totalFails.ToString());
-
-
-                    //end of Cycle loop
-
-                  
-                        //Average Loop
-
-                    DateTime counterTime = Options.StartDate;
-
-                        do
-                        {
-                            double binTotalGOR = 0;
-                            double binTotalROR = 0;
-
-                            var CycleBin = from cur in Phase.Cycles
-                                           where cur.CycleStart >= counterTime
-                                           && cur.CycleStart <= counterTime.AddMinutes(15)
-                                           orderby cur.CycleStart
-                                           select cur;
-
-                            var failsInBin = from s in SplitFails
-                                             where s >= counterTime && s <= counterTime.AddMinutes(15)
-                                             select s;
-
-                            double binFails = failsInBin.Count();
-
-                            //Parallel.ForEach(CycleBin, c =>
-                                
-                            foreach (MOE.Common.Business.CustomReport.Cycle c in CycleBin)
-                            {
-                                binTotalGOR += c.Activations.GreenOccupancy(c) * 100;
-                                binTotalROR += c.Activations.StartOfRedOccupancy(c, Options.FirstSecondsOfRed) * 100;
-
-
-
-                            }
-                        //);
-                            if (Options.ShowPercentFailLines)
-                            {
-                                if (binFails > 0 && CycleBin.Count() > 0)
-                                {
-                                    double binFailPercent = (binFails / Convert.ToDouble(CycleBin.Count()));
-                                    chart.Series["Percent Fails"].Points.AddXY(counterTime, Convert.ToInt32(binFailPercent * 100));
-                                }
-                                else
-                                {
-                                    chart.Series["Percent Fails"].Points.AddXY(counterTime, 0);
-                                }
-                            }
-                            if (Options.ShowAvgLines)
-                            {
-                                if (CycleBin.Count() > 0)
-                                {
-
-
-                                    double avggor = binTotalGOR / CycleBin.Count();
-                                    double avgror = binTotalROR / CycleBin.Count();
-
-                                    chart.Series["Avg. GOR"].Points.AddXY(counterTime, avggor);
-                                    chart.Series["Avg. ROR"].Points.AddXY(counterTime, avgror);
-
-                                }
-
-                                if (CycleBin.Count() == 0)
-                                {
-                                    chart.Series["Avg. GOR"].Points.AddXY(counterTime, 0);
-                                    chart.Series["Avg. ROR"].Points.AddXY(counterTime, 0);
-                                }
-                            }
-
-
-
-
-
-
-
-                            counterTime = counterTime.AddMinutes(15);
-
-
-
-
-                        } while (counterTime < Options.EndDate.AddMinutes(15));
-
-                        //End Average Loop
-                    
-                                
-
+                    chart.Series["Percent Fails"].Points.AddXY(counterTime, Convert.ToInt32(percentFail));
+                }
             }
-                SetChartTitle(statistics);
-                AddPlanStrips(chart, Phase, Options.StartDate, Options.EndDate, SplitFails);
+            if (Options.ShowAvgLines)
+            {
+                foreach (var averageGor in SplitFailPhase.AverageGors)
+                {
+                    chart.Series["Avg. GOR"].Points.AddXY(averageGor.Item1, averageGor.Item2);
+                }
+                foreach (var averageRor in SplitFailPhase.AverageRors)
+                {
+                    chart.Series["Avg. ROR"].Points.AddXY(averageRor.Item1, averageRor.Item2);
+                }
             }
+            SetChartTitle(SplitFailPhase.Statistics);
+            AddPlanStrips(chart, Phase, Options.StartDate, Options.EndDate);
         }
 
         private void SetChartTitle(Dictionary<string, string> statistics)
@@ -556,7 +253,7 @@ namespace MOE.Common.Business.SplitFail
             chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
 
-        protected void AddPlanStrips(Chart chart, MOE.Common.Business.CustomReport.Phase phase, DateTime startDate, DateTime endDate, List<DateTime> splitFails )
+        protected void AddPlanStrips(Chart chart, MOE.Common.Business.CustomReport.Phase phase, DateTime startDate, DateTime endDate)
         {
             PlanCollection planCollection = new PlanCollection(startDate, endDate, phase.SignalID);
             
@@ -619,8 +316,8 @@ namespace MOE.Common.Business.SplitFail
                                    where c.CycleStart > plan.StartTime && c.CycleEnd < plan.EndTime
                                    select c;
 
-                 var failsInPlan = from s in splitFails
-                                   where s > plan.StartTime && s < plan.EndTime
+                 var failsInPlan = from s in SplitFailPhase.PercentFails
+                                   where s.Item1 > plan.StartTime && s.Item1 < plan.EndTime
                                    select s;
 
                  PlanMetrics.Text += failsInPlan.Count().ToString() + " SF";

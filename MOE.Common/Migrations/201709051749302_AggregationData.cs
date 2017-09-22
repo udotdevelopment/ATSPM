@@ -22,9 +22,9 @@ namespace MOE.Common.Migrations
                         SplitFailures = c.Int(nullable: false),
                         ArrivalsOnGreen = c.Int(nullable: false),
                         ArrivalsOnRed = c.Int(nullable: false),
-                        ArrivalsOnYellow = c.Int(nullable: false),
                         SevereRedLightViolations = c.Int(nullable: false),
                         TotalRedLightViolations = c.Int(nullable: false),
+                        ArrivalsOnYellow = c.Int(),
                     })
                 .PrimaryKey(t => t.ID)
                 .ForeignKey("dbo.Approaches", t => t.ApproachID, cascadeDelete: true)
@@ -50,15 +50,14 @@ namespace MOE.Common.Migrations
                 "dbo.DetectorAggregationDatas",
                 c => new
                     {
-                        ID = c.Int(nullable: false, identity: true),
+                        Id = c.Int(nullable: false, identity: true),
                         BinStartTime = c.DateTime(nullable: false),
-                        DetectorID = c.String(nullable: false, maxLength: 10),
+                        DetectorId = c.String(nullable: false, maxLength: 10),
                         Volume = c.Int(nullable: false),
-                        Detector_ID = c.Int(),
                     })
-                .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.Detectors", t => t.Detector_ID)
-                .Index(t => t.Detector_ID);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Detectors", t => t.Id)
+                .Index(t => t.Id);
             
             CreateTable(
                 "dbo.PreemptionAggregationDatas",
@@ -132,13 +131,13 @@ namespace MOE.Common.Migrations
             DropForeignKey("dbo.SignalAggregationDatas", "SignalID", "dbo.Signals");
             DropForeignKey("dbo.PriorityAggregationDatas", "SignalID", "dbo.Signals");
             DropForeignKey("dbo.PreemptionAggregationDatas", "SignalID", "dbo.Signals");
-            DropForeignKey("dbo.DetectorAggregationDatas", "Detector_ID", "dbo.Detectors");
+            DropForeignKey("dbo.DetectorAggregationDatas", "Id", "dbo.Detectors");
             DropForeignKey("dbo.ApproachSpeedAggregationDatas", "ApproachID", "dbo.Approaches");
             DropForeignKey("dbo.ApproachAggregationDatas", "ApproachID", "dbo.Approaches");
             DropIndex("dbo.SignalAggregationDatas", new[] { "SignalID" });
             DropIndex("dbo.PriorityAggregationDatas", new[] { "SignalID" });
             DropIndex("dbo.PreemptionAggregationDatas", new[] { "SignalID" });
-            DropIndex("dbo.DetectorAggregationDatas", new[] { "Detector_ID" });
+            DropIndex("dbo.DetectorAggregationDatas", new[] { "Id" });
             DropIndex("dbo.ApproachSpeedAggregationDatas", new[] { "ApproachID" });
             DropIndex("dbo.ApproachAggregationDatas", new[] { "ApproachID" });
             DropTable("dbo.SignalAggregationDatas");
