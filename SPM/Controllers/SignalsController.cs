@@ -15,17 +15,29 @@ namespace SPM.Controllers
     [Authorize(Roles = "Technician")]
     public class SignalsController : Controller
     {
+        public SignalsController()
+        {
+
+            _signalsRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+        }
+
+        public SignalsController(MOE.Common.Models.Repositories.ISignalsRepository signalsRepository)
+        {
+            _signalsRepository = signalsRepository;
+        }
+
+        private MOE.Common.Models.Repositories.ISignalsRepository _signalsRepository;
+
         private MOE.Common.Models.Repositories.IDetectorRepository detectorRepository =
                 MOE.Common.Models.Repositories.DetectorRepositoryFactory.Create();
-        private MOE.Common.Models.Repositories.ISignalsRepository signalsRepository =
-            MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+
         private MOE.Common.Models.Repositories.IDetectionTypeRepository detectionTypeRepository =
             MOE.Common.Models.Repositories.DetectionTypeRepositoryFactory.Create();
         private MOE.Common.Models.Repositories.IApproachRepository approachRepository =
                 MOE.Common.Models.Repositories.ApproachRepositoryFactory.Create();
         //private MOE.Common.Models.Repositories.ILaneRepository laneGroupRepository =
         //        MOE.Common.Models.Repositories.LaneRepositoryFactory.Create();
-        private MOE.Common.Models.Repositories.IMetricTypeRepository metricTypeRepository =
+        private MOE.Common.Models.Repositories.IMetricTypeRepository _metricTypeRepository =
                 MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
 
         // GET: Signals
@@ -51,7 +63,7 @@ namespace SPM.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult AddApproach(string id)
         {            
-            var signal = signalsRepository.GetSignalBySignalID(id);
+            var signal = _signalsRepository.GetSignalBySignalID(id);
             Approach approach = GetNewApproach(signal);           
             approachRepository.AddOrUpdate(approach);
             AddSelectListsToViewBag(signal);
@@ -63,7 +75,7 @@ namespace SPM.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult CopyApproach(string id, int approachID)
         {
-            var signal = signalsRepository.GetSignalBySignalID(id);
+            var signal = _signalsRepository.GetSignalBySignalID(id);
             //Approach approachFromDatabase = signal.Approaches.Where(a => a.ApproachID == approachID).First();
             AddSelectListsToViewBag(signal);
             try
@@ -101,7 +113,7 @@ namespace SPM.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult AddDetector(string signalID, int approachID, string approachIndex)
         {
-            Signal signal = signalsRepository.GetSignalBySignalID(signalID);
+            Signal signal = _signalsRepository.GetSignalBySignalID(signalID);
             var approach = signal.Approaches.Where(s => s.ApproachID == approachID).First();
             Detector detector = CreateNewDetector(approach, approachIndex, signalID);            
             AddSelectListsToViewBag(signal);
@@ -114,7 +126,7 @@ namespace SPM.Controllers
         public ActionResult CopyDetector(int ID, string signalID, int approachID, string approachIndex)
         {
             Detector newDetector = MOE.Common.Models.Detector.CopyDetector(ID, true); //need to increase DetChannel if not copying the whole signal.
-            Signal signal = signalsRepository.GetSignalBySignalID(signalID);
+            Signal signal = _signalsRepository.GetSignalBySignalID(signalID);
             Approach approach = signal.Approaches.Where(s => s.ApproachID == approachID).First();
             newDetector.ApproachID = approach.ApproachID;
             newDetector.Index = approachIndex + "Detectors[" + approach.Detectors.Count.ToString() + "].";
@@ -149,13 +161,13 @@ namespace SPM.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Create(string id)
         {
-            var existingSignal = signalsRepository.GetSignalBySignalID(id);
+            var existingSignal = _signalsRepository.GetSignalBySignalID(id);
             if (existingSignal == null)
             {
                 Signal signal = CreateNewSignal(id);
                 try
                 {
-                    signalsRepository.AddOrUpdate(signal);
+                    _signalsRepository.AddOrUpdate(signal);
                 }
                 catch (Exception ex)
                 {
@@ -197,14 +209,14 @@ namespace SPM.Controllers
             {
                 return Content("<h1>A signal ID is required</h1>");
             }
-            Signal signal = signalsRepository.GetSignalBySignalID(id);
+            Signal signal = _signalsRepository.GetSignalBySignalID(id);
             if (signal != null)
             {
                 newSignal = MOE.Common.Models.Signal.CopySignal(signal, newId);              
             }
             try
             {
-                signalsRepository.AddOrUpdate(newSignal);
+                _signalsRepository.AddOrUpdate(newSignal);
             }
             catch(Exception ex)
             {
@@ -224,7 +236,7 @@ namespace SPM.Controllers
             {
                 return Content("<h1>A signal ID is required</h1>");
             }
-            Signal signal = signalsRepository.GetSignalBySignalID(id);
+            Signal signal = _signalsRepository.GetSignalBySignalID(id);
             signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description).ToList();
             foreach(Approach approach in signal.Approaches)
             {
@@ -257,7 +269,7 @@ namespace SPM.Controllers
                 AddSelectListsToViewBag(signal);
                 //foreach (MOE.Common.Models.MetricComment c in signal.Comments)
                 //{
-                //    c.MetricTypes = metricTypeRepository.GetMetricTypesByMetricComment(c);
+                //    c.MetricTypes = _metricTypeRepository.GetMetricTypesByMetricComment(c);
                 //}
             }           
             return PartialView(signal);
@@ -275,7 +287,7 @@ namespace SPM.Controllers
             {
                 return Content("<h1>A signal ID is required</h1>");
             }
-            Signal signal = signalsRepository.GetSignalBySignalID(id);
+            Signal signal = _signalsRepository.GetSignalBySignalID(id);
             signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description).ToList();
             foreach (Approach approach in signal.Approaches)
             {
@@ -308,7 +320,7 @@ namespace SPM.Controllers
                 AddSelectListsToViewBag(signal);
                 //foreach (MOE.Common.Models.MetricComment c in signal.Comments)
                 //{
-                //    c.MetricTypes = metricTypeRepository.GetMetricTypesByMetricComment(c);
+                //    c.MetricTypes = _metricTypeRepository.GetMetricTypesByMetricComment(c);
                 //}
             }
             return PartialView(signal);
@@ -401,7 +413,7 @@ namespace SPM.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Signal signal = signalsRepository.GetSignalBySignalID(id);
+            Signal signal = _signalsRepository.GetSignalBySignalID(id);
             if (signal == null)
             {
                 return HttpNotFound();
@@ -417,7 +429,7 @@ namespace SPM.Controllers
         {
             try
             {
-                signalsRepository.Remove(id);
+                _signalsRepository.Remove(id);
                 return id + " Removed";
             }
             catch (Exception ex)
