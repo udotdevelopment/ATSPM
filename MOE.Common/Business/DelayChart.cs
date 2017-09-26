@@ -355,12 +355,12 @@ namespace MOE.Common.Business
                 iNearest = (iNumberToRound - iRest) + iToNearest;
                 return iNearest;
             }
-            else if (iRest > (iToNearest / 2))
+            if (iRest > (iToNearest / 2))
             {
                 iNearest = (iNumberToRound - iRest) + iToNearest;
                 return iNearest;
             }
-            else if (iRest < (iToNearest / 2))
+            if (iRest < (iToNearest / 2))
             {
                 iNearest = (iNumberToRound - iRest);
                 return iNearest;

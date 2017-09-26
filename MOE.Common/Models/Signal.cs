@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace MOE.Common.Models
 {
     using System;
@@ -8,17 +10,20 @@ namespace MOE.Common.Models
 
     public partial class Signal
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage",
+            "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Signal()
         {
-       
+
         }
 
-        [NotMapped]
-        private string signalID;
+        [NotMapped] private string signalID;
 
         [Key]
+        public int VersionID { get; set; }
+
         [StringLength(10)]
+        [Required]
         public string SignalID
         {
             get { return signalID; }
@@ -45,6 +50,16 @@ namespace MOE.Common.Models
                 }
             }
         }
+
+        [Required]
+        public virtual VersionAction VersionAction { get; set; }
+
+        [Required]
+        public string Note { get; set; }
+
+        [Required]
+        [Display(Name = "Last Day This Configuration is Valid")]
+        public DateTime End { get; set; }
 
         [Required]
         [Display(Name="Primary Name")]
@@ -85,9 +100,8 @@ namespace MOE.Common.Models
          [Display(Name = "Chart Notes")]
         public virtual ICollection<MetricComment> Comments { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ActionLog> ActionLog { get; set; }
-        [Display(Name="Phase/Direction")]
+
+        [Display(Name = "Phase/Direction")]
         public virtual ICollection<Approach> Approaches { get; set; }
     }
 }

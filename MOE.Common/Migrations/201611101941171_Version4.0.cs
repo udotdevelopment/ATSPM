@@ -38,7 +38,7 @@ namespace MOE.Common.Migrations
             //Sql("Truncate TABLE MOE_Users");
             //Sql("Truncate TABLE Menu");
             //********************************************
-             
+
 
             DropPrimaryKey("dbo.ApproachRouteDetail");
             DropForeignKey("dbo.Action_Log_Actions", "Action_Id", "dbo.Action_Log_Action_List");

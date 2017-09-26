@@ -9,13 +9,15 @@
 
     public partial class ApproachRoute
     {
-        public List<Models.Approach> GetRouteNonMember()
+        public List<Models.Signal> GetRouteNonMember()
         {
-            MOE.Common.Models.Repositories.IApproachRepository sr = 
-                MOE.Common.Models.Repositories.ApproachRepositoryFactory.Create();
+            MOE.Common.Models.Repositories.ISignalsRepository sr = 
+                MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+
             var members = from r in ApproachRouteDetails
-                          select r.Approach;
-            return sr.GetAllApproaches().Except(members).ToList();
+                          select r.Signal;
+
+            return sr.GetAllSignals().Except(members).ToList();
         }
 
     }

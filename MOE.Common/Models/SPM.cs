@@ -66,6 +66,8 @@ namespace MOE.Common.Models
         public virtual DbSet<ApplicationSettings> ApplicationSettings { get; set; }
         public virtual DbSet<WatchDogApplicationSettings> WatchdogApplicationSettings { get; set; }
         public virtual DbSet<DetectionHardware> DetectionHardwares { get; set; }
+        public virtual DbSet<VersionAction> VersionActions { get; set; }
+
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -81,12 +83,7 @@ namespace MOE.Common.Models
             modelBuilder.Entity<ApproachRoute>()
                 .HasMany(e => e.ApproachRouteDetails)
                 .WithRequired(e => e.ApproachRoute)
-                .WillCascadeOnDelete(true);
-
-            modelBuilder.Entity<Approach>()
-                .HasMany(e => e.ApproachRouteDetails)
-                .WithRequired(e => e.Approach)
-                .WillCascadeOnDelete(true);
+                .WillCascadeOnDelete(true);        
 
             modelBuilder.Entity<Route>()
                 .Property(e => e.Description)
@@ -118,16 +115,6 @@ namespace MOE.Common.Models
 
             modelBuilder.Entity<Signal>()
                 .Property(e => e.RegionID);
-
-            modelBuilder.Entity<Signal>()
-                .HasMany(e => e.ActionLog)
-                .WithRequired(e => e.Signal)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Signal>()
-                .HasMany(e => e.Approaches)
-                .WithRequired(e => e.Signal)
-                .WillCascadeOnDelete(true);
 
             modelBuilder.Entity<Approach>()
                 .HasMany(e => e.Detectors)

@@ -1,0 +1,27 @@
+﻿@model MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel
+
+@{
+    ViewBag.Title = "SPM Configuration Tool";
+}
+@Html.AntiForgeryToken()
+<h2>Signal Configuration</h2>
+
+@Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
+<div class="" id="ResultMessage"></div>
+<div id="SignalResult"></div>
+@section Scripts
+    {
+    <script type="text/javascript" src="~/Scripts/Map.js"></script>
+    <script type="text/javascript" src="~/Scripts/AddData.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalEdit.js"></script>
+    <script type="text/javascript" src="~/Scripts/GetMetrics.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalDetail.js"></script>
+    <script type="text/javascript">
+        var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';
+        var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';
+        var urlpathFillSignals = '@Url.Action("FillSignals", "DefaultCharts")';
+        var urlpathGetSignalDetail = '@Url.Action("SignalDetailResult", "Signals")';
+        var urlpathGetConfigurationTable = '@Url.Action("Index", "ConfigurationTable")';
+    </script>
+}

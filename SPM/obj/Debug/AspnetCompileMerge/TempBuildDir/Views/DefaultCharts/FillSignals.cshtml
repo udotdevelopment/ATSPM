@@ -1,0 +1,87 @@
+﻿@model MOE.Common.Models.ViewModel.Chart.FillSignalsViewModel
+@using Caseiro.Mvc.PagedList
+@using Caseiro.Mvc.PagedList.Helpers
+@using Caseiro.Mvc.PagedList.Extensions
+@Html.HiddenFor(m => m.OrderField)
+@Html.HiddenFor(m => m.OrderDirection)
+<div class="row">
+    <div class="form-group col-md-4">
+        <label class="control-label" for="Filters">Filter</label>
+        @Html.DropDownListFor(model => model.SelectedFilterID,
+new SelectList(Model.Filters, "FilterID", "FilterName"),
+                                   "--Select a Filter--", new { @id = "Filters", @class = "form-control signal-search-width" })
+    </div>
+    <div class="form-group col-md-4">
+        @Html.LabelFor(model => model.FilterCriteria, new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.FilterCriteria, new { @class = "form-control" })
+    </div>
+    <div class="input-group-custom col-md-4">
+        <input id="FilterButton" type="button" value="Filter" class="btn" />
+        <input id="ClearFilterButton" type="button" value="Clear Filter" class="btn" />
+    </div>
+</div>
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Signal ID</th>
+            <th>Primary Name</th>
+            <th>Secondary Name</th>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Signals)
+        {
+            <tr>
+                <td>@item.SignalID</td>
+                <td>@item.PrimaryName</td>
+                <td>@item.SecondaryName</td>
+                <td><a href="javascript:SetControlValues('@item.SignalID',null)">Select</a></td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4">
+                <table>
+                    <tr>
+                        <td>
+                            <a class="glyphicon glyphicon-fast-backward"  href="javascript:GetSignals(1)"></a>
+                            &nbsp;&nbsp;
+                        </td>
+                        @{
+                            int pageNumber = 0;
+                            if (Model.Page < 3)
+                            {
+                                pageNumber = 1;
+                            }
+                            else
+                            {
+                                pageNumber = Model.Page - 2;
+                            }
+
+                            for (int i = 1; i <= 10; i++)
+                            {
+                                if (pageNumber <= Model.Signals.PageCount)
+                                {
+                                    <td>
+                                        <a href="javascript:GetSignals(@pageNumber)">@pageNumber</a>|
+                                    </td>
+                                }
+                                pageNumber++;
+                            }
+                        }
+                        <td>
+                            &nbsp;&nbsp;<a class="glyphicon glyphicon-fast-forward" href="javascript:GetSignals(@Model.Signals.PageCount)"></a>
+                        </td>
+                        <td>
+                            &nbsp;&nbsp;@Model.Signals.TotalCount.ToString() Signals
+                        </td>
+                    </tr>
+                </table>                
+                @*@Html.PagerFilterFor(m => m.Signals, page => Url.Action("FillSignals", new { page = page }))*@
+            </td>
+        </tr>
+    </tfoot>
+</table>
+

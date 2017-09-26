@@ -1,0 +1,58 @@
+﻿@model MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel
+<script charset="UTF-8" type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+<div class="panel panel-default">
+    <div class="panel-heading">Signal Selection</div>
+    <div class="panel-body">
+        @Html.LabelFor(model => model.SignalID, htmlAttributes: new { id="SignalID-error", @class = "control-label" })
+        <div class="input-group-custom">
+            @Html.EditorFor(model => model.SignalID, new { htmlAttributes = new { id = "SignalID", @class = "form-control  signalID-width", placeholder = "Signal ID" } })
+            <label id="SignalLocation">Press Enter to select signal</label>
+        </div>@Html.ValidationMessageFor(model => model.SignalID, "", new { id = "SignalID-error", @class = "text-danger" })
+        <br />
+        <div id="accordion" role="tablist" aria-multiselectable="true" class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                        <a id="SignalHeader" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            Signal List
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse ControlHeader" role="tabpanel" aria-labelledby="headingOne">
+                    <div id="SignalsPlaceHolder">
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingTwo">
+                    <h4 class="panel-title">
+                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Signal Map
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                    <div class="col-md-6">
+                        <label class="control-label" for="Regions" id="Regions-error">Region</label>
+                        @Html.DropDownListFor(model => model.SelectedRegionID,
+                                    new SelectList(Model.Regions, "ID", "Description"),
+                                                      "--Select Region--", new { @id = "Regions", @class = "form-control", @onchange = "RegionChange(this)" })
+                        @Html.ValidationMessageFor(model => model.SelectedRegionID, "", new { id = "SelectedRegionID-error", @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label" for="MetricTypes">Metric Type</label>
+                        @Html.DropDownList("MetricTypes", Model.MapMetricsList, "--Select a Metric--", new { @id = "MetricTypes", @class = "form-control", @onchange = "ReportTypeChange()" })
+                    </div>
+                    <div class="Flexible-container col-md-12">
+                        <div id="mapDiv" class="MapDiv"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+<script type="text/javascript" src="~/Scripts/AddData.js" ></script>
+<script type="text/javascript" src="~/Scripts/SignalSearch.js"></script>
+}

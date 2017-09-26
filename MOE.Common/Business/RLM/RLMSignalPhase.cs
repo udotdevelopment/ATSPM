@@ -68,10 +68,7 @@ namespace MOE.Common.Business
                 {
                     return Math.Round((Violations / TotalVolume) * 100, 0);
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 
@@ -83,10 +80,7 @@ namespace MOE.Common.Business
                 {
                     return Math.Round((Srlv / TotalVolume) * 100, 2);
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 
@@ -122,10 +116,7 @@ namespace MOE.Common.Business
                 {
                     return Math.Round((YellowOccurrences / TotalVolume) * 100, 0);
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
         public MOE.Common.Models.Approach Approach { get; set; }

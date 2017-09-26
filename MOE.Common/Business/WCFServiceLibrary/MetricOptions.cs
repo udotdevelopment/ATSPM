@@ -149,10 +149,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
     }
 }

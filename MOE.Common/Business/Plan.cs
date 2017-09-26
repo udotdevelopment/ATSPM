@@ -42,10 +42,7 @@ namespace MOE.Common.Business
                 {
                     return Math.Round(((TotalGreenTime / TotalTime) * 100));
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 
@@ -137,10 +134,7 @@ namespace MOE.Common.Business
                 {
                     return Math.Round(((TotalArrivalOnGreen / TotalVolume) * 100));
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 
@@ -152,10 +146,7 @@ namespace MOE.Common.Business
                 {
                     return Math.Round((PercentArrivalOnGreen / PercentGreen),2);
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 

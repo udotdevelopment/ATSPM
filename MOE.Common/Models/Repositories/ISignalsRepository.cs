@@ -8,6 +8,8 @@ namespace MOE.Common.Models.Repositories
 {
     public interface ISignalsRepository
     {
+        
+
         List<Models.Signal> GetAllSignals();
         List<Models.Signal> GetAllEnabledSignals();
         List<Models.Signal> GetAllWithGraphDetectors();
@@ -21,5 +23,15 @@ namespace MOE.Common.Models.Repositories
         string GetSignalLocation(string signalID);
         void AddList(List<MOE.Common.Models.Signal> signals);
         void Remove(string id);
+        void UpdateWithNewVersion(MOE.Common.Models.Signal incomingSignal);
+        List<MOE.Common.Models.Signal> GetAllVersionsOfSignalBySignalID(string signalID);
+        Common.Models.Signal GetLatestVersionOfSignalBySignalID(string signalID);
+
+         List<Signal> GetLatestVerionOfAllSignals();
+         int CheckVersionWithLastDate(string signalId);
+
+        List<Signal> GetLatestVerionOfAllSignalsByControllerType(int controllerTypeId);
+
+        Signal GetVersionOfSignalByDate(string signalId, DateTime startDate);
     }
 }

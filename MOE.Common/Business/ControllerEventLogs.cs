@@ -104,10 +104,7 @@ namespace MOE.Common.Business
             {
                 return row.Timestamp;
             }
-            else
-            {
-                return twoDaysAgo;
-            }
+            return twoDaysAgo;
         }
 
 
@@ -203,8 +200,7 @@ namespace MOE.Common.Business
 
             if (planRecord.Count() > 0)
             {return planRecord.OrderByDescending(s=>s.Timestamp).FirstOrDefault().EventParam;}
-            else
-            { return 0; }
+            return 0;
         }
 
         static public MOE.Common.Models.Controller_Event_Log GetEventBeforeEvent(string signalID, int phase, DateTime startDate)

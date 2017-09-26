@@ -15,8 +15,10 @@ namespace MOE.Common.Models
 
 
         [Required]
-        public String SignalID { get; set; }
+       public int VersionID { get; set; }
         public virtual Models.Signal Signal { get; set; }
+
+        public string SignalID { get; set; }
 
 
         public List<int> MetricTypeIDs { get; set; }

@@ -34,10 +34,7 @@ namespace MOE.Common.Business.SplitFail
                 {
                     return (DetectorOff - DetectorOn).TotalMilliseconds;
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 

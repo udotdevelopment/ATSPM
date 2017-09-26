@@ -167,11 +167,7 @@ namespace SPM.Controllers
                 }
                 return PartialView("Edit", signal);
             }
-            else
-            {
-                return Content("<h1>Signal Already Exists</h1>");
-            }
-
+            return Content("<h1>Signal Already Exists</h1>");
         }
 
 

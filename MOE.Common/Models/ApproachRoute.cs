@@ -17,5 +17,7 @@ namespace MOE.Common.Models
         public string RouteName { get; set; }
 
         public virtual ICollection<ApproachRouteDetail> ApproachRouteDetails { get; set; }
+
+        public virtual ICollection<MetricType> MetricTypes { get; set; }
     }
 }

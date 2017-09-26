@@ -11,7 +11,7 @@ namespace MOE.Common.Models.Repositories
         List<Models.ApproachRouteDetail> GetAllRoutesDetails();
         List<Models.ApproachRouteDetail> GetByRouteID(int routeID);
         void DeleteByRouteID(int routeID);
-        void UpdateByRouteAndApproachID(int routeID, int approachID, int newOrderNumber);
+        void UpdateByRouteAndApproachID(int routeID, string signalId, int newOrderNumber);
         void Add(Models.ApproachRouteDetail newRouteDetail);
     }
 

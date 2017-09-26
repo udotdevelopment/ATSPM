@@ -58,11 +58,7 @@ namespace MOE.Common.Models
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
-
+            return false;
         }
 
         public static Models.Approach CreateNewApproachWithDefaultValues(Models.Signal signal, Models.DirectionType dir, MOE.Common.Models.SPM db)

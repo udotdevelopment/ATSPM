@@ -76,14 +76,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
             base.CreateMetric();
             string location = GetSignalLocation();
             MOE.Common.Models.Repositories.ISignalsRepository sr = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            Models.Signal signal = sr.GetSignalBySignalID(SignalID);
+            Models.Signal signal = sr.GetVersionOfSignalByDate(SignalID, StartDate);
 
-            List<Approach> SpeedApproaches = signal.GetApproachesForSignalThatSupportMetric(10);
+            List<Approach> speedApproaches = signal.GetApproachesForSignalThatSupportMetric(10);
 
             //If there are phases in the database add the charts
-            if (SpeedApproaches.Count > 0)
+            if (speedApproaches.Count > 0)
             {
-                foreach (Approach approach in SpeedApproaches)
+                foreach (Approach approach in speedApproaches)
                 {
                     List<Models.Detector> speedDets = approach.GetDetectorsForMetricType(10);
 

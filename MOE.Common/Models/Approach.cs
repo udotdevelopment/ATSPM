@@ -18,9 +18,14 @@ namespace MOE.Common.Models
         [Key]
         public int ApproachID { get; set; }
 
-        [Required]
+
+    
         public string SignalID { get; set; }
+
+        [Required]
+        public int VersionID { get; set; }
         public virtual Signal Signal { get; set; }
+
 
         [Required]
         [Display(Name="Direction")]
@@ -44,7 +49,7 @@ namespace MOE.Common.Models
 
         public virtual ICollection<Detector> Detectors { get; set; }
 
-        public virtual ICollection<ApproachRouteDetail> ApproachRouteDetails { get; set; }
+     
 
     }
 }

@@ -376,6 +376,14 @@ While each agency should consult with their IT department for specific guideline
 
             context.SaveChanges();
 
+            context.VersionActions.AddOrUpdate(
+                 
+  new Models.VersionAction { ID = 1, Description = "New" },
+  new Models.VersionAction { ID = 2, Description = "Update" },
+  new Models.VersionAction { ID = 3, Description = "Delete" },
+  new Models.VersionAction { ID = 10, Description = "Initial" }
+);
+
             context.MetricsFilterTypes.AddOrUpdate(
                 c => c.FilterName,
                 new Models.MetricsFilterType { FilterName = "Signal ID" },

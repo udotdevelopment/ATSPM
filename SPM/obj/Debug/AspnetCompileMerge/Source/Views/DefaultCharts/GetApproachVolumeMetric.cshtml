@@ -1,0 +1,38 @@
+﻿@model IEnumerable<MOE.Common.Business.ApproachVolume.MetricInfo>
+
+@{foreach (var record in Model)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <img src=@record.ImageLocation class="approachVolumeImage" alt="Approach volume chart for " + @record.Direction1 +" and "+ @record.Direction2 +" directions" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-condensed table-bordered">
+
+                <tr><th>Metric</th><th align="center">Value</th></tr>
+                <tr><td class="leftAlign">Peak Hour</td><td align="center">@record.PeakHour</td></tr>
+                <tr><td class="leftAlign">Peak Hour Factor</td><td align="center">@record.PeakHourKFactor</td></tr>
+                <tr><td class="leftAlign">Peak Hour Volume</td><td align="center">@record.PeakHourVolume</td></tr>
+                <tr><td class="leftAlign">Peak Hour Factor</td><td align="center">@record.PHF</td>
+                <tr><td class="leftAlign">Total Volume</td><td align="center">@record.TotalVolume</td>
+                <tr><td align="center">-</td><td align="center">-</td></tr>
+                <tr> <td class="leftAlign">@record.Direction1 Peak Hour</td><td align="center">@record.D1PeakHour</td></tr>
+                <tr><td class="leftAlign">@record.Direction1 Peak Hour D Value</td><td align="center">@record.D1PeakHourDValue</td>
+                <tr> <td class="leftAlign">@record.Direction1 Peak Hour K Value</td><td align="center">@record.D1PeakHourKValue</td>
+                <tr><td class="leftAlign">@record.Direction1 Peak Hour Volume</td><td align="center">@record.D1PeakHourVolume</td>
+                <tr> <td class="leftAlign">@record.Direction1 Peak Hour Factor</td><td align="center">@record.D1PHF</td>
+                <tr> <td class="leftAlign">@record.Direction1 Total Volume</td><td align="center">@record.D1TotalVolume</td>
+                <tr><td align="center">-</td><td align="center">-</td></tr>
+                <tr> <td class="leftAlign">@record.Direction2 Peak Hour</td><td align="center">@record.D2PeakHour</td></tr>
+                <tr><td class="leftAlign">@record.Direction2 Peak Hour D Value</td><td align="center">@record.D2PeakHourDValue</td>
+                <tr> <td class="leftAlign">@record.Direction2 Peak Hour K Value</td><td align="center">@record.D2PeakHourKValue</td>
+                <tr><td class="leftAlign">@record.Direction2 Peak Hour Volume</td><td align="center">@record.D2PeakHourVolume</td>
+                <tr> <td class="leftAlign">@record.Direction2 Peak Hour Factor</td><td align="center">@record.D2PHF</td>
+                <tr><td class="leftAlign">@record.Direction2 Total Volume</td><td align="center">@record.D2TotalVolume</td></tr>
+            </table>
+        </div>
+     </div>
+}
+} 

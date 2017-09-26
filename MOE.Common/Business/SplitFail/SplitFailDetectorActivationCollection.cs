@@ -135,19 +135,12 @@ namespace MOE.Common.Business.SplitFail
 
         private double division(double first, double second)
         {
-
-
             if (first > 0 && second > 0)
             {
                 double i =  first / second;
                 return i;
             }
-            else
-            {
-                return 0;
-            }
-
-
+            return 0;
         }
 
     }

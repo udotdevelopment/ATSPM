@@ -1,0 +1,112 @@
+﻿@model MOE.Common.Models.Signal
+
+@Html.AntiForgeryToken()
+<div class="panel panel-signal col-xs-12">
+    <div class="panel-heading">
+        <h4>
+            Signal @Model.SignalID
+        </h4>
+    </div>
+
+    <div class="panel-body">
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <table class="table">
+                <tr>
+                    <th>
+                        Controller Type
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Region.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PrimaryName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SecondaryName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Latitude)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Longitude)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Enabled)
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.ControllerType.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Region.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.PrimaryName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.SecondaryName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Latitude)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Longitude)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Enabled)
+                    </td>
+                </tr>
+            </table>
+            <h3>Approaches</h3>
+            <table class="table table-striped">
+                <tr>
+                    <th>
+                        Direction
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Approaches.First().Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Approaches.First().ProtectedPhaseNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Approaches.First().PermissivePhaseNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Approaches.First().IsProtectedPhaseOverlap)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model.Approaches)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DirectionType.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProtectedPhaseNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PermissivePhaseNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsProtectedPhaseOverlap)
+                        </td>
+                    </tr>
+                }
+            </table>
+
+            <h3>Detectors</h3>
+            <div id="ConfigurationTableCollapse">
+            </div>
+
+        </div>
+    </div>
+</div>
+

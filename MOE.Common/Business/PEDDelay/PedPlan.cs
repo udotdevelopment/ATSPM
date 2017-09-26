@@ -43,13 +43,14 @@ namespace MOE.Common.Business.PEDDelay
 
         public double MinDelay
         {
-            get {
+            get
+            {
                 if (PedActuations > 0) 
                 { 
                     return _Cycles.Min(c => c.Delay); 
-                } 
-                else { return 0;}
                 }
+                return 0;
+            }
             
         }
 
@@ -61,7 +62,7 @@ namespace MOE.Common.Business.PEDDelay
                 {
                     return _Cycles.Max(c => c.Delay);
                 }
-                else { return 0; }
+                return 0;
             }
         }
 
@@ -73,7 +74,7 @@ namespace MOE.Common.Business.PEDDelay
                 {
                     return _Cycles.Average(c => c.Delay);
                 }
-                else { return 0; }
+                return 0;
             }
         }
 
