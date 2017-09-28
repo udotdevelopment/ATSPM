@@ -20,8 +20,8 @@ namespace MOE.Common.Models
         public DateTime BinStartTime { get; set; }
 
         [Required]
-        [StringLength(10)]
-        public string SignalID { get; set; }
+        [ForeignKey("Signal")]
+        public int VersionlID { get; set; }
 
         public virtual Signal Signal { get; set; }
 

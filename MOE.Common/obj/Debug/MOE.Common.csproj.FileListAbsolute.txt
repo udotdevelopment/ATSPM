@@ -277,3 +277,4 @@ C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatfor
 C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
 C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.Migrations.HistoricalConfiguration.resources
+C:\Projects\GitHub\ATSPM\MOE.Common\obj\Debug\MOE.Common.Migrations.DataAggregation.resources

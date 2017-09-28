@@ -397,9 +397,9 @@
     <Compile Include="Migrations\201709142002002_Historical Configuration.Designer.cs">
       <DependentUpon>201709142002002_Historical Configuration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201709051749302_AggregationData.cs" />
-    <Compile Include="Migrations\201709051749302_AggregationData.Designer.cs">
-      <DependentUpon>201709051749302_AggregationData.cs</DependentUpon>
+    <Compile Include="Migrations\201709281716540_DataAggregation.cs" />
+    <Compile Include="Migrations\201709281716540_DataAggregation.Designer.cs">
+      <DependentUpon>201709281716540_DataAggregation.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
@@ -814,8 +814,8 @@
     <EmbeddedResource Include="Migrations\201709142002002_Historical Configuration.resx">
       <DependentUpon>201709142002002_Historical Configuration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709051749302_AggregationData.resx">
-      <DependentUpon>201709051749302_AggregationData.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201709281716540_DataAggregation.resx">
+      <DependentUpon>201709281716540_DataAggregation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
