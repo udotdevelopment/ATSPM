@@ -193,7 +193,7 @@ namespace MOE.Common.Business
                     //Instantiate a signal phase object
                     SignalPhase sp = new MOE.Common.Business.SignalPhase(
                                             startDate, endDate,approach, false,
-                                            15,13);                    
+                                            15,13, false);                    
                     
                     //Check the direction of the Link Pivot
                     if (upstream)

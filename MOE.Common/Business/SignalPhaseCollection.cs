@@ -63,7 +63,7 @@ namespace MOE.Common.Business
 
                     //Get the phase
                     MOE.Common.Business.SignalPhase signalPhase = new MOE.Common.Business.SignalPhase(
-                        startDate, endDate, approach, showVolume, binSize, metricTypeID);
+                        startDate, endDate, approach, showVolume, binSize, metricTypeID, false);
 
                     //try not to add the same direction twice
                     var ExsitingPhases = from MOE.Common.Business.SignalPhase phase in this.SignalPhaseList

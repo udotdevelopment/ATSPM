@@ -119,7 +119,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     {
                         
                         MOE.Common.Business.SignalPhase signalPhase = new SignalPhase(StartDate, EndDate, approach,
-                            ShowVolumes, SelectedBinSize, MetricTypeID);
+                            ShowVolumes, SelectedBinSize, MetricTypeID, false);
 
                         chart = GetNewChart(approach);
                         AddDataToChart(chart, signalPhase);

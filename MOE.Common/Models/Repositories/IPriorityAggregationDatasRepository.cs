@@ -2,6 +2,6 @@
 {
     public interface IPriorityAggregationDatasRepository
     {
-        void Save(PriorityAggregationData priorityAggregationData);
+        void Save(PriorityAggregation priorityAggregation);
     }
 }

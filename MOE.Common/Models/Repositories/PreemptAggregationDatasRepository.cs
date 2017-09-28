@@ -15,7 +15,7 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
-                db.PreemptionAggregationDatas.Add(preemptAggregationData);
+                db.PreemptionAggregationData.Add(preemptAggregationData);
                 db.SaveChanges();
             }
             catch (Exception e)

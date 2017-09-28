@@ -2,6 +2,6 @@
 {
     public interface IPreemptAggregationDatasRepository
     {
-        void Save(PreemptionAggregationData preemptionAggregationDataAggregationData);
+        void Save(PreemptionAggregation preemptionAggregationDataAggregationData);
     }
 }

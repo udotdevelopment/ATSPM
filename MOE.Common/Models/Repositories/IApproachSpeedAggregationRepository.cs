@@ -2,9 +2,9 @@
 {
     public interface IApproachSpeedAggregationRepository
     {
-        void Add(ApproachSpeedAggregationData approachSpeedAggregationData);
-        void Remove(ApproachSpeedAggregationData approachSpeedAggregationData);
+        void Add(ApproachSpeedAggregation approachSpeedAggregation);
+        void Remove(ApproachSpeedAggregation approachSpeedAggregation);
         void Remove(int id);
-        void Update(ApproachSpeedAggregationData approachSpeedAggregationData);
+        void Update(ApproachSpeedAggregation approachSpeedAggregation);
     }
 }

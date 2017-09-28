@@ -55,7 +55,7 @@ namespace MOE.Common.Models
         public virtual DbSet<Action> Actions { get; set; }
         public virtual DbSet<ActionLog> ActionLogs { get; set; }
         public virtual DbSet<ApproachRouteDetail> ApproachRouteDetails { get; set; }
-        public virtual DbSet<SignalAggregationData> SignalAggregationDatas { get; set; }
+        public virtual DbSet<SignalAggregation> SignalAggregations { get; set; }
         public virtual DbSet<ControllerType> ControllerType { get; set; }
         public virtual DbSet<Program_Settings> Program_Settings { get; set; }
         public virtual DbSet<Route_Detectors> Route_Detectors { get; set; }
@@ -66,11 +66,14 @@ namespace MOE.Common.Models
         public virtual DbSet<ApplicationSettings> ApplicationSettings { get; set; }
         public virtual DbSet<WatchDogApplicationSettings> WatchdogApplicationSettings { get; set; }
         public virtual DbSet<DetectionHardware> DetectionHardwares { get; set; }
-        public virtual DbSet<PreemptionAggregationData> PreemptionAggregationDatas { get; set; }
-        public virtual DbSet<PriorityAggregationData> PriorityAggregationDatas { get; set; }
-        public virtual DbSet<ApproachAggregationData> ApproachAggregationDatas { get; set; }
-        public virtual DbSet<ApproachSpeedAggregationData> ApproachSpeedAggregationDatas { get; set; }
-        public virtual DbSet<DetectorAggregationData> DetectorAggregationDatas { get; set; }
+        public virtual DbSet<PreemptionAggregationData> PreemptionAggregationData { get; set; }
+        public virtual DbSet<PriorityAggregation> PriorityAggregations { get; set; }
+        public virtual DbSet<ApproachCycleAggregation> ApproachCycleAggregations { get; set; }
+        public virtual DbSet<ApproachPcdAggregation> ApproachPcdAggregations { get; set; }
+        public virtual DbSet<ApproachSplitFailAggregation> ApproachSplitFailAggregations { get; set; }
+        public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedActivationAggregations { get; set; }
+        public virtual DbSet<ApproachSpeedAggregation> ApproachSpeedAggregations { get; set; }
+        public virtual DbSet<DetectorAggregation> DetectorAggregations { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

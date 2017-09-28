@@ -116,8 +116,6 @@ namespace MOE.Common.Models.Repositories
         }
         public void Add(MOE.Common.Models.ApplicationEvent applicationEvent)
         {
-
-
             MOE.Common.Models.ApplicationEvent g = (from r in db.ApplicationEvents
                                              where r.ID == applicationEvent.ID
                                              select r).FirstOrDefault();

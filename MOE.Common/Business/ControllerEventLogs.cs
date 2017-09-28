@@ -135,6 +135,7 @@ namespace MOE.Common.Business
             }
 
             this.Events.AddRange(newEvents.Events);
+            Events = Events.Distinct().ToList();
             Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp)); 
         }
 

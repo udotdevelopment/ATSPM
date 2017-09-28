@@ -12,21 +12,21 @@ namespace MOE.Common.Models.Repositories
     {
         Models.SPM db = new SPM();
         
-        public void Update(MOE.Common.Models.ApproachSpeedAggregationData approachSpeedAggregationData)
+        public void Update(MOE.Common.Models.ApproachSpeedAggregation approachSpeedAggregation)
         {
             MOE.Common.Models.ApplicationEvent g = (from r in db.ApplicationEvents
-                                             where r.ID == approachSpeedAggregationData.ID
+                                             where r.ID == approachSpeedAggregation.Id
                                              select r).FirstOrDefault();
             try
             {
                 if (g != null)
                 {
-                    db.Entry(g).CurrentValues.SetValues(approachSpeedAggregationData);
+                    db.Entry(g).CurrentValues.SetValues(approachSpeedAggregation);
                     db.SaveChanges();
                 }
                 else
                 {
-                    db.ApproachSpeedAggregationDatas.Add(approachSpeedAggregationData);
+                    db.ApproachSpeedAggregations.Add(approachSpeedAggregation);
                     db.SaveChanges();
                 }
             }
@@ -40,10 +40,10 @@ namespace MOE.Common.Models.Repositories
             
         }
 
-        public void Remove(MOE.Common.Models.ApproachSpeedAggregationData approachSpeedAggregationData)
+        public void Remove(MOE.Common.Models.ApproachSpeedAggregation approachSpeedAggregation)
         {
             MOE.Common.Models.ApplicationEvent g = (from r in db.ApplicationEvents
-                                             where r.ID == approachSpeedAggregationData.ID
+                                             where r.ID == approachSpeedAggregation.Id
                                              select r).FirstOrDefault();
             if (g != null)
             {
@@ -81,11 +81,11 @@ namespace MOE.Common.Models.Repositories
                 }
             }
         }
-        public void Add(MOE.Common.Models.ApproachSpeedAggregationData approachSpeedAggregationData)
+        public void Add(MOE.Common.Models.ApproachSpeedAggregation approachSpeedAggregation)
         {
             try
             {
-                db.ApproachSpeedAggregationDatas.Add(approachSpeedAggregationData);
+                db.ApproachSpeedAggregations.Add(approachSpeedAggregation);
                 db.SaveChanges();
             }
             catch(Exception e)

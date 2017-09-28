@@ -57,11 +57,11 @@ namespace MOE.Common.Models.Repositories
             return count;
         }
 
-        public void SaveSignalData(SignalAggregationData signalAggregationData)
+        public void SaveSignalData(SignalAggregation signalAggregation)
         {
             try
             {
-                db.SignalAggregationDatas.Add(signalAggregationData);
+                db.SignalAggregations.Add(signalAggregation);
                 db.SaveChanges();
             }
             catch (Exception e)

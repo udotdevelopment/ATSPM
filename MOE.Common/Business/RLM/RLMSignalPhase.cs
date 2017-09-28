@@ -12,11 +12,7 @@ namespace MOE.Common.Business
     {
         public bool IsPermissive { get; set; }
 
-        private VolumeCollection volume;
-        public VolumeCollection Volume
-        {
-            get { return volume; }
-        }
+        public VolumeCollection Volume { get; }
 
         public int PhaseNumber { get; set; }
 
@@ -28,37 +24,19 @@ namespace MOE.Common.Business
             }
         }
 
-        private MOE.Common.Business.RLMPlanCollection plans;
-        public MOE.Common.Business.RLMPlanCollection Plans
-        {
-            get { return plans; }
-        }
+        public MOE.Common.Business.RLMPlanCollection Plans { get; private set; }
 
-        private double srlvSeconds = 0;
-        public double SRLVSeconds
+        public double SevereRedLightViolationSeconds { get; } = 0;
+
+        public double SevereRedLightViolations
         {
             get
             {
-                return srlvSeconds;
+                return Plans.PlanList.Sum(d => d.SevereRedLightViolations);
             }
         }
 
-        public double Srlv
-        {
-            get
-            {
-                return Plans.PlanList.Sum(d => d.Srlv);
-            }
-        }
-
-        private double totalVolume = 0;
-        public double TotalVolume
-        {
-            get
-            {
-                return totalVolume;
-            }
-        }
+        public double TotalVolume { get; private set; } = 0;
 
         public double PercentViolations
         {
@@ -81,7 +59,7 @@ namespace MOE.Common.Business
             {
                 if (TotalVolume > 0)
                 {
-                    return Math.Round((Srlv / TotalVolume) * 100, 2);
+                    return Math.Round((SevereRedLightViolations / TotalVolume) * 100, 2);
                 }
                 else
                 {
@@ -94,7 +72,7 @@ namespace MOE.Common.Business
         {
             get
             {
-                return this.plans.PlanList.Sum(d => d.YellowOccurrences);
+                return this.Plans.PlanList.Sum(d => d.YellowOccurrences);
             }
         }
 
@@ -102,7 +80,7 @@ namespace MOE.Common.Business
         {
             get
             {
-                return this.plans.PlanList.Sum(d => d.TotalYellowTime);
+                return this.Plans.PlanList.Sum(d => d.TotalYellowTime);
             }
         }
 
@@ -131,49 +109,26 @@ namespace MOE.Common.Business
         public MOE.Common.Models.Approach Approach { get; set; }
 
 
-        private DateTime startDate;
-        private DateTime endDate;
-        private int detChannel;
-        private bool showVolume;
-        private int binSize;
+        private int _detChannel;
+        private bool _showVolume;
 
-
-
-
-        /// <summary>
-        /// Constructor for Signal phase
-        /// </summary>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <param name="signalId"></param>
-        /// <param name="eventData1"></param>
-        /// <param name="region"></param>
-        /// <param name="detChannel"></param>
-        public RLMSignalPhase(DateTime startDate, DateTime endDate, int binSize, double srlvSeconds,
-            int metricTypeID, MOE.Common.Models.Approach approach, bool usePermissivePhase)
+        
+        public RLMSignalPhase(DateTime startDate, DateTime endDate, int binSize, double severeRedLightViolatinsSeconds, MOE.Common.Models.Approach approach, bool usePermissivePhase)
         {            
-            this.srlvSeconds = srlvSeconds;
-            this.startDate = startDate;
-            this.endDate = endDate;
-            this.Approach = approach;
-            
-            this.binSize = binSize;
-
+            SevereRedLightViolationSeconds = severeRedLightViolatinsSeconds;
+            Approach = approach;
             IsPermissive = usePermissivePhase;
-
             Models.Repositories.IControllerEventLogRepository controllerRepository =
                 Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-           
-
             if (!Approach.IsProtectedPhaseOverlap)
             {
                 
-                GetSignalPhaseData(startDate, endDate, showVolume, binSize, usePermissivePhase);
+                GetSignalPhaseData(startDate, endDate, usePermissivePhase);
             }
             else
             {
-                totalVolume = controllerRepository.GetTMCVolume(startDate, endDate, Approach.SignalID, Approach.ProtectedPhaseNumber);
-                GetSignalOverlapData(startDate, endDate, showVolume, binSize);
+                TotalVolume = controllerRepository.GetTMCVolume(startDate, endDate, Approach.SignalID, Approach.ProtectedPhaseNumber);
+                GetSignalOverlapData(startDate, endDate, _showVolume, binSize);
             }
 
         }
@@ -182,13 +137,10 @@ namespace MOE.Common.Business
         {
         }
 
-        private void GetSignalPhaseData(DateTime startDate, DateTime endDate, bool showVolume, int binSize, bool usePermissivePhase)
+        private void GetSignalPhaseData(DateTime startDate, DateTime endDate, bool usePermissivePhase)
         {
-            DateTime redLightTimeStamp = DateTime.MinValue;
             MOE.Common.Models.Repositories.IControllerEventLogRepository controllerRepository =
                 MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-            List<Models.Controller_Event_Log> cycleEvents;
-
             if (!usePermissivePhase)
             {
                 PhaseNumber = Approach.ProtectedPhaseNumber;
@@ -198,15 +150,13 @@ namespace MOE.Common.Business
             {
                 PhaseNumber = Approach.PermissivePhaseNumber??0;
             }
-
-            totalVolume = controllerRepository.GetTMCVolume(startDate, endDate, Approach.SignalID, PhaseNumber);
-            cycleEvents = controllerRepository.GetEventsByEventCodesParam(Approach.SignalID,
+            TotalVolume = controllerRepository.GetTMCVolume(startDate, endDate, Approach.SignalID, PhaseNumber);
+            List<Models.Controller_Event_Log> cycleEvents = controllerRepository.GetEventsByEventCodesParam(Approach.SignalID,
                 startDate, endDate, new List<int>() { 1, 8, 9, 10, 11 }, PhaseNumber);
-
-            plans = new RLMPlanCollection(cycleEvents, startDate, endDate, this.SRLVSeconds, Approach);
-            if (plans.PlanList.Count == 0)
+            Plans = new RLMPlanCollection(cycleEvents, startDate, endDate, this.SevereRedLightViolationSeconds, Approach);
+            if (Plans.PlanList.Count == 0)
             {
-                plans.AddItem(new RLMPlan(startDate, endDate, 0, cycleEvents, this.SRLVSeconds, Approach));
+                Plans.AddItem(new RLMPlan(startDate, endDate, 0, cycleEvents, this.SevereRedLightViolationSeconds, Approach));
             }
         }       
 
@@ -220,10 +170,10 @@ namespace MOE.Common.Business
                 MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
             var cycleEvents = controllerRepository.GetEventsByEventCodesParam(Approach.SignalID,
                 startDate, endDate, li, Approach.ProtectedPhaseNumber);
-            plans = new RLMPlanCollection(cycleEvents, startDate, endDate, this.SRLVSeconds, Approach);
-            if (plans.PlanList.Count == 0)
+            Plans = new RLMPlanCollection(cycleEvents, startDate, endDate, this.SevereRedLightViolationSeconds, Approach);
+            if (Plans.PlanList.Count == 0)
             {
-                Plans.AddItem(new RLMPlan(startDate, endDate, 0, cycleEvents, this.SRLVSeconds, Approach));
+                Plans.AddItem(new RLMPlan(startDate, endDate, 0, cycleEvents, this.SevereRedLightViolationSeconds, Approach));
             }            
         }
 

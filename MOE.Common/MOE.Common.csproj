@@ -389,17 +389,20 @@
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
-    <Compile Include="Models\ApproachSpeedAggregationData.cs" />
-    <Compile Include="Models\ApproachAggregationData.cs" />
+    <Compile Include="Models\ApproachPcdAggregation.cs" />
+    <Compile Include="Models\ApproachYellowRedActivationsAggregationData.cs" />
+    <Compile Include="Models\ApproachSplitFailAggregation.cs" />
+    <Compile Include="Models\ApproachSpeedAggregation.cs" />
+    <Compile Include="Models\ApproachCycleAggregation.cs" />
     <Compile Include="Models\Custom\ActionLog.cs" />
     <Compile Include="Models\Custom\ApproachRoute.cs" />
     <Compile Include="Models\DatabaseInitializer.cs" />
     <Compile Include="Models\DetectionHardware.cs" />
-    <Compile Include="Models\DetectorAggregationData.cs" />
+    <Compile Include="Models\DetectorAggregation.cs" />
     <Compile Include="Models\ExternalLink.cs" />
     <Compile Include="Models\FAQ.cs" />
-    <Compile Include="Models\PreemptionAggregationData.cs" />
-    <Compile Include="Models\PriorityAggregationData.cs" />
+    <Compile Include="Models\PreemptionAggregation.cs" />
+    <Compile Include="Models\PriorityAggregation.cs" />
     <Compile Include="Models\Repositories\ActionChart.cs" />
     <Compile Include="Models\Repositories\ApproachSpeedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\ApproachSpeedAggregationRepositoryFactory.cs" />
@@ -690,7 +693,7 @@
     <Compile Include="Models\Route.cs" />
     <Compile Include="Models\Route_Detectors.cs" />
     <Compile Include="Models\Signal.cs" />
-    <Compile Include="Models\SignalAggregationData.cs" />
+    <Compile Include="Models\SignalAggregation.cs" />
     <Compile Include="Models\Speed_Events.cs" />
     <Compile Include="Models\SPM.cs" />
     <Compile Include="Models\Comment.cs" />

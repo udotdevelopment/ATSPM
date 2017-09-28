@@ -12,6 +12,6 @@ namespace MOE.Common.Models.Repositories
         int GetAddCycles(string signalID, DateTime startTime, DateTime endTime);
         int GetSubtractCycles(string signalId, DateTime startTime, DateTime endTime);
         int GetDwellCycles(string signalID, DateTime startTime, DateTime endTime);
-        void SaveSignalData(SignalAggregationData signalAggregationData);
+        void SaveSignalData(SignalAggregation signalAggregation);
     }
 }

@@ -139,11 +139,11 @@ namespace MOE.Common.Business
             }
         }
 
-        public double Srlv
+        public double SevereRedLightViolations
         {
             get
             {
-                return RLMCycleCollection.Sum(d => d.Srlv);
+                return RLMCycleCollection.Sum(d => d.SevereRedLightViolations);
             }
         }
 
@@ -225,7 +225,7 @@ namespace MOE.Common.Business
             {
                 if (TotalVolume > 0)
                 {
-                    return Math.Round((Srlv / TotalVolume) * 100, 2);
+                    return Math.Round((SevereRedLightViolations / TotalVolume) * 100, 2);
                 }
                 else
                 {

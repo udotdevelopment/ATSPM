@@ -5,69 +5,37 @@ using System.Web;
 
 namespace MOE.Common.Business
 {
+    public enum ArrivalType { ArrivalOnGreen, ArrivalOnYellow, ArrivalOnRed }
     public class DetectorDataPoint
     {
         //Represents a time span from the start of the red to red cycle
-        private double yPoint;
-        public double YPoint
-        {
-            get
-            {
-                return yPoint;
-            }
-        }
+        public double YPoint { get; }
 
         //The actual time of the detector activation
-        private DateTime timeStamp;
-        public DateTime TimeStamp
-        {
-            get 
-            {
-                return timeStamp;
-            }
-        }
+        public DateTime TimeStamp { get; }
 
-        private double delay;
-        public double Delay
-        {
-            get
-            {
-                return delay;
-            }
-            
-        }
+        public double Delay { get; }
 
-        private bool arrivalOnGreen;
-        public bool ArrivalOnGreen
-        {
-            get
-            {
-                return arrivalOnGreen;
-            }
-
-        }
-
+        public ArrivalType ArrivalType { get; }
         
-        
-        /// <summary>
-        /// Constructor for the DetectorDataPoint. Sets the timestamp
-        /// and the y coordinate.
-        /// </summary>
-        /// <param name="startDate"></param>
-        /// <param name="eventTime"></param>
-        public DetectorDataPoint(DateTime startDate, DateTime eventTime, DateTime greenEvent, DateTime redEvent)
+        public DetectorDataPoint(DateTime startDate, DateTime eventTime, DateTime greenEvent, DateTime yellowEvent)
         {
-            timeStamp = eventTime;
-            yPoint = (eventTime - startDate).TotalSeconds;
+            TimeStamp = eventTime;
+            YPoint = (eventTime - startDate).TotalSeconds;
             if (eventTime < greenEvent)
             {
-                delay = (greenEvent - eventTime).TotalSeconds;
-                arrivalOnGreen = false;
+                Delay = (greenEvent - eventTime).TotalSeconds;
+                ArrivalType = ArrivalType.ArrivalOnRed;
             }
-            else
+            else if (eventTime >= greenEvent && eventTime < yellowEvent)
             {
-                delay = 0;
-                arrivalOnGreen = true;
+                Delay = 0;
+                ArrivalType = ArrivalType.ArrivalOnGreen;
+            }
+            else if(eventTime >= yellowEvent)
+            {
+                Delay = 0;
+                ArrivalType = ArrivalType.ArrivalOnYellow;
             }
         }
     }
