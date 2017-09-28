@@ -330,6 +330,7 @@
   <ItemGroup>
     <Compile Include="Business\ActionLog\ChartData.cs" />
     <Compile Include="Business\ApproachVolume\MetricInfo.cs" />
+    <Compile Include="Business\ArchiveMetric.cs" />
     <Compile Include="Business\BulkCopyOptions.cs" />
     <Compile Include="Business\ChartFactory.cs" />
     <Compile Include="Business\ChartTitleFactory.cs" />
@@ -351,8 +352,11 @@
     <Compile Include="Business\CustomReport\Signal.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Business\DataAggregation\DataAggregation.cs" />
     <Compile Include="Business\Helpers\ApproachVolumeTable.cs" />
     <Compile Include="Business\Helpers\ConfigurationRecord.cs" />
+    <Compile Include="Business\Speed\DetectorSpeed.cs" />
+    <Compile Include="Business\SplitFail\SplitFailPhase.cs" />
     <Compile Include="Business\TMC\TMCData.cs" />
     <Compile Include="Business\TMC\TMCInfo.cs" />
     <Compile Include="Business\PCD\Cycle.cs" />
@@ -393,16 +397,34 @@
     <Compile Include="Migrations\201709142002002_Historical Configuration.Designer.cs">
       <DependentUpon>201709142002002_Historical Configuration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709051749302_AggregationData.cs" />
+    <Compile Include="Migrations\201709051749302_AggregationData.Designer.cs">
+      <DependentUpon>201709051749302_AggregationData.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
+    <Compile Include="Models\ApproachPcdAggregation.cs" />
+    <Compile Include="Models\ApproachYellowRedActivationsAggregationData.cs" />
+    <Compile Include="Models\ApproachSplitFailAggregation.cs" />
+    <Compile Include="Models\ApproachSpeedAggregation.cs" />
+    <Compile Include="Models\ApproachCycleAggregation.cs" />
     <Compile Include="Models\Custom\ActionLog.cs" />
     <Compile Include="Models\Custom\ApproachRoute.cs" />
     <Compile Include="Models\Custom\ApproachRouteDetail.cs" />
     <Compile Include="Models\DatabaseInitializer.cs" />
     <Compile Include="Models\DetectionHardware.cs" />
+    <Compile Include="Models\DetectorAggregation.cs" />
     <Compile Include="Models\ExternalLink.cs" />
     <Compile Include="Models\FAQ.cs" />
+    <Compile Include="Models\PreemptionAggregation.cs" />
+    <Compile Include="Models\PriorityAggregation.cs" />
     <Compile Include="Models\Repositories\ActionChart.cs" />
+    <Compile Include="Models\Repositories\ApproachSpeedAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\ApproachSpeedAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\IApproachSpeedAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\ISpeedEventRepository.cs" />
+    <Compile Include="Models\Repositories\SpeedEventRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\SpeedEventRepository.cs" />
     <Compile Include="Models\Repositories\ApplicationSettingsRepository.cs" />
     <Compile Include="Models\Repositories\ActionLogRepository.cs" />
     <Compile Include="Models\Repositories\ApplicationSettingsRepositoryFactory.cs" />
@@ -544,7 +566,6 @@
     <Compile Include="Models\Approach.cs" />
     <Compile Include="Models\ApproachRoute.cs" />
     <Compile Include="Models\ApproachRouteDetail.cs" />
-    <Compile Include="Models\Archived_Metrics.cs" />
     <Compile Include="Models\ControllerType.cs" />
     <Compile Include="Models\Custom\MetricComment.cs" />
     <Compile Include="Models\Custom\Approach.cs" />
@@ -595,12 +616,21 @@
     <Compile Include="Models\Repositories\ApproachRouteDetailsRepository.cs" />
     <Compile Include="Models\Repositories\ApproachRouteDetailsRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\ApproachRouteRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\IPreemptAggregationDatasRepository.cs" />
+    <Compile Include="Models\Repositories\IPriorityAggregationDatasRepository.cs" />
+    <Compile Include="Models\Repositories\PreemptAggregationDatasRepository.cs" />
+    <Compile Include="Models\Repositories\PriorityAggregationDatasRepository.cs" />
+    <Compile Include="Models\Repositories\PreemptAggregationDatasRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\PriorityAggregationDatasRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\SignalAggregationDataRepository.cs" />
+    <Compile Include="Models\Repositories\SignalAggregationDataRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\ControllerTypeRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\DetectionHardwareRepository.cs" />
     <Compile Include="Models\Repositories\DetectionHardwareRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\IApplicationSettingsRepository.cs" />
     <Compile Include="Models\Repositories\IActionLogRepository.cs" />
     <Compile Include="Models\Repositories\IApplicationEventRepository.cs" />
+    <Compile Include="Models\Repositories\ISignalAggregationDataRepository.cs" />
     <Compile Include="Models\Repositories\IDetectionHardwareRepository.cs" />
     <Compile Include="Models\Repositories\IGenericRepository.cs" />
     <Compile Include="Models\Repositories\IApproachRouteDetailsRepository.cs" />
@@ -622,8 +652,6 @@
     <Compile Include="Models\Repositories\ApproachRepository.cs" />
     <Compile Include="Models\Repositories\ApproachRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\ApproachRouteRepository.cs" />
-    <Compile Include="Models\Repositories\ArchivedMetricsRepository.cs" />
-    <Compile Include="Models\Repositories\ArchivedMetricsRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\ControllerTypeRepository.cs" />
     <Compile Include="Models\Repositories\ControllerEventLogRepository.cs" />
     <Compile Include="Models\Repositories\ControllerEventLogRepositoryFactory.cs" />
@@ -633,7 +661,6 @@
     <Compile Include="Models\Repositories\DetectorRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\IApproachRepository.cs" />
     <Compile Include="Models\Repositories\IApproachRouteRepository.cs" />
-    <Compile Include="Models\Repositories\IArchivedMetricsRepository.cs" />
     <Compile Include="Models\Repositories\IControllerTypeRepository.cs" />
     <Compile Include="Models\Repositories\IControllerEventLogRepository.cs" />
     <Compile Include="Models\Repositories\IDetectorCommentRepository.cs" />
@@ -682,6 +709,7 @@
     <Compile Include="Models\Route.cs" />
     <Compile Include="Models\Route_Detectors.cs" />
     <Compile Include="Models\Signal.cs" />
+    <Compile Include="Models\SignalAggregation.cs" />
     <Compile Include="Models\Speed_Events.cs" />
     <Compile Include="Models\SPM.cs" />
     <Compile Include="Models\Comment.cs" />
@@ -785,6 +813,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709142002002_Historical Configuration.resx">
       <DependentUpon>201709142002002_Historical Configuration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709051749302_AggregationData.resx">
+      <DependentUpon>201709051749302_AggregationData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

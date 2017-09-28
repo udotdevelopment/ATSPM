@@ -300,7 +300,7 @@ namespace MOE.Common.Business
                                 endDate.Minute, endDate.Second);
                             
                             SignalPhase usp = new MOE.Common.Business.SignalPhase(
-                                            tempStartDate, tempEndDate, row.Approach, false, 15,13);
+                                            tempStartDate, tempEndDate, row.Approach, false, 15,13, false);
                             upstreamPCD.Add(usp);
                             aOGUpstreamBefore += usp.TotalArrivalOnGreen;
                             totalVolumeUpstream += usp.TotalVolume;
@@ -331,7 +331,7 @@ namespace MOE.Common.Business
                         DateTime tempEndDate = new DateTime(dt.Year, dt.Month, dt.Day, endDate.Hour, endDate.Minute, endDate.Second);
 
                         SignalPhase dsp = new MOE.Common.Business.SignalPhase(
-                                        tempStartDate, tempEndDate, row.Approach, false, 15,13);
+                                        tempStartDate, tempEndDate, row.Approach, false, 15,13, false);
                         downstreamPCD.Add(dsp);
                         aOGDownstreamBefore += dsp.TotalArrivalOnGreen;
                         totalVolumeDownstream += dsp.TotalVolume;

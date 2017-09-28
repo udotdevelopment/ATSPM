@@ -30,7 +30,7 @@ namespace MOE.Common.Models
         [Required]
         [Display(Name="Direction")]
         public int DirectionTypeID { get; set; }
-        public virtual DirectionType DirectionType { get; set; }
+        public DirectionType DirectionType { get; set; }
 
         public string Description { get; set; }
 

@@ -10,18 +10,7 @@ namespace MOE.Common.Business
 {
     public class Plan
     {
-        /// <summary>
-        /// The start time of the plan
-        /// </summary>
-        protected DateTime startTime;
-        public DateTime StartTime
-        {
-            get
-            {
-                return startTime;
-            }
-        }
-
+        public DateTime StartTime { get; }
 
         public int TotalDetectorHits { get; set; }
 
@@ -33,8 +22,7 @@ namespace MOE.Common.Business
 
         public int StdDevAvgSpeed { get; set; }
 
-
-       public double PercentGreen
+        public double PercentGreen
         {
             get
             {
@@ -47,81 +35,20 @@ namespace MOE.Common.Business
         }
 
 
-       public List<Cycle> CycleCollection = new List<Cycle>();
+        public List<Cycle> CycleCollection = new List<Cycle>();
 
-        /// <summary>
-        /// The end time of the plan
-        /// </summary>
-        protected DateTime endTime;
-        public DateTime EndTime
-        {
-            get
-            {
-                return endTime;
-            }
-            //set
-            //{
-            //    endTime = value;
-            //}
-        }
+        public DateTime EndTime{ get;}
 
-        protected int cycleCount;
-        public int CycleCount
-        {
-            get
-            {
-                return cycleCount;
-            }
-            set
-            {
-                cycleCount = value;
-            }
-        }
+        public int CycleCount { get; set; }
 
 
-        private int cycleLength;
-        public int CycleLength
-        {
-            get
-            {
-                return cycleLength;
-            }
-            set
-            {
-                cycleLength = value;
-            }
-        }
+        public int CycleLength { get; set; }
 
-        private int offsetLength;
-        public int OffsetLength
-        {
-            get
-            {
-                return offsetLength;
-            }
-            set
-            {
-                offsetLength = value;
-            }
-        }
-
-        /// <summary>
-        /// The total number of acitivations for this plan while the phase was on green
-        /// </summary>
-        //public Double  TotalArrivalOnGreen { get; set; }
-
+        public int OffsetLength { get; set; }
 
         public int MinSpeedFilter { get; set; }
-
         
-        public double AvgDelay
-        {
-            get
-            {
-                return TotalDelay/TotalVolume;
-            }           
-        }
-
+        public double AvgDelay => TotalDelay/TotalVolume;
 
         /// <summary>
         /// A calculation to get the percent of activations on green
@@ -161,7 +88,18 @@ namespace MOE.Common.Business
                 return totalArrivalOnGreen;
             }
         }
-        
+
+        private double totalArrivalOnYellow = -1;
+        public double TotalArrivalOnYellow
+        {
+            get
+            {
+                if (totalArrivalOnYellow == -1)
+                    totalArrivalOnYellow = CycleCollection.Sum(d => d.TotalArrivalOnYellow);
+                return totalArrivalOnYellow;
+            }
+        }
+
 
         private double totalArrivalOnRed = -1;
         public double TotalArrivalOnRed
@@ -242,10 +180,6 @@ namespace MOE.Common.Business
             }
         }
 
-        //private double totalplantime;
-        //private double totalgreenphasetime;
-        //public SortedDictionary<int,int> phaseCountDictionary = new SortedDictionary<int,int>();
-
         public SortedDictionary<int, int> Splits = new SortedDictionary<int, int>();
 
         /// <summary>
@@ -256,59 +190,41 @@ namespace MOE.Common.Business
         /// <summary>
         /// The signal number
         /// </summary>
-        public string SignalID { get; set; }
+        public string SignalId { get; set; }
 
         /// <summary>
         /// The plan number
         /// </summary>
         public int PhaseNumber { get; set; }
 
-
-
-        /// <summary>
-        /// Constructor that sets the start time, end time and plan, and creates the the lower level objects and statistics
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <param name="plan"></param>
-        /// <param name="signaltable"></param>
-        /// <param name="detectortable"></param>
+        
         public Plan(DateTime start, DateTime end, int planNumber, List<Models.Controller_Event_Log> signaltable,
             List<Models.Controller_Event_Log> detectortable, List<Models.Controller_Event_Log> preempttable, 
             Models.Approach approach)
         {
-            this.SignalID = approach.SignalID;
+            this.SignalId = approach.SignalID;
             this.PhaseNumber = approach.ProtectedPhaseNumber;
-            startTime = start;
-            endTime = end;
+            StartTime = start;
+            EndTime = end;
             PlanNumber = planNumber;
             GetGreenYellowRedCycle(start, end, signaltable, detectortable, preempttable);
-            //pcdCollection = new PCDDataPointCollection(start, end, signaltable, detectortable, preempttable, signalid, phase);
-            //setstatistics();
         }
-
-        /// <summary>
-        /// Constructor that sets the start time, end time and plan and nothing else
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <param name="plan"></param>
+        
         public Plan(DateTime start, DateTime end, int planNumber)
         {
-            startTime = start;
-            endTime = end;
+            StartTime = start;
+            EndTime = end;
             PlanNumber = planNumber;
-            
         }
 
         /// <summary>
         /// Translates an event code to an event type
         /// </summary>
-        /// <param name="EventCode"></param>
+        /// <param name="eventCode"></param>
         /// <returns></returns>
-        private Cycle.EventType GetEventType(int EventCode)
+        private Cycle.EventType GetEventType(int eventCode)
         {
-            switch (EventCode)
+            switch (eventCode)
             {
                     
                 case 1:
@@ -340,7 +256,7 @@ namespace MOE.Common.Business
             foreach (Business.AnalysisPhase phase in phases.Items)
             {
                 var Cycles = from cycle in phase.Cycles.Items
-                             where cycle.StartTime > this.StartTime && cycle.EndTime < this.endTime
+                             where cycle.StartTime > this.StartTime && cycle.EndTime < this.EndTime
                              select cycle;
 
                 if (Cycles.Count() > HighCycleCount)
@@ -351,7 +267,7 @@ namespace MOE.Common.Business
                 //phaseCountDictionary.Add(phase.PhaseNumber, Cycles.Count());
             }
 
-            cycleCount = HighCycleCount;
+            CycleCount = HighCycleCount;
 
         }
 
@@ -679,7 +595,7 @@ namespace MOE.Common.Business
                 MOE.Common.Models.Controller_Event_Log eventBeforePattern = null;
                 try
                 {
-                    eventBeforePattern = MOE.Common.Business.ControllerEventLogs.GetEventBeforeEvent(this.SignalID, this.PhaseNumber, startTime);
+                    eventBeforePattern = MOE.Common.Business.ControllerEventLogs.GetEventBeforeEvent(this.SignalId, this.PhaseNumber, startTime);
 
                 }
                 finally
@@ -777,7 +693,7 @@ namespace MOE.Common.Business
                 foreach (var pcd in query)
                 {
                     DetectorDataPoint ddp = new DetectorDataPoint(pcd.StartTime, row.Timestamp, 
-                        pcd.GreenEvent, pcd.EndTime);
+                        pcd.GreenEvent, pcd.YellowEvent);
                     pcd.AddDetector(ddp);
                 }
 
@@ -796,7 +712,7 @@ namespace MOE.Common.Business
                 foreach (var pcd in query)
                 {
                     DetectorDataPoint ddp = new DetectorDataPoint(pcd.StartTime, row.Timestamp, 
-                        pcd.GreenEvent, pcd.EndTime);
+                        pcd.GreenEvent, pcd.YellowEvent);
                     pcd.AddPreempt(ddp);
                 }
 
@@ -811,7 +727,7 @@ namespace MOE.Common.Business
 
             //get the speed hits for the plan
             List<Cycle> cycles = (from cycle in this.CycleCollection
-                        where (cycle.StartTime > this.startTime && cycle.EndTime < this.endTime)
+                        where (cycle.StartTime > this.StartTime && cycle.EndTime < this.EndTime)
                         select cycle).ToList();
 
             foreach (Cycle Cy in cycles)

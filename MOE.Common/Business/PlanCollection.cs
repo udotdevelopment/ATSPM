@@ -16,19 +16,14 @@ namespace MOE.Common.Business
 
         public List<Plan> PlanList = new List<Plan>();
 
-
-        private Models.Approach approach = new Models.Approach();
-        public Models.Approach Approach
-        {
-            get { return approach; }
-        }
+        public Models.Approach Approach { get; } = new Models.Approach();
 
 
         public PlanCollection(List<Models.Controller_Event_Log> cycleEvents,
             List<Models.Controller_Event_Log> detectorEvents, DateTime startdate,
             DateTime enddate, Models.Approach approach, List<Models.Controller_Event_Log> preemptEvents)
         {
-            this.approach = approach;
+            this.Approach = approach;
             GetPlanCollection(startdate, enddate,
                 cycleEvents, detectorEvents, preemptEvents);
         }
@@ -44,7 +39,7 @@ namespace MOE.Common.Business
             List<Models.Controller_Event_Log> detectorEvents,
             List<Models.Controller_Event_Log> preemptEvents)
         {
-            MOE.Common.Business.PlansBase ds = new PlansBase(approach.SignalID, startDate, endDate);
+            MOE.Common.Business.PlansBase ds = new PlansBase(Approach.SignalID, startDate, endDate);
 
             for (int i = 0; i < ds.Events.Count; i++)
             {

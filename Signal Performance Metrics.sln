@@ -61,6 +61,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MOE.CommonTests", "MOE.Comm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConvertDBForHistoricalConfigurations", "ConvertDBForHistoricalConfigurations\ConvertDBForHistoricalConfigurations.csproj", "{C3AC2C5F-7B62-4A06-8E6C-D70B51C27D36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AggregateATSPMData", "ArchiveMetricData\AggregateATSPMData.csproj", "{90FFF51A-9263-4C04-84C1-A2813200E25D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU

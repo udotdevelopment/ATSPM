@@ -181,7 +181,7 @@ namespace MOE.Common.Business
         }
 
         private double srlv = -1;
-        public double Srlv
+        public double SevereRedLightViolations
         {
             get
             {

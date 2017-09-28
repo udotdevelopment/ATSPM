@@ -27,6 +27,6 @@ namespace MOE.Common.Models.Repositories
         int GetDetectorActivationCount(string signalID,
              DateTime startTime, DateTime endTime, int detectorChannel);
         int GetRecordCount(string signalID, DateTime startTime, DateTime endTime);
-
+        List<Controller_Event_Log> GetAllAggregationCodes(string signalID, DateTime startTime, DateTime endTime);
     }
 }

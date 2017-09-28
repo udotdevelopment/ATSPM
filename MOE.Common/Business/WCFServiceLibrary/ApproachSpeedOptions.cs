@@ -12,6 +12,7 @@ using MOE.Common.Business;
 using MOE.Common.Models;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
+using MOE.Common.Business.Speed;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
@@ -185,6 +186,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
             eightyFifthSeries.XValueType = ChartValueType.DateTime;
             //pointSeries.MarkerSize = Convert.ToInt32(uxDotSizeDropDownList.SelectedValue);
 
+            Series fifteenthSeries = new Series();
+            fifteenthSeries.ChartType = SeriesChartType.Line;
+            fifteenthSeries.Color = Color.Orange;
+            fifteenthSeries.Name = "15th Percentile Speed";
+            fifteenthSeries.XValueType = ChartValueType.DateTime;
+
             //Add the Posted Speed series
             Series postedspeedSeries = new Series();
             postedspeedSeries.ChartType = SeriesChartType.Line;
@@ -195,6 +202,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             chart.Series.Add(postedspeedSeries);
             chart.Series.Add(eightyFifthSeries);
+            chart.Series.Add(fifteenthSeries);
             chart.Series.Add(pointSeries);
 
             //Add the Posts series to ensure the chart is the size of the selected timespan
@@ -227,50 +235,19 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 + "\n" + "Includes records over 5mph that occur between 15s after start of green to start of yellow."));
         }
 
-        protected void AddSpeedDataToChart(Chart chart,Models.Detector detector,
-            DateTime startDate,
+        protected void AddSpeedDataToChart(Chart chart,Models.Detector detector, DateTime startDate,
             DateTime endDate, int binSize)
         {
-            decimal totalDetectorHits = 0;
-            decimal totalOnGreenArrivals = 0;
-            decimal percentArrivalOnGreen = 0;
-
-            Models.SPM db = new SPM();
-
-            List<Models.Speed_Events>SpeedHitsForChart = (from r in db.Speed_Events
-                                                    where r.timestamp > startDate
-                                                    && r.timestamp < endDate
-                                                    && r.DetectorID == detector.DetectorID
-                                                    select r).ToList();
-
-            MOE.Common.Models.Repositories.IControllerEventLogRepository CLR =  Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-
-           
-
-            List<Models.Controller_Event_Log> phaseevents = CLR.GetEventsByEventCodesParam(detector.Approach.SignalID, StartDate, EndDate, new List<int>(){0,1,7,8,9,10,11}, detector.Approach.ProtectedPhaseNumber);
-            List<Models.Controller_Event_Log> detEvents = new List<Controller_Event_Log>();
-            List<Models.Controller_Event_Log> preemptEvents = new List<Controller_Event_Log>();
-
-            PlanCollection Plans = new PlanCollection(phaseevents,detEvents,  StartDate,
-            EndDate, detector.Approach, preemptEvents);
-        
-
-
-            foreach (MOE.Common.Business.Plan plan in Plans.PlanList)
+            DetectorSpeed detectorSpeed = new DetectorSpeed(detector, startDate, endDate, binSize);
+            foreach (Plan plan in detectorSpeed.Plans.PlanList)
             {
-                foreach(Cycle c in plan.CycleCollection)
-                {
-                    c.FindSpeedEventsForCycle(SpeedHitsForChart);
-                }
-                plan.AvgSpeedBucketCollection = new AvgSpeedBucketCollection(plan.StartTime, plan.EndTime, plan.CycleCollection, binSize, detector.MinSpeedFilter ?? 5, detector.MovementDelay ?? 0);
-
                 if (plan.AvgSpeedBucketCollection.Items.Count > 0)
                 {
-
-                    foreach (MOE.Common.Business.AvgSpeedBucket bucket in plan.AvgSpeedBucketCollection.Items)
+                    foreach (AvgSpeedBucket bucket in plan.AvgSpeedBucketCollection.Items)
                     {
                         chart.Series["Average MPH"].Points.AddXY(bucket.StartTime, bucket.AvgSpeed);
                         chart.Series["85th Percentile Speed"].Points.AddXY(bucket.StartTime, bucket.EightyFifth);
+                        chart.Series["15th Percentile Speed"].Points.AddXY(bucket.StartTime, bucket.FifteenthPercentile);
                         if (ShowPlanStatistics && ShowPostedSpeed)
                         {
                             chart.Series["Posted Speed"].Points.AddXY(bucket.StartTime, detector.Approach.MPH);
@@ -278,20 +255,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     }
                 }
             }
-            
-
-            //if arrivals on green is selected add the data to the chart
             if (ShowPlanStatistics)
             {
-                if (totalDetectorHits > 0)
-                {
-                    percentArrivalOnGreen = (totalOnGreenArrivals / totalDetectorHits) * 100;
-                }
-                else
-                {
-                    percentArrivalOnGreen = 0;
-                }
-                SetSpeedPlanStrips(Plans, chart, startDate, detector.MinSpeedFilter ?? 0);
+                SetSpeedPlanStrips(detectorSpeed.Plans, chart, startDate, detector.MinSpeedFilter ?? 0);
             }
         }
 
@@ -326,29 +292,29 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
 
                 //Add a corrisponding custom label for each strip
-                CustomLabel Plannumberlabel = new CustomLabel();
-                Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
-                Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
+                CustomLabel plannumberLabel = new CustomLabel();
+                plannumberLabel.FromPosition = plan.StartTime.ToOADate();
+                plannumberLabel.ToPosition = plan.EndTime.ToOADate();
                 switch (plan.PlanNumber)
                 {
                     case 254:
-                        Plannumberlabel.Text = "Free";
+                        plannumberLabel.Text = "Free";
                         break;
                     case 255:
-                        Plannumberlabel.Text = "Flash";
+                        plannumberLabel.Text = "Flash";
                         break;
                     case 0:
-                        Plannumberlabel.Text = "Unknown";
+                        plannumberLabel.Text = "Unknown";
                         break;
                     default:
-                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+                        plannumberLabel.Text = "Plan " + plan.PlanNumber.ToString();
 
                         break;
                 }
 
-                Plannumberlabel.LabelMark = LabelMarkStyle.LineSideMark;
-                Plannumberlabel.ForeColor = Color.Black;
-                Plannumberlabel.RowIndex = 3;
+                plannumberLabel.LabelMark = LabelMarkStyle.LineSideMark;
+                plannumberLabel.ForeColor = Color.Black;
+                plannumberLabel.RowIndex = 3;
 
                 CustomLabel avgLabel = new CustomLabel();
 
@@ -370,7 +336,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
                 if (ShowPlanStatistics)
                 {
-                    chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(Plannumberlabel);
+                    chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(plannumberLabel);
                     if (ShowAverageSpeed)
                     {
                         chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(avgLabel);

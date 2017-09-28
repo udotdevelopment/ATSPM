@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.ComponentModel;
 using System.Timers;
+using MOE.Common.Models;
 
 
 namespace MOE.Common.Business
@@ -1249,6 +1250,6 @@ namespace MOE.Common.Business
                 Thread.Sleep(SNMPtimeout);
             }
         }
-
+        
     }
 }

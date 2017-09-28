@@ -13,175 +13,59 @@ namespace MOE.Common.Business
         public enum NextEventResponse{GroupOK, GroupMissingData, GroupComplete};
         public enum EventType {ChangeToRed, ChangeToGreen, ChangeToYellow, GreenTermination, BeginYellowClearance, EndYellowClearance,Unknown };
         public enum TerminationType { ForceOff, GapOut, MaxOut, Unknown };
-        
-        /// <summary>
-        /// Start time of the cycle
-        /// </summary>
-        protected DateTime startTime;
-        public DateTime StartTime
-        {
-            get{
-                return startTime;
-            }
-        }
 
+        public DateTime StartTime { get; protected set; }
 
         public List<Models.Speed_Events> SpeedsForCycle;
 
-        /// <summary>
-        /// End time of the Cycle
-        /// </summary>
-        protected DateTime endTime;
-        public DateTime EndTime
-        {
-            get
-            {
-                return endTime;
-            }
-        }
+        public DateTime EndTime { get; protected set; }
 
-        protected DateTime beginYellowClearance;
-        public DateTime BeginYellowClearance
-        {
-            get
-            {
-                return beginYellowClearance;
-            }
-        }
+        public DateTime BeginYellowClearance { get; }
 
-        /// <summary>
-        /// Y coordinate for the green line on the chart
-        /// </summary>
-        protected double greenLineY;
-        public double GreenLineY
-        {
-            get
-            {
-                return greenLineY;
-            }
-        }
+        public double GreenLineY { get; protected set; }
 
-        /// <summary>
-        /// Y coordinate for the yellow line on the chart
-        /// </summary>
-        protected double yellowLineY;
-        public double YellowLineY
-        {
-            get
-            {
-                return yellowLineY;
-            }
-        }
+        public double YellowLineY { get; protected set; }
 
-        /// <summary>
-        /// Y coordinate for the red line on the chart
-        /// </summary>
-        protected double redLineY;
-        public double RedLineY
-        {
-            get
-            {
-                return redLineY;
-            }
-        }
+        public double RedLineY { get; protected set; }
 
-        /// <summary>
-        /// The next event status
-        /// </summary>
-        protected TerminationType termination;
-        public TerminationType Termination
-        {
-            get
-            {
-                return termination;
-            }
-            set
-            {
-                termination = value;
-            }
-        }
+        public TerminationType Termination { get; set; }
 
-        protected NextEventResponse status;
-        public NextEventResponse Status
-        {
-            get
-            {
-                return status;
-            }
-        }
+        public NextEventResponse Status { get; protected set; }
 
-        /// <summary>
-        /// A collection of detector activations for the cycle
-        /// </summary>
-        protected List<DetectorDataPoint> detectorCollection;
-        public List<DetectorDataPoint> DetectorCollection
-        {
-            get
-            {
-                return detectorCollection;
-            }
-            set
-            {
-                detectorCollection = value;
-            }
-        }
+        public List<DetectorDataPoint> DetectorCollection { get; set; }
 
-        /// <summary>
-        /// A collection of preempt activations for the cycle
-        /// </summary>
-        protected List<DetectorDataPoint> preemptCollection;
-        public List<DetectorDataPoint> PreemptCollection
-        {
-            get
-            {
-                return preemptCollection;
-            }
-            set
-            {
-                preemptCollection = value;
-            }
-        }
+        public List<DetectorDataPoint> PreemptCollection { get; set; }
 
-        /// <summary>
-        /// Green time of the Cycle
-        /// </summary>
-        protected DateTime greenEvent;
-        public DateTime GreenEvent
-        {
-            get
-            {
-                return greenEvent;
-            }
-        }
+        public DateTime GreenEvent { get; protected set; }
 
-        /// <summary>
-        /// Yellow time of the Cycle
-        /// </summary>
-        protected DateTime yellowEvent;
-        public DateTime YellowEvent
-        {
-            get
-            {
-                return yellowEvent;
-            }
-        }
+        public DateTime YellowEvent { get; protected set; }
 
         private double totalArrivalOnGreen = -1;
         public double TotalArrivalOnGreen
         {
             get {
                 if (totalArrivalOnGreen == -1)
-                    totalArrivalOnGreen = DetectorCollection.Where(d => d.ArrivalOnGreen == true).Count();
+                    totalArrivalOnGreen = DetectorCollection.Count(d => d.ArrivalType == ArrivalType.ArrivalOnGreen);
                 return totalArrivalOnGreen;
             }
         }
 
+        private double totalArrivalOnYellow = -1;
+        public double TotalArrivalOnYellow
+        {
+            get
+            {
+                if (totalArrivalOnYellow == -1)
+                    totalArrivalOnYellow = DetectorCollection.Count(d => d.ArrivalType == ArrivalType.ArrivalOnYellow);
+                return totalArrivalOnYellow;
+            }
+        }
         private double totalArrivalOnRed = -1;
         public double TotalArrivalOnRed
         {
             get { 
                 if(totalArrivalOnRed == -1)
-                    totalArrivalOnRed = DetectorCollection.Where(d => d.ArrivalOnGreen == false).Count();
+                    totalArrivalOnRed = DetectorCollection.Count(d => d.ArrivalType == ArrivalType.ArrivalOnRed);
                 return totalArrivalOnRed;
             }
         }
@@ -218,17 +102,6 @@ namespace MOE.Common.Business
                 }
                 return totalGreenTime;
             }
-            //get
-            //{
-            //    if (EndTime > GreenEvent)
-            //    {
-            //        return (EndTime - GreenEvent).TotalSeconds;
-            //    }
-            //    else
-            //    {
-            //        return 0;
-            //    }
-            //}
         }
 
         private double totalYellowTime = -1;
@@ -251,7 +124,7 @@ namespace MOE.Common.Business
             {
                 if (totalRedTime == -1)
                 {
-                    totalRedTime = (YellowEvent - startTime).TotalSeconds;
+                    totalRedTime = (YellowEvent - StartTime).TotalSeconds;
                 }
                 return totalRedTime;
             }
@@ -261,39 +134,33 @@ namespace MOE.Common.Business
         {
             get
             {
-                return (EndTime - startTime).TotalSeconds;
+                return (EndTime - StartTime).TotalSeconds;
             }
         }
 
         /// <summary>
         /// Constructor for the Cycle
         /// </summary>
-        /// <param name="cycleStartTime"></param>
-        public Cycle(DateTime starttime)
+        /// <param name="startTime"></param>
+        public Cycle(DateTime startTime)
         {
-            startTime = starttime;
-            greenLineY = 0;
-            yellowLineY = 0;
-            redLineY = 0;
-            detectorCollection = new List<DetectorDataPoint>();
-            preemptCollection = new List<DetectorDataPoint>();
+            StartTime = startTime;
+            GreenLineY = 0;
+            YellowLineY = 0;
+            RedLineY = 0;
+            DetectorCollection = new List<DetectorDataPoint>();
+            PreemptCollection = new List<DetectorDataPoint>();
         }
 
         public void AddDetector(DetectorDataPoint ddp)
         {
-            detectorCollection.Add(ddp);
+            DetectorCollection.Add(ddp);
         }
 
         public void AddPreempt(DetectorDataPoint ddp)
         {
-            preemptCollection.Add(ddp);
+            PreemptCollection.Add(ddp);
         }
-
-        /// <summary>
-        /// Gets the next event in the cycle
-        /// </summary>
-        /// <param name="eventType"></param>
-        /// <param name="timeStamp"></param>
 
         public void ClearDetectorData()
         {
@@ -301,14 +168,14 @@ namespace MOE.Common.Business
             totalGreenTime = -1;
             totalArrivalOnGreen = -1;
             totalVolume = -1;
-            detectorCollection.Clear();
+            DetectorCollection.Clear();
         }
 
         public void FindSpeedEventsForCycle(List<Models.Speed_Events> Speeds)
         {
             SpeedsForCycle = (from r in Speeds
-                             where r.timestamp > this.startTime
-                             && r.timestamp < this.endTime
+                             where r.timestamp > this.StartTime
+                             && r.timestamp < this.EndTime
                              select r).ToList();
         }
         
@@ -319,51 +186,51 @@ namespace MOE.Common.Business
             if (eventType == EventType.ChangeToGreen)
             {
                 //Check to see that the last event was not a change to green
-                if (greenLineY == 0)
+                if (GreenLineY == 0)
                 {
                     //Check for bad data
-                    if (startTime != DateTime.MinValue)
+                    if (StartTime != DateTime.MinValue)
                     {
-                        greenLineY = (timeStamp - startTime).TotalSeconds;
-                        greenEvent = timeStamp;
-                        status = NextEventResponse.GroupOK;
+                        GreenLineY = (timeStamp - StartTime).TotalSeconds;
+                        GreenEvent = timeStamp;
+                        Status = NextEventResponse.GroupOK;
                     }
                     //Mark the group as having bad data
                     else
                     {
-                       status = NextEventResponse.GroupMissingData;
+                       Status = NextEventResponse.GroupMissingData;
                     }
                 }
                 //Dont add anything but keep processing
                 else
                 {
-                    status = NextEventResponse.GroupOK;
+                    Status = NextEventResponse.GroupOK;
                 }
             }
             // if the change event is yellow add its' data
             else if (eventType ==  EventType.ChangeToYellow)
             {
                 // check to see that the last event was not a change to yellow
-                if (yellowLineY == 0)
+                if (YellowLineY == 0)
                 {
                     //check that the greenline y coordinate was already added
                     //then add the data
-                    if (startTime != DateTime.MinValue && greenLineY != 0)
+                    if (StartTime != DateTime.MinValue && GreenLineY != 0)
                     {
-                        yellowLineY = (timeStamp - startTime).TotalSeconds;
-                        yellowEvent = timeStamp;
-                        status = NextEventResponse.GroupOK;
+                        YellowLineY = (timeStamp - StartTime).TotalSeconds;
+                        YellowEvent = timeStamp;
+                        Status = NextEventResponse.GroupOK;
                     }
                     //flag the group as bad data
                     else
                     {
-                        status = NextEventResponse.GroupMissingData;
+                        Status = NextEventResponse.GroupMissingData;
                     }
                 }
                 //keep processing
                 else
                 {
-                    status = NextEventResponse.GroupOK;
+                    Status = NextEventResponse.GroupOK;
                 }
             }
             //check to see if the event is a change to red
@@ -371,26 +238,26 @@ namespace MOE.Common.Business
             {
                 //check to see if the green, yellow, and starting red was added
                 //if not create the next group
-                if (startTime == DateTime.MinValue && yellowLineY == 0 && greenLineY == 0 && redLineY == 0)
+                if (StartTime == DateTime.MinValue && YellowLineY == 0 && GreenLineY == 0 && RedLineY == 0)
                 {
-                    startTime = timeStamp;
-                    status = NextEventResponse.GroupOK;
+                    StartTime = timeStamp;
+                    Status = NextEventResponse.GroupOK;
                 }
                 //add the event to the existing group
                 else
                 {
                     //if the yellow and green y coordinates have been added and the 
                     // start time is valid add the red event as the ending red
-                    if (startTime != DateTime.MinValue && yellowLineY != 0 && greenLineY != 0)
+                    if (StartTime != DateTime.MinValue && YellowLineY != 0 && GreenLineY != 0)
                     {
-                        redLineY = (timeStamp - startTime).TotalSeconds;
-                        status = NextEventResponse.GroupComplete;
-                        endTime = timeStamp;
+                        RedLineY = (timeStamp - StartTime).TotalSeconds;
+                        Status = NextEventResponse.GroupComplete;
+                        EndTime = timeStamp;
                     }
                     //mark the group as missing data
                     else
                     {
-                        status = NextEventResponse.GroupMissingData;
+                        Status = NextEventResponse.GroupMissingData;
                     }
                 }
                 
@@ -398,7 +265,7 @@ namespace MOE.Common.Business
             //keep processing
             else
             {
-                status = NextEventResponse.GroupOK;
+                Status = NextEventResponse.GroupOK;
             }
         }
     }

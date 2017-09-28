@@ -35,7 +35,7 @@ namespace MOE.Common.Business
         {
             get
             {
-                return SignalPhaseList.Sum(d => d.Srlv);
+                return SignalPhaseList.Sum(d => d.SevereRedLightViolations);
             }
         }
 
@@ -55,14 +55,12 @@ namespace MOE.Common.Business
                 {                    
 
                     this.SignalPhaseList.Add(new MOE.Common.Business.RLMSignalPhase(
-                    startDate, endDate, binSize, this.SevereRedLightViolationsSeconds, 
-                    metricTypeID, approach, false));
+                    startDate, endDate, binSize, this.SevereRedLightViolationsSeconds, approach, false));
 
                     if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
                     {
                         this.SignalPhaseList.Add(new MOE.Common.Business.RLMSignalPhase(
-                        startDate, endDate, binSize, this.SevereRedLightViolationsSeconds,
-                        metricTypeID, approach, true));
+                        startDate, endDate, binSize, this.SevereRedLightViolationsSeconds, approach, true));
                     }
                 }
             }

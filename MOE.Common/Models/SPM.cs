@@ -55,7 +55,7 @@ namespace MOE.Common.Models
         public virtual DbSet<Action> Actions { get; set; }
         public virtual DbSet<ActionLog> ActionLogs { get; set; }
         public virtual DbSet<ApproachRouteDetail> ApproachRouteDetails { get; set; }
-        public virtual DbSet<Archived_Metrics> Archived_Metrics { get; set; }
+        public virtual DbSet<SignalAggregation> SignalAggregations { get; set; }
         public virtual DbSet<ControllerType> ControllerType { get; set; }
         public virtual DbSet<Program_Settings> Program_Settings { get; set; }
         public virtual DbSet<Route_Detectors> Route_Detectors { get; set; }
@@ -67,6 +67,14 @@ namespace MOE.Common.Models
         public virtual DbSet<WatchDogApplicationSettings> WatchdogApplicationSettings { get; set; }
         public virtual DbSet<DetectionHardware> DetectionHardwares { get; set; }
         public virtual DbSet<VersionAction> VersionActions { get; set; }
+        public virtual DbSet<PreemptionAggregation> PreemptionAggregations { get; set; }
+        public virtual DbSet<PriorityAggregation> PriorityAggregations { get; set; }
+        public virtual DbSet<ApproachCycleAggregation> ApproachCycleAggregations { get; set; }
+        public virtual DbSet<ApproachPcdAggregation> ApproachPcdAggregations { get; set; }
+        public virtual DbSet<ApproachSplitFailAggregation> ApproachSplitFailAggregations { get; set; }
+        public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedActivationAggregations { get; set; }
+        public virtual DbSet<ApproachSpeedAggregation> ApproachSpeedAggregations { get; set; }
+        public virtual DbSet<DetectorAggregation> DetectorAggregations { get; set; }
 
 
 
@@ -130,11 +138,7 @@ namespace MOE.Common.Models
                 .IsRequired()
                 .HasMaxLength(50)
                 .HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAnnotation(new IndexAttribute("IX_DetectorIDUnique") { IsUnique = true }));
-
-
-            modelBuilder.Entity<Archived_Metrics>()
-                .Property(e => e.DetectorID)
-                .IsUnicode(false);
+            
 
             modelBuilder.Entity<ControllerType>()
                 .Property(e => e.Description)

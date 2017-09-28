@@ -119,7 +119,6 @@ namespace MOE.Common.Models.Repositories
         }
         public List<Models.Signal> EagerLoadAllSignals()
         {
-
             List<Models.Signal> signals = db.Signals
                 .Include(signal => signal.Approaches.Select(a => a.Detectors))
                 .Include(signal => signal.Approaches.Select(a => a.DirectionType))
@@ -129,13 +128,21 @@ namespace MOE.Common.Models.Repositories
             return signals;
         }
 
+        public List<Models.Signal> EagerLoadAllEnabledSignals()
+        {
+            List<Models.Signal> signals = db.Signals
+                .Where(signal => signal.Enabled == true)
+                .Include(signal => signal.Approaches.Select(a => a.Detectors))
+                .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                .ToList();
+            return signals;
+        }
+
         public List<Models.Signal> GetAllEnabledSignals()
         {
-            db.Configuration.LazyLoadingEnabled = false;
             List<Models.Signal> signals = (from r in db.Signals
                     where r.Enabled && r.End > DateTime.Now
                                            select r)
-
                 .Where(signal => signal.End > DateTime.Now)
                 .ToList();
             return signals;

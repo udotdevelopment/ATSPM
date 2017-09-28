@@ -27,20 +27,18 @@ namespace MOE.Common.Models.ViewModel.Chart
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
             var signal = repository.GetSignalBySignalID(signalID);
             MetricsList = new List<SelectListItem>();
+            var availableMetrics = signal.GetAvailableMetricsVisibleToWebsite().Where(m => m.ShowOnWebsite == true);
             if (signal != null)
             {
-                foreach (Models.MetricType m in signal.GetAvailableMetricsVisibleToWebsite())
+                foreach (Models.MetricType m in availableMetrics)
                 {
-                    if (m.ShowOnWebsite)
+                    if (SelectedMetricID != null && SelectedMetricID == m.MetricID)
                     {
-                        if (SelectedMetricID != null && SelectedMetricID == m.MetricID)
-                        {
-                            MetricsList.Add(new SelectListItem { Value = m.MetricID.ToString(), Text = m.ChartName, Selected = true });
-                        }
-                        else
-                        {
-                            MetricsList.Add(new SelectListItem { Value = m.MetricID.ToString(), Text = m.ChartName });
-                        }
+                        MetricsList.Add(new SelectListItem { Value = m.MetricID.ToString(), Text = m.ChartName, Selected = true });
+                    }
+                    else
+                    {
+                        MetricsList.Add(new SelectListItem { Value = m.MetricID.ToString(), Text = m.ChartName });
                     }
                 }
             }

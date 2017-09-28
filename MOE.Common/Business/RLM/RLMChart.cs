@@ -151,7 +151,7 @@ namespace MOE.Common.Business
             chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(signalPhase.Approach.ProtectedPhaseNumber, signalPhase.Approach.DirectionType.Description));
             Dictionary<string, string> statistics = new Dictionary<string, string>();
             statistics.Add("Total Violations", signalPhase.Violations.ToString() + " (" + signalPhase.PercentViolations.ToString() + "%)");
-            statistics.Add("Severe Violations", signalPhase.Srlv + " (" + signalPhase.PercentSevereViolations.ToString() + "%)");
+            statistics.Add("Severe Violations", signalPhase.SevereRedLightViolations + " (" + signalPhase.PercentSevereViolations.ToString() + "%)");
             statistics.Add("Yellow Light Occurrences", signalPhase.YellowOccurrences + " (" + signalPhase.PercentYellowOccurrences.ToString() + "%)");
             chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
@@ -271,7 +271,7 @@ namespace MOE.Common.Business
                     srlvLabel.ForeColor = Color.Maroon;
                     srlvLabel.RowIndex = customLabelIndex;
                     customLabelIndex++; 
-                    srlvLabel.Text = "SRLV-" + plan.Srlv.ToString();
+                    srlvLabel.Text = "SRLV-" + plan.SevereRedLightViolations.ToString();
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(srlvLabel);
                 }
                 if (Options.ShowPercentRedLightViolations)

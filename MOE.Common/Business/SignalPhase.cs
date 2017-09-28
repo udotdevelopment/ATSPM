@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -10,41 +11,11 @@ namespace MOE.Common.Business
 {
     public class SignalPhase
     {
+        public string Direction { get; }
 
+        public VolumeCollection Volume { get; private set; }
 
-        private string direction;
-        public string Direction
-        {
-            get { return direction; }
-        }
-
-        //private int phase;
-        //public int Phase
-        //{
-        //    get { return phase; }
-        //}
-
-        //private bool isOverLap;
-        //public bool IsOverlap
-        //{
-        //    get { return isOverLap; }
-        //}
-
-        private VolumeCollection volume;
-        public VolumeCollection Volume
-        {
-            get { return volume; }
-        }
-
-
-
-        private MOE.Common.Business.PlanCollection plans;
-        public MOE.Common.Business.PlanCollection Plans
-        {
-            get { return plans; }
-        }
-
-
+        public MOE.Common.Business.PlanCollection Plans { get; private set; }
 
         public double AvgDelay
         {
@@ -116,6 +87,16 @@ namespace MOE.Common.Business
             }
         }
 
+        private double totalArrivalOnYellow = -1;
+        public double TotalArrivalOnYellow
+        {
+            get
+            {
+                if (totalArrivalOnYellow == -1)
+                    totalArrivalOnYellow = Plans.PlanList.Sum(d => d.TotalArrivalOnYellow);
+                return totalArrivalOnYellow;
+            }
+        }
         public double TotalDelay
         {
             get
@@ -171,7 +152,7 @@ namespace MOE.Common.Business
                 {
                     totalRedTime = Plans.PlanList.Sum(d => d.TotalRedTime);
                 }
-                return totalYellowTime;
+                return totalRedTime;
             }
         }
 
@@ -183,45 +164,21 @@ namespace MOE.Common.Business
             }
         }
 
-        private DateTime startDate;
-        private DateTime endDate;
-        private bool showVolume;
-        private int binSize;
-        private Models.Approach approach;
-        public Models.Approach Approach
-        {
-            get
-            {
-                return approach;
-            }
-        }
+        public bool IsPermissive { get; }
+        public Models.Approach Approach { get; }
         private List<Models.Controller_Event_Log> cycleEvents { get; set; }
         private List<Models.Controller_Event_Log> preemptEvents { get; set; }
 
-
-        /// <summary>
-        /// Constructor for Signal phase
-        /// </summary>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <param name="signalId"></param>
-        /// <param name="phaseNumber"></param>
-        /// <param name="region"></param>
-        /// <param name="detChannel"></param>
+        
         public SignalPhase(DateTime startDate, DateTime endDate, Models.Approach approach,
-            bool showVolume, int binSize, int metricTypeID)
+            bool showVolume, int binSize, int metricTypeId, bool isPermissive)
         {
-            this.approach = approach;
-            this.startDate = startDate;
-            this.endDate = endDate;
-            this.direction = approach.DirectionType.Description;
-            this.showVolume = showVolume;
-            this.binSize = binSize;
-           
-
+            this.Approach = approach;
+            if (approach.DirectionType != null) this.Direction = approach.DirectionType.Description;
+            IsPermissive = isPermissive;
             if (!approach.IsProtectedPhaseOverlap)
             {
-                GetSignalPhaseData(startDate, endDate, showVolume, binSize, metricTypeID);
+                GetSignalPhaseData(startDate, endDate, showVolume, binSize, metricTypeId);
             }
             else
             {
@@ -236,57 +193,58 @@ namespace MOE.Common.Business
             totalVolume = -1;
             totalGreenTime = -1;
             totalArrivalOnGreen = -1;
-            this.volume = null;
-            DateTime redLightTimeStamp = DateTime.MinValue;
-
+            this.Volume = null;
             foreach (MOE.Common.Models.Controller_Event_Log row in detectorEvents)
             {
                 row.Timestamp = row.Timestamp.AddSeconds(seconds);
             }
-
-            plans.LinkPivotAddDetectorData(this.detectorEvents);
+            Plans.LinkPivotAddDetectorData(this.detectorEvents);
         }
 
         /// <summary>
         /// Gets the data for the green yellow and red lines as well as the 
         /// detector events
         /// </summary>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <param name="signalId"></param>
-        /// <param name="eventData1"></param>
-        /// <param name="region"></param>
-        /// <param name="detChannel"></param>
         private void GetSignalPhaseData(DateTime startDate, DateTime endDate,
-            bool showVolume, int binSize, int metricTypeID)
+            bool showVolume, int binSize, int metricTypeId)
         {  
 
             MOE.Common.Models.Repositories.IControllerEventLogRepository celRepository =
                 MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-            this.cycleEvents = celRepository.GetEventsByEventCodesParam(approach.SignalID, startDate,
-                endDate, new List<int>() { 1, 8, 10 }, approach.ProtectedPhaseNumber);
-            this.preemptEvents = celRepository.GetSignalEventsByEventCodes(approach.SignalID, startDate,
+            if (IsPermissive)
+            {
+                if (Approach.PermissivePhaseNumber != null && Approach.PermissivePhaseNumber > 0)
+                    cycleEvents = celRepository.GetEventsByEventCodesParam(Approach.SignalID, startDate,
+                        endDate, new List<int>() {1, 8, 10}, Approach.PermissivePhaseNumber.Value);
+            }
+            else
+            {
+                cycleEvents = celRepository.GetEventsByEventCodesParam(Approach.SignalID, startDate,
+                endDate, new List<int>() { 1, 8, 10 }, Approach.ProtectedPhaseNumber);
+            }
+            
+            this.preemptEvents = celRepository.GetSignalEventsByEventCodes(Approach.SignalID, startDate,
                 endDate, new List<int>() { 102 });
 
            
             
             this.detectorEvents = new List<Models.Controller_Event_Log>();
-            var detectorsForMetric = approach.GetDetectorsForMetricType(metricTypeID);
+            var detectorsForMetric = Approach.GetDetectorsForMetricType(metricTypeId);
 
             foreach (Models.Detector d in detectorsForMetric)
             {
-                this.detectorEvents.AddRange(celRepository.GetEventsByEventCodesParamWithOffset(approach.SignalID, startDate,
+                this.detectorEvents.AddRange(celRepository.GetEventsByEventCodesParamWithOffset(Approach.SignalID, startDate,
                     endDate, new List<int> { 81 }, d.DetChannel, d.GetOffset()));
 
             }
 
 
 
-            plans = new PlanCollection( cycleEvents, detectorEvents, startDate, endDate, approach, preemptEvents );
+            Plans = new PlanCollection( cycleEvents, detectorEvents, startDate, endDate, Approach, preemptEvents );
 
-            if (plans.PlanList.Count == 0)
+            if (Plans.PlanList.Count == 0)
             {
-                plans.AddItem(new Plan(startDate, endDate, 0, cycleEvents, detectorEvents, preemptEvents, approach));
+                Plans.AddItem(new Plan(startDate, endDate, 0, cycleEvents, detectorEvents, preemptEvents, Approach));
             }
 
             if (showVolume)
@@ -316,23 +274,23 @@ namespace MOE.Common.Business
            
             MOE.Common.Models.Repositories.IControllerEventLogRepository celRepository =
                 MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-            this.cycleEvents = celRepository.GetEventsByEventCodesParam(approach.SignalID, startDate,
-                endDate, new List<int>() { 61, 63, 64 }, approach.ProtectedPhaseNumber);
-            this.preemptEvents = celRepository.GetSignalEventsByEventCodes(approach.SignalID, startDate,
+            this.cycleEvents = celRepository.GetEventsByEventCodesParam(Approach.SignalID, startDate,
+                endDate, new List<int>() { 61, 63, 64 }, Approach.ProtectedPhaseNumber);
+            this.preemptEvents = celRepository.GetSignalEventsByEventCodes(Approach.SignalID, startDate,
                 endDate, new List<int>() { 102 });
 
       
             this.detectorEvents = new List<Models.Controller_Event_Log>();
-            foreach (Models.Detector d in approach.Detectors)
+            foreach (Models.Detector d in Approach.Detectors)
             {
-                this.detectorEvents.AddRange(celRepository.GetEventsByEventCodesParam(approach.SignalID, startDate,
+                this.detectorEvents.AddRange(celRepository.GetEventsByEventCodesParam(Approach.SignalID, startDate,
                     endDate, new List<int> { 81 }, d.DetChannel));
             }
-            plans = new PlanCollection(cycleEvents, detectorEvents, startDate, endDate, approach, preemptEvents);
+            Plans = new PlanCollection(cycleEvents, detectorEvents, startDate, endDate, Approach, preemptEvents);
 
-            if (plans.PlanList.Count == 0)
+            if (Plans.PlanList.Count == 0)
             {
-                Plans.AddItem(new Plan(startDate, endDate, 0, cycleEvents, detectorEvents, preemptEvents, approach));
+                Plans.AddItem(new Plan(startDate, endDate, 0, cycleEvents, detectorEvents, preemptEvents, Approach));
             }
 
             if (showVolume)
@@ -344,7 +302,7 @@ namespace MOE.Common.Business
         private void SetVolume(List<Models.Controller_Event_Log> detectorEvents, DateTime startDate, DateTime endDate,
             int binSize)
         {
-            volume = new VolumeCollection(startDate, endDate, detectorEvents, binSize);            
+            Volume = new VolumeCollection(startDate, endDate, detectorEvents, binSize);            
         }
 
 
