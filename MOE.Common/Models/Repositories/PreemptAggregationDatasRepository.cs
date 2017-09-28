@@ -11,11 +11,11 @@ namespace MOE.Common.Models.Repositories
     {
         SPM db = new SPM();
 
-        public void Save(PreemptionAggregationData preemptAggregationData)
+        public void Save(PreemptionAggregation preemptAggregationData)
         {
             try
             {
-                db.PreemptionAggregationData.Add(preemptAggregationData);
+                db.PreemptionAggregations.Add(preemptAggregationData);
                 db.SaveChanges();
             }
             catch (Exception e)

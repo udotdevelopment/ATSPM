@@ -96,7 +96,7 @@ namespace MOE.Common.Migrations
                 .Index(t => t.Id);
             
             CreateTable(
-                "dbo.PreemptionAggregationDatas",
+                "dbo.PreemptionAggregations",
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
@@ -166,7 +166,7 @@ namespace MOE.Common.Migrations
             
             DropForeignKey("dbo.SignalAggregations", "SignalID", "dbo.Signals");
             DropForeignKey("dbo.PriorityAggregations", "SignalID", "dbo.Signals");
-            DropForeignKey("dbo.PreemptionAggregationDatas", "SignalID", "dbo.Signals");
+            DropForeignKey("dbo.PreemptionAggregations", "SignalID", "dbo.Signals");
             DropForeignKey("dbo.DetectorAggregations", "Id", "dbo.Detectors");
             DropForeignKey("dbo.ApproachYellowRedActivationAggregations", "ApproachId", "dbo.Approaches");
             DropForeignKey("dbo.ApproachSplitFailAggregations", "ApproachId", "dbo.Approaches");
@@ -175,7 +175,7 @@ namespace MOE.Common.Migrations
             DropForeignKey("dbo.ApproachCycleAggregations", "ApproachId", "dbo.Approaches");
             DropIndex("dbo.SignalAggregations", new[] { "SignalID" });
             DropIndex("dbo.PriorityAggregations", new[] { "SignalID" });
-            DropIndex("dbo.PreemptionAggregationDatas", new[] { "SignalID" });
+            DropIndex("dbo.PreemptionAggregations", new[] { "SignalID" });
             DropIndex("dbo.DetectorAggregations", new[] { "Id" });
             DropIndex("dbo.ApproachYellowRedActivationAggregations", new[] { "ApproachId" });
             DropIndex("dbo.ApproachSplitFailAggregations", new[] { "ApproachId" });
@@ -184,7 +184,7 @@ namespace MOE.Common.Migrations
             DropIndex("dbo.ApproachCycleAggregations", new[] { "ApproachId" });
             DropTable("dbo.SignalAggregations");
             DropTable("dbo.PriorityAggregations");
-            DropTable("dbo.PreemptionAggregationDatas");
+            DropTable("dbo.PreemptionAggregations");
             DropTable("dbo.DetectorAggregations");
             DropTable("dbo.ApproachYellowRedActivationAggregations");
             DropTable("dbo.ApproachSplitFailAggregations");
