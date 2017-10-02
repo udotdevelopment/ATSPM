@@ -1,5 +1,7 @@
 ﻿@model MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel
-<script charset="UTF-8" type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+
+<script type="text/javascript" src="~/Scripts/AddData.js"></script>
+<script charset="UTF-8" type="text/javascript" src="//www.bing.com/api/maps/mapcontrol?callback=GetMap"></script>
 <div class="panel panel-default">
     <div class="panel-heading">Signal Selection</div>
     <div class="panel-body">
@@ -53,6 +55,5 @@
 </div>
 @section Scripts
 {
-<script type="text/javascript" src="~/Scripts/AddData.js" ></script>
 <script type="text/javascript" src="~/Scripts/SignalSearch.js"></script>
 }

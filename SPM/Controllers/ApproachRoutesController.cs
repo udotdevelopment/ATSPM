@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MOE.Common.Models;
+using MOE.Common.Models.ViewModel.RouteEdit;
 
 namespace SPM.Controllers
 {
@@ -39,7 +40,8 @@ namespace SPM.Controllers
         // GET: ApproachRoutes/Create
         public ActionResult Create()
         {
-            return View();
+            RouteCreateViewModel viewModel = new RouteCreateViewModel();
+            return View(viewModel);
         }
 
         // POST: ApproachRoutes/Create

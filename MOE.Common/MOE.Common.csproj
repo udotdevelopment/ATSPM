@@ -369,7 +369,6 @@
     <Compile Include="Business\WatchDog\WatchDogScan.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Data\MOE1.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -545,7 +544,6 @@
     <Compile Include="Business\WCFServiceLibrary\SplitMonitorOptions.cs" />
     <Compile Include="Data\LinkPivot.cs">
       <DependentUpon>LinkPivot.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Data\LinkPivot.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -732,6 +730,7 @@
     <Compile Include="Models\ViewModel\MetricUsage\ChartViewModel.cs" />
     <Compile Include="Models\ViewModel\MetricUsage\MetricUsageViewModel.cs" />
     <Compile Include="Models\ViewModel\RouteEdit\ApproachRouteDetailViewModel.cs" />
+    <Compile Include="Models\ViewModel\RouteEdit\RouteCreateViewModel.cs" />
     <Compile Include="Models\ViewModel\RouteEdit\RouteListViewModel.cs" />
     <Compile Include="Models\ViewModel\WebConfigTool\WebConfigToolViewModel.cs" />
     <Compile Include="Models\ViewModel\_MainMenu\MenuItem.cs" />
