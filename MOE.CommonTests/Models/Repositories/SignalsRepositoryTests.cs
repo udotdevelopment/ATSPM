@@ -155,12 +155,12 @@ namespace MOE.Common.Models.Repositories.Tests
             var origSignal = CreateSignalForTest();
             SR.AddOrUpdate(origSignal);
 
-            var alteredSignal = CreateSignalForTest();
+            var alteredSignal = SR.CopySignalToNewVersion(origSignal);
 
             alteredSignal.PrimaryName = "alteredPrimaryName";
             alteredSignal.SecondaryName = "alteredSecondaryName";
 
-            SR.UpdateWithNewVersion(alteredSignal);
+            SR.AddOrUpdate(alteredSignal);
 
             var signals = SR.GetAllVersionsOfSignalBySignalID("10001");
 

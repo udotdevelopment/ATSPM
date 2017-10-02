@@ -81,4 +81,3 @@ C:\Projects\github\atspm\NEWDecodeandImportASC3Logs\obj\Debug\NEWDecodeandImport
 C:\Projects\github\atspm\NEWDecodeandImportASC3Logs\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
 C:\Projects\github\atspm\NEWDecodeandImportASC3Logs\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
 C:\Projects\github\atspm\NEWDecodeandImportASC3Logs\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
-C:\Projects\github\atspm\NEWDecodeandImportASC3Logs\obj\Debug\NEWDecodeandImportASC3Logs.csprojResolveAssemblyReference.cache

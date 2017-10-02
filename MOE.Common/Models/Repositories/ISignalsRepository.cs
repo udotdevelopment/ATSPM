@@ -23,7 +23,7 @@ namespace MOE.Common.Models.Repositories
         string GetSignalLocation(string signalID);
         void AddList(List<MOE.Common.Models.Signal> signals);
         void Remove(string id);
-        void UpdateWithNewVersion(MOE.Common.Models.Signal incomingSignal);
+        Signal CopySignalToNewVersion(Signal originalVersion);
         List<MOE.Common.Models.Signal> GetAllVersionsOfSignalBySignalID(string signalID);
         Common.Models.Signal GetLatestVersionOfSignalBySignalID(string signalID);
 
@@ -33,5 +33,8 @@ namespace MOE.Common.Models.Repositories
         List<Signal> GetLatestVerionOfAllSignalsByControllerType(int controllerTypeId);
 
         Signal GetVersionOfSignalByDate(string signalId, DateTime startDate);
+        Signal GetSignalVersionByVersionId(int versionId);
+        void SetVersionToDeleted(int versionId);
+        void SetAllVersionsOfASignalToDeleted(string id);
     }
 }

@@ -9,8 +9,16 @@ namespace MOE.Common.Models.Repositories
 {
     public class ApproachRepository : IApproachRepository
     {
-        Models.SPM _db = new SPM();
+        private Models.SPM _db;
+        public ApproachRepository()
+        {
+            _db = new SPM();
+        }
 
+        public ApproachRepository(SPM context)
+        {
+            _db = context;
+        }
 
         public List<Models.Approach> GetAllApproaches()
         {

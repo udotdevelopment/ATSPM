@@ -64,11 +64,11 @@ namespace MOE.Common.Migrations
             CreateIndex("dbo.MetricComments", "VersionID");
             CreateIndex("dbo.Signals", "VersionAction_ID");
             CreateIndex("dbo.Approaches", "VersionID");
-            AddForeignKey("dbo.ApproachRouteDetail", "DirectionType1_DirectionTypeID", "dbo.DirectionTypes", "DirectionTypeID");
-            AddForeignKey("dbo.ApproachRouteDetail", "DirectionType2_DirectionTypeID", "dbo.DirectionTypes", "DirectionTypeID");
-            AddForeignKey("dbo.Signals", "VersionAction_ID", "dbo.VersionActions", "ID", cascadeDelete: true);
-            AddForeignKey("dbo.MetricComments", "VersionID", "dbo.Signals", "VersionID", cascadeDelete: true);
-            AddForeignKey("dbo.Approaches", "VersionID", "dbo.Signals", "VersionID", cascadeDelete: true);
+            //AddForeignKey("dbo.ApproachRouteDetail", "DirectionType1_DirectionTypeID", "dbo.DirectionTypes", "DirectionTypeID");
+            //AddForeignKey("dbo.ApproachRouteDetail", "DirectionType2_DirectionTypeID", "dbo.DirectionTypes", "DirectionTypeID");
+            //AddForeignKey("dbo.Signals", "VersionAction_ID", "dbo.VersionActions", "ID", cascadeDelete: true);
+            //AddForeignKey("dbo.MetricComments", "VersionID", "dbo.Signals", "VersionID", cascadeDelete: true);
+            //AddForeignKey("dbo.Approaches", "VersionID", "dbo.Signals", "VersionID", cascadeDelete: true);
             DropColumn("dbo.ApproachRouteDetail", "ApproachOrder");
             DropColumn("dbo.ApproachRouteDetail", "ApproachID");
         }

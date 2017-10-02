@@ -52,6 +52,8 @@ namespace MOE.Common.Models
         }
 
         [Required]
+        [Display(Name = "Version Action")]
+        public int VersionActionId { get; set; }
         public virtual VersionAction VersionAction { get; set; }
 
         [Required]

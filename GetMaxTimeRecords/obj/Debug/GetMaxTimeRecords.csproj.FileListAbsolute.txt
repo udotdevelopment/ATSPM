@@ -85,4 +85,3 @@ C:\Projects\github\atspm\GetMaxTimeRecords\obj\Debug\GetMaxTimeRecords.pdb
 C:\Projects\github\atspm\GetMaxTimeRecords\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
 C:\Projects\github\atspm\GetMaxTimeRecords\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
 C:\Projects\github\atspm\GetMaxTimeRecords\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
-C:\Projects\github\atspm\GetMaxTimeRecords\obj\Debug\GetMaxTimeRecords.csprojResolveAssemblyReference.cache

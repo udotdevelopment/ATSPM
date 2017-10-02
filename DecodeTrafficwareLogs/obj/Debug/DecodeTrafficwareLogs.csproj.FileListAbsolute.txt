@@ -81,4 +81,3 @@ C:\Projects\github\atspm\DecodeTrafficwareLogs\obj\Debug\DecodeTrafficwareLogs.p
 C:\Projects\github\atspm\DecodeTrafficwareLogs\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
 C:\Projects\github\atspm\DecodeTrafficwareLogs\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
 C:\Projects\github\atspm\DecodeTrafficwareLogs\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
-C:\Projects\github\atspm\DecodeTrafficwareLogs\obj\Debug\DecodeTrafficwareLogs.csprojResolveAssemblyReference.cache

@@ -8,20 +8,28 @@ namespace MOE.Common.Models.Repositories
 {
     public class DetectorRepositoryFactory
     {
-       private static IDetectorRepository graphDetectorRepository;
+       private static IDetectorRepository detectorRepository;
 
         public static IDetectorRepository Create()
         {
-            if (graphDetectorRepository != null)
+            if (detectorRepository != null)
             {
-                return graphDetectorRepository;
+                return detectorRepository;
             }
             return new DetectorRepository();
+        }
+        public static IDetectorRepository Create(SPM context)
+        {
+            if (detectorRepository != null)
+            {
+                return detectorRepository;
+            }
+            return new DetectorRepository(context);
         }
 
         public static void SetArchivedMetricsRepository(IDetectorRepository newRepository)
         {
-            graphDetectorRepository = newRepository;
+            detectorRepository = newRepository;
         }
     }
     

@@ -55,3 +55,5 @@ C:\Projects\github\atspm\MOE.CommonTests\bin\Debug\MOE.CommonTests.dll.config
 C:\Projects\github\atspm\MOE.CommonTests\bin\Debug\EntityFramework.SqlServer.dll
 C:\Projects\github\atspm\MOE.CommonTests\bin\Debug\EntityFramework.SqlServer.xml
 C:\Projects\github\atspm\MOE.CommonTests\obj\Debug\MOE.CommonTests.csprojResolveAssemblyReference.cache
+C:\Projects\github\atspm\MOE.CommonTests\bin\Debug\System.Web.Helpers.dll
+C:\Projects\github\atspm\MOE.CommonTests\bin\Debug\System.Web.Helpers.xml
