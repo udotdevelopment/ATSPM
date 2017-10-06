@@ -10,7 +10,7 @@ namespace MOE.Common.Models
     public partial class Signal
     {
         [NotMapped]
-        public String SignalDescription { get { return SignalID + " - " + PrimaryName + " " + SecondaryName; } }
+        public String SignalDescription => SignalID + " - " + PrimaryName + " " + SecondaryName;
 
         [NotMapped]
         public List<Models.Controller_Event_Log> PlanEvents {get; set;}       
@@ -67,6 +67,21 @@ namespace MOE.Common.Models
         {
             return this.PrimaryName + " @ " + this.SecondaryName;
         }
+
+        [NotMapped]
+        public string SelectListName
+        {
+            get
+            {
+                if (End == DateTime.MaxValue || End == Convert.ToDateTime("12/31/9999"))
+                {
+                    return "Current";
+                }
+                return End.ToShortDateString() + " - " + Note;
+            } 
+
+        }
+
 
         public List<Models.Detector> GetDetectorsForSignal()
         {

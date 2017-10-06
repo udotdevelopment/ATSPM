@@ -6,6 +6,18 @@ namespace MOE.CommonTests.Models
 {
     public class InMemoryDetectionTypeRepository : IDetectionTypeRepository
     {
+        private InMemoryMOEDatabase db;
+
+        public InMemoryDetectionTypeRepository(InMemoryMOEDatabase db)
+        {
+            this.db = db;
+        }
+
+        public InMemoryDetectionTypeRepository()
+        {
+            this.db = new InMemoryMOEDatabase();
+        }
+
         public List<DetectionType> GetAllDetectionTypes()
         {
             throw new System.NotImplementedException();

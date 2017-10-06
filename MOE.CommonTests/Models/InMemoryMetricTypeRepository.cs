@@ -15,7 +15,7 @@ namespace MOE.CommonTests.Models
             _db = new InMemoryMOEDatabase();
         }
 
-        InMemoryMetricTypeRepository(InMemoryMOEDatabase dB)
+        public InMemoryMetricTypeRepository(InMemoryMOEDatabase dB)
         {
             _db = dB;
         }

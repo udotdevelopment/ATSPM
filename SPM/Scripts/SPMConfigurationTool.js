@@ -28,6 +28,35 @@ function SetControlValues(signalID, selectedMetricID) {
     GetSignalLocation();
 }
 
+function AddNewVersion()
+{
+    var signalID = $("#editSignalID").val();
+
+var parameters = {};
+parameters.ID = signalID;
+$.ajax({
+    type: "POST",
+    cache: false,
+    async: true,
+    headers: GetRequestVerificationTokenObject(),
+    data: JSON.stringify({ "id": signalID }),
+    url: urlpathCopySignal,
+    datatype: "json",
+    contentType: "application/json; charset=utf-8",
+    success: function (data) {
+        $('#SignalEdit').html(data);
+        SetSignalID(signalID);
+    },
+    statusCode: {
+        404: function (content) { alert('cannot find resource'); },
+        500: function (content) { alert('internal server error'); }
+    },
+    error: function (req, status, errorObj) {
+        alert("Error");
+    }
+});
+}
+
 function GetSignalLocation() {
     var signalID = $("#SignalID").val();
     var tosend = {};

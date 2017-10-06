@@ -20,6 +20,7 @@ namespace MOE.Common.Models
         [NotMapped] private string signalID;
 
         [Key]
+        [Display(Name = "Version")]
         public int VersionID { get; set; }
 
         [StringLength(10)]

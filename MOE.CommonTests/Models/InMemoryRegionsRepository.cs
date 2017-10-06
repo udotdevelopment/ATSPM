@@ -6,6 +6,13 @@ namespace MOE.CommonTests.Models
 {
     public class InMemoryRegionsRepository : IRegionsRepository
     {
+        private object db;
+
+        public InMemoryRegionsRepository(object db)
+        {
+            this.db = db;
+        }
+
         public List<Region> GetAllRegions()
         {
             List < Region > regs = new List<Region>();

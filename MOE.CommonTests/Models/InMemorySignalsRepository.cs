@@ -77,7 +77,7 @@ namespace MOE.CommonTests.Models
 
             newVersion.SignalID = originalVersion.SignalID;
             originalVersion.End = DateTime.Today;
-            newVersion.End = LastDate;
+            newVersion.End = DateTime.MaxValue;
             newVersion.Note = originalVersion.Note;
             newVersion.PrimaryName = originalVersion.PrimaryName;
             newVersion.SecondaryName = originalVersion.SecondaryName;
@@ -164,7 +164,7 @@ namespace MOE.CommonTests.Models
             return orderedSignals;
         }
 
-        private VersionAction GetVersionActionByVersionActionId(int Id)
+        private VersionAction GetVersionActionByVersionAction_ID(int Id)
         {
             VersionAction va = (from r in _db.VersionActions
                                where r.ID == Id

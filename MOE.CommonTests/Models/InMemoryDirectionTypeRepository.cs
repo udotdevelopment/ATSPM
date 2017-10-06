@@ -8,22 +8,22 @@ namespace MOE.CommonTests.Models
 
     public class InMemoryDirectionTypeRepository : IDirectionTypeRepository
     {
-        private InMemoryMOEDatabase _MOE;
+        private InMemoryMOEDatabase _db;
 
         public InMemoryDirectionTypeRepository()
         {
-            _MOE = new InMemoryMOEDatabase();
+            _db = new InMemoryMOEDatabase();
             
         }
 
-        public InMemoryDirectionTypeRepository(InMemoryMOEDatabase MOE)
+        public InMemoryDirectionTypeRepository(InMemoryMOEDatabase db)
         {
-            _MOE = MOE;
+            _db = db;
 
         }
         public List<DirectionType> GetAllDirections()
         {
-            var dirs = (from r in _MOE.DirectionTypes
+            var dirs = (from r in _db.DirectionTypes
                        select r).ToList();
 
             return dirs;
@@ -31,7 +31,7 @@ namespace MOE.CommonTests.Models
 
         public DirectionType GetDirectionByID(int directionID)
         {
-            var dirs = (from r in _MOE.DirectionTypes
+            var dirs = (from r in _db.DirectionTypes
                         where r.DirectionTypeID == directionID
                         select r).FirstOrDefault();
 
@@ -42,7 +42,7 @@ namespace MOE.CommonTests.Models
         {
             List<System.Web.Mvc.SelectListItem> list =
                 new List<System.Web.Mvc.SelectListItem>();
-            foreach (DirectionType d in _MOE.DirectionTypes.OrderBy(d => d.DisplayOrder))
+            foreach (DirectionType d in _db.DirectionTypes.OrderBy(d => d.DisplayOrder))
             {
                 list.Add(new System.Web.Mvc.SelectListItem { Value = d.DirectionTypeID.ToString(), Text = d.Description });
             }

@@ -12,7 +12,7 @@ namespace MOE.Common.Models.Repositories
     public class SignalsRepository : ISignalsRepository
     {
         private Models.SPM _db;
-        public DateTime LastDate = Convert.ToDateTime("01/01/9999");
+        public DateTime LastDate = DateTime.MaxValue;
 
         public SignalsRepository()
         {
@@ -492,7 +492,7 @@ namespace MOE.Common.Models.Repositories
             return signal;
         }
 
-        private VersionAction GetVersionActionByVersionActionId(int id)
+        private VersionAction GetVersionActionByVersionAction_ID(int id)
         {
             VersionAction va = (from r in _db.VersionActions
                 where r.ID == id
@@ -511,7 +511,7 @@ namespace MOE.Common.Models.Repositories
                 .OrderByDescending(x => x.End)
                 .ToList();
 
-            if (signals.Count < 0)
+            if (signals.Count > 0)
             {
 
                 return signals;

@@ -26,6 +26,15 @@ namespace MOE.CommonTests.Models
         public List<Common.Models.LaneType> LaneTypes = new List<Common.Models.LaneType>();
         public List<Common.Models.DetectionHardware> DetectionHardwares = new List<Common.Models.DetectionHardware>();
 
+        public void ClearTables()
+        {
+            Detectors.Clear();
+            ApproachRouteDetails.Clear();
+            ApproachRoutes.Clear();
+            Approaches.Clear();
+            Signals.Clear();
+
+        }
 
 
         public InMemoryMOEDatabase()
@@ -169,6 +178,8 @@ namespace MOE.CommonTests.Models
 
 
         }
+
+
 
         private void PopulateDetectionHardware()
         {

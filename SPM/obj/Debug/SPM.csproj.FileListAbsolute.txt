@@ -96,6 +96,9 @@ C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\obj\Debug\RdlCompile.ca
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\obj\Debug\RdlCompile.compiled
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\obj\Debug\SPM.dll
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\obj\Debug\SPM.pdb
+C:\Projects\github\atspm\SPM\bin\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Projects\github\atspm\SPM\bin\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Projects\github\atspm\SPM\bin\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
 C:\Projects\github\atspm\SPM\bin\Images\ATSPM Logo-01.png
 C:\Projects\github\atspm\SPM\bin\Images\CheckSignalWithTitle.png
 C:\Projects\github\atspm\SPM\bin\Images\close.png
@@ -194,6 +197,3 @@ C:\Projects\github\atspm\SPM\obj\Debug\SPM.csprojResolveAssemblyReference.cache
 C:\Projects\github\atspm\SPM\obj\Debug\SPM.csproj.CoreCompileInputs.cache
 C:\Projects\github\atspm\SPM\obj\Debug\SPM.dll
 C:\Projects\github\atspm\SPM\obj\Debug\SPM.pdb
-C:\Projects\github\atspm\SPM\bin\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
-C:\Projects\github\atspm\SPM\bin\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
-C:\Projects\github\atspm\SPM\bin\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll

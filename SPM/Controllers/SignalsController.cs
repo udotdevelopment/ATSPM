@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Net;
@@ -145,7 +146,12 @@ namespace SPM.Controllers
         [Authorize(Roles = "Technician")]
         private string GetApproachIndex(Signal signal)
         {
-            return "Approaches[" + signal.Approaches.Count.ToString() + "].";
+            if (signal.Approaches != null)
+            {
+                return "Approaches[" + signal.Approaches.Count.ToString() + "].";
+            }
+            signal.Approaches = new List<Approach>();
+            return "Approaches[0]";
         }
 
         private Approach GetNewApproach(Signal signal)
@@ -247,6 +253,9 @@ namespace SPM.Controllers
             signal.Longitude = "0";
             signal.RegionID = 2;
             signal.ControllerTypeID = 1;
+            signal.End = DateTime.MaxValue;          
+            signal.Note = "Create New";
+            signal.VersionID = 1;
             signal.Enabled = true;
             return signal;
         }
@@ -291,12 +300,25 @@ namespace SPM.Controllers
             }
             Signal signal = _signalsRepository.GetSignalBySignalID(id);
             signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description).ToList();
+
+            if (signal.Approaches == null)
+            {
+                signal.Approaches = new List<Approach>();
+            }
+
+
             foreach(Approach approach in signal.Approaches)
             {
                 approach.Detectors = approach.Detectors.OrderBy(d => d.DetectorID).ToList();
             }
+
             if (signal != null)
             {
+                if (signal.Note == null)
+                {
+                    signal.Note = "";
+                }
+
                 List<MOE.Common.Models.DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
                 foreach (MOE.Common.Models.Approach a in signal.Approaches)
                 {
@@ -391,16 +413,26 @@ namespace SPM.Controllers
             {
                 ModelState.Clear();
                 signal = SetDetectionTypes(signal);
+              
+                //var modelStateErrors = this.ModelState.Keys.SelectMany(key => this.ModelState[key].Errors);
+                
                 if (TryValidateModel(signal))
                 {
                     MOE.Common.Models.Repositories.ISignalsRepository repository =
                         MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
                     repository.AddOrUpdate(signal);
+                    AddSelectListsToViewBag(signal);
+                    return Content("Save Successful!" + DateTime.Now.ToString());
                 }
-                AddSelectListsToViewBag(signal);
-                return Content("Save Successful!" + DateTime.Now.ToString());
+                return Content("There was a validation error.");
             }
-            catch(Exception ex)
+
+            catch (ValidationException ex)
+            {
+                return Content(ex.Message);
+            }
+
+            catch (Exception ex)
             {
                 return Content(ex.Message);
             }
@@ -439,12 +471,14 @@ namespace SPM.Controllers
         {
 
 
+           
             ViewBag.ControllerType = new SelectList(_controllerTypeRepository.GetControllerTypes(), "ControllerTypeID", "Description", signal.ControllerTypeID);
             ViewBag.Region = new SelectList(_regionRepository.GetAllRegions(), "ID", "Description", signal.RegionID);
             ViewBag.DirectionType = new SelectList(_directionTypeRepository.GetAllDirections(), "DirectionTypeID", "Abbreviation");
             ViewBag.MovementType = new SelectList(_movementTypeRepository.GetAllMovementTypes(), "MovementTypeID", "Description");
             ViewBag.LaneType = new SelectList(_laneTypeRepository.GetAllLaneTypes(), "LaneTypeID", "Description");
-            ViewBag.DetectionHardware = new SelectList(_detectionHardwareRepository.GetAllDetectionHardwares(), "ID", "Name");  
+            ViewBag.DetectionHardware = new SelectList(_detectionHardwareRepository.GetAllDetectionHardwares(), "ID", "Name");
+            ViewBag.VersionList = new SelectList(_signalsRepository.GetAllVersionsOfSignalBySignalID(signal.SignalID), "VersionID", "SelectListName", signal.VersionID);
         }
 
         // GET: Signals/Delete/5

@@ -78,7 +78,7 @@ namespace ConvertDBForHistoricalConfigurations
             }
 
             db.SaveChanges();
-            db.Database.ExecuteSqlCommand("ALTER TABLE [dbo].[Signals] ADD CONSTRAINT [FK_dbo.Signals_dbo.VersionActions_VersionAction_ID] FOREIGN KEY ([VersionAction_ID]) REFERENCES [dbo].[VersionActions] ([ID])");
+            db.Database.ExecuteSqlCommand("ALTER TABLE [dbo].[Signals] ADD CONSTRAINT [FK_dbo.Signals_dbo.VersionActions_VersionAction_ID] FOREIGN KEY ([VersionActionId]) REFERENCES [dbo].[VersionActions] ([ID])");
 
             
 

@@ -10,8 +10,17 @@ namespace MOE.CommonTests.Models
 {
     public class InMemoryDetectorRepository : IDetectorRepository
     {
+        private InMemoryMOEDatabase _db;
 
+        public InMemoryDetectorRepository(InMemoryMOEDatabase db)
+        {
+            this._db = db;
+        }
 
+        public InMemoryDetectorRepository()
+        {
+            this._db = new InMemoryMOEDatabase();
+        }
 
         public Detector Add(Detector Detector)
         {

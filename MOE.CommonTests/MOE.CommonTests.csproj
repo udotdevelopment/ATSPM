@@ -85,6 +85,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Models\Custom\ApproachTests.cs" />
     <Compile Include="Models\InMemoryApproachRepository.cs" />
     <Compile Include="Models\InMemoryApproachRouteDetailsRepository.cs" />
     <Compile Include="Models\InMemoryApproachRouteRepository.cs" />

@@ -133,6 +133,9 @@ C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\MOE.Common\obj\Debug\MOE.Co
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\MOE.Common\obj\Debug\MOE.Common.dll
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\MOE.Common\obj\Debug\MOE.Common.pdb
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\MOE.Common\obj\Debug\MOE.Common.Migrations.201702162037176_4.0.1.resources
+C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
 C:\Projects\github\atspm\MOE.Common\bin\Debug\MOE.Common.dll.config
 C:\Projects\github\atspm\MOE.Common\bin\Debug\MOE.Common.dll
 C:\Projects\github\atspm\MOE.Common\bin\Debug\MOE.Common.pdb
@@ -179,6 +182,8 @@ C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.Owin.Host.SystemWeb.dll
 C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.Owin.Security.Cookies.dll
 C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.Owin.Security.dll
 C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.Owin.Security.OAuth.dll
+C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
 C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.Web.Infrastructure.dll
 C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.Web.XmlTransform.dll
 C:\Projects\github\atspm\MOE.Common\bin\Debug\MvcCheckBoxList.dll
@@ -243,6 +248,8 @@ C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.Owin.Host.SystemWeb.xml
 C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.Owin.Security.xml
 C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.Owin.Security.Cookies.xml
 C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.Owin.Security.OAuth.xml
+C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
 C:\Projects\github\atspm\MOE.Common\bin\Debug\Newtonsoft.Json.xml
 C:\Projects\github\atspm\MOE.Common\bin\Debug\Remotion.Linq.xml
 C:\Projects\github\atspm\MOE.Common\bin\Debug\SharpSnmpLib.Full.xml
@@ -264,16 +271,9 @@ C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.csprojResolveAssemblyRe
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.Migrations.Initial.resources
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.Migrations.Version40.resources
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.Migrations.SPMWatchDog.resources
+C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.Migrations.Version401.resources
+C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.Migrations.HistoricalConfiguration.resources
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.csproj.GenerateResource.Cache
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.csproj.CoreCompileInputs.cache
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.dll
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.pdb
-C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.Migrations.Version401.resources
-C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
-C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
-C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
-C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
-C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
-C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
-C:\Projects\github\atspm\MOE.Common\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
-C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.Migrations.HistoricalConfiguration.resources

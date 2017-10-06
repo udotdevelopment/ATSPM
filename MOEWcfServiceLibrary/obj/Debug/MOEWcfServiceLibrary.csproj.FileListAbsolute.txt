@@ -48,6 +48,9 @@ C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\MOEWcfServiceLibrary\bin\De
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\MOEWcfServiceLibrary\obj\Debug\MOEWcfServiceLibrary.csprojResolveAssemblyReference.cache
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\MOEWcfServiceLibrary\obj\Debug\MOEWcfServiceLibrary.dll
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\MOEWcfServiceLibrary\obj\Debug\MOEWcfServiceLibrary.pdb
+C:\Projects\github\atspm\MOEWcfServiceLibrary\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Projects\github\atspm\MOEWcfServiceLibrary\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Projects\github\atspm\MOEWcfServiceLibrary\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
 C:\Projects\github\atspm\MOEWcfServiceLibrary\bin\Debug\MOEWcfServiceLibrary.dll.config
 C:\Projects\github\atspm\MOEWcfServiceLibrary\bin\Debug\MOEWcfServiceLibrary.dll
 C:\Projects\github\atspm\MOEWcfServiceLibrary\bin\Debug\MOEWcfServiceLibrary.pdb
@@ -100,6 +103,3 @@ C:\Projects\github\atspm\MOEWcfServiceLibrary\obj\Debug\MOEWcfServiceLibrary.csp
 C:\Projects\github\atspm\MOEWcfServiceLibrary\obj\Debug\MOEWcfServiceLibrary.csproj.CoreCompileInputs.cache
 C:\Projects\github\atspm\MOEWcfServiceLibrary\obj\Debug\MOEWcfServiceLibrary.dll
 C:\Projects\github\atspm\MOEWcfServiceLibrary\obj\Debug\MOEWcfServiceLibrary.pdb
-C:\Projects\github\atspm\MOEWcfServiceLibrary\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
-C:\Projects\github\atspm\MOEWcfServiceLibrary\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
-C:\Projects\github\atspm\MOEWcfServiceLibrary\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll

@@ -31,7 +31,7 @@ C:\Projects\github\atspm\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-mast
 C:\Projects\github\atspm\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Debug\System.Web.WebPages.xml
 C:\Projects\github\atspm\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Debug\System.Web.WebPages.Deployment.xml
 C:\Projects\github\atspm\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\bin\Debug\System.Web.WebPages.Razor.xml
+C:\Projects\github\atspm\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\obj\Debug\Caseiro.Mvc.PagedList.csprojResolveAssemblyReference.cache
 C:\Projects\github\atspm\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\obj\Debug\Caseiro.Mvc.PagedList.csproj.CoreCompileInputs.cache
 C:\Projects\github\atspm\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\obj\Debug\Caseiro.Mvc.PagedList.dll
 C:\Projects\github\atspm\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\obj\Debug\Caseiro.Mvc.PagedList.pdb
-C:\Projects\github\atspm\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\obj\Debug\Caseiro.Mvc.PagedList.csprojResolveAssemblyReference.cache
