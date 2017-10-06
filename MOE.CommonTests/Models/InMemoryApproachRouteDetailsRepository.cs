@@ -12,7 +12,7 @@ namespace MOE.CommonTests.Models
     {
 
 
-        public void Add(ApproachRouteDetail newRouteDetail)
+        public void Add(RouteSignal newRouteDetail)
         {
             throw new NotImplementedException();
         }
@@ -22,12 +22,12 @@ namespace MOE.CommonTests.Models
             throw new NotImplementedException();
         }
 
-        public List<ApproachRouteDetail> GetAllRoutesDetails()
+        public List<RouteSignal> GetAllRoutesDetails()
         {
             throw new NotImplementedException();
         }
 
-        public List<ApproachRouteDetail> GetByRouteID(int routeID)
+        public List<RouteSignal> GetByRouteID(int routeID)
         {
             throw new NotImplementedException();
         }

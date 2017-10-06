@@ -10,6 +10,7 @@ namespace MOE.Common.Models.ViewModel.RouteEdit
     {
         public string RouteName { get; set; }
         public int RouteID { get; set; }
-        public List<MOE.Common.Models.ApproachRouteDetail> Approaches { get; set; }
+        //TODO:Fix for Routes
+        //public List<MOE.Common.Models.RouteSignal> Approaches { get; set; }
     }
 }

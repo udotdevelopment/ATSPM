@@ -10,16 +10,16 @@ namespace MOE.Common.Models.Repositories
     {
         MOE.Common.Models.SPM db = new SPM();
 
-        public List<Models.ApproachRouteDetail> GetAllRoutesDetails()
+        public List<Models.RouteSignal> GetAllRoutesDetails()
         {
-            List<Models.ApproachRouteDetail> routes = (from r in db.ApproachRouteDetails
+            List<Models.RouteSignal> routes = (from r in db.RouteSignals
                                                         select r).ToList();
             return routes;
         }
 
-        public List<Models.ApproachRouteDetail> GetByRouteID(int routeID)
+        public List<Models.RouteSignal> GetByRouteID(int routeID)
         {
-            List<Models.ApproachRouteDetail> routes = (from r in db.ApproachRouteDetails
+            List<Models.RouteSignal> routes = (from r in db.RouteSignals
                                                  where r.ApproachRouteId == routeID
                                                  select r).ToList();
 
@@ -45,13 +45,13 @@ namespace MOE.Common.Models.Repositories
 
         public void DeleteByRouteID(int routeID)
         {
-            List<Models.ApproachRouteDetail> routes = (from r in db.ApproachRouteDetails
+            List<Models.RouteSignal> routes = (from r in db.RouteSignals
                                                        where r.ApproachRouteId == routeID
                                                        select r).ToList();
 
             try
             {
-                db.ApproachRouteDetails.RemoveRange(routes);
+                db.RouteSignals.RemoveRange(routes);
                 db.SaveChanges();
             }
             catch (Exception ex)
@@ -72,13 +72,13 @@ namespace MOE.Common.Models.Repositories
 
         public void UpdateByRouteAndApproachID(int routeID, string signalId, int newOrderNumber)
         {
-            Models.ApproachRouteDetail RouteDetail = (from r in db.ApproachRouteDetails
+            Models.RouteSignal RouteDetail = (from r in db.RouteSignals
                                                  where r.ApproachRouteId == routeID 
                                                  && r.SignalId == signalId
                                                       select r).FirstOrDefault();
             if (RouteDetail != null)
             {
-                Models.ApproachRouteDetail newRouteDetail = new Models.ApproachRouteDetail();
+                Models.RouteSignal newRouteDetail = new Models.RouteSignal();
                 newRouteDetail.Order = newOrderNumber;
 
                 try
@@ -103,11 +103,11 @@ namespace MOE.Common.Models.Repositories
 
             }
         }
-        public void Add(Models.ApproachRouteDetail newRouteDetail)
+        public void Add(Models.RouteSignal newRouteDetail)
         {
             try
             {
-                db.ApproachRouteDetails.Add(newRouteDetail);
+                db.RouteSignals.Add(newRouteDetail);
                 db.SaveChanges();
             }
             catch (Exception ex)

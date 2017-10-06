@@ -1,7 +1,4 @@
-﻿//$(function (ready) {
-//    Microsoft.Maps.loadModule({ callback: GetMap });
-//});
-var infobox;
+﻿var infobox;
 function openWindow(url) {
     var w = window.open(url, '',
     'width=800,height=600,toolbar=0,status=0,location=0,menubar=0,directories=0,resizable=1,scrollbars=1');
@@ -21,11 +18,24 @@ function GetMap()
         customizeOverlays: false
     });
     dataLayer = [];
-    //var infoboxLayer = [];
-    //infobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), { visible: false, offset: new Microsoft.Maps.Point(0, 20) });
-    //infoboxLayer.push(infobox);
-    //map.entities.push(infoboxLayer);
     AddData();
+    map.entities.push(dataLayer);
+}
+
+function GetRouteMap() {
+    map = new Microsoft.Maps.Map(document.getElementById('mapDiv'), {
+        credentials: 'ArDqSVBgLAcobelrUlW6yVPIyL-UGPwVKTE0ce2_tAxvrZr5YFnSEFds7I1CNy5O',
+        center: new Microsoft.Maps.Location(39.50, -111.00),
+        mapTypeId: Microsoft.Maps.MapTypeId.road,
+        showDashboard: true,
+        showScalebar: false,
+        enableSearchLogo: false,
+        showMapTypeSelector: false,
+        zoom: 6,
+        customizeOverlays: false
+    });
+    dataLayer = [];
+    AddRouteData();
     map.entities.push(dataLayer);
 }
 
@@ -36,9 +46,7 @@ function ReportTypeChange() {
 }
 
 function RegionChange(e) {
-
     CenterMap(e.options[e.selectedIndex].value);
-
 }
 
 function CenterMap(region) {
@@ -58,6 +66,7 @@ function CenterMap(region) {
         GetMapWithCenter(38.268951, -111.417847, 7);
     }
 }
+
 
 function GetMapWithCenter(lat, long, zoom) {
     map = new Microsoft.Maps.Map(document.getElementById('mapDiv'), { credentials: 'ArDqSVBgLAcobelrUlW6yVPIyL-UGPwVKTE0ce2_tAxvrZr5YFnSEFds7I1CNy5O',
@@ -84,7 +93,13 @@ function GetMapWithCenter(lat, long, zoom) {
 
 
 function closeInfobox() {
-    infobox.setMap(null);
+    if (infobox != null) {
+        infobox.setMap(null);
+    }
+}
+
+function AddSignalToList() {
+    alert("Pin Clicked");
 }
 
 
@@ -182,6 +197,33 @@ function ZoomIn(e) {
     }
 }
 
+function AddSignalFromPin(e) {
+    if (e.targetType == 'pushpin') {
+        var signalId = e.target.SignalID.toString();
+        AddSignalToList(signalId);
+    }
+}
+
+function AddSignalToList(signalId) {    
+    var signalList = $('#SelectedSignalsList');
+    signalList.append(new Option(signalId, signalId, true, true));
+}
+
+function MoveUp() {
+    $('#SelectedSignalsList option:selected:first-child').prop("selected", false);
+    before = $('#SelectedSignalsList option:selected:first').prev();
+    $('#SelectedSignalsList option:selected').detach().insertBefore(before);
+}
+function MoveDown() {
+    $('#SelectedSignalsList option:selected:last-child').prop("selected", false);
+    after = $('#SelectedSignalsList option:selected:last').next();
+    $('#SelectedSignalsList option:selected').detach().insertAfter(after);
+}
+function Remove() {
+    $('#SelectedSignalsList option:selected').remove();
+}
+function GetOptions(){}
+
 function displayInfobox(e) {
     if (e.targetType == 'pushpin') {
         actionArray = new Array();
@@ -209,17 +251,31 @@ function displayInfobox(e) {
     } 
 }
 
+function displayRouteInfobox(e) {
+    if (e.targetType == 'pushpin') {
+        actionArray = new Array();
+        var SignalID = e.target.SignalID.toString();
 
-
-
-
-//function rowClick(signalId) {
-////    document.forms[0].AccordionPane1_content$uxEntityTextBox.value = signalId;
-////    document.forms[0].AccordionPane1_content$uxEntityTextBox.value = "";
-////    document.forms[0].AccordionPane1_content$uxEntityTextBox.value = signalId;
-//   // return false;
-//}
-
+        var tosend = {};
+        tosend.signalID = SignalID;
+        $.ajax({
+            url: urlpathSignalInfoBox,
+            type: "POST",
+            cache: false,
+            async: true,
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(tosend),
+            success: function (data) {
+                if (infobox != null) {
+                    infobox.setMap(null);
+                }
+                infobox = new Microsoft.Maps.Infobox(e.target.getLocation(), { offset: new Microsoft.Maps.Point(-100, 0), htmlContent: data });
+                infobox.setMap(map);
+            }
+        });
+    }
+}
 
 function CancelAsyncPostBack() {
     if (prm.get_isInAsyncPostBack()) {

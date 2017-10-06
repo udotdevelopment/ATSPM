@@ -27,10 +27,10 @@ namespace SPM.Controllers
             }
             MOE.Common.Models.ViewModel.RouteEdit.ApproachRouteDetailViewModel viewModel =
                 new MOE.Common.Models.ViewModel.RouteEdit.ApproachRouteDetailViewModel();
-            viewModel.Approaches = new List<ApproachRouteDetail>();
+            viewModel.Approaches = new List<RouteSignal>();
             viewModel.RouteID = id;
             viewModel.RouteName = route.RouteName;
-            viewModel.Approaches = db.ApproachRouteDetails
+            viewModel.Approaches = db.RouteSignals
                 
                 .Include(a => a.ApproachRoute)
                 .Where(a => a.ApproachRouteId == id)
@@ -46,7 +46,7 @@ namespace SPM.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ApproachRouteDetail approachRouteDetail = db.ApproachRouteDetails.Find(id);
+            RouteSignal approachRouteDetail = db.RouteSignals.Find(id);
             if (approachRouteDetail == null)
             {
                 return HttpNotFound();
@@ -57,9 +57,9 @@ namespace SPM.Controllers
         // GET: ApproachRouteDetails/Create
         public ActionResult Create(int id)
         {
-            ApproachRouteDetail approachRouteDetail = new ApproachRouteDetail { ApproachRouteId = id };
+            RouteSignal approachRouteDetail = new RouteSignal { ApproachRouteId = id };
             ViewBag.ApproachID = new SelectList(db.Approaches, "ApproachID", "ApproachRouteDescription");
-            ViewBag.ApproachRouteId = new SelectList(db.ApproachRoutes, "ApproachRouteId", "RouteName", id);
+            ViewBag.ApproachRouteId = new SelectList(db.Routes, "ApproachRouteId", "RouteName", id);
             return View(approachRouteDetail);
         }
 
@@ -68,17 +68,17 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "RouteDetailID,ApproachRouteId,ApproachOrder,ApproachID")] ApproachRouteDetail approachRouteDetail)
+        public ActionResult Create([Bind(Include = "RouteDetailID,ApproachRouteId,ApproachOrder,ApproachID")] RouteSignal approachRouteDetail)
         {
             if (ModelState.IsValid)
             {
-                db.ApproachRouteDetails.Add(approachRouteDetail);
+                db.RouteSignals.Add(approachRouteDetail);
                 db.SaveChanges();
                 return RedirectToAction("Index", new { id = approachRouteDetail.ApproachRouteId });
             }
             
             ViewBag.ApproachID = new SelectList(db.Approaches, "ApproachID", "ApproachRouteDescription", approachRouteDetail.SignalId);
-            ViewBag.ApproachRouteId = new SelectList(db.ApproachRoutes, "ApproachRouteId", "RouteName", approachRouteDetail.ApproachRouteId);
+            ViewBag.ApproachRouteId = new SelectList(db.Routes, "ApproachRouteId", "RouteName", approachRouteDetail.ApproachRouteId);
             return View(approachRouteDetail);
         }
 
@@ -89,13 +89,13 @@ namespace SPM.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ApproachRouteDetail approachRouteDetail = db.ApproachRouteDetails.Find(id);
+            RouteSignal approachRouteDetail = db.RouteSignals.Find(id);
             if (approachRouteDetail == null)
             {
                 return HttpNotFound();
             }
             ViewBag.ApproachID = new SelectList(db.Approaches, "ApproachID", "ApproachRouteDescription", approachRouteDetail.SignalId);
-            ViewBag.ApproachRouteId = new SelectList(db.ApproachRoutes, "ApproachRouteId", "RouteName", approachRouteDetail.ApproachRouteId);
+            ViewBag.ApproachRouteId = new SelectList(db.Routes, "ApproachRouteId", "RouteName", approachRouteDetail.ApproachRouteId);
             return View(approachRouteDetail);
         }
 
@@ -104,7 +104,7 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RouteDetailID,ApproachRouteId,ApproachOrder,ApproachID")] ApproachRouteDetail approachRouteDetail)
+        public ActionResult Edit([Bind(Include = "RouteDetailID,ApproachRouteId,ApproachOrder,ApproachID")] RouteSignal approachRouteDetail)
         {
             if (ModelState.IsValid)
             {
@@ -113,7 +113,7 @@ namespace SPM.Controllers
                 return RedirectToAction("Index", new { id = approachRouteDetail.ApproachRouteId });
             }
             ViewBag.ApproachID = new SelectList(db.Approaches, "ApproachID", "ApproachRouteDescription", approachRouteDetail.SignalId);
-            ViewBag.ApproachRouteId = new SelectList(db.ApproachRoutes, "ApproachRouteId", "RouteName", approachRouteDetail.ApproachRouteId);
+            ViewBag.ApproachRouteId = new SelectList(db.Routes, "ApproachRouteId", "RouteName", approachRouteDetail.ApproachRouteId);
             return View(approachRouteDetail);
         }
 
@@ -124,7 +124,7 @@ namespace SPM.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ApproachRouteDetail approachRouteDetail = db.ApproachRouteDetails.Find(id);
+            RouteSignal approachRouteDetail = db.RouteSignals.Find(id);
             if (approachRouteDetail == null)
             {
                 return HttpNotFound();
@@ -137,8 +137,8 @@ namespace SPM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            ApproachRouteDetail approachRouteDetail = db.ApproachRouteDetails.Find(id);
-            db.ApproachRouteDetails.Remove(approachRouteDetail);
+            RouteSignal approachRouteDetail = db.RouteSignals.Find(id);
+            db.RouteSignals.Remove(approachRouteDetail);
             db.SaveChanges();
             return RedirectToAction("Index", new { id = approachRouteDetail.ApproachRouteId });
         }

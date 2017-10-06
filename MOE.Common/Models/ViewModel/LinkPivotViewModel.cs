@@ -14,7 +14,8 @@ namespace MOE.Common.Models.ViewModel
         private MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
 
         public int LinkPivotViewModelId { get; set; }
-        public List<Models.ApproachRoute> AppRoutes { get; set; }
+        //TODO:Fix for Routes
+        //public List<Models.ApproachRoute> AppRoutes { get; set; }
         [Required(ErrorMessage="Starting Point is required")]
         [Display(Name="Starting Point")]
         public string StartingPoint { get; set; }

@@ -302,6 +302,7 @@
     </Content>
     <Content Include="Scripts\ActionLog.js" />
     <Content Include="Scripts\AddData.js" />
+    <Content Include="Scripts\AddRouteData.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Chart.min.js.map">
@@ -336,6 +337,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\RouteEdit.js" />
+    <Content Include="Scripts\RouteMap.js" />
     <Content Include="Scripts\SignalDetail.js" />
     <Content Include="Scripts\User.js" />
     <Content Include="Scripts\SignalEdit.js" />
@@ -530,6 +532,8 @@
     <Content Include="Views\SPMUsers\Index.cshtml" />
     <Content Include="Views\DefaultCharts\GetTMCMetric.cshtml" />
     <Content Include="Views\WatchDogApplicationSettings\Edit.cshtml" />
+    <Content Include="Views\ApproachRoutes\RouteMap.cshtml" />
+    <Content Include="Views\ApproachRoutes\RouteInfoBox.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

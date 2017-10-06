@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using MOE.Common.Models;
 using MOE.Common.Models.ViewModel.RouteEdit;
+using MOE.Common.Models.ViewModel.Chart;
 
 namespace SPM.Controllers
 {
@@ -19,7 +20,7 @@ namespace SPM.Controllers
         // GET: ApproachRoutes
         public ActionResult Index()
         {
-            return View(db.ApproachRoutes.OrderBy(a => a.RouteName).ToList());
+            return View(db.Routes.OrderBy(a => a.RouteName).ToList());
         }
 
         // GET: ApproachRoutes/Details/5
@@ -29,12 +30,23 @@ namespace SPM.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ApproachRoute approachRoute = db.ApproachRoutes.Find(id);
+            Route approachRoute = db.Routes.Find(id);
             if (approachRoute == null)
             {
                 return HttpNotFound();
             }
             return View(approachRoute);
+        }
+
+        public ActionResult RouteInfoBox(string signalID)
+        {
+            SignalInfoBoxViewModel viewModel = new SignalInfoBoxViewModel(signalID);
+            return PartialView("RouteInfoBox", viewModel);
+        }
+
+        public ActionResult RouteMap(MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel ssvm)
+        {
+            return PartialView(ssvm);
         }
 
         // GET: ApproachRoutes/Create
@@ -49,11 +61,11 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ApproachRouteId,RouteName")] ApproachRoute approachRoute)
+        public ActionResult Create([Bind(Include = "ApproachRouteId,RouteName")] Route approachRoute)
         {
             if (ModelState.IsValid)
             {
-                db.ApproachRoutes.Add(approachRoute);
+                db.Routes.Add(approachRoute);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -68,7 +80,7 @@ namespace SPM.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ApproachRoute approachRoute = db.ApproachRoutes.Find(id);
+            Route approachRoute = db.Routes.Find(id);
             if (approachRoute == null)
             {
                 return HttpNotFound();
@@ -81,7 +93,7 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ApproachRouteId,RouteName")] ApproachRoute approachRoute)
+        public ActionResult Edit([Bind(Include = "ApproachRouteId,RouteName")] Route approachRoute)
         {
             if (ModelState.IsValid)
             {
@@ -99,7 +111,7 @@ namespace SPM.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ApproachRoute approachRoute = db.ApproachRoutes.Find(id);
+            Route approachRoute = db.Routes.Find(id);
             if (approachRoute == null)
             {
                 return HttpNotFound();
@@ -112,8 +124,8 @@ namespace SPM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            ApproachRoute approachRoute = db.ApproachRoutes.Find(id);
-            db.ApproachRoutes.Remove(approachRoute);
+            Route approachRoute = db.Routes.Find(id);
+            db.Routes.Remove(approachRoute);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

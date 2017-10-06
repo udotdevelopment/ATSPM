@@ -17,7 +17,7 @@ namespace SPM.Controllers
         public ActionResult Analysis()
         {
             var lp = new MOE.Common.Models.ViewModel.LinkPivotViewModel();
-            lp.AppRoutes = (from a in db.ApproachRoutes
+            lp.AppRoutes = (from a in db.Routes
                                orderby a.RouteName
                                select a).ToList();
             lp.Bias = 0;
@@ -35,7 +35,7 @@ namespace SPM.Controllers
 
         public ActionResult FillSignals(int id)
         {
-            List<MOE.Common.Models.ApproachRouteDetail> app = (from a in db.ApproachRouteDetails
+            List<MOE.Common.Models.RouteSignal> app = (from a in db.RouteSignals
                                                                where a.ApproachRouteId == id
                                                                select a).ToList();
 

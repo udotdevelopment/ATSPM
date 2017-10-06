@@ -21,7 +21,7 @@ namespace MOE.Common.Models.Repositories
         public Models.ApproachRoute GetRouteByID(int routeID)
         {
             Models.ApproachRoute route = (from r in db.ApproachRoutes
-                                          where r.ApproachRouteId == routeID
+                                          where r.Id == routeID
                                                  select r).FirstOrDefault();
             if(route != null)
             {
@@ -52,7 +52,7 @@ namespace MOE.Common.Models.Repositories
         public void DeleteByID(int routeID)
         {
             Models.ApproachRoute route = (from r in db.ApproachRoutes
-                                          where r.ApproachRouteId == routeID
+                                          where r.Id == routeID
                                           select r).FirstOrDefault();
 
             db.ApproachRoutes.Remove(route);
@@ -62,14 +62,14 @@ namespace MOE.Common.Models.Repositories
         public void UpdateByID(int routeID, string newDescription)
         {
             Models.ApproachRoute route = (from r in db.ApproachRoutes
-                                          where r.ApproachRouteId == routeID
+                                          where r.Id == routeID
                                           select r).FirstOrDefault();
 
             if(route != null)
             {
             Models.ApproachRoute newroute = new Models.ApproachRoute();
 
-            newroute.ApproachRouteId = route.ApproachRouteId;
+            newroute.Id = route.Id;
             newroute.RouteName = newDescription;
             try
             {

@@ -28,6 +28,5 @@ namespace MOE.Common.Models
         public virtual ICollection<DetectionType> DetectionTypes { get; set; }
         public virtual ICollection<MetricComment> Comments { get; set; }
         public virtual ICollection<ActionLog> ActionLogs { get; set; }
-        public virtual ICollection<ApproachRoute> ApproachRoutes { get; set; }
     }
 }

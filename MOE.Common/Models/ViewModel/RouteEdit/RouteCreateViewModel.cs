@@ -9,12 +9,13 @@ namespace MOE.Common.Models.ViewModel.RouteEdit
 {
     public class RouteCreateViewModel
     {
-        public MOE.Common.Models.ApproachRoute ApproachRoute { get; set; }
-        public MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel SignalSearch { get; set; }
+        //TODO:Fix for Routes
+        //public MOE.Common.Models.ApproachRoute ApproachRoute { get; set; }
+        public MOE.Common.Models.ViewModel.RouteEdit.RouteMapViewModel RouteMap { get; set; }
 
         public RouteCreateViewModel()
         {
-            SignalSearch = new SignalSearchViewModel();
+            RouteMap = new RouteMapViewModel();
         }
     }
 }
