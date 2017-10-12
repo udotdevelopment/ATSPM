@@ -50,6 +50,8 @@ namespace SPM.Controllers.Tests
 
         private MOE.Common.Models.Repositories.IMetricTypeRepository _metricTypeRepository =
             new InMemoryMetricTypeRepository(Db);
+
+                   
     
 
     [TestMethod()]
@@ -133,7 +135,17 @@ namespace SPM.Controllers.Tests
         [TestMethod()]
         public void AddDetectorTest()
         {
-            Assert.Fail();
+            Db.ClearTables();
+
+            var sc = new SignalsController(_controllerTypeRepository, _regionRepository, _directionTypeRepository,
+             _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
+             _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
+
+            sc.Create("1001");
+
+            sc.AddApproach("1001");
+            MOE.Common.Models.Repositories.ApproachRepositoryFactory.SetApproachRepository(_approachRepository);
+            var result = sc.CopyApproach("1001", 0) as ContentResult;
         }
 
         [TestMethod()]

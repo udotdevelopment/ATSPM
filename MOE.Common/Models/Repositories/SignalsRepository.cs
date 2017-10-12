@@ -53,12 +53,18 @@ namespace MOE.Common.Models.Repositories
 
         public Signal GetSignalVersionByVersionId(int versionId)
         {
-            throw new NotImplementedException();
+            var signal = (from r in _db.Signals where r.VersionID == versionId && r.VersionActionId != 3 select r).FirstOrDefault();
+            return signal;
         }
 
         public void SetVersionToDeleted(int versionId)
         {
-            throw new NotImplementedException();
+            var signal = (from r in _db.Signals where r.VersionID == versionId select r).FirstOrDefault();
+            if (signal != null)
+            {
+                signal.VersionActionId = 3;
+            }
+            _db.SaveChanges();
         }
 
         public void SetAllVersionsOfASignalToDeleted(string signalId)
@@ -251,7 +257,7 @@ namespace MOE.Common.Models.Repositories
         public void Update(MOE.Common.Models.Signal incomingSignal)
         {
             MOE.Common.Models.Signal signalFromDatabase = (from r in _db.Signals
-                where r.SignalID == incomingSignal.SignalID
+                where r.VersionID == incomingSignal.VersionID
                 select r).FirstOrDefault();
             if (signalFromDatabase != null)
             {
@@ -380,7 +386,7 @@ namespace MOE.Common.Models.Repositories
         public void AddOrUpdate(MOE.Common.Models.Signal signal)
         {
             MOE.Common.Models.Signal g = (from r in _db.Signals
-                where r.SignalID == signal.SignalID
+                where r.VersionID == signal.VersionID 
                 select r).FirstOrDefault();
             if (g == null)
             {
