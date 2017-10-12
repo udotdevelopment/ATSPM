@@ -169,11 +169,11 @@ namespace SPM.Controllers
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult AddDetector(string signalID, int approachID, string approachIndex)
+        public ActionResult AddDetector(int versionId, int approachID, string approachIndex)
         {
-            Signal signal = _signalsRepository.GetSignalBySignalID(signalID);
+            Signal signal = _signalsRepository.GetSignalVersionByVersionId(versionId);
             var approach = signal.Approaches.Where(s => s.ApproachID == approachID).First();
-            Detector detector = CreateNewDetector(approach, approachIndex, signalID);            
+            Detector detector = CreateNewDetector(approach, approachIndex, signal.SignalID);            
             AddSelectListsToViewBag(signal);
             return PartialView(detector);
         }
@@ -181,10 +181,10 @@ namespace SPM.Controllers
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult CopyDetector(int ID, string signalID, int approachID, string approachIndex)
+        public ActionResult CopyDetector(int ID, int versionId, int approachID, string approachIndex)
         {
             Detector newDetector = MOE.Common.Models.Detector.CopyDetector(ID, true); //need to increase DetChannel if not copying the whole signal.
-            Signal signal = _signalsRepository.GetSignalBySignalID(signalID);
+            Signal signal = _signalsRepository.GetSignalVersionByVersionId(versionId);
             Approach approach = signal.Approaches.Where(s => s.ApproachID == approachID).First();
             newDetector.ApproachID = approach.ApproachID;
             newDetector.Index = approachIndex + "Detectors[" + approach.Detectors.Count.ToString() + "].";
@@ -348,6 +348,66 @@ namespace SPM.Controllers
                 //}
             }           
             return PartialView(signal);
+        }
+
+
+        // GET: Signals/Edit/5
+        public ActionResult EditVersion(string Id)
+        {
+            if (Id == null)
+            {
+                return Content("<h1>A Version ID is required</h1>");
+            }
+            Signal signal = _signalsRepository.GetSignalVersionByVersionId(Convert.ToInt32(Id));
+            signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description).ToList();
+
+            if (signal.Approaches == null)
+            {
+                signal.Approaches = new List<Approach>();
+            }
+
+
+            foreach (Approach approach in signal.Approaches)
+            {
+                approach.Detectors = approach.Detectors.OrderBy(d => d.DetectorID).ToList();
+            }
+
+            if (signal != null)
+            {
+                if (signal.Note == null)
+                {
+                    signal.Note = "";
+                }
+
+                List<MOE.Common.Models.DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
+                foreach (MOE.Common.Models.Approach a in signal.Approaches)
+                {
+                    foreach (MOE.Common.Models.Detector gd in a.Detectors)
+                    {
+                        gd.Index = a.Index + "Detector[" + a.Detectors.ToList().FindIndex(d => d.DetectorID == gd.DetectorID).ToString() + "].";
+                        gd.AllDetectionTypes = allDetectionTypes;
+                        gd.DetectionTypeIDs = new List<int>();
+                        gd.DetectorComments = gd.DetectorComments.OrderByDescending(x => x.TimeStamp).ToList();
+                        foreach (MOE.Common.Models.DetectionType dt in gd.DetectionTypes)
+                        {
+                            gd.DetectionTypeIDs.Add(dt.DetectionTypeID);
+                        }
+                    }
+                    a.Index = "Approaches[" + signal.Approaches.ToList().FindIndex(app => app.ApproachID == a.ApproachID).ToString() + "].";
+                }
+                if (signal == null)
+                {
+                    return HttpNotFound();
+                }
+
+                signal.Comments = signal.Comments.OrderByDescending(s => s.TimeStamp).ToList();
+                AddSelectListsToViewBag(signal);
+                //foreach (MOE.Common.Models.MetricComment c in signal.Comments)
+                //{
+                //    c.MetricTypes = _metricTypeRepository.GetMetricTypesByMetricComment(c);
+                //}
+            }
+            return PartialView("Edit",signal);
         }
 
         public ActionResult _SignalPartial(Signal signal)

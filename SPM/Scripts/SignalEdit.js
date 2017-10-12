@@ -52,6 +52,25 @@ function GetConfigurationTable(signalID){
     });
 }
 
+function GetConfigurationTableForVersion(vId) {
+
+    $.ajax({
+        type: "Get",
+        cache: false,
+        async: true,
+        data: { "VersionID": vId },
+        url: urlpathGetConfigurationTableForVersion,
+        success: function (data) { $('#ConfigurationTableCollapse').html(data); },
+        statusCode: {
+            404: function (content) { alert('cannot find resource'); },
+            500: function (content) { alert(content.responseText); }
+        },
+        error: function (req, status, errorObj) {
+            alert("Error");
+        }
+    });
+}
+
 function PostCreateComment() {
     var tosend = {};
     tosend.SignalID = $("#editSignalID").val();
@@ -89,6 +108,8 @@ function PostCreateComment() {
         });
     }
 }
+
+
 
 function GetCreateDetectorComment(ID) {
     var metricPath = urlpathCreateDetectorComments+'/' + ID;

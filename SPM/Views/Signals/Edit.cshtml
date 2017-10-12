@@ -26,7 +26,7 @@
                 <div class="form-group-configuration-tool  form-group col-md-6">
                     @Html.LabelFor(model => model.VersionID, htmlAttributes: new { @class = "control-label" })
                     <div class="">
-                        @Html.DropDownListFor(model => model.VersionID, (SelectList)ViewBag.VersionList, new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.VersionID, (SelectList)ViewBag.VersionList, new { @class = "form-control", @onchange = "LoadVersionByVersionID(this.value)" })
                         @Html.ValidationMessageFor(model => model.VersionID, "", new { id = "Version-error", @class = "text-danger" })
                     </div>
                 </div>

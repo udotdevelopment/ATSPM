@@ -23,6 +23,31 @@ function LoadSignalEdit(signalID) {
     });
 
 }
+
+function LoadVersionByVersionID(vId) {
+   
+   
+    $.ajax({
+        url: urlpathGetVersionEdit + "/" + vId,
+        type: "GET",
+        cache: false,
+        async: true,
+        contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $('#SignalEdit').html(data);
+                        $("#SignalConfigurationCollapseOne").addClass("in");
+                        SetDatePicker();
+                        //HideBasicCheckBoxes();
+                        $("#ConfigurationTableHeader").click(function () {
+                            GetConfigurationTableForVersion(vId);
+                        });
+                        $.validator.unobtrusive.parse($("#SignalEdit"));
+                    },
+    onerror: function () { alert("Error"); }
+    });
+
+}
+
 function SetControlValues(signalID, selectedMetricID) {
     $("#SignalID").val(signalID);
     GetSignalLocation();
