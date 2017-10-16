@@ -114,9 +114,10 @@ namespace SPM.Controllers
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult AddApproach(string id)
-        {            
-            var signal = _signalsRepository.GetSignalBySignalID(id);
+        public ActionResult AddApproach(string versionId)
+        {
+            int id = Convert.ToInt32(versionId);
+            var signal = _signalsRepository.GetSignalVersionByVersionId(id);
             Approach approach = GetNewApproach(signal);           
             _approachRepository.AddOrUpdate(approach);
             AddSelectListsToViewBag(signal);
@@ -163,6 +164,8 @@ namespace SPM.Controllers
             approach.Description = "New Phase/Direction";
             approach.Index = GetApproachIndex(signal);
             approach.DirectionTypeID = 1;
+            approach.VersionID = signal.VersionID;
+           
             return approach;
         }
 
@@ -172,6 +175,10 @@ namespace SPM.Controllers
         public ActionResult AddDetector(int versionId, int approachID, string approachIndex)
         {
             Signal signal = _signalsRepository.GetSignalVersionByVersionId(versionId);
+            if(signal.Approaches.Count == 0)
+            {
+                signal.Approaches = _approachRepository.GetAllApproaches().Where(a => a.VersionID == signal.VersionID).ToList();
+            }
             var approach = signal.Approaches.Where(s => s.ApproachID == approachID).First();
             Detector detector = CreateNewDetector(approach, approachIndex, signal.SignalID);            
             AddSelectListsToViewBag(signal);
@@ -207,7 +214,7 @@ namespace SPM.Controllers
             detector.Index = approachIndex + "Detectors[" + approach.Detectors.Count.ToString() + "].";
             detector.DetectorComments = new List<DetectorComment>();
             detector.DateAdded = DateTime.Now;
-            detector.DetChannel = _detectorRepository.GetMaximumDetectorChannel(signalID) + 1;
+            detector.DetChannel = _detectorRepository.GetMaximumDetectorChannel(approach.VersionID) + 1;
             detector.DetectorID = signalID + detector.DetChannel.ToString("D2");
             detector = _detectorRepository.Add(detector);
             detector.Approach = approach;

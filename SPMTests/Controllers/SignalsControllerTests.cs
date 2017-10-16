@@ -141,11 +141,20 @@ namespace SPM.Controllers.Tests
              _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
              _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
 
-            sc.Create("1001");
+            var sigresult = sc.Create("1001") as PartialViewResult;
 
-            sc.AddApproach("1001");
+            var sig = (Signal)sigresult.ViewData.Model;
+            sig.Approaches = new List<Approach>();
             MOE.Common.Models.Repositories.ApproachRepositoryFactory.SetApproachRepository(_approachRepository);
-            var result = sc.CopyApproach("1001", 0) as ContentResult;
+            var apprResult = sc.AddApproach(sig.VersionID.ToString()) as PartialViewResult;
+
+            var appr = (Approach)apprResult.ViewData.Model;
+
+            var result = sc.AddDetector(sig.VersionID, appr.ApproachID, appr.Index) as PartialViewResult;
+
+            var det = (Detector)result.ViewData.Model;
+
+            Assert.IsNotNull(det);
         }
 
         [TestMethod()]

@@ -70,10 +70,10 @@ namespace MOE.Common.Models.Repositories
             return _db.Signals.Find(SignalID).GetDetectorsForSignal();
         }
 
-        public int GetMaximumDetectorChannel(string signalID)
+        public int GetMaximumDetectorChannel(int versionId)
         {
             int max = 0;
-            var signal = _db.Signals.Find(signalID);
+            var signal = _db.Signals.Find(versionId);
             if (signal != null)
             {
                 var detectors = signal.GetDetectorsForSignal();

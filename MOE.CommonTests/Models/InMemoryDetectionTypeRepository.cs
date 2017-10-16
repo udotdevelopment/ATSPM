@@ -1,21 +1,22 @@
 ﻿using System.Collections.Generic;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
+using System.Linq;
 
 namespace MOE.CommonTests.Models
 {
     public class InMemoryDetectionTypeRepository : IDetectionTypeRepository
     {
-        private InMemoryMOEDatabase db;
+        private InMemoryMOEDatabase _db;
 
         public InMemoryDetectionTypeRepository(InMemoryMOEDatabase db)
         {
-            this.db = db;
+            this._db = db;
         }
 
         public InMemoryDetectionTypeRepository()
         {
-            this.db = new InMemoryMOEDatabase();
+            this._db = new InMemoryMOEDatabase();
         }
 
         public List<DetectionType> GetAllDetectionTypes()
@@ -25,7 +26,11 @@ namespace MOE.CommonTests.Models
 
         public List<DetectionType> GetAllDetectionTypesNoBasic()
         {
-            throw new System.NotImplementedException();
+           var types = (from r in _db.DetectionTypes
+                       where r.DetectionTypeID != 1
+                       select r).ToList();
+
+            return types;
         }
 
         public DetectionType GetDetectionTypeByDetectionTypeID(int detectionTypeID)

@@ -24,7 +24,8 @@ namespace MOE.CommonTests.Models
 
         public Detector Add(Detector Detector)
         {
-            throw new NotImplementedException();
+            _db.Detectors.Add(Detector);
+            return Detector;
         }
 
         public bool CheckReportAvialbility(string detectorID, int metricID)
@@ -34,7 +35,8 @@ namespace MOE.CommonTests.Models
 
         public Detector GetDetectorByDetectorID(string DetectorID)
         {
-            throw new NotImplementedException();
+            var det = _db.Detectors.Where(d => d.DetectorID == DetectorID).FirstOrDefault();
+            return det;
         }
 
         public Detector GetDetectorByID(int ID)
@@ -52,9 +54,19 @@ namespace MOE.CommonTests.Models
             throw new NotImplementedException();
         }
 
-        public int GetMaximumDetectorChannel(string signalID)
+        public int GetMaximumDetectorChannel(int versionId)
         {
-            throw new NotImplementedException();
+            int max = 0;
+            var signal = _db.Signals.Where(s => s.VersionID == versionId).FirstOrDefault();
+            if (signal != null)
+            {
+                var detectors = signal.GetDetectorsForSignal();
+                if (detectors.Count() > 0)
+                {
+                    max = detectors.Max(g => g.DetChannel);
+                }
+            }
+            return max;
         }
 
         public void Remove(Detector Detector)
