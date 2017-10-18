@@ -127,9 +127,9 @@ namespace SPM.Controllers
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult CopyApproach(string id, int approachID)
+        public ActionResult CopyApproach(int versionId, int approachID)
         {
-            var signal = _signalsRepository.GetSignalBySignalID(id);
+            var signal = _signalsRepository.GetSignalVersionByVersionId(versionId);
             //Approach approachFromDatabase = signal.Approaches.Where(a => a.ApproachID == approachID).First();
             AddSelectListsToViewBag(signal);
             try
@@ -267,7 +267,7 @@ namespace SPM.Controllers
             return signal;
         }
                 
-        // GET: Signals/Copy
+        // POST: Signals/Copy
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -281,7 +281,10 @@ namespace SPM.Controllers
             Signal signal = _signalsRepository.GetSignalBySignalID(id);
             if (signal != null)
             {
-                newSignal = MOE.Common.Models.Signal.CopySignal(signal, newId);              
+                newSignal = MOE.Common.Models.Signal.CopySignal(signal, newId);
+                newSignal.VersionActionId = 1;
+                newSignal.End = DateTime.MaxValue;
+                newSignal.Note = "Copy of Signal " + id;
             }
             try
             {
@@ -296,6 +299,36 @@ namespace SPM.Controllers
                 AddSelectListsToViewBag(newSignal);
             }
             return PartialView("Edit", newSignal);
+        }
+
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public ActionResult CopyVersion(int versionId)
+        {
+            MOE.Common.Models.Signal copyVersion = new MOE.Common.Models.Signal();
+
+            Signal origVersion = _signalsRepository.GetSignalVersionByVersionId(versionId);
+            if (origVersion != null)
+            {
+                copyVersion = MOE.Common.Models.Signal.CopyVersion(origVersion);
+                copyVersion.VersionActionId = 4;
+                copyVersion.End = DateTime.Today;
+                copyVersion.Note = "Copy of Version " + origVersion.Note;
+            }
+            try
+            {
+                _signalsRepository.AddOrUpdate(copyVersion);
+            }
+            catch (Exception ex)
+            {
+                return Content("<h1>" + ex.Message + "</h1>");
+            }
+            finally
+            {
+                AddSelectListsToViewBag(copyVersion);
+            }
+            return PartialView("Edit", copyVersion);
         }
 
         // GET: Signals/Edit/5

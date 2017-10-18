@@ -261,6 +261,10 @@ namespace MOE.Common.Models.Repositories
                 select r).FirstOrDefault();
             if (signalFromDatabase != null)
             {
+                if(incomingSignal.VersionActionId == 0)
+                {
+                    incomingSignal.VersionActionId = signalFromDatabase.VersionActionId;
+                }
                 _db.Entry(signalFromDatabase).CurrentValues.SetValues(incomingSignal);
                 if (incomingSignal.Approaches != null)
                 {

@@ -388,9 +388,9 @@
     <Compile Include="Migrations\201704032058572_Version4.0.1.Designer.cs">
       <DependentUpon>201704032058572_Version4.0.1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201710041752445_Historical Configuration.cs" />
-    <Compile Include="Migrations\201710041752445_Historical Configuration.Designer.cs">
-      <DependentUpon>201710041752445_Historical Configuration.cs</DependentUpon>
+    <Compile Include="Migrations\201710171705065_Historical Configuration.cs" />
+    <Compile Include="Migrations\201710171705065_Historical Configuration.Designer.cs">
+      <DependentUpon>201710171705065_Historical Configuration.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
@@ -547,9 +547,8 @@
     <Compile Include="Models\Custom\MetricComment.cs" />
     <Compile Include="Models\Custom\Approach.cs" />
     <Compile Include="Models\Custom\Controller_Event_Log.cs" />
-    <Compile Include="Models\Custom\Detectors.cs" />
+    <Compile Include="Models\Custom\Detector.cs" />
     <Compile Include="Models\Custom\Signal.cs" />
-    <Compile Include="Models\Custom\SignalWithDetection.cs" />
     <Compile Include="Models\DetectionType.cs" />
     <Compile Include="Models\DetectionTypeGraph_Detectors.cs" />
     <Compile Include="Models\DetectorMetrics.cs" />
@@ -781,8 +780,8 @@
     <EmbeddedResource Include="Migrations\201704032058572_Version4.0.1.resx">
       <DependentUpon>201704032058572_Version4.0.1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710041752445_Historical Configuration.resx">
-      <DependentUpon>201710041752445_Historical Configuration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201710171705065_Historical Configuration.resx">
+      <DependentUpon>201710171705065_Historical Configuration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

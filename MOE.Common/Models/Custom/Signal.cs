@@ -278,51 +278,45 @@ namespace MOE.Common.Models
             }
             return false;
         }
-       
-
-        public static MOE.Common.Models.Signal CopySignal(MOE.Common.Models.Signal incommingSignal, string newSignalID)
+        public static Signal CopyVersion(Signal origVersion)
         {
-            Models.SPM db = new SPM();
-            MOE.Common.Models.Signal newSignal = new Models.Signal();
+            MOE.Common.Models.Signal newVersion = new Models.Signal();
+
+            CopyCommonSignalSettings(origVersion, newVersion);
+
+            newVersion.SignalID = origVersion.SignalID;
+
+            return newVersion;
+        }
+
+        private static void CopyCommonSignalSettings(Signal origSignal, Signal newSignal)
+        {
             newSignal.IPAddress = "10.10.10.10";
-            newSignal.PrimaryName = incommingSignal.PrimaryName;
-            newSignal.SecondaryName = incommingSignal.SecondaryName;
-            newSignal.Longitude = incommingSignal.Longitude;
-            newSignal.Latitude = incommingSignal.Latitude;
-            newSignal.RegionID = incommingSignal.RegionID;
-            newSignal.ControllerTypeID = incommingSignal.ControllerTypeID;
-            newSignal.Enabled = incommingSignal.Enabled;            
+            newSignal.PrimaryName = origSignal.PrimaryName;
+            newSignal.SecondaryName = origSignal.SecondaryName;
+            newSignal.Longitude = origSignal.Longitude;
+            newSignal.Latitude = origSignal.Latitude;
+            newSignal.RegionID = origSignal.RegionID;
+            newSignal.ControllerTypeID = origSignal.ControllerTypeID;
+            newSignal.Enabled = origSignal.Enabled;
             newSignal.Approaches = new List<Models.Approach>();
-            //Models.Repositories.ISignalsRepository signalRepository =
-            //    Models.Repositories.SignalsRepositoryFactory.Create();
-            //signalRepository.AddOrUpdate(newSignal);
-            //Models.Repositories.IApproachRepository approachRepository =
-            //   Models.Repositories.ApproachRepositoryFactory.Create();
-            foreach (Models.Approach a in incommingSignal.Approaches)
+
+            foreach (Models.Approach a in origSignal.Approaches)
             {
                 Approach aForNewSignal = Models.Approach.CopyApproachForSignal(a.ApproachID); //this does the db.Save inside.
                 newSignal.Approaches.Add(aForNewSignal);
-                //approachRepository.AddOrUpdate(aForNewSignal);  
+
             }
+        }
+        public static MOE.Common.Models.Signal CopySignal(MOE.Common.Models.Signal origSignal, string newSignalID)
+        {
+            
+            MOE.Common.Models.Signal newSignal = new Models.Signal();
+
+            CopyCommonSignalSettings(origSignal, newSignal);
+
             newSignal.SignalID = newSignalID;
-            //try
-            //{
-            //    db.SaveChanges();
-            //}
-            //catch (Exception ex)
-            //{
-            //    Models.Repositories.IApplicationEventRepository eventRepository =
-            //        Models.Repositories.ApplicationEventRepositoryFactory.Create();
-            //    ApplicationEvent error = new ApplicationEvent();
-            //    error.ApplicationName = "MOE.Common";
-            //    error.Class = "Models.Signal.cs";
-            //    error.Function = "CopySignal";
-            //    error.Description = ex.Message;
-            //    error.SeverityLevel = ApplicationEvent.SeverityLevels.Medium;
-            //    error.Timestamp = DateTime.Now;
-            //    eventRepository.Add(error);
-            //    throw;
-            //}
+
             return newSignal;
         }
 

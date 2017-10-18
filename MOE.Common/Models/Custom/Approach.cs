@@ -97,6 +97,7 @@ namespace MOE.Common.Models
         {
             Models.Approach newApproach = new Models.Approach();
             newApproach.SignalID = approachToCopy.SignalID;
+            newApproach.VersionID = approachToCopy.VersionID;
             newApproach.DirectionTypeID = approachToCopy.DirectionTypeID;
             newApproach.Description = approachToCopy.Description + " Copy";
             newApproach.MPH = approachToCopy.MPH;

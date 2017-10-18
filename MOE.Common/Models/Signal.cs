@@ -106,5 +106,7 @@ namespace MOE.Common.Models
 
         [Display(Name = "Phase/Direction")]
         public virtual ICollection<Approach> Approaches { get; set; }
+
+
     }
 }

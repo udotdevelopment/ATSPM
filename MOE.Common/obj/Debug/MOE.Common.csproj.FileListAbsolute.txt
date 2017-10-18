@@ -272,8 +272,8 @@ C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.Migrations.Initial.reso
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.Migrations.Version40.resources
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.Migrations.SPMWatchDog.resources
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.Migrations.Version401.resources
-C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.Migrations.HistoricalConfiguration.resources
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.csproj.GenerateResource.Cache
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.csproj.CoreCompileInputs.cache
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.dll
 C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.pdb
+C:\Projects\github\atspm\MOE.Common\obj\Debug\MOE.Common.Migrations.HistoricalConfiguration.resources

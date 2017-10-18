@@ -47,8 +47,8 @@ namespace ConvertDBForHistoricalConfigurations.Tests
                 s.Longitude = "0.01";
                 s.ControllerTypeID = 1;
                 s.RegionID = 1;
-               
 
+                s.VersionActionId = 10;
 
                 db.Signals.Add(s);
 

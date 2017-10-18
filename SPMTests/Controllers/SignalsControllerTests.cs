@@ -90,8 +90,11 @@ namespace SPM.Controllers.Tests
                 _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
 
             sc.Create("1001");
+            var version = _signalsRepository.GetLatestVersionOfSignalBySignalID("1001");
 
-            var result = sc.AddApproach("1001") as PartialViewResult;
+            
+                           
+            var result = sc.AddApproach(version.VersionID.ToString()) as PartialViewResult;
             if (result != null)
             {
                 var appr = (Approach)result.ViewData.Model;
