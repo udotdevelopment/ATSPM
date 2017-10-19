@@ -121,7 +121,7 @@ namespace SPM.Controllers.Tests
 
             sc.AddApproach("1001");
             MOE.Common.Models.Repositories.ApproachRepositoryFactory.SetApproachRepository(_approachRepository);
-            var result = sc.CopyApproach("1001",0) as ContentResult;
+            var result = sc.CopyApproach(1001,0) as ContentResult;
             if (result != null)
             {
                 
