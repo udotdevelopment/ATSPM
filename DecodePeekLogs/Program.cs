@@ -259,7 +259,7 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalID"],
                             {
                                 fileHasBeenRead = true;
                             }
-                            else if (line.Contains(",End Of"))
+                            else if (line.Contains(",Start Of"))
                             {
                                 fileHasBeenRead = true;
                             }
@@ -457,7 +457,7 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalID"],
 
                     if (Properties.Settings.Default.WriteToConsole)
                     {
-                        Console.WriteLine("%%%End of file Loop%%%");
+                        Console.WriteLine("%%%Start of file Loop%%%");
                         Thread.Sleep(100);
                     }
                 }
@@ -465,7 +465,7 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalID"],
 
                 if (Properties.Settings.Default.WriteToConsole)
                 {
-                    Console.WriteLine("%%%End of DIRECTORY  Loop%%%");
+                    Console.WriteLine("%%%Start of DIRECTORY  Loop%%%");
                     Thread.Sleep(100);
                 }
                 //CleanUpFiles(FilesToDelete);
@@ -473,7 +473,7 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalID"],
 
                 if (Properties.Settings.Default.WriteToConsole)
                 {
-                    Console.WriteLine("###End of Queue Build Hit###");
+                    Console.WriteLine("###Start of Queue Build Hit###");
 
                 }
 

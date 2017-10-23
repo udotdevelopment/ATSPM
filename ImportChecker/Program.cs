@@ -167,7 +167,7 @@ namespace ImportChecker
 
        List<MOE.Common.Models.Signal>  signals = (from r in db.Signals 
                                                   where r.ControllerTypeID == ControllerTypeID && r.Enabled == true
-                                                  && r.End > DateTime.Today
+                                                  && r.Start > DateTime.Today
                                                   select r).OrderBy(t => Guid.NewGuid()).Take(10).ToList();
 
         return signals;

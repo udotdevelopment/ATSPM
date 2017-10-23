@@ -4,3 +4,10 @@ C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\FTPSClient\FTPSClient\bin\D
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\FTPSClient\FTPSClient\bin\Debug\SnmpSharpNet.dll
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\FTPSClient\FTPSClient\obj\Debug\AlexPilotti.FTPS.Client.dll
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\FTPSClient\FTPSClient\obj\Debug\AlexPilotti.FTPS.Client.pdb
+C:\Projects\github\atspm\FTPSClient\FTPSClient\bin\Debug\AlexPilotti.FTPS.Client.XML
+C:\Projects\github\atspm\FTPSClient\FTPSClient\bin\Debug\AlexPilotti.FTPS.Client.dll
+C:\Projects\github\atspm\FTPSClient\FTPSClient\bin\Debug\AlexPilotti.FTPS.Client.pdb
+C:\Projects\github\atspm\FTPSClient\FTPSClient\bin\Debug\SnmpSharpNet.dll
+C:\Projects\github\atspm\FTPSClient\FTPSClient\obj\Debug\FTPSClient.csproj.CoreCompileInputs.cache
+C:\Projects\github\atspm\FTPSClient\FTPSClient\obj\Debug\AlexPilotti.FTPS.Client.dll
+C:\Projects\github\atspm\FTPSClient\FTPSClient\obj\Debug\AlexPilotti.FTPS.Client.pdb

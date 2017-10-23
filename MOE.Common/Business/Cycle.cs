@@ -29,7 +29,7 @@ namespace MOE.Common.Business
         public List<Models.Speed_Events> SpeedsForCycle;
 
         /// <summary>
-        /// End time of the Cycle
+        /// Start time of the Cycle
         /// </summary>
         protected DateTime endTime;
         public DateTime EndTime

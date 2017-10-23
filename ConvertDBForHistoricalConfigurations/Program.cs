@@ -73,7 +73,7 @@ namespace ConvertDBForHistoricalConfigurations
 
             foreach (var s in signals)
             {
-                s.End = Convert.ToDateTime("01/01/9999");
+                s.Start = Convert.ToDateTime("01/01/9999");
                 s.VersionAction = version;
             }
 

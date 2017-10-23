@@ -117,11 +117,17 @@ namespace SPM.Controllers.Tests
                 _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
                 _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
 
-            sc.Create("1001");
+            var sigresult = sc.Create("1001") as PartialViewResult;
 
-            sc.AddApproach("1001");
+            var sig = (Signal)sigresult.ViewData.Model;
+
+            var apprResult =  sc.AddApproach("1001") as PartialViewResult;
+            var appr = (Approach)apprResult.ViewData.Model;
+
             MOE.Common.Models.Repositories.ApproachRepositoryFactory.SetApproachRepository(_approachRepository);
-            var result = sc.CopyApproach("1001",0) as ContentResult;
+            var result = sc.CopyApproach(sig.VersionID,appr.ApproachID) as ContentResult;
+            
+
             if (result != null)
             {
                 
@@ -214,7 +220,7 @@ namespace SPM.Controllers.Tests
                 vId = results.FirstOrDefault().VersionID;
             }
 
-            sc.DeleteVersion(vId);
+            sc.DeleteVersion(vId.ToString());
 
             var results1 = _signalsRepository.GetAllVersionsOfSignalBySignalID("1001");
 

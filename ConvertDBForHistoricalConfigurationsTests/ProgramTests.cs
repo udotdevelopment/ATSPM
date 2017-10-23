@@ -38,7 +38,7 @@ namespace ConvertDBForHistoricalConfigurations.Tests
 
                 s.SignalID = "10" + i.ToString();
               
-                s.End = Convert.ToDateTime("1/1/9999");
+                s.Start = Convert.ToDateTime("1/1/9999");
                 s.PrimaryName = "Primary: " + i.ToString();
                 s.SecondaryName = "Secondary: " + i.ToString();
                 s.Note = "Create Dummy";

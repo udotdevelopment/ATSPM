@@ -12,7 +12,7 @@ namespace MOE.Common.Models.Repositories
     public class SignalsRepository : ISignalsRepository
     {
         private Models.SPM _db;
-        public DateTime LastDate = DateTime.MaxValue;
+       
 
         public SignalsRepository()
         {
@@ -29,11 +29,8 @@ namespace MOE.Common.Models.Repositories
 
         public List<Models.Signal> GetAllSignals()
         {
-            _db.Configuration.LazyLoadingEnabled = false;
-            List<Models.Signal> signals = (from r in _db.Signals
-                where r.End > DateTime.Now
-                select r).ToList();
-            return signals;
+            
+            return GetLatestVersionOfAllSignals();
         }
 
         public Signal GetVersionOfSignalByDate(string signalId, DateTime startDate)
@@ -41,11 +38,12 @@ namespace MOE.Common.Models.Repositories
             List<Models.Signal> signals = _db.Signals
                 .Include(signal => signal.Approaches.Select(a => a.Detectors))
                 .Include(signal => signal.Approaches.Select(a => a.DirectionType))
-                .Where(signal => signal.SignalID == signalId)
-                .Where(signal => signal.End > startDate)
-                .ToList();
+                    .Where(signal => signal.SignalID == signalId)
+                    .Where(signal => signal.Start <= startDate)
+                    .Where(signal => signal.VersionActionId != 3)
+                    .ToList();
 
-            var orderedSignals = signals.OrderBy(signal => signal.End);
+            var orderedSignals = signals.OrderByDescending(signal => signal.Start);
 
 
             return orderedSignals.First();
@@ -53,8 +51,8 @@ namespace MOE.Common.Models.Repositories
 
         public Signal GetSignalVersionByVersionId(int versionId)
         {
-            var signal = (from r in _db.Signals where r.VersionID == versionId && r.VersionActionId != 3 select r).FirstOrDefault();
-            return signal;
+            var version = (from r in _db.Signals where r.VersionID == versionId select r).FirstOrDefault();
+            return version;
         }
 
         public void SetVersionToDeleted(int versionId)
@@ -97,9 +95,8 @@ namespace MOE.Common.Models.Repositories
 
             
 
-            newVersion.SignalID = originalVersion.SignalID;
-            originalVersion.End = DateTime.Today;
-            newVersion.End = LastDate;
+            newVersion.SignalID = originalVersion.SignalID;          
+            newVersion.Start = DateTime.Today;
             newVersion.Note = originalVersion.Note;
             newVersion.PrimaryName = originalVersion.PrimaryName;
             newVersion.SecondaryName = originalVersion.SecondaryName;
@@ -179,7 +176,7 @@ namespace MOE.Common.Models.Repositories
 
         public List<Signal> GetLatestVerionOfAllSignalsByControllerType(int controllerTypeId)
         {
-            var signals = GetLatestVerionOfAllSignals();
+            var signals = GetLatestVersionOfAllSignals();
 
             var filteredSignals = (from r in signals where r.ControllerTypeID == controllerTypeId
                                    select r).ToList();
@@ -193,7 +190,8 @@ namespace MOE.Common.Models.Repositories
                 .Include(signal => signal.Approaches.Select(a => a.Detectors))
                 .Include(signal => signal.Approaches.Select(a => a.DirectionType))
 
-                .Where(signal => signal.End > DateTime.Now)
+                .Where(signal => signal.Start > DateTime.Now)
+                .Where(signal => signal.VersionActionId != 3)
                 .ToList();
             return signals;
         }
@@ -201,12 +199,8 @@ namespace MOE.Common.Models.Repositories
         public List<Models.Signal> GetAllEnabledSignals()
         {
             _db.Configuration.LazyLoadingEnabled = false;
-            List<Models.Signal> signals = (from r in _db.Signals
-                    where r.Enabled && r.End > DateTime.Now
-                                           select r)
 
-                .Where(signal => signal.End > DateTime.Now)
-                .ToList();
+            List<Models.Signal> signals = GetLatestVersionOfAllSignals().Where(r=>r.Enabled).ToList();
             return signals;
         }
 
@@ -224,34 +218,16 @@ namespace MOE.Common.Models.Repositories
             return location;
         }
 
-        public List<Models.Signal> GetAllWithGraphDetectors()
-        {
-            List<Models.Signal> signals = (from s in _db.Signals
-                where s.End > DateTime.Today &&
-                s.GetDetectorsForSignal().Count > 0
-                select s).ToList();
-            return signals;
-        }
 
-        public bool CheckReportAvialabilityForSignal(string signalID, int metricTypeID)
+        public bool CheckReportAvialabilityForSignal(string signalId, int metricTypeID)
         {
-            var signal = _db.Signals.Find(signalID);
+            var signal = GetLatestVersionOfAllSignals().Find(s => s.SignalID == signalId);
             return signal.CheckReportAvailabilityForSignal(metricTypeID);
         }
 
         public Models.Signal GetSignalBySignalID(string signalId)
         {
-            return _db.Signals.Where(s => s.SignalID == signalId).FirstOrDefault(s => s.End > DateTime.Today);
-        }
-
-        public bool DoesSignalHaveDetection(string signalId)
-        {
-            var signal = _db.Signals.Where(s => s.SignalID == signalId).FirstOrDefault(s => s.End > DateTime.Today);
-            if (signal != null && signal.GetDetectorsForSignal().Count > 0)
-            {
-                return true;
-            }
-            return false;
+            return GetLatestVersionOfAllSignals().Find(s => s.SignalID == signalId);
         }
 
         public void Update(MOE.Common.Models.Signal incomingSignal)
@@ -375,7 +351,7 @@ namespace MOE.Common.Models.Repositories
         public List<MOE.Common.Business.Pin> GetPinInfo()
         {
             List<MOE.Common.Business.Pin> pins = new List<Business.Pin>();
-            foreach (var signal in _db.Signals.Where(s => s.Enabled == true).Where(s => s.End > DateTime.Today).ToList())
+            foreach (var signal in GetLatestVersionOfAllSignals().Where(s => s.Enabled).ToList())
             {
                 MOE.Common.Business.Pin pin = new MOE.Common.Business.Pin(signal.SignalID, signal.Latitude,
                     signal.Longitude,
@@ -442,33 +418,13 @@ namespace MOE.Common.Models.Repositories
 
         }
 
-        public void Remove(string id)
-        {
-            //MOE.Common.Models.Signal g = _db.Signals.Find(id);
-            //if (g != null)
-            //{
-            //    _db.Signals.Remove(g);
-            //    _db.SaveChanges();
-            //}
-        }
 
-        public void Remove(MOE.Common.Models.Signal signal)
-        {
-            //MOE.Common.Models.Signal g = (from r in _db.Signals
-            //    where r.SignalID == originalVersion.SignalID
-            //    select r).FirstOrDefault();
-            //if (g != null)
-            //{
-            //    _db.Signals.Remove(g);
-            //    _db.SaveChanges();
-            //}
-        }
 
         public SignalFTPInfo GetSignalFTPInfoByID(string signalId)
         {
             var signal = (from r in _db.Signals
                 join ftp in _db.ControllerType on r.ControllerTypeID equals ftp.ControllerTypeID
-                where r.SignalID == signalId && r.End > DateTime.Today
+                where r.SignalID == signalId && r.Start > DateTime.Today
                 select new SignalFTPInfo
                 {
                     SignalID = r.SignalID,
@@ -489,16 +445,20 @@ namespace MOE.Common.Models.Repositories
 
         public Common.Models.Signal GetLatestVersionOfSignalBySignalID(string signalID)
         {
+            //var signal = (from r in _db.Signals
+            //        where r.SignalID == signalID
+            //        && r.VersionActionId != 3
+            //        select r)
+            //    .Include(r => r.Approaches.Select(a => a.Detectors))
+            //    .Include(r => r.Approaches.Select(a => a.DirectionType))
+            //    .OrderByDescending(x => x.Start)
+            //    .Take(1).FirstOrDefault();
+
+
             var signal = (from r in _db.Signals
-                    where r.SignalID == signalID
-                    select r)
-                .Include(r => r.Approaches.Select(a => a.Detectors))
-                .Include(r => r.Approaches.Select(a => a.DirectionType))
-                .OrderByDescending(x => x.End)
-                .Take(1).FirstOrDefault();
-
-
-
+                          where r.SignalID == signalID
+                            && r.VersionActionId != 3
+                          select r).OrderByDescending(r => r.Start).FirstOrDefault();
             return signal;
         }
 
@@ -507,18 +467,19 @@ namespace MOE.Common.Models.Repositories
             VersionAction va = (from r in _db.VersionActions
                 where r.ID == id
                 select r).FirstOrDefault();
-
+                
             return va;
         }
 
         public List<Signal> GetAllVersionsOfSignalBySignalID(string signalID)
         {
             var signals = (from r in _db.Signals
-                    where r.SignalID == signalID
-                    select r)
+                    where r.SignalID == signalID &&
+                    r.VersionActionId != 3
+                           select r)
                 .Include(r => r.Approaches.Select(a => a.Detectors))
                 .Include(r => r.Approaches.Select(a => a.DirectionType))
-                .OrderByDescending(x => x.End)
+                .OrderByDescending(x => x.Start)
                 .ToList();
 
             if (signals.Count > 0)
@@ -529,11 +490,22 @@ namespace MOE.Common.Models.Repositories
             return null;
         }
 
-        public List<Signal> GetLatestVerionOfAllSignals()
+        public List<Signal> GetLatestVersionOfAllSignals()
         {
-            var signals = (from r in _db.Signals
-                where r.End == LastDate
-                select r).ToList();
+            List<Signal> signals = new List<Signal>();
+
+            var activeSignals = _db.Signals.Where(r => r.VersionActionId != 3)
+                .GroupBy(r => r.SignalID)
+                .Select(g => g.FirstOrDefault()).ToList();
+
+            foreach (var s in activeSignals)
+            {
+                var sig = _db.Signals.Where(r => r.SignalID == s.SignalID)
+                                        .OrderByDescending(r => r.Start)
+                                        .FirstOrDefault();
+
+                signals.Add(sig);
+            }
 
             return signals;
         }
@@ -542,7 +514,7 @@ namespace MOE.Common.Models.Repositories
         {
             var signals = GetAllVersionsOfSignalBySignalID(signalId);
 
-            var sigs = signals.Where(r => r.End == LastDate).ToList();
+            var sigs = signals.Where(r => r.Start == r.FirstDate).ToList();
 
             switch (sigs.Count)
             {

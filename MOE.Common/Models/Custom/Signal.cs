@@ -22,6 +22,24 @@ namespace MOE.Common.Models
                 PlanEvents = repository.GetSignalEventsByEventCode(SignalID, startTime, endTime, 131);
         }
 
+        [NotMapped]
+        public List<Signal> VersionList {
+            get;
+
+            set; }
+
+        [NotMapped]
+        public DateTime FirstDate
+        {
+
+            get { return Convert.ToDateTime("1/1/2011"); }
+                
+         }
+         
+
+
+
+
         //public List<Models.Lane> GetLaneGroupsForSignal()
         //{
         //    List<Models.Lane> laneGroups = new List<Lane>();
@@ -73,11 +91,11 @@ namespace MOE.Common.Models
         {
             get
             {
-                if (End == DateTime.MaxValue || End == Convert.ToDateTime("12/31/9999"))
+                if (Start == DateTime.MaxValue || Start == Convert.ToDateTime("12/31/9999"))
                 {
                     return "Current";
                 }
-                return End.ToShortDateString() + " - " + Note;
+                return Start.ToShortDateString() + " - " + Note;
             } 
 
         }

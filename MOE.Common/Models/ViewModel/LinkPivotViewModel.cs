@@ -30,7 +30,7 @@ namespace MOE.Common.Models.ViewModel
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
         [Required]
-        [Display(Name = "End Date")]
+        [Display(Name = "Start Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
@@ -40,7 +40,7 @@ namespace MOE.Common.Models.ViewModel
         public string StartTime { get; set; }
 
         [Required]
-        [Display(Name = "End Time")]
+        [Display(Name = "Start Time")]
         public string EndTime { get; set; }
 
         [Required]
@@ -48,7 +48,7 @@ namespace MOE.Common.Models.ViewModel
         public string StartAMPM { get; set; }
 
         [Required]
-        [Display(Name = "End AM/PM")]
+        [Display(Name = "Start AM/PM")]
         public string EndAMPM { get; set; }
 
         //These parameters are used when a user selects a row on the table

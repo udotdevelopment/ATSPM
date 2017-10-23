@@ -260,7 +260,7 @@ namespace SPM.Controllers
             signal.Longitude = "0";
             signal.RegionID = 2;
             signal.ControllerTypeID = 1;
-            signal.End = DateTime.MaxValue;          
+            signal.Start = DateTime.MaxValue;          
             signal.Note = "Create New";
             signal.VersionID = 1;
             signal.Enabled = true;
@@ -283,7 +283,7 @@ namespace SPM.Controllers
             {
                 newSignal = MOE.Common.Models.Signal.CopySignal(signal, newId);
                 newSignal.VersionActionId = 1;
-                newSignal.End = DateTime.MaxValue;
+                newSignal.Start = DateTime.MaxValue;
                 newSignal.Note = "Copy of Signal " + id;
             }
             try
@@ -313,7 +313,7 @@ namespace SPM.Controllers
             {
                 copyVersion = MOE.Common.Models.Signal.CopyVersion(origVersion);
                 copyVersion.VersionActionId = 4;
-                copyVersion.End = DateTime.Today;
+                copyVersion.Start = DateTime.Today;
                 copyVersion.Note = "Copy of Version " + origVersion.Note;
             }
             try
@@ -578,7 +578,7 @@ namespace SPM.Controllers
             ViewBag.MovementType = new SelectList(_movementTypeRepository.GetAllMovementTypes(), "MovementTypeID", "Description");
             ViewBag.LaneType = new SelectList(_laneTypeRepository.GetAllLaneTypes(), "LaneTypeID", "Description");
             ViewBag.DetectionHardware = new SelectList(_detectionHardwareRepository.GetAllDetectionHardwares(), "ID", "Name");
-            ViewBag.VersionList = new SelectList(_signalsRepository.GetAllVersionsOfSignalBySignalID(signal.SignalID), "VersionID", "SelectListName", signal.VersionID);
+            signal.VersionList = _signalsRepository.GetAllVersionsOfSignalBySignalID(signal.SignalID);
         }
 
         // GET: Signals/Delete/5
@@ -595,25 +595,25 @@ namespace SPM.Controllers
             MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel wctv =
                 new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository);
 
-            return View(wctv);
+            return null;//View(wctv);
         }
 
         // POST: Signals/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public string DeleteConfirmed(string id)
-        {
-            try
-            {
-                _signalsRepository.Remove(id);
-                return id + " Removed";
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-        }
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateJsonAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        //public string DeleteConfirmed(string id)
+        //{
+        //    try
+        //    {
+        //        _signalsRepository.Remove(id);
+        //        return id + " Removed";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ex.Message;
+        //    }
+        //}
 
         protected override void Dispose(bool disposing)
         {
@@ -623,18 +623,42 @@ namespace SPM.Controllers
             base.Dispose(disposing);
         }
 
-        [HttpPost, ActionName("Delete Version")]
+        [HttpPost, ActionName("DeleteVersion")]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult DeleteVersion(int versionId)
+        public ActionResult DeleteVersion(string versionId)
         {
-            Signal signal = _signalsRepository.GetSignalVersionByVersionId(versionId);
+            int _vid = Convert.ToInt32(versionId);
+            Signal signal = _signalsRepository.GetSignalVersionByVersionId(_vid);
 
-            _signalsRepository.SetVersionToDeleted(versionId);
+            if (signal == null)
+            {
+                return Content("<h1>" + "No Version with this ID can be found " + "</h1>");
+            }
 
-            var nextMostRecentVersion = _signalsRepository.GetLatestVersionOfSignalBySignalID(signal.SignalID);
+            string sigId = signal.SignalID;
 
-            return PartialView("Edit", nextMostRecentVersion);
+            Signal mostRecentVersion;
+
+            try
+            {
+                _signalsRepository.SetVersionToDeleted(_vid);
+               
+            }
+            catch (Exception ex)
+            {
+                return Content("<h1>" + ex.Message + "</h1>");
+            }
+            finally
+            {
+                mostRecentVersion = _signalsRepository.GetLatestVersionOfSignalBySignalID(sigId);
+                AddSelectListsToViewBag(mostRecentVersion);
+            }
+
+
+             
+
+            return PartialView("Edit", mostRecentVersion);
         }
     }
 }

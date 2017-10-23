@@ -337,7 +337,7 @@ namespace MOE.CommonTests.Models
 
                 s.SignalID = "10" + i.ToString();
                 s.VersionID = i;
-                s.End = Convert.ToDateTime("1/1/9999");
+                s.Start = Convert.ToDateTime("1/1/9999");
                 s.PrimaryName = "Primary: " + i.ToString();
                 s.SecondaryName = "Secondary: " + i.ToString();
 
@@ -468,7 +468,7 @@ namespace MOE.CommonTests.Models
 
             s.SignalID = "101";
             s.VersionID = 1;
-            s.End = Convert.ToDateTime("08/15/2017");
+            s.Start = Convert.ToDateTime("08/15/2017");
             s.PrimaryName = "Primary: 101" ;
             s.SecondaryName = "Secondary: 101" ;
             s.Note = "Initial Setup";
@@ -482,7 +482,7 @@ namespace MOE.CommonTests.Models
 
             s2.SignalID = "101";
             s2.VersionID = 2;
-            s2.End = Convert.ToDateTime("09/15/2017");
+            s2.Start = Convert.ToDateTime("09/15/2017");
             s2.PrimaryName = "Primary: 101";
             s2.SecondaryName = "Secondary: 101";
             s2.Note = "Channel Ressaignment";
@@ -495,7 +495,7 @@ namespace MOE.CommonTests.Models
             MOE.Common.Models.Signal s3 = new Signal();
             s3.SignalID = "101";
             s3.VersionID = 3;
-            s3.End = Convert.ToDateTime("1/1/9999");
+            s3.Start = Convert.ToDateTime("1/1/9999");
             s3.PrimaryName = "Primary: 101";
             s3.SecondaryName = "Secondary: 101";
             s3.Note = "New Approach";

@@ -45,7 +45,7 @@ namespace MOE.Common.Migrations
             AddColumn("dbo.Signals", "VersionID", c => c.Int(nullable: false, identity: true));
             AddColumn("dbo.Signals", "VersionActionId", c => c.Int(nullable: false));
             AddColumn("dbo.Signals", "Note", c => c.String(nullable: false));
-            AddColumn("dbo.Signals", "End", c => c.DateTime(nullable: false));
+            AddColumn("dbo.Signals", "Start", c => c.DateTime(nullable: false));
             AddColumn("dbo.Approaches", "VersionID", c => c.Int(nullable: false));
             AddColumn("dbo.ApproachRouteDetail", "Order", c => c.Int(nullable: false));
             AddColumn("dbo.ApproachRouteDetail", "SignalId", c => c.String(nullable: false));
@@ -121,7 +121,7 @@ namespace MOE.Common.Migrations
             DropColumn("dbo.ApproachRouteDetail", "SignalId");
             DropColumn("dbo.ApproachRouteDetail", "Order");
             DropColumn("dbo.Approaches", "VersionID");
-            DropColumn("dbo.Signals", "End");
+            DropColumn("dbo.Signals", "Start");
             DropColumn("dbo.Signals", "Note");
             DropColumn("dbo.Signals", "VersionActionId");
             DropColumn("dbo.Signals", "VersionID");

@@ -34,7 +34,7 @@ function AddNewVersion() {
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             $('#SignalEdit').html(data);
-            $("#versionDropDown").val(versionId);
+
         },
         statusCode: {
             404: function (content) { alert('cannot find resource'); },
@@ -45,6 +45,68 @@ function AddNewVersion() {
         }
     });
    
+}
+
+function DeleteVersion() {
+    var signalID = $("#SignalID").val();
+    var versionId = $("#versionDropDown option:selected").val();
+    var versionDescription = $("#versionDropDown option:selected").text();
+    var parameters = {};
+    parameters.ID = versionId;
+    if (confirm( "Are you sure you want to delete the version " + versionDescription + " ?"))
+    {
+        $.ajax({
+            type: "POST",
+            cache: false,
+            async: true,
+            headers: GetRequestVerificationTokenObject(),
+            data: JSON.stringify({ "versionId": versionId }),
+            url: urlpathDeleteVersion,
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $('#SignalEdit').html(data);
+
+            },
+            statusCode: {
+                404: function (content) { alert('cannot find resource'); },
+                500: function (content) { alert('internal server error'); }
+            },
+            error: function (req, status, errorObj) {
+                alert("Error");
+            }
+        });
+    }
+            
+
+}
+
+function DeleteSignal() {
+    var signalID = $("#SignalID").val();
+
+    if (confirm("Are you sure you want to delete signal " + signalID + " ?")) {
+        $.ajax({
+            type: "POST",
+            cache: false,
+            async: true,
+            headers: GetRequestVerificationTokenObject(),
+            data: JSON.stringify({ "Id": signalID }),
+            url: urlpathDeleteSignal,
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function(data){window.location.reload(false)},
+                //(data) { $('#ConfigurationTableCollapse').html(data); },
+            statusCode: {
+                404: function (content) { alert('cannot find resource'); },
+                500: function (content) { alert('internal server error'); }
+            },
+            error: function (req, status, errorObj) {
+                alert("Error");
+            }
+        });
+    }
+
+
 }
 
 
@@ -103,6 +165,24 @@ function GetConfigurationTableForVersion(versionId) {
             alert("Error");
         }
     });
+}
+
+function UpdateVersionDropdown()
+{
+    var selIndex = $("#versionDropDown option:selected").index();
+    var dd = document.getElementById('versionDropDown');
+    var oldVersionDescription = $("#versionDropDown option:selected").text();
+
+
+
+    var note = $("#Note").val();
+    var date = $("#End").val();
+    var newVersionDescription = date + " - " + note;
+
+    dd.options[selIndex].text = newVersionDescription;
+    //$("#versionDropDown option:selected").text = newVersionDescription;
+
+
 }
 
 function PostCreateComment() {

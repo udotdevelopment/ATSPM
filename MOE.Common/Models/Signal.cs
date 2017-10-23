@@ -61,8 +61,8 @@ namespace MOE.Common.Models
         public string Note { get; set; }
 
         [Required]
-        [Display(Name = "Last Day This Configuration is Valid")]
-        public DateTime End { get; set; }
+        [Display(Name = "First Day This Configuration is Valid")]
+        public DateTime Start { get; set; }
 
         [Required]
         [Display(Name="Primary Name")]

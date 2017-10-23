@@ -138,13 +138,13 @@ namespace MOE.Common.Business
             //downstream is unknown. The end row is determined by the starting point seleceted by the user
             if (direction == "Upstream")
             {
-                //End row for upstream is index 0
+                //Start row for upstream is index 0
                 adjustment.AddLinkPivotAdjustmentRow(_ApproachRouteDetail[0].SignalId, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, _ApproachRouteDetail[0].Signal.PrimaryName + " " + _ApproachRouteDetail[0].Signal.SecondaryName,
                     "","","","","",0,0,0,0,1,0,0);
             }
             else
             {
-                //End row for downstream is last row in the detail table
+                //Start row for downstream is last row in the detail table
                 adjustment.AddLinkPivotAdjustmentRow(_ApproachRouteDetail[_ApproachRouteDetail.Count - 1].SignalId, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                     _ApproachRouteDetail[_ApproachRouteDetail.Count - 1].Signal.PrimaryName + " " + _ApproachRouteDetail[_ApproachRouteDetail.Count - 1].Signal.SecondaryName, "", "", "", "", "", 0, 0, 0, 0, _ApproachRouteDetail.Count, 0, 0);
             }
