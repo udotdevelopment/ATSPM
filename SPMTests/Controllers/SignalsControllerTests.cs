@@ -125,9 +125,13 @@ namespace SPM.Controllers.Tests
             var appr = (Approach)apprResult.ViewData.Model;
 
             MOE.Common.Models.Repositories.ApproachRepositoryFactory.SetApproachRepository(_approachRepository);
+<<<<<<< HEAD
             var result = sc.CopyApproach(sig.VersionID,appr.ApproachID) as ContentResult;
             
 
+=======
+            var result = sc.CopyApproach(1001,0) as ContentResult;
+>>>>>>> Hist.Config.UI
             if (result != null)
             {
                 
