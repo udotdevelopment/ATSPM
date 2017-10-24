@@ -35,7 +35,7 @@ namespace MOE.Common.Migrations
                         MetricType_MetricID = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => new { t.ApproachRoute_ApproachRouteId, t.MetricType_MetricID })
-                .ForeignKey("dbo.ApproachRoute", t => t.ApproachRoute_ApproachRouteId, cascadeDelete: true)
+                .ForeignKey("dbo.Route", t => t.ApproachRoute_ApproachRouteId, cascadeDelete: true)
                 .ForeignKey("dbo.MetricTypes", t => t.MetricType_MetricID, cascadeDelete: true)
                 .Index(t => t.ApproachRoute_ApproachRouteId)
                 .Index(t => t.MetricType_MetricID);
@@ -81,7 +81,7 @@ namespace MOE.Common.Migrations
             DropForeignKey("dbo.MetricComments", "VersionID", "dbo.Signals");
             DropForeignKey("dbo.Signals", "VersionAction_ID", "dbo.VersionActions");
             DropForeignKey("dbo.ApproachRouteMetricTypes", "MetricType_MetricID", "dbo.MetricTypes");
-            DropForeignKey("dbo.ApproachRouteMetricTypes", "ApproachRoute_ApproachRouteId", "dbo.ApproachRoute");
+            DropForeignKey("dbo.ApproachRouteMetricTypes", "ApproachRoute_ApproachRouteId", "dbo.Route");
             DropForeignKey("dbo.ApproachRouteDetail", "DirectionType2_DirectionTypeID", "dbo.DirectionTypes");
             DropForeignKey("dbo.ApproachRouteDetail", "DirectionType1_DirectionTypeID", "dbo.DirectionTypes");
             DropIndex("dbo.ApproachRouteMetricTypes", new[] { "MetricType_MetricID" });

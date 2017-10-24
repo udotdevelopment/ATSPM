@@ -17,7 +17,7 @@ namespace SPM.Controllers
         public ActionResult Analysis()
         {
             var lp = new MOE.Common.Models.ViewModel.LinkPivotViewModel();
-            lp.AppRoutes = (from a in db.Routes
+            lp.Routes = (from a in db.Routes
                                orderby a.RouteName
                                select a).ToList();
             lp.Bias = 0;
@@ -35,21 +35,14 @@ namespace SPM.Controllers
 
         public ActionResult FillSignals(int id)
         {
-            List<MOE.Common.Models.RouteSignal> app = (from a in db.RouteSignals
-                                                               where a.ApproachRouteId == id
-                                                               select a).ToList();
-
-            MOE.Common.Models.Repositories.ISignalsRepository sr = MOE.Common.Models.Repositories
-                .SignalsRepositoryFactory.Create();
-
+            var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
+            var route = routeRepository.GetRouteByID(id);
             List <MOE.Common.Models.Signal> signals = new List<Signal>();
-
-            foreach (var a in app)
+            foreach (var routeSignal in route.RouteSignals)
             {
-                signals.Add(sr.GetLatestVersionOfSignalBySignalID(a.SignalId));
+                signals.Add(routeSignal.Signal);
 
             }
-            // return Json(signals, JsonRequestBehavior.AllowGet);
             return PartialView("FillSignals", signals);
         }
 
@@ -77,7 +70,7 @@ namespace SPM.Controllers
                 if (lpvm.StartingPoint == "Downstream")
                 {
                     adjustments = client.GetLinkPivot(
-                        lpvm.SelectedApproachRouteId,
+                        lpvm.SelectedRouteId,
                         _StartDate,
                         _EndDate,
                         lpvm.CycleLength,
@@ -97,7 +90,7 @@ namespace SPM.Controllers
                 else
                 {
                     adjustments = client.GetLinkPivot(
-                        lpvm.SelectedApproachRouteId,
+                        lpvm.SelectedRouteId,
                         _StartDate,
                         _EndDate,
                         lpvm.CycleLength,
@@ -193,26 +186,18 @@ namespace SPM.Controllers
         {
             if (ModelState.IsValid)
             {
-                LinkPivotServiceReference.LinkPivotServiceClient client =
-                    new LinkPivotServiceReference.LinkPivotServiceClient();
-
-                LinkPivotServiceReference.DisplayObject display =
-                    new LinkPivotServiceReference.DisplayObject();
-                
+                LinkPivotServiceReference.LinkPivotServiceClient client = new LinkPivotServiceReference.LinkPivotServiceClient();
+                LinkPivotServiceReference.DisplayObject display = new LinkPivotServiceReference.DisplayObject();                
                 pcdOptions.SelectedEndDate = Convert.ToDateTime(pcdOptions.SelectedStartDate[0].ToShortDateString() + " " +
                     pcdOptions.EndDate.ToShortTimeString());
-
                 DateTime pcdEndDate = Convert.ToDateTime(pcdOptions.SelectedStartDate[0].ToShortDateString()
-                    + " " + pcdOptions.SelectedEndDate.TimeOfDay.ToString());
-                
+                    + " " + pcdOptions.SelectedEndDate.TimeOfDay.ToString());                
                 client.Open();
                 display = client.DisplayLinkPivotPCD(pcdOptions.SignalId, pcdOptions.UpstreamDirection,
                     pcdOptions.DownSignalId, pcdOptions.DownDirection, pcdOptions.Delta, pcdOptions.SelectedStartDate[0],
                     pcdEndDate, pcdOptions.YAxis);
                 client.Close();
-                MOE.Common.Models.ViewModel.LinkPivotPCDsViewModel pcdModel =
-                    new MOE.Common.Models.ViewModel.LinkPivotPCDsViewModel();
-
+                MOE.Common.Models.ViewModel.LinkPivotPCDsViewModel pcdModel = new MOE.Common.Models.ViewModel.LinkPivotPCDsViewModel();
                 string imagePath = ConfigurationManager.AppSettings["SPMImageLocation"] + "LinkPivot/";
                 pcdModel.ExistingChart = imagePath + display.UpstreamBeforePCDPath;
                 pcdModel.PredictedChart = imagePath + display.UpstreamAfterPCDPath;

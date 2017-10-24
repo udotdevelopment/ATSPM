@@ -10,12 +10,12 @@ namespace MOE.Common.Models
     {        
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int RouteDetailId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [Display(Name="Route")]
-        public int ApproachRouteId { get; set; }
-        public virtual Route ApproachRoute { get; set; }
+        public int RouteId { get; set; }
+        public virtual Route Route { get; set; }
 
         [Required]
         [Display(Name = "Signal Order")]
@@ -24,6 +24,7 @@ namespace MOE.Common.Models
         [Required]
         [Display(Name = "Signal")]     
         public string SignalId { get; set; }
+        public Signal Signal { get; set; }
         public List<RoutePhaseDirection> PhaseDirections { get; set; }
 
     }

@@ -12,30 +12,33 @@ namespace MOE.Common.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        ApproachRouteDetailId = c.Int(nullable: false),
+                        RouteSignalId = c.Int(nullable: false),
                         Phase = c.Int(nullable: false),
-                        IsPhaseDirection1Overlap = c.Boolean(nullable: false),
-                        ApproachRouteDetail_RouteDetailId = c.Int(),
-                        Direction_DirectionTypeID = c.Int(),
+                        DirectionTypeId = c.Int(nullable: false),
+                        IsOverlap = c.Boolean(nullable: false),
+                        IsPrimaryApproach = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.RouteSignals", t => t.ApproachRouteDetail_RouteDetailId)
-                .ForeignKey("dbo.DirectionTypes", t => t.Direction_DirectionTypeID)
-                .Index(t => t.ApproachRouteDetail_RouteDetailId)
-                .Index(t => t.Direction_DirectionTypeID);
+                .ForeignKey("dbo.DirectionTypes", t => t.DirectionTypeId, cascadeDelete: true)
+                .ForeignKey("dbo.RouteSignals", t => t.RouteSignalId, cascadeDelete: true)
+                .Index(t => t.RouteSignalId)
+                .Index(t => t.DirectionTypeId);
             
             CreateTable(
                 "dbo.RouteSignals",
                 c => new
                     {
-                        RouteDetailId = c.Int(nullable: false, identity: true),
-                        ApproachRouteId = c.Int(nullable: false),
+                        Id = c.Int(nullable: false, identity: true),
+                        RouteId = c.Int(nullable: false),
                         Order = c.Int(nullable: false),
                         SignalId = c.String(nullable: false),
+                        Signal_VersionID = c.Int(),
                     })
-                .PrimaryKey(t => t.RouteDetailId)
-                .ForeignKey("dbo.Routes", t => t.ApproachRouteId, cascadeDelete: true)
-                .Index(t => t.ApproachRouteId);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Routes", t => t.RouteId, cascadeDelete: true)
+                .ForeignKey("dbo.Signals", t => t.Signal_VersionID)
+                .Index(t => t.RouteId)
+                .Index(t => t.Signal_VersionID);
             
             CreateTable(
                 "dbo.Routes",
@@ -50,12 +53,14 @@ namespace MOE.Common.Migrations
         
         public override void Down()
         {
-            DropForeignKey("dbo.RoutePhaseDirections", "Direction_DirectionTypeID", "dbo.DirectionTypes");
-            DropForeignKey("dbo.RoutePhaseDirections", "ApproachRouteDetail_RouteDetailId", "dbo.RouteSignals");
-            DropForeignKey("dbo.RouteSignals", "ApproachRouteId", "dbo.Routes");
-            DropIndex("dbo.RouteSignals", new[] { "ApproachRouteId" });
-            DropIndex("dbo.RoutePhaseDirections", new[] { "Direction_DirectionTypeID" });
-            DropIndex("dbo.RoutePhaseDirections", new[] { "ApproachRouteDetail_RouteDetailId" });
+            DropForeignKey("dbo.RouteSignals", "Signal_VersionID", "dbo.Signals");
+            DropForeignKey("dbo.RouteSignals", "RouteId", "dbo.Routes");
+            DropForeignKey("dbo.RoutePhaseDirections", "RouteSignalId", "dbo.RouteSignals");
+            DropForeignKey("dbo.RoutePhaseDirections", "DirectionTypeId", "dbo.DirectionTypes");
+            DropIndex("dbo.RouteSignals", new[] { "Signal_VersionID" });
+            DropIndex("dbo.RouteSignals", new[] { "RouteId" });
+            DropIndex("dbo.RoutePhaseDirections", new[] { "DirectionTypeId" });
+            DropIndex("dbo.RoutePhaseDirections", new[] { "RouteSignalId" });
             DropTable("dbo.Routes");
             DropTable("dbo.RouteSignals");
             DropTable("dbo.RoutePhaseDirections");

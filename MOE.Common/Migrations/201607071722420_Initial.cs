@@ -130,7 +130,7 @@ namespace MOE.Common.Migrations
                         Direction = c.String(maxLength: 15),
                     })
                     .PrimaryKey(t => t.ApproachRouteId)
-                    .ForeignKey("dbo.ApproachRoute", t => t.ApproachRouteId, cascadeDelete: true)
+                    .ForeignKey("dbo.Route", t => t.ApproachRouteId, cascadeDelete: true)
                     .ForeignKey("dbo.Signals", t => t.SignalID, cascadeDelete: false)
                 .Index(t => t.ApproachRouteId)
                 .Index(t => t.SignalID);
@@ -138,7 +138,7 @@ namespace MOE.Common.Migrations
 
 
             CreateTable(
-                "dbo.ApproachRoute",
+                "dbo.Route",
                 c => new
                     {
                         ApproachRouteId = c.Int(nullable: false, identity: true),
@@ -478,7 +478,7 @@ namespace MOE.Common.Migrations
             //DropForeignKey("dbo.Detector_Error", "DetectorID", "dbo.Graph_Detectors");
             //DropForeignKey("dbo.Detector_Comment", "DetectorID", "dbo.Graph_Detectors");
             //DropForeignKey("dbo.ApproachRouteDetail", "SignalID", "dbo.Signals");
-            //DropForeignKey("dbo.ApproachRouteDetail", "ApproachRouteId", "dbo.ApproachRoute");
+            //DropForeignKey("dbo.ApproachRouteDetail", "RouteId", "dbo.Route");
             //DropForeignKey("dbo.Action_Log", "SignalID", "dbo.Signals");
             //DropForeignKey("dbo.Action_Log_Metrics", "Action_Log_Id", "dbo.Action_Log");
             //DropForeignKey("dbo.Action_Log_Metrics", "Metric_Id", "dbo.Action_Log_Metric_List");
@@ -491,7 +491,7 @@ namespace MOE.Common.Migrations
             //DropIndex("dbo.Detector_Comment", new[] { "DetectorID" });
             //DropIndex("dbo.Graph_Detectors", new[] { "SignalID" });
             //DropIndex("dbo.ApproachRouteDetail", new[] { "SignalID" });
-            //DropIndex("dbo.ApproachRouteDetail", new[] { "ApproachRouteId" });
+            //DropIndex("dbo.ApproachRouteDetail", new[] { "RouteId" });
             //DropIndex("dbo.Action_Log_Metrics", new[] { "Metric_Id" });
             //DropIndex("dbo.Action_Log_Metrics", new[] { "Action_Log_Id" });
             //DropIndex("dbo.Action_Log_Actions", new[] { "Action_Id" });
@@ -522,7 +522,7 @@ namespace MOE.Common.Migrations
             //DropTable("dbo.Detector_Error");
             //DropTable("dbo.Detector_Comment");
             //DropTable("dbo.Graph_Detectors");
-            //DropTable("dbo.ApproachRoute");
+            //DropTable("dbo.Route");
             //DropTable("dbo.ApproachRouteDetail");
             //DropTable("dbo.Signals");
             //DropTable("dbo.Action_Log_Metric_List");

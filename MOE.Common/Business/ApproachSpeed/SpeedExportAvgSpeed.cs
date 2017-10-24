@@ -30,8 +30,7 @@ namespace MOE.Common.Business
             }
             
         }
-
-        private int avgSpeed;
+        
         public int AvgSpeed
         {
             get
@@ -54,9 +53,7 @@ namespace MOE.Common.Business
                 return minSpeedFilter;
             }
         }
-
         
-        private int binSizeMultiplier;
 
         public SpeedExportAvgSpeed(DateTime startTime, DateTime endTime,
             int minspeedfilter, List<Models.Speed_Events> Speeds)

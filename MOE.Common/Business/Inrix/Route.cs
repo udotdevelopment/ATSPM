@@ -77,8 +77,7 @@ namespace MOE.Common.Business.Inrix
         public Route(MOE.Common.Business.Inrix.Route routeCopy)
         {
             Models.Inrix.Repositories.RouteRepository rr = new Models.Inrix.Repositories.RouteRepository();
-
-            int tempID = 0;
+            
             Name = "Copy of " + routeCopy.Name;
             Description = routeCopy.Description;
             //routesTA.Insert(this.Name, this.Description, out tempID);

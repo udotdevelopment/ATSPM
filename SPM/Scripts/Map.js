@@ -98,9 +98,6 @@ function closeInfobox() {
     }
 }
 
-function AddSignalToList() {
-    alert("Pin Clicked");
-}
 
 
 
@@ -204,11 +201,6 @@ function AddSignalFromPin(e) {
     }
 }
 
-function AddSignalToList(signalId) {    
-    var signalList = $('#SelectedSignalsList');
-    signalList.append(new Option(signalId, signalId, true, true));
-}
-
 function MoveUp() {
     $('#SelectedSignalsList option:selected:first-child').prop("selected", false);
     before = $('#SelectedSignalsList option:selected:first').prev();
@@ -251,31 +243,7 @@ function displayInfobox(e) {
     } 
 }
 
-function displayRouteInfobox(e) {
-    if (e.targetType == 'pushpin') {
-        actionArray = new Array();
-        var SignalID = e.target.SignalID.toString();
 
-        var tosend = {};
-        tosend.signalID = SignalID;
-        $.ajax({
-            url: urlpathSignalInfoBox,
-            type: "POST",
-            cache: false,
-            async: true,
-            datatype: "json",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(tosend),
-            success: function (data) {
-                if (infobox != null) {
-                    infobox.setMap(null);
-                }
-                infobox = new Microsoft.Maps.Infobox(e.target.getLocation(), { offset: new Microsoft.Maps.Point(-100, 0), htmlContent: data });
-                infobox.setMap(map);
-            }
-        });
-    }
-}
 
 function CancelAsyncPostBack() {
     if (prm.get_isInAsyncPostBack()) {

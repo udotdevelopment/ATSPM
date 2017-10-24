@@ -14,9 +14,8 @@ namespace MOE.Common.Business.PEDDelay
 
         protected string _SignalID;
         public string SignalID { get { return _SignalID; } }
-
-        protected DateTime _StartDate;
-        public DateTime StartDate { get { return _StartDate; } }
+        
+        public DateTime StartDate { get; }
 
         protected DateTime _EndDate;
         public DateTime EndDate { get { return _EndDate; } }        

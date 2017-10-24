@@ -8,14 +8,16 @@ using System.Threading.Tasks;
 namespace MOE.Common.Models.ViewModel.RouteEdit
 {
     public class RouteCreateViewModel
-    {
-        //TODO:Fix for Routes
-        //public MOE.Common.Models.ApproachRoute ApproachRoute { get; set; }
+    {        
+
+        public MOE.Common.Models.Route Route { get; set; }
         public MOE.Common.Models.ViewModel.RouteEdit.RouteMapViewModel RouteMap { get; set; }
+        public List<Tuple<string, string>> SignalSelectList { get; set; }
 
         public RouteCreateViewModel()
         {
             RouteMap = new RouteMapViewModel();
+            SignalSelectList = new List<Tuple<string, string>>();
         }
     }
 }

@@ -7,7 +7,10 @@
 function GetMetric(urlPath, tosend)
 {
     GetChartComment(tosend.MetricTypeID, tosend.SignalID);
-
+    dataLayer.push({
+        'MetricTypeId': tosend.MetricTypeID,
+        'SignalId': tosend.SignalID
+    });
     $.ajax({
         url: urlPath,
         type: "POST",

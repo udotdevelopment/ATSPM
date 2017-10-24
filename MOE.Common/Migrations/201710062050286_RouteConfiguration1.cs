@@ -9,18 +9,18 @@ namespace MOE.Common.Migrations
         {
             DropForeignKey("dbo.ApproachRouteDetail", "DirectionType1_DirectionTypeID", "dbo.DirectionTypes");
             DropForeignKey("dbo.ApproachRouteDetail", "DirectionType2_DirectionTypeID", "dbo.DirectionTypes");
-            DropForeignKey("dbo.ApproachRouteDetail", "ApproachRouteId", "dbo.ApproachRoute");
-            DropForeignKey("dbo.ApproachRouteMetricTypes", "ApproachRoute_ApproachRouteId", "dbo.ApproachRoute");
+            DropForeignKey("dbo.ApproachRouteDetail", "RouteId", "dbo.Route");
+            DropForeignKey("dbo.ApproachRouteMetricTypes", "ApproachRoute_ApproachRouteId", "dbo.Route");
             DropForeignKey("dbo.ApproachRouteMetricTypes", "MetricType_MetricID", "dbo.MetricTypes");
             DropForeignKey("dbo.Route_Detectors", "Detectors_ID", "dbo.Detectors");
-            DropIndex("dbo.ApproachRouteDetail", new[] { "ApproachRouteId" });
+            DropIndex("dbo.ApproachRouteDetail", new[] { "RouteId" });
             DropIndex("dbo.ApproachRouteDetail", new[] { "DirectionType1_DirectionTypeID" });
             DropIndex("dbo.ApproachRouteDetail", new[] { "DirectionType2_DirectionTypeID" });
             DropIndex("dbo.Route_Detectors", new[] { "Detectors_ID" });
             DropIndex("dbo.ApproachRouteMetricTypes", new[] { "ApproachRoute_ApproachRouteId" });
             DropIndex("dbo.ApproachRouteMetricTypes", new[] { "MetricType_MetricID" });
             DropTable("dbo.Accordian");
-            DropTable("dbo.ApproachRoute");
+            DropTable("dbo.Route");
             DropTable("dbo.ApproachRouteDetail");
             DropTable("dbo.Alert_Day_Types");
             DropTable("dbo.DownloadAgreements");
@@ -153,7 +153,7 @@ namespace MOE.Common.Migrations
                 .PrimaryKey(t => t.RouteDetailId);
             
             CreateTable(
-                "dbo.ApproachRoute",
+                "dbo.Route",
                 c => new
                     {
                         ApproachRouteId = c.Int(nullable: false, identity: true),
@@ -178,11 +178,11 @@ namespace MOE.Common.Migrations
             CreateIndex("dbo.Route_Detectors", "Detectors_ID");
             CreateIndex("dbo.ApproachRouteDetail", "DirectionType2_DirectionTypeID");
             CreateIndex("dbo.ApproachRouteDetail", "DirectionType1_DirectionTypeID");
-            CreateIndex("dbo.ApproachRouteDetail", "ApproachRouteId");
+            CreateIndex("dbo.ApproachRouteDetail", "RouteId");
             AddForeignKey("dbo.Route_Detectors", "Detectors_ID", "dbo.Detectors", "ID");
             AddForeignKey("dbo.ApproachRouteMetricTypes", "MetricType_MetricID", "dbo.MetricTypes", "MetricID", cascadeDelete: true);
-            AddForeignKey("dbo.ApproachRouteMetricTypes", "ApproachRoute_ApproachRouteId", "dbo.ApproachRoute", "ApproachRouteId", cascadeDelete: true);
-            AddForeignKey("dbo.ApproachRouteDetail", "ApproachRouteId", "dbo.ApproachRoute", "ApproachRouteId", cascadeDelete: true);
+            AddForeignKey("dbo.ApproachRouteMetricTypes", "ApproachRoute_ApproachRouteId", "dbo.Route", "RouteId", cascadeDelete: true);
+            AddForeignKey("dbo.ApproachRouteDetail", "RouteId", "dbo.Route", "RouteId", cascadeDelete: true);
             AddForeignKey("dbo.ApproachRouteDetail", "DirectionType2_DirectionTypeID", "dbo.DirectionTypes", "DirectionTypeID");
             AddForeignKey("dbo.ApproachRouteDetail", "DirectionType1_DirectionTypeID", "dbo.DirectionTypes", "DirectionTypeID");
         }

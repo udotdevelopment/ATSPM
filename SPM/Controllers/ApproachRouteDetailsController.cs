@@ -15,11 +15,11 @@ namespace SPM.Controllers
     {
         private MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
 
-        // GET: ApproachRouteDetails
+        // GET: RouteSignals
         public ActionResult Index(int id)
         {
-            MOE.Common.Models.Repositories.IApproachRouteRepository routeRepository =
-                MOE.Common.Models.Repositories.ApproachRouteRepositoryFactory.Create();
+            MOE.Common.Models.Repositories.IRouteRepository routeRepository =
+                MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
             var route = routeRepository.GetRouteByID(id);
             if (route == null)
             {
@@ -27,19 +27,19 @@ namespace SPM.Controllers
             }
             MOE.Common.Models.ViewModel.RouteEdit.ApproachRouteDetailViewModel viewModel =
                 new MOE.Common.Models.ViewModel.RouteEdit.ApproachRouteDetailViewModel();
-            viewModel.Approaches = new List<RouteSignal>();
+            viewModel.RouteSignals = new List<RouteSignal>();
             viewModel.RouteID = id;
             viewModel.RouteName = route.RouteName;
-            viewModel.Approaches = db.RouteSignals
+            viewModel.RouteSignals = db.RouteSignals
                 
-                .Include(a => a.ApproachRoute)
-                .Where(a => a.ApproachRouteId == id)
+                .Include(a => a.Route)
+                .Where(a => a.RouteId == id)
                 .OrderBy(a => a.Order)
                 .ToList();
             return View(viewModel);
         }
 
-        // GET: ApproachRouteDetails/Details/5
+        // GET: RouteSignals/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -54,35 +54,35 @@ namespace SPM.Controllers
             return View(approachRouteDetail);
         }
 
-        // GET: ApproachRouteDetails/Create
+        // GET: RouteSignals/Create
         public ActionResult Create(int id)
         {
-            RouteSignal approachRouteDetail = new RouteSignal { ApproachRouteId = id };
+            RouteSignal approachRouteDetail = new RouteSignal { RouteId = id };
             ViewBag.ApproachID = new SelectList(db.Approaches, "ApproachID", "ApproachRouteDescription");
-            ViewBag.ApproachRouteId = new SelectList(db.Routes, "ApproachRouteId", "RouteName", id);
+            ViewBag.ApproachRouteId = new SelectList(db.Routes, "RouteId", "RouteName", id);
             return View(approachRouteDetail);
         }
 
-        // POST: ApproachRouteDetails/Create
+        // POST: RouteSignals/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "RouteDetailID,ApproachRouteId,ApproachOrder,ApproachID")] RouteSignal approachRouteDetail)
+        public ActionResult Create([Bind(Include = "RouteDetailID,RouteId,ApproachOrder,ApproachID")] RouteSignal approachRouteDetail)
         {
             if (ModelState.IsValid)
             {
                 db.RouteSignals.Add(approachRouteDetail);
                 db.SaveChanges();
-                return RedirectToAction("Index", new { id = approachRouteDetail.ApproachRouteId });
+                return RedirectToAction("Index", new { id = approachRouteDetail.RouteId });
             }
             
             ViewBag.ApproachID = new SelectList(db.Approaches, "ApproachID", "ApproachRouteDescription", approachRouteDetail.SignalId);
-            ViewBag.ApproachRouteId = new SelectList(db.Routes, "ApproachRouteId", "RouteName", approachRouteDetail.ApproachRouteId);
+            ViewBag.ApproachRouteId = new SelectList(db.Routes, "RouteId", "RouteName", approachRouteDetail.RouteId);
             return View(approachRouteDetail);
         }
 
-        // GET: ApproachRouteDetails/Edit/5
+        // GET: RouteSignals/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -95,29 +95,29 @@ namespace SPM.Controllers
                 return HttpNotFound();
             }
             ViewBag.ApproachID = new SelectList(db.Approaches, "ApproachID", "ApproachRouteDescription", approachRouteDetail.SignalId);
-            ViewBag.ApproachRouteId = new SelectList(db.Routes, "ApproachRouteId", "RouteName", approachRouteDetail.ApproachRouteId);
+            ViewBag.ApproachRouteId = new SelectList(db.Routes, "RouteId", "RouteName", approachRouteDetail.RouteId);
             return View(approachRouteDetail);
         }
 
-        // POST: ApproachRouteDetails/Edit/5
+        // POST: RouteSignals/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RouteDetailID,ApproachRouteId,ApproachOrder,ApproachID")] RouteSignal approachRouteDetail)
+        public ActionResult Edit([Bind(Include = "RouteDetailID,RouteId,ApproachOrder,ApproachID")] RouteSignal approachRouteDetail)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(approachRouteDetail).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index", new { id = approachRouteDetail.ApproachRouteId });
+                return RedirectToAction("Index", new { id = approachRouteDetail.RouteId });
             }
             ViewBag.ApproachID = new SelectList(db.Approaches, "ApproachID", "ApproachRouteDescription", approachRouteDetail.SignalId);
-            ViewBag.ApproachRouteId = new SelectList(db.Routes, "ApproachRouteId", "RouteName", approachRouteDetail.ApproachRouteId);
+            ViewBag.ApproachRouteId = new SelectList(db.Routes, "RouteId", "RouteName", approachRouteDetail.RouteId);
             return View(approachRouteDetail);
         }
 
-        // GET: ApproachRouteDetails/Delete/5
+        // GET: RouteSignals/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -132,7 +132,7 @@ namespace SPM.Controllers
             return View(approachRouteDetail);
         }
 
-        // POST: ApproachRouteDetails/Delete/5
+        // POST: RouteSignals/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -140,7 +140,7 @@ namespace SPM.Controllers
             RouteSignal approachRouteDetail = db.RouteSignals.Find(id);
             db.RouteSignals.Remove(approachRouteDetail);
             db.SaveChanges();
-            return RedirectToAction("Index", new { id = approachRouteDetail.ApproachRouteId });
+            return RedirectToAction("Index", new { id = approachRouteDetail.RouteId });
         }
 
         protected override void Dispose(bool disposing)

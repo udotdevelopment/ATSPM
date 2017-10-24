@@ -878,7 +878,6 @@ namespace MOE.Common.Business
             int phase, string direction, string location, bool isOverlap, double y1AxisMaximum,
             double y2AxisMaximum, bool showVolume, int dotSize)
         {
-            double y = 0;
             Chart chart = new Chart();
             string extendedDirection = string.Empty;
             string movementType = "Phase";

@@ -14,7 +14,6 @@ namespace MOE.Common.Business
         private double totalAoR = 0;
         private double totalPercentAoR = 0;
         private double totalCars = 0;
-        private int MetricTypeID = 9;
         public WCFServiceLibrary.AoROptions Options { get; set; }
         public ArriveOnRedChart(WCFServiceLibrary.AoROptions options, 
             MOE.Common.Business.SignalPhase signalPhase)

@@ -14,10 +14,12 @@ namespace MOE.Common.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        public int ApproachRouteDetailId { get; set; }
-        public RouteSignal ApproachRouteDetail { get; set; }
+        public int RouteSignalId { get; set; }
+        public RouteSignal RouteSignal { get; set; }
         public int Phase { get; set; }
+        public int DirectionTypeId { get; set; }
         public virtual DirectionType Direction { get; set; }
-        public bool IsPhaseDirection1Overlap { get; set; }
+        public bool IsOverlap { get; set; }
+        public bool IsPrimaryApproach { get; set; }
     }
 }

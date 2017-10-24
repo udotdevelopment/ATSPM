@@ -8,7 +8,7 @@ using MOE.Common.Models.Repositories;
 
 namespace MOE.CommonTests.Models
 {
-    class InMemoryApproachRouteRepository : IApproachRouteRepository
+    class InMemoryApproachRouteRepository : IRouteRepository
     {
 
 
@@ -33,6 +33,11 @@ namespace MOE.CommonTests.Models
         }
 
         public Route GetRouteByName(string routeName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(Route route)
         {
             throw new NotImplementedException();
         }

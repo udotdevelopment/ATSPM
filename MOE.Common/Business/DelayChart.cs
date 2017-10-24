@@ -10,8 +10,7 @@ namespace MOE.Common.Business
 {
     public class DelayChart
     {
-
-        private int MetricTypeID = 8;
+        
         public Chart chart = new Chart();
         public WCFServiceLibrary.ApproachDelayOptions Options  { get; set; }
 

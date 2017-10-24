@@ -202,3 +202,4 @@ function ClearReport()
     $('#PCDOptionsPlaceHolder').html('');
     $('#ReportPlaceHolder').html('');
 }
+

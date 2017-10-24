@@ -8,7 +8,7 @@ using MOE.Common.Models.Repositories;
 
 namespace MOE.CommonTests.Models
 {
-    class InMemoryApproachRouteDetailsRepository : IApproachRouteDetailRepository
+    class InMemoryApproachRouteDetailsRepository : IRouteSignalsRepository
     {
 
 

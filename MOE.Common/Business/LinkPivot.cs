@@ -43,11 +43,12 @@ namespace MOE.Common.Business
         public  LinkPivot(int routeId, DateTime startDate, DateTime endDate, int cycleTime, string chartLocation,
             string direction, double bias, string biasDirection, List<DayOfWeek> days)
         {
-            MOE.Common.Models.SPM db = new Models.SPM();
+            var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
+            var route = routeRepository.GetRouteByIDAndDate(routeId, startDate);
             //TODO:Fix for Routes
             //var _ApproachRouteDetail = (from ard in db.RouteSignals
             //                            .Include("Approach")
-            //                            where ard.ApproachRouteId == routeId
+            //                            where ard.RouteId == routeId
             //                            orderby ard.Order
             //                            select ard).ToList();
 
