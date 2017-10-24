@@ -17,8 +17,8 @@ namespace MOE.CommonTests.Models
         public List<Common.Models.Approach> Approaches = new List<Common.Models.Approach>();
         public List<Common.Models.VersionAction> VersionActions = new List<Common.Models.VersionAction>();
         public List<Common.Models.DetectionType> DetectionTypes = new List<Common.Models.DetectionType>();
-        public List<Common.Models.ApproachRoute> ApproachRoutes = new List<Common.Models.ApproachRoute>();
-        public List<Common.Models.ApproachRouteDetail> ApproachRouteDetails = new List<Common.Models.ApproachRouteDetail>();
+        public List<Common.Models.Route> ApproachRoutes = new List<Common.Models.Route>();
+        public List<Common.Models.RouteSignal> ApproachRouteDetails = new List<Common.Models.RouteSignal>();
         public List<Common.Models.DirectionType> DirectionTypes = new List<Common.Models.DirectionType>();
         public List<Common.Models.MetricType> MetricTypes = new List<Common.Models.MetricType>();
 

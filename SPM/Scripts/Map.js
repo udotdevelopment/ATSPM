@@ -1,7 +1,4 @@
-﻿$(function (ready) {
-    Microsoft.Maps.loadModule('Microsoft.Maps.Overlays.Style', { callback: GetMap });
-});
-
+﻿var infobox;
 function openWindow(url) {
     var w = window.open(url, '',
     'width=800,height=600,toolbar=0,status=0,location=0,menubar=0,directories=0,resizable=1,scrollbars=1');
@@ -19,16 +16,27 @@ function GetMap()
         showMapTypeSelector: false,
         zoom: 6,
         customizeOverlays: false
-
-
     });
-    dataLayer = new Microsoft.Maps.EntityCollection();
-    map.entities.push(dataLayer);
-    var infoboxLayer = new Microsoft.Maps.EntityCollection();
-    map.entities.push(infoboxLayer);
-    infobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), { visible: false, offset: new Microsoft.Maps.Point(0, 20) });
-    infoboxLayer.push(infobox);
+    dataLayer = [];
     AddData();
+    map.entities.push(dataLayer);
+}
+
+function GetRouteMap() {
+    map = new Microsoft.Maps.Map(document.getElementById('mapDiv'), {
+        credentials: 'ArDqSVBgLAcobelrUlW6yVPIyL-UGPwVKTE0ce2_tAxvrZr5YFnSEFds7I1CNy5O',
+        center: new Microsoft.Maps.Location(39.50, -111.00),
+        mapTypeId: Microsoft.Maps.MapTypeId.road,
+        showDashboard: true,
+        showScalebar: false,
+        enableSearchLogo: false,
+        showMapTypeSelector: false,
+        zoom: 6,
+        customizeOverlays: false
+    });
+    dataLayer = [];
+    AddRouteData();
+    map.entities.push(dataLayer);
 }
 
 
@@ -38,9 +46,7 @@ function ReportTypeChange() {
 }
 
 function RegionChange(e) {
-
     CenterMap(e.options[e.selectedIndex].value);
-
 }
 
 function CenterMap(region) {
@@ -60,6 +66,7 @@ function CenterMap(region) {
         GetMapWithCenter(38.268951, -111.417847, 7);
     }
 }
+
 
 function GetMapWithCenter(lat, long, zoom) {
     map = new Microsoft.Maps.Map(document.getElementById('mapDiv'), { credentials: 'ArDqSVBgLAcobelrUlW6yVPIyL-UGPwVKTE0ce2_tAxvrZr5YFnSEFds7I1CNy5O',
@@ -86,8 +93,11 @@ function GetMapWithCenter(lat, long, zoom) {
 
 
 function closeInfobox() {
-    infobox.setOptions({ visible: false });
+    if (infobox != null) {
+        infobox.setMap(null);
+    }
 }
+
 
 
 
@@ -184,13 +194,32 @@ function ZoomIn(e) {
     }
 }
 
+function AddSignalFromPin(e) {
+    if (e.targetType == 'pushpin') {
+        var signalId = e.target.SignalID.toString();
+        AddSignalToList(signalId);
+    }
+}
+
+function MoveUp() {
+    $('#SelectedSignalsList option:selected:first-child').prop("selected", false);
+    before = $('#SelectedSignalsList option:selected:first').prev();
+    $('#SelectedSignalsList option:selected').detach().insertBefore(before);
+}
+function MoveDown() {
+    $('#SelectedSignalsList option:selected:last-child').prop("selected", false);
+    after = $('#SelectedSignalsList option:selected:last').next();
+    $('#SelectedSignalsList option:selected').detach().insertAfter(after);
+}
+function Remove() {
+    $('#SelectedSignalsList option:selected').remove();
+}
+function GetOptions(){}
+
 function displayInfobox(e) {
     if (e.targetType == 'pushpin') {
-        infobox.setLocation(e.target.getLocation());
         actionArray = new Array();
-        var incString = e.target.Actions.toString()
         var SignalID = e.target.SignalID.toString();
-        var Region = e.target.Region;
 
         var tosend = {};
         tosend.signalID = SignalID;
@@ -203,31 +232,17 @@ function displayInfobox(e) {
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(tosend),
             success: function (data) {
-                infobox.setOptions({
-                    visible: true,
-                    offset: new Microsoft.Maps.Point(-100, 20),
-                    htmlContent: data
-                });
+                if (infobox != null) {
+                    infobox.setMap(null);
+                }
+                infobox = new Microsoft.Maps.Infobox(e.target.getLocation(), { offset: new Microsoft.Maps.Point(-100, 0), htmlContent: data });
+                infobox.setMap(map);
                 SetControlValues(SignalID, null);
-            },
+            }
         });
-        
-
-        
-
-    }
+    } 
 }
 
-
-
-
-
-//function rowClick(signalId) {
-////    document.forms[0].AccordionPane1_content$uxEntityTextBox.value = signalId;
-////    document.forms[0].AccordionPane1_content$uxEntityTextBox.value = "";
-////    document.forms[0].AccordionPane1_content$uxEntityTextBox.value = signalId;
-//   // return false;
-//}
 
 
 function CancelAsyncPostBack() {

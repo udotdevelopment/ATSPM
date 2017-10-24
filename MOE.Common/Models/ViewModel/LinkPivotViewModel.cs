@@ -14,13 +14,12 @@ namespace MOE.Common.Models.ViewModel
         private MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
 
         public int LinkPivotViewModelId { get; set; }
-        public List<Models.ApproachRoute> AppRoutes { get; set; }
+        public List<Models.Route> Routes { get; set; }
         [Required(ErrorMessage="Starting Point is required")]
         [Display(Name="Starting Point")]
         public string StartingPoint { get; set; }
         [Required(ErrorMessage="Route is required")]
-        public int SelectedApproachRouteId { get; set; }
-
+        public int SelectedRouteId { get; set; }
         public int Bias { get; set; }
         [Required(ErrorMessage="Bias Direction is required")]
         public string BiasUpDownStream { get; set; }
@@ -34,19 +33,15 @@ namespace MOE.Common.Models.ViewModel
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
-
         [Required]
         [Display(Name="Start Time")]        
         public string StartTime { get; set; }
-
         [Required]
         [Display(Name = "End Time")]
         public string EndTime { get; set; }
-
         [Required]
         [Display(Name = "Start AM/PM")]
         public string StartAMPM { get; set; }
-
         [Required]
         [Display(Name = "End AM/PM")]
         public string EndAMPM { get; set; }
@@ -67,14 +62,6 @@ namespace MOE.Common.Models.ViewModel
         [Required(ErrorMessage="Cycle Length is required")]
         [Display(Name = "Cycle Length")]
         public int CycleLength { get; set; }
-
-        //public bool Sunday { get; set; }
-        //public bool Monday { get; set; }
-        //public bool Tuesday { get; set; }
-        //public bool Wednesday { get; set; }
-        //public bool Thursday { get; set; }
-        //public bool Friday { get; set; }
-        //public bool Saturday { get; set; }
         
         public LinkPivotViewModel()
         {

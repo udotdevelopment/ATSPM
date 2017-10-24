@@ -30,7 +30,7 @@ namespace MOE.Common.Migrations
             //Sql("Truncate TABLE Graph_Detectors");
             //Sql("Truncate TABLE SPM_Comment");
             //Sql("Truncate TABLE Graph_Detectors");
-            //Sql("Truncate TABLE ApproachRoute");
+            //Sql("Truncate TABLE Route");
             //Sql("Truncate TABLE Action_Log");
             //Sql("Truncate TABLE Action_Log_Action_List");
             //Sql("Truncate TABLE Action_Log_Agency_List");
@@ -826,7 +826,7 @@ namespace MOE.Common.Migrations
             DropTable("dbo.Agencies");
             DropTable("dbo.Actions");
             DropTable("dbo.ActionLogs");
-            AddPrimaryKey("dbo.ApproachRouteDetail", new[] { "ApproachRouteId", "SignalID" });
+            AddPrimaryKey("dbo.ApproachRouteDetail", new[] { "RouteId", "SignalID" });
             CreateIndex("dbo.Lastupdate", "SignalID");
             CreateIndex("dbo.Route_Detectors", "DetectorID");
             CreateIndex("dbo.Detector_Error", "DetectorID");

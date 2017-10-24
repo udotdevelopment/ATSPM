@@ -25,7 +25,7 @@ namespace MOE.Common.Models
         //public List<Models.Lane> GetLaneGroupsForSignal()
         //{
         //    List<Models.Lane> laneGroups = new List<Lane>();
-        //    foreach (Models.Approach a in this.Approaches)
+        //    foreach (Models.Approach a in this.RouteSignals)
         //    {
         //        foreach (Models.Lane lg in a.Lanes)
         //        {

@@ -8,20 +8,21 @@ namespace MOE.Common.Models.Repositories
 {
     public class RouteRepositoryFactory
     {
-        private static IRouteRepository routeRepository;
+        private static IRouteRepository approachRouteRepository;
 
         public static IRouteRepository Create()
         {
-            if (routeRepository != null)
+            if (approachRouteRepository != null)
             {
-                return routeRepository;
+                return approachRouteRepository;
             }
             return new RouteRepository();
         }
 
-        public static void SetRouteRepository(IRouteRepository newRepository)
+        public static void SetApproachRouteRepository(IRouteRepository newRepository)
         {
-            routeRepository = newRepository;
+            approachRouteRepository = newRepository;
         }
     }
-}
+    }
+

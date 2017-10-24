@@ -8,11 +8,11 @@ using MOE.Common.Models.Repositories;
 
 namespace MOE.CommonTests.Models
 {
-    class InMemoryApproachRouteRepository : IApproachRouteRepository
+    class InMemoryApproachRouteRepository : IRouteRepository
     {
 
 
-        public void Add(ApproachRoute newRoute)
+        public void Add(Route newRoute)
         {
             throw new NotImplementedException();
         }
@@ -22,17 +22,22 @@ namespace MOE.CommonTests.Models
             throw new NotImplementedException();
         }
 
-        public List<ApproachRoute> GetAllRoutes()
+        public List<Route> GetAllRoutes()
         {
             throw new NotImplementedException();
         }
 
-        public ApproachRoute GetRouteByID(int routeID)
+        public Route GetRouteByID(int routeID)
         {
             throw new NotImplementedException();
         }
 
-        public ApproachRoute GetRouteByName(string routeName)
+        public Route GetRouteByName(string routeName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(Route route)
         {
             throw new NotImplementedException();
         }

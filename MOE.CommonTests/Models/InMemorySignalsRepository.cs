@@ -298,5 +298,10 @@ namespace MOE.CommonTests.Models
         {
             throw new NotImplementedException();
         }
+
+        public List<Signal> EagerLoadAllEnabledSignals()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

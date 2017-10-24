@@ -1,13 +1,8 @@
 namespace MOE.Common.Models
 {
-    using System;
     using System.Data.Entity;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
-    using System.Data.Entity.ModelConfiguration.Conventions;
     using Microsoft.AspNet.Identity.EntityFramework;
-    using  MOE.Common.Business.SiteSecurity;
-    using System.Data.Entity.Migrations;
     using System.Data.Entity.Infrastructure.Annotations;
 
     public partial class SPM : IdentityDbContext<MOE.Common.Business.SiteSecurity.SPMUser>
@@ -35,30 +30,22 @@ namespace MOE.Common.Models
         public virtual DbSet<DirectionType> DirectionTypes { get; set; }
         public virtual DbSet<LaneType> LaneTypes { get; set; }
         public virtual DbSet<Approach> Approaches { get; set; }
-        public virtual DbSet<MOE.Common.Models.Custom.SignalWithDetection> SignalsWithDetection { get; set; }
         public virtual DbSet<DetectionType> DetectionTypes { get; set; }
         public virtual DbSet<MetricsFilterType> MetricsFilterTypes { get; set; }
         public virtual DbSet<MetricType> MetricTypes { get; set; }
         public virtual DbSet<Controller_Event_Log> Controller_Event_Log { get; set; }        
-        public virtual DbSet<Accordian> Accordians { get; set; }
         public virtual DbSet<Agency> Agencies { get; set; }
-        public virtual DbSet<Alert_Day_Types> Alert_Day_Types { get; set; }
-        public virtual DbSet<ApproachRoute> ApproachRoutes { get; set; }
-        public virtual DbSet<DownloadAgreement> DownloadAgreements { get; set; }
         public virtual DbSet<Detector> Detectors { get; set; }
-        public virtual DbSet<LastUpdate> Lastupdates { get; set; }
         public virtual DbSet<Menu> Menus { get; set; }
-        public virtual DbSet<Program_Message> Program_Message { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
-        public virtual DbSet<Route> Routes { get; set; }
         public virtual DbSet<Signal> Signals { get; set; }
         public virtual DbSet<Action> Actions { get; set; }
         public virtual DbSet<ActionLog> ActionLogs { get; set; }
-        public virtual DbSet<ApproachRouteDetail> ApproachRouteDetails { get; set; }
+        public virtual DbSet<Route> Routes { get; set; }
+        public virtual DbSet<RouteSignal> RouteSignals { get; set; }
+        public virtual DbSet<RoutePhaseDirection> RoutePhaseDirections { get; set; }
         public virtual DbSet<SignalAggregation> SignalAggregations { get; set; }
         public virtual DbSet<ControllerType> ControllerType { get; set; }
-        public virtual DbSet<Program_Settings> Program_Settings { get; set; }
-        public virtual DbSet<Route_Detectors> Route_Detectors { get; set; }
         public virtual DbSet<Speed_Events> Speed_Events { get; set; }
         public virtual DbSet<FAQ> FAQs { get; set; }
         public virtual DbSet<ExternalLink> ExternalLinks { get; set; }
@@ -82,24 +69,7 @@ namespace MOE.Common.Models
         {
             //modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
             //modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-            base.OnModelCreating(modelBuilder);
-            
-            modelBuilder.Entity<ApproachRoute>()
-                .Property(e => e.RouteName)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<ApproachRoute>()
-                .HasMany(e => e.ApproachRouteDetails)
-                .WithRequired(e => e.ApproachRoute)
-                .WillCascadeOnDelete(true);        
-
-            modelBuilder.Entity<Route>()
-                .Property(e => e.Description)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Route>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
+            base.OnModelCreating(modelBuilder);  
 
             modelBuilder.Entity<Signal>()
                 .Property(e => e.PrimaryName)

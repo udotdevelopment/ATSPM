@@ -62,15 +62,7 @@ namespace MOE.Common.Business.CustomReport
             get { return _EndDate; }
             set { _EndDate = value; }
         }
-
         
-        
-        private int p1;
-        private string SignalID1;
-        private DateTime StartDate1;
-        private DateTime EndDate1;
-        private List<int> list;
-        private int p2;
 
         public int PhaseNumber { get; set; }
 

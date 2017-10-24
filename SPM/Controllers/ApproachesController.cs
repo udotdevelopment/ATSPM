@@ -34,7 +34,7 @@ namespace SPM.Controllers
         }
 
         
-        // GET: Approaches/Create
+        // GET: RouteSignals/Create
          [Authorize(Roles = "Admin")]
         public ActionResult Create(string id)
         {
@@ -46,7 +46,7 @@ namespace SPM.Controllers
             return PartialView(approach);
         }
 
-        // POST: Approaches/Create
+        // POST: RouteSignals/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -68,7 +68,7 @@ namespace SPM.Controllers
 
         
 
-        // GET: Approaches/Delete/5
+        // GET: RouteSignals/Delete/5
          [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
@@ -84,7 +84,7 @@ namespace SPM.Controllers
             return View(approach);
         }
 
-        // POST: Approaches/Delete/5
+        // POST: RouteSignals/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]

@@ -1,0 +1,50 @@
+﻿@model MOE.Common.Models.RoutePhaseDirection
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>RoutePhaseDirection</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ApproachRouteDetailId)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ApproachRouteDetailId)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Phase)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Phase)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.IsPhaseDirection1Overlap)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.IsPhaseDirection1Overlap)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>
