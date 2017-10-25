@@ -22,11 +22,11 @@ namespace MOE.Common.Models.Repositories
             return count;
         }
 
-        public double GetTMCVolume(DateTime startDate, DateTime endDate, string signalID, int Phase)
+        public double GetTMCVolume(DateTime startDate, DateTime endDate, string signalId, int Phase)
         {
             MOE.Common.Models.Repositories.ISignalsRepository repository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = repository.GetSignalBySignalID(signalID);
+            var signal = repository.GetVersionOfSignalByDate(signalId, startDate);
             List<Models.Detector> graphDetectors = signal.GetDetectorsForSignalByPhaseNumber(Phase);
 
             List<int> tmcChannels = new List<int>();
@@ -47,7 +47,7 @@ namespace MOE.Common.Models.Repositories
             double count = (from cel in db.Controller_Event_Log
                            where cel.Timestamp >= startDate
                            && cel.Timestamp < endDate
-                           && cel.SignalID == signalID
+                           && cel.SignalID == signalId
                            && tmcChannels.Contains(cel.EventParam)
                            && cel.EventCode == 82
                            select cel).Count();

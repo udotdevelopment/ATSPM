@@ -135,7 +135,7 @@ namespace MOE.Common.Models.Repositories.Tests
 
             SR.AddOrUpdate(s);
 
-            var x = SR.GetSignalBySignalID("10001");
+            var x = SR.GetLatestVersionOfSignalBySignalID("10001");
 
             Assert.IsTrue(x.PrimaryName == "UpdatedPrimaryTestStreet");
         }

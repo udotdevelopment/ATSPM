@@ -17,7 +17,7 @@ namespace MOE.Common.Models.ViewModel.Chart
         {
             MOE.Common.Models.Repositories.ISignalsRepository repository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = repository.GetSignalBySignalID(signalID);
+            var signal = repository.GetLatestVersionOfSignalBySignalID(signalID);
             SetTitle(signal);
             SetDescription(signal);
             SetMetrics(signal);

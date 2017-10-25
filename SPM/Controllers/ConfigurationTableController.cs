@@ -15,7 +15,7 @@ namespace SPM.Controllers
         {
             MOE.Common.Models.Repositories.ISignalsRepository sr = 
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = sr.GetSignalBySignalID(SignalID);
+            var signal = sr.GetLatestVersionOfSignalBySignalID(SignalID);
             List<MOE.Common.Business.Helpers.ConfigurationRecord> records = 
                 new List<MOE.Common.Business.Helpers.ConfigurationRecord>();
             foreach (MOE.Common.Models.Detector gd in signal.GetDetectorsForSignal())

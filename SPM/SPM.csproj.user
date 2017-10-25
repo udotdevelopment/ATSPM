@@ -32,7 +32,7 @@
           <SQLDebugging>False</SQLDebugging>
           <ExternalProgram>
           </ExternalProgram>
-          <StartExternalURL>http://localhost:62548/DataExport/RawDataExport</StartExternalURL>
+          <StartExternalURL>http://localhost:62548/Signals</StartExternalURL>
           <StartCmdLineArguments>
           </StartCmdLineArguments>
           <StartWorkingDirectory>

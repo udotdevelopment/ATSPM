@@ -87,7 +87,7 @@ namespace SPM.Controllers
 
         public ActionResult AddNewVersion(string id)
         {
-            var existingSignal = _signalsRepository.GetSignalBySignalID(id);
+            var existingSignal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             if (existingSignal == null)
             {
                 return Content("<h1>" +"No Signal Matches this SignalID" + "</h1>");
@@ -226,7 +226,7 @@ namespace SPM.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Create(string id)
         {
-            var existingSignal = _signalsRepository.GetSignalBySignalID(id);
+            var existingSignal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             if (existingSignal == null)
             {
 
@@ -278,7 +278,7 @@ namespace SPM.Controllers
             {
                 return Content("<h1>A signal ID is required</h1>");
             }
-            Signal signal = _signalsRepository.GetSignalBySignalID(id);
+            Signal signal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             if (signal != null)
             {
                 newSignal = MOE.Common.Models.Signal.CopySignal(signal, newId);
@@ -338,7 +338,7 @@ namespace SPM.Controllers
             {
                 return Content("<h1>A signal ID is required</h1>");
             }
-            Signal signal = _signalsRepository.GetSignalBySignalID(id);
+            Signal signal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description).ToList();
 
             if (signal.Approaches == null)
@@ -462,7 +462,7 @@ namespace SPM.Controllers
             {
                 return Content("<h1>A signal ID is required</h1>");
             }
-            Signal signal = _signalsRepository.GetSignalBySignalID(id);
+            Signal signal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description).ToList();
             foreach (Approach approach in signal.Approaches)
             {

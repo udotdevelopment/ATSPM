@@ -123,8 +123,8 @@ namespace MOE.Common.Business
         {
             MOE.Common.Models.Repositories.ISignalsRepository signalRepository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            MOE.Common.Models.Signal upstreamSignal = signalRepository.GetSignalBySignalID(upstreamSignalID);
-            MOE.Common.Models.Signal downstreamSignal = signalRepository.GetSignalBySignalID(downstreamSignalID);
+            MOE.Common.Models.Signal upstreamSignal = signalRepository.GetVersionOfSignalByDate(upstreamSignalID, startDate);
+            MOE.Common.Models.Signal downstreamSignal = signalRepository.GetVersionOfSignalByDate(downstreamSignalID, startDate);
             MOE.Common.Models.Approach upApproachToAnalyze = GetApproachToAnalyze(upstreamSignal, upstreamDirection);
             MOE.Common.Models.Approach downApproachToAnalyze = GetApproachToAnalyze(downstreamSignal, downstreamDirection);
             
@@ -165,9 +165,7 @@ namespace MOE.Common.Business
         private void GeneratePCD(Models.Approach approach, int delta, 
             DateTime startDate, DateTime endDate, bool upstream, int maxYAxis)
         {
-            MOE.Common.Models.Repositories.ISignalsRepository repository =
-                MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            //var signal = repository.GetSignalBySignalID(approach.SignalId);
+
             
             //Create a location string to show the combined cross strees
             string location = string.Empty;
@@ -176,8 +174,6 @@ namespace MOE.Common.Business
                 location = approach.Signal.PrimaryName + " " + approach.Signal.SecondaryName;
             }
             string chartName = string.Empty;
-             //MOE.Common.Data.LinkPivotTableAdapters.Graph_DetectorsTableAdapter gdAdapter =
-             //  new Data.LinkPivotTableAdapters.Graph_DetectorsTableAdapter(); 
             
             //find the upstream approach
             if (!String.IsNullOrEmpty(approach.DirectionType.Description))

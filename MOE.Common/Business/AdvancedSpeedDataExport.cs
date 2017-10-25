@@ -18,7 +18,7 @@ namespace MOE.Common.Business
         {
             MOE.Common.Models.Repositories.ISignalsRepository repository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = repository.GetSignalBySignalID(signalId);
+            var signal = repository.GetLatestVersionOfSignalBySignalID(signalId);
             //Get the dates that match the daytype for the given period
             List<DateTime> dtList = new List<DateTime>();
             DateTime tempDate = startDate;

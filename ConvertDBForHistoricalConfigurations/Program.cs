@@ -12,7 +12,7 @@ namespace ConvertDBForHistoricalConfigurations
     {
         static void Main()
         {
-            UpdateSignalRecordsWithEndDateAndVersion();
+            UpdateSignalRecordsWithStartDateAndVersion();
             UpdateApproachesWithVersionID();
             UpdateMetriCommentsWithVersionID();
 
@@ -60,7 +60,7 @@ namespace ConvertDBForHistoricalConfigurations
             db.Dispose();
         }
 
-        private static void UpdateSignalRecordsWithEndDateAndVersion()
+        private static void UpdateSignalRecordsWithStartDateAndVersion()
         {
             MOE.Common.Models.SPM db = new SPM();
 
@@ -73,7 +73,7 @@ namespace ConvertDBForHistoricalConfigurations
 
             foreach (var s in signals)
             {
-                s.Start = Convert.ToDateTime("01/01/9999");
+                s.Start = s.FirstDate;
                 s.VersionAction = version;
             }
 

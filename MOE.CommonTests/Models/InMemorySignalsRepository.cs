@@ -287,12 +287,7 @@ namespace MOE.CommonTests.Models
             throw new NotImplementedException();
         }
 
-        public Common.Models.Signal GetSignalBySignalID(string signalID)
-        {
-            var signal = GetLatestVersionOfSignalBySignalID(signalID);
 
-            return signal;
-        }
 
         public Common.Models.Signal GetLatestVersionOfSignalBySignalID(string signalID)
         {
@@ -314,7 +309,7 @@ namespace MOE.CommonTests.Models
 
         public string GetSignalLocation(string signalID)
         {
-            var signal = GetSignalBySignalID(signalID);
+            var signal = GetLatestVersionOfSignalBySignalID(signalID);
 
             string location = string.Empty;
             if (signal != null)
@@ -349,7 +344,7 @@ namespace MOE.CommonTests.Models
 
 
 
-        public int CheckVersionWithLastDate(string signalId)
+        public int CheckVersionWithFirstDate(string signalId)
         {
             var signals = GetAllVersionsOfSignalBySignalID(signalId);
 

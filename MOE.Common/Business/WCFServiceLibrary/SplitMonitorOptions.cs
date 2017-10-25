@@ -481,7 +481,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             MOE.Common.Models.Repositories.ISignalsRepository repository =
                    MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = repository.GetSignalBySignalID(signalId);
+            var signal = repository.GetLatestVersionOfSignalBySignalID(signalId);
             List<MOE.Common.Models.Detector> detectors = signal.GetDetectorsForSignalByPhaseNumber(phase);
             string detID = "";
             if (detectors.Count() > 0)
