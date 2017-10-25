@@ -181,6 +181,30 @@ class DataBuffer : IDataReader {
         public bool Read () {
             if (currentDataReader.Read ()) {
                 return true;
+<<<<<<< HEAD
+            } else {
+                currentDataReader.Close ();
+                currentDataReader.Dispose ();
+                currentDataReader = null;
+                currentDataTable.Dispose ();
+                currentDataTable = null;
+                while (BufferCount == 0) {
+                    if (EndOfData) {
+                        return false;
+                    } else {
+                        isDataAvailable.WaitOne ();
+                    }
+                }
+                lock (Buffer) {
+                    currentDataReader = Buffer[0].CreateDataReader ();
+                    currentDataTable = Buffer[0];
+                    Buffer.RemoveAt (0);
+                    currentDataReader.Read ();
+                    isBufferSpaceAvailable.Set ();
+                }
+                return true;
+            }
+=======
             }
             currentDataReader.Close ();
             currentDataReader.Dispose ();
@@ -202,6 +226,7 @@ class DataBuffer : IDataReader {
                 isBufferSpaceAvailable.Set ();
             }
             return true;
+>>>>>>> HistoricalConfigurations
         }
 
         public void Dispose () {

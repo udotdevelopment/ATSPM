@@ -139,7 +139,7 @@ namespace MOE.Common.Business
         {
             MOE.Common.Models.Repositories.ISignalsRepository repository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = repository.GetLatestVersionOfSignalBySignalID(signalID);     
+            var signal = repository.GetSignalBySignalID(signalID);     
             this.phaseNumber = phasenumber;
             this.signalId = signalID;
             this.IsOverlap = false;

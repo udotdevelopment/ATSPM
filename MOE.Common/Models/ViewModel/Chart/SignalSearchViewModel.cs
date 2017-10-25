@@ -24,28 +24,17 @@ namespace MOE.Common.Models.ViewModel.Chart
         public List<SelectListItem> MapMetricsList { get; set; }
         public List<string> ImageLocation { get; set; }
 
-        private IRegionsRepository _regionRepository;
-        private IMetricTypeRepository _metricRepository;
-
         public SignalSearchViewModel()
         {
-            _regionRepository = RegionsRepositoryFactory.Create();
-            _metricRepository = MetricTypeRepositoryFactory.Create();
-            GetRegions(_regionRepository);
-            GetMetrics(_metricRepository);
+            GetRegions();
+            GetMetrics();
         }
 
-        public SignalSearchViewModel(IRegionsRepository regionRepositry, IMetricTypeRepository metricRepository)
-        {
-            GetRegions(regionRepositry);
-            GetMetrics(metricRepository);
-        }
-
-        public void GetMetrics(IMetricTypeRepository metricRepository)
+        public void GetMetrics()
         {
             //MetricTypeRepositoryFactory.SetMetricsRepository(new TestMetricTypeRepository());
-            
-            List<MOE.Common.Models.MetricType> metricTypes = metricRepository.GetAllToDisplayMetrics();
+            IMetricTypeRepository repository = MetricTypeRepositoryFactory.Create();
+            List<MOE.Common.Models.MetricType> metricTypes = repository.GetAllToDisplayMetrics();
             MapMetricsList = new List<SelectListItem>();
             foreach (MOE.Common.Models.MetricType m in metricTypes)
             {
@@ -53,10 +42,10 @@ namespace MOE.Common.Models.ViewModel.Chart
             }
         }
 
-        public void GetRegions(IRegionsRepository regionRepository)
+        public void GetRegions()
         {
-            
-            Regions = regionRepository.GetAllRegions();
+            IRegionsRepository repository = RegionsRepositoryFactory.Create();
+            Regions = repository.GetAllRegions();
         }
     }
 }

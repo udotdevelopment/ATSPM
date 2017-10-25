@@ -169,7 +169,7 @@ namespace MOE.Common.Business.LogDecoder
                                         {
                                             RowBag.Add(eventrow);
                                         }
-                                        
+                                        //elTable.AddController_Event_LogRow(SignalID, EventTime.AddMilliseconds(-1), firstEventCode, firstEventParam);
                                     }
                                     catch
                                     {
@@ -192,7 +192,7 @@ namespace MOE.Common.Business.LogDecoder
                                         {
                                             RowBag.Add(eventrow);
                                         }
-                                        
+                                        //elTable.AddController_Event_LogRow(Convert.ToInt32(SignalID), EventTime, EventCode, EventParam);
                                     }
                                     catch
                                     {

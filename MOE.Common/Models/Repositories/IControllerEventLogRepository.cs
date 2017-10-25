@@ -16,12 +16,6 @@ namespace MOE.Common.Models.Repositories
             DateTime startTime, DateTime endTime, List<int> eventCodes);
         List<MOE.Common.Models.Controller_Event_Log> GetEventsByEventCodesParam(string signalID,
            DateTime startTime, DateTime endTime, List<int> eventCodes, int param);
-        int GetEventCountByEventCodesParamDateTimeRange(string signalID,
-            DateTime startTime, DateTime endTime, int startHour, int startMinute, int endHour, int endMinute,
-            List<int> eventCodes, int param);
-        List<MOE.Common.Models.Controller_Event_Log> GetEventsByEventCodesParamDateTimeRange(string signalID,
-            DateTime startTime, DateTime endTime, int startHour, int startMinute, int endHour, int endMinute,
-            List<int> eventCodes, int param);
         List<MOE.Common.Models.Controller_Event_Log> GetEventsByEventCodesParamWithOffset(string signalID,
            DateTime startTime, DateTime endTime, List<int> eventCodes, int param, double offset);
         MOE.Common.Models.Controller_Event_Log GetFirstEventBeforeDate(string signalID,

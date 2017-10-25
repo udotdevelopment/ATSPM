@@ -19,15 +19,6 @@ namespace MOE.Common.Models.Repositories
             return new ApproachRepository();
         }
 
-        public static IApproachRepository Create(SPM context)
-        {
-            if (approachRepository != null)
-            {
-                return approachRepository;
-            }
-            return new ApproachRepository(context);
-        }
-
         public static void SetApproachRepository(IApproachRepository newRepository)
         {
             approachRepository = newRepository;

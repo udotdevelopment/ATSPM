@@ -534,7 +534,7 @@ namespace MOE.Common.Business.SplitFail
 
                         } while (counterTime < Options.EndDate.AddMinutes(15));
 
-                        //Start Average Loop
+                        //End Average Loop
                     
                                 
 

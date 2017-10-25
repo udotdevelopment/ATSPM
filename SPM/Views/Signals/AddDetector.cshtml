@@ -17,7 +17,6 @@
             <input type="hidden" name="@(Model.Index)ID" id="ID_@Model.ID" value="@Model.ID" />
                    @Html.HiddenFor(model => model.DetectorID, new { Name = Model.Index + "DetectorID" })
                    @Html.HiddenFor(model => model.ApproachID, new { Name = Model.Index + "ApproachID" })<div class="form-group col-md-4">
-                   @Html.HiddenFor(model => model.Approach.VersionID, new { Name = "versionId" })
                 <div class="">
                     @Html.LabelFor(model => model.DetChannel, htmlAttributes: new { @class = "control-label" })
                     <div class="">

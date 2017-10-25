@@ -17,105 +17,9 @@ function SaveError() {
     $("#ActionMessage").text("Save Failed!");
 }
 
-function AddNewVersion() {
-    var signalID = $("#SignalID").val();
-    var versionId = $("#VersionID").val();
-
-    var parameters = {};
-    parameters.ID = versionId;
-    $.ajax({
-        type: "POST",
-        cache: false,
-        async: true,
-        headers: GetRequestVerificationTokenObject(),
-        data: JSON.stringify({ "versionId": versionId }),
-        url: urlpathCopyVersion,
-        datatype: "json",
-        contentType: "application/json; charset=utf-8",
-        success: function (data) {
-            $('#SignalEdit').html(data);
-
-        },
-        statusCode: {
-            404: function (content) { alert('cannot find resource'); },
-            500: function (content) { alert('internal server error'); }
-        },
-        error: function (req, status, errorObj) {
-            alert("Error");
-        }
-    });
-   
-}
-
-function DeleteVersion() {
-    var signalID = $("#SignalID").val();
-    var versionId = $("#versionDropDown option:selected").val();
-    var versionDescription = $("#versionDropDown option:selected").text();
-    var parameters = {};
-    parameters.ID = versionId;
-    if (confirm( "Are you sure you want to delete the version " + versionDescription + " ?"))
-    {
-        $.ajax({
-            type: "POST",
-            cache: false,
-            async: true,
-            headers: GetRequestVerificationTokenObject(),
-            data: JSON.stringify({ "versionId": versionId }),
-            url: urlpathDeleteVersion,
-            datatype: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                $('#SignalEdit').html(data);
-
-            },
-            statusCode: {
-                404: function (content) { alert('cannot find resource'); },
-                500: function (content) { alert('internal server error'); }
-            },
-            error: function (req, status, errorObj) {
-                alert("Error");
-            }
-        });
-    }
-            
-
-}
-
-function DeleteSignal() {
-    var signalID = $("#SignalID").val();
-
-    if (confirm("Are you sure you want to delete signal " + signalID + " ?")) {
-        $.ajax({
-            type: "POST",
-            cache: false,
-            async: true,
-            headers: GetRequestVerificationTokenObject(),
-            data: JSON.stringify({ "Id": signalID }),
-            url: urlpathDeleteSignal,
-            datatype: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function(data){window.location.reload(false)},
-                //(data) { $('#ConfigurationTableCollapse').html(data); },
-            statusCode: {
-                404: function (content) { alert('cannot find resource'); },
-                500: function (content) { alert('internal server error'); }
-            },
-            error: function (req, status, errorObj) {
-                alert("Error");
-            }
-        });
-    }
-
-
-}
-
-
-
 function GetCreateComment() {
-    var signalID = $("#SignalID").val();
-   
-    var versionId =  $("#VersionID").val();
-    var metricPath = urlpathCreateMetricComments + '/' + versionId;
+    var signalID = $("#editSignalID").val();
+    var metricPath = urlpathCreateMetricComments +'/' + signalID;
 
     $.ajax({
         url: metricPath,
@@ -148,48 +52,9 @@ function GetConfigurationTable(signalID){
     });
 }
 
-function GetConfigurationTableForVersion(versionId) {
-
-    $.ajax({
-        type: "Get",
-        cache: false,
-        async: true,
-        data: { "VersionID": versionId },
-        url: urlpathGetConfigurationTableForVersion,
-        success: function (data) { $('#ConfigurationTableCollapse').html(data); },
-        statusCode: {
-            404: function (content) { alert('cannot find resource'); },
-            500: function (content) { alert(content.responseText); }
-        },
-        error: function (req, status, errorObj) {
-            alert("Error");
-        }
-    });
-}
-
-function UpdateVersionDropdown()
-{
-    var selIndex = $("#versionDropDown option:selected").index();
-    var dd = document.getElementById('versionDropDown');
-    var oldVersionDescription = $("#versionDropDown option:selected").text();
-
-
-
-    var note = $("#Note").val();
-    var date = $("#End").val();
-    var newVersionDescription = date + " - " + note;
-
-    dd.options[selIndex].text = newVersionDescription;
-    //$("#versionDropDown option:selected").text = newVersionDescription;
-
-
-}
-
 function PostCreateComment() {
     var tosend = {};
-    
-    tosend.VersionID =  $("#VersionID").val();
-    tosend.SignalID = $("#SignalID").val();
+    tosend.SignalID = $("#editSignalID").val();
     tosend.CommentText = $("#CommentText").val();
     tosend.MetricIDs = [];
     $("[name='MetricIDs']").each(function () {
@@ -225,8 +90,6 @@ function PostCreateComment() {
     }
 }
 
-
-
 function GetCreateDetectorComment(ID) {
     var metricPath = urlpathCreateDetectorComments+'/' + ID;
 
@@ -244,7 +107,6 @@ function GetCreateDetectorComment(ID) {
 }
 
 function PostCreateDetectorComment(ID) {
-   
     var tosend = {};
     tosend.ID = ID;
     tosend.CommentText = $("#CommentText").val();
@@ -292,14 +154,13 @@ function CreateNewSignal() {
         }
     });
 }
-
 function SetSignalID(newSignalID)
 {
     $("#SignalID").val(newSignalID);
 }
 
 function CopySignal() {    
-    var signalID = $("#SignalID").val();
+    var signalID = $("#editSignalID").val();
     var newSignalID = prompt("Please enter the new SignalID", "123456");
 
     var parameters = {};
@@ -331,8 +192,7 @@ function CopySignal() {
 function CopyApproach(approachID) {
     var parameters = {};
     parameters.approachID = approachID;
-   // parameters.id = $("#SignalID").val();
-    parameters.versionId =  $("#VersionID").val();
+    parameters.id = $("#editSignalID").val();
     $.ajax({
         type: "POST",
         cache: false,
@@ -375,8 +235,7 @@ function IsDuplicateChannel() {
 }
 
 function CopyDetector(ID, approachID) {
-    var signalID = $("#SignalID").val();
-    var versionId =  $("#VersionID").val();
+    var signalID = $("#editSignalID").val();
     var approachIndex = $("#Index" + approachID).val();
     var metricPath = urlpathCreateDetector;
     $.ajax({
@@ -384,7 +243,7 @@ function CopyDetector(ID, approachID) {
         cache: false,
         async: true,
         headers: GetRequestVerificationTokenObject(),
-        data: { "ID": ID, "versionId": versionId, "approachID": approachID, "approachIndex": approachIndex },
+        data: { "ID": ID,"signalID": signalID, "approachID": approachID, "approachIndex": approachIndex },
         url: urlpathCopyDetector,
         success: function (data) {
             $('#DetectorsList_' + approachID).append(data);
@@ -411,16 +270,15 @@ function GetRequestVerificationTokenObject()
 }
 
 function CreateNewApproach() {
-    var signalID = $("#SignalID").val();
-    var versionId =  $("#VersionID").val();
+    var signalID = $("#editSignalID").val();
         var metricPath = urlpathCreateApproach;
         $.ajax({
             type: "POST",
             cache: false,
             async: true,
-            data: { "versionId": versionId },
+            //data: { "id": signalID },
             headers: GetRequestVerificationTokenObject(),
-            url: metricPath,
+            url: metricPath + "/" + signalID,
             success: function (data) { $('#ApproachesList').append(data); },
             statusCode: {
                 404: function (content) { alert('cannot find resource'); },
@@ -434,7 +292,7 @@ function CreateNewApproach() {
 
 function PostCreateApproach() {
     var tosend = {};
-    tosend.SignalID = $("#SignalID").val();
+    tosend.SignalID = $("#editSignalID").val();
     tosend.DirectionTypeID= $("#DirectionTypeID").val();
     tosend.Description = $("#Description").val();
     tosend.MPH = $("#MPH").val();
@@ -516,11 +374,9 @@ function DeleteApproach(approachId, approachDescription) {
 }
 
 function GetCreateNewDetector(approachID) {
-        var versionID =  $("#VersionID").val();
         var approachIndex = $("#Index"+approachID).val();
         var tosend = {};
-        tosend.signalID = $("#SignalID").val();
-        tosend.versionId = versionID;
+        tosend.signalID = $("#editSignalID").val();
         tosend.approachID = approachID;
         tosend.approachIndex = $("#Index" + approachID).val();
         $.ajax({

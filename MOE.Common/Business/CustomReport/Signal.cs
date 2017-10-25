@@ -75,7 +75,7 @@ namespace MOE.Common.Business.CustomReport
             _EventCodes = eventCodes;
             MOE.Common.Models.Repositories.ISignalsRepository repository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            SignalModel = repository.GetLatestVersionOfSignalBySignalID(signalID);
+            SignalModel = repository.GetSignalBySignalID(signalID);
             _Detectors = SignalModel.GetDetectorsForSignal();
             _Plans = new PlansBase(signalID, startDate, endDate);
             

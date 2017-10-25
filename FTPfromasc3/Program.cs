@@ -50,7 +50,7 @@ namespace FTPfromAllControllers
 
             var SignalsDT = from r in db.Signals
                             join f in db.ControllerType on r.ControllerTypeID equals f.ControllerTypeID
-                            where r.ControllerTypeID != 4 &&  r.Start > DateTime.Today
+                            where r.ControllerTypeID != 4 &&  r.End > DateTime.Today
                             select new
                             {
                                 SignalId = r.SignalID,

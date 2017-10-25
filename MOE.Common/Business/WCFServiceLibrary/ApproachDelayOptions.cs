@@ -40,6 +40,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             int binSize, bool showPlanStatistics, int metricTypeID, bool showDelayPerVehicle, bool showTotalDelayPerHour)
         {
             SignalID = signalID;
+            //StartDate = startDate;
+            //EndDate = endDate;
             YAxisMax = yAxisMax;
             Y2AxisMax = y2AxisMax;
             SelectedBinSize = binSize;

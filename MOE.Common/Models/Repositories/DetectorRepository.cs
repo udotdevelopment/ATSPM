@@ -9,16 +9,7 @@ namespace MOE.Common.Models.Repositories
 {
     public class DetectorRepository: IDetectorRepository
     {
-        private Models.SPM _db;
-        public DetectorRepository()
-        {
-            _db = new SPM();
-        }
-
-        public DetectorRepository(SPM context)
-        {
-            _db = context;
-        }
+        MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
 
         //This method probably doesn't really belong here anymore.
         //public List<MOE.Common.Models.Detectors> GetDetectorsBySignalID(string SignalID)
@@ -37,7 +28,7 @@ namespace MOE.Common.Models.Repositories
         //    List<int> phases = smh.GetPhasesForSignal();
 
         //    List<MOE.Common.Models.Detectors> detectors = new List<Detectors>();
-
+            
         //    foreach(int p in phases)
         //    {
         //        foreach(MOE.Common.Models.Lane l in p.LaneGroups.FirstOrDefault().Lanes)
@@ -52,7 +43,7 @@ namespace MOE.Common.Models.Repositories
 
         public MOE.Common.Models.Detector GetDetectorByDetectorID(string DetectorID)
         {
-            var det = (from r in _db.Detectors
+            var det = (from r in db.Detectors
                       where r.DetectorID == DetectorID 
                       select r).FirstOrDefault();
 
@@ -61,19 +52,19 @@ namespace MOE.Common.Models.Repositories
 
         public MOE.Common.Models.Detector GetDetectorByID(int ID)
         {
-            var det = _db.Detectors.Find(ID);
+            var det = db.Detectors.Find(ID);
             return det;
         }
 
         public List<MOE.Common.Models.Detector> GetDetectorsBySignalID(string SignalID)
         {
-            return _db.Signals.Find(SignalID).GetDetectorsForSignal();
+            return db.Signals.Find(SignalID).GetDetectorsForSignal();
         }
 
-        public int GetMaximumDetectorChannel(int versionId)
+        public int GetMaximumDetectorChannel(string signalID)
         {
             int max = 0;
-            var signal = _db.Signals.Find(versionId);
+            var signal = db.Signals.Find(signalID);
             if (signal != null)
             {
                 var detectors = signal.GetDetectorsForSignal();
@@ -87,17 +78,17 @@ namespace MOE.Common.Models.Repositories
 
         public Detector Add(Models.Detector detector)
         {
-            Models.Detector g = (from r in _db.Detectors
+            Models.Detector g = (from r in db.Detectors
                                         where r.ID == detector.ID
                                         select r).FirstOrDefault();
             if (g == null)
             {
                 detector.DetectionTypes = new List<DetectionType>();
-                detector.DetectionTypes = _db.DetectionTypes.Where(dt => detector.DetectionTypeIDs.Contains(dt.DetectionTypeID)).ToList(); ;
+                detector.DetectionTypes = db.DetectionTypes.Where(dt => detector.DetectionTypeIDs.Contains(dt.DetectionTypeID)).ToList(); ;
                 try
                 {
-                    _db.Detectors.Add(detector);
-                    _db.SaveChanges();
+                    db.Detectors.Add(detector);
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -119,14 +110,14 @@ namespace MOE.Common.Models.Repositories
         }
         public void Update(Models.Detector detector)
         {
-            Models.Detector g = (from r in _db.Detectors
+            Models.Detector g = (from r in db.Detectors
                                         where r.ID == detector.ID
                                           select r).FirstOrDefault();
             if (g != null)
             {
                 foreach(int i in detector.DetectionTypeIDs)
                 {
-                    Models.DetectionType t = (from r in _db.DetectionTypes
+                    Models.DetectionType t = (from r in db.DetectionTypes
                                               where r.DetectionTypeID == i
                                               select r).FirstOrDefault();
 
@@ -134,8 +125,8 @@ namespace MOE.Common.Models.Repositories
                 }
                 try
                 {
-                    _db.Entry(g).CurrentValues.SetValues(detector);
-                    _db.SaveChanges();
+                    db.Entry(g).CurrentValues.SetValues(detector);
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -156,15 +147,15 @@ namespace MOE.Common.Models.Repositories
 
         public void Remove(Models.Detector detector)
         {
-            Models.Detector g = (from r in _db.Detectors
+            Models.Detector g = (from r in db.Detectors
                                         where r.ID == detector.ID
                                         select r).FirstOrDefault();
             if (g != null)
             {
                 try
                 {
-                    _db.Detectors.Remove(g);
-                    _db.SaveChanges();
+                    db.Detectors.Remove(g);
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -186,15 +177,15 @@ namespace MOE.Common.Models.Repositories
 
         public void Remove(int ID)
         {
-            Models.Detector g = (from r in _db.Detectors
+            Models.Detector g = (from r in db.Detectors
                                         where r.ID == ID
                                         select r).FirstOrDefault();
             if (g != null)
             {
                 try
                 {
-                    _db.Detectors.Remove(g);
-                    _db.SaveChanges();
+                    db.Detectors.Remove(g);
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -215,7 +206,7 @@ namespace MOE.Common.Models.Repositories
 
         public bool CheckReportAvialbility(string detectorID, int metricID)
         {
-            MOE.Common.Models.Detector gd = _db.Detectors
+            MOE.Common.Models.Detector gd = db.Detectors
                 .Where(g => g.DetectorID == detectorID)                
                 .FirstOrDefault();    
             bool result = false;
@@ -240,7 +231,7 @@ namespace MOE.Common.Models.Repositories
         public List<MOE.Common.Models.Detector> GetDetectorsBySignalIDAndMetricType(string SignalID, int MetricID)
         {
             List<MOE.Common.Models.Detector> detectors = new List<Detector>();
-            List<MOE.Common.Models.Detector> dets = _db.Signals.Find(SignalID).GetDetectorsForSignal();
+            List<MOE.Common.Models.Detector> dets = db.Signals.Find(SignalID).GetDetectorsForSignal();
             foreach(MOE.Common.Models.Detector d in dets)
             {
                 if(CheckReportAvialbility(d.DetectorID, MetricID))

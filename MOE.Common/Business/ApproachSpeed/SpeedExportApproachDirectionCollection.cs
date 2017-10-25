@@ -13,7 +13,7 @@ namespace MOE.Common.Business
         {
             Models.Repositories.ISignalsRepository signalRepository =
                 Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = signalRepository.GetLatestVersionOfSignalBySignalID(signalID);
+            var signal = signalRepository.GetSignalBySignalID(signalID);
             List<Models.Detector> distinctPhases = signal.GetDetectorsForSignalThatSupportAMetric(10);
                  
 

@@ -18,7 +18,7 @@ namespace MOE.Common.Models.Repositories
         void Remove(Models.Detector Detector);
         void Remove(int ID);
         bool CheckReportAvialbility(string detectorID, int metricID);
-        int GetMaximumDetectorChannel(int versionId);
+        int GetMaximumDetectorChannel(string signalID);
 
     }
 }

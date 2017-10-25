@@ -120,7 +120,7 @@ namespace MOE.Common.Business.Preempt
             //EndCallSeries.ChartType = SeriesChartType.StackedColumn;
             //EndCallSeries.BorderDashStyle = ChartDashStyle.Dash;
             //EndCallSeries.Color = Color.Black;
-            //EndCallSeries.Name = "Start Call";
+            //EndCallSeries.Name = "End Call";
             //EndCallSeries.XValueType = ChartValueType.Int32;
 
 

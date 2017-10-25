@@ -191,7 +191,6 @@
     <Compile Include="Controllers\ApproachRouteDetailsController.cs" />
     <Compile Include="Controllers\ApproachRoutesController.cs" />
     <Compile Include="Controllers\ConfigurationTableController.cs" />
-    <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\DefaultChartsController.cs" />
     <Compile Include="Controllers\DetectorCommentsController.cs" />
     <Compile Include="Controllers\DetectorsController.cs" />
@@ -210,7 +209,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\DataExportViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\SPMConfigurationTableViewModel.cs" />
@@ -532,11 +530,6 @@
     <Content Include="Views\SPMUsers\Index.cshtml" />
     <Content Include="Views\DefaultCharts\GetTMCMetric.cshtml" />
     <Content Include="Views\WatchDogApplicationSettings\Edit.cshtml" />
-    <Content Include="Views\DataExport\Create.cshtml" />
-    <Content Include="Views\DataExport\Delete.cshtml" />
-    <Content Include="Views\DataExport\Details.cshtml" />
-    <Content Include="Views\DataExport\Edit.cshtml" />
-    <Content Include="Views\DataExport\RawDataExport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

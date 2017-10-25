@@ -54,11 +54,11 @@ namespace NEWDecodeandImportASC3Logs
                 dirList.Add(s);
             }
 
-
+            
             SimplePartitioner<string> sp = new SimplePartitioner<string>(dirList);
             //foreach (string dir in dirList)
 
-            ParallelOptions optionsMain = new ParallelOptions { MaxDegreeOfParallelism = Properties.Settings.Default.MaxThreadsMain };
+            ParallelOptions optionsMain = new ParallelOptions { MaxDegreeOfParallelism = Properties.Settings.Default.MaxThreadsMain};
             Parallel.ForEach(sp, optionsMain, dir =>
                       {
                           var ToDelete = new ConcurrentBag<string>();
@@ -76,9 +76,8 @@ namespace NEWDecodeandImportASC3Logs
                           string sigid = dirname;
                           var mergedEventsTable = new BlockingCollection<MOE.Common.Data.MOE.Controller_Event_LogRow>();
 
-                          //SimplePartitioner<string> sp2 = new SimplePartitioner<string>(Directory.GetFiles(dir, "*.dat"));
-                          //Parallel.ForEach(sp2, options, s =>
-                          foreach(var s in Directory.GetFiles(dir, "*.dat"))
+                          SimplePartitioner<string> sp2 = new SimplePartitioner<string>(Directory.GetFiles(dir, "*.dat"));
+                          Parallel.ForEach(sp2, options, s =>
                                 {
 
 
@@ -90,55 +89,40 @@ namespace NEWDecodeandImportASC3Logs
                                         ToDelete.Add(s);
 
                                     }
-
+                                   
                                     catch { }
 
 
                                 }
-                          //);
+                                 );
 
 
 
-
-                          MOE.Common.Data.MOE.Controller_Event_LogDataTable elTable = new MOE.Common.Data.MOE.Controller_Event_LogDataTable();
-
-                          UniqueConstraint custUnique =
-                          new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalID"],
-                                                    elTable.Columns["Timestamp"],
-                                                    elTable.Columns["EventCode"],
-                                                    elTable.Columns["EventParam"]
-                                            });
-
-                          elTable.Constraints.Add(custUnique);
-
-                          //mergedEventsTable.CopyToDataTable(elTable, LoadOption.PreserveChanges);
-
-                          foreach (var r in mergedEventsTable)
+                        
+                          using (MOE.Common.Data.MOE.Controller_Event_LogDataTable EventsTable = new MOE.Common.Data.MOE.Controller_Event_LogDataTable())
                           {
-                              try
-                              {
-                                  elTable.AddController_Event_LogRow(r);
-                              }
-                              catch { }
-                          }
+                               
+                              
+                              mergedEventsTable.CopyToDataTable(EventsTable, LoadOption.PreserveChanges);
 
-                          mergedEventsTable.Dispose();
+
+                              mergedEventsTable.Dispose();
 
                               string connectionString = Properties.Settings.Default.SPMConnectionString;
                               string destTable = Properties.Settings.Default.DestinationTableNAme;
-
+                              
 
                               MOE.Common.Business.BulkCopyOptions Options = new MOE.Common.Business.BulkCopyOptions(connectionString, destTable,
-                                  Properties.Settings.Default.WriteToConsole, Properties.Settings.Default.forceNonParallel, Properties.Settings.Default.MaxThreads, Properties.Settings.Default.DeleteFile,
+                                  Properties.Settings.Default.WriteToConsole,Properties.Settings.Default.forceNonParallel, Properties.Settings.Default.MaxThreads, Properties.Settings.Default.DeleteFile, 
                                   Properties.Settings.Default.EarliestAcceptableDate, Properties.Settings.Default.BulkCopyBatchSize, Properties.Settings.Default.BulkCopyTimeOut);
+                                  
+                                  
 
-
-
-                              if (elTable.Count > 0)
+                              if (EventsTable.Count > 0)
                               {
 
 
-                                  if (MOE.Common.Business.Signal.BulktoDB(elTable, Options) && Properties.Settings.Default.DeleteFile)
+                                  if (MOE.Common.Business.Signal.BulktoDB(EventsTable, Options) && Properties.Settings.Default.DeleteFile)
                                   {
 
 
@@ -168,7 +152,7 @@ namespace NEWDecodeandImportASC3Logs
 
                               else
                               {
-
+                                  
                                   ConcurrentBag<String> td = new ConcurrentBag<String>();
 
                                   foreach (string s in ToDelete)
@@ -187,8 +171,8 @@ namespace NEWDecodeandImportASC3Logs
 
 
                               }
+                              }
                           
-
 
 
                       }

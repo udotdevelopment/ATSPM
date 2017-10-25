@@ -8,20 +8,6 @@
         </h4>
     </div>
 
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.SignalID, new { @id = "editSignalID" })
-    @Html.HiddenFor(model => model.VersionID)
-        
-               
-                
-    <div class="form-group-configuration-tool  form-group col-md-6">
-        @Html.LabelFor(model => model.VersionID, htmlAttributes: new { @class = "control-label" })
-        <div class="">
-            @Html.DropDownListFor(model => model.VersionID, (SelectList)ViewBag.VersionList, new { @class = "form-control", @onchange = "LoadVersionByVersionID(this.value)" })
-            @Html.ValidationMessageFor(model => model.VersionID, "", new { id = "Version-error", @class = "text-danger" })
-        </div>
-    </div>
-
     <div class="panel-body">
         <div class="form-horizontal">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })

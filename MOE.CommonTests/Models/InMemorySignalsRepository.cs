@@ -7,49 +7,36 @@ using System.Threading.Tasks;
 using MOE.Common.Business;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
-using Detector = MOE.Common.Models.Detector;
 using Signal = MOE.Common.Models.Signal;
 
 namespace MOE.CommonTests.Models
 {
     public class InMemorySignalsRepository : ISignalsRepository
     {
-       
+        public DateTime LastDate = Convert.ToDateTime("01/01/9999");
 
-        private InMemoryMOEDatabase _db;
+        private InMemoryMOEDatabase _moeDB = new InMemoryMOEDatabase();
 
-        public InMemorySignalsRepository()
-        {
-            _db = new InMemoryMOEDatabase();
-
-        }
-
-        public InMemorySignalsRepository(InMemoryMOEDatabase db)
-        {
-            _db = db;
-
-        }
-
-
+ 
 
         public void AddList(List<Common.Models.Signal> signals)
         {
             foreach (var s in signals)
             {
-                _db.Signals.Add(s);
+                _moeDB.Signals.Add(s);
             }
         }
 
         public void AddOrUpdate(Common.Models.Signal signal)
         {
-            MOE.Common.Models.Signal g = (from r in _db.Signals
+            MOE.Common.Models.Signal g = (from r in _moeDB.Signals
                                           where r.SignalID == signal.SignalID 
                                           select r).FirstOrDefault();
             if (g == null)
             {
                
 
-               _db.Signals.Add(signal);
+               _moeDB.Signals.Add(signal);
                 
             }
             else
@@ -59,114 +46,29 @@ namespace MOE.CommonTests.Models
             }
         }
 
+        
 
-
-        public Signal CopySignalToNewVersion(Signal originalVersion)
+        public void UpdateWithNewVersion(Common.Models.Signal incomingSignal)
         {
-            Common.Models.Signal newVersion = new Signal();
-
-            originalVersion.VersionAction = (from r in _db.VersionActions
-                where r.ID == 4
-                select r).FirstOrDefault();
-
-            newVersion.VersionAction = (from r in _db.VersionActions
-                where r.ID == 5
-                select r).FirstOrDefault();
 
 
 
-            newVersion.SignalID = originalVersion.SignalID;
-            originalVersion.Start = DateTime.Today;
-            newVersion.Start = DateTime.MaxValue;
-            newVersion.Note = originalVersion.Note;
-            newVersion.PrimaryName = originalVersion.PrimaryName;
-            newVersion.SecondaryName = originalVersion.SecondaryName;
-            newVersion.IPAddress = originalVersion.IPAddress;
-            newVersion.ControllerTypeID = originalVersion.ControllerTypeID;
-            newVersion.RegionID = originalVersion.RegionID;
-            newVersion.Enabled = originalVersion.Enabled;
-            newVersion.Latitude = originalVersion.Latitude;
-            newVersion.Longitude = originalVersion.Longitude;
-            newVersion.VersionID = (from r in _db.Signals
-                                       select r.VersionID).Max() + 1;
-
-            _db.Signals.Add(newVersion);
-            //_db.SaveChanges();
-
-            CopyApproaches(originalVersion, newVersion);
-
-            return newVersion;
         }
 
-        private void CopyApproaches(Signal signalFromDb, Signal newSignal)
+        public List<Signal> GetAllVersionsOfSignalBySignalID(string signalID)
         {
-            List<Approach> approaches = (from r in _db.Approaches
-                where r.VersionID == signalFromDb.VersionID
-                select r).ToList();
-
-            foreach (var apprFromDb in approaches)
-            {
-                Approach newApp = new Approach();
-
-                newApp.SignalID = newSignal.SignalID;
-                newApp.Description = apprFromDb.Description;
-                newApp.DirectionTypeID = apprFromDb.DirectionTypeID;
-                newApp.ProtectedPhaseNumber = apprFromDb.ProtectedPhaseNumber;
-                newApp.DirectionTypeID = apprFromDb.DirectionTypeID;
-                newApp.IsProtectedPhaseOverlap = apprFromDb.IsProtectedPhaseOverlap;
-                newApp.MPH = apprFromDb.MPH;
-                newApp.PermissivePhaseNumber = apprFromDb.PermissivePhaseNumber;
-                newApp.VersionID = newSignal.VersionID;
-
-                _db.Approaches.Add(newApp);
-                //_db.SaveChanges();
-
-                CopyDetectors(apprFromDb, newApp);
-            }
-        }
-
-        private void CopyDetectors(Approach apprFromDb, Approach newApp)
-        {
-            var detectorsFromDb = (from r in _db.Detectors
-                where r.ApproachID == apprFromDb.ApproachID
-                select r).ToList();
-
-            foreach (var detFromDb in detectorsFromDb)
-            {
-                var newDetector = new Detector();
-
-                newDetector.DecisionPoint = detFromDb.DecisionPoint;
-                newDetector.ApproachID = newApp.ApproachID;
-                newDetector.DateAdded = DateTime.Today;
-                newDetector.DetChannel = detFromDb.DetChannel;
-                newDetector.DetectionHardwareID = detFromDb.DetectionHardwareID;
-                newDetector.DetectorID = detFromDb.DetectorID;
-                newDetector.LaneNumber = detFromDb.LaneNumber;
-                newDetector.DetectorCommentIDs.AddRange(detFromDb.DetectorCommentIDs);
-                newDetector.MovementTypeID = detFromDb.MovementTypeID;
-                newDetector.MinSpeedFilter = detFromDb.MinSpeedFilter;
-                newDetector.DistanceFromStopBar = detFromDb.DistanceFromStopBar;
-
-                _db.Detectors.Add(newDetector);
-                //_db.SaveChanges();
-            }
-        }
-
-        public List<Signal> GetAllVersionsOfSignalBySignalID(string signalId)
-        {
-            var signals = (from r in _db.Signals
-                           where r.SignalID == signalId
-                           && r.VersionActionId != 3
+            var signals = (from r in _moeDB.Signals
+                           where r.SignalID == signalID
                            select r).ToList();
 
-            var orderedSignals = signals.OrderBy(d => d.Start).ToList();
+            signals.OrderBy(d => d.End);
 
-            return orderedSignals;
+            return signals;
         }
 
-        private VersionAction GetVersionActionByVersionAction_ID(int Id)
+        private VersionAction GetVersionActionByVersionActionId(int Id)
         {
-            VersionAction va = (from r in _db.VersionActions
+            VersionAction va = (from r in _moeDB.VersionActions
                                where r.ID == Id
                                select r).FirstOrDefault();
 
@@ -175,12 +77,12 @@ namespace MOE.CommonTests.Models
 
         public void Update(MOE.Common.Models.Signal incomingSignal)
         {
-            MOE.Common.Models.Signal signalFromDatabase = (from r in _db.Signals
+            MOE.Common.Models.Signal signalFromDatabase = (from r in _moeDB.Signals
                                                            where r.SignalID == incomingSignal.SignalID
                                                            select r).FirstOrDefault();
             if (signalFromDatabase != null)
             {
-                signalFromDatabase.VersionAction = (from r in _db.VersionActions
+                signalFromDatabase.VersionAction = (from r in _moeDB.VersionActions
                                                     where r.ID == 3
                                                             select r).FirstOrDefault();
 
@@ -208,10 +110,10 @@ namespace MOE.CommonTests.Models
                         {
                             foreach (MOE.Common.Models.Detector newDetector in a.Detectors)
                             {
-                                var detectorFromDatabase = _db.Detectors.Where(d => d.ID == newDetector.ID).FirstOrDefault();
+                                var detectorFromDatabase = _moeDB.Detectors.Where(d => d.ID == newDetector.ID).FirstOrDefault();
                                 if (newDetector.DetectionTypes == null)
                                 {
-                                    newDetector.DetectionTypes = _db.DetectionTypes.Where(x => newDetector.DetectionTypeIDs.Contains(x.DetectionTypeID)).ToList();
+                                    newDetector.DetectionTypes = _moeDB.DetectionTypes.Where(x => newDetector.DetectionTypeIDs.Contains(x.DetectionTypeID)).ToList();
                                 }
                                 if (detectorFromDatabase != null)
                                 {
@@ -242,7 +144,7 @@ namespace MOE.CommonTests.Models
                                 {
                                     if (newDetector.DetectionTypes == null)
                                     {
-                                        newDetector.DetectionTypes = _db.DetectionTypes.Where(x => newDetector.DetectionTypeIDs.Contains(x.DetectionTypeID)).ToList();
+                                        newDetector.DetectionTypes = _moeDB.DetectionTypes.Where(x => newDetector.DetectionTypeIDs.Contains(x.DetectionTypeID)).ToList();
                                     }
                                     if (approach != null) approach.Detectors.Add(newDetector);
                                 }
@@ -258,42 +160,63 @@ namespace MOE.CommonTests.Models
                 {
                     foreach (Common.Models.Detector gd in a.Detectors)
                     {
-                        gd.DetectionTypes = _db.DetectionTypes.Where(x => gd.DetectionTypeIDs.Contains(x.DetectionTypeID)).ToList();
+                        gd.DetectionTypes = _moeDB.DetectionTypes.Where(x => gd.DetectionTypeIDs.Contains(x.DetectionTypeID)).ToList();
                     }
                 }
-                _db.Signals.Add(incomingSignal);
+                _moeDB.Signals.Add(incomingSignal);
             }
         }
 
         public List<Common.Models.Signal> EagerLoadAllSignals()
         {
-            return _db.Signals;
+            return _moeDB.Signals;
         }
 
         public List<Common.Models.Signal> GetAllEnabledSignals()
         {
-            return _db.Signals;
+            return _moeDB.Signals;
         }
 
         public List<Common.Models.Signal> GetAllSignals()
         {
-            return _db.Signals;
+            return _moeDB.Signals;
         }
 
+        public List<Common.Models.Signal> GetAllWithGraphDetectors()
+        {
+            List<Common.Models.Signal> sigsWithDetectors = new List<Common.Models.Signal>();
 
+            foreach (var s in _moeDB.Signals)
+            {
+                List<Common.Models.Detector> dets = s.GetDetectorsForSignal();
+
+                if (dets.Count > 0)
+                {
+                    sigsWithDetectors.Add(s);
+                }
+
+            }
+
+            return sigsWithDetectors;
+        }
 
         public List<Pin> GetPinInfo()
         {
             throw new NotImplementedException();
         }
 
+        public Common.Models.Signal GetSignalBySignalID(string signalID)
+        {
+            var signal = GetLatestVersionOfSignalBySignalID(signalID);
 
+            return signal;
+        }
 
         public Common.Models.Signal GetLatestVersionOfSignalBySignalID(string signalID)
         {
-            var signal = (from r in _db.Signals
+            var signal = (from r in _moeDB.Signals
                           where r.SignalID == signalID
-                          select r).OrderByDescending(x => x.Start).Take(1).FirstOrDefault();
+                          select r).OrderByDescending(x => x.End).Take(1).FirstOrDefault();
 
 
 
@@ -309,7 +232,7 @@ namespace MOE.CommonTests.Models
 
         public string GetSignalLocation(string signalID)
         {
-            var signal = GetLatestVersionOfSignalBySignalID(signalID);
+            var signal = GetSignalBySignalID(signalID);
 
             string location = string.Empty;
             if (signal != null)
@@ -320,35 +243,36 @@ namespace MOE.CommonTests.Models
             return location;
         }
 
-    
-
-        public List<Signal> GetLatestVersionOfAllSignals()
+        public void Remove(Common.Models.Signal signal)
         {
-            List<Signal> signals = new List<Signal>();
+            _moeDB.Signals.Remove(signal);
+        }
 
-            var activeSignals = _db.Signals.Where(r => r.VersionActionId != 3)
-                .GroupBy(r => r.SignalID)
-                .Select(g => g.FirstOrDefault()).ToList();
+        public void Remove(string id)
+        {
+            var signal = GetSignalBySignalID(id);
 
-            foreach (var s in activeSignals)
+            if(signal != null)
             {
-                var sig = _db.Signals.Where(r => r.SignalID == s.SignalID)
-                                        .OrderByDescending(r => r.Start)
-                                        .FirstOrDefault();
+                _moeDB.Signals.Remove(signal);
 
-                signals.Add(sig);
             }
+        }
+
+        public List<Signal> GetLatestVerionOfAllSignals()
+        {
+            var signals = (from r in _moeDB.Signals
+                          where r.End ==  LastDate
+                          select r).ToList();
 
             return signals;
         }
 
-
-
-        public int CheckVersionWithFirstDate(string signalId)
+        public int CheckVersionWithLastDate(string signalId)
         {
             var signals = GetAllVersionsOfSignalBySignalID(signalId);
 
-            var sigs = signals.Where(r => r.Start == r.FirstDate).ToList();
+            var sigs = signals.Where(r => r.End == LastDate).ToList();
 
             switch (sigs.Count)
             {
@@ -367,57 +291,12 @@ namespace MOE.CommonTests.Models
 
         public List<Signal> GetLatestVerionOfAllSignalsByControllerType(int controllerTypeId)
         {
-            List<Signal> signals = (from r in _db.Signals
-                where r.VersionActionId != 3 && r.Start >= DateTime.Today
-                && r.ControllerTypeID == controllerTypeId
-                                    select r).ToList();
-            
-            return signals;
+            throw new NotImplementedException();
         }
-
 
         public Signal GetVersionOfSignalByDate(string signalId, DateTime startDate)
-            {
-                List<Signal> signals = _db.Signals
-                    .Where(signal => signal.SignalID == signalId)
-                    .Where(signal => signal.Start <= startDate)
-                    .Where(signal => signal.VersionActionId != 3)
-                    .ToList();
-
-                var orderedSignals = signals.OrderByDescending(signal => signal.Start);
-
-
-                return orderedSignals.First();
-        }
-        
-
-        public Signal GetSignalVersionByVersionId(int versionId)
         {
-            var signal = (from r in _db.Signals where r.VersionID == versionId select r).FirstOrDefault();
-            return signal;
-
-        }
-
-        public void SetVersionToDeleted(int versionId)
-        {
-            var signal = (from r in _db.Signals where r.VersionID == versionId select r).FirstOrDefault();
-            if (signal != null)
-            {
-                signal.VersionActionId = 3;
-            }
-        }
-
-        public void SetAllVersionsOfASignalToDeleted(string signalId)
-        {
-            var signals = from r in _db.Signals
-                where r.SignalID == signalId
-                select r;
-
-            foreach (var s in signals)
-            {
-                s.VersionActionId = 3;
-            }
-
+            throw new NotImplementedException();
         }
     }
 }

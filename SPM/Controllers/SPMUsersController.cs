@@ -146,9 +146,12 @@ namespace SPM.Controllers
                 {
                     return Content("This user does not have this role assigned");
                 }
-                userManager.RemoveFromRole(user.Id, role.Name);
-                context.SaveChanges();
-                return Content("Role Removed");
+                else
+                {
+                    userManager.RemoveFromRole(user.Id, role.Name);
+                    context.SaveChanges();
+                    return Content("Role Removed");
+                }
             }
         }
 
@@ -177,9 +180,12 @@ namespace SPM.Controllers
                 {
                     return Content("This user already has this role assigned");
                 }
-                userManager.AddToRole(user.Id, role.Name);
-                context.SaveChanges();
-                return Content("Role Added");
+                else
+                {
+                    userManager.AddToRole(user.Id, role.Name);
+                    context.SaveChanges();
+                    return Content("Role Added");
+                }
             }
         }
 

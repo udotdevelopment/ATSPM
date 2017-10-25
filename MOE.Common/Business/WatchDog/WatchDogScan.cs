@@ -432,7 +432,7 @@ namespace MOE.Common.Business.WatchDog
 
                         MOE.Common.Models.Repositories.ISignalsRepository signalRepository =
                             MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-                        var signal = signalRepository.GetLatestVersionOfSignalBySignalID(error.SignalID);
+                        var signal = signalRepository.GetSignalBySignalID(error.SignalID);
                         //   Add to email if it was not failing yesterday
                         ErrorMessage += error.SignalID.ToString();
                         ErrorMessage += " - ";
@@ -474,7 +474,7 @@ namespace MOE.Common.Business.WatchDog
         {
             
             MOE.Common.Models.Repositories.ISignalsRepository smh = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            MOE.Common.Models.Signal sig = smh.GetLatestVersionOfSignalBySignalID(SignalID);
+            MOE.Common.Models.Signal sig = smh.GetSignalBySignalID(SignalID);
 
             var dets = sig.GetDetectorsForSignalByPhaseNumber(Phase);
 

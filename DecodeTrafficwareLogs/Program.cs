@@ -212,11 +212,6 @@ namespace DecodeTrafficwareLogs
                 {
                     DataTable elTable = new DataTable();
 
-                    elTable.Columns.Add("SignalID", typeof(String));
-                    elTable.Columns.Add("Timestamp", typeof(DateTime));
-                    elTable.Columns.Add("EventCode", typeof(Int32));
-                    elTable.Columns.Add("EventParam", typeof(Int32));
-
                     UniqueConstraint custUnique =
 new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
                                         elTable.Columns[1], 
@@ -447,7 +442,7 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
 
                     if (Properties.Settings.Default.WriteToConsole)
                     {
-                        Console.WriteLine("%%%Start of file Loop%%%");
+                        Console.WriteLine("%%%End of file Loop%%%");
                         Thread.Sleep(100);
                     }
                 }
@@ -455,7 +450,7 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
 
                 if (Properties.Settings.Default.WriteToConsole)
                 {
-                    Console.WriteLine("%%%Start of DIRECTORY  Loop%%%");
+                    Console.WriteLine("%%%End of DIRECTORY  Loop%%%");
                     Thread.Sleep(100);
                 }
                 //CleanUpFiles(FilesToDelete);
@@ -463,7 +458,7 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
 
                 if (Properties.Settings.Default.WriteToConsole)
                 {
-                    Console.WriteLine("###Start of Queue Build Hit###");
+                    Console.WriteLine("###End of Queue Build Hit###");
 
                 }
 

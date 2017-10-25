@@ -20,7 +20,6 @@ namespace MOE.Common.Models
         [NotMapped] private string signalID;
 
         [Key]
-        [Display(Name = "Version")]
         public int VersionID { get; set; }
 
         [StringLength(10)]
@@ -53,16 +52,14 @@ namespace MOE.Common.Models
         }
 
         [Required]
-        [Display(Name = "Version Action")]
-        public int VersionActionId { get; set; }
         public virtual VersionAction VersionAction { get; set; }
 
         [Required]
         public string Note { get; set; }
 
         [Required]
-        [Display(Name = "First Day This Configuration is Valid")]
-        public DateTime Start { get; set; }
+        [Display(Name = "Last Day This Configuration is Valid")]
+        public DateTime End { get; set; }
 
         [Required]
         [Display(Name="Primary Name")]
@@ -106,7 +103,5 @@ namespace MOE.Common.Models
 
         [Display(Name = "Phase/Direction")]
         public virtual ICollection<Approach> Approaches { get; set; }
-
-
     }
 }

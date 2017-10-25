@@ -22,11 +22,11 @@ namespace MOE.Common.Models.Repositories
             return count;
         }
 
-        public double GetTMCVolume(DateTime startDate, DateTime endDate, string signalId, int Phase)
+        public double GetTMCVolume(DateTime startDate, DateTime endDate, string signalID, int Phase)
         {
             MOE.Common.Models.Repositories.ISignalsRepository repository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = repository.GetVersionOfSignalByDate(signalId, startDate);
+            var signal = repository.GetSignalBySignalID(signalID);
             List<Models.Detector> graphDetectors = signal.GetDetectorsForSignalByPhaseNumber(Phase);
 
             List<int> tmcChannels = new List<int>();
@@ -47,7 +47,7 @@ namespace MOE.Common.Models.Repositories
             double count = (from cel in db.Controller_Event_Log
                            where cel.Timestamp >= startDate
                            && cel.Timestamp < endDate
-                           && cel.SignalID == signalId
+                           && cel.SignalID == signalID
                            && tmcChannels.Contains(cel.EventParam)
                            && cel.EventCode == 82
                            select cel).Count();
@@ -245,83 +245,6 @@ namespace MOE.Common.Models.Repositories
                 throw;
             }
         }
-
-        public int GetEventCountByEventCodesParamDateTimeRange(string signalID,
-            DateTime startTime, DateTime endTime, int startHour, int startMinute, int endHour, int endMinute,
-            List<int> eventCodes, int param)
-        {
-            try
-            {
-                return
-                (from s in db.Controller_Event_Log
-                 where s.SignalID == signalID &&
-                       s.Timestamp >= startTime &&
-                       s.Timestamp <= endTime &&
-                       ((s.Timestamp.Hour > startHour && s.Timestamp.Hour < endHour) ||
-                        (s.Timestamp.Hour == startHour && s.Timestamp.Hour == endHour &&
-                         s.Timestamp.Minute >= startMinute && s.Timestamp.Minute <= endMinute) ||
-                        (s.Timestamp.Hour == startHour && s.Timestamp.Hour < endHour && s.Timestamp.Minute >= startMinute) ||
-                        (s.Timestamp.Hour < startHour && s.Timestamp.Hour == endHour && s.Timestamp.Minute <= endMinute))
-                       &&
-                       s.EventParam == param &&
-                       eventCodes.Contains(s.EventCode)
-                 select s).Count();
-            }
-            catch (Exception ex)
-            {
-                MOE.Common.Models.Repositories.IApplicationEventRepository logRepository =
-                    MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                MOE.Common.Models.ApplicationEvent e = new MOE.Common.Models.ApplicationEvent();
-                e.ApplicationName = "MOE.Common";
-                e.Class = this.GetType().ToString();
-                e.Function = "GetEventCountByEventCodesParamDateTimeRange";
-                e.SeverityLevel = MOE.Common.Models.ApplicationEvent.SeverityLevels.High;
-                e.Timestamp = DateTime.Now;
-                e.Description = ex.Message;
-                logRepository.Add(e);
-                throw;
-            }
-        }
-
-
-        public List<MOE.Common.Models.Controller_Event_Log> GetEventsByEventCodesParamDateTimeRange(string signalID,
-            DateTime startTime, DateTime endTime, int startHour, int startMinute, int endHour, int endMinute,
-            List<int> eventCodes, int param)
-        {
-            try
-            {
-                var events = (from s in db.Controller_Event_Log
-                              where s.SignalID == signalID &&
-                                    s.Timestamp >= startTime &&
-                                    s.Timestamp <= endTime &&
-                                    ((s.Timestamp.Hour > startHour && s.Timestamp.Hour < endHour) ||
-                                     (s.Timestamp.Hour == startHour && s.Timestamp.Hour == endHour &&
-                                      s.Timestamp.Minute >= startMinute && s.Timestamp.Minute <= endMinute) ||
-                                      (s.Timestamp.Hour == startHour && s.Timestamp.Hour < endHour && s.Timestamp.Minute >= startMinute) ||
-                                      (s.Timestamp.Hour < startHour && s.Timestamp.Hour == endHour && s.Timestamp.Minute <= endMinute))
-                                    &&
-                                    s.EventParam == param &&
-                                    eventCodes.Contains(s.EventCode)
-                              select s).ToList();
-                events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
-                return events;
-            }
-            catch (Exception ex)
-            {
-                MOE.Common.Models.Repositories.IApplicationEventRepository logRepository =
-                    MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                MOE.Common.Models.ApplicationEvent e = new MOE.Common.Models.ApplicationEvent();
-                e.ApplicationName = "MOE.Common";
-                e.Class = this.GetType().ToString();
-                e.Function = "GetSignalEventsByEventCodesParamDateTimeRange";
-                e.SeverityLevel = MOE.Common.Models.ApplicationEvent.SeverityLevels.High;
-                e.Timestamp = DateTime.Now;
-                e.Description = ex.Message;
-                logRepository.Add(e);
-                throw;
-            }
-        }
-
 
         public List<MOE.Common.Models.Controller_Event_Log> GetEventsByEventCodesParamWithOffset(string signalID,
            DateTime startTime, DateTime endTime, List<int> eventCodes, int param, double offset)

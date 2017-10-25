@@ -19,15 +19,6 @@ namespace MOE.Common.Models.Repositories
             return new SignalsRepository();
         }
 
-        public static ISignalsRepository Create(SPM context)
-        {
-            if (signalsRepository != null)
-            {
-                return signalsRepository;
-            }
-            return new SignalsRepository(context);
-        }
-
         public static void SetSignalsRepository(ISignalsRepository newRepository)
         {
             signalsRepository = newRepository;

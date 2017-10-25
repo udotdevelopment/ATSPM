@@ -21,20 +21,7 @@ namespace MOE.CommonTests.Models
         public List<Common.Models.ApproachRouteDetail> ApproachRouteDetails = new List<Common.Models.ApproachRouteDetail>();
         public List<Common.Models.DirectionType> DirectionTypes = new List<Common.Models.DirectionType>();
         public List<Common.Models.MetricType> MetricTypes = new List<Common.Models.MetricType>();
-        public List<Common.Models.ControllerType> ControllerTypes = new List<Common.Models.ControllerType>();
-        public List<Common.Models.MovementType> MovementTypes = new List<Common.Models.MovementType>();
-        public List<Common.Models.LaneType> LaneTypes = new List<Common.Models.LaneType>();
-        public List<Common.Models.DetectionHardware> DetectionHardwares = new List<Common.Models.DetectionHardware>();
 
-        public void ClearTables()
-        {
-            Detectors.Clear();
-            ApproachRouteDetails.Clear();
-            ApproachRoutes.Clear();
-            Approaches.Clear();
-            Signals.Clear();
-
-        }
 
 
         public InMemoryMOEDatabase()
@@ -43,289 +30,6 @@ namespace MOE.CommonTests.Models
             PopulateDetectionTypes();
             PopulateMetricTypes();
             PopulateDirectionTypes();
-            PopulateControllerTypes();
-            PopulateMovementTypes();
-            PopulateLaneTypes();
-            PopulateDetectionHardware();
-            PoplateMetricTypes();
-
-        }
-
-        private void PoplateMetricTypes()
-        {
-            var mt1 = new MetricType
-            {
-                MetricID = 1,
-                ChartName = "Purdue Phase Termination",
-                Abbreviation = "PPT",
-                ShowOnWebsite = true
-            };
-            var mt2 = new MetricType
-            {
-                MetricID = 2,
-                ChartName = "Split Monitor",
-                Abbreviation = "SM",
-                ShowOnWebsite = true
-            };
-            var mt3 = new MetricType
-            {
-                MetricID = 3,
-                ChartName = "Pedestrian Delay",
-                Abbreviation = "PedD",
-                ShowOnWebsite = true
-            };
-            var mt4 = new MetricType
-            {
-                MetricID = 4,
-                ChartName = "Preemption Details",
-                Abbreviation = "PD",
-                ShowOnWebsite = true
-            };
-            var mt5 = new MetricType
-            {
-                MetricID = 5,
-                ChartName = "Turning Movement Counts",
-                Abbreviation = "TMC",
-                ShowOnWebsite = true
-            };
-            var mt6 = new MetricType
-            {
-                MetricID = 6,
-                ChartName = "Purdue Coordination Diagram",
-                Abbreviation = "PCD",
-                ShowOnWebsite = true
-            };
-            var mt7 = new MetricType
-            {
-                MetricID = 7,
-                ChartName = "Approach Volume",
-                Abbreviation = "AV",
-                ShowOnWebsite = true
-            };
-            var mt8 = new MetricType
-            {
-                MetricID = 8,
-                ChartName = "Approach Delay",
-                Abbreviation = "AD",
-                ShowOnWebsite = true
-            };
-            var mt9 = new MetricType
-            {
-                MetricID = 9,
-                ChartName = "Arrivals On Red",
-                Abbreviation = "AoR",
-                ShowOnWebsite = true,
-            };
-            var mt10 = new MetricType
-            {
-                MetricID = 10,
-                ChartName = "Approach Speed",
-                Abbreviation = "Speed",
-                ShowOnWebsite = true
-            };
-            var mt11 = new MetricType
-            {
-                MetricID = 11,
-                ChartName = "Yellow and Red Actuations",
-                Abbreviation = "YRA",
-                ShowOnWebsite = true
-            };
-            var mt12 = new MetricType
-            {
-                MetricID = 12,
-                ChartName = "Purdue Split Failure",
-                Abbreviation = "SF",
-                ShowOnWebsite = true
-            };
-            var mt13 = new MetricType
-            {
-                MetricID = 13,
-                ChartName = "Purdue Link Pivot",
-                Abbreviation = "LP",
-                ShowOnWebsite = false
-            };
-            var mt14= new MetricType
-            {
-                MetricID = 14,
-                ChartName = "Preempt Service Request",
-                Abbreviation = "PSR",
-                ShowOnWebsite = false
-            };
-            var mt15 = new MetricType
-            {
-                MetricID = 15,
-                ChartName = "Preempt Service",
-                Abbreviation = "PS",
-                ShowOnWebsite = false
-            };
-
-            MetricTypes.Add(mt1);
-            MetricTypes.Add(mt2);
-            MetricTypes.Add(mt3);
-            MetricTypes.Add(mt4);
-            MetricTypes.Add(mt5);
-            MetricTypes.Add(mt6);
-            MetricTypes.Add(mt7);
-            MetricTypes.Add(mt8);
-            MetricTypes.Add(mt9);
-            MetricTypes.Add(mt10);
-            MetricTypes.Add(mt11);
-            MetricTypes.Add(mt12);
-            MetricTypes.Add(mt13);
-            MetricTypes.Add(mt14);
-            MetricTypes.Add(mt15);
-
-
-
-        }
-
-
-
-        private void PopulateDetectionHardware()
-        {
-            var dh1 = new DetectionHardware {ID = 0, Name = "Unknown"};
-            var dh2 = new DetectionHardware {ID = 1, Name = "Wavetronix Matrix"};
-            var dh3 = new DetectionHardware {ID = 2, Name = "Wavetronix Advance"};
-            var dh4 = new DetectionHardware {ID = 3, Name = "Inductive Loops"};
-            var dh5 = new DetectionHardware {ID = 4, Name = "Sensys"};
-            var dh6 = new DetectionHardware {ID = 5, Name = "Video"};
-
-            DetectionHardwares.Add(dh1);
-            DetectionHardwares.Add(dh2);
-            DetectionHardwares.Add(dh3);
-            DetectionHardwares.Add(dh4);
-            DetectionHardwares.Add(dh5);
-            DetectionHardwares.Add(dh6);
-        }
-
-        private void PopulateLaneTypes()
-        {
-            var l1 =  new LaneType {LaneTypeID = 1, Description = "Vehicle", Abbreviation = "V"};
-            var l2 = new LaneType {LaneTypeID = 2, Description = "Bike", Abbreviation = "Bike"};
-            var l3 = new LaneType {LaneTypeID = 3, Description = "Pedestrian", Abbreviation = "Ped"};
-            var l4 = new LaneType {LaneTypeID = 4, Description = "Exit", Abbreviation = "E"};
-            var l5 = new LaneType {LaneTypeID = 5, Description = "Light Rail Transit", Abbreviation = "LRT"};
-            var l6 = new LaneType {LaneTypeID = 6, Description = "Bus", Abbreviation = "Bus"};
-            var l7 = new LaneType {LaneTypeID = 7, Description = "High Occupancy Vehicle", Abbreviation = "HOV"};
-
-            LaneTypes.Add(l1);
-            LaneTypes.Add(l2);
-            LaneTypes.Add(l3);
-            LaneTypes.Add(l4);
-            LaneTypes.Add(l5);
-            LaneTypes.Add(l6);
-            LaneTypes.Add(l7);
-
-        }
-
-        private void PopulateMovementTypes()
-        {
-            var m1 = new MovementType {MovementTypeID = 1, Description = "Thru", Abbreviation = "T", DisplayOrder = 3};
-            var m2 = new MovementType {MovementTypeID = 2, Description = "Right", Abbreviation = "R", DisplayOrder = 5};
-            var m3 = new MovementType {MovementTypeID = 3, Description = "Left", Abbreviation = "L", DisplayOrder = 1};
-            var m4 = new MovementType {MovementTypeID = 4, Description = "Thru-Right", Abbreviation = "TR", DisplayOrder = 4};
-            var m5 = new MovementType {MovementTypeID = 5, Description = "Thru-Left", Abbreviation = "TL", DisplayOrder = 2};
-
-            MovementTypes.Add(m1);
-            MovementTypes.Add(m2);
-            MovementTypes.Add(m3);
-            MovementTypes.Add(m4);
-            MovementTypes.Add(m5);
-        }
-
-        private void PopulateControllerTypes()
-        {
-
-            var val1 = new ControllerType
-            {
-                ControllerTypeID = 1,
-                Description = "ASC3",
-                SNMPPort = 161,
-                FTPDirectory = "//Set1",
-                ActiveFTP = true,
-                UserName = "econolite",
-                Password = "ecpi2ecpi"
-            };
-            var val2 = new ControllerType
-            {
-                ControllerTypeID = 2,
-                Description = "Cobalt",
-                SNMPPort = 161,
-                FTPDirectory = "/set1",
-                ActiveFTP = true,
-                UserName = "econolite",
-                Password = "ecpi2ecpi"
-            };
-            var val3 = new ControllerType
-            {
-                ControllerTypeID = 3,
-                Description = "ASC3 - 2070",
-                SNMPPort = 161,
-                FTPDirectory = "/set1",
-                ActiveFTP = true,
-                UserName = "econolite",
-                Password = "ecpi2ecpi"
-            };
-            var val4 = new ControllerType
-            {
-                ControllerTypeID = 4,
-                Description = "MaxTime",
-                SNMPPort = 161,
-                FTPDirectory = "none",
-                ActiveFTP = false,
-                UserName = "none",
-                Password = "none"
-            };
-            var val5 = new ControllerType
-            {
-                ControllerTypeID = 5,
-                Description = "Trafficware",
-                SNMPPort = 161,
-                FTPDirectory = "none",
-                ActiveFTP = true,
-                UserName = "none",
-                Password = "none"
-            };
-            var val6 = new ControllerType
-            {
-                ControllerTypeID = 6,
-                Description = "Siemens SEPAC",
-                SNMPPort = 161,
-                FTPDirectory = "/mnt/sd",
-                ActiveFTP = false,
-                UserName = "admin",
-                Password = "$adm*kon2"
-            };
-            var val7 = new ControllerType
-            {
-                ControllerTypeID = 7,
-                Description = "McCain ATC EX",
-                SNMPPort = 161,
-                FTPDirectory = " /mnt/rd/hiResData",
-                ActiveFTP = false,
-                UserName = "root",
-                Password = "root"
-            };
-            var val8 = new ControllerType
-            {
-                ControllerTypeID = 8,
-                Description = "Peek",
-                SNMPPort = 161,
-                FTPDirectory = "mnt/sram/cuLogging",
-                ActiveFTP = false,
-                UserName = "atc",
-                Password = "PeekAtc"
-            };
-
-
-            ControllerTypes.Add(val1);
-            ControllerTypes.Add(val2);
-            ControllerTypes.Add(val3);
-            ControllerTypes.Add(val4);
-            ControllerTypes.Add(val5);
-            ControllerTypes.Add(val6);
-            ControllerTypes.Add(val7);
-            ControllerTypes.Add(val8);
 
         }
 
@@ -337,7 +41,7 @@ namespace MOE.CommonTests.Models
 
                 s.SignalID = "10" + i.ToString();
                 s.VersionID = i;
-                s.Start = Convert.ToDateTime("1/1/9999");
+                s.End = Convert.ToDateTime("1/1/9999");
                 s.PrimaryName = "Primary: " + i.ToString();
                 s.SecondaryName = "Secondary: " + i.ToString();
 
@@ -468,7 +172,7 @@ namespace MOE.CommonTests.Models
 
             s.SignalID = "101";
             s.VersionID = 1;
-            s.Start = Convert.ToDateTime("08/15/2017");
+            s.End = Convert.ToDateTime("08/15/2017");
             s.PrimaryName = "Primary: 101" ;
             s.SecondaryName = "Secondary: 101" ;
             s.Note = "Initial Setup";
@@ -482,7 +186,7 @@ namespace MOE.CommonTests.Models
 
             s2.SignalID = "101";
             s2.VersionID = 2;
-            s2.Start = Convert.ToDateTime("09/15/2017");
+            s2.End = Convert.ToDateTime("09/15/2017");
             s2.PrimaryName = "Primary: 101";
             s2.SecondaryName = "Secondary: 101";
             s2.Note = "Channel Ressaignment";
@@ -495,7 +199,7 @@ namespace MOE.CommonTests.Models
             MOE.Common.Models.Signal s3 = new Signal();
             s3.SignalID = "101";
             s3.VersionID = 3;
-            s3.Start = Convert.ToDateTime("1/1/9999");
+            s3.End = Convert.ToDateTime("1/1/9999");
             s3.PrimaryName = "Primary: 101";
             s3.SecondaryName = "Secondary: 101";
             s3.Note = "New Approach";
@@ -596,7 +300,7 @@ namespace MOE.CommonTests.Models
             var va5 = new Common.Models.VersionAction
             {
                 ID = 5,
-                Description = "New version"
+                Description = "Update and create new version"
             };
             VersionActions.Add(va5);
 

@@ -35,6 +35,7 @@ namespace MOE.Common.Models
         public virtual DbSet<DirectionType> DirectionTypes { get; set; }
         public virtual DbSet<LaneType> LaneTypes { get; set; }
         public virtual DbSet<Approach> Approaches { get; set; }
+        public virtual DbSet<MOE.Common.Models.Custom.SignalWithDetection> SignalsWithDetection { get; set; }
         public virtual DbSet<DetectionType> DetectionTypes { get; set; }
         public virtual DbSet<MetricsFilterType> MetricsFilterTypes { get; set; }
         public virtual DbSet<MetricType> MetricTypes { get; set; }
@@ -124,11 +125,11 @@ namespace MOE.Common.Models
                 .HasMany(e => e.DetectorComments)
                 .WithRequired(e => e.Detector)
                 .WillCascadeOnDelete(true);
-
             modelBuilder.Entity<Detector>()
                 .Property(e => e.DetectorID)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(50)
+                .HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAnnotation(new IndexAttribute("IX_DetectorIDUnique") { IsUnique = true }));
 
 
             modelBuilder.Entity<Archived_Metrics>()
