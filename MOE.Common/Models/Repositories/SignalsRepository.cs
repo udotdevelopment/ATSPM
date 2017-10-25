@@ -185,17 +185,14 @@ namespace MOE.Common.Models.Repositories
         }
         public List<Models.Signal> EagerLoadAllSignals()
         {
-            List<Models.Signal> signals = db.Signals
+
+            List<Models.Signal> signals = _db.Signals.Where(r => r.VersionActionId != 3)
+                .GroupBy(r => r.SignalID)
+                .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault())
                 .Include(signal => signal.Approaches.Select(a => a.Detectors))
                 .Include(signal => signal.Approaches.Select(a => a.DirectionType))
-
-            List<Models.Signal> signals = _db.Signals
-                .Include(signal => signal.Approaches.Select(a => a.Detectors))
-                .Include(signal => signal.Approaches.Select(a => a.DirectionType))
-
-                .Where(signal => signal.Start > DateTime.Now)
-                .Where(signal => signal.VersionActionId != 3)
                 .ToList();
+
             return signals;
         }
 
@@ -485,20 +482,13 @@ namespace MOE.Common.Models.Repositories
 
         public List<Signal> GetLatestVersionOfAllSignals()
         {
-            //List<Signal> signals = new List<Signal>();
+
 
             var activeSignals = _db.Signals.Where(r => r.VersionActionId != 3)
                 .GroupBy(r => r.SignalID)
                 .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).ToList();
 
-            //foreach (var s in activeSignals)
-            //{
-            //    var sig = _db.Signals.Where(r => r.SignalID == s.SignalID)
-            //                            .OrderByDescending(r => r.Start)
-            //                            .FirstOrDefault();
 
-            //    signals.Add(sig);
-            //}
 
             return activeSignals;
         }

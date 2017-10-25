@@ -90,8 +90,6 @@
     <Compile Include="Models\Custom\ApproachTests.cs" />
     <Compile Include="Models\Custom\ImporterTests.cs" />
     <Compile Include="Models\InMemoryApproachRepository.cs" />
-    <Compile Include="Models\InMemoryApproachRouteDetailsRepository.cs" />
-    <Compile Include="Models\InMemoryApproachRouteRepository.cs" />
     <Compile Include="Models\InMemoryControllerTypeRepository.cs" />
     <Compile Include="Models\InMemoryDetectionHardwareRepository.cs" />
     <Compile Include="Models\InMemoryDetectionTypeRepository.cs" />
@@ -103,7 +101,6 @@
     <Compile Include="Models\InMemoryMovementTypeRepository.cs" />
     <Compile Include="Models\InMemoryRegionsRepository.cs" />
     <Compile Include="Models\InMemorySignalsRepository.cs" />
-    <Compile Include="Models\Repositories\ApproachRepositoryTests.cs" />
     <Compile Include="Models\Repositories\SignalsRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

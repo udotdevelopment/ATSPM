@@ -27,8 +27,6 @@ namespace MOE.CommonTests.Models
         public void ClearTables()
         {
             Detectors.Clear();
-            ApproachRouteDetails.Clear();
-            ApproachRoutes.Clear();
             Approaches.Clear();
             Signals.Clear();
 

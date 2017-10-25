@@ -32,9 +32,6 @@ namespace SPM.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<MOE.Common.Models.Route> ApproachRoutes { get; set; }
-
-        public System.Data.Entity.DbSet<MOE.Common.Models.RouteSignal> ApproachRouteDetails { get; set; }
 
         public System.Data.Entity.DbSet<MOE.Common.Models.DirectionType> DirectionTypes { get; set; }
 

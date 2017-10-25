@@ -31,7 +31,7 @@ namespace MOE.Common.Models.Repositories
                 var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
                 foreach (var routeSignal in route.RouteSignals)
                 {
-                    var signal = signalRepository.GetSignalBySignalID(routeSignal.SignalId);
+                    var signal = signalRepository.GetLatestVersionOfSignalBySignalID(routeSignal.SignalId);
                     if (signal != null)
                     {
                         routeSignal.Signal = signal;

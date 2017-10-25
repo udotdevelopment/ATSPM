@@ -10,8 +10,17 @@ namespace MOE.CommonTests.Models
 {
     public class InMemoryApproachRepository : IApproachRepository
     {
-        public InMemoryMOEDatabase _db = new InMemoryMOEDatabase();
+        public InMemoryMOEDatabase _db; 
 
+        public InMemoryApproachRepository()
+        {
+            _db = new InMemoryMOEDatabase();
+        }
+
+        public InMemoryApproachRepository(InMemoryMOEDatabase context)
+        {
+            _db = context;
+        }
 
         public void AddOrUpdate(Approach approach)
         {

@@ -395,6 +395,7 @@
     <Compile Include="Migrations\201704032058572_Version4.0.1.cs" />
     <Compile Include="Migrations\201704032058572_Version4.0.1.Designer.cs">
       <DependentUpon>201704032058572_Version4.0.1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201709281716540_DataAggregation.cs" />
     <Compile Include="Migrations\201709281716540_DataAggregation.Designer.cs">
       <DependentUpon>201709281716540_DataAggregation.cs</DependentUpon>
@@ -809,6 +810,7 @@
     <EmbeddedResource Include="Migrations\201710241721007_Historical Configuration.resx">
       <DependentUpon>201710241721007_Historical Configuration.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709281716540_DataAggregation.resx">
       <DependentUpon>201709281716540_DataAggregation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710062050286_RouteConfiguration1.resx">
@@ -817,7 +819,6 @@
     <EmbeddedResource Include="Migrations\201710062056336_RouteConfiguration2.resx">
       <DependentUpon>201710062056336_RouteConfiguration2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709281716540_DataAggregation.resx">
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\Caseiro.Mvc.PagedList.csproj">
