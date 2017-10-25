@@ -102,7 +102,7 @@ namespace MOE.Common.Models
 
             if (increaseChannel)
             {
-                newGD.DetChannel = detectorRepository.GetMaximumDetectorChannel(detectorToCopy.Approach.SignalID) + 1;
+                newGD.DetChannel = detectorRepository.GetMaximumDetectorChannel(detectorToCopy.Approach.VersionID) + 1;
             }
             else //when copying signals, signalID changes, and DetChannel should be kept the same.
             {

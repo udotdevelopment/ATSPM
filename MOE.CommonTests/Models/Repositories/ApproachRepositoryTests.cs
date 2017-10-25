@@ -12,11 +12,16 @@ namespace MOE.Common.Models.Repositories.Tests
     [TestClass()]
     public class ApproachRepositoryTests
     {
-        private void InitializeContext(InMemoryApproachRepository Ar)
+        private InMemoryApproachRepository InitializeContext()
         {
-            Ar._db.PopulateSignal();
-            Ar._db.PopulateSignalsWithApproaches();
-            Ar._db.PopulateApproachesWithDetectors();
+            InMemoryMOEDatabase db = new InMemoryMOEDatabase();
+            db.PopulateSignal();
+            db.PopulateSignalsWithApproaches();
+            db.PopulateApproachesWithDetectors();
+
+            InMemoryApproachRepository Ar = new InMemoryApproachRepository(db);
+            return Ar;
+
         }
 
         [TestMethod()]
@@ -24,9 +29,9 @@ namespace MOE.Common.Models.Repositories.Tests
         {
         
 
-         InMemoryApproachRepository Ar = new InMemoryApproachRepository();
+         InMemoryApproachRepository Ar = InitializeContext();
 
-            InitializeContext(Ar);
+
 
             var approaches = Ar.GetAllApproaches();
 
@@ -43,9 +48,9 @@ namespace MOE.Common.Models.Repositories.Tests
         [TestMethod()]
         public void GetApproachByApproachIDTest()
         {
-            InMemoryApproachRepository Ar = new InMemoryApproachRepository();
+            InMemoryApproachRepository Ar = InitializeContext(); ;
 
-            InitializeContext(Ar);
+            
 
             var app = Ar.GetApproachByApproachID(1021);
 
@@ -55,9 +60,9 @@ namespace MOE.Common.Models.Repositories.Tests
         [TestMethod()]
         public void AddOrUpdateTest()
         {
-            InMemoryApproachRepository Ar = new InMemoryApproachRepository();
+            InMemoryApproachRepository Ar = InitializeContext();
 
-            InitializeContext(Ar);
+
 
             Common.Models.Approach app = new Approach
             {

@@ -287,7 +287,7 @@ namespace MOE.Common.Business
             {
                 MOE.Common.Models.Repositories.ISignalsRepository repository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-                var signal = repository.GetSignalBySignalID(signalId);
+                var signal = repository.GetLatestVersionOfSignalBySignalID(signalId);
                 List<MOE.Common.Models.Detector> dets = 
                     signal.GetDetectorsForSignalThatSupportAMetricByApproachDirection(6, upstreamApproachDirection);
                 foreach (MOE.Common.Models.Detector row in dets)
@@ -319,7 +319,7 @@ namespace MOE.Common.Business
             {
                 MOE.Common.Models.Repositories.ISignalsRepository repository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-                var signal = repository.GetSignalBySignalID(downSignalId);
+                var signal = repository.GetLatestVersionOfSignalBySignalID(downSignalId);
                 List<MOE.Common.Models.Detector> dets = 
                     signal.GetDetectorsForSignalThatSupportAMetricByApproachDirection(6, downSignalDirection);
                 foreach (MOE.Common.Models.Detector row in dets)

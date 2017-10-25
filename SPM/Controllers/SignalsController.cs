@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using MOE.Common.Models;
 using SPM.Filters;
@@ -15,25 +14,65 @@ namespace SPM.Controllers
     [Authorize(Roles = "Technician")]
     public class SignalsController : Controller
     {
-        private MOE.Common.Models.Repositories.IDetectorRepository detectorRepository =
-                MOE.Common.Models.Repositories.DetectorRepositoryFactory.Create();
-        private MOE.Common.Models.Repositories.ISignalsRepository signalsRepository =
-            MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-        private MOE.Common.Models.Repositories.IDetectionTypeRepository detectionTypeRepository =
-            MOE.Common.Models.Repositories.DetectionTypeRepositoryFactory.Create();
-        private MOE.Common.Models.Repositories.IApproachRepository approachRepository =
-                MOE.Common.Models.Repositories.ApproachRepositoryFactory.Create();
-        //private MOE.Common.Models.Repositories.ILaneRepository laneGroupRepository =
-        //        MOE.Common.Models.Repositories.LaneRepositoryFactory.Create();
-        private MOE.Common.Models.Repositories.IMetricTypeRepository metricTypeRepository =
-                MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
+        private MOE.Common.Models.Repositories.IControllerTypeRepository _controllerTypeRepository; 
+        private MOE.Common.Models.Repositories.IRegionsRepository _regionRepository;
+        private MOE.Common.Models.Repositories.IDirectionTypeRepository _directionTypeRepository;
+        private MOE.Common.Models.Repositories.IMovementTypeRepository _movementTypeRepository;
+        private MOE.Common.Models.Repositories.ILaneTypeRepository _laneTypeRepository;
+        private MOE.Common.Models.Repositories.IDetectionHardwareRepository _detectionHardwareRepository;
+        private MOE.Common.Models.Repositories.ISignalsRepository _signalsRepository;
+        private MOE.Common.Models.Repositories.IDetectorRepository _detectorRepository; 
+        private MOE.Common.Models.Repositories.IDetectionTypeRepository _detectionTypeRepository; 
+        private MOE.Common.Models.Repositories.IApproachRepository _approachRepository; 
+        private MOE.Common.Models.Repositories.IMetricTypeRepository _metricTypeRepository; 
 
-        // GET: Signals
+        public SignalsController()
+        {
+
+            _signalsRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            _detectorRepository = MOE.Common.Models.Repositories.DetectorRepositoryFactory.Create();
+            _detectionTypeRepository = MOE.Common.Models.Repositories.DetectionTypeRepositoryFactory.Create();
+            _approachRepository = MOE.Common.Models.Repositories.ApproachRepositoryFactory.Create();
+            _metricTypeRepository = MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
+            _controllerTypeRepository = MOE.Common.Models.Repositories.ControllerTypeRepositoryFactory.Create();
+            _regionRepository = MOE.Common.Models.Repositories.RegionsRepositoryFactory.Create();
+            _directionTypeRepository = MOE.Common.Models.Repositories.DirectionTypeRepositoryFactory.Create();
+            _movementTypeRepository = MOE.Common.Models.Repositories.MovementTypeRepositoryFactory.Create();
+            _laneTypeRepository = MOE.Common.Models.Repositories.LaneTypeRepositoryFactory.Create();
+            _detectionHardwareRepository = MOE.Common.Models.Repositories.DetectionHardwareRepositoryFactory.Create();
+        }
+
+        public SignalsController(
+         MOE.Common.Models.Repositories.IControllerTypeRepository controllerTypeRepository,
+         MOE.Common.Models.Repositories.IRegionsRepository regionRepository,
+         MOE.Common.Models.Repositories.IDirectionTypeRepository directionTypeRepository,
+         MOE.Common.Models.Repositories.IMovementTypeRepository movementTypeRepository,
+         MOE.Common.Models.Repositories.ILaneTypeRepository laneTypeRepository,
+         MOE.Common.Models.Repositories.IDetectionHardwareRepository detectionHardwareRepository,
+         MOE.Common.Models.Repositories.ISignalsRepository signalsRepository,
+         MOE.Common.Models.Repositories.IDetectorRepository detectorRepository,
+         MOE.Common.Models.Repositories.IDetectionTypeRepository detectionTypeRepository,
+         MOE.Common.Models.Repositories.IApproachRepository approachRepository,
+         MOE.Common.Models.Repositories.IMetricTypeRepository metricTypeRepository)
+        {
+            _signalsRepository = signalsRepository;
+            _detectorRepository = detectorRepository;
+            _detectionTypeRepository = detectionTypeRepository;
+            _approachRepository = approachRepository;
+            _controllerTypeRepository = controllerTypeRepository;
+            _regionRepository = regionRepository;
+            _directionTypeRepository = directionTypeRepository;
+            _movementTypeRepository = movementTypeRepository;
+            _laneTypeRepository = laneTypeRepository;
+            _detectionHardwareRepository = detectionHardwareRepository;
+            _metricTypeRepository = metricTypeRepository;
+        }
+
         public ActionResult Index()
         {
             MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel wctv =
-                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel();
-            
+                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository);
+
             return View(wctv);
         }
 
@@ -42,18 +81,45 @@ namespace SPM.Controllers
         public ActionResult SignalDetail()
         {
             MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel wctv =
-                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel();
+                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository);
             return View(wctv);
         }
+
+        public ActionResult AddNewVersion(string id)
+        {
+            var existingSignal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
+            if (existingSignal == null)
+            {
+                return Content("<h1>" +"No Signal Matches this SignalID" + "</h1>");
+            }
+
+            Signal signal = _signalsRepository.CopySignalToNewVersion(existingSignal);
+                try
+                {
+                    _signalsRepository.AddOrUpdate(signal);
+                }
+                catch (Exception ex)
+                {
+                    return Content("<h1>" + ex.Message + "</h1>");
+                }
+                finally
+                {
+                    AddSelectListsToViewBag(signal);
+                }
+                return PartialView("Edit", signal);
+            }
+            
+        
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult AddApproach(string id)
-        {            
-            var signal = signalsRepository.GetSignalBySignalID(id);
+        public ActionResult AddApproach(string versionId)
+        {
+            int id = Convert.ToInt32(versionId);
+            var signal = _signalsRepository.GetSignalVersionByVersionId(id);
             Approach approach = GetNewApproach(signal);           
-            approachRepository.AddOrUpdate(approach);
+            _approachRepository.AddOrUpdate(approach);
             AddSelectListsToViewBag(signal);
             return PartialView(approach);
         }
@@ -61,15 +127,15 @@ namespace SPM.Controllers
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult CopyApproach(string id, int approachID)
+        public ActionResult CopyApproach(int versionId, int approachID)
         {
-            var signal = signalsRepository.GetSignalBySignalID(id);
+            var signal = _signalsRepository.GetSignalVersionByVersionId(versionId);
             //Approach approachFromDatabase = signal.Approaches.Where(a => a.ApproachID == approachID).First();
             AddSelectListsToViewBag(signal);
             try
             {
                 Approach newApproach = MOE.Common.Models.Approach.CopyApproach(approachID);
-                approachRepository.AddOrUpdate(newApproach);
+                _approachRepository.AddOrUpdate(newApproach);
                 return Content("<h1>Copy Successful!</h1>");
             }
             catch (Exception ex)
@@ -81,7 +147,12 @@ namespace SPM.Controllers
         [Authorize(Roles = "Technician")]
         private string GetApproachIndex(Signal signal)
         {
-            return "Approaches[" + signal.Approaches.Count.ToString() + "].";
+            if (signal.Approaches != null)
+            {
+                return "Approaches[" + signal.Approaches.Count.ToString() + "].";
+            }
+            signal.Approaches = new List<Approach>();
+            return "Approaches[0]";
         }
 
         private Approach GetNewApproach(Signal signal)
@@ -93,17 +164,23 @@ namespace SPM.Controllers
             approach.Description = "New Phase/Direction";
             approach.Index = GetApproachIndex(signal);
             approach.DirectionTypeID = 1;
+            approach.VersionID = signal.VersionID;
+           
             return approach;
         }
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult AddDetector(string signalID, int approachID, string approachIndex)
+        public ActionResult AddDetector(int versionId, int approachID, string approachIndex)
         {
-            Signal signal = signalsRepository.GetSignalBySignalID(signalID);
+            Signal signal = _signalsRepository.GetSignalVersionByVersionId(versionId);
+            if(signal.Approaches.Count == 0)
+            {
+                signal.Approaches = _approachRepository.GetAllApproaches().Where(a => a.VersionID == signal.VersionID).ToList();
+            }
             var approach = signal.Approaches.Where(s => s.ApproachID == approachID).First();
-            Detector detector = CreateNewDetector(approach, approachIndex, signalID);            
+            Detector detector = CreateNewDetector(approach, approachIndex, signal.SignalID);            
             AddSelectListsToViewBag(signal);
             return PartialView(detector);
         }
@@ -111,10 +188,10 @@ namespace SPM.Controllers
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult CopyDetector(int ID, string signalID, int approachID, string approachIndex)
+        public ActionResult CopyDetector(int ID, int versionId, int approachID, string approachIndex)
         {
             Detector newDetector = MOE.Common.Models.Detector.CopyDetector(ID, true); //need to increase DetChannel if not copying the whole signal.
-            Signal signal = signalsRepository.GetSignalBySignalID(signalID);
+            Signal signal = _signalsRepository.GetSignalVersionByVersionId(versionId);
             Approach approach = signal.Approaches.Where(s => s.ApproachID == approachID).First();
             newDetector.ApproachID = approach.ApproachID;
             newDetector.Index = approachIndex + "Detectors[" + approach.Detectors.Count.ToString() + "].";
@@ -131,15 +208,15 @@ namespace SPM.Controllers
         {
             Detector detector = new Detector();
             detector.ApproachID = approach.ApproachID;
-            detector.AllDetectionTypes = detectionTypeRepository.GetAllDetectionTypesNoBasic();
+            detector.AllDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
             detector.DetectionTypeIDs = new List<int>();
             detector.DetectionTypes = new List<DetectionType>();
             detector.Index = approachIndex + "Detectors[" + approach.Detectors.Count.ToString() + "].";
             detector.DetectorComments = new List<DetectorComment>();
             detector.DateAdded = DateTime.Now;
-            detector.DetChannel = detectorRepository.GetMaximumDetectorChannel(signalID) + 1;
+            detector.DetChannel = _detectorRepository.GetMaximumDetectorChannel(approach.VersionID) + 1;
             detector.DetectorID = signalID + detector.DetChannel.ToString("D2");
-            detector = detectorRepository.Add(detector);
+            detector = _detectorRepository.Add(detector);
             detector.Approach = approach;
             return detector;
         }
@@ -149,13 +226,14 @@ namespace SPM.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Create(string id)
         {
-            var existingSignal = signalsRepository.GetSignalBySignalID(id);
+            var existingSignal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             if (existingSignal == null)
             {
+
                 Signal signal = CreateNewSignal(id);
                 try
                 {
-                    signalsRepository.AddOrUpdate(signal);
+                    _signalsRepository.AddOrUpdate(signal);
                 }
                 catch (Exception ex)
                 {
@@ -182,11 +260,14 @@ namespace SPM.Controllers
             signal.Longitude = "0";
             signal.RegionID = 2;
             signal.ControllerTypeID = 1;
+            signal.Start = DateTime.MaxValue;          
+            signal.Note = "Create New";
+            signal.VersionID = 1;
             signal.Enabled = true;
             return signal;
         }
                 
-        // GET: Signals/Copy
+        // POST: Signals/Copy
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -197,14 +278,17 @@ namespace SPM.Controllers
             {
                 return Content("<h1>A signal ID is required</h1>");
             }
-            Signal signal = signalsRepository.GetSignalBySignalID(id);
+            Signal signal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             if (signal != null)
             {
-                newSignal = MOE.Common.Models.Signal.CopySignal(signal, newId);              
+                newSignal = MOE.Common.Models.Signal.CopySignal(signal, newId);
+                newSignal.VersionActionId = 1;
+                newSignal.Start = DateTime.MaxValue;
+                newSignal.Note = "Copy of Signal " + id;
             }
             try
             {
-                signalsRepository.AddOrUpdate(newSignal);
+                _signalsRepository.AddOrUpdate(newSignal);
             }
             catch(Exception ex)
             {
@@ -217,6 +301,36 @@ namespace SPM.Controllers
             return PartialView("Edit", newSignal);
         }
 
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public ActionResult CopyVersion(int versionId)
+        {
+            MOE.Common.Models.Signal copyVersion = new MOE.Common.Models.Signal();
+
+            Signal origVersion = _signalsRepository.GetSignalVersionByVersionId(versionId);
+            if (origVersion != null)
+            {
+                copyVersion = MOE.Common.Models.Signal.CopyVersion(origVersion);
+                copyVersion.VersionActionId = 4;
+                copyVersion.Start = DateTime.Today;
+                copyVersion.Note = "Copy of Version " + origVersion.Note;
+            }
+            try
+            {
+                _signalsRepository.AddOrUpdate(copyVersion);
+            }
+            catch (Exception ex)
+            {
+                return Content("<h1>" + ex.Message + "</h1>");
+            }
+            finally
+            {
+                AddSelectListsToViewBag(copyVersion);
+            }
+            return PartialView("Edit", copyVersion);
+        }
+
         // GET: Signals/Edit/5
         public ActionResult Edit(string id)
         {
@@ -224,15 +338,28 @@ namespace SPM.Controllers
             {
                 return Content("<h1>A signal ID is required</h1>");
             }
-            Signal signal = signalsRepository.GetSignalBySignalID(id);
+            Signal signal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description).ToList();
+
+            if (signal.Approaches == null)
+            {
+                signal.Approaches = new List<Approach>();
+            }
+
+
             foreach(Approach approach in signal.Approaches)
             {
                 approach.Detectors = approach.Detectors.OrderBy(d => d.DetectorID).ToList();
             }
+
             if (signal != null)
             {
-                List<MOE.Common.Models.DetectionType> allDetectionTypes = detectionTypeRepository.GetAllDetectionTypesNoBasic();
+                if (signal.Note == null)
+                {
+                    signal.Note = "";
+                }
+
+                List<MOE.Common.Models.DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
                 foreach (MOE.Common.Models.Approach a in signal.Approaches)
                 {
                     foreach (MOE.Common.Models.Detector gd in a.Detectors)
@@ -257,33 +384,42 @@ namespace SPM.Controllers
                 AddSelectListsToViewBag(signal);
                 //foreach (MOE.Common.Models.MetricComment c in signal.Comments)
                 //{
-                //    c.MetricTypes = metricTypeRepository.GetMetricTypesByMetricComment(c);
+                //    c.MetricTypes = _metricTypeRepository.GetMetricTypesByMetricComment(c);
                 //}
             }           
             return PartialView(signal);
         }
 
-        public ActionResult _SignalPartial(Signal signal)
-        {
-            return PartialView(signal);
-        }
 
-        [AllowAnonymous]
-        public ActionResult SignalDetailResult(string id)
+        // GET: Signals/Edit/5
+        public ActionResult EditVersion(string Id)
         {
-            if (id == null)
+            if (Id == null)
             {
-                return Content("<h1>A signal ID is required</h1>");
+                return Content("<h1>A Version ID is required</h1>");
             }
-            Signal signal = signalsRepository.GetSignalBySignalID(id);
+            Signal signal = _signalsRepository.GetSignalVersionByVersionId(Convert.ToInt32(Id));
             signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description).ToList();
+
+            if (signal.Approaches == null)
+            {
+                signal.Approaches = new List<Approach>();
+            }
+
+
             foreach (Approach approach in signal.Approaches)
             {
                 approach.Detectors = approach.Detectors.OrderBy(d => d.DetectorID).ToList();
             }
+
             if (signal != null)
             {
-                List<MOE.Common.Models.DetectionType> allDetectionTypes = detectionTypeRepository.GetAllDetectionTypesNoBasic();
+                if (signal.Note == null)
+                {
+                    signal.Note = "";
+                }
+
+                List<MOE.Common.Models.DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
                 foreach (MOE.Common.Models.Approach a in signal.Approaches)
                 {
                     foreach (MOE.Common.Models.Detector gd in a.Detectors)
@@ -308,7 +444,58 @@ namespace SPM.Controllers
                 AddSelectListsToViewBag(signal);
                 //foreach (MOE.Common.Models.MetricComment c in signal.Comments)
                 //{
-                //    c.MetricTypes = metricTypeRepository.GetMetricTypesByMetricComment(c);
+                //    c.MetricTypes = _metricTypeRepository.GetMetricTypesByMetricComment(c);
+                //}
+            }
+            return PartialView("Edit",signal);
+        }
+
+        public ActionResult _SignalPartial(Signal signal)
+        {
+            return PartialView(signal);
+        }
+
+        [AllowAnonymous]
+        public ActionResult SignalDetailResult(string id)
+        {
+            if (id == null)
+            {
+                return Content("<h1>A signal ID is required</h1>");
+            }
+            Signal signal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
+            signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description).ToList();
+            foreach (Approach approach in signal.Approaches)
+            {
+                approach.Detectors = approach.Detectors.OrderBy(d => d.DetectorID).ToList();
+            }
+            if (signal != null)
+            {
+                List<MOE.Common.Models.DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
+                foreach (MOE.Common.Models.Approach a in signal.Approaches)
+                {
+                    foreach (MOE.Common.Models.Detector gd in a.Detectors)
+                    {
+                        gd.Index = a.Index + "Detector[" + a.Detectors.ToList().FindIndex(d => d.DetectorID == gd.DetectorID).ToString() + "].";
+                        gd.AllDetectionTypes = allDetectionTypes;
+                        gd.DetectionTypeIDs = new List<int>();
+                        gd.DetectorComments = gd.DetectorComments.OrderByDescending(x => x.TimeStamp).ToList();
+                        foreach (MOE.Common.Models.DetectionType dt in gd.DetectionTypes)
+                        {
+                            gd.DetectionTypeIDs.Add(dt.DetectionTypeID);
+                        }
+                    }
+                    a.Index = "Approaches[" + signal.Approaches.ToList().FindIndex(app => app.ApproachID == a.ApproachID).ToString() + "].";
+                }
+                if (signal == null)
+                {
+                    return HttpNotFound();
+                }
+
+                signal.Comments = signal.Comments.OrderByDescending(s => s.TimeStamp).ToList();
+                AddSelectListsToViewBag(signal);
+                //foreach (MOE.Common.Models.MetricComment c in signal.Comments)
+                //{
+                //    c.MetricTypes = _metricTypeRepository.GetMetricTypesByMetricComment(c);
                 //}
             }
             return PartialView(signal);
@@ -326,16 +513,26 @@ namespace SPM.Controllers
             {
                 ModelState.Clear();
                 signal = SetDetectionTypes(signal);
+              
+                //var modelStateErrors = this.ModelState.Keys.SelectMany(key => this.ModelState[key].Errors);
+                
                 if (TryValidateModel(signal))
                 {
                     MOE.Common.Models.Repositories.ISignalsRepository repository =
                         MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
                     repository.AddOrUpdate(signal);
+                    AddSelectListsToViewBag(signal);
+                    return Content("Save Successful!" + DateTime.Now.ToString());
                 }
-                AddSelectListsToViewBag(signal);
-                return Content("Save Successful!" + DateTime.Now.ToString());
+                return Content("There was a validation error.");
             }
-            catch(Exception ex)
+
+            catch (ValidationException ex)
+            {
+                return Content(ex.Message);
+            }
+
+            catch (Exception ex)
             {
                 return Content(ex.Message);
             }
@@ -372,25 +569,16 @@ namespace SPM.Controllers
 
         private void AddSelectListsToViewBag(MOE.Common.Models.Signal signal)
         {
-            MOE.Common.Models.Repositories.IControllerTypeRepository controllerTypeRepository =
-                MOE.Common.Models.Repositories.ControllerTypeRepositoryFactory.Create();
-            MOE.Common.Models.Repositories.IRegionsRepository regionRepository =
-                MOE.Common.Models.Repositories.RegionsRepositoryFactory.Create();
-            MOE.Common.Models.Repositories.IDirectionTypeRepository directionTypeRepository =
-                MOE.Common.Models.Repositories.DirectionTypeRepositoryFactory.Create();
-            MOE.Common.Models.Repositories.IMovementTypeRepository movementTypeRepository =
-                MOE.Common.Models.Repositories.MovementTypeRepositoryFactory.Create();
-            MOE.Common.Models.Repositories.ILaneTypeRepository laneTypeRepository =
-                MOE.Common.Models.Repositories.LaneTypeRepositoryFactory.Create();
-            MOE.Common.Models.Repositories.IDetectionHardwareRepository DetectionHardwareRepository =
-    MOE.Common.Models.Repositories.DetectionHardwareRepositoryFactory.Create();
 
-            ViewBag.ControllerType = new SelectList(controllerTypeRepository.GetControllerTypes(), "ControllerTypeID", "Description", signal.ControllerTypeID);
-            ViewBag.Region = new SelectList(regionRepository.GetAllRegions(), "ID", "Description", signal.RegionID);
-            ViewBag.DirectionType = new SelectList(directionTypeRepository.GetAllDirections(), "DirectionTypeID", "Abbreviation");
-            ViewBag.MovementType = new SelectList(movementTypeRepository.GetAllMovementTypes(), "MovementTypeID", "Description");
-            ViewBag.LaneType = new SelectList(laneTypeRepository.GetAllLaneTypes(), "LaneTypeID", "Description");
-            ViewBag.DetectionHardware = new SelectList(DetectionHardwareRepository.GetAllDetectionHardwares(), "ID", "Name");  
+
+           
+            ViewBag.ControllerType = new SelectList(_controllerTypeRepository.GetControllerTypes(), "ControllerTypeID", "Description", signal.ControllerTypeID);
+            ViewBag.Region = new SelectList(_regionRepository.GetAllRegions(), "ID", "Description", signal.RegionID);
+            ViewBag.DirectionType = new SelectList(_directionTypeRepository.GetAllDirections(), "DirectionTypeID", "Abbreviation");
+            ViewBag.MovementType = new SelectList(_movementTypeRepository.GetAllMovementTypes(), "MovementTypeID", "Description");
+            ViewBag.LaneType = new SelectList(_laneTypeRepository.GetAllLaneTypes(), "LaneTypeID", "Description");
+            ViewBag.DetectionHardware = new SelectList(_detectionHardwareRepository.GetAllDetectionHardwares(), "ID", "Name");
+            signal.VersionList = _signalsRepository.GetAllVersionsOfSignalBySignalID(signal.SignalID);
         }
 
         // GET: Signals/Delete/5
@@ -401,30 +589,31 @@ namespace SPM.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Signal signal = signalsRepository.GetSignalBySignalID(id);
-            if (signal == null)
-            {
-                return HttpNotFound();
-            }
-            return View(signal);
+            _signalsRepository.SetAllVersionsOfASignalToDeleted(id);
+
+
+            MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel wctv =
+                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository);
+
+            return null;//View(wctv);
         }
 
         // POST: Signals/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public string DeleteConfirmed(string id)
-        {
-            try
-            {
-                signalsRepository.Remove(id);
-                return id + " Removed";
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-        }
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateJsonAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        //public string DeleteConfirmed(string id)
+        //{
+        //    try
+        //    {
+        //        _signalsRepository.Remove(id);
+        //        return id + " Removed";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ex.Message;
+        //    }
+        //}
 
         protected override void Dispose(bool disposing)
         {
@@ -432,6 +621,44 @@ namespace SPM.Controllers
             {
             }
             base.Dispose(disposing);
+        }
+
+        [HttpPost, ActionName("DeleteVersion")]
+        [ValidateJsonAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteVersion(string versionId)
+        {
+            int _vid = Convert.ToInt32(versionId);
+            Signal signal = _signalsRepository.GetSignalVersionByVersionId(_vid);
+
+            if (signal == null)
+            {
+                return Content("<h1>" + "No Version with this ID can be found " + "</h1>");
+            }
+
+            string sigId = signal.SignalID;
+
+            Signal mostRecentVersion;
+
+            try
+            {
+                _signalsRepository.SetVersionToDeleted(_vid);
+               
+            }
+            catch (Exception ex)
+            {
+                return Content("<h1>" + ex.Message + "</h1>");
+            }
+            finally
+            {
+                mostRecentVersion = _signalsRepository.GetLatestVersionOfSignalBySignalID(sigId);
+                AddSelectListsToViewBag(mostRecentVersion);
+            }
+
+
+             
+
+            return PartialView("Edit", mostRecentVersion);
         }
     }
 }

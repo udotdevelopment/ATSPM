@@ -97,6 +97,7 @@ namespace MOE.Common.Models
         {
             Models.Approach newApproach = new Models.Approach();
             newApproach.SignalID = approachToCopy.SignalID;
+            newApproach.VersionID = approachToCopy.VersionID;
             newApproach.DirectionTypeID = approachToCopy.DirectionTypeID;
             newApproach.Description = approachToCopy.Description + " Copy";
             newApproach.MPH = approachToCopy.MPH;
@@ -113,14 +114,20 @@ namespace MOE.Common.Models
                 MOE.Common.Models.Repositories.ApproachRepositoryFactory.Create();
             Approach approachToCopy = approachRepository.GetApproachByApproachID(approachIDToCopy);
             Approach newApproach = CopyApproachCommonProperties(approachToCopy);
-            foreach (Detector d in approachToCopy.Detectors)
+            if (approachToCopy.Detectors != null)
             {
-                Detector dForNewApproach = Detector.CopyDetector(d.ID, true); //need to increase DetChannel if not copying the whole signal.
-                newApproach.Detectors.Add(dForNewApproach);
-            }
-            if (newApproach.Detectors.Count > 1)
-            {
-                newApproach = SetDetChannelWhenMultipleDetectorsExist(newApproach);
+                foreach (Detector d in approachToCopy.Detectors)
+                {
+                    Detector
+                        dForNewApproach =
+                            Detector.CopyDetector(d.ID,
+                                true); //need to increase DetChannel if not copying the whole signal.
+                    newApproach.Detectors.Add(dForNewApproach);
+                }
+                if (newApproach.Detectors.Count > 1)
+                {
+                    newApproach = SetDetChannelWhenMultipleDetectorsExist(newApproach);
+                }
             }
             return newApproach;
         }

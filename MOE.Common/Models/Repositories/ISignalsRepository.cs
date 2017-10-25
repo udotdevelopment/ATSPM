@@ -12,27 +12,27 @@ namespace MOE.Common.Models.Repositories
 
         List<Models.Signal> GetAllSignals();
         List<Models.Signal> GetAllEnabledSignals();
-        List<Models.Signal> GetAllWithGraphDetectors();
         List<Models.Signal> EagerLoadAllSignals();
-        List<Models.Signal> EagerLoadAllEnabledSignals();
-        Models.Signal GetSignalBySignalID(string signalID);
+        Models.Signal GetLatestVersionOfSignalBySignalID(string signalID);
         SignalFTPInfo GetSignalFTPInfoByID(string signalID);
         void AddOrUpdate(MOE.Common.Models.Signal signal);
         //void Add(MOE.Common.Models.Signal signal);
-        void Remove(MOE.Common.Models.Signal signal);
+       
         List<MOE.Common.Business.Pin> GetPinInfo();
         string GetSignalLocation(string signalID);
         void AddList(List<MOE.Common.Models.Signal> signals);
-        void Remove(string id);
-        void UpdateWithNewVersion(MOE.Common.Models.Signal incomingSignal);
+       
+        Signal CopySignalToNewVersion(Signal originalVersion);
         List<MOE.Common.Models.Signal> GetAllVersionsOfSignalBySignalID(string signalID);
-        Common.Models.Signal GetLatestVersionOfSignalBySignalID(string signalID);
-
-         List<Signal> GetLatestVerionOfAllSignals();
-         int CheckVersionWithLastDate(string signalId);
+ 
+         List<Signal> GetLatestVersionOfAllSignals();
+         int CheckVersionWithFirstDate(string signalId);
 
         List<Signal> GetLatestVerionOfAllSignalsByControllerType(int controllerTypeId);
 
         Signal GetVersionOfSignalByDate(string signalId, DateTime startDate);
+        Signal GetSignalVersionByVersionId(int versionId);
+        void SetVersionToDeleted(int versionId);
+        void SetAllVersionsOfASignalToDeleted(string id);
     }
 }

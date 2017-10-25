@@ -29,14 +29,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [Display(Name = "Show Plans")]
         public bool ShowPlanStatistics { get; set; }
 
-        public AoROptions(string signalID, DateTime startDate, DateTime endDate, double yAxisMax, int binSize, bool showPlanStatistics)
-        {
-            SignalID = signalID;
-            //StartDate = startDate;
-            //EndDate = endDate;
-            YAxisMax = yAxisMax;
-            ShowPlanStatistics = showPlanStatistics;
-        }
+
         public AoROptions()
         {
             BinSizeList = new List<int>();

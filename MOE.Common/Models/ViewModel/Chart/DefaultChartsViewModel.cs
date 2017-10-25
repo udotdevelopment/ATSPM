@@ -33,13 +33,13 @@ namespace MOE.Common.Models.ViewModel.Chart
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        [Display(Name = "End Date")]
+        [Display(Name = "Start Date")]
         public DateTime EndDateDay { get; set; }
         [Required]
-        [Display(Name = "End Time")]
+        [Display(Name = "Start Time")]
         public string EndTime { get; set; }
         [Required]
-        [Display(Name = "End AM/PM")]
+        [Display(Name = "Start AM/PM")]
         public string SelectedEndAMPM { get; set; }
         public List<SelectListItem> StartAMPMList { get; set; }
         public List<SelectListItem> EndAMPMList { get; set; }

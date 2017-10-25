@@ -103,6 +103,7 @@ namespace MOE.Common.Models
                 .HasMany(e => e.DetectorComments)
                 .WithRequired(e => e.Detector)
                 .WillCascadeOnDelete(true);
+
             modelBuilder.Entity<Detector>()
                 .Property(e => e.DetectorID)
                 .IsRequired()

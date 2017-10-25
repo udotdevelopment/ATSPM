@@ -25,7 +25,7 @@ namespace MOE.Common.Models.ViewModel.Chart
         {
             MOE.Common.Models.Repositories.ISignalsRepository repository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = repository.GetSignalBySignalID(signalID);
+            var signal = repository.GetLatestVersionOfSignalBySignalID(signalID);
             MetricsList = new List<SelectListItem>();
             var availableMetrics = signal.GetAvailableMetricsVisibleToWebsite().Where(m => m.ShowOnWebsite == true);
             if (signal != null)
