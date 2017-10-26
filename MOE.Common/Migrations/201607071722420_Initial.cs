@@ -137,14 +137,14 @@ namespace MOE.Common.Migrations
 
 
 
-            CreateTable(
-                "dbo.Route",
-                c => new
-                    {
-                        ApproachRouteId = c.Int(nullable: false, identity: true),
-                        RouteName = c.String(nullable: false, unicode: false),
-                    })
-                .PrimaryKey(t => t.ApproachRouteId);
+            //CreateTable(
+            //    "dbo.Route",
+            //    c => new
+            //        {
+            //            ApproachRouteId = c.Int(nullable: false, identity: true),
+            //            RouteName = c.String(nullable: false, unicode: false),
+            //        })
+            //    .PrimaryKey(t => t.ApproachRouteId);
 
             CreateTable(
                 "dbo.Graph_Detectors",
