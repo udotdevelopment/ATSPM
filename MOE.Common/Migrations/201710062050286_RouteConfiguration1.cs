@@ -20,17 +20,14 @@ namespace MOE.Common.Migrations
             DropIndex("dbo.ApproachRouteMetricTypes", new[] { "ApproachRoute_ApproachRouteId" });
             DropIndex("dbo.ApproachRouteMetricTypes", new[] { "MetricType_MetricID" });
             DropTable("dbo.Accordian");
-            DropTable("dbo.Route");
             DropTable("dbo.ApproachRouteDetail");
+            DropTable("dbo.Route");
             DropTable("dbo.Alert_Day_Types");
             DropTable("dbo.DownloadAgreements");
             DropTable("dbo.LastUpdates");
             DropTable("dbo.Program_Message");
             DropTable("dbo.Program_Settings");
             DropTable("dbo.Route_Detectors");
-            DropTable("dbo.Route");
-            DropTable("dbo.SignalWithDetections");
-            DropTable("dbo.ApproachRouteMetricTypes");
         }
         
         public override void Down()

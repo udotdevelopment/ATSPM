@@ -388,10 +388,6 @@
     <Compile Include="Migrations\201611290015315_SPMWatchDog.Designer.cs">
       <DependentUpon>201611290015315_SPMWatchDog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201710241721007_Historical Configuration.cs" />
-    <Compile Include="Migrations\201710241721007_Historical Configuration.Designer.cs">
-      <DependentUpon>201710241721007_Historical Configuration.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201704032058572_Version4.0.1.cs" />
     <Compile Include="Migrations\201704032058572_Version4.0.1.Designer.cs">
       <DependentUpon>201704032058572_Version4.0.1.cs</DependentUpon>
@@ -806,9 +802,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704032058572_Version4.0.1.resx">
       <DependentUpon>201704032058572_Version4.0.1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710241721007_Historical Configuration.resx">
-      <DependentUpon>201710241721007_Historical Configuration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709281716540_DataAggregation.resx">
       <DependentUpon>201709281716540_DataAggregation.cs</DependentUpon>
