@@ -28,5 +28,8 @@ namespace MOE.Common.Models
 
         [Required]
         public int ArrivalsOnYellow { get; set; }
+
+        [Required]
+        public bool IsProtectedPhase { get; set; }
     }
 }

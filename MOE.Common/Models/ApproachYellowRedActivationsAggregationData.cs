@@ -25,5 +25,8 @@ namespace MOE.Common.Models
 
         [Required]
         public int TotalRedLightViolations { get; set; }
+
+        [Required]
+        public bool IsProtectedPhase { get; set; }
     }
 }

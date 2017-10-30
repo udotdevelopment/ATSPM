@@ -34,5 +34,8 @@ namespace MOE.Common.Models
 
         [Required]
         public int PedActuations { get; set; }
+
+        [Required]
+        public bool IsProtectedPhase { get; set; }
     }
 }
