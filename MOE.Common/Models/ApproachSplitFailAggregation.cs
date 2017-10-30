@@ -22,5 +22,8 @@ namespace MOE.Common.Models
 
         [Required]
         public int SplitFailures { get; set; }
+
+        [Required]
+        public bool IsProtectedPhase { get; set; }
     }
 }

@@ -404,6 +404,10 @@
     <Compile Include="Migrations\201710062056336_RouteConfiguration2.Designer.cs">
       <DependentUpon>201710062056336_RouteConfiguration2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710272056348_DataAggregationUI.cs" />
+    <Compile Include="Migrations\201710272056348_DataAggregationUI.Designer.cs">
+      <DependentUpon>201710272056348_DataAggregationUI.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\ApproachPcdAggregation.cs" />
@@ -622,15 +626,12 @@
     <Compile Include="Models\Repositories\PriorityAggregationDatasRepository.cs" />
     <Compile Include="Models\Repositories\PreemptAggregationDatasRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\PriorityAggregationDatasRepositoryFactory.cs" />
-    <Compile Include="Models\Repositories\SignalAggregationDataRepository.cs" />
-    <Compile Include="Models\Repositories\SignalAggregationDataRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\ControllerTypeRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\DetectionHardwareRepository.cs" />
     <Compile Include="Models\Repositories\DetectionHardwareRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\IApplicationSettingsRepository.cs" />
     <Compile Include="Models\Repositories\IActionLogRepository.cs" />
     <Compile Include="Models\Repositories\IApplicationEventRepository.cs" />
-    <Compile Include="Models\Repositories\ISignalAggregationDataRepository.cs" />
     <Compile Include="Models\Repositories\IDetectionHardwareRepository.cs" />
     <Compile Include="Models\Repositories\IGenericRepository.cs" />
     <Compile Include="Models\Repositories\IDirectionTypeRepository.cs" />
@@ -699,7 +700,6 @@
     <Compile Include="Models\RoutePhaseDirection.cs" />
     <Compile Include="Models\RouteSignal.cs" />
     <Compile Include="Models\Signal.cs" />
-    <Compile Include="Models\SignalAggregation.cs" />
     <Compile Include="Models\Speed_Events.cs" />
     <Compile Include="Models\SPM.cs" />
     <Compile Include="Models\Comment.cs" />
@@ -811,6 +811,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710062056336_RouteConfiguration2.resx">
       <DependentUpon>201710062056336_RouteConfiguration2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710272056348_DataAggregationUI.resx">
+      <DependentUpon>201710272056348_DataAggregationUI.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

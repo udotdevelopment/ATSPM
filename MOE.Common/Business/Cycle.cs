@@ -98,7 +98,7 @@ namespace MOE.Common.Business
             get{
                 if (totalGreenTime == -1)
                 {
-                    totalGreenTime = (EndTime - GreenEvent).TotalSeconds;
+                    totalGreenTime = (YellowEvent - GreenEvent).TotalSeconds;
                 }
                 return totalGreenTime;
             }
@@ -124,7 +124,7 @@ namespace MOE.Common.Business
             {
                 if (totalRedTime == -1)
                 {
-                    totalRedTime = (YellowEvent - StartTime).TotalSeconds;
+                    totalRedTime = (GreenEvent - StartTime).TotalSeconds;
                 }
                 return totalRedTime;
             }

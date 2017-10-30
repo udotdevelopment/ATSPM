@@ -44,7 +44,6 @@ namespace MOE.Common.Models
         public virtual DbSet<Route> Routes { get; set; }
         public virtual DbSet<RouteSignal> RouteSignals { get; set; }
         public virtual DbSet<RoutePhaseDirection> RoutePhaseDirections { get; set; }
-        public virtual DbSet<SignalAggregation> SignalAggregations { get; set; }
         public virtual DbSet<ControllerType> ControllerType { get; set; }
         public virtual DbSet<Speed_Events> Speed_Events { get; set; }
         public virtual DbSet<FAQ> FAQs { get; set; }

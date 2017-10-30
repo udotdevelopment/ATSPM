@@ -31,6 +31,9 @@ namespace MOE.Common.Models
 
         [Required]
         public double Speed15Th { get; set; }
-        
+
+        [Required]
+        public bool IsProtectedPhase { get; set; }
+
     }
 }
