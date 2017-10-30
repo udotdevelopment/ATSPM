@@ -24,31 +24,49 @@ namespace ImportChecker
 
     public class ImportChecker
     {
-        public  MOE.Common.Models.Repositories.IControllerEventLogRepository CELRepository =
-        MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+
+        public MOE.Common.Models.SPM _db;
+
+        public MOE.Common.Models.Repositories.IControllerEventLogRepository CELRepository;
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
         public bool ThereIsAProblem { get; set; }
 
-        public MOE.Common.Models.SPM db = new SPM();
 
         public ImportChecker()
         {
+            try
+            {
+                CELRepository = MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+                _db = new SPM();
+            }
+            catch { }
+
+
             StartTime = DateTime.Now.AddMinutes(-30);
             EndTime = DateTime.Now;
             ThereIsAProblem = false;
 
-            List<MOE.Common.Models.ControllerType> TypesInUse = FindControllerTypesInUse();
+
+            if (_db != null && CELRepository != null)
+            {
+                List<MOE.Common.Models.ControllerType> TypesInUse = FindControllerTypesInUse();
 
             foreach (var t in TypesInUse)
             {
                 CheckControllerEventLogByControllerType(t);
             }
-             
-            CheckSpeedRecords();
-            CheckSpeedService();
-            
+
+                CheckSpeedRecords();
+                CheckSpeedService();
+            }
+            else
+            {
+                ThereIsAProblem = true;
+                message.Body = "The import checker could not find the database.";
+            }
+
             if(ThereIsAProblem)
             {
                 CreateAndSendEmail();
@@ -77,7 +95,7 @@ namespace ImportChecker
 
         private void CheckSpeedRecords()
         {
-            var speedRecords = (from r in db.Speed_Events
+            var speedRecords = (from r in _db.Speed_Events
                                where r.timestamp > StartTime && r.timestamp <= EndTime
                                select r).Take(20);
 
@@ -96,12 +114,12 @@ namespace ImportChecker
 
             List<MOE.Common.Models.ControllerType> TypesInUse = new List<ControllerType>();
 
-            List<MOE.Common.Models.ControllerType> AllTypes = (from r in db.ControllerType
+            List<MOE.Common.Models.ControllerType> AllTypes = (from r in _db.ControllerType
                                                             select r).ToList();
 
             foreach(var t in AllTypes)
             {
-                var s = (from r in db.Signals 
+                var s = (from r in _db.Signals 
                          where r.ControllerTypeID == t.ControllerTypeID
                          select r).FirstOrDefault();
 
@@ -165,7 +183,7 @@ namespace ImportChecker
 
         
 
-       List<MOE.Common.Models.Signal>  signals = (from r in db.Signals 
+       List<MOE.Common.Models.Signal>  signals = (from r in _db.Signals 
                                                   where r.ControllerTypeID == ControllerTypeID && r.Enabled == true
                                                   && r.Start > DateTime.Today
                                                   select r).OrderBy(t => Guid.NewGuid()).Take(10).ToList();

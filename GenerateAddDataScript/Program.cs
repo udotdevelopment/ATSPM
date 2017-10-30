@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MOE.Common.Business.ScriptGenerator;
+using MOE.Common;
 
 namespace GenerateAddDataScript
 {

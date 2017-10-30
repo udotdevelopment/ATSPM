@@ -37,7 +37,7 @@ namespace MOE.Common.Business
 
             
 
-            double RawAvgSpeed = TotalSpeed / Items.Count;
+            double RawAvgSpeed = TotalSpeed / SpeedEvents.Count;
             AvgSpeed = Convert.ToInt32(Math.Round(RawAvgSpeed));
             return AvgSpeed;
         }

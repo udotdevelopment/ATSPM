@@ -15,6 +15,7 @@ namespace MOE.Common.Models.Repositories
         List<Models.Signal> EagerLoadAllSignals();
         Models.Signal GetLatestVersionOfSignalBySignalID(string signalID);
         SignalFTPInfo GetSignalFTPInfoByID(string signalID);
+        List<SignalFTPInfo> GetSignalFTPInfoForAllFTPSignals();
         void AddOrUpdate(MOE.Common.Models.Signal signal);
         //void Add(MOE.Common.Models.Signal signal);
        

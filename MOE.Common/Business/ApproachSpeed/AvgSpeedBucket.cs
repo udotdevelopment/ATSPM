@@ -96,64 +96,7 @@ namespace MOE.Common.Business
             return percentileValue;
         }
 
-        //public Tuple<int, int> AddspeedHitToAverage(List<Cycle> cycleCollection)
-        //{
-        //    int averageSpeed;
-        //    int totalSpeed = 0;
-        //    int totalHits = 0;
-        //    int eightyfifth = 0;
-        //    int eighyFiveIndexInt = 0;
-        //    List<int> speeds = new List<int>();
-        //    var cycle = cycleCollection.FirstOrDefault(c => c.StartTime > this.StartTime &&
-        //                                               c.EndTime < this.EndTime);
-
-
-        //    foreach (var cy in query)
-        //    {
-        //        foreach (Models.Speed_Events sh in cy.SpeedsForCycle)
-        //        {
-
-        //                totalSpeed = totalSpeed + sh.MPH;
-        //                speeds.Add(sh.MPH);
-        //                totalHits++;
-        //        }
-        //    }
-
-        //    if (totalHits > 0)
-        //    {
-        //        double rawAverageSpeed = (totalSpeed / totalHits);
-        //        averageSpeed = Convert.ToInt32( Math.Round(rawAverageSpeed));
-                
-        //        double eighyFiveIndex =  ((totalHits * .85) + .5);
-        //        speeds.Sort();
-        //        if (speeds.Count > 3)
-        //        {
-        //            if ((eighyFiveIndex % 1) == 0)
-        //            {
-        //                eighyFiveIndexInt = Convert.ToInt16(eighyFiveIndex);
-        //                eightyfifth = speeds.ElementAt(eighyFiveIndexInt - 2);
-        //            }
-        //            else
-        //            {
-        //                double indexMod = (eighyFiveIndex % 1);
-        //                eighyFiveIndexInt = Convert.ToInt16(eighyFiveIndex);
-        //                int speed1 = speeds.ElementAt(eighyFiveIndexInt - 2);
-        //                int speed2 = speeds.ElementAt(eighyFiveIndexInt - 1);
-        //                double rawEightyfifth = (1 - indexMod) * speed1 + indexMod * speed2;
-        //                eightyfifth = Convert.ToInt32(Math.Round(rawEightyfifth));
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        averageSpeed = 0;
-        //        eightyfifth = 0;
-        //    }
-
-        //    return new Tuple<int, int>(averageSpeed, eightyfifth);
-
-        //        }
-
+        
         
 
             }

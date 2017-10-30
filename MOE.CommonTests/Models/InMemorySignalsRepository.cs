@@ -300,7 +300,31 @@ namespace MOE.CommonTests.Models
             return signal;
         }
 
+        public List<SignalFTPInfo> GetSignalFTPInfoForAllFTPSignals()
+        {
+            throw new NotImplementedException();
 
+            //List<SignalFTPInfo> signallist = (from r in GetLatestVersionOfAllSignals()
+            //                                  join ftp in _db.ControllerType on r.ControllerTypeID equals ftp.ControllerTypeID
+            //                                  where r.ControllerTypeID != 4
+            //                                  select new SignalFTPInfo
+            //                                  {
+            //                                      SignalID = r.SignalID,
+            //                                      PrimaryName = r.PrimaryName,
+            //                                      Secondary_Name = r.SecondaryName,
+            //                                      User_Name = ftp.UserName,
+            //                                      Password = ftp.Password,
+            //                                      FTP_Directory = ftp.FTPDirectory,
+            //                                      IP_Address = r.IPAddress,
+            //                                      SNMPPort = ftp.SNMPPort,
+            //                                      ActiveFTP = ftp.ActiveFTP,
+            //                                      ControllerType = r.ControllerTypeID
+            //                                  }
+            //).ToList();
+
+            //return signallist;
+
+        }
 
         public SignalFTPInfo GetSignalFTPInfoByID(string signalID)
         {

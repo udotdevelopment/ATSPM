@@ -80,9 +80,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SharpSnmpLib">
-      <HintPath>..\..\..\..\..\..\..\Common Libraries\SharpSnmpLib.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpSnmpLib">
       <HintPath>..\..\..\FTPfromasc3\FTPfromasc3\bin\Debug\SharpSnmpLib.dll</HintPath>
     </Reference>
     <Reference Include="SharpSnmpLib.Full, Version=9.0.20811.1, Culture=neutral, PublicKeyToken=4c00852d3788e005, processorArchitecture=MSIL">
@@ -130,12 +127,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MOE.Common\MOE.Common.csproj">
-      <Project>{87951632-A7BE-4E04-B62C-C4FC2FC0CD5A}</Project>
-      <Name>MOE.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
@@ -159,6 +150,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MOE.Common\MOE.Common.csproj">
+      <Project>{87951632-a7be-4e04-b62c-c4fc2fc0cd5a}</Project>
+      <Name>MOE.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

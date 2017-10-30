@@ -19,7 +19,6 @@
     <SccAuxPath>Svn</SccAuxPath>
     <SccProvider>SubversionScc</SccProvider>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>\\utstsrtcns61\udot\GenerateAddDataScript\</PublishUrl>
     <Install>false</Install>
@@ -71,7 +70,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AlexPilotti.FTPS.Client, Version=1.1.0.27735, Culture=neutral, PublicKeyToken=48316da1e84b328d, processorArchitecture=MSIL">

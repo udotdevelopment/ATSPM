@@ -87,6 +87,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Business\ApproachSpeed\AvgSpeedBucketCollectionTests.cs" />
     <Compile Include="Models\Custom\ApproachTests.cs" />
     <Compile Include="Models\Custom\ImporterTests.cs" />
     <Compile Include="Models\InMemoryApproachRepository.cs" />
@@ -112,6 +113,10 @@
     <ProjectReference Include="..\MOE.Common\MOE.Common.csproj">
       <Project>{87951632-A7BE-4E04-B62C-C4FC2FC0CD5A}</Project>
       <Name>MOE.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WavetronicsSpeedListener\WavetronicsSpeedListener.csproj">
+      <Project>{23FADD7C-2165-4EED-B930-C6ACDD2AC12F}</Project>
+      <Name>WavetronicsSpeedListener</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
