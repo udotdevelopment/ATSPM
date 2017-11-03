@@ -7,20 +7,17 @@ namespace MOE.Common.Migrations
     {
         public override void Up()
         {
-            DropForeignKey("dbo.ApproachRouteDetail", "DirectionType1_DirectionTypeID", "dbo.DirectionTypes");
-            DropForeignKey("dbo.ApproachRouteDetail", "DirectionType2_DirectionTypeID", "dbo.DirectionTypes");
+
             DropForeignKey("dbo.ApproachRouteDetail", "RouteId", "dbo.Route");
             DropForeignKey("dbo.ApproachRouteMetricTypes", "ApproachRoute_ApproachRouteId", "dbo.Route");
             DropForeignKey("dbo.ApproachRouteMetricTypes", "MetricType_MetricID", "dbo.MetricTypes");
             DropForeignKey("dbo.Route_Detectors", "Detectors_ID", "dbo.Detectors");
             DropIndex("dbo.ApproachRouteDetail", new[] { "RouteId" });
-            DropIndex("dbo.ApproachRouteDetail", new[] { "DirectionType1_DirectionTypeID" });
-            DropIndex("dbo.ApproachRouteDetail", new[] { "DirectionType2_DirectionTypeID" });
             DropIndex("dbo.Route_Detectors", new[] { "Detectors_ID" });
             DropIndex("dbo.ApproachRouteMetricTypes", new[] { "ApproachRoute_ApproachRouteId" });
             DropIndex("dbo.ApproachRouteMetricTypes", new[] { "MetricType_MetricID" });
             DropTable("dbo.Accordian");
-            DropTable("dbo.ApproachRouteDetail");
+
             DropTable("dbo.Route");
             DropTable("dbo.Alert_Day_Types");
             DropTable("dbo.DownloadAgreements");
