@@ -18,8 +18,10 @@ namespace MOE.Common.Models
 
         [Required]
         [StringLength(10)]
-        public string SignalID { get; set; }
+        public string SignalId { get; set; }
 
+        [ForeignKey("Signal")]
+        public int VersionId { get; set; }
         public virtual Signal Signal { get; set; }
 
         [Required]

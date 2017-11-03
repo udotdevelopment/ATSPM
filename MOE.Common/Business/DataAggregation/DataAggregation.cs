@@ -141,6 +141,7 @@ namespace MOE.Common.Business.DataAggregation
             approachSpeedAggregationTable.Columns.Add(new DataColumn("SpeedVolume", typeof(double)));
             approachSpeedAggregationTable.Columns.Add(new DataColumn("Speed85th", typeof(double)));
             approachSpeedAggregationTable.Columns.Add(new DataColumn("Speed15th", typeof(double)));
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
             while (_approachSpeedAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
                 DataRow dataRow = approachSpeedAggregationTable.NewRow();
@@ -150,6 +151,7 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["SpeedVolume"] = approachAggregationData.SpeedVolume;
                 dataRow["Speed85th"] = approachAggregationData.Speed85Th;
                 dataRow["Speed15th"] = approachAggregationData.Speed15Th;
+                dataRow["IsProtectedPhase"] = approachAggregationData.IsProtectedPhase;
                 approachSpeedAggregationTable.Rows.Add(dataRow);
             }
             string connectionString =
@@ -185,6 +187,7 @@ namespace MOE.Common.Business.DataAggregation
             approachAggregationTable.Columns.Add(new DataColumn("GreenTime", typeof(double)));
             approachAggregationTable.Columns.Add(new DataColumn("TotalCycles", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("PedActuations", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
             while (_approachCycleAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
                 DataRow dataRow = approachAggregationTable.NewRow();
@@ -195,6 +198,7 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["GreenTime"] = approachAggregationData.GreenTime;
                 dataRow["TotalCycles"] = approachAggregationData.TotalCycles;
                 dataRow["PedActuations"] = approachAggregationData.PedActuations;
+                dataRow["IsProtectedPhase"] = approachAggregationData.IsProtectedPhase;
                 approachAggregationTable.Rows.Add(dataRow);
             }
             string connectionString =
@@ -228,6 +232,7 @@ namespace MOE.Common.Business.DataAggregation
             approachAggregationTable.Columns.Add(new DataColumn("ArrivalsOnGreen", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("ArrivalsOnRed", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("ArrivalsOnYellow", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
             while (_approachPcdAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
                 DataRow dataRow = approachAggregationTable.NewRow();
@@ -236,6 +241,7 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["ArrivalsOnGreen"] = approachAggregationData.ArrivalsOnGreen;
                 dataRow["ArrivalsOnRed"] = approachAggregationData.ArrivalsOnRed;
                 dataRow["ArrivalsOnYellow"] = approachAggregationData.ArrivalsOnYellow;
+                dataRow["IsProtectedPhase"] = approachAggregationData.IsProtectedPhase;
                 approachAggregationTable.Rows.Add(dataRow);
             }
             string connectionString =
@@ -267,12 +273,14 @@ namespace MOE.Common.Business.DataAggregation
             approachAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             approachAggregationTable.Columns.Add(new DataColumn("ApproachID", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("SplitFailures", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
             while (_approachSplitFailAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
                 DataRow dataRow = approachAggregationTable.NewRow();
                 dataRow["BinStartTime"] = approachAggregationData.BinStartTime;
                 dataRow["ApproachID"] = approachAggregationData.ApproachId;
                 dataRow["SplitFailures"] = approachAggregationData.SplitFailures;
+                dataRow["IsProtectedPhase"] = approachAggregationData.IsProtectedPhase;
                 approachAggregationTable.Rows.Add(dataRow);
             }
             string connectionString =
@@ -305,6 +313,7 @@ namespace MOE.Common.Business.DataAggregation
             approachAggregationTable.Columns.Add(new DataColumn("ApproachID", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("SevereRedLightViolations", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("TotalRedLightViolations", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
             while (_approachYellowRedActivationAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
                 DataRow dataRow = approachAggregationTable.NewRow();
@@ -312,6 +321,7 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["ApproachID"] = approachAggregationData.ApproachId;
                 dataRow["SevereRedLightViolations"] = approachAggregationData.SevereRedLightViolations;
                 dataRow["TotalRedLightViolations"] = approachAggregationData.TotalRedLightViolations;
+                dataRow["IsProtectedPhase"] = approachAggregationData.IsProtectedPhase;
                 approachAggregationTable.Rows.Add(dataRow);
             }
             string connectionString =
@@ -373,11 +383,11 @@ namespace MOE.Common.Business.DataAggregation
             List<int> priorityCodes = new List<int> { 112, 113, 114 };
             if (records.Count(r => preemptCodes.Contains(r.EventCode)) > 0)
             {
-                AggregatePreemptCodes(startTime, records, signal.SignalID, preemptCodes);
+                AggregatePreemptCodes(startTime, records, signal, preemptCodes);
             }
             if (records.Count(r => priorityCodes.Contains(r.EventCode)) > 0)
             {
-                AggregatePriorityCodes(startTime, records, signal.SignalID, priorityCodes);
+                AggregatePriorityCodes(startTime, records, signal, priorityCodes);
             }
             if (signal.Approaches != null)
             {
@@ -563,7 +573,7 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
-        private void AggregatePriorityCodes(DateTime startTime, List<Controller_Event_Log> records, string signalID, List<int> eventCodes)
+        private void AggregatePriorityCodes(DateTime startTime, List<Controller_Event_Log> records, MOE.Common.Models.Signal signal, List<int> eventCodes)
         {
             for (int i = 0; i <= 10; i++)
             {
@@ -571,7 +581,8 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     PriorityAggregation priorityAggregation = new PriorityAggregation
                     {
-                        SignalID = signalID,
+                        SignalID = signal.SignalID,
+                        VersionId = signal.VersionID,
                         BinStartTime = startTime,
                         PriorityNumber = i,
                         PriorityRequests = records.Count(r => r.EventCode == 112),
@@ -584,7 +595,7 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
-        private void AggregatePreemptCodes(DateTime startTime, List<Controller_Event_Log> records, string signalID, List<int> eventCodes)
+        private void AggregatePreemptCodes(DateTime startTime, List<Controller_Event_Log> records, MOE.Common.Models.Signal signal, List<int> eventCodes)
         {
             for (int i = 0; i <= 10; i++)
             {
@@ -592,7 +603,8 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     PreemptionAggregation preemptionAggregationData = new PreemptionAggregation
                     {
-                        SignalID = signalID,
+                        SignalId = signal.SignalID,
+                        VersionId = signal.VersionID,
                         BinStartTime = startTime,
                         PreemptNumber = i,
                         PreemptRequests = records.Count(r => r.EventCode == 102),

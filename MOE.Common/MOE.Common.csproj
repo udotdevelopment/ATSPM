@@ -411,7 +411,7 @@
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\ApproachPcdAggregation.cs" />
-    <Compile Include="Models\ApproachYellowRedActivationsAggregationData.cs" />
+    <Compile Include="Models\ApproachYellowRedActivationsAggregations.cs" />
     <Compile Include="Models\ApproachSplitFailAggregation.cs" />
     <Compile Include="Models\ApproachSpeedAggregation.cs" />
     <Compile Include="Models\ApproachCycleAggregation.cs" />
