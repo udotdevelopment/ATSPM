@@ -214,7 +214,7 @@ function MoveDown() {
 function Remove() {
     $('#SelectedSignalsList option:selected').remove();
 }
-function GetOptions(){}
+
 
 function displayInfobox(e) {
     if (e.targetType == 'pushpin') {

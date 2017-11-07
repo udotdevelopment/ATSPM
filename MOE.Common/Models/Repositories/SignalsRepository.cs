@@ -464,16 +464,17 @@ namespace MOE.Common.Models.Repositories
         }
 
 
-        public Common.Models.Signal GetLatestVersionOfSignalBySignalID(string signalID)
+        public Common.Models.Signal GetLatestVersionOfSignalBySignalID(string signalId)
         {
+            var returnSignal = _db.Signals
+                .Include(signal => signal.Approaches.Select(a => a.Detectors))
+                .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                .Where(signal => signal.SignalID == signalId)
+                .Where(signal => signal.VersionActionId != 3)
+                .OrderByDescending(signal => signal.Start)
+                .FirstOrDefault();
 
-
-
-            var signal = (from r in _db.Signals
-                          where r.SignalID == signalID
-                            && r.VersionActionId != 3
-                          select r).OrderByDescending(r => r.Start).FirstOrDefault();
-            return signal;
+            return returnSignal;
         }
 
         private VersionAction GetVersionActionByVersionAction_ID(int id)

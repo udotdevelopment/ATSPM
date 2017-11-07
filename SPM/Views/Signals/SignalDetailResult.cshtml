@@ -12,12 +12,25 @@
     @Html.HiddenFor(model => model.SignalID, new { @id = "editSignalID" })
     @Html.HiddenFor(model => model.VersionID)
         
-               
+    @{
+        List <SelectListItem>  versionList = new List<SelectListItem>();
+        foreach (var v in Model.VersionList)
+        {
+            if (v.VersionID == Model.VersionID)
+            {
+                versionList.Add(new SelectListItem { Text = v.SelectListName, Value = v.VersionID.ToString(), Selected = true });
+            }
+            else
+            {
+                versionList.Add(new SelectListItem { Text = v.SelectListName, Value = v.VersionID.ToString() });
+            }
+        }
+    }         
                 
     <div class="form-group-configuration-tool  form-group col-md-6">
         @Html.LabelFor(model => model.VersionID, htmlAttributes: new { @class = "control-label" })
         <div class="">
-            @Html.DropDownListFor(model => model.VersionID, (SelectList)ViewBag.VersionList, new { @class = "form-control", @onchange = "LoadVersionByVersionID(this.value)" })
+            @Html.DropDownList("versionDropDown", versionList, new {id = "versionDropDown", @class = "form-control", @onchange = "LoadVersionByVersionID(this.value)" })
             @Html.ValidationMessageFor(model => model.VersionID, "", new { id = "Version-error", @class = "text-danger" })
         </div>
     </div>

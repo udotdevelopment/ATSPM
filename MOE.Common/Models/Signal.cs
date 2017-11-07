@@ -58,6 +58,7 @@ namespace MOE.Common.Models
         public virtual VersionAction VersionAction { get; set; }
 
         [Required]
+        [Display(Name = "Version Label")]
         public string Note { get; set; }
 
         [Required]
