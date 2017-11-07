@@ -153,7 +153,7 @@ namespace MOE.Common.Models
         }
 
         public static Approach CopyApproachForSignal(int approachIDToCopy)
-        {
+         {
             MOE.Common.Models.Repositories.IApproachRepository approachRepository =
                 MOE.Common.Models.Repositories.ApproachRepositoryFactory.Create();
             Approach approachToCopy = approachRepository.GetApproachByApproachID(approachIDToCopy);

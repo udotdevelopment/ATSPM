@@ -88,6 +88,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Business\ApproachSpeed\AvgSpeedBucketCollectionTests.cs" />
+    <Compile Include="Models\InMemoryApplicationEventRepository.cs" />
+    <Compile Include="Business\WCFServiceLibrary\MetricOptionsTests.cs" />
     <Compile Include="Models\Custom\ApproachTests.cs" />
     <Compile Include="Models\Custom\ImporterTests.cs" />
     <Compile Include="Models\InMemoryApproachRepository.cs" />

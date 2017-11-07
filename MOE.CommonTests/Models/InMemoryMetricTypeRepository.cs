@@ -38,9 +38,11 @@ namespace MOE.CommonTests.Models
             throw new NotImplementedException();
         }
 
-        public MetricType GetMetricsByID(int metricID)
+        public MetricType GetMetricsByID(int metricId)
         {
-            throw new NotImplementedException();
+            var metricType = _db.MetricTypes.Find(m => m.MetricID == metricId);
+
+            return metricType;
         }
 
         public List<MetricType> GetMetricsByIDs(List<int> metricIDs)
