@@ -66,7 +66,7 @@ namespace MOE.Common.Business
         {
             this.startTime = startTime;
             this.endTime = endTime;
-            this.xAxis = endTime;
+            this.xAxis = startTime;
             if (binSize == 0)
             {
                 this.binSizeMultiplier = 0;
@@ -77,14 +77,14 @@ namespace MOE.Common.Business
             }
         }
 
-        public Volume(DateTime startTime, DateTime endTime, int binSize, int volume)
-        {
-            this.startTime = startTime;
-            this.endTime = endTime;
-            this.xAxis = endTime;
-            this.binSizeMultiplier = 60 / binSize;
-            this.detectorCount = volume;
-        }
+        //public Volume(DateTime startTime, DateTime endTime, int binSize, int volume)
+        //{
+        //    this.startTime = startTime;
+        //    this.endTime = endTime;
+        //    this.xAxis = endTime;
+        //    this.binSizeMultiplier = 60 / binSize;
+        //    this.detectorCount = volume;
+        //}
 
         public void AddDetectorToVolume()
         {

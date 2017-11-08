@@ -36,36 +36,39 @@ namespace ImportChecker
 
         public ImportChecker()
         {
-            try
-            {
-                CELRepository = MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-                _db = new SPM();
-            }
-            catch { }
-
-
             StartTime = DateTime.Now.AddMinutes(-30);
             EndTime = DateTime.Now;
             ThereIsAProblem = false;
 
-
-            if (_db != null && CELRepository != null)
+            try
             {
-                List<MOE.Common.Models.ControllerType> TypesInUse = FindControllerTypesInUse();
-
-            foreach (var t in TypesInUse)
-            {
-                CheckControllerEventLogByControllerType(t);
+                CELRepository = MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+                _db = new SPM();
+                var testSignals = _db.Signals.Take(1).FirstOrDefault();
             }
-
-                CheckSpeedRecords();
-                CheckSpeedService();
-            }
-            else
+            catch
             {
                 ThereIsAProblem = true;
                 message.Body = "The import checker could not find the database.";
             }
+
+
+
+
+
+            if (_db != null && CELRepository != null && !ThereIsAProblem)
+            {
+                List<MOE.Common.Models.ControllerType> TypesInUse = FindControllerTypesInUse();
+
+                foreach (var t in TypesInUse)
+                {
+                    CheckControllerEventLogByControllerType(t);
+                }
+
+                    CheckSpeedRecords();
+                    CheckSpeedService();
+            }
+
 
             if(ThereIsAProblem)
             {
@@ -218,6 +221,7 @@ namespace ImportChecker
                 Console.WriteLine("Sent message to: " + message.To.ToString() + "\nMessage text: " + message.Body + "\n");
                 smtp.Send(message);
                 System.Threading.Thread.Sleep(500);
+                
                 er.QuickAdd("ImportChecker", "Program", "SendMessage",
                     MOE.Common.Models.ApplicationEvent.SeverityLevels.Information,
                     "Email Sent Successfully to: " + message.To.ToString());
@@ -225,8 +229,17 @@ namespace ImportChecker
 
             catch (Exception ex)
             {
-                er.QuickAdd("ImportChecker", "Program", "SendMessage",
-                    MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
+                try
+                {
+                    er.QuickAdd("ImportChecker", "Program", "SendMessage",
+                        MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+
             }
         }
 
