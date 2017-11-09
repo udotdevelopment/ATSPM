@@ -125,7 +125,7 @@ namespace MOE.Common.Business
             chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
 
             AddDataToChart(chart, signalPhase);
-            SetPlanStrips(signalPhase.Plans.PlanList, chart, Options.StartDate, Options.ShowPlanStatistics);
+            SetPlanStrips(signalPhase.Plans, chart, Options.StartDate, Options.ShowPlanStatistics);
         }
 
         private void SetChartTitles(SignalPhase signalPhase, Dictionary<string, string> statistics)
@@ -145,57 +145,47 @@ namespace MOE.Common.Business
         }
 
 
-        protected void AddDataToChart(Chart chart, MOE.Common.Business.SignalPhase signalPhase)
+        protected void AddDataToChart(Chart chart, SignalPhase signalPhase)
         {
-           
             double totalDetectorHits = 0;
             int yAxisHolder = 0;
-
-
-
-            foreach (MOE.Common.Business.Plan plan in signalPhase.Plans.PlanList)
+            if (signalPhase.Cycles.Count > 0)
             {
-                if (plan.CycleCollection.Count > 0)
+                DateTime dt = signalPhase.StartDate;
+                while (dt < signalPhase.EndDate)
                 {
-
-                    DateTime dt = plan.StartTime;
-
-                    while (dt < plan.EndTime)
+                    double binTotalStops = 0;
+                    double binPercentAoR = 0;
+                    double binDetectorHits = 0;
+                    var pcds = from item in signalPhase.Cycles
+                                where item.StartTime > dt && item.EndTime < dt.AddMinutes(Options.SelectedBinSize)
+                                select item;
+                    foreach (Cycle pcd in pcds)
                     {
-                        double binTotalStops = 0;
-                        double binPercentAoR = 0;
-                        double binDetectorHits = 0;
-                        var pcds = from item in plan.CycleCollection
-                                   where item.StartTime > dt && item.EndTime < dt.AddMinutes(Options.SelectedBinSize)
-                                   select item;
-                        foreach (MOE.Common.Business.Cycle pcd in pcds)
+                        totalDetectorHits += pcd.DetectorEvents.Count;
+                        binDetectorHits += pcd.DetectorEvents.Count;
+                        foreach (DetectorDataPoint detectorPoint in pcd.DetectorEvents)
                         {
-                            totalDetectorHits += pcd.DetectorCollection.Count;
-                            binDetectorHits += pcd.DetectorCollection.Count;
-                            foreach (MOE.Common.Business.DetectorDataPoint detectorPoint in pcd.DetectorCollection)
+                            if (detectorPoint.YPoint < pcd.GreenLineY) 
                             {
-                                if (detectorPoint.YPoint < pcd.GreenLineY) //&& detectorPoint.YPoint < pcd.RedLineY)
-                                {
-                                    binTotalStops++;
-                                    totalAoR++;
-                                }
-                            }
-
-                            if (binDetectorHits > 0)
-                            {
-                                binPercentAoR = ((binTotalStops / binDetectorHits) * 100);
+                                binTotalStops++;
+                                totalAoR++;
                             }
                         }
-                        chart.Series["Percent Arrivals on Red"].Points.AddXY(dt, binPercentAoR);
-                        chart.Series["Total Vehicles"].Points.AddXY(dt, (binDetectorHits * (60 / Options.SelectedBinSize)));
-                        chart.Series["Arrivals on Red"].Points.AddXY(dt, (binTotalStops * (60 / Options.SelectedBinSize)));
-                        dt = dt.AddMinutes(Options.SelectedBinSize);
-                        if (yAxisHolder < (binTotalStops * (60 / Options.SelectedBinSize)) && Options.YAxisMax == null)
+                        if (binDetectorHits > 0)
                         {
-                            yAxisHolder = Convert.ToInt16(binDetectorHits * (60 / Options.SelectedBinSize));
-                            yAxisHolder = RoundToNearest(yAxisHolder, 100);
-                            chart.ChartAreas[0].AxisY.Maximum = yAxisHolder + 250;
+                            binPercentAoR = ((binTotalStops / binDetectorHits) * 100);
                         }
+                    }
+                    chart.Series["Percent Arrivals on Red"].Points.AddXY(dt, binPercentAoR);
+                    chart.Series["Total Vehicles"].Points.AddXY(dt, (binDetectorHits * (60 / Options.SelectedBinSize)));
+                    chart.Series["Arrivals on Red"].Points.AddXY(dt, (binTotalStops * (60 / Options.SelectedBinSize)));
+                    dt = dt.AddMinutes(Options.SelectedBinSize);
+                    if (yAxisHolder < (binTotalStops * (60 / Options.SelectedBinSize)) && Options.YAxisMax == null)
+                    {
+                        yAxisHolder = Convert.ToInt16(binDetectorHits * (60 / Options.SelectedBinSize));
+                        yAxisHolder = RoundToNearest(yAxisHolder, 100);
+                        chart.ChartAreas[0].AxisY.Maximum = yAxisHolder + 250;
                     }
                 }
             }

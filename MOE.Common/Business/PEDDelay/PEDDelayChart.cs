@@ -85,12 +85,8 @@ namespace MOE.Common.Business.PEDDelay
             PedestrianDelaySeries.Color = Color.Blue;
             PedestrianDelaySeries.Name = "Pedestrian Delay\nby Actuation";
             PedestrianDelaySeries.XValueType = ChartValueType.DateTime;
-            
-
             chart.Series.Add(PedestrianDelaySeries);
             chart.Series["Pedestrian Delay\nby Actuation"]["PixelPointWidth"] = "2";
-            
-
             AddDataToChart();
             SetPlanStrips();
         }
@@ -196,35 +192,6 @@ namespace MOE.Common.Business.PEDDelay
 
             }
         }
-
-        private static int RoundToNearest(int iNumberToRound, int iToNearest)
-        {
-            //int iToNearest = 100;
-            int iNearest = 0;
-            bool bIsUpper = false;
-
-            int iRest = iNumberToRound % iToNearest;
-            if (iNumberToRound == 550) bIsUpper = true;
-
-            if (bIsUpper == true)
-            {
-                iNearest = (iNumberToRound - iRest) + iToNearest;
-                return iNearest;
-            }
-            if (iRest > (iToNearest / 2))
-            {
-                iNearest = (iNumberToRound - iRest) + iToNearest;
-                return iNearest;
-            }
-            if (iRest < (iToNearest / 2))
-            {
-                iNearest = (iNumberToRound - iRest);
-                return iNearest;
-            }
-
-            return 0;
-        }
-
     }
 }
 

@@ -9,27 +9,18 @@ namespace MOE.Common.Business
     public class ControllerEventLogs
     {
         private Models.SPM db = new Models.SPM();
-
-        protected string _SignalID;
-        public string SignalID { get { return _SignalID; } }
-
-        protected DateTime _StartDate;
-        public DateTime StartDate { get { return _StartDate; } }
-
-        protected DateTime _EndDate;
-        public DateTime EndDate { get { return _EndDate; } }
-
-        protected List<int> _EventCodes;
-        public List<int> EventCodes { get { return _EventCodes; } }
-
+        public string SignalId { get; }
+        public DateTime StartDate { get; protected set; }
+        public DateTime EndDate { get; protected set; }
+        public List<int> EventCodes { get; }
         public List<Models.Controller_Event_Log> Events { get; set; }
 
         public ControllerEventLogs(string signalID, DateTime startDate, DateTime endDate)
         {
-            _SignalID = signalID;
-            _StartDate = startDate;
-            _EndDate = endDate;
-            _EventCodes = new List<int>();
+            SignalId = signalID;
+            StartDate = startDate;
+            EndDate = endDate;
+            EventCodes = new List<int>();
             Events = new List<Models.Controller_Event_Log>();
         }
 
@@ -110,14 +101,14 @@ namespace MOE.Common.Business
 
         public void MergeEvents(ControllerEventLogs newEvents)
         {
-            if (newEvents._StartDate < this._StartDate)
+            if (newEvents.StartDate < this.StartDate)
             {
-                this._StartDate = newEvents._StartDate;
+                this.StartDate = newEvents.StartDate;
             }
 
-            if (newEvents._EndDate > this._EndDate)
+            if (newEvents.EndDate > this.EndDate)
             {
-                this._EndDate = newEvents._EndDate;
+                this.EndDate = newEvents.EndDate;
             }
 
             var incomingEventCodes = (from s in newEvents.EventCodes
@@ -125,9 +116,9 @@ namespace MOE.Common.Business
 
             foreach (int i in incomingEventCodes)
             {
-                if (!this._EventCodes.Contains(i))
+                if (!this.EventCodes.Contains(i))
                 {
-                    this._EventCodes.AddRange(newEvents._EventCodes);
+                    this.EventCodes.AddRange(newEvents.EventCodes);
                 }
             }
 
@@ -138,10 +129,10 @@ namespace MOE.Common.Business
 
         public ControllerEventLogs(string signalID, DateTime startDate, DateTime endDate, List<int> eventCodes)
         {
-            _SignalID = signalID;
-            _StartDate = startDate;
-            _EndDate = endDate;
-            _EventCodes = eventCodes;
+            SignalId = signalID;
+            StartDate = startDate;
+            EndDate = endDate;
+            EventCodes = eventCodes;
 
             var events = from s in db.Controller_Event_Log
                          where s.SignalID == signalID && 
@@ -156,10 +147,10 @@ namespace MOE.Common.Business
 
         public ControllerEventLogs(string signalID, DateTime startDate, DateTime endDate, int eventParam, List<int> eventCodes)
         {
-            _SignalID = signalID;
-            _StartDate = startDate;
-            _EndDate = endDate;
-            _EventCodes = eventCodes;
+            SignalId = signalID;
+            StartDate = startDate;
+            EndDate = endDate;
+            EventCodes = eventCodes;
 
             var events = from s in db.Controller_Event_Log
                          where s.SignalID == signalID &&

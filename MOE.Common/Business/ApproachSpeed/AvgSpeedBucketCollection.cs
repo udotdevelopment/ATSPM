@@ -9,12 +9,12 @@ namespace MOE.Common.Business
     {
         public List<AvgSpeedBucket> Items = new List<AvgSpeedBucket>();
 
-        public AvgSpeedBucketCollection(DateTime startTime, DateTime endTime, List<Cycle> CycleCollection, int binSize, int minspeedfilter, int movementdelay)
+        public AvgSpeedBucketCollection(DateTime startTime, DateTime endTime, List<Cycle> cycleCollection, int binSize, int movementdelay)
         {
             DateTime dt = startTime;
             while (dt.AddMinutes(binSize) <= endTime)
             {
-                AvgSpeedBucket Avg = new AvgSpeedBucket(dt, dt.AddMinutes(binSize), CycleCollection, binSize, minspeedfilter, movementdelay);
+                AvgSpeedBucket Avg = new AvgSpeedBucket(dt, dt.AddMinutes(binSize), cycleCollection, binSize, movementdelay);
                 Items.Add(Avg);
                 dt = dt.AddMinutes(binSize);
             }

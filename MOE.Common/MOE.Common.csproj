@@ -355,6 +355,8 @@
     <Compile Include="Business\DataAggregation\DataAggregation.cs" />
     <Compile Include="Business\Helpers\ApproachVolumeTable.cs" />
     <Compile Include="Business\Helpers\ConfigurationRecord.cs" />
+    <Compile Include="Business\PlanSplitMonitor.cs" />
+    <Compile Include="Business\PlanSpeed.cs" />
     <Compile Include="Business\Speed\DetectorSpeed.cs" />
     <Compile Include="Business\SplitFail\SplitFailPhase.cs" />
     <Compile Include="Business\TMC\TMCData.cs" />
@@ -508,7 +510,7 @@
     <Compile Include="Business\RLM\RLMPlan.cs" />
     <Compile Include="Business\Plan.cs" />
     <Compile Include="Business\RLM\RLMPlanCollection.cs" />
-    <Compile Include="Business\PlanCollection.cs" />
+    <Compile Include="Business\PlanFactory.cs" />
     <Compile Include="Business\RLM\RLMSignalPhaseCollection.cs" />
     <Compile Include="Business\Route.cs" />
     <Compile Include="Business\ScriptGenerator\GenerateAddData.cs" />
@@ -728,6 +730,7 @@
     <Compile Include="Models\ViewModel\WebConfigTool\WebConfigToolViewModel.cs" />
     <Compile Include="Models\ViewModel\_MainMenu\MenuItem.cs" />
     <Compile Include="Models\WatchDogApplicationSettings.cs" />
+    <Compile Include="Business\CycleFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -20,9 +20,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
     public class PedDelayOptions: MetricOptions
     {
 
-        public PedDelayOptions(string signalID, DateTime startDate, DateTime endDate, double? yAxisMax)
+        public PedDelayOptions(string signalId, DateTime startDate, DateTime endDate, double? yAxisMax)
         {
-            SignalID = signalID;
+            SignalID = signalId;
             StartDate = startDate;
             EndDate = endDate;
             YAxisMax = yAxisMax;
@@ -39,14 +39,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
-            MOE.Common.Business.PEDDelay.PedDelaySignal pds = new MOE.Common.Business.PEDDelay.PedDelaySignal(SignalID,
-     StartDate, EndDate);
-            foreach (MOE.Common.Business.PEDDelay.PedPhase p in pds.PedPhases)
+            PEDDelay.PedDelaySignal pds = new PEDDelay.PedDelaySignal(SignalID, StartDate, EndDate);
+            foreach (PEDDelay.PedPhase p in pds.PedPhases)
             {
                 if (p.Cycles.Count > 0)
                 {
-                    MOE.Common.Business.PEDDelay.PEDDelayChart pdc = 
-                        new MOE.Common.Business.PEDDelay.PEDDelayChart(this, p);
+                    PEDDelay.PEDDelayChart pdc = new PEDDelay.PEDDelayChart(this, p);
                     Chart chart = pdc.chart;
                     string chartName = CreateFileName();
                     chart.SaveImage(MetricFileLocation + chartName);

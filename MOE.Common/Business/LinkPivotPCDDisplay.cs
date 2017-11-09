@@ -271,7 +271,7 @@ namespace MOE.Common.Business
                 maxYAxis, 2000, false, 2);
 
             //Add the data to the chart
-            AddDataToChart(chart, sp, startDate, endDate, false, true);
+            AddDataToChart(chart, sp, startDate, false, true);
             
             //Add info to the based on direction and before or after adjustments
             if(directionBeforeAfter == "DownstreamBefore")
@@ -495,55 +495,43 @@ namespace MOE.Common.Business
         /// <param name="chart"></param>
         /// <param name="signalPhase"></param>
         /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
         /// <param name="signalId"></param>
-        private void AddDataToChart(Chart chart, MOE.Common.Business.SignalPhase signalPhase, DateTime startDate,
-            DateTime endDate, bool showVolume, bool showArrivalOnGreen)
+        private void AddDataToChart(Chart chart, SignalPhase signalPhase, DateTime startDate, bool showVolume, bool showArrivalOnGreen)
         {
-          
             decimal totalDetectorHits = 0;
             decimal totalOnGreenArrivals = 0;
             decimal percentArrivalOnGreen = 0;
-
-            //Add the data by plan
-            foreach (MOE.Common.Business.Plan plan in signalPhase.Plans.PlanList)
+            foreach (Cycle pcd in signalPhase.Cycles)
             {
-                //check for empty pcd collection
-                if (plan.CycleCollection.Count > 0)
+                //add the data for the green line
+                chart.Series["Change to Green"].Points.AddXY(
+                    pcd.GreenEvent,
+                    pcd.GreenLineY);
+
+                //add the data for the yellow line
+                chart.Series["Change to Yellow"].Points.AddXY(
+                    pcd.YellowEvent,
+                    pcd.YellowLineY);
+
+                //add the data for the red line
+                chart.Series["Change to Red"].Points.AddXY(
+                    pcd.EndTime,
+                    pcd.RedLineY);
+
+                //add the detector hits to the running total
+                totalDetectorHits += pcd.DetectorEvents.Count;
+
+                //add the detector hits to the detector activation series
+                foreach (DetectorDataPoint detectorPoint in pcd.DetectorEvents)
                 {
-                    foreach (MOE.Common.Business.Cycle pcd in plan.CycleCollection)
+                    chart.Series["Detector Activation"].Points.AddXY(
+                        detectorPoint.TimeStamp,
+                        detectorPoint.YPoint);
+
+                    //if this is an arrival on green add it to the running total
+                    if (detectorPoint.YPoint > pcd.GreenLineY && detectorPoint.YPoint < pcd.RedLineY)
                     {
-                        //add the data for the green line
-                        chart.Series["Change to Green"].Points.AddXY(
-                            pcd.GreenEvent,
-                            pcd.GreenLineY);
-
-                        //add the data for the yellow line
-                        chart.Series["Change to Yellow"].Points.AddXY(
-                            pcd.YellowEvent,
-                            pcd.YellowLineY);
-
-                        //add the data for the red line
-                        chart.Series["Change to Red"].Points.AddXY(
-                            pcd.EndTime,
-                            pcd.RedLineY);
-
-                        //add the detector hits to the running total
-                        totalDetectorHits += pcd.DetectorCollection.Count;
-
-                        //add the detector hits to the detector activation series
-                        foreach (MOE.Common.Business.DetectorDataPoint detectorPoint in pcd.DetectorCollection)
-                        {
-                            chart.Series["Detector Activation"].Points.AddXY(
-                                detectorPoint.TimeStamp,
-                                detectorPoint.YPoint);
-
-                            //if this is an arrival on green add it to the running total
-                            if (detectorPoint.YPoint > pcd.GreenLineY && detectorPoint.YPoint < pcd.RedLineY)
-                            {
-                                totalOnGreenArrivals++;
-                            }
-                        }
+                        totalOnGreenArrivals++;
                     }
                 }
             }
@@ -551,7 +539,7 @@ namespace MOE.Common.Business
             //add the volume data to the volume series if true
             if (showVolume)
             {
-                foreach (MOE.Common.Business.Volume v in signalPhase.Volume.Items)
+                foreach (Volume v in signalPhase.Volume.Items)
                 {
                     chart.Series["Volume Per Hour"].Points.AddXY(v.XAxis, v.YAxis);
                 }
@@ -574,12 +562,12 @@ namespace MOE.Common.Business
                  chart.Titles.Add(title);
 
 
-                SetPlanStrips(signalPhase.Plans.PlanList, chart, startDate);
+                SetPlanStrips(signalPhase.Plans, chart, startDate);
             }
 
-            MOE.Common.Models.Repositories.IMetricCommentRepository mcr = MOE.Common.Models.Repositories.MetricCommentRepositoryFactory.Create();
+            var mcr = Models.Repositories.MetricCommentRepositoryFactory.Create();
 
-            MOE.Common.Models.MetricComment comment = mcr.GetLatestCommentForReport(signalPhase.Approach.SignalID, MetricTypeID);
+            Models.MetricComment comment = mcr.GetLatestCommentForReport(signalPhase.Approach.SignalID, MetricTypeID);
 
             if (comment != null)
             {
@@ -588,10 +576,6 @@ namespace MOE.Common.Business
                 chart.Titles[1].Docking = Docking.Bottom;
                 chart.Titles[1].ForeColor = Color.Red;
             }
-
-
-
-            
         }
 
 

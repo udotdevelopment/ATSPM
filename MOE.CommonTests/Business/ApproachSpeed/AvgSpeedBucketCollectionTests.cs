@@ -17,7 +17,7 @@ namespace MOE.Common.Business.Tests
         public void AvgSpeedBucketCollectionTest()
         {
             List<Cycle> cycles = new List<Cycle>(); 
-            AvgSpeedBucketCollection asbc = new AvgSpeedBucketCollection(DateTime.Now.AddDays(-1), DateTime.Now, cycles, 5, 5, 5);
+            AvgSpeedBucketCollection asbc = new AvgSpeedBucketCollection(DateTime.Now.AddDays(-1), DateTime.Now, cycles, 5, 5);
 
             List<Models.Speed_Events> lse = new List<Models.Speed_Events>();
 

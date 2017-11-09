@@ -9,66 +9,29 @@ namespace MOE.Common.Business.PEDDelay
 {
     public class PedPhase:ControllerEventLogs
     {
-        private int _PhaseNumber;
-        public int PhaseNumber { get{return _PhaseNumber;} }
+        public int PhaseNumber { get; }
+        public string SignalID { get; } 
+        public double PedActuations { get{return Plans.Sum(p => p.PedActuations);} }
+        public List<PedCycle> Cycles { get; }
+        public List<PedPlan> Plans { get; }
+        public List<PedHourlyTotal> HourlyTotals { get; }
+        public double MinDelay { get; private set; }
+        public double AverageDelay { get; private set; }
+        public double MaxDelay { get; private set; }
 
-        protected string _SignalID;
-        public string SignalID { get { return _SignalID; } }
-        
-        public DateTime StartDate { get; }
-
-        protected DateTime _EndDate;
-        public DateTime EndDate { get { return _EndDate; } }        
-
-        public double PedActuations { get{return _Plans.Sum(p => p.PedActuations);} }
-
-        private double _MinDelay;
-
-        public double MinDelay
-        {
-            get { return _MinDelay; }
-        }
-
-        private double _MaxDelay;
-
-        public double MaxDelay
-        {
-            get { return _MaxDelay; }
-        }
-
-        private double _AverageDelay;
-
-        public double AverageDelay
-        {
-            get { return _AverageDelay; }
-        }
-
-        private List<PedCycle> _Cycles = new List<PedCycle>();
-
-        public List<PedCycle> Cycles
-        {
-            get { return _Cycles; }
-        }
-        
-
-        protected List<PedPlan> _Plans = new List<PedPlan>();
-        public List<PedPlan> Plans{ get{ return _Plans; } }
-
-        private List<PedHourlyTotal> _HourlyTotals = new List<PedHourlyTotal>();
-
-        public List<PedHourlyTotal> HourlyTotals
-        {
-            get { return _HourlyTotals; }
-        }
-        
 
         public PedPhase(int phaseNumber, string signalID, DateTime startDate, DateTime endDate,
             PlansBase plansData):base(signalID,startDate, endDate, phaseNumber, new List<int>{21,22,45})
         {
-            _SignalID = signalID;
-            _StartDate = startDate;
-            _EndDate = endDate;
-            _PhaseNumber = phaseNumber;
+            SignalID = signalID;
+            StartDate = startDate;
+            EndDate = endDate;
+            PhaseNumber = phaseNumber;
+            StartDate = startDate;
+            EndDate = endDate;
+            Plans = new List<PedPlan>();
+            Cycles = new List<PedCycle>();
+            HourlyTotals = new List<PedHourlyTotal>();
 
             for (int i = 0; i < plansData.Events.Count; i++)
             {
@@ -78,7 +41,7 @@ namespace MOE.Common.Business.PEDDelay
                 {
                     PedPlan plan = new PedPlan(signalID, phaseNumber, plansData.Events[i].Timestamp, endDate,
                         plansData.Events[i].EventParam);
-                    _Plans.Add(plan);
+                    Plans.Add(plan);
                 }
                 //else we add the plan with the next plans' time stamp as the end of the plan
                 else
@@ -87,7 +50,7 @@ namespace MOE.Common.Business.PEDDelay
                     PedPlan plan = new PedPlan(signalID, phaseNumber, plansData.Events[i].Timestamp, 
                         plansData.Events[i + 1].Timestamp, plansData.Events[i].EventParam);
 
-                    _Plans.Add(plan);
+                    Plans.Add(plan);
 
                 }
             }
@@ -112,7 +75,6 @@ namespace MOE.Common.Business.PEDDelay
 
         private void GetCycles()
         {
-            
             for (int i = 0; i < Events.Count; i++)
             {
                 if (i < Events.Count - 2 && Events[i].EventCode == 21 &&
@@ -135,9 +97,9 @@ namespace MOE.Common.Business.PEDDelay
             //Get Min Max and Average
             if (Cycles.Count > 0)
             {
-                _MinDelay = Cycles.Min(c => c.Delay);
-                _MaxDelay = Cycles.Max(c => c.Delay);
-                _AverageDelay = Cycles.Average(c => c.Delay);
+                MinDelay = Cycles.Min(c => c.Delay);
+                MaxDelay = Cycles.Max(c => c.Delay);
+                AverageDelay = Cycles.Average(c => c.Delay);
 
 
                 DateTime dt = new DateTime(this.StartDate.Year, StartDate.Month, StartDate.Day, StartDate.Hour, 0, 0);
@@ -148,12 +110,14 @@ namespace MOE.Common.Business.PEDDelay
                                         where c.CallRegistered >= dt &&
                                         c.CallRegistered < nextDt
                                         select c.Delay).Sum();
-                    _HourlyTotals.Add(new PedHourlyTotal(dt, hourDelay));
+                    HourlyTotals.Add(new PedHourlyTotal(dt, hourDelay));
                     dt = dt.AddHours(1);
                     nextDt = nextDt.AddHours(1);
                 }
             }
         }
+
+        
     }
 }
 

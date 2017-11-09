@@ -138,9 +138,8 @@ namespace MOE.Common.Business
             chart.Series["Posts"].Points.AddXY(Options.StartDate, 0);
             chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
 
-            AddDataToChart(chart, signalPhase, Options.StartDate, Options.EndDate, Options.SelectedBinSize, 
-                signalPhase.Approach.SignalID, Options.ShowTotalDelayPerHour, Options.ShowDelayPerVehicle);
-            SetPlanStrips(signalPhase.Plans.PlanList, chart, Options.StartDate, Options.ShowPlanStatistics);
+            AddDataToChart(chart, signalPhase, Options.SelectedBinSize, Options.ShowTotalDelayPerHour, Options.ShowDelayPerVehicle);
+            SetPlanStrips(signalPhase.Plans, chart, Options.StartDate, Options.ShowPlanStatistics);
         }
 
         private void SetChartTitles(SignalPhase signalPhase, Dictionary<string, string> statistics)
@@ -164,81 +163,35 @@ namespace MOE.Common.Business
 
 
 
-        protected void AddDataToChart(Chart chart, MOE.Common.Business.SignalPhase signalPhase, DateTime startDate,
-     DateTime endDate, int binSize, string signalId, bool showDelayPerHour, bool showDelayPerVehicle)
+        protected void AddDataToChart(Chart chart, SignalPhase signalPhase, int binSize, bool showDelayPerHour, bool showDelayPerVehicle)
         {
-
-
-            
-
-            foreach (MOE.Common.Business.Plan plan in signalPhase.Plans.PlanList)
+            DateTime dt = signalPhase.StartDate;
+            while (dt < signalPhase.EndDate)
             {
-                //double totalPlanAoR = 0;
-                //double totalPlanDelay = 0;
-                //double avgPlanDelay = 0;
-                //double totalPlanDetHits = 0;
-
-
-                if (plan.CycleCollection.Count > 0)
+                var pcds = from item in signalPhase.Cycles
+                            where item.StartTime > dt && item.EndTime  < dt.AddMinutes(binSize)
+                            select item;
+                if (showDelayPerVehicle)
                 {
-                    
-                    DateTime dt = plan.StartTime;
-                   
-                    //int Yvalueholder = 0;
-                    //int Y2valueholder = 0;
-
-
-                    while (dt < plan.EndTime)
+                    if (pcds.Count() > 0)
                     {
-
-                        var pcds = from item in plan.CycleCollection
-                                   where item.StartTime > dt && item.EndTime  < dt.AddMinutes(binSize)
-                                    select item;
-
-                       
-                            
-
-                      
-                        if (showDelayPerVehicle)
-                            {
-                                if (pcds.Count() > 0)
-                                {
-                                    chart.Series["Approach Delay Per Vehicle"].Points.AddXY(dt, pcds.Sum(d => d.TotalDelay) / pcds.Sum(d=> d.TotalVolume));
-                                }
-                                else
-                                {
-                                    chart.Series["Approach Delay Per Vehicle"].Points.AddXY(dt, 0);
-                                }
-
-
-                            }
-
-                            if (showDelayPerHour)
-                            {
-
-                                chart.Series["Approach Delay"].Points.AddXY(dt, (pcds.Sum(d => d.TotalDelay) * (60 / binSize)));
-
-
-
-
-
-
-
-                            }
-                        
-                        dt = dt.AddMinutes(binSize);
+                        chart.Series["Approach Delay Per Vehicle"].Points.AddXY(dt, pcds.Sum(d => d.TotalDelay) / pcds.Sum(d=> d.TotalVolume));
+                    }
+                    else
+                    {
+                        chart.Series["Approach Delay Per Vehicle"].Points.AddXY(dt, 0);
                     }
                 }
-
-
-                
-
+                if (showDelayPerHour)
+                {
+                    chart.Series["Approach Delay"].Points.AddXY(dt, (pcds.Sum(d => d.TotalDelay) * (60 / binSize)));
+                }
+                dt = dt.AddMinutes(binSize);
             }
             Dictionary<string, string> statistics = new Dictionary<string, string>();
             statistics.Add("Average Delay Per Vehicle (AD)", Math.Round(signalPhase.AvgDelay) + " seconds");
             statistics.Add("Total Delay For Selected Period (TD)", Math.Round(signalPhase.TotalDelay) + " seconds");
             SetChartTitles(signalPhase, statistics);
-
         }
 
 
@@ -296,7 +249,6 @@ namespace MOE.Common.Business
    
                 double avgDelay = Math.Round(plan.AvgDelay, 0);
                 double totalDelay = Math.Round(plan.TotalDelay);
-                    /// stripline.StripWidth), 0);
 
                 if (showPlanStatistics)
                 {
@@ -323,52 +275,5 @@ namespace MOE.Common.Business
 
             }
         }
-
-        ///<summary>
-        ///Trucates doubles to significant place
-        ///<param>
-        ///name="d"
-        ///name="digit"
-        ///</param>
-        /// </summary>
-
-        public static double SetSigFigs(double d, int digits)
-        {
-
-            double scale = Math.Pow(10, Math.Floor(Math.Log10(Math.Abs(d))) + 1);
-
-            return scale * Math.Round(d / scale, digits);
-        }
-
-        private static int RoundToNearest(int iNumberToRound, int iToNearest)
-        {
-            //int iToNearest = 100;
-            int iNearest = 0;
-            bool bIsUpper = false;
-
-            int iRest = iNumberToRound % iToNearest;
-            if (iNumberToRound == 550) bIsUpper = true;
-
-            if (bIsUpper == true)
-            {
-                iNearest = (iNumberToRound - iRest) + iToNearest;
-                return iNearest;
-            }
-            if (iRest > (iToNearest / 2))
-            {
-                iNearest = (iNumberToRound - iRest) + iToNearest;
-                return iNearest;
-            }
-            if (iRest < (iToNearest / 2))
-            {
-                iNearest = (iNumberToRound - iRest);
-                return iNearest;
-            }
-
-            return 0;
-        }
-
-
-
     }
 }

@@ -835,7 +835,7 @@ namespace MOE.Common.Business
                 sp.Approach.DirectionType.Description,
                     location, sp.Approach.IsProtectedPhaseOverlap, 150, 2000, false, 2);
 
-            AddDataToChart(chart, sp, startDate, endDate, sp.Approach.SignalID, false, true);
+            AddDataToChart(chart, sp, startDate, false, true);
 
             //Create the File Name
             string chartName = "LinkPivot-" +
@@ -1033,52 +1033,42 @@ namespace MOE.Common.Business
         /// <param name="chart"></param>
         /// <param name="signalPhase"></param>
         /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <param name="signalId"></param>
-        private void AddDataToChart(Chart chart, MOE.Common.Business.SignalPhase signalPhase, DateTime startDate,
-            DateTime endDate, string signalId, bool showVolume, bool showArrivalOnGreen)
+        private void AddDataToChart(Chart chart, SignalPhase signalPhase, DateTime startDate, bool showVolume, bool showArrivalOnGreen)
         {
             decimal totalDetectorHits = 0;
             decimal totalOnGreenArrivals = 0;
             decimal percentArrivalOnGreen = 0;
-
-            foreach (MOE.Common.Business.Plan plan in signalPhase.Plans.PlanList)
+            foreach (Cycle pcd in signalPhase.Cycles)
             {
-                if (plan.CycleCollection.Count > 0)
+                chart.Series["Change to Green"].Points.AddXY(
+                    //pcd.StartTime,
+                    pcd.GreenEvent,
+                    pcd.GreenLineY);
+                chart.Series["Change to Yellow"].Points.AddXY(
+                    //pcd.StartTime,
+                    pcd.YellowEvent,
+                    pcd.YellowLineY);
+                chart.Series["Change to Red"].Points.AddXY(
+                    //pcd.StartTime, 
+                    pcd.EndTime,
+                    pcd.RedLineY);
+                totalDetectorHits += pcd.DetectorEvents.Count;
+                foreach (MOE.Common.Business.DetectorDataPoint detectorPoint in pcd.DetectorEvents)
                 {
-                    foreach (MOE.Common.Business.Cycle pcd in plan.CycleCollection)
+                    chart.Series["Detector Activation"].Points.AddXY(
+                        //pcd.StartTime, 
+                        detectorPoint.TimeStamp,
+                        detectorPoint.YPoint);
+                    if (detectorPoint.YPoint > pcd.GreenLineY && detectorPoint.YPoint < pcd.RedLineY)
                     {
-                        chart.Series["Change to Green"].Points.AddXY(
-                            //pcd.StartTime,
-                            pcd.GreenEvent,
-                            pcd.GreenLineY);
-                        chart.Series["Change to Yellow"].Points.AddXY(
-                            //pcd.StartTime,
-                            pcd.YellowEvent,
-                            pcd.YellowLineY);
-                        chart.Series["Change to Red"].Points.AddXY(
-                            //pcd.StartTime, 
-                            pcd.EndTime,
-                            pcd.RedLineY);
-                        totalDetectorHits += pcd.DetectorCollection.Count;
-                        foreach (MOE.Common.Business.DetectorDataPoint detectorPoint in pcd.DetectorCollection)
-                        {
-                            chart.Series["Detector Activation"].Points.AddXY(
-                                //pcd.StartTime, 
-                                detectorPoint.TimeStamp,
-                                detectorPoint.YPoint);
-                            if (detectorPoint.YPoint > pcd.GreenLineY && detectorPoint.YPoint < pcd.RedLineY)
-                            {
-                                totalOnGreenArrivals++;
-                            }
-                        }
+                        totalOnGreenArrivals++;
                     }
                 }
             }
 
             if (showVolume)
             {
-                foreach (MOE.Common.Business.Volume v in signalPhase.Volume.Items)
+                foreach (Volume v in signalPhase.Volume.Items)
                 {
                     chart.Series["Volume Per Hour"].Points.AddXY(v.XAxis, v.YAxis);
                 }
@@ -1099,35 +1089,8 @@ namespace MOE.Common.Business
                 title.Text = Math.Round(percentArrivalOnGreen).ToString() + "% AoG";
                  title.Font = new Font(FontFamily.GenericSansSerif, 20);
                  chart.Titles.Add(title);
-
-
-                SetPlanStrips(signalPhase.Plans.PlanList, chart, startDate);
+                SetPlanStrips(signalPhase.Plans, chart, startDate);
             }
-
-            //Add Comment to chart
-
-
-
-            //MOE.Common.Data.Signals.SPM_CommentDataTable commentTable = new MOE.Common.Data.Signals.SPM_CommentDataTable();
-            //MOE.Common.Data.SignalsTableAdapters.SPM_CommentTableAdapter commentTA = new MOE.Common.Data.SignalsTableAdapters.SPM_CommentTableAdapter();
-            //commentTA.FillByEntitybyChartType(commentTable, 4, signalId.ToString(), 2);
-
-             //MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
-             //var commentTable = from r in db.Comment
-             //                      where r.ChartType == 4 && r.Entity == signalId && r.EntityType == 2
-             //                      select r;
-
-
-
-             //   if (commentTable.Count() > 0)
-             //   {
-             //   MOE.Common.Models.Comment comment = commentTable.FirstOrDefault();
-             //   chart.Titles.Add(comment.Comment);
-             //   chart.Titles[1].Docking = Docking.Bottom;
-             //   chart.Titles[1].ForeColor = Color.Red;
-            //}
-
-            
         }
 
 
@@ -1137,10 +1100,10 @@ namespace MOE.Common.Business
         /// <param name="planCollection"></param>
         /// <param name="chart"></param>
         /// <param name="graphStartDate"></param>
-        protected void SetPlanStrips(List<MOE.Common.Business.Plan> planCollection, Chart chart, DateTime graphStartDate)
+        protected void SetPlanStrips(List<Plan> planCollection, Chart chart, DateTime graphStartDate)
         {
             int backGroundColor = 1;
-            foreach (MOE.Common.Business.Plan plan in planCollection)
+            foreach (Plan plan in planCollection)
             {
                 StripLine stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans

@@ -23,8 +23,7 @@ namespace MOE.Common.Business
         public int EightyFifth { get; }
 
         public int FifteenthPercentile { get; }
-
-        public int MinSpeedFilter { get; }
+        
 
         public int MovementDelay { get; }
 
@@ -33,23 +32,27 @@ namespace MOE.Common.Business
 
         private int _binSizeMultiplier;
 
-        public AvgSpeedBucket(DateTime startTime, DateTime endTime, List<Cycle> cycleCollection, int binSize, int minspeedfilter, int movementdelay)
+        public AvgSpeedBucket(DateTime startTime, DateTime endTime, List<Cycle> cycleCollection, int binSize, int movementdelay)
         {
             this.StartTime = startTime;
             this.EndTime = endTime;
             this.XAxis = endTime;
             this._binSizeMultiplier = 60 / binSize;
-            this.MinSpeedFilter = minspeedfilter;
             this.MovementDelay = movementdelay;
-            Cycle cycle = cycleCollection.FirstOrDefault(c => c.StartTime > this.StartTime && c.EndTime < this.EndTime);
-            if (cycle != null && cycle.SpeedsForCycle.Count > 0)
+            var cycles = cycleCollection.Where(c => c.StartTime >= startTime && c.StartTime < endTime).ToList();
+            List<int> speedsForBucket = new List<int>();
+            foreach (Cycle cycle in cycles)
             {
-                SpeedVolume = cycle.SpeedsForCycle.Count();
-                cycle.SpeedsForCycle = cycle.SpeedsForCycle.OrderBy(s => s.MPH).ToList();
-                SummedSpeed = cycle.SpeedsForCycle.Sum(s => s.MPH);
-                AvgSpeed = Convert.ToInt32(Math.Round(cycle.SpeedsForCycle.Average(s => s.MPH)));
-                EightyFifth = GetPercentile(cycle, .85);
-                FifteenthPercentile = GetPercentile(cycle, .15);
+                speedsForBucket.AddRange(cycle.SpeedsForCycle.Select(s => s.MPH));
+            }
+            if (speedsForBucket.Count > 0)
+            {
+                speedsForBucket.Sort();
+                SpeedVolume = speedsForBucket.Count();
+                SummedSpeed = speedsForBucket.Sum();
+                AvgSpeed = Convert.ToInt32(Math.Round(speedsForBucket.Average()));
+                EightyFifth = GetPercentile(speedsForBucket, .85);
+                FifteenthPercentile = GetPercentile(speedsForBucket, .15);
             }
             else
             {
@@ -61,7 +64,7 @@ namespace MOE.Common.Business
             }
         }
 
-        private int GetPercentile(Cycle cycle, double percentile)
+        private int GetPercentile(List<int> speeds, double percentile)
         {
             int percentileValue = 0;
             try
@@ -74,13 +77,13 @@ namespace MOE.Common.Business
                     if ((tempPercentileIndex % 1) > 0)
                     {
                         percentileIndex = Convert.ToInt32(Math.Round(tempPercentileIndex + .5));
-                        percentileValue = cycle.SpeedsForCycle[percentileIndex].MPH;
+                        percentileValue = speeds[percentileIndex];
                     }
                     else
                     {
                         percentileIndex = Convert.ToInt32(tempPercentileIndex);
-                        int speed1 = cycle.SpeedsForCycle[percentileIndex].MPH;
-                        int speed2 = cycle.SpeedsForCycle[percentileIndex + 1].MPH;
+                        int speed1 = speeds[percentileIndex];
+                        int speed2 = speeds[percentileIndex + 1];
                         double rawEightyfifth = (speed1 + speed2) / 2;
                         percentileValue = Convert.ToInt32(Math.Round(rawEightyfifth));
                     }

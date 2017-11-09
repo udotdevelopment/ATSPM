@@ -20,12 +20,13 @@ namespace MOE.Common.Models.Repositories
             return speedEvents;
         }
 
-        public List<Speed_Events> GetSpeedEventsByDetector(DateTime startDate, DateTime endDate, Models.Detector detector)
+        public List<Speed_Events> GetSpeedEventsByDetector(DateTime startDate, DateTime endDate, Models.Detector detector, int minSpeedFilter)
         {
             List<Models.Speed_Events> speedEvents = (from r in db.Speed_Events
                 where r.timestamp > startDate
                       && r.timestamp < endDate
-                      && r.DetectorID == detector.DetectorID
+                      && r.DetectorID == detector.DetectorID 
+                      && r.MPH > minSpeedFilter
                 select r).ToList();
             return speedEvents;
         }

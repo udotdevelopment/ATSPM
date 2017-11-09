@@ -86,59 +86,27 @@ namespace MOE.Common.Business.WCFServiceLibrary
             
             Chart chart = new Chart();            
             string location = GetSignalLocation();
-
-            //SignalPhaseCollection signalphasecollection = new SignalPhaseCollection(
-            //    StartDate,
-            //    EndDate, 
-            //    SignalID,
-            //    ShowVolumes,
-            //    SelectedBinSize, 
-            //    MetricTypeID);
-
-                //If there are phases in the database add the charts
-                //if (signalphasecollection.SignalPhaseList.Count > 0)
-                //{
-                //    foreach (MOE.Common.Business.SignalPhase signalPhase in signalphasecollection.SignalPhaseList)
-                //    {
-                //        if (signalPhase.Plans.PlanList.Count > 0)
-                //        {
-                //            chart = GetNewChart(signalPhase.Approach);
-                //            AddDataToChart(chart, signalPhase);
-                //            string chartName = CreateFileName();
-                //            chart.ImageLocation = MetricFileLocation + chartName;
-                //            chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
-                //            ReturnList.Add(MetricWebPath + chartName);
-                //    }
-
-                //}
             List<Approach> metricApproaches = Signal.GetApproachesForSignalThatSupportMetric(this.MetricTypeID);
 
             if (metricApproaches.Count > 0)
+            {
+                foreach (Approach approach in metricApproaches)
                 {
-                    foreach (Approach approach in metricApproaches)
-                    {
-                        
-                        MOE.Common.Business.SignalPhase signalPhase = new SignalPhase(StartDate, EndDate, approach,
-                            ShowVolumes, SelectedBinSize, MetricTypeID, false);
-
-                        chart = GetNewChart(approach);
-                        AddDataToChart(chart, signalPhase);
-                        string chartName = CreateFileName();
-                        chart.ImageLocation = MetricFileLocation + chartName;
-                        chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
-                        ReturnList.Add(MetricWebPath + chartName);
-
-
-                    }
+                    SignalPhase signalPhase = new SignalPhase(StartDate, EndDate, approach,
+                        ShowVolumes, SelectedBinSize, MetricTypeID, false);
+                    chart = GetNewChart(approach);
+                    AddDataToChart(chart, signalPhase);
+                    string chartName = CreateFileName();
+                    chart.ImageLocation = MetricFileLocation + chartName;
+                    chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
+                    ReturnList.Add(MetricWebPath + chartName);
                 }
-            
-           
-
+            }
             return ReturnList;
         }
 
 
-        private Chart GetNewChart(MOE.Common.Models.Approach approach)
+        private Chart GetNewChart(Approach approach)
         {
             Chart chart = MOE.Common.Business.ChartFactory.CreateDefaultChart(this);
             CreateChartLegend(chart);
@@ -248,16 +216,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             double totalDetectorHits = 0;
             double totalOnGreenArrivals = 0;
-            foreach (MOE.Common.Business.Plan plan in signalPhase.Plans.PlanList)
+            foreach (Cycle pcd in signalPhase.Cycles)
             {
-                if (plan.CycleCollection.Count > 0)
-                {
-                    foreach (MOE.Common.Business.Cycle pcd in plan.CycleCollection)
-                    {
-                        totalOnGreenArrivals += AddCycleToChart(chart, pcd);
-                        totalDetectorHits += pcd.DetectorCollection.Count;
-                    }
-                }
+                totalOnGreenArrivals += AddCycleToChart(chart, pcd);
+                totalDetectorHits += pcd.DetectorEvents.Count;
             }
             if (ShowVolumes)
             {
@@ -269,7 +231,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
             if (ShowPlanStatistics)
             {
-                SetPlanStrips(signalPhase.Plans.PlanList, chart);
+                SetPlanStrips(signalPhase.Plans, chart);
             }
         }
 
@@ -300,7 +262,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chart.Series["Change to Green"].Points.AddXY(pcd.GreenEvent, pcd.GreenLineY);
             chart.Series["Change to Yellow"].Points.AddXY(pcd.YellowEvent, pcd.YellowLineY);
             chart.Series["Change to Red"].Points.AddXY(pcd.EndTime, pcd.RedLineY);
-            foreach (MOE.Common.Business.DetectorDataPoint detectorPoint in pcd.DetectorCollection)
+            foreach (MOE.Common.Business.DetectorDataPoint detectorPoint in pcd.DetectorEvents)
             {
                 chart.Series["Detector Activation"].Points.AddXY(
                     //pcd.StartTime, 
@@ -318,13 +280,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
         /// <summary>
         /// Adds plan strips to the chart
         /// </summary>
-        /// <param name="PlanCollection"></param>
-        /// <param name="Chart"></param>
+        /// <param name="plans"></param>
+        /// <param name="chart"></param>
         /// <param name="StartDate"></param>
-        protected void SetPlanStrips(List<MOE.Common.Business.Plan> PlanCollection, Chart Chart)
+        protected void SetPlanStrips(List<Plan> plans, Chart chart)
         {
             int backGroundColor = 1;
-            foreach (MOE.Common.Business.Plan plan in PlanCollection)
+            foreach (MOE.Common.Business.Plan plan in plans)
             {
                 StripLine stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans
@@ -345,7 +307,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 stripline.StripWidth = (plan.EndTime - plan.StartTime).TotalHours;
                 stripline.StripWidthType = DateTimeIntervalType.Hours;
        
-                Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
+                chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
 
                 //Add a corrisponding custom label for each strip
                 CustomLabel Plannumberlabel = new CustomLabel();
@@ -371,7 +333,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 Plannumberlabel.ForeColor = Color.Black;
                 Plannumberlabel.RowIndex = 3;
 
-                Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(Plannumberlabel);
+                chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(Plannumberlabel);
 
                 CustomLabel aogLabel = new CustomLabel();
                 aogLabel.FromPosition = plan.StartTime.ToOADate();
@@ -382,7 +344,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 aogLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 aogLabel.ForeColor = Color.Blue;
                 aogLabel.RowIndex = 2;
-                Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(aogLabel);
+                chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(aogLabel);
 
                 CustomLabel statisticlabel = new CustomLabel();
                 statisticlabel.FromPosition = plan.StartTime.ToOADate();
@@ -391,7 +353,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     plan.PlatoonRatio.ToString() + " PR";
                 statisticlabel.ForeColor = Color.Maroon;
                 statisticlabel.RowIndex = 1;
-                Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(statisticlabel);
+                chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(statisticlabel);
 
             
 

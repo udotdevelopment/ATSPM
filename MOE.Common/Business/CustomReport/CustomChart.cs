@@ -195,7 +195,7 @@ namespace MOE.Common.Business.CustomReport
                 //to cooincide with the end of the graph
                 if (plansBase.Events.Count - 1 == i)
                 {
-                    Plan plan = new Plan(signalID, plansBase.Events[i].Timestamp, endDate,
+                    Plan plan = new Plan(plansBase.Events[i].Timestamp, endDate,
                         plansBase.Events[i].EventParam);
                     plans.Add(plan);
                 }
@@ -203,7 +203,7 @@ namespace MOE.Common.Business.CustomReport
                 else
                 {
 
-                    Plan plan = new Plan(signalID, plansBase.Events[i].Timestamp, 
+                    Plan plan = new Plan(plansBase.Events[i].Timestamp, 
                         plansBase.Events[i + 1].Timestamp, plansBase.Events[i].EventParam);
 
                     plans.Add(plan);

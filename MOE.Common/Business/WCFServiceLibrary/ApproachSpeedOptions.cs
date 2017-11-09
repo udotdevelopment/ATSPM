@@ -91,7 +91,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     foreach (Models.Detector det in speedDets)
                     {
                         //Display the PDC chart
-                        Chart chart = GetNewSpeedChart(location, det);
+                        Chart chart = GetNewSpeedChart(det);
 
                         AddSpeedDataToChart(chart, det, StartDate, EndDate, SelectedBinSize);
 
@@ -108,7 +108,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return ReturnList;
         }
 
-        private Chart GetNewSpeedChart(string location, Models.Detector detector)
+        private Chart GetNewSpeedChart(Models.Detector detector)
         {
          
             Chart chart = new Chart();
@@ -239,7 +239,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             DateTime endDate, int binSize)
         {
             DetectorSpeed detectorSpeed = new DetectorSpeed(detector, startDate, endDate, binSize);
-            foreach (Plan plan in detectorSpeed.Plans.PlanList)
+            foreach (Plan plan in detectorSpeed.Plans)
             {
                 if (plan.AvgSpeedBucketCollection.Items.Count > 0)
                 {
@@ -261,13 +261,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        protected void SetSpeedPlanStrips(MOE.Common.Business.PlanCollection planCollection, Chart chart, DateTime graphStartDate, int minSpeedFilter)
+        protected void SetSpeedPlanStrips(List<Plan> plans, Chart chart, DateTime graphStartDate, int minSpeedFilter)
         {
             int backGroundColor = 1;
-            foreach (MOE.Common.Business.Plan plan in planCollection.PlanList)
+            foreach (Plan plan in plans)
             {
                 plan.SetSpeedStatistics(minSpeedFilter);
-
                 StripLine stripline = new StripLine();
                 float currentSize;
                 currentSize = 3;

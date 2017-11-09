@@ -185,7 +185,6 @@ namespace MOE.Common.Models.Repositories
         }
         public List<Models.Signal> EagerLoadAllSignals()
         {
-
             List<Models.Signal> signals = _db.Signals.Where(r => r.VersionActionId != 3)
                 .GroupBy(r => r.SignalID)
                 .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault())
@@ -227,9 +226,9 @@ namespace MOE.Common.Models.Repositories
 
 
 
-        public void Update(MOE.Common.Models.Signal incomingSignal)
+        public void Update(Signal incomingSignal)
         {
-            MOE.Common.Models.Signal signalFromDatabase = (from r in _db.Signals
+            Signal signalFromDatabase = (from r in _db.Signals
                 where r.VersionID == incomingSignal.VersionID
                 select r).FirstOrDefault();
             if (signalFromDatabase != null)
@@ -241,7 +240,7 @@ namespace MOE.Common.Models.Repositories
                 _db.Entry(signalFromDatabase).CurrentValues.SetValues(incomingSignal);
                 if (incomingSignal.Approaches != null)
                 {
-                    foreach (MOE.Common.Models.Approach a in incomingSignal.Approaches)
+                    foreach (Approach a in incomingSignal.Approaches)
                     {
                         var approach =
                             signalFromDatabase.Approaches.FirstOrDefault(app => app.ApproachID == a.ApproachID);
@@ -401,8 +400,6 @@ namespace MOE.Common.Models.Repositories
         {
             foreach (var s in signals)
             {
-
-
                 try
                 {
                     AddOrUpdate(s);
@@ -464,15 +461,12 @@ namespace MOE.Common.Models.Repositories
         }
 
 
-        public Common.Models.Signal GetLatestVersionOfSignalBySignalID(string signalID)
+        public Common.Models.Signal GetLatestVersionOfSignalBySignalID(string signalId)
         {
-
-
-
-            var signal = (from r in _db.Signals
-                          where r.SignalID == signalID
-                            && r.VersionActionId != 3
-                          select r).OrderByDescending(r => r.Start).FirstOrDefault();
+            var signal = _db.Signals.Where(s => s.SignalID == signalId && s.VersionActionId != 3)
+                .Include(s => s.Approaches.Select(a => a.Detectors))
+                .Include(s => s.Approaches.Select(a => a.DirectionType))
+                .OrderByDescending(r => r.Start).FirstOrDefault();
             return signal;
         }
 
@@ -506,14 +500,9 @@ namespace MOE.Common.Models.Repositories
 
         public List<Signal> GetLatestVersionOfAllSignals()
         {
-
-
             var activeSignals = _db.Signals.Where(r => r.VersionActionId != 3)
                 .GroupBy(r => r.SignalID)
                 .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).ToList();
-
-
-
             return activeSignals;
         }
 

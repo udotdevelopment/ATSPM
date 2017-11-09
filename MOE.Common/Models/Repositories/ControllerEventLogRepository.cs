@@ -373,20 +373,19 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
-                var events = (from s in db.Controller_Event_Log
-                              where s.SignalID == signalID &&
-                              s.Timestamp >= date.AddDays(-1) &&
-                              s.Timestamp < date &&
-                              s.EventCode == eventCode
-                              select s).ToList();
-                events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
-                return events.Last();
+                DateTime tempDate = date.AddDays(-1);
+                var lastEvent = db.Controller_Event_Log.Where(c => c.SignalID == signalID &&
+                                                                    c.Timestamp >= tempDate &&
+                                                                    c.Timestamp < date &&
+                                                                    c.EventCode == eventCode)
+                        .OrderByDescending(c => c.Timestamp).FirstOrDefault();
+                    return lastEvent;
+            
             }
             catch (Exception ex)
             {
-                MOE.Common.Models.Repositories.IApplicationEventRepository logRepository =
-                    MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                MOE.Common.Models.ApplicationEvent e = new MOE.Common.Models.ApplicationEvent();
+                IApplicationEventRepository logRepository = ApplicationEventRepositoryFactory.Create();
+                ApplicationEvent e = new ApplicationEvent();
                 e.ApplicationName = "MOE.Common";
                 e.Class = this.GetType().ToString();
                 e.Function = "GetEventsByEventCodesParamWithOffset";
@@ -394,7 +393,7 @@ namespace MOE.Common.Models.Repositories
                 e.Description = ex.Message;
                 e.Timestamp = DateTime.Now;
                 logRepository.Add(e);
-                throw;
+                return null;
             }
         }
     }

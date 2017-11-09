@@ -46,7 +46,7 @@ namespace MOE.Common.Business.DataAggregation
             SPM db = new SPM();
             db.Configuration.LazyLoadingEnabled = false;
             var signals = db.Signals
-                .Where(signal => signal.Enabled == true)
+                .Where(signal => signal.Enabled == true && signal.SignalID == "7219")
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes.Select(dt => dt.MetricTypes))))
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
@@ -551,7 +551,7 @@ namespace MOE.Common.Business.DataAggregation
                 foreach (var detector in speedDetectors)
                 {
                     DetectorSpeed detectorSpeed = new DetectorSpeed(detector, startTime, endTime, 15);
-                    var speedBucket = detectorSpeed.Plans.PlanList.FirstOrDefault()
+                    var speedBucket = detectorSpeed.Plans.FirstOrDefault()
                         ?.AvgSpeedBucketCollection.Items
                         .FirstOrDefault();
                     if (speedBucket != null)

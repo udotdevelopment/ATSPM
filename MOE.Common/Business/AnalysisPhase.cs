@@ -137,24 +137,17 @@ namespace MOE.Common.Business
         /// <param name="CycleEventsTable"></param>
         public AnalysisPhase(int phasenumber, string signalID, List<Models.Controller_Event_Log> CycleEventsTable)
         {
-            MOE.Common.Models.Repositories.ISignalsRepository repository =
-                MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            Models.Repositories.ISignalsRepository repository =
+                Models.Repositories.SignalsRepositoryFactory.Create();
             var signal = repository.GetLatestVersionOfSignalBySignalID(signalID);     
-            this.phaseNumber = phasenumber;
-            this.signalId = signalID;
-            this.IsOverlap = false;
-            List<Models.Controller_Event_Log> PedEvents = FindPedEvents(CycleEventsTable, phasenumber);
-            List<Models.Controller_Event_Log> PhaseEvents = FindPhaseEvents(CycleEventsTable, phasenumber);
-            Cycles = new AnalysisPhaseCycleCollection(phasenumber, signalId, PhaseEvents, PedEvents);
-            Models.Approach approach = signal.Approaches.Where(a => a.ProtectedPhaseNumber == phasenumber).FirstOrDefault();
-            if (approach != null)
-            {
-                this.Direction = approach.DirectionType.Description;
-            }
-            else
-            {
-                this.Direction = "Unknown";
-            }            
+            phaseNumber = phasenumber;
+            signalId = signalID;
+            IsOverlap = false;
+            List<Models.Controller_Event_Log> pedEvents = FindPedEvents(CycleEventsTable, phasenumber);
+            List<Models.Controller_Event_Log> phaseEvents = FindPhaseEvents(CycleEventsTable, phasenumber);
+            Cycles = new AnalysisPhaseCycleCollection(phasenumber, signalId, phaseEvents, pedEvents);
+            Models.Approach approach = signal.Approaches.FirstOrDefault(a => a.ProtectedPhaseNumber == phasenumber);
+            this.Direction = approach != null ? approach.DirectionType.Description : "Unknown";            
         }
 
         private List<Models.Controller_Event_Log> FindConsecutiveEvents(List<Models.Controller_Event_Log> terminationEvents, 

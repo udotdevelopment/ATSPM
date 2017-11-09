@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
+using MOE.Common.Models;
 
 
 namespace MOE.Common.Business
@@ -12,10 +13,12 @@ namespace MOE.Common.Business
     public class SignalPhase
     {
         public string Direction { get; }
-
         public VolumeCollection Volume { get; private set; }
-
-        public MOE.Common.Business.PlanCollection Plans { get; private set; }
+        public List<MOE.Common.Business.Plan> Plans { get; private set; }
+        public List<Cycle> Cycles { get; set; }
+        public List<Models.Controller_Event_Log> DetectorEvents { get; set; }
+        public bool IsPermissive { get; }
+        public Models.Approach Approach { get; }
 
         public double AvgDelay
         {
@@ -71,7 +74,7 @@ namespace MOE.Common.Business
             get
             {
                 if (totalArrivalOnGreen == -1)
-                    totalArrivalOnGreen = Plans.PlanList.Sum(d => d.TotalArrivalOnGreen);
+                    totalArrivalOnGreen = Cycles.Sum(d => d.TotalArrivalOnGreen);
                 return totalArrivalOnGreen;
             }
         }
@@ -82,7 +85,7 @@ namespace MOE.Common.Business
         {
             get { 
                 if(totalArrivalOnRed == -1)
-                    totalArrivalOnRed = Plans.PlanList.Sum(d => d.TotalArrivalOnRed);
+                    totalArrivalOnRed = Cycles.Sum(d => d.TotalArrivalOnRed);
                 return totalArrivalOnRed;
             }
         }
@@ -93,7 +96,7 @@ namespace MOE.Common.Business
             get
             {
                 if (totalArrivalOnYellow == -1)
-                    totalArrivalOnYellow = Plans.PlanList.Sum(d => d.TotalArrivalOnYellow);
+                    totalArrivalOnYellow = Cycles.Sum(d => d.TotalArrivalOnYellow);
                 return totalArrivalOnYellow;
             }
         }
@@ -101,7 +104,7 @@ namespace MOE.Common.Business
         {
             get
             {
-                return Plans.PlanList.Sum(d => d.TotalDelay);
+                return Cycles.Sum(d => d.TotalDelay);
             }
         }
 
@@ -111,7 +114,7 @@ namespace MOE.Common.Business
             get
             {
                 if(totalVolume == -1)
-                    totalVolume = Plans.PlanList.Sum(d=> d.TotalVolume);
+                    totalVolume = Cycles.Sum(d=> d.TotalVolume);
                 return totalVolume;
             }
 
@@ -124,7 +127,7 @@ namespace MOE.Common.Business
             {
                 if(totalGreenTime == -1)
                 {
-                    totalGreenTime = Plans.PlanList.Sum(d => d.TotalGreenTime);
+                    totalGreenTime = Cycles.Sum(d => d.TotalGreenTime);
                 }
                 return totalGreenTime;
             }
@@ -137,7 +140,7 @@ namespace MOE.Common.Business
             {
                 if (totalYellowTime == -1)
                 {
-                    totalYellowTime = Plans.PlanList.Sum(d => d.TotalYellowTime);
+                    totalYellowTime = Cycles.Sum(d => d.TotalYellowTime);
                 }
                 return totalYellowTime;
             }
@@ -150,7 +153,7 @@ namespace MOE.Common.Business
             {
                 if (totalRedTime == -1)
                 {
-                    totalRedTime = Plans.PlanList.Sum(d => d.TotalRedTime);
+                    totalRedTime = Cycles.Sum(d => d.TotalRedTime);
                 }
                 return totalRedTime;
             }
@@ -160,31 +163,25 @@ namespace MOE.Common.Business
         {
             get
             {
-                return Plans.PlanList.Sum(d => d.TotalTime);
+                return Cycles.Sum(d => d.TotalTime);
             }
         }
 
-        public bool IsPermissive { get; }
-        public Models.Approach Approach { get; }
-        private List<Models.Controller_Event_Log> cycleEvents { get; set; }
-        private List<Models.Controller_Event_Log> preemptEvents { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         
-        public SignalPhase(DateTime startDate, DateTime endDate, Models.Approach approach,
+        public SignalPhase(DateTime startDate, DateTime endDate, Approach approach,
             bool showVolume, int binSize, int metricTypeId, bool isPermissive)
         {
-            this.Approach = approach;
+            StartDate = startDate;
+            EndDate = endDate;
+            Approach = approach;
+            Cycles = new List<Cycle>();
+            Plans = new List<Plan>();
             if (approach.DirectionType != null) this.Direction = approach.DirectionType.Description;
             IsPermissive = isPermissive;
-            if (!approach.IsProtectedPhaseOverlap)
-            {
-                GetSignalPhaseData(startDate, endDate, showVolume, binSize, metricTypeId);
-            }
-            else
-            {
-                GetSignalOverlapData(startDate, endDate, showVolume, binSize);
-            }
-
+            GetSignalPhaseData(showVolume, binSize, metricTypeId);
         }
 
         public void LinkPivotAddSeconds(int seconds)
@@ -194,119 +191,178 @@ namespace MOE.Common.Business
             totalGreenTime = -1;
             totalArrivalOnGreen = -1;
             this.Volume = null;
-            foreach (MOE.Common.Models.Controller_Event_Log row in detectorEvents)
+            foreach (Controller_Event_Log row in DetectorEvents)
             {
                 row.Timestamp = row.Timestamp.AddSeconds(seconds);
             }
-            Plans.LinkPivotAddDetectorData(this.detectorEvents);
-        }
-
-        /// <summary>
-        /// Gets the data for the green yellow and red lines as well as the 
-        /// detector events
-        /// </summary>
-        private void GetSignalPhaseData(DateTime startDate, DateTime endDate,
-            bool showVolume, int binSize, int metricTypeId)
-        {  
-
-            MOE.Common.Models.Repositories.IControllerEventLogRepository celRepository =
-                MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-            if (IsPermissive)
-            {
-                if (Approach.PermissivePhaseNumber != null && Approach.PermissivePhaseNumber > 0)
-                    cycleEvents = celRepository.GetEventsByEventCodesParam(Approach.SignalID, startDate,
-                        endDate, new List<int>() {1, 8, 10}, Approach.PermissivePhaseNumber.Value);
-            }
-            else
-            {
-                cycleEvents = celRepository.GetEventsByEventCodesParam(Approach.SignalID, startDate,
-                endDate, new List<int>() { 1, 8, 10 }, Approach.ProtectedPhaseNumber);
-            }
-            
-            this.preemptEvents = celRepository.GetSignalEventsByEventCodes(Approach.SignalID, startDate,
-                endDate, new List<int>() { 102 });
-
-           
-            
-            this.detectorEvents = new List<Models.Controller_Event_Log>();
-            var detectorsForMetric = Approach.GetDetectorsForMetricType(metricTypeId);
-
-            foreach (Models.Detector d in detectorsForMetric)
-            {
-                this.detectorEvents.AddRange(celRepository.GetEventsByEventCodesParamWithOffset(Approach.SignalID, startDate,
-                    endDate, new List<int> { 81 }, d.DetChannel, d.GetOffset()));
-
-            }
-
-
-
-            Plans = new PlanCollection( cycleEvents, detectorEvents, startDate, endDate, Approach, preemptEvents );
-
-            if (Plans.PlanList.Count == 0)
-            {
-                Plans.AddItem(new Plan(startDate, endDate, 0, cycleEvents, detectorEvents, preemptEvents, Approach));
-            }
-
-            if (showVolume)
-            {
-                SetVolume(detectorEvents, startDate, endDate, binSize);
-            }
-
-            
+            //Todo:Fix for Link Pivot
+            //Plans.LinkPivotAddDetectorData(this.DetectorEvents);
         }
 
         
-
-
-        /// <summary>
-        /// Gets the data for the green yellow and red lines as well as the 
-        /// detector events for overlap phases
-        /// </summary>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <param name="signalId"></param>
-        /// <param name="eventData1"></param>
-        /// <param name="region"></param>
-        /// <param name="detChannel"></param>
-        private void GetSignalOverlapData(DateTime startDate, DateTime endDate,
-            bool showVolume, int binSize)
-        {            
-           
-            MOE.Common.Models.Repositories.IControllerEventLogRepository celRepository =
-                MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-            this.cycleEvents = celRepository.GetEventsByEventCodesParam(Approach.SignalID, startDate,
-                endDate, new List<int>() { 61, 63, 64 }, Approach.ProtectedPhaseNumber);
-            this.preemptEvents = celRepository.GetSignalEventsByEventCodes(Approach.SignalID, startDate,
-                endDate, new List<int>() { 102 });
-
-      
-            this.detectorEvents = new List<Models.Controller_Event_Log>();
-            foreach (Models.Detector d in Approach.Detectors)
-            {
-                this.detectorEvents.AddRange(celRepository.GetEventsByEventCodesParam(Approach.SignalID, startDate,
-                    endDate, new List<int> { 81 }, d.DetChannel));
-            }
-            Plans = new PlanCollection(cycleEvents, detectorEvents, startDate, endDate, Approach, preemptEvents);
-
-            if (Plans.PlanList.Count == 0)
-            {
-                Plans.AddItem(new Plan(startDate, endDate, 0, cycleEvents, detectorEvents, preemptEvents, Approach));
-            }
-
+        private void GetSignalPhaseData(bool showVolume, int binSize, int metricTypeId)
+        {
+            GetDetectorEvents(metricTypeId);
+            GetCycleEvents();
+            GetPreemptEvents();
+            GetPlans();
             if (showVolume)
             {
-                SetVolume(detectorEvents, startDate, endDate, binSize);
+                SetVolume(DetectorEvents, binSize);
             }
         }
 
-        private void SetVolume(List<Models.Controller_Event_Log> detectorEvents, DateTime startDate, DateTime endDate,
-            int binSize)
+        private void GetPlans()
         {
-            Volume = new VolumeCollection(startDate, endDate, detectorEvents, binSize);            
+            var celRepository = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            List<Controller_Event_Log> planEvents = new List<Controller_Event_Log>();
+            var firstPlanEvent = celRepository.GetFirstEventBeforeDate(Approach.SignalID, 131, StartDate);
+            if (firstPlanEvent != null)
+            {
+                firstPlanEvent.Timestamp = StartDate;
+                planEvents.Add(firstPlanEvent);
+            }
+            else
+            {
+                firstPlanEvent = new Controller_Event_Log();
+                firstPlanEvent.Timestamp = StartDate;
+                planEvents.Add(firstPlanEvent);
+            }
+            var tempPlanEvents = celRepository.GetSignalEventsByEventCode(Approach.SignalID, StartDate, EndDate, 131);
+            if (tempPlanEvents != null)
+            {
+                planEvents.AddRange(tempPlanEvents.OrderBy(e => e.Timestamp).Distinct());
+                AddPlans(planEvents);
+            }
         }
 
+        private void AddPlans(List<Controller_Event_Log> planEvents)
+        {
+            for (int i = 0; i < planEvents.Count; i++)
+            {
+                if (planEvents.Count - 1 == i)
+                {
+                    if (planEvents[i].Timestamp != EndDate)
+                    {
+                        var planCycles = Cycles
+                            .Where(c => c.StartTime >= planEvents[i].Timestamp && c.StartTime < EndDate).ToList();
+                        Plans.Add(new Plan(planEvents[i].Timestamp, EndDate, planEvents[i].EventParam, Approach, planCycles));
+                    }
+                }
+                else
+                {
+                    if (planEvents[i].Timestamp != planEvents[i + 1].Timestamp)
+                    {
+                        var planCycles = Cycles
+                            .Where(c => c.StartTime >= planEvents[i].Timestamp && c.StartTime < planEvents[i + 1].Timestamp).ToList();
+                        Plans.Add(new Plan(planEvents[i].Timestamp, planEvents[i + 1].Timestamp, planEvents[i].EventParam, Approach, planCycles));
+                    }
+                }
+            }
+        }
 
+        private void GetDetectorEvents(int metricTypeId)
+        {
+            var celRepository = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            DetectorEvents = new List<Models.Controller_Event_Log>();
+            var detectorsForMetric = Approach.GetDetectorsForMetricType(metricTypeId);
+            foreach (Models.Detector d in detectorsForMetric)
+            {
+                DetectorEvents.AddRange(celRepository.GetEventsByEventCodesParamWithOffset(Approach.SignalID, StartDate,
+                    EndDate, new List<int> { 81 }, d.DetChannel, d.GetOffset()));
+            }
+        }
 
-        public List<Models.Controller_Event_Log> detectorEvents { get; set; }
+        private void GetPreemptEvents()
+        {
+            var celRepository = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            List<Controller_Event_Log> preemptEvents = celRepository.GetSignalEventsByEventCodes(Approach.SignalID, StartDate,
+                            EndDate, new List<int>() { 102 });
+            foreach (var preemptEvent in preemptEvents)
+            {
+                var cycle = Cycles.FirstOrDefault(c => c.StartTime <= preemptEvent.Timestamp && c.EndTime > preemptEvent.Timestamp);
+                cycle?.AddPreempt(new DetectorDataPoint(cycle.StartTime, preemptEvent.Timestamp, cycle.GreenEvent, cycle.YellowEvent));
+            }
+        }
+
+        private void GetCycleEvents()
+        {
+            List<Controller_Event_Log> cycleEvents = new List<Controller_Event_Log>();
+            var celRepository = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            if (IsPermissive)
+            {
+                if (Approach.PermissivePhaseNumber != null && Approach.PermissivePhaseNumber > 0)
+                {
+                    cycleEvents = celRepository.GetEventsByEventCodesParam(Approach.SignalID, StartDate,
+                        EndDate, new List<int>() { 1, 8, 10 }, Approach.PermissivePhaseNumber.Value);
+                }
+            }
+            else
+            {
+                var cycleEventNumbers = Approach.IsProtectedPhaseOverlap ? new List<int> {61, 63, 64} : new List<int>() {1, 8, 10};
+                cycleEvents = celRepository.GetEventsByEventCodesParam(Approach.SignalID, StartDate,
+                EndDate, cycleEventNumbers, Approach.ProtectedPhaseNumber);
+            }
+            AddCycles(cycleEvents);
+        }
+
+        private void AddCycles(List<Controller_Event_Log> cycleEvents)
+        {
+            for (int i = 0; i < cycleEvents.Count; i++)
+            {
+                if (i < cycleEvents.Count - 3
+                    && GetEventType(cycleEvents[i].EventCode) == Business.Cycle.EventType.ChangeToRed
+                    && GetEventType(cycleEvents[i + 1].EventCode) == Business.Cycle.EventType.ChangeToGreen
+                    && GetEventType(cycleEvents[i + 2].EventCode) == Business.Cycle.EventType.ChangeToYellow
+                    && GetEventType(cycleEvents[i + 3].EventCode) == Business.Cycle.EventType.ChangeToRed)
+                {
+                    Cycles.Add(new Cycle(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp, cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp));
+                    i = i + 3;
+                }
+            }
+            if (Cycles != null)
+            {
+                foreach (var cycle in Cycles)
+                {
+                    var detectorEventsForCycle =
+                        DetectorEvents.Where(d => d.Timestamp >= cycle.StartTime && d.Timestamp < cycle.EndTime)
+                            .ToList();
+                    foreach (var controllerEventLog in detectorEventsForCycle)
+                    {
+                        cycle.AddDetectorData(new DetectorDataPoint(cycle.StartTime, controllerEventLog.Timestamp,
+                            cycle.GreenEvent, cycle.YellowEvent));
+                    }
+                }
+            }
+        }
+
+        private Cycle.EventType GetEventType(int eventCode)
+        {
+            switch (eventCode)
+            {
+                case 1:
+                    return Cycle.EventType.ChangeToGreen;
+                // overlap green
+                case 61:
+                    return Cycle.EventType.ChangeToGreen;
+                case 8:
+                    return Cycle.EventType.ChangeToYellow;
+                // overlap yellow
+                case 63:
+                    return Cycle.EventType.ChangeToYellow;
+                case 10:
+                    return Cycle.EventType.ChangeToRed;
+                // overlap red
+                case 64:
+                    return Cycle.EventType.ChangeToRed;
+                default:
+                    return Cycle.EventType.Unknown;
+            }
+        }
+
+        private void SetVolume(List<Controller_Event_Log> detectorEvents, int binSize)
+        {
+            Volume = new VolumeCollection(StartDate, EndDate, detectorEvents, binSize);            
+        }
     }
 }
