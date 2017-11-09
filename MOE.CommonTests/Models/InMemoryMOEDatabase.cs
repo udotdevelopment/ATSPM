@@ -23,6 +23,7 @@ namespace MOE.CommonTests.Models
         public List<Common.Models.MovementType> MovementTypes = new List<Common.Models.MovementType>();
         public List<Common.Models.LaneType> LaneTypes = new List<Common.Models.LaneType>();
         public List<Common.Models.DetectionHardware> DetectionHardwares = new List<Common.Models.DetectionHardware>();
+        public List<Common.Models.ApplicationEvent> ApplicaitonEvents = new List<ApplicationEvent>();
 
         public void ClearTables()
         {

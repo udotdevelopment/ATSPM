@@ -165,6 +165,7 @@ namespace SPM.Controllers
             approach.Index = GetApproachIndex(signal);
             approach.DirectionTypeID = 1;
             approach.VersionID = signal.VersionID;
+            approach.IsProtectedPhaseOverlap = false;
            
             return approach;
         }

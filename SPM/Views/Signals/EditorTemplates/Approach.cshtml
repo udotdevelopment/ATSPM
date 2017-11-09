@@ -51,7 +51,8 @@
             <div class="form-group-configuration-tool  form-group col-md-2">
                 @Html.LabelFor(model => model.IsProtectedPhaseOverlap, htmlAttributes: new { @class = "control-label" })
                 <div class="input-group">
-                    @Html.EditorFor(model => model.IsProtectedPhaseOverlap, new { htmlAttributes = new { @class = "control-label" } })
+                    @Html.EditorFor(model => model.IsProtectedPhaseOverlap, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.IsProtectedPhaseOverlap, "", new { id = "IsProtectedPhaseOverlap-error", @class = "text-danger" })
                 </div>
             </div>
             <div id="DetectorsList_@Model.ApproachID" class="center-block col-md-12">

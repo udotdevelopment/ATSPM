@@ -19,7 +19,8 @@ namespace MOE.Common.Migrations
             DropIndex("dbo.ApproachRouteDetail", new[] { "ApproachID" });
             DropIndex("dbo.Detectors", "IX_DetectorIDUnique");
             DropIndex("dbo.SPMWatchDogErrorEvents", new[] { "SignalID" });
-            DropPrimaryKey("dbo.Signals");
+            DropPrimaryKey("Signals");
+
             CreateTable(
                 "dbo.VersionActions",
                 c => new
@@ -29,40 +30,36 @@ namespace MOE.Common.Migrations
                 })
                 .PrimaryKey(t => t.ID);
 
-            
+            Sql("Insert into VersionActions(ID, Description) values (1, 'New')");
+            Sql("Insert into VersionActions(ID, Description) values (2, 'Edit')");
+            Sql("Insert into VersionActions(ID, Description) values (3, 'Delete')");
+            Sql("Insert into VersionActions(ID, Description) values (4, 'New Version')");
+            Sql("Insert into VersionActions(ID, Description) values (10, 'Initial')");
+
 
             AddColumn("dbo.MetricComments", "VersionID", c => c.Int(nullable: false));
             AddColumn("dbo.Signals", "VersionID", c => c.Int(nullable: false, identity: true));
-            AddColumn("dbo.Signals", "VersionActionId", c => c.Int(nullable: false));
-            AddColumn("dbo.Signals", "Note", c => c.String(nullable: false));
-            AddColumn("dbo.Signals", "Start", c => c.DateTime(nullable: false));
+            AddColumn("dbo.Signals", "VersionActionId", c => c.Int(nullable: false, defaultValue:10));
+            AddColumn("dbo.Signals", "Note", c => c.String(nullable: false, defaultValue: "Initial"));
+            AddColumn("dbo.Signals", "Start", c => c.DateTime(nullable: false ));
             AddColumn("dbo.Approaches", "VersionID", c => c.Int(nullable: false));
-            AddColumn("dbo.ApproachRouteDetail", "Order", c => c.Int(nullable: false));
-            AddColumn("dbo.ApproachRouteDetail", "SignalId", c => c.String(nullable: false));
-            AddColumn("dbo.ApproachRouteDetail", "PhaseDirection1", c => c.Int(nullable: false));
-            AddColumn("dbo.ApproachRouteDetail", "IsPhaseDirection1Overlap", c => c.Boolean(nullable: false));
-            AddColumn("dbo.ApproachRouteDetail", "PhaseDirection2", c => c.Int(nullable: false));
-            AddColumn("dbo.ApproachRouteDetail", "IsPhaseDirection2Overlap", c => c.Boolean(nullable: false));
-            AddColumn("dbo.ApproachRouteDetail", "DirectionType1_DirectionTypeID", c => c.Int());
-            AddColumn("dbo.ApproachRouteDetail", "DirectionType2_DirectionTypeID", c => c.Int());
             AlterColumn("dbo.ActionLogs", "SignalID", c => c.String(nullable: false));
             AlterColumn("dbo.MetricComments", "SignalID", c => c.String());
             AlterColumn("dbo.Approaches", "SignalID", c => c.String());
             AlterColumn("dbo.SPMWatchDogErrorEvents", "SignalID", c => c.String(nullable: false));
             AddPrimaryKey("dbo.Signals", "VersionID");
-            CreateIndex("dbo.ApproachRouteDetail", "DirectionType1_DirectionTypeID");
-            CreateIndex("dbo.ApproachRouteDetail", "DirectionType2_DirectionTypeID");
             CreateIndex("dbo.MetricComments", "VersionID");
             CreateIndex("dbo.Signals", "VersionActionId");
             CreateIndex("dbo.Approaches", "VersionID");
-            AddForeignKey("dbo.ApproachRouteDetail", "DirectionType1_DirectionTypeID", "dbo.DirectionTypes", "DirectionTypeID");
-            AddForeignKey("dbo.ApproachRouteDetail", "DirectionType2_DirectionTypeID", "dbo.DirectionTypes", "DirectionTypeID");
-            AddForeignKey("dbo.Signals", "VersionActionId", "dbo.VersionActions", "ID", cascadeDelete: true);
-            AddForeignKey("dbo.MetricComments", "VersionID", "dbo.Signals", "VersionID", cascadeDelete: true);
-            AddForeignKey("dbo.Approaches", "VersionID", "dbo.Signals", "VersionID", cascadeDelete: true);
+            //AddForeignKey("dbo.Signals", "VersionActionId", "dbo.VersionActions", "ID", cascadeDelete: true);
+            //AddForeignKey("dbo.MetricComments", "VersionID", "dbo.Signals", "VersionID", cascadeDelete: true);
+            //AddForeignKey("dbo.Approaches", "VersionID", "dbo.Signals", "VersionID", cascadeDelete: true);
             DropColumn("dbo.ApproachRouteDetail", "ApproachOrder");
             DropColumn("dbo.ApproachRouteDetail", "ApproachID");
             DropTable("dbo.SignalWithDetections");
+            DropTable("dbo.ApproachRoute");
+            DropTable("dbo.ApproachRouteDetail");
+           
             //Original Data Aggragation Migration
             CreateTable(
                 "dbo.ApproachCycleAggregations",
@@ -278,19 +275,10 @@ namespace MOE.Common.Migrations
             DropIndex("dbo.MetricComments", new[] { "VersionID" });
             DropIndex("dbo.ApproachRouteDetail", new[] { "DirectionType2_DirectionTypeID" });
             DropIndex("dbo.ApproachRouteDetail", new[] { "DirectionType1_DirectionTypeID" });
-            DropPrimaryKey("dbo.Signals");
             AlterColumn("dbo.SPMWatchDogErrorEvents", "SignalID", c => c.String(nullable: false, maxLength: 10));
             AlterColumn("dbo.Approaches", "SignalID", c => c.String(nullable: false, maxLength: 10));
             AlterColumn("dbo.MetricComments", "SignalID", c => c.String(nullable: false, maxLength: 10));
             AlterColumn("dbo.ActionLogs", "SignalID", c => c.String(nullable: false, maxLength: 10));
-            DropColumn("dbo.ApproachRouteDetail", "DirectionType2_DirectionTypeID");
-            DropColumn("dbo.ApproachRouteDetail", "DirectionType1_DirectionTypeID");
-            DropColumn("dbo.ApproachRouteDetail", "IsPhaseDirection2Overlap");
-            DropColumn("dbo.ApproachRouteDetail", "PhaseDirection2");
-            DropColumn("dbo.ApproachRouteDetail", "IsPhaseDirection1Overlap");
-            DropColumn("dbo.ApproachRouteDetail", "PhaseDirection1");
-            DropColumn("dbo.ApproachRouteDetail", "SignalId");
-            DropColumn("dbo.ApproachRouteDetail", "Order");
             DropColumn("dbo.Approaches", "VersionID");
             DropColumn("dbo.Signals", "Start");
             DropColumn("dbo.Signals", "Note");

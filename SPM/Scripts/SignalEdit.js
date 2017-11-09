@@ -129,8 +129,9 @@ function GetCreateComment() {
         }
     });
 }
-function GetConfigurationTable(signalID){
-   
+//function GetConfigurationTable(signalID) {
+    function GetConfigurationTable() {
+    var signalID = $("#SignalID").val();
     $.ajax({
         type: "Get",
         cache: false,

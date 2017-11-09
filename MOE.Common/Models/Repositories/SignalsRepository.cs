@@ -463,11 +463,15 @@ namespace MOE.Common.Models.Repositories
 
         public Common.Models.Signal GetLatestVersionOfSignalBySignalID(string signalId)
         {
-            var signal = _db.Signals.Where(s => s.SignalID == signalId && s.VersionActionId != 3)
-                .Include(s => s.Approaches.Select(a => a.Detectors))
-                .Include(s => s.Approaches.Select(a => a.DirectionType))
-                .OrderByDescending(r => r.Start).FirstOrDefault();
-            return signal;
+            var returnSignal = _db.Signals
+                .Include(signal => signal.Approaches.Select(a => a.Detectors))
+                .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                .Where(signal => signal.SignalID == signalId)
+                .Where(signal => signal.VersionActionId != 3)
+                .OrderByDescending(signal => signal.Start)
+                .FirstOrDefault();
+
+            return returnSignal;
         }
 
         private VersionAction GetVersionActionByVersionAction_ID(int id)

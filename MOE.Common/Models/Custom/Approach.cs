@@ -93,13 +93,20 @@ namespace MOE.Common.Models
 
         }
 
-        public static Approach CopyApproachCommonProperties(Approach approachToCopy)
+        public static Approach CopyApproachCommonProperties(Approach approachToCopy, bool isVersionOrSignalCopy)
         {
             Models.Approach newApproach = new Models.Approach();
             newApproach.SignalID = approachToCopy.SignalID;
             newApproach.VersionID = approachToCopy.VersionID;
             newApproach.DirectionTypeID = approachToCopy.DirectionTypeID;
-            newApproach.Description = approachToCopy.Description + " Copy";
+            if (!isVersionOrSignalCopy)
+            {
+                newApproach.Description = approachToCopy.Description + " Copy";
+            }
+            else
+            {
+                newApproach.Description = approachToCopy.Description;
+            }
             newApproach.MPH = approachToCopy.MPH;
             newApproach.ProtectedPhaseNumber = approachToCopy.ProtectedPhaseNumber;
             newApproach.IsProtectedPhaseOverlap = approachToCopy.IsProtectedPhaseOverlap;
@@ -113,7 +120,7 @@ namespace MOE.Common.Models
             MOE.Common.Models.Repositories.IApproachRepository approachRepository =
                 MOE.Common.Models.Repositories.ApproachRepositoryFactory.Create();
             Approach approachToCopy = approachRepository.GetApproachByApproachID(approachIDToCopy);
-            Approach newApproach = CopyApproachCommonProperties(approachToCopy);
+            Approach newApproach = CopyApproachCommonProperties(approachToCopy, false);
             if (approachToCopy.Detectors != null)
             {
                 foreach (Detector d in approachToCopy.Detectors)
@@ -146,11 +153,11 @@ namespace MOE.Common.Models
         }
 
         public static Approach CopyApproachForSignal(int approachIDToCopy)
-        {
+         {
             MOE.Common.Models.Repositories.IApproachRepository approachRepository =
                 MOE.Common.Models.Repositories.ApproachRepositoryFactory.Create();
             Approach approachToCopy = approachRepository.GetApproachByApproachID(approachIDToCopy);
-            Approach newApproach = CopyApproachCommonProperties(approachToCopy);
+            Approach newApproach = CopyApproachCommonProperties(approachToCopy, true);
             foreach (Detector d in approachToCopy.Detectors)
             {
                 Detector dForNewApproach = Detector.CopyDetector(d.ID, false);

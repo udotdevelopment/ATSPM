@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
@@ -64,7 +65,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public string MetricWebPath { get; set; }
         
         public MOE.Common.Models.MetricType MetricType{ get; set; }
-        
+
+        private MOE.Common.Models.Repositories.IMetricTypeRepository _metricTypeRepository 
+            = MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
+
+
 
         [DataMember]
         public List<string> ReturnList{ get; set;}
@@ -83,13 +88,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 
 
         public virtual List<string> CreateMetric()
-        {
-            
+        {           
+            this.MetricType = _metricTypeRepository.GetMetricsByID(this.MetricTypeID);
 
-            MOE.Common.Models.Repositories.IMetricTypeRepository metricTypeRepository =
-                MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
-            this.MetricType = metricTypeRepository.GetMetricsByID(this.MetricTypeID);
-            LogMetricRun();            
+            LogMetricRun();  
+            
             return new List<string>();
         }
 
@@ -116,40 +119,80 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public string CreateFileName()
         {
-            string fileName =  MetricType.Abbreviation +
-                                SignalID +
-                                "-" +
-                                StartDate.Year.ToString() +
-                                StartDate.ToString("MM") +
-                                StartDate.ToString("dd") +
-                                StartDate.ToString("HH") +
-                                StartDate.ToString("mm") +
-                                "-" +
-                                EndDate.Year.ToString() +
-                                EndDate.ToString("MM") +
-                                EndDate.ToString("dd") +
-                                EndDate.ToString("HH") +
-                                EndDate.ToString("mm-");
+            if (this.MetricType == null)
+            {
+                this.MetricType = _metricTypeRepository.GetMetricsByID(this.MetricTypeID);
+            }
+            
+                string fileName = MetricType.Abbreviation +
+                                  SignalID +
+                                  "-" +
+                                  StartDate.Year.ToString() +
+                                  StartDate.ToString("MM") +
+                                  StartDate.ToString("dd") +
+                                  StartDate.ToString("HH") +
+                                  StartDate.ToString("mm") +
+                                  "-" +
+                                  EndDate.Year.ToString() +
+                                  EndDate.ToString("MM") +
+                                  EndDate.ToString("dd") +
+                                  EndDate.ToString("HH") +
+                                  EndDate.ToString("mm-");
 
 
 
 
-                            Random r = new Random();
-                            fileName += r.Next().ToString();
-                            fileName += ".jpg";
+                Random r = new Random();
+                fileName += r.Next().ToString();
+                fileName += ".jpg";
 
-                            return fileName;
+
+
+
+            try
+            {
+
+
+                if (DriveAvailable())
+                {
+                    return fileName;
+                }
+                return null;
+            }
+            catch
+            {
+                throw new Exception("Path not found");
+                
+            }
+
+
+        
+            
+            
         }
 
-        public bool TestDriveAvailable()
+        public bool DriveAvailable()
         {
             DirectoryInfo di = new DirectoryInfo(MetricFileLocation);
-
+            di.Refresh();
             if(di.Exists)
             {
                 return true;
             }
-            return false;
+
+           
+
+                Directory.CreateDirectory(MetricFileLocation);
+            di.Refresh();
+            if (di.Exists)
+                {
+                    return true;
+                }
+   
+                    return false;
+                
+            
+           
         }
     }
 }
