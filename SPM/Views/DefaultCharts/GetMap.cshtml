@@ -17,9 +17,9 @@
             {
             <text>
         var pin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(@(p.Latitude), @(p.Longitude)));
-        pin.SignalID = @(p.SignalID);
+        pin.SignalId = @(p.SignalId);
         pin.Region = @(p.Region);
-        pin.Title =  "@(p.SignalID)  @(p.Description)";</text>
+        pin.Title =  "@(p.SignalId)  @(p.Description)";</text>
         
         <text>
         pin.Actions = "@(p.MetricTypes)";

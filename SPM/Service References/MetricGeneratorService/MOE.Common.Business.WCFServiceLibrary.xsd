@@ -8,7 +8,7 @@
           <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="BinSizeList" nillable="true" type="q1:ArrayOfint" />
           <xs:element minOccurs="0" name="SelectedBinSize" type="xs:int" />
           <xs:element minOccurs="0" name="ShowDelayPerVehicle" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowPlanStatistics" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowPlansStatistics" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowTotalDelayPerHour" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
@@ -22,8 +22,8 @@
       <xs:element minOccurs="0" name="MetricTypeID" type="xs:int" />
       <xs:element minOccurs="0" name="MetricWebPath" nillable="true" type="xs:string" />
       <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ReturnList" nillable="true" type="q2:ArrayOfstring" />
-      <xs:element minOccurs="0" name="SignalID" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="SignalId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Y2AxisMax" nillable="true" type="xs:double" />
       <xs:element minOccurs="0" name="Y2AxisMin" type="xs:double" />
       <xs:element minOccurs="0" name="YAxisMax" nillable="true" type="xs:double" />
@@ -50,7 +50,7 @@
         <xs:sequence>
           <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="BinSizeList" nillable="true" type="q4:ArrayOfint" />
           <xs:element minOccurs="0" name="SelectedBinSize" type="xs:int" />
-          <xs:element minOccurs="0" name="ShowPlanStatistics" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowPlansStatistics" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -63,7 +63,7 @@
           <xs:element minOccurs="0" name="SelectedBinSize" type="xs:int" />
           <xs:element minOccurs="0" name="SelectedDotSize" type="xs:int" />
           <xs:element minOccurs="0" name="ShowArrivalsOnGreen" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowPlanStatistics" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowPlansStatistics" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowVolumes" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
@@ -78,7 +78,7 @@
           <xs:element minOccurs="0" name="SelectedConsecutiveCount" type="xs:int" />
           <xs:element minOccurs="0" name="ShowArrivalsOnGreen" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowPedActivity" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowPlanStripes" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowPlansStripes" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -135,7 +135,7 @@
           <xs:element minOccurs="0" name="SelectedBinSize" type="xs:int" />
           <xs:element minOccurs="0" name="Show85Percentile" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowAverageSpeed" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowPlanStatistics" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowPlansStatistics" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowPostedSpeed" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
@@ -165,7 +165,7 @@
           <xs:element minOccurs="0" name="ShowPercentGapOuts" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowPercentMaxOutForceOff" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowPercentSkip" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowPlanStripes" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowPlansStripes" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

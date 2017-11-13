@@ -11,7 +11,7 @@ namespace MOE.Common.Business.PCD
         public DateTime EndTime { get; set; }
         //public List<MOE.Common.Models.Detector> LaneGroups { get; set; } //TODO: model change.
         public List<PCD.Plan> Plans { get; set; }
-        public List<PCD.Cycle> Cycles { get; set; }
+        public List<PhaseCycleBase> Cycles { get; set; }
         public int PhaseNumber { get; set; }
 
         public Phase(int phaseNumber)

@@ -8,17 +8,17 @@ namespace MOE.Common.Migrations
         public override void Up()
         {
             //Historical Configuration Migration
-            DropForeignKey("dbo.ActionLogs", "SignalID", "dbo.Signals");
+            DropForeignKey("dbo.ActionLogs", "SignalId", "dbo.Signals");
             DropForeignKey("dbo.ApproachRouteDetail", "ApproachID", "dbo.Approaches");
-            DropForeignKey("dbo.SPMWatchDogErrorEvents", "SignalID", "dbo.Signals");
-            DropForeignKey("dbo.MetricComments", "SignalID", "dbo.Signals");
-            DropForeignKey("dbo.Approaches", "SignalID", "dbo.Signals");
-            DropIndex("dbo.ActionLogs", new[] { "SignalID" });
-            DropIndex("dbo.MetricComments", new[] { "SignalID" });
-            DropIndex("dbo.Approaches", new[] { "SignalID" });
+            DropForeignKey("dbo.SPMWatchDogErrorEvents", "SignalId", "dbo.Signals");
+            DropForeignKey("dbo.MetricComments", "SignalId", "dbo.Signals");
+            DropForeignKey("dbo.Approaches", "SignalId", "dbo.Signals");
+            DropIndex("dbo.ActionLogs", new[] { "SignalId" });
+            DropIndex("dbo.MetricComments", new[] { "SignalId" });
+            DropIndex("dbo.Approaches", new[] { "SignalId" });
             DropIndex("dbo.ApproachRouteDetail", new[] { "ApproachID" });
             DropIndex("dbo.Detectors", "IX_DetectorIDUnique");
-            DropIndex("dbo.SPMWatchDogErrorEvents", new[] { "SignalID" });
+            DropIndex("dbo.SPMWatchDogErrorEvents", new[] { "SignalId" });
             DropPrimaryKey("Signals");
 
             CreateTable(
@@ -43,10 +43,10 @@ namespace MOE.Common.Migrations
             AddColumn("dbo.Signals", "Note", c => c.String(nullable: false, defaultValue: "Initial"));
             AddColumn("dbo.Signals", "Start", c => c.DateTime(nullable: false ));
             AddColumn("dbo.Approaches", "VersionID", c => c.Int(nullable: false));
-            AlterColumn("dbo.ActionLogs", "SignalID", c => c.String(nullable: false));
-            AlterColumn("dbo.MetricComments", "SignalID", c => c.String());
-            AlterColumn("dbo.Approaches", "SignalID", c => c.String());
-            AlterColumn("dbo.SPMWatchDogErrorEvents", "SignalID", c => c.String(nullable: false));
+            AlterColumn("dbo.ActionLogs", "SignalId", c => c.String(nullable: false));
+            AlterColumn("dbo.MetricComments", "SignalId", c => c.String());
+            AlterColumn("dbo.Approaches", "SignalId", c => c.String());
+            AlterColumn("dbo.SPMWatchDogErrorEvents", "SignalId", c => c.String(nullable: false));
             AddPrimaryKey("dbo.Signals", "VersionID");
             CreateIndex("dbo.MetricComments", "VersionID");
             CreateIndex("dbo.Signals", "VersionActionId");
@@ -275,10 +275,10 @@ namespace MOE.Common.Migrations
             DropIndex("dbo.MetricComments", new[] { "VersionID" });
             DropIndex("dbo.ApproachRouteDetail", new[] { "DirectionType2_DirectionTypeID" });
             DropIndex("dbo.ApproachRouteDetail", new[] { "DirectionType1_DirectionTypeID" });
-            AlterColumn("dbo.SPMWatchDogErrorEvents", "SignalID", c => c.String(nullable: false, maxLength: 10));
-            AlterColumn("dbo.Approaches", "SignalID", c => c.String(nullable: false, maxLength: 10));
-            AlterColumn("dbo.MetricComments", "SignalID", c => c.String(nullable: false, maxLength: 10));
-            AlterColumn("dbo.ActionLogs", "SignalID", c => c.String(nullable: false, maxLength: 10));
+            AlterColumn("dbo.SPMWatchDogErrorEvents", "SignalId", c => c.String(nullable: false, maxLength: 10));
+            AlterColumn("dbo.Approaches", "SignalId", c => c.String(nullable: false, maxLength: 10));
+            AlterColumn("dbo.MetricComments", "SignalId", c => c.String(nullable: false, maxLength: 10));
+            AlterColumn("dbo.ActionLogs", "SignalId", c => c.String(nullable: false, maxLength: 10));
             DropColumn("dbo.Approaches", "VersionID");
             DropColumn("dbo.Signals", "Start");
             DropColumn("dbo.Signals", "Note");
@@ -286,18 +286,18 @@ namespace MOE.Common.Migrations
             DropColumn("dbo.Signals", "VersionID");
             DropColumn("dbo.MetricComments", "VersionID");
             DropTable("dbo.VersionActions");
-            AddPrimaryKey("dbo.Signals", "SignalID");
-            CreateIndex("dbo.SPMWatchDogErrorEvents", "SignalID");
+            AddPrimaryKey("dbo.Signals", "SignalId");
+            CreateIndex("dbo.SPMWatchDogErrorEvents", "SignalId");
             CreateIndex("dbo.Detectors", "DetectorID", unique: true, name: "IX_DetectorIDUnique");
             CreateIndex("dbo.ApproachRouteDetail", "ApproachID");
-            CreateIndex("dbo.Approaches", "SignalID");
-            CreateIndex("dbo.MetricComments", "SignalID");
-            CreateIndex("dbo.ActionLogs", "SignalID");
-            AddForeignKey("dbo.Approaches", "SignalID", "dbo.Signals", "SignalID", cascadeDelete: true);
-            AddForeignKey("dbo.MetricComments", "SignalID", "dbo.Signals", "SignalID", cascadeDelete: true);
-            AddForeignKey("dbo.SPMWatchDogErrorEvents", "SignalID", "dbo.Signals", "SignalID", cascadeDelete: true);
+            CreateIndex("dbo.Approaches", "SignalId");
+            CreateIndex("dbo.MetricComments", "SignalId");
+            CreateIndex("dbo.ActionLogs", "SignalId");
+            AddForeignKey("dbo.Approaches", "SignalId", "dbo.Signals", "SignalId", cascadeDelete: true);
+            AddForeignKey("dbo.MetricComments", "SignalId", "dbo.Signals", "SignalId", cascadeDelete: true);
+            AddForeignKey("dbo.SPMWatchDogErrorEvents", "SignalId", "dbo.Signals", "SignalId", cascadeDelete: true);
             AddForeignKey("dbo.ApproachRouteDetail", "ApproachID", "dbo.Approaches", "ApproachID", cascadeDelete: true);
-            AddForeignKey("dbo.ActionLogs", "SignalID", "dbo.Signals", "SignalID");
+            AddForeignKey("dbo.ActionLogs", "SignalId", "dbo.Signals", "SignalId");
         }
     }
 }

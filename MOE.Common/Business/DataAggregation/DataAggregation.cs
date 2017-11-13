@@ -520,14 +520,14 @@ namespace MOE.Common.Business.DataAggregation
         private void SetSplitFailData(DateTime startTime, DateTime endTime, Approach signalApproach, bool isPermissive)
         {
             if (!signalApproach.GetDetectorsForMetricType(12).Any()) return;
-            CustomReport.Phase phase;
+            Phase phase;
             if (isPermissive)
             {
-                phase = new CustomReport.Phase(signalApproach, startTime, endTime, new List<int> {1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64}, 1,true);
+                phase = new Phase(signalApproach, startTime, endTime, new List<int> {1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64}, 1,true);
             }
             else
             {
-                phase = new CustomReport.Phase(signalApproach, startTime, endTime, new List<int> {1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64}, 1, false);
+                phase = new Phase(signalApproach, startTime, endTime, new List<int> {1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64}, 1, false);
             }
             SplitFailOptions splitFailOptions = new SplitFailOptions();
             splitFailOptions.SetDefaults();

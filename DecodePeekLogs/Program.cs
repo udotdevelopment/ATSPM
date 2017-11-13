@@ -205,7 +205,7 @@ namespace DecodePeekLogs
                     MOE.Common.Data.MOE.Controller_Event_LogDataTable elTable = new MOE.Common.Data.MOE.Controller_Event_LogDataTable();
 
                     UniqueConstraint custUnique =
-new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalID"],
+new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalId"],
                                         elTable.Columns["Timestamp"], 
                                            elTable.Columns["EventCode"],
                                             elTable.Columns["EventParam"]

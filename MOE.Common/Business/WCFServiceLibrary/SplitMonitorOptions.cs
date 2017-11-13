@@ -236,7 +236,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             foreach (MOE.Common.Business.Plan plan in plans.PlanList)
             {
-                var Cycles = from cycle in phase.Cycles.Items
+                var Cycles = from cycle in phase.Cycles.PhaseCycles
                              where cycle.StartTime > plan.StartTime && cycle.EndTime < plan.EndTime
                              orderby cycle.Duration
                              select cycle;
@@ -460,7 +460,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         Plannumberlabel.Text = "Unknown";
                         break;
                     default:
-                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+                        Plannumberlabel.Text = "Plans " + plan.PlanNumber.ToString();
 
                         break;
                 }
@@ -628,7 +628,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
 
             //Table 
-            if (phase.Cycles.Items.Count > 0)
+            if (phase.Cycles.PhaseCycles.Count > 0)
             {
                 plans.FillMissingSplits();
                 int MaxSplitLength = 0;
@@ -657,7 +657,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 }
 
 
-                foreach (MOE.Common.Business.AnalysisPhaseCycle Cycle in phase.Cycles.Items)
+                foreach (MOE.Common.Business.AnalysisPhaseCycle Cycle in phase.Cycles.PhaseCycles)
                 {
 
 

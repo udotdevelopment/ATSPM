@@ -16,7 +16,7 @@ namespace MOE.Common.Business.Speed
         public int TotalDetectorHits { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public Cycle Cycles { get; set; }
+        public List<PhaseCycleBase> Cycles { get; set; }
 
         public DetectorSpeed(Models.Detector detector, DateTime startDate, DateTime endDate, int binSize)
         {
@@ -28,9 +28,9 @@ namespace MOE.Common.Business.Speed
             StartDate = startDate;
             EndDate = endDate;
             TotalDetectorHits = speedEvents.Count;
-            Cycles = Business.CycleFactory.GetSpeedCycles();
-            Plans = PlanFactory.GetSpeedPlans();
-            GetPlans(detector);
+            Cycles = Business.PhaseCycleFactory.GetCycles(1, phaseevents, StartDate, EndDate);
+            Plans = PlanFactory.GetSpeedPlans(detector.Approach.SignalID, StartDate, EndDate);
+            
             foreach (Plan plan in Plans)
             {
                 //foreach (Cycle cycle in plan.CycleCollection)
@@ -42,53 +42,5 @@ namespace MOE.Common.Business.Speed
         }
 
 
-        private void GetPlans(Models.Detector detector)
-        {
-            var celRepository = ControllerEventLogRepositoryFactory.Create();
-            List<Controller_Event_Log> planEvents = new List<Controller_Event_Log>();
-            var firstPlanEvent = celRepository.GetFirstEventBeforeDate(detector.Approach.SignalID, 131, StartDate);
-            if (firstPlanEvent != null)
-            {
-                firstPlanEvent.Timestamp = StartDate;
-                planEvents.Add(firstPlanEvent);
-            }
-            else
-            {
-                firstPlanEvent = new Controller_Event_Log();
-                firstPlanEvent.Timestamp = StartDate;
-                planEvents.Add(firstPlanEvent);
-            }
-            var tempPlanEvents = celRepository.GetSignalEventsByEventCode(detector.Approach.SignalID, StartDate, EndDate, 131);
-            if (tempPlanEvents != null)
-            {
-                planEvents.AddRange(tempPlanEvents.OrderBy(e => e.Timestamp).Distinct());
-                AddPlans(planEvents, detector);
-            }
-        }
-
-        private void AddPlans(List<Controller_Event_Log> planEvents, Models.Detector detector)
-        {
-            for (int i = 0; i < planEvents.Count; i++)
-            {
-                if (planEvents.Count - 1 == i)
-                {
-                    if (planEvents[i].Timestamp != EndDate)
-                    {
-                        //var planCycles = Cycles
-                        //    .Where(c => c.StartTime >= planEvents[i].Timestamp && c.StartTime < EndDate).ToList();
-                        Plans.Add(new Plan(planEvents[i].Timestamp, EndDate, planEvents[i].EventParam, detector.Approach, planCycles));
-                    }
-                }
-                else
-                {
-                    if (planEvents[i].Timestamp != planEvents[i + 1].Timestamp)
-                    {
-                        //var planCycles = Cycles
-                        //    .Where(c => c.StartTime >= planEvents[i].Timestamp && c.StartTime < planEvents[i + 1].Timestamp).ToList();
-                        Plans.Add(new Plan(planEvents[i].Timestamp, planEvents[i + 1].Timestamp, planEvents[i].EventParam, Approach, planCycles));
-                    }
-                }
-            }
-        }
     }
 }

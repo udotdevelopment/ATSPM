@@ -95,7 +95,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             MetricInfoList = new List<ApproachVolume.MetricInfo>();          
             MOE.Common.Models.Repositories.ISignalsRepository signalsRepository = 
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            //var signal = signalsRepository.GetSignalBySignalID(this.SignalID);    
+            //var signal = signalsRepository.GetSignalBySignalID(this.SignalId);    
             var signal = signalsRepository.GetVersionOfSignalByDate(SignalID, StartDate);
             var NSAdvanceVolumeApproaches = new List<MOE.Common.Business.ApproachVolume.Approach>();
             var NSTMCVolumeApproaches = new List<MOE.Common.Business.ApproachVolume.Approach>();

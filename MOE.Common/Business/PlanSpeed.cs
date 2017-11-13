@@ -18,8 +18,9 @@ namespace MOE.Common.Business
 
         public int StdDevAvgSpeed { get; set; }
         
-        public PlanSpeed(DateTime start, DateTime end, int planNumber, Models.Approach approach, List<Cycle> cyclesForPlan) : base(start,  end, planNumber,  approach, cyclesForPlan)
+        public PlanSpeed(DateTime start, DateTime end, int planNumber, Models.Approach approach, List<PhaseCycleBase> cyclesForPlan) : base(start,  end, planNumber,  approach, cyclesForPlan)
         {
+
         }
        
 

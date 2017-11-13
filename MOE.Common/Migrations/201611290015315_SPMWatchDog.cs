@@ -28,8 +28,8 @@ namespace MOE.Common.Migrations
         
         public override void Down()
         {
-            DropForeignKey("dbo.SPMWatchDogErrorEvents", "SignalID", "dbo.Signals");
-            DropIndex("dbo.SPMWatchDogErrorEvents", new[] { "SignalID" });
+            DropForeignKey("dbo.SPMWatchDogErrorEvents", "SignalId", "dbo.Signals");
+            DropIndex("dbo.SPMWatchDogErrorEvents", new[] { "SignalId" });
             DropTable("dbo.SPMWatchDogErrorEvents");
         }
     }

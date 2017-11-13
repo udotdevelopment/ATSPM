@@ -70,7 +70,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 foreach (Approach approach in metricApproaches)
                 {
-                    MOE.Common.Business.CustomReport.Phase phase = new MOE.Common.Business.CustomReport.Phase(approach, StartDate, EndDate, new List<int> { 1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64 }, 1, false);
+                    Phase phase = new Phase(approach, StartDate, EndDate, new List<int> { 1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64 }, 1, false);
                     phase.ApproachDirection = approach.DirectionType.Description;
                     SplitFailPhase splitFailPhase = new SplitFailPhase(approach.ProtectedPhaseNumber, approach, this, phase);
                     string location = GetSignalLocation();
@@ -82,7 +82,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     if(approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
                     {
                         string permChartName = CreateFileName();
-                        MOE.Common.Business.CustomReport.Phase permPhase = new MOE.Common.Business.CustomReport.Phase(approach, StartDate, 
+                        Phase permPhase = new Phase(approach, StartDate, 
                             EndDate, new List<int> { 1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64 }, 1, true);
                         SplitFailPhase splitFailPermissivePhase = new SplitFailPhase(approach.PermissivePhaseNumber.Value, approach, this, phase);
                         permPhase.ApproachDirection = approach.DirectionType.Description;
@@ -93,7 +93,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return returnString;
         }
 
-        private void GetChart(CustomReport.Phase phase, SplitFailPhase splitFailPhase, string chartName, List<string> returnString, bool isPermissivePhase)
+        private void GetChart(Phase phase, SplitFailPhase splitFailPhase, string chartName, List<string> returnString, bool isPermissivePhase)
         {
             MOE.Common.Business.SplitFail.SplitFailChart sfChart = new MOE.Common.Business.SplitFail.SplitFailChart(phase, this, splitFailPhase);
             if (isPermissivePhase)

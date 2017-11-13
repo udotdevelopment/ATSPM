@@ -6,39 +6,16 @@ using System.Threading.Tasks;
 
 namespace MOE.Common.Business.PEDDelay
 {
-    public class PedPlan
+    public class PedPlan : PlanBase
     {
-        private DateTime _StartDate;
 
-        public DateTime StartDate
-        {
-            get { return _StartDate; }
-        }
 
-        private DateTime _EndDate;
+        public int PhaseNumber { get; set; }
 
-        public DateTime EndDate
-        {
-            get { return _EndDate; }
-        }
-
-        private int _PlanNumber;
-
-        public int PlanNumber
-        {
-            get { return _PlanNumber; }
-        }
-
-        private int _PhaseNumber;
-
-        public int PhaseNumber
-        {
-            get { return _PhaseNumber; }
-        }
         
         public double PedActuations
         {
-            get { return _Cycles.Count; }
+            get { return Cycles.Count; }
         }
 
         public double MinDelay
@@ -47,7 +24,7 @@ namespace MOE.Common.Business.PEDDelay
             {
                 if (PedActuations > 0) 
                 { 
-                    return _Cycles.Min(c => c.Delay); 
+                    return Cycles.Min(c => c.Delay); 
                 }
                 return 0;
             }
@@ -60,7 +37,7 @@ namespace MOE.Common.Business.PEDDelay
             {
                 if (PedActuations > 0)
                 {
-                    return _Cycles.Max(c => c.Delay);
+                    return Cycles.Max(c => c.Delay);
                 }
                 return 0;
             }
@@ -72,29 +49,25 @@ namespace MOE.Common.Business.PEDDelay
             {
                 if (PedActuations > 0)
                 {
-                    return _Cycles.Average(c => c.Delay);
+                    return Cycles.Average(c => c.Delay);
                 }
                 return 0;
             }
         }
 
 
-        private List<PedCycle> _Cycles = new List<PedCycle>();
+        public List<PedCycle> Cycles = new List<PedCycle>();
 
-        public List<PedCycle> Cycles
+
+        
+        
+        
+        
+        public PedPlan(int phaseNumber, DateTime startDate, DateTime endDate, int planNumber)
         {
-            get { return _Cycles; }
-            set { _Cycles = value; }
-        }
-        
-        
-        
-        
-        public PedPlan(string signalID, int phaseNumber, DateTime startDate, DateTime endDate, int planNumber)
-        {
-            _StartDate = startDate;
-            _EndDate = endDate;
-            _PlanNumber = planNumber;
+            PlanStart = startDate;
+            PlanEnd = endDate;
+            PlanNumber = planNumber;
         }
 
         

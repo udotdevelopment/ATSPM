@@ -27,5 +27,19 @@ namespace MOE.Common.Models
         public int EventParam { get; set; }
 
        
+        public override bool Equals(Object obj)
+        {
+            if (obj == null || GetType() != obj.GetType()) return false;
+            Controller_Event_Log y = (Controller_Event_Log)obj;
+            return this != null && y != null && this.SignalID == y.SignalID && this.Timestamp == y.Timestamp
+                   && this.EventCode == y.EventCode && this.EventParam == y.EventParam
+                ;
+        }
+
+
+  
+        public override int GetHashCode() => this == null ? 0 : (this.SignalID.GetHashCode() ^ this.Timestamp.GetHashCode() ^ this.EventCode.GetHashCode() ^ this.EventParam.GetHashCode());
+
+
     }
 }

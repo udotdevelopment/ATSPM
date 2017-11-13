@@ -64,7 +64,7 @@ namespace MOE.Common.Business
         public List<Models.Controller_Event_Log> ConsecutiveMaxOut = new List<Models.Controller_Event_Log>();
         public List<Models.Controller_Event_Log> ConsecutiveForceOff = new List<Models.Controller_Event_Log>();
         public List<Models.Controller_Event_Log> UnknownTermination = new List<Models.Controller_Event_Log>();
-        public Business.AnalysisPhaseCycleCollection Cycles;
+        public List<PhaseCycleBase> Cycles;
 
         public List<Models.Controller_Event_Log> FindTerminationEvents(List<Models.Controller_Event_Log> terminationeventstable, int phasenumber)
         {
@@ -91,10 +91,10 @@ namespace MOE.Common.Business
             return events;
         }
 
-        public List<Models.Controller_Event_Log> FindPhaseEvents(List<Models.Controller_Event_Log> PhaseEventsTable, int PhaseNumber)
+        public List<Models.Controller_Event_Log> FindPhaseEvents(List<Models.Controller_Event_Log> phaseEventsTable, int phaseNumber)
         {
-            List<Models.Controller_Event_Log> events = (from row in PhaseEventsTable
-                                                        where row.EventParam == PhaseNumber
+            List<Models.Controller_Event_Log> events = (from row in phaseEventsTable
+                                                        where row.EventParam == phaseNumber
                                                         orderby row.Timestamp
                                                         select row).ToList();
 
@@ -104,18 +104,18 @@ namespace MOE.Common.Business
         /// <summary>
         /// Constructor used for Phase Termination Chart
         /// </summary>
-        /// <param name="phasenumber"></param>
+        /// <param name="phaseNumber"></param>
         /// <param name="terminationeventstable"></param>
         /// <param name="consecutiveCount"></param>
-        public AnalysisPhase(int phasenumber, List<Models.Controller_Event_Log> terminationeventstable, int consecutiveCount)
+        public AnalysisPhase(int phaseNumber, List<Models.Controller_Event_Log> terminationeventstable, int consecutiveCount)
         {
 
-            this.phaseNumber = phasenumber;
-            TerminationEvents = FindTerminationEvents(terminationeventstable, phaseNumber);
+            this.phaseNumber = phaseNumber;
+            TerminationEvents = FindTerminationEvents(terminationeventstable, this.phaseNumber);
 
             
 
-            PedestrianEvents = FindPedEvents(terminationeventstable, phaseNumber);
+            PedestrianEvents = FindPedEvents(terminationeventstable, this.phaseNumber);
 
 
             ConsecutiveGapOuts = FindConsecutiveEvents(TerminationEvents, 4, consecutiveCount);
@@ -132,31 +132,31 @@ namespace MOE.Common.Business
         /// <summary>
         /// Constructor Used for Split monitor
         /// </summary>
-        /// <param name="phasenumber"></param>
-        /// <param name="signalID"></param>
-        /// <param name="CycleEventsTable"></param>
-        public AnalysisPhase(int phasenumber, string signalID, List<Models.Controller_Event_Log> CycleEventsTable)
+        /// <param name="phaseNumber"></param>
+        /// <param name="signalId"></param>
+        /// <param name="cycleEventsTable"></param>
+        public AnalysisPhase(int phaseNumber, string signalId, List<Models.Controller_Event_Log> cycleEventsTable)
         {
             Models.Repositories.ISignalsRepository repository =
                 Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = repository.GetLatestVersionOfSignalBySignalID(signalID);     
-            phaseNumber = phasenumber;
-            signalId = signalID;
+            var signal = repository.GetLatestVersionOfSignalBySignalID(signalId);     
+            this.phaseNumber = phaseNumber;
+            this.signalId = signalId;
             IsOverlap = false;
-            List<Models.Controller_Event_Log> pedEvents = FindPedEvents(CycleEventsTable, phasenumber);
-            List<Models.Controller_Event_Log> phaseEvents = FindPhaseEvents(CycleEventsTable, phasenumber);
-            Cycles = new AnalysisPhaseCycleCollection(phasenumber, signalId, phaseEvents, pedEvents);
-            Models.Approach approach = signal.Approaches.FirstOrDefault(a => a.ProtectedPhaseNumber == phasenumber);
+            List<Models.Controller_Event_Log> pedEvents = FindPedEvents(cycleEventsTable, phaseNumber);
+            List<Models.Controller_Event_Log> phaseEvents = FindPhaseEvents(cycleEventsTable, phaseNumber);
+            Cycles = PhaseCycleFactory.GetSplitMonitorCycles(phaseNumber, this.signalId, phaseEvents, pedEvents);
+            Models.Approach approach = signal.Approaches.FirstOrDefault(a => a.ProtectedPhaseNumber == phaseNumber);
             this.Direction = approach != null ? approach.DirectionType.Description : "Unknown";            
         }
 
         private List<Models.Controller_Event_Log> FindConsecutiveEvents(List<Models.Controller_Event_Log> terminationEvents, 
             int eventtype, int consecutiveCount)
         {
-            List<Models.Controller_Event_Log> ConsecutiveEvents = new List<Models.Controller_Event_Log>();
+            List<Models.Controller_Event_Log> consecutiveEvents = new List<Models.Controller_Event_Log>();
             int runningConsecCount = 0;
             // Order the events by datestamp
-            var eventsInOrder = terminationEvents.OrderBy(TerminationEvent => TerminationEvent.Timestamp);
+            var eventsInOrder = terminationEvents.OrderBy(terminationEvent => terminationEvent.Timestamp);
             foreach (Models.Controller_Event_Log termEvent in eventsInOrder)
             {
                 if (termEvent.EventCode != 7)
@@ -172,11 +172,11 @@ namespace MOE.Common.Business
 
                     if (runningConsecCount >= consecutiveCount)
                     {
-                        ConsecutiveEvents.Add(termEvent);
+                        consecutiveEvents.Add(termEvent);
                     }
                 }
             }
-            return ConsecutiveEvents;
+            return consecutiveEvents;
         }
 
         private List<Models.Controller_Event_Log> FindUnknownTerminationEvents(List<Models.Controller_Event_Log> terminationEvents)

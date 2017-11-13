@@ -52,7 +52,7 @@ namespace SPM.Controllers
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "SignalID,DirectionTypeID,Description,MPH,DecisionPoint,MovementDelay")] Approach approach)
+        public ActionResult Create([Bind(Include = "SignalId,DirectionTypeID,Description,MPH,DecisionPoint,MovementDelay")] Approach approach)
         {
             
             ViewBag.DirectionType = new SelectList(directionRepository.GetAllDirections(), "DirectionTypeID", "Abbreviation");            

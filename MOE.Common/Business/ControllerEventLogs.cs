@@ -15,9 +15,9 @@ namespace MOE.Common.Business
         public List<int> EventCodes { get; }
         public List<Models.Controller_Event_Log> Events { get; set; }
 
-        public ControllerEventLogs(string signalID, DateTime startDate, DateTime endDate)
+        public ControllerEventLogs(string signalId, DateTime startDate, DateTime endDate)
         {
-            SignalId = signalID;
+            SignalId = signalId;
             StartDate = startDate;
             EndDate = endDate;
             EventCodes = new List<int>();
@@ -29,7 +29,7 @@ namespace MOE.Common.Business
             Events = new List<Models.Controller_Event_Log>();
         }
 
-        public void FillforPreempt(string signalID, DateTime startDate, DateTime endDate)
+        public void FillforPreempt(string signalId, DateTime startDate, DateTime endDate)
         {
             List<int> Codes = new List<int>();
 
@@ -41,7 +41,7 @@ namespace MOE.Common.Business
             Models.SPM db = new Models.SPM();
            
             var events = (from s in db.Controller_Event_Log
-                          where s.SignalID == signalID &&
+                          where s.SignalID == signalId &&
                           s.Timestamp >= startDate &&
                           s.Timestamp <= endDate &&
                           Codes.Contains(s.EventCode)
@@ -52,10 +52,10 @@ namespace MOE.Common.Business
 
         }
 
-        public void Add105Events(string signalID, DateTime startDate, DateTime endDate)
+        public void Add105Events(string signalId, DateTime startDate, DateTime endDate)
         {
             var events = (from s in db.Controller_Event_Log
-                          where s.SignalID == signalID &&
+                          where s.SignalID == signalId &&
                           s.Timestamp >= startDate &&
                           s.Timestamp <= endDate &&
                           (s.EventCode == 105 || s.EventCode == 111)
@@ -78,14 +78,14 @@ namespace MOE.Common.Business
 
         }
 
-        static public DateTime GetMostRecentRecordTimestamp(string signalID)
+        public static DateTime GetMostRecentRecordTimestamp(string signalId)
         {
             Models.SPM db = new Models.SPM();
 
             DateTime twoDaysAgo = DateTime.Now.AddDays(-2);
 
             MOE.Common.Models.Controller_Event_Log row = (from r in db.Controller_Event_Log
-                                                           where r.SignalID == signalID && r.Timestamp > twoDaysAgo
+                                                           where r.SignalID == signalId && r.Timestamp > twoDaysAgo
                                                            orderby r.Timestamp descending
                                                          select r).Take(1).FirstOrDefault();
                                                          
@@ -127,15 +127,15 @@ namespace MOE.Common.Business
             Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp)); 
         }
 
-        public ControllerEventLogs(string signalID, DateTime startDate, DateTime endDate, List<int> eventCodes)
+        public ControllerEventLogs(string signalId, DateTime startDate, DateTime endDate, List<int> eventCodes)
         {
-            SignalId = signalID;
+            SignalId = signalId;
             StartDate = startDate;
             EndDate = endDate;
             EventCodes = eventCodes;
 
             var events = from s in db.Controller_Event_Log
-                         where s.SignalID == signalID && 
+                         where s.SignalID == signalId && 
                          s.Timestamp >= startDate &&
                          s.Timestamp <= endDate &&
                          eventCodes.Contains(s.EventCode)
@@ -145,15 +145,15 @@ namespace MOE.Common.Business
             Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp)); 
         }
 
-        public ControllerEventLogs(string signalID, DateTime startDate, DateTime endDate, int eventParam, List<int> eventCodes)
+        public ControllerEventLogs(string signalId, DateTime startDate, DateTime endDate, int eventParam, List<int> eventCodes)
         {
-            SignalId = signalID;
+            SignalId = signalId;
             StartDate = startDate;
             EndDate = endDate;
             EventCodes = eventCodes;
 
             var events = from s in db.Controller_Event_Log
-                         where s.SignalID == signalID &&
+                         where s.SignalID == signalId &&
                          s.Timestamp >= startDate &&
                          s.Timestamp <= endDate &&                         
                          eventCodes.Contains(s.EventCode) &&
@@ -164,12 +164,12 @@ namespace MOE.Common.Business
             Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp)); 
         }
 
-        static public List<int> GetPedPhases(string signalID, DateTime startDate, DateTime endDate)
+        public static List<int> GetPedPhases(string signalId, DateTime startDate, DateTime endDate)
         {
             Models.SPM db = new Models.SPM();
             List<int> pedEventCodes = new List<int>{21,45,90,23};
             var events = (from s in db.Controller_Event_Log
-                         where s.SignalID == signalID &&
+                         where s.SignalID == signalId &&
                          s.Timestamp >= startDate &&
                          s.Timestamp <= endDate &&
                          pedEventCodes.Contains(s.EventCode)
@@ -177,31 +177,31 @@ namespace MOE.Common.Business
             return events.ToList<int>();
         }
 
-        static public int GetPreviousPlan(string signalID, DateTime startDate)
+        public static int GetPreviousPlan(string signalId, DateTime startDate)
         {
             Models.SPM db = new Models.SPM();
             DateTime endDate = startDate.AddHours(-12);
 
 
             var planRecord= from r in db.Controller_Event_Log 
-                         where r.SignalID == signalID &&
+                         where r.SignalID == signalId &&
                              r.Timestamp >= endDate &&
                              r.Timestamp <= startDate &&
                              r.EventCode == 131
                             select r;
 
-            if (planRecord.Count() > 0)
+            if (planRecord.Any())
             {return planRecord.OrderByDescending(s=>s.Timestamp).FirstOrDefault().EventParam;}
             return 0;
         }
 
-        static public MOE.Common.Models.Controller_Event_Log GetEventBeforeEvent(string signalID, int phase, DateTime startDate)
+        public static MOE.Common.Models.Controller_Event_Log GetEventBeforeEvent(string signalId, int phase, DateTime startDate)
         {
             Models.SPM db = new Models.SPM();
             DateTime endDate = startDate.AddHours(-12);
             var eventRecord = (from s in db.Controller_Event_Log
                               orderby s.Timestamp descending
-                              where s.SignalID == signalID &&
+                              where s.SignalID == signalId &&
                               s.EventParam == phase &&
                               s.Timestamp <= startDate &&
                               s.Timestamp >= endDate

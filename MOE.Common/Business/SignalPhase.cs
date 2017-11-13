@@ -15,7 +15,7 @@ namespace MOE.Common.Business
         public string Direction { get; }
         public VolumeCollection Volume { get; private set; }
         public List<MOE.Common.Business.Plan> Plans { get; private set; }
-        public List<Cycle> Cycles { get; set; }
+        public List<PhaseCycleBase> Cycles { get; set; }
         public List<Models.Controller_Event_Log> DetectorEvents { get; set; }
         public bool IsPermissive { get; }
         public Models.Approach Approach { get; }
@@ -127,7 +127,7 @@ namespace MOE.Common.Business
             {
                 if(totalGreenTime == -1)
                 {
-                    totalGreenTime = Cycles.Sum(d => d.TotalGreenTime);
+                    totalGreenTime = Cycles.Sum(d => d.GreenTime);
                 }
                 return totalGreenTime;
             }
@@ -140,7 +140,7 @@ namespace MOE.Common.Business
             {
                 if (totalYellowTime == -1)
                 {
-                    totalYellowTime = Cycles.Sum(d => d.TotalYellowTime);
+                    totalYellowTime = Cycles.Sum(d => d.YellowTime);
                 }
                 return totalYellowTime;
             }
@@ -177,7 +177,7 @@ namespace MOE.Common.Business
             StartDate = startDate;
             EndDate = endDate;
             Approach = approach;
-            Cycles = new List<Cycle>();
+            Cycles = new List<PhaseCycleBase>();
             Plans = new List<Plan>();
             if (approach.DirectionType != null) this.Direction = approach.DirectionType.Description;
             IsPermissive = isPermissive;
@@ -245,7 +245,7 @@ namespace MOE.Common.Business
                     if (planEvents[i].Timestamp != EndDate)
                     {
                         var planCycles = Cycles
-                            .Where(c => c.StartTime >= planEvents[i].Timestamp && c.StartTime < EndDate).ToList();
+                            .Where(c => c.CycleStart >= planEvents[i].Timestamp && c.CycleStart < EndDate).ToList();
                         Plans.Add(new Plan(planEvents[i].Timestamp, EndDate, planEvents[i].EventParam, Approach, planCycles));
                     }
                 }
@@ -254,7 +254,7 @@ namespace MOE.Common.Business
                     if (planEvents[i].Timestamp != planEvents[i + 1].Timestamp)
                     {
                         var planCycles = Cycles
-                            .Where(c => c.StartTime >= planEvents[i].Timestamp && c.StartTime < planEvents[i + 1].Timestamp).ToList();
+                            .Where(c => c.CycleStart >= planEvents[i].Timestamp && c.CycleStart < planEvents[i + 1].Timestamp).ToList();
                         Plans.Add(new Plan(planEvents[i].Timestamp, planEvents[i + 1].Timestamp, planEvents[i].EventParam, Approach, planCycles));
                     }
                 }
@@ -280,8 +280,8 @@ namespace MOE.Common.Business
                             EndDate, new List<int>() { 102 });
             foreach (var preemptEvent in preemptEvents)
             {
-                var cycle = Cycles.FirstOrDefault(c => c.StartTime <= preemptEvent.Timestamp && c.EndTime > preemptEvent.Timestamp);
-                cycle?.AddPreempt(new DetectorDataPoint(cycle.StartTime, preemptEvent.Timestamp, cycle.GreenEvent, cycle.YellowEvent));
+                var cycle = Cycles.FirstOrDefault(c => c.CycleStart <= preemptEvent.Timestamp && c.CycleEnd > preemptEvent.Timestamp);
+                cycle?.PreemptCollection.Add(new DetectorDataPoint(cycle.CycleStart, preemptEvent.Timestamp, cycle.GreenStart, cycle.YellowStart));
             }
         }
 
@@ -311,12 +311,20 @@ namespace MOE.Common.Business
             for (int i = 0; i < cycleEvents.Count; i++)
             {
                 if (i < cycleEvents.Count - 3
-                    && GetEventType(cycleEvents[i].EventCode) == Business.Cycle.EventType.ChangeToRed
-                    && GetEventType(cycleEvents[i + 1].EventCode) == Business.Cycle.EventType.ChangeToGreen
-                    && GetEventType(cycleEvents[i + 2].EventCode) == Business.Cycle.EventType.ChangeToYellow
-                    && GetEventType(cycleEvents[i + 3].EventCode) == Business.Cycle.EventType.ChangeToRed)
+                    && GetEventType(cycleEvents[i].EventCode) == Business.PhaseCycleBase.EventType.ChangeToRed
+                    && GetEventType(cycleEvents[i + 1].EventCode) == Business.PhaseCycleBase.EventType.ChangeToGreen
+                    && GetEventType(cycleEvents[i + 2].EventCode) == Business.PhaseCycleBase.EventType.ChangeToYellow
+                    && GetEventType(cycleEvents[i + 3].EventCode) == Business.PhaseCycleBase.EventType.ChangeToRed)
                 {
-                    Cycles.Add(new Cycle(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp, cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp));
+                    Cycles.Add(new PhaseCycleBase
+                    {
+                        CycleStart = cycleEvents[i].Timestamp,
+                        RedClearStart = cycleEvents[i].Timestamp,
+                        GreenStart = cycleEvents[i + 1].Timestamp,
+                        YellowStart = cycleEvents[i + 2].Timestamp,
+                        CycleEnd = cycleEvents[i + 3].Timestamp
+                    });
+
                     i = i + 3;
                 }
             }
@@ -325,38 +333,38 @@ namespace MOE.Common.Business
                 foreach (var cycle in Cycles)
                 {
                     var detectorEventsForCycle =
-                        DetectorEvents.Where(d => d.Timestamp >= cycle.StartTime && d.Timestamp < cycle.EndTime)
+                        DetectorEvents.Where(d => d.Timestamp >= cycle.CycleStart && d.Timestamp < cycle.CycleEnd)
                             .ToList();
                     foreach (var controllerEventLog in detectorEventsForCycle)
                     {
-                        cycle.AddDetectorData(new DetectorDataPoint(cycle.StartTime, controllerEventLog.Timestamp,
-                            cycle.GreenEvent, cycle.YellowEvent));
+                        cycle.DetectorEvents.Add(new DetectorDataPoint(cycle.CycleStart, controllerEventLog.Timestamp,
+                            cycle.GreenStart, cycle.YellowStart));
                     }
                 }
             }
         }
 
-        private Cycle.EventType GetEventType(int eventCode)
+        private PhaseCycleBase.EventType GetEventType(int eventCode)
         {
             switch (eventCode)
             {
                 case 1:
-                    return Cycle.EventType.ChangeToGreen;
+                    return PhaseCycleBase.EventType.ChangeToGreen;
                 // overlap green
                 case 61:
-                    return Cycle.EventType.ChangeToGreen;
+                    return PhaseCycleBase.EventType.ChangeToGreen;
                 case 8:
-                    return Cycle.EventType.ChangeToYellow;
+                    return PhaseCycleBase.EventType.ChangeToYellow;
                 // overlap yellow
                 case 63:
-                    return Cycle.EventType.ChangeToYellow;
+                    return PhaseCycleBase.EventType.ChangeToYellow;
                 case 10:
-                    return Cycle.EventType.ChangeToRed;
+                    return PhaseCycleBase.EventType.ChangeToRed;
                 // overlap red
                 case 64:
-                    return Cycle.EventType.ChangeToRed;
+                    return PhaseCycleBase.EventType.ChangeToRed;
                 default:
-                    return Cycle.EventType.Unknown;
+                    return PhaseCycleBase.EventType.Unknown;
             }
         }
 

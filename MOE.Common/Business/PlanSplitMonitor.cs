@@ -10,9 +10,15 @@ namespace MOE.Common.Business
 {
     public class PlanSplitMonitor:Plan
     {
-        
-        public PlanSplitMonitor(DateTime start, DateTime end, int planNumber, Models.Approach approach, List<Cycle> cyclesForPlan):base( start,  end,  planNumber, approach,  cyclesForPlan)
+        public SortedDictionary<int, int> Splits = new SortedDictionary<int, int>();
+
+        public PlanSplitMonitor(DateTime start, DateTime end, int planNumber):base(start,  end,  planNumber)
         {
+            PlanStart = start;
+            PlanEnd = end;
+            PlanNumber = planNumber;
+            
+
         }
 
         public void SetProgrammedSplits(string signalId)
@@ -23,7 +29,7 @@ namespace MOE.Common.Business
             {
                 l.Add(i);
             }
-            ControllerEventLogs splitsDt = new ControllerEventLogs(signalId, this.StartTime, this.StartTime.AddSeconds(2), l);
+            ControllerEventLogs splitsDt = new ControllerEventLogs(signalId, PlanStart, PlanStart.AddSeconds(2), l);
             foreach (MOE.Common.Models.Controller_Event_Log row in splitsDt.Events)
             {
                 if (row.EventCode == 132)
@@ -219,20 +225,8 @@ namespace MOE.Common.Business
 
         public void SetHighCycleCount(Business.AnalysisPhaseCollection phases)
         {
-            //find all the phases cycles within the plan
-            int HighCycleCount = 0;
-            foreach (Business.AnalysisPhase phase in phases.Items)
-            {
-                var Cycles = from cycle in phase.Cycles.Items
-                    where cycle.StartTime > this.StartTime && cycle.EndTime < this.EndTime
-                    select cycle;
 
-                if (Cycles.Count() > HighCycleCount)
-                {
-                    HighCycleCount = Cycles.Count();
-                }
-            }
-            CycleCount = HighCycleCount;
+            CycleCount = phases.Items.Max(p => p.Cycles.Count);
         }
 
     }

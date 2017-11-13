@@ -90,7 +90,7 @@ namespace SPM.Controllers
             var existingSignal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             if (existingSignal == null)
             {
-                return Content("<h1>" +"No Signal Matches this SignalID" + "</h1>");
+                return Content("<h1>" +"No Signal Matches this SignalId" + "</h1>");
             }
 
             Signal signal = _signalsRepository.CopySignalToNewVersion(existingSignal);

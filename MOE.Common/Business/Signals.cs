@@ -59,7 +59,7 @@ namespace MOE.Common.Business
         //    using (MOE.Common.Models.SPM db = new Models.SPM())
         //    {
         //        var table = (from r in db.Detectors
-        //                     where r.SignalID == signalId && r.CheckReportAvialbility(reporttype) == true                            
+        //                     where r.SignalId == signalId && r.CheckReportAvialbility(reporttype) == true                            
         //                     select r).ToList();
 
         //        return table;

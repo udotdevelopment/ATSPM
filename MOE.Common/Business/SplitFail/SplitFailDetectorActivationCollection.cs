@@ -46,18 +46,18 @@ namespace MOE.Common.Business.SplitFail
 
 
 
-        public double GreenOccupancy(MOE.Common.Business.CustomReport.Cycle cycle)
+        public double GreenOccupancy(MOE.Common.Business.PhaseCycleBase cycle)
         {
 
             double o = 0;
 
             
-            double t = Convert.ToInt32(cycle.TotalGreenTime * 1000);
+            double t = Convert.ToInt32(cycle.GreenTime * 1000);
 
             foreach (SplitFailDetectorActivation a in cycle.Activations.Activations.Values)
             {
 
-                o += FindModifiedActivationDuration(cycle.ChangeToGreen, cycle.BeginYellowClear, a);
+                o += FindModifiedActivationDuration(cycle.GreenStart, cycle.YellowStart, a);
 
             }
 
@@ -71,16 +71,16 @@ namespace MOE.Common.Business.SplitFail
 
 
 
-        public double StartOfRedOccupancy(MOE.Common.Business.CustomReport.Cycle cycle, int SecondsToWatch)
+        public double StartOfRedOccupancy(MOE.Common.Business.PhaseCycleBase cycle, int SecondsToWatch)
     {
-        DateTime EndWatchTime = cycle.ChangeToRed.AddSeconds(SecondsToWatch);
+        DateTime EndWatchTime = cycle.RedClearStart.AddSeconds(SecondsToWatch);
         
         double o = 0;
 
         foreach (SplitFailDetectorActivation a in cycle.Activations.Activations.Values)
         {
 
-               o += FindModifiedActivationDuration(cycle.ChangeToRed, EndWatchTime, a);
+               o += FindModifiedActivationDuration(cycle.RedClearStart, EndWatchTime, a);
 
 
         }

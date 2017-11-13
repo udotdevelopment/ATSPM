@@ -255,20 +255,20 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        private double AddCycleToChart(Chart chart, Cycle pcd)
+        private double AddCycleToChart(Chart chart, PhaseCycleBase cycle)
         {
 
             double totalOnGreenArrivals = 0;
-            chart.Series["Change to Green"].Points.AddXY(pcd.GreenEvent, pcd.GreenLineY);
-            chart.Series["Change to Yellow"].Points.AddXY(pcd.YellowEvent, pcd.YellowLineY);
-            chart.Series["Change to Red"].Points.AddXY(pcd.EndTime, pcd.RedLineY);
-            foreach (MOE.Common.Business.DetectorDataPoint detectorPoint in pcd.DetectorEvents)
+            chart.Series["Change to Green"].Points.AddXY(cycle.GreenStart, cycle.GreenTime);
+            chart.Series["Change to Yellow"].Points.AddXY(cycle.YellowStart, cycle.YellowTime);
+            chart.Series["Change to Red"].Points.AddXY(cycle.CycleEnd,cycle.RedTime);
+            foreach (MOE.Common.Business.DetectorDataPoint detectorPoint in cycle.DetectorEvents)
             {
                 chart.Series["Detector Activation"].Points.AddXY(
-                    //pcd.StartTime, 
+                    //cycle.StartTime, 
                     detectorPoint.TimeStamp,
                     detectorPoint.YPoint);
-                if (detectorPoint.YPoint > pcd.GreenLineY && detectorPoint.YPoint < pcd.RedLineY)
+                if (detectorPoint.YPoint > cycle.GreenTime && detectorPoint.YPoint < cycle.RedTime)
                 {
                     totalOnGreenArrivals++;
                 }
@@ -325,7 +325,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         Plannumberlabel.Text = "Unknown";
                         break;
                     default:
-                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+                        Plannumberlabel.Text = "Plans " + plan.PlanNumber.ToString();
 
                         break;
                 }

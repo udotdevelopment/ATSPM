@@ -12,9 +12,9 @@ namespace MOE.Common.Business.SplitFail
     {
         public Chart chart = new Chart();
         public WCFServiceLibrary.SplitFailOptions Options { get; set; }
-        public MOE.Common.Business.CustomReport.Phase Phase  { get; set; }
+        public Phase Phase  { get; set; }
         public SplitFailPhase SplitFailPhase { get;}
-        public SplitFailChart(CustomReport.Phase phase, WCFServiceLibrary.SplitFailOptions options, SplitFailPhase splitFailPhase)
+        public SplitFailChart(Phase phase, WCFServiceLibrary.SplitFailOptions options, SplitFailPhase splitFailPhase)
         {
             Options = options;
             SplitFailPhase = splitFailPhase;
@@ -79,7 +79,7 @@ namespace MOE.Common.Business.SplitFail
             chartArea.AxisX2.Maximum = Options.EndDate.ToOADate();
             chartArea.AxisX.Maximum = Options.EndDate.ToOADate();
  
-            //Axis for Plan Strips
+            //Axis for Plans Strips
             chartArea.AxisX2.Enabled = AxisEnabled.True;
             chartArea.AxisX2.MajorTickMark.Enabled = true;
             chartArea.AxisX2.IntervalType = DateTimeIntervalType.Hours;
@@ -253,7 +253,7 @@ namespace MOE.Common.Business.SplitFail
             chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
 
-        protected void AddPlanStrips(Chart chart, MOE.Common.Business.CustomReport.Phase phase, DateTime startDate, DateTime endDate)
+        protected void AddPlanStrips(Chart chart, Phase phase, DateTime startDate, DateTime endDate)
         {
             PlanCollection planCollection = new PlanCollection(startDate, endDate, phase.SignalID);
             
@@ -298,7 +298,7 @@ namespace MOE.Common.Business.SplitFail
                          Plannumberlabel.Text = "Unknown";
                          break;
                      default:
-                         Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+                         Plannumberlabel.Text = "Plans " + plan.PlanNumber.ToString();
 
                          break;
                  }

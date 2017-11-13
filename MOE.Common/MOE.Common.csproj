@@ -334,34 +334,20 @@
     <Compile Include="Business\BulkCopyOptions.cs" />
     <Compile Include="Business\ChartFactory.cs" />
     <Compile Include="Business\ChartTitleFactory.cs" />
-    <Compile Include="Business\CustomReport\CustomChart.cs">
+    <Compile Include="Business\Phase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Business\CustomReport\Cycle.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Business\CustomReport\GraphSeries.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Business\CustomReport\Phase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Business\CustomReport\Plan.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Business\CustomReport\Signal.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Business\PhaseCycleBase.cs" />
     <Compile Include="Business\DataAggregation\DataAggregation.cs" />
     <Compile Include="Business\Helpers\ApproachVolumeTable.cs" />
     <Compile Include="Business\Helpers\ConfigurationRecord.cs" />
+    <Compile Include="Business\PlanBase.cs" />
     <Compile Include="Business\PlanSplitMonitor.cs" />
     <Compile Include="Business\PlanSpeed.cs" />
     <Compile Include="Business\Speed\DetectorSpeed.cs" />
     <Compile Include="Business\SplitFail\SplitFailPhase.cs" />
     <Compile Include="Business\TMC\TMCData.cs" />
     <Compile Include="Business\TMC\TMCInfo.cs" />
-    <Compile Include="Business\PCD\Cycle.cs" />
     <Compile Include="Business\PCD\PCDMetric.cs" />
     <Compile Include="Business\PCD\Phase.cs" />
     <Compile Include="Business\PCD\PhaseFactory.cs" />
@@ -456,15 +442,11 @@
     </Compile>
     <Compile Include="Business\AnalysisPhase.cs" />
     <Compile Include="Business\AnalysisPhaseCollection.cs" />
-    <Compile Include="Business\AnalysisPhaseCycle.cs" />
-    <Compile Include="Business\AnalysisPhaseCycleCollection.cs" />
     <Compile Include="Business\ApproachVolume\Approach.cs" />
     <Compile Include="Business\ApproachVolume\ApproachVolumeChart.cs" />
     <Compile Include="Business\ApproachSpeed\AvgSpeedBucket.cs" />
     <Compile Include="Business\ApproachSpeed\AvgSpeedBucketCollection.cs" />
-    <Compile Include="Business\ControllerEvent.cs" />
     <Compile Include="Business\ArriveOnRedChart.cs" />
-    <Compile Include="Business\CycleEngine.cs" />
     <Compile Include="Business\ListToTableConverter.cs" />
     <Compile Include="Business\LogDecoder\ASC3Decoder.cs" />
     <Compile Include="Business\PEDDelay\PedHourlyTotal.cs" />
@@ -473,7 +455,6 @@
     <Compile Include="Business\PEDDelay\PedDelaySignal.cs" />
     <Compile Include="Business\PEDDelay\PedPhase.cs" />
     <Compile Include="Business\PEDDelay\PedPlan.cs" />
-    <Compile Include="Business\PlanBase.cs" />
     <Compile Include="Business\Preempt\PreemptCycle.cs" />
     <Compile Include="Business\Preempt\PreemptCycleEngine.cs" />
     <Compile Include="Business\Preempt\PreemptDetailChart.cs" />
@@ -500,7 +481,6 @@
     <Compile Include="Business\Inrix\TMC.cs" />
     <Compile Include="Business\Inrix\TMCCollection.cs" />
     <Compile Include="Business\Inrix\TravelTimeRecord.cs" />
-    <Compile Include="Business\Cycle.cs" />
     <Compile Include="Business\LinkPivot.cs" />
     <Compile Include="Business\LinkPivotPair.cs" />
     <Compile Include="Business\LinkPivotPCDDisplay.cs" />
@@ -730,7 +710,7 @@
     <Compile Include="Models\ViewModel\WebConfigTool\WebConfigToolViewModel.cs" />
     <Compile Include="Models\ViewModel\_MainMenu\MenuItem.cs" />
     <Compile Include="Models\WatchDogApplicationSettings.cs" />
-    <Compile Include="Business\CycleFactory.cs" />
+    <Compile Include="Business\PhaseCycleFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

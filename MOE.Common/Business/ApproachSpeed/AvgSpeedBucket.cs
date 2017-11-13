@@ -32,16 +32,16 @@ namespace MOE.Common.Business
 
         private int _binSizeMultiplier;
 
-        public AvgSpeedBucket(DateTime startTime, DateTime endTime, List<Cycle> cycleCollection, int binSize, int movementdelay)
+        public AvgSpeedBucket(DateTime startTime, DateTime endTime, List<PhaseCycleBase> cycleCollection, int binSize, int movementdelay)
         {
             this.StartTime = startTime;
             this.EndTime = endTime;
             this.XAxis = endTime;
             this._binSizeMultiplier = 60 / binSize;
             this.MovementDelay = movementdelay;
-            var cycles = cycleCollection.Where(c => c.StartTime >= startTime && c.StartTime < endTime).ToList();
+            var cycles = cycleCollection.Where(c => c.CycleStart >= startTime && c.CycleStart < endTime).ToList();
             List<int> speedsForBucket = new List<int>();
-            foreach (Cycle cycle in cycles)
+            foreach (var cycle in cycles)
             {
                 speedsForBucket.AddRange(cycle.SpeedsForCycle.Select(s => s.MPH));
             }

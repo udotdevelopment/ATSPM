@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MOE.Common.Business.CustomReport;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
@@ -15,7 +14,7 @@ namespace MOE.Common.Business.SplitFail
         public List<DateTime> SplitFails { get; }
         public int TotalFails { get; set; } = 0;
         public int PhaseNumber { get; }
-        public MOE.Common.Business.CustomReport.Phase Phase { get; }
+        public Phase Phase { get; }
         public List<Tuple<DateTime, double>> GorGapOut { get; }
         public List<Tuple<DateTime, double>> RorGapOut { get; }
         public List<Tuple<DateTime, double>> GorForceOff { get; }
@@ -64,7 +63,7 @@ namespace MOE.Common.Business.SplitFail
         {
             if (_controllerEventLogs.Count > 0)
             {
-                foreach (MOE.Common.Business.CustomReport.Cycle cycle in Phase.Cycles)
+                foreach (var cycle in Phase.Cycles)
                 {
                     ProcessDetectors(cycle);
                     CheckActivations(cycle);
@@ -83,7 +82,7 @@ namespace MOE.Common.Business.SplitFail
             {
                 double binTotalGor = 0;
                 double binTotalRor = 0;
-                List<CustomReport.Cycle> cycleBin = GetCycleBin(counterTime);
+                List<PhaseCycleBase> cycleBin = GetCycleBin(counterTime);
                 var binFails = SplitFails.Count(s => s >= counterTime && s <= counterTime.AddMinutes(15));
                 SetBinTotalRorGor(options, ref binTotalGor, ref binTotalRor, cycleBin);
                 SetPercentFails(counterTime, cycleBin, binFails);
@@ -92,7 +91,7 @@ namespace MOE.Common.Business.SplitFail
             } while (counterTime < options.EndDate.AddMinutes(15));
         }
 
-        private void SetAverageRorGorForCycleBin(DateTime counterTime, double binTotalGor, double binTotalRor, List<CustomReport.Cycle> cycleBin)
+        private void SetAverageRorGorForCycleBin(DateTime counterTime, double binTotalGor, double binTotalRor, List<PhaseCycleBase> cycleBin)
         {
             if (cycleBin.Any())
             {
@@ -108,7 +107,7 @@ namespace MOE.Common.Business.SplitFail
             }
         }
 
-        private void SetPercentFails(DateTime counterTime, List<CustomReport.Cycle> cycleBin, int binFails)
+        private void SetPercentFails(DateTime counterTime, List<PhaseCycleBase> cycleBin, int binFails)
         {
             if (binFails > 0 && cycleBin.Any())
             {
@@ -121,16 +120,16 @@ namespace MOE.Common.Business.SplitFail
             }
         }
 
-        private static void SetBinTotalRorGor(SplitFailOptions options, ref double binTotalGor, ref double binTotalRor, List<CustomReport.Cycle> cycleBin)
+        private static void SetBinTotalRorGor(SplitFailOptions options, ref double binTotalGor, ref double binTotalRor, List<PhaseCycleBase> cycleBin)
         {
-            foreach (MOE.Common.Business.CustomReport.Cycle c in cycleBin)
+            foreach (MOE.Common.Business.PhaseCycleBase c in cycleBin)
             {
                 binTotalGor += c.Activations.GreenOccupancy(c) * 100;
                 binTotalRor += c.Activations.StartOfRedOccupancy(c, options.FirstSecondsOfRed) * 100;
             }
         }
 
-        private List<CustomReport.Cycle> GetCycleBin(DateTime counterTime)
+        private List<PhaseCycleBase> GetCycleBin(DateTime counterTime)
         {
             return Phase.Cycles
                 .Where(cur => cur.CycleStart >= counterTime && cur.CycleStart <= counterTime.AddMinutes(15))
@@ -138,13 +137,13 @@ namespace MOE.Common.Business.SplitFail
                 .ToList();
         }
 
-        private void SetRorGor(SplitFailOptions options, CustomReport.Cycle cycle)
+        private void SetRorGor(SplitFailOptions options, PhaseCycleBase cycle)
         {
             if (cycle.CycleStart > options.StartDate && cycle.CycleStart < options.EndDate)
             {
                 double gor = cycle.Activations.GreenOccupancy(cycle) * 100;
                 double ror = cycle.Activations.StartOfRedOccupancy(cycle, options.FirstSecondsOfRed) * 100;
-                if (cycle.TerminationEvent == MOE.Common.Business.CustomReport.Cycle.TerminationCause.GapOut)
+                if (cycle.TerminationEvent == MOE.Common.Business.PhaseCycleBase.TerminationType.GapOut)
                 {
                     GorGapOut.Add(new Tuple<DateTime, double>(cycle.CycleStart, gor));
                     RorGapOut.Add(new Tuple<DateTime, double>(cycle.CycleStart, ror));
@@ -162,7 +161,7 @@ namespace MOE.Common.Business.SplitFail
             }
         }
 
-        private static void CheckActivations(CustomReport.Cycle cycle)
+        private static void CheckActivations(PhaseCycleBase cycle)
         {
             for (int i = 0; i < cycle.Activations.Activations.Count - 1;)
             {
@@ -190,7 +189,7 @@ namespace MOE.Common.Business.SplitFail
             }
         }
 
-        private void ProcessDetectors(CustomReport.Cycle cycle)
+        private void ProcessDetectors(PhaseCycleBase cycle)
         {
             foreach (var controllerEventLog in _controllerEventLogs)
             {
@@ -219,7 +218,7 @@ namespace MOE.Common.Business.SplitFail
             }
         }
 
-        private void SetDetectorActivationsForCycleWithoutDetectorHits(CustomReport.Cycle cycle, int channel)
+        private void SetDetectorActivationsForCycleWithoutDetectorHits(PhaseCycleBase cycle, int channel)
         {
             SplitFailDetectorActivation splitFailDetectorActivation = new SplitFailDetectorActivation();
             DateTime earlierTime = cycle.CycleStart.AddMinutes(-30);
@@ -235,7 +234,7 @@ namespace MOE.Common.Business.SplitFail
             }
         }
 
-        private static void SetDetectorActivationsForCycleWithLessThanOneDetectorHit(CustomReport.Cycle cycle, List<Controller_Event_Log> detectorHitsForCycle)
+        private static void SetDetectorActivationsForCycleWithLessThanOneDetectorHit(PhaseCycleBase cycle, List<Controller_Event_Log> detectorHitsForCycle)
         {
             SplitFailDetectorActivation da = new SplitFailDetectorActivation();
             MOE.Common.Models.Controller_Event_Log current = detectorHitsForCycle.First();
@@ -256,7 +255,7 @@ namespace MOE.Common.Business.SplitFail
             }
         }
 
-        private static void SetDetectorActivationsForCycleWithDetectorHits(CustomReport.Cycle cycle, List<Controller_Event_Log> detectorHitsForCycle)
+        private static void SetDetectorActivationsForCycleWithDetectorHits(PhaseCycleBase cycle, List<Controller_Event_Log> detectorHitsForCycle)
         {
             for (int i = 0; i < detectorHitsForCycle.Count() - 1; i++)
             {

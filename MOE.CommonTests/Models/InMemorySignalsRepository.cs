@@ -309,7 +309,7 @@ namespace MOE.CommonTests.Models
             //                                  where r.ControllerTypeID != 4
             //                                  select new SignalFTPInfo
             //                                  {
-            //                                      SignalID = r.SignalID,
+            //                                      SignalId = r.SignalId,
             //                                      PrimaryName = r.PrimaryName,
             //                                      Secondary_Name = r.SecondaryName,
             //                                      User_Name = ftp.UserName,

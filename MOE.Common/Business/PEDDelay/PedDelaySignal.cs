@@ -20,23 +20,23 @@ namespace MOE.Common.Business.PEDDelay
         protected List<PedPhase> _PedPhases = new List<PedPhase>();
         public List<PedPhase> PedPhases { get { return _PedPhases; } }
 
-        protected PlansBase _Plans;
+        protected List<PlanBase> Plans;
 
-        public PedDelaySignal(string signalID, DateTime startDate,
+        public PedDelaySignal(string signalId, DateTime startDate,
             DateTime endDate) 
         {
-            _SignalID = signalID;
+            _SignalID = signalId;
             _StartDate = startDate;
             _EndDate = endDate;
 
-            _Plans = new PlansBase(signalID, startDate, endDate);
+            Plans =  PlanFactory.GetPlansFromDatabase(signalId, startDate, endDate);
 
-            List<int> pedPhaseNumbers = ControllerEventLogs.GetPedPhases(signalID, startDate, endDate);
+            List<int> pedPhaseNumbers = ControllerEventLogs.GetPedPhases(signalId, startDate, endDate);
             
             Parallel.ForEach(pedPhaseNumbers, currentPhase =>
             //foreach(int currentPhase in pedPhaseNumbers)
             {
-                _PedPhases.Add(new PedPhase(currentPhase, signalID, startDate, endDate, _Plans));
+                _PedPhases.Add(new PedPhase(currentPhase, signalId, startDate, endDate, Plans));
             }
                 );
             _PedPhases.Sort((x, y) => x.PhaseNumber.CompareTo(y.PhaseNumber));

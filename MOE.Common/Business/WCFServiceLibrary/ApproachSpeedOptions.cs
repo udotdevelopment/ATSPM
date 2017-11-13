@@ -306,7 +306,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         plannumberLabel.Text = "Unknown";
                         break;
                     default:
-                        plannumberLabel.Text = "Plan " + plan.PlanNumber.ToString();
+                        plannumberLabel.Text = "Plans " + plan.PlanNumber.ToString();
 
                         break;
                 }

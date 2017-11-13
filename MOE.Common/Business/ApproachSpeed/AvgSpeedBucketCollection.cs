@@ -9,7 +9,7 @@ namespace MOE.Common.Business
     {
         public List<AvgSpeedBucket> Items = new List<AvgSpeedBucket>();
 
-        public AvgSpeedBucketCollection(DateTime startTime, DateTime endTime, List<Cycle> cycleCollection, int binSize, int movementdelay)
+        public AvgSpeedBucketCollection(DateTime startTime, DateTime endTime, List<PhaseCycleBase> cycleCollection, int binSize, int movementdelay)
         {
             DateTime dt = startTime;
             while (dt.AddMinutes(binSize) <= endTime)
@@ -26,19 +26,19 @@ namespace MOE.Common.Business
             Items.Add(average);
         }
 
-        public int GetAverageSpeed(List<Models.Speed_Events> SpeedEvents)
+        public int GetAverageSpeed(List<Models.Speed_Events> speedEvents)
         {
             int TotalSpeed = 0;
             int AvgSpeed = 0;
-            foreach (Models.Speed_Events speed in SpeedEvents)
+            foreach (Models.Speed_Events speed in speedEvents)
             {
                 TotalSpeed = TotalSpeed + speed.MPH;
             }
 
             
 
-            double RawAvgSpeed = TotalSpeed / SpeedEvents.Count;
-            AvgSpeed = Convert.ToInt32(Math.Round(RawAvgSpeed));
+            double rawAvgSpeed = TotalSpeed / speedEvents.Count;
+            AvgSpeed = Convert.ToInt32(Math.Round(rawAvgSpeed));
             return AvgSpeed;
         }
     }

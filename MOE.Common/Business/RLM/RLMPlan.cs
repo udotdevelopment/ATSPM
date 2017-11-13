@@ -323,7 +323,7 @@ namespace MOE.Common.Business
             int HighCycleCount = 0;
             foreach (Business.AnalysisPhase phase in phases.Items)
             {
-                var Cycles = from cycle in phase.Cycles.Items
+                var Cycles = from cycle in phase.Cycles.PhaseCycles
                              where cycle.StartTime > this.StartTime && cycle.EndTime < this.endTime
                              select cycle;
 

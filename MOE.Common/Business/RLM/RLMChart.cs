@@ -378,7 +378,7 @@ namespace MOE.Common.Business
                         Plannumberlabel.Text = "Unknown";
                         break;
                     default:
-                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+                        Plannumberlabel.Text = "Plans " + plan.PlanNumber.ToString();
 
                         break;
                 }

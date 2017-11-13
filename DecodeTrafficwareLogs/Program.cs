@@ -212,7 +212,7 @@ namespace DecodeTrafficwareLogs
                 {
                     DataTable elTable = new DataTable();
 
-                    elTable.Columns.Add("SignalID", typeof(String));
+                    elTable.Columns.Add("SignalId", typeof(String));
                     elTable.Columns.Add("Timestamp", typeof(DateTime));
                     elTable.Columns.Add("EventCode", typeof(Int32));
                     elTable.Columns.Add("EventParam", typeof(Int32));

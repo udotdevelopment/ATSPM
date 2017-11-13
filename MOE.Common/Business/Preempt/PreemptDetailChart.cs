@@ -302,7 +302,7 @@ namespace MOE.Common.Business.Preempt
                             Plannumberlabel.Text = "Unknown";
                             break;
                         default:
-                            Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+                            Plannumberlabel.Text = "Plans " + plan.PlanNumber.ToString();
 
                             break;
                     }
@@ -324,7 +324,7 @@ namespace MOE.Common.Business.Preempt
 
 
                     string preemptCount = c.Count().ToString();
-                    planPreemptsLabel.Text = "Preempts Serviced During Plan: " + preemptCount;
+                    planPreemptsLabel.Text = "Preempts Serviced During Plans: " + preemptCount;
                     planPreemptsLabel.LabelMark = LabelMarkStyle.LineSideMark;
                     planPreemptsLabel.ForeColor = Color.Red;
                     planPreemptsLabel.RowIndex = 7;

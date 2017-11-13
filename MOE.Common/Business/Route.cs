@@ -82,7 +82,7 @@ namespace MOE.Common.Business
            //                      select new
            //                      {
            //                          DetectorID = d.DetectorID, 
-           //                          SignalID = d.SignalID,
+           //                          SignalId = d.SignalId,
            //                          Det_Channel = d.Det_Channel,
            //                          Lane = d.Lane,
            //                          Direction = d.Direction,
@@ -94,7 +94,7 @@ namespace MOE.Common.Business
 
            // foreach (var row in routeMembersDT)
            // {
-           //     MOE.Common.Business.Detector det = new Detector(row.DetectorID.ToString(), row.SignalID, row.Det_Channel, row.Lane, row.Direction, row.Phase, row.RouteOrder);
+           //     MOE.Common.Business.Detector det = new Detector(row.DetectorID.ToString(), row.SignalId, row.Det_Channel, row.Lane, row.Direction, row.Phase, row.RouteOrder);
            //     MemberDetectors.Add(det);
            // }
 
@@ -117,7 +117,7 @@ namespace MOE.Common.Business
 
         //    foreach (MOE.Common.Models.Detectors row in routeNonMembersDT)
         //    {
-        //        MOE.Common.Business.Detector det = new Detector(row.DetectorID.ToString(), row.SignalID, row.Det_Channel, row.Lane, row.Direction, row.Phase, 0);
+        //        MOE.Common.Business.Detector det = new Detector(row.DetectorID.ToString(), row.SignalId, row.Det_Channel, row.Lane, row.Direction, row.Phase, 0);
         //        NonMemberDetectors.Add(det);
         //    }
         }

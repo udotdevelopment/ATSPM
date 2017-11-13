@@ -71,7 +71,7 @@ namespace MOE.Common.Business.WatchDog
                         AnalysisStart, AnalysisEnd, Settings.ConsecutiveCount);
 
                 foreach (MOE.Common.Business.AnalysisPhase phase in APcollection.Items)
-                //Parallel.ForEach(APcollection.Items, options,phase =>
+                //Parallel.ForEach(APcollection.PhaseCycles, options,phase =>
                 {
                     CheckForMaxOut(phase, signal);
                     CheckForForceOff(phase, signal);

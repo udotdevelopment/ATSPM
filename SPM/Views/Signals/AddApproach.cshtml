@@ -14,7 +14,7 @@
         </div>
         <div id="ApproachConfigurationCollapse_@(Model.ApproachID)" class="panel-collapse in collapse panel-body" role="tabpanel">
             @Html.Hidden(Model.Index + "ApproachID", Model.ApproachID, new {@id ="ApproachID"+@Model.ApproachID} )
-            @Html.HiddenFor(model => model.SignalID, htmlAttributes: new { Name = Model.Index + "SignalID" })
+            @Html.HiddenFor(model => model.SignalID, htmlAttributes: new { Name = Model.Index + "SignalId" })
             @Html.HiddenFor(model => model.VersionID, htmlAttributes: new { Name = Model.Index + "VersionID" })
             @Html.HiddenFor(model => model.Index, new {@id="Index"+Model.ApproachID})
             @Html.HiddenFor(model => model.MPH, new { @class = "mph_" + @Model.ApproachID, Name = Model.Index + "MPH" })

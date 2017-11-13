@@ -11,7 +11,7 @@ namespace MOE.Common.Models.Repositories
         MOE.Common.Models.Detector GetDetectorByDetectorID(string DetectorID);
         List<MOE.Common.Models.Detector> GetDetectorsBySignalID(string SignalID);
         MOE.Common.Models.Detector GetDetectorByID(int ID);
-        //List<MOE.Common.Models.Detectors> GetDetectorsBySignalIDAndPhase(string SignalID, int PhaseNumber);
+        //List<MOE.Common.Models.Detectors> GetDetectorsBySignalIDAndPhase(string SignalId, int PhaseNumber);
         List<MOE.Common.Models.Detector> GetDetectorsBySignalIDAndMetricType(string SignalID, int MetricID);
         Detector Add(Models.Detector Detector);
         void Update(Models.Detector Detector);
