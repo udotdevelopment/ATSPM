@@ -10,32 +10,25 @@ namespace MOE.Common.Business
 {
     public class PlanSpeed:Plan
     {
-        public AvgSpeedBucketCollection AvgSpeedBucketCollection { get; set; }
-
         public int EightyFifth { get; set; }
 
         public int AvgSpeed { get; set; }
 
         public int StdDevAvgSpeed { get; set; }
         
-        public PlanSpeed(DateTime start, DateTime end, int planNumber, Models.Approach approach, List<Cycle> cyclesForPlan) : base(start,  end, planNumber,  approach, cyclesForPlan)
+        public PlanSpeed(DateTime start, DateTime end, int planNumber, List<CycleSpeed> cycles) : base(start, end, planNumber)
         {
+            SetSpeedStatistics(cycles);
         }
        
 
-        public void SetSpeedStatistics(int minSpeedFilter)
+        public void SetSpeedStatistics(List<CycleSpeed> cycles)
         {
             List<int> rawSpeeds = new List<int>();
-
-            //get the speed hits for the plan
-            //List<Cycle> cycles = (from cycle in this.CycleCollection
-            //            where (cycle.StartTime > this.StartTime && cycle.EndTime < this.EndTime)
-            //            select cycle).ToList();
-
-            //foreach (Cycle cycle in cycles)
-            //{
-            //    rawSpeeds.AddRange(cycle.SpeedsForCycle.Select(s => s.MPH));
-            //}
+            foreach (CycleSpeed cycle in cycles.Where(c => c.StartTime >= StartTime && c.StartTime < EndTime))
+            {
+                rawSpeeds.AddRange(cycle.SpeedEvents.Select(s => s.MPH));
+            }
 
             //find stddev of average
             if (rawSpeeds.Count > 0)

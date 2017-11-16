@@ -101,13 +101,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
-            MOE.Common.Business.AnalysisPhaseCollection analysisPhaseCollection =
-                       new MOE.Common.Business.AnalysisPhaseCollection(SignalID, StartDate,
-                           EndDate);
+            AnalysisPhaseCollection analysisPhaseCollection = new AnalysisPhaseCollection(SignalID, StartDate, EndDate);
             //If there are phases in the collection add the charts
             if (analysisPhaseCollection.Items.Count > 0)
             {
-                foreach (MOE.Common.Business.Plan plan in analysisPhaseCollection.Plans.PlanList)
+                foreach (PlanSplitMonitor plan in analysisPhaseCollection.Plans)
                 {
                     plan.SetProgrammedSplits(SignalID);
                     plan.SetHighCycleCount(analysisPhaseCollection);
@@ -197,10 +195,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     var phasesInOrder = (from r in analysisPhaseCollection.Items
                                          select r).OrderBy(r => r.PhaseNumber);
-                    foreach (MOE.Common.Business.AnalysisPhase Phase in phasesInOrder)
+                    foreach (AnalysisPhase Phase in phasesInOrder)
                     {
                         Chart chart = GetNewSplitMonitorChart(StartDate, EndDate, SignalID, GetSignalLocation(), Phase.PhaseNumber);
-                        AddSplitMonitorDataToChart(chart, StartDate, EndDate, Phase, SignalID, analysisPhaseCollection.Plans);
+                        AddSplitMonitorDataToChart(chart, Phase, analysisPhaseCollection.Plans);
                         if (ShowPlanStripes)
                         {
                             SetSimplePlanStrips(analysisPhaseCollection.Plans, chart, StartDate);
@@ -228,13 +226,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return ReturnList;
         }
 
-        private void SetSplitMonitorStatistics(MOE.Common.Business.PlanCollection plans, MOE.Common.Business.AnalysisPhase phase, Chart chart)
+        private void SetSplitMonitorStatistics(List<PlanSplitMonitor> plans, AnalysisPhase phase, Chart chart)
         {
-
             //find the phase Cycles that occure during the plan.
-
-
-            foreach (MOE.Common.Business.Plan plan in plans.PlanList)
+            foreach (PlanSplitMonitor plan in plans)
             {
                 var Cycles = from cycle in phase.Cycles.Items
                              where cycle.StartTime > plan.StartTime && cycle.EndTime < plan.EndTime
@@ -353,7 +348,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     double runningTotal = 0;
                     double averageSplits = 0;
-                    foreach (MOE.Common.Business.AnalysisPhaseCycle Cycle in Cycles)
+                    foreach (AnalysisPhaseCycle Cycle in Cycles)
                     {
                         runningTotal = runningTotal + Cycle.Duration.TotalSeconds;
                     }
@@ -419,10 +414,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        private void SetSimplePlanStrips(MOE.Common.Business.PlanCollection planCollection, Chart chart, DateTime graphStartDate)
+        private void SetSimplePlanStrips(List<PlanSplitMonitor> plans, Chart chart, DateTime graphStartDate)
         {
             int backGroundColor = 1;
-            foreach (MOE.Common.Business.Plan plan in planCollection.PlanList)
+            foreach (PlanSplitMonitor plan in plans)
             {
                 StripLine stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans
@@ -479,10 +474,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private Chart GetNewSplitMonitorChart(DateTime graphStartDate, DateTime graphEndDate, string signalId, string location, int phase)
         {
-            MOE.Common.Models.Repositories.ISignalsRepository repository =
-                   MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            Models.Repositories.ISignalsRepository repository =
+                   Models.Repositories.SignalsRepositoryFactory.Create();
             var signal = repository.GetLatestVersionOfSignalBySignalID(signalId);
-            List<MOE.Common.Models.Detector> detectors = signal.GetDetectorsForSignalByPhaseNumber(phase);
+            List<Models.Detector> detectors = signal.GetDetectorsForSignalByPhaseNumber(phase);
             string detID = "";
             if (detectors.Count() > 0)
             {
@@ -618,73 +613,54 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void SetChartTitle(Chart chart, int phase)
         {
-            chart.Titles.Add(ChartTitleFactory.GetChartName(this.MetricTypeID));
-            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(this.SignalID, this.StartDate, this.EndDate));
+            chart.Titles.Add(ChartTitleFactory.GetChartName(MetricTypeID));
+            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(SignalID, StartDate, EndDate));
             chart.Titles.Add(ChartTitleFactory.GetPhase(phase));
         }
 
-        private void AddSplitMonitorDataToChart(Chart chart, DateTime startDate,
-   DateTime endDate, MOE.Common.Business.AnalysisPhase phase, string signalId, MOE.Common.Business.PlanCollection plans)
+        private void AddSplitMonitorDataToChart(Chart chart, AnalysisPhase phase, List<PlanSplitMonitor> plans)
         {
-
             //Table 
             if (phase.Cycles.Items.Count > 0)
             {
-                plans.FillMissingSplits();
-                int MaxSplitLength = 0;
-                foreach (MOE.Common.Business.Plan plan in plans.PlanList)
+                int maxSplitLength = 0;
+                foreach (PlanSplitMonitor plan in plans)
                 {
-
+                    int highestSplit = plan.FindHighestRecordedSplitPhase();
+                    plan.FillMissingSplits(highestSplit);
                     try
                     {
-
                         chart.Series["Programed Split"].Points.AddXY(plan.StartTime, plan.Splits[phase.PhaseNumber]);
                         chart.Series["Programed Split"].Points.AddXY(plan.EndTime, plan.Splits[phase.PhaseNumber]);
-
-                        if (plan.Splits[phase.PhaseNumber] > MaxSplitLength)
+                        if (plan.Splits[phase.PhaseNumber] > maxSplitLength)
                         {
-                            MaxSplitLength = plan.Splits[phase.PhaseNumber];
+                            maxSplitLength = plan.Splits[phase.PhaseNumber];
                         }
-
-
-
-
                     }
                     catch 
                     {
                         //System.Windows.MessageBox.Show(ex.ToString());
                     }
                 }
-
-
-                foreach (MOE.Common.Business.AnalysisPhaseCycle Cycle in phase.Cycles.Items)
+                foreach (AnalysisPhaseCycle Cycle in phase.Cycles.Items)
                 {
-
-
                     if (Cycle.TerminationEvent == 4)
                     {
-
                         chart.Series["GapOut"].Points.AddXY(Cycle.StartTime, Cycle.Duration.TotalSeconds);
                     }
-
                     if (Cycle.TerminationEvent == 5)
                     {
 
                         chart.Series["MaxOut"].Points.AddXY(Cycle.StartTime, Cycle.Duration.TotalSeconds);
                     }
-
                     if (Cycle.TerminationEvent == 6)
                     {
-
                         chart.Series["ForceOff"].Points.AddXY(Cycle.StartTime, Cycle.Duration.TotalSeconds);
                     }
-
                     if (Cycle.TerminationEvent == 0)
                     {
-
                         chart.Series["Unknown"].Points.AddXY(Cycle.StartTime, Cycle.Duration.TotalSeconds);
                     }
-
                     if (Cycle.HasPed && ShowPedActivity)
                     {
                         if (Cycle.PedDuration == 0)
@@ -695,22 +671,21 @@ namespace MOE.Common.Business.WCFServiceLibrary
                             }
                             if (Cycle.PedEndTime == DateTime.MinValue)
                             {
-                                Cycle.SetPedEnd(Cycle.YellowEvent
-                                    );
+                                Cycle.SetPedEnd(Cycle.YellowEvent);
                             }
                         }
                         chart.Series["PedActivity"].Points.AddXY(Cycle.PedStartTime, Cycle.PedDuration);
                     }
                 }
-                if (MaxSplitLength > 0)
+                if (maxSplitLength > 0)
                 {
-                    if (MaxSplitLength >= 50)
+                    if (maxSplitLength >= 50)
                     {
-                        chart.ChartAreas[0].AxisY.Maximum = (1.5 * MaxSplitLength);
+                        chart.ChartAreas[0].AxisY.Maximum = (1.5 * maxSplitLength);
                     }
                     else 
                     {
-                        chart.ChartAreas[0].AxisY.Maximum = (2.5 * MaxSplitLength);
+                        chart.ChartAreas[0].AxisY.Maximum = (2.5 * maxSplitLength);
                     }
                 }
                 if (YAxisMax != null)
@@ -719,10 +694,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 }
             }
         }
-
-
-
-
     }
 }
 

@@ -121,12 +121,12 @@ namespace MOE.Common.Business
             string downstreamSignalID, string downstreamDirection, int delta, 
             DateTime startDate, DateTime endDate, int maxYAxis)
         {
-            MOE.Common.Models.Repositories.ISignalsRepository signalRepository =
-                MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            MOE.Common.Models.Signal upstreamSignal = signalRepository.GetVersionOfSignalByDate(upstreamSignalID, startDate);
-            MOE.Common.Models.Signal downstreamSignal = signalRepository.GetVersionOfSignalByDate(downstreamSignalID, startDate);
-            MOE.Common.Models.Approach upApproachToAnalyze = GetApproachToAnalyze(upstreamSignal, upstreamDirection);
-            MOE.Common.Models.Approach downApproachToAnalyze = GetApproachToAnalyze(downstreamSignal, downstreamDirection);
+            Models.Repositories.ISignalsRepository signalRepository =
+                Models.Repositories.SignalsRepositoryFactory.Create();
+            Models.Signal upstreamSignal = signalRepository.GetVersionOfSignalByDate(upstreamSignalID, startDate);
+            Models.Signal downstreamSignal = signalRepository.GetVersionOfSignalByDate(downstreamSignalID, startDate);
+            Models.Approach upApproachToAnalyze = GetApproachToAnalyze(upstreamSignal, upstreamDirection);
+            Models.Approach downApproachToAnalyze = GetApproachToAnalyze(downstreamSignal, downstreamDirection);
             
             if (upApproachToAnalyze != null)
             {
@@ -179,7 +179,7 @@ namespace MOE.Common.Business
             if (!String.IsNullOrEmpty(approach.DirectionType.Description))
             {
                 //Find PCD detector for this appraoch
-                 MOE.Common.Models.Detector gd =
+                 Models.Detector gd =
                      approach.Signal.GetDetectorsForSignalThatSupportAMetricByApproachDirection(
                      6, approach.DirectionType.Description).FirstOrDefault();
                          
@@ -187,7 +187,7 @@ namespace MOE.Common.Business
                 if(gd != null)
                 {
                     //Instantiate a signal phase object
-                    SignalPhase sp = new MOE.Common.Business.SignalPhase(
+                    SignalPhase sp = new SignalPhase(
                                             startDate, endDate,approach, false,
                                             15,13, false);                    
                     
@@ -330,7 +330,7 @@ namespace MOE.Common.Business
                 ".jpg";
 
             //Save an image of the chart
-            chart.SaveImage(chartLocation + @"LinkPivot\" + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
+            chart.SaveImage(chartLocation + @"LinkPivot\" + chartName, ChartImageFormat.Jpeg);
             return chartName;
         }
 
@@ -501,35 +501,35 @@ namespace MOE.Common.Business
             decimal totalDetectorHits = 0;
             decimal totalOnGreenArrivals = 0;
             decimal percentArrivalOnGreen = 0;
-            foreach (Cycle pcd in signalPhase.Cycles)
+            foreach (CyclePcd cycle in signalPhase.Cycles)
             {
                 //add the data for the green line
                 chart.Series["Change to Green"].Points.AddXY(
-                    pcd.GreenEvent,
-                    pcd.GreenLineY);
+                    cycle.GreenEvent,
+                    cycle.GreenLineY);
 
                 //add the data for the yellow line
                 chart.Series["Change to Yellow"].Points.AddXY(
-                    pcd.YellowEvent,
-                    pcd.YellowLineY);
+                    cycle.YellowEvent,
+                    cycle.YellowLineY);
 
                 //add the data for the red line
                 chart.Series["Change to Red"].Points.AddXY(
-                    pcd.EndTime,
-                    pcd.RedLineY);
+                    cycle.EndTime,
+                    cycle.RedLineY);
 
                 //add the detector hits to the running total
-                totalDetectorHits += pcd.DetectorEvents.Count;
+                totalDetectorHits += cycle.DetectorEvents.Count;
 
                 //add the detector hits to the detector activation series
-                foreach (DetectorDataPoint detectorPoint in pcd.DetectorEvents)
+                foreach (DetectorDataPoint detectorPoint in cycle.DetectorEvents)
                 {
                     chart.Series["Detector Activation"].Points.AddXY(
                         detectorPoint.TimeStamp,
                         detectorPoint.YPoint);
 
                     //if this is an arrival on green add it to the running total
-                    if (detectorPoint.YPoint > pcd.GreenLineY && detectorPoint.YPoint < pcd.RedLineY)
+                    if (detectorPoint.YPoint > cycle.GreenLineY && detectorPoint.YPoint < cycle.RedLineY)
                     {
                         totalOnGreenArrivals++;
                     }
@@ -585,10 +585,10 @@ namespace MOE.Common.Business
         /// <param name="planCollection"></param>
         /// <param name="chart"></param>
         /// <param name="graphStartDate"></param>
-        protected void SetPlanStrips(List<MOE.Common.Business.Plan> planCollection, Chart chart, DateTime graphStartDate)
+        protected void SetPlanStrips(List<PlanPcd> planCollection, Chart chart, DateTime graphStartDate)
         {
             int backGroundColor = 1;
-            foreach (MOE.Common.Business.Plan plan in planCollection)
+            foreach (PlanPcd plan in planCollection)
             {
                 StripLine stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans
@@ -642,7 +642,7 @@ namespace MOE.Common.Business
                 aogLabel.FromPosition = plan.StartTime.ToOADate();
                 aogLabel.ToPosition = plan.EndTime.ToOADate();
                 aogLabel.Text = plan.PercentArrivalOnGreen.ToString() + "% AoG\n" +
-                    plan.PercentGreen.ToString() + "% GT";
+                    plan.PercentGreenTime.ToString() + "% GT";
                 aogLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 aogLabel.ForeColor = Color.Blue;
                 aogLabel.RowIndex = 2;

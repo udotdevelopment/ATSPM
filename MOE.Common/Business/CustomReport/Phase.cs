@@ -40,9 +40,9 @@ namespace MOE.Common.Business.CustomReport
 
         public List<Models.Controller_Event_Log> Events;
 
-        private List<CustomReport.Cycle> _Cycles = new List<Cycle>();
+        private List<Cycle> _Cycles = new List<Cycle>();
 
-        public List<CustomReport.Cycle> Cycles
+        public List<Cycle> Cycles
         {
             get { return _Cycles; }
             set { _Cycles = value; }
@@ -72,14 +72,10 @@ namespace MOE.Common.Business.CustomReport
 
         public Phase(Models.Approach approach,
             DateTime startDate, DateTime endDate, List<int> eventCodes, int StartofCycleEvent, bool UsePermissivePhase)
-           
-                
         {
             startDate = startDate.AddMinutes(-1);
             endDate = endDate.AddMinutes(+1);
-
             Approach = approach;
-            
             StartDate = startDate;
             _EndDate = endDate;
             if (!UsePermissivePhase)
@@ -92,13 +88,8 @@ namespace MOE.Common.Business.CustomReport
             }
             IsOverlap = false;
             SignalID = Approach.Signal.SignalID;
-
-
-            MOE.Common.Models.Repositories.IControllerEventLogRepository cer = MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-
-            Events = cer.GetEventsByEventCodesParam(SignalID, startDate, endDate,
-                eventCodes, PhaseNumber);
-
+            Models.Repositories.IControllerEventLogRepository cer = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            Events = cer.GetEventsByEventCodesParam(SignalID, startDate, endDate, eventCodes, PhaseNumber);
             GetCycles(StartofCycleEvent);
         }
 
@@ -113,7 +104,7 @@ namespace MOE.Common.Business.CustomReport
             {
                 IsOverlap = false;
                 
-                CustomReport.Cycle.TerminationCause termEvent = new Cycle.TerminationCause();
+                Cycle.TerminationCause termEvent = new Cycle.TerminationCause();
                 termEvent = Cycle.TerminationCause.Unknown;
 
                 for (int i = 0; i < Events.Count; i++)
@@ -229,10 +220,10 @@ namespace MOE.Common.Business.CustomReport
                                     }
                                     else
                                     {
-                                        cycleEnd = this.EndDate;
+                                        cycleEnd = EndDate;
                                     }
 
-                                    CustomReport.Cycle _Cycle = new CustomReport.Cycle(CycleStart, changeToGreen,
+                                    Cycle _Cycle = new Cycle(CycleStart, changeToGreen,
                                    beginYellowClear, changeToRed, cycleEnd);
                                     _Cycle.EndYellowClearance = endYellowClear;
                                     _Cycle.TerminationEvent = termEvent;
@@ -260,7 +251,7 @@ namespace MOE.Common.Business.CustomReport
                             changeToRed > DateTime.MinValue 
                             )
                         {
-                            CustomReport.Cycle _Cycle = new CustomReport.Cycle(CycleStart, changeToGreen,
+                            Cycle _Cycle = new Cycle(CycleStart, changeToGreen,
                            beginYellowClear, changeToRed, cycleEnd);
                             _Cycle.EndYellowClearance = endYellowClear;
                             _Cycle.TerminationEvent = termEvent;

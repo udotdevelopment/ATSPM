@@ -352,11 +352,16 @@
     <Compile Include="Business\CustomReport\Signal.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Business\CycleSplitFail.cs" />
+    <Compile Include="Business\CycleSpeed.cs" />
     <Compile Include="Business\DataAggregation\DataAggregation.cs" />
     <Compile Include="Business\Helpers\ApproachVolumeTable.cs" />
     <Compile Include="Business\Helpers\ConfigurationRecord.cs" />
+    <Compile Include="Business\PlanPCD.cs" />
+    <Compile Include="Business\PlanSplitFail.cs" />
     <Compile Include="Business\PlanSplitMonitor.cs" />
     <Compile Include="Business\PlanSpeed.cs" />
+    <Compile Include="Business\CyclePcd.cs" />
     <Compile Include="Business\Speed\DetectorSpeed.cs" />
     <Compile Include="Business\SplitFail\SplitFailPhase.cs" />
     <Compile Include="Business\TMC\TMCData.cs" />
@@ -500,7 +505,7 @@
     <Compile Include="Business\Inrix\TMC.cs" />
     <Compile Include="Business\Inrix\TMCCollection.cs" />
     <Compile Include="Business\Inrix\TravelTimeRecord.cs" />
-    <Compile Include="Business\Cycle.cs" />
+    <Compile Include="Business\RedToRedCycle.cs" />
     <Compile Include="Business\LinkPivot.cs" />
     <Compile Include="Business\LinkPivotPair.cs" />
     <Compile Include="Business\LinkPivotPCDDisplay.cs" />

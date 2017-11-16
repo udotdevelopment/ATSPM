@@ -8,7 +8,7 @@ namespace MOE.Common.Business
 {
     public class SpeedExportApproachDirection
     {
-        public List<Cycle> Cycles = new List<Cycle>();
+        public List<RedToRedCycle> Cycles = new List<RedToRedCycle>();
 
         private string direction;
         public string Direction

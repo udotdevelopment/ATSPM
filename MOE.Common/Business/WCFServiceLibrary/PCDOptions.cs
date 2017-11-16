@@ -37,7 +37,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public bool ShowVolumes { get; set; }
         [DataMember]
         public bool ShowArrivalsOnGreen { get; set; }
-        public MOE.Common.Models.Signal Signal { get; set; }
+        public Models.Signal Signal { get; set; }
 
         private int MetricTypeID = 6;
         
@@ -79,14 +79,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
-            MOE.Common.Models.Repositories.ISignalsRepository signalRepository =
-                MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            Models.Repositories.ISignalsRepository signalRepository =
+                Models.Repositories.SignalsRepositoryFactory.Create();
             Signal = signalRepository.GetVersionOfSignalByDate(SignalID, StartDate);
-            this.MetricTypeID = 6;
+            MetricTypeID = 6;
             
             Chart chart = new Chart();            
             string location = GetSignalLocation();
-            List<Approach> metricApproaches = Signal.GetApproachesForSignalThatSupportMetric(this.MetricTypeID);
+            List<Approach> metricApproaches = Signal.GetApproachesForSignalThatSupportMetric(MetricTypeID);
 
             if (metricApproaches.Count > 0)
             {
@@ -108,7 +108,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private Chart GetNewChart(Approach approach)
         {
-            Chart chart = MOE.Common.Business.ChartFactory.CreateDefaultChart(this);
+            Chart chart = ChartFactory.CreateDefaultChart(this);
             CreateChartLegend(chart);
             if (ShowVolumes)
             {
@@ -204,22 +204,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void SetChartTitle(Chart chart, Approach approach, Dictionary<string, string> statistics)
         {
-            var detectorsForMetric = approach.GetDetectorsForMetricType(this.MetricTypeID);
+            var detectorsForMetric = approach.GetDetectorsForMetricType(MetricTypeID);
             string message = "\n Advanced detector located " + detectorsForMetric.FirstOrDefault().DistanceFromStopBar.ToString() + " ft. upstream of stop bar";
-            chart.Titles.Add(ChartTitleFactory.GetChartName(this.MetricTypeID));
-            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRangeAndMessage(approach.SignalID, this.StartDate, this.EndDate, message));
+            chart.Titles.Add(ChartTitleFactory.GetChartName(MetricTypeID));
+            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRangeAndMessage(approach.SignalID, StartDate, EndDate, message));
             chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(approach.ProtectedPhaseNumber, approach.DirectionType.Description));
             chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
 
-        private void AddDataToChart(Chart chart, MOE.Common.Business.SignalPhase signalPhase)
+        private void AddDataToChart(Chart chart, SignalPhase signalPhase)
         {
             double totalDetectorHits = 0;
             double totalOnGreenArrivals = 0;
-            foreach (Cycle pcd in signalPhase.Cycles)
+            foreach (CyclePcd cycle in signalPhase.Cycles)
             {
-                totalOnGreenArrivals += AddCycleToChart(chart, pcd);
-                totalDetectorHits += pcd.DetectorEvents.Count;
+                totalOnGreenArrivals += AddCycleToChart(chart, cycle);
+                totalDetectorHits += cycle.DetectorEvents.Count;
             }
             if (ShowVolumes)
             {
@@ -235,7 +235,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        private void AddArrivalOnGreen(Chart chart, double totalOnGreenArrivals, double totalDetectorHits, MOE.Common.Models.Approach approach)
+        private void AddArrivalOnGreen(Chart chart, double totalOnGreenArrivals, double totalDetectorHits, Approach approach)
         {
             double percentArrivalOnGreen = 0;
             if (totalDetectorHits > 0)
@@ -249,26 +249,26 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void AddVolumeToChart(Chart chart, VolumeCollection volumeCollection)
         {
-            foreach (MOE.Common.Business.Volume v in volumeCollection.Items)
+            foreach (Volume v in volumeCollection.Items)
             {
                 chart.Series["Volume Per Hour"].Points.AddXY(v.XAxis, v.YAxis);
             }
         }
 
-        private double AddCycleToChart(Chart chart, Cycle pcd)
+        private double AddCycleToChart(Chart chart, CyclePcd cycle)
         {
 
             double totalOnGreenArrivals = 0;
-            chart.Series["Change to Green"].Points.AddXY(pcd.GreenEvent, pcd.GreenLineY);
-            chart.Series["Change to Yellow"].Points.AddXY(pcd.YellowEvent, pcd.YellowLineY);
-            chart.Series["Change to Red"].Points.AddXY(pcd.EndTime, pcd.RedLineY);
-            foreach (MOE.Common.Business.DetectorDataPoint detectorPoint in pcd.DetectorEvents)
+            chart.Series["Change to Green"].Points.AddXY(cycle.GreenEvent, cycle.GreenLineY);
+            chart.Series["Change to Yellow"].Points.AddXY(cycle.YellowEvent, cycle.YellowLineY);
+            chart.Series["Change to Red"].Points.AddXY(cycle.EndTime, cycle.RedLineY);
+            foreach (DetectorDataPoint detectorPoint in cycle.DetectorEvents)
             {
                 chart.Series["Detector Activation"].Points.AddXY(
                     //pcd.StartTime, 
                     detectorPoint.TimeStamp,
                     detectorPoint.YPoint);
-                if (detectorPoint.YPoint > pcd.GreenLineY && detectorPoint.YPoint < pcd.RedLineY)
+                if (detectorPoint.YPoint > cycle.GreenLineY && detectorPoint.YPoint < cycle.RedLineY)
                 {
                     totalOnGreenArrivals++;
                 }
@@ -283,10 +283,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
         /// <param name="plans"></param>
         /// <param name="chart"></param>
         /// <param name="StartDate"></param>
-        protected void SetPlanStrips(List<Plan> plans, Chart chart)
+        protected void SetPlanStrips(List<PlanPcd> plans, Chart chart)
         {
             int backGroundColor = 1;
-            foreach (MOE.Common.Business.Plan plan in plans)
+            foreach (PlanPcd plan in plans)
             {
                 StripLine stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans
@@ -339,7 +339,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 aogLabel.FromPosition = plan.StartTime.ToOADate();
                 aogLabel.ToPosition = plan.EndTime.ToOADate();
                 aogLabel.Text = plan.PercentArrivalOnGreen.ToString() + "% AoG\n" +
-                    plan.PercentGreen.ToString() + "% GT";
+                    plan.PercentGreenTime.ToString() + "% GT";
 
                 aogLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 aogLabel.ForeColor = Color.Blue;

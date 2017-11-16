@@ -99,7 +99,7 @@ namespace MOE.Common.Business.Preempt
             chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
 
             AddDataToChart(chart, Options.StartDate, Options.EndDate, DTTB, Options.SignalID);
-            PlanCollection plans = new PlanCollection(Options.StartDate, Options.EndDate, Options.SignalID);
+            List<Plan> plans = PlanFactory.GetBasicPlans(Options.StartDate, Options.EndDate, Options.SignalID);
             SetSimplePlanStrips(plans, chart, Options.StartDate, DTTB);
 
         }
@@ -135,10 +135,10 @@ namespace MOE.Common.Business.Preempt
             }
         }
 
-        protected void SetSimplePlanStrips(MOE.Common.Business.PlanCollection planCollection, Chart chart, DateTime graphStartDate, MOE.Common.Business.ControllerEventLogs DTTB)
+        protected void SetSimplePlanStrips(List<Plan> plans, Chart chart, DateTime graphStartDate, MOE.Common.Business.ControllerEventLogs DTTB)
         {
             int backGroundColor = 1;
-            foreach (MOE.Common.Business.Plan plan in planCollection.PlanList)
+            foreach (MOE.Common.Business.Plan plan in plans)
             {
                 StripLine stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans

@@ -367,7 +367,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 }
                 if (showPlanStripes)
                 {
-                    PlanCollection.SetSimplePlanStrips(analysisPhaseCollection.Plans, chart, startDate);
+                    SetSimplePlanStrips(analysisPhaseCollection.Plans, chart, startDate);
                 }
                 if (YAxisMax != null)
                 {
@@ -376,6 +376,68 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
 
         }
+
+        public static void SetSimplePlanStrips(List<PlanSplitMonitor> plans, Chart chart, DateTime graphStartDate)
+        {
+            int backGroundColor = 1;
+            foreach (MOE.Common.Business.Plan plan in plans)
+            {
+                StripLine stripline = new StripLine();
+                //Creates alternating backcolor to distinguish the plans
+                if (backGroundColor % 2 == 0)
+                {
+                    stripline.BackColor = Color.FromArgb(120, Color.LightGray);
+                }
+                else
+                {
+                    stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
+                }
+
+                //Set the stripline properties
+                stripline.IntervalOffsetType = DateTimeIntervalType.Hours;
+                stripline.Interval = 1;
+                stripline.IntervalOffset = (plan.StartTime - graphStartDate).TotalHours;
+                stripline.StripWidth = (plan.EndTime - plan.StartTime).TotalHours;
+                stripline.StripWidthType = DateTimeIntervalType.Hours;
+
+                chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
+
+                //Add a corrisponding custom label for each strip
+                CustomLabel Plannumberlabel = new CustomLabel();
+                Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
+                Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
+                switch (plan.PlanNumber)
+                {
+                    case 254:
+                        Plannumberlabel.Text = "Free";
+                        break;
+                    case 255:
+                        Plannumberlabel.Text = "Flash";
+                        break;
+                    case 0:
+                        Plannumberlabel.Text = "Unknown";
+                        break;
+                    default:
+                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+
+                        break;
+                }
+                Plannumberlabel.LabelMark = LabelMarkStyle.LineSideMark;
+                Plannumberlabel.ForeColor = Color.Black;
+                Plannumberlabel.RowIndex = 6;
+
+
+                chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(Plannumberlabel);
+
+
+                backGroundColor++;
+
+            }
+
+
+        }
+
+
 
     }
 

@@ -63,65 +63,60 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             base.CreateMetric();
             List<string> returnString = new List<string>();
-            MOE.Common.Models.Repositories.ISignalsRepository sr = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            MOE.Common.Models.Signal signal = sr.GetVersionOfSignalByDate(SignalID, StartDate);
-            List<Approach> metricApproaches = signal.GetApproachesForSignalThatSupportMetric(this.MetricTypeID);
+            Models.Repositories.ISignalsRepository sr = Models.Repositories.SignalsRepositoryFactory.Create();
+            Models.Signal signal = sr.GetVersionOfSignalByDate(SignalID, StartDate);
+            List<Approach> metricApproaches = signal.GetApproachesForSignalThatSupportMetric(MetricTypeID);
             if (metricApproaches.Count > 0)
             {
                 foreach (Approach approach in metricApproaches)
                 {
-                    MOE.Common.Business.CustomReport.Phase phase = new MOE.Common.Business.CustomReport.Phase(approach, StartDate, EndDate, new List<int> { 1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64 }, 1, false);
-                    phase.ApproachDirection = approach.DirectionType.Description;
-                    SplitFailPhase splitFailPhase = new SplitFailPhase(approach.ProtectedPhaseNumber, approach, this, phase);
+                    SplitFailPhase splitFailPhase = new SplitFailPhase(approach, this, false);
                     string location = GetSignalLocation();
                     string chartName = CreateFileName();
-                    if (phase.PhaseNumber > 0)
+                    if (approach.ProtectedPhaseNumber > 0)
                     {
-                        GetChart(phase, splitFailPhase, chartName, returnString, false);
+                        GetChart(splitFailPhase, chartName, returnString, false, approach);
                     }
                     if(approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
                     {
                         string permChartName = CreateFileName();
-                        MOE.Common.Business.CustomReport.Phase permPhase = new MOE.Common.Business.CustomReport.Phase(approach, StartDate, 
-                            EndDate, new List<int> { 1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64 }, 1, true);
-                        SplitFailPhase splitFailPermissivePhase = new SplitFailPhase(approach.PermissivePhaseNumber.Value, approach, this, phase);
-                        permPhase.ApproachDirection = approach.DirectionType.Description;
-                        GetChart(permPhase, splitFailPermissivePhase, permChartName, returnString, true);
+                        SplitFailPhase splitFailPermissivePhase = new SplitFailPhase(approach, this, true);
+                        GetChart(splitFailPermissivePhase, permChartName, returnString, true, approach);
                     }
                 }
             }
             return returnString;
         }
 
-        private void GetChart(CustomReport.Phase phase, SplitFailPhase splitFailPhase, string chartName, List<string> returnString, bool isPermissivePhase)
+        private void GetChart(SplitFailPhase splitFailPhase, string chartName, List<string> returnString, bool getPermissivePhase, Approach approach)
         {
-            MOE.Common.Business.SplitFail.SplitFailChart sfChart = new MOE.Common.Business.SplitFail.SplitFailChart(phase, this, splitFailPhase);
-            if (isPermissivePhase)
+            SplitFailChart sfChart = new SplitFailChart(this, splitFailPhase, getPermissivePhase);
+            if (getPermissivePhase)
             {
                 sfChart.chart.BackColor = Color.LightGray;
-                sfChart.chart.Titles[2].Text = "Permissive " + sfChart.chart.Titles[2].Text + " " + phase.Approach.GetDetectorsForMetricType(12).FirstOrDefault().MovementType.Description;
+                sfChart.chart.Titles[2].Text = "Permissive " + sfChart.chart.Titles[2].Text + " " + approach.GetDetectorsForMetricType(12).FirstOrDefault().MovementType.Description;
             }
             else
             {
-                sfChart.chart.Titles[2].Text = "Protected " + sfChart.chart.Titles[2].Text + " " + phase.Approach.GetDetectorsForMetricType(12).FirstOrDefault().MovementType.Description;
+                sfChart.chart.Titles[2].Text = "Protected " + sfChart.chart.Titles[2].Text + " " + approach.GetDetectorsForMetricType(12).FirstOrDefault().MovementType.Description;
             }
             System.Threading.Thread.Sleep(300);
-            chartName = chartName.Replace(".", (phase.ApproachDirection + "."));
+            chartName = chartName.Replace(".", (approach.DirectionType.Description + "."));
             try
             {
-                sfChart.chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
+                sfChart.chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
             }
             catch
             {
                 try
                 {
-                    sfChart.chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
+                    sfChart.chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
                 }
                 catch
                 {
                     Models.Repositories.IApplicationEventRepository appEventRepository =
                     Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                    Models.ApplicationEvent applicationEvent = new ApplicationEvent();
+                    ApplicationEvent applicationEvent = new ApplicationEvent();
                     applicationEvent.ApplicationName = "SPM Website";
                     applicationEvent.Description = MetricType.ChartName + " Failed While Saving File";
                     applicationEvent.SeverityLevel = ApplicationEvent.SeverityLevels.Medium;

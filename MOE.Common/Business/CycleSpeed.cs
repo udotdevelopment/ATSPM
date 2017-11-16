@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using MOE.Common.Models;
+
+namespace MOE.Common.Business
+{
+    public class CycleSpeed:RedToRedCycle
+    {
+        public List<Speed_Events> SpeedEvents { get; set; }
+        
+
+        public CycleSpeed(DateTime firstRedEvent, DateTime greenEvent, DateTime yellowEvent, DateTime lastRedEvent, List<Speed_Events> speeds):base(firstRedEvent, greenEvent, yellowEvent, lastRedEvent)
+        {
+            FindSpeedEventsForCycle(speeds);
+        }
+
+        public void FindSpeedEventsForCycle(List<Models.Speed_Events> speeds)
+        {
+            SpeedEvents = speeds.Where(s => s.timestamp >= StartTime && s.timestamp < EndTime).ToList();
+        }
+    }
+}

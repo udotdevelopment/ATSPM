@@ -517,11 +517,11 @@ namespace MOE.Common.Business.DataAggregation
             _approachCycleAggregationConcurrentQueue.Enqueue(approachAggregation);
         }
         
-        private void SetSplitFailData(DateTime startTime, DateTime endTime, Approach signalApproach, bool isPermissive)
+        private void SetSplitFailData(DateTime startTime, DateTime endTime, Approach signalApproach, bool getPermissivePhase)
         {
             if (!signalApproach.GetDetectorsForMetricType(12).Any()) return;
             CustomReport.Phase phase;
-            if (isPermissive)
+            if (getPermissivePhase)
             {
                 phase = new CustomReport.Phase(signalApproach, startTime, endTime, new List<int> {1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64}, 1,true);
             }
@@ -533,7 +533,7 @@ namespace MOE.Common.Business.DataAggregation
             splitFailOptions.SetDefaults();
             splitFailOptions.StartDate = startTime;
             splitFailOptions.EndDate = endTime;
-            SplitFailPhase splitFailPhase = new SplitFailPhase(signalApproach.ProtectedPhaseNumber, signalApproach, splitFailOptions, phase);
+            SplitFailPhase splitFailPhase = new SplitFailPhase(signalApproach, splitFailOptions, getPermissivePhase);
             _approachSplitFailAggregationConcurrentQueue.Enqueue(new ApproachSplitFailAggregation
             {
                 ApproachId = signalApproach.ApproachID,
@@ -550,12 +550,10 @@ namespace MOE.Common.Business.DataAggregation
             {
                 foreach (var detector in speedDetectors)
                 {
-                    DetectorSpeed detectorSpeed = new DetectorSpeed(detector, startTime, endTime, 15);
-                    var speedBucket = detectorSpeed.Plans.FirstOrDefault()
-                        ?.AvgSpeedBucketCollection.Items
-                        .FirstOrDefault();
-                    if (speedBucket != null)
+                    DetectorSpeed detectorSpeed = new DetectorSpeed(detector, startTime, endTime, 15, false);
+                    if (detectorSpeed.AvgSpeedBucketCollection.AvgSpeedBuckets.Any())
                     {
+                        var speedBucket = detectorSpeed.AvgSpeedBucketCollection.AvgSpeedBuckets.FirstOrDefault();
                         ApproachSpeedAggregation approachSpeedAggregation =
                             new ApproachSpeedAggregation
                             {

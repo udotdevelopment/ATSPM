@@ -1038,28 +1038,28 @@ namespace MOE.Common.Business
             decimal totalDetectorHits = 0;
             decimal totalOnGreenArrivals = 0;
             decimal percentArrivalOnGreen = 0;
-            foreach (Cycle pcd in signalPhase.Cycles)
+            foreach (CyclePcd cycle in signalPhase.Cycles)
             {
                 chart.Series["Change to Green"].Points.AddXY(
                     //pcd.StartTime,
-                    pcd.GreenEvent,
-                    pcd.GreenLineY);
+                    cycle.GreenEvent,
+                    cycle.GreenLineY);
                 chart.Series["Change to Yellow"].Points.AddXY(
                     //pcd.StartTime,
-                    pcd.YellowEvent,
-                    pcd.YellowLineY);
+                    cycle.YellowEvent,
+                    cycle.YellowLineY);
                 chart.Series["Change to Red"].Points.AddXY(
                     //pcd.StartTime, 
-                    pcd.EndTime,
-                    pcd.RedLineY);
-                totalDetectorHits += pcd.DetectorEvents.Count;
-                foreach (MOE.Common.Business.DetectorDataPoint detectorPoint in pcd.DetectorEvents)
+                    cycle.EndTime,
+                    cycle.RedLineY);
+                totalDetectorHits += cycle.DetectorEvents.Count;
+                foreach (MOE.Common.Business.DetectorDataPoint detectorPoint in cycle.DetectorEvents)
                 {
                     chart.Series["Detector Activation"].Points.AddXY(
                         //pcd.StartTime, 
                         detectorPoint.TimeStamp,
                         detectorPoint.YPoint);
-                    if (detectorPoint.YPoint > pcd.GreenLineY && detectorPoint.YPoint < pcd.RedLineY)
+                    if (detectorPoint.YPoint > cycle.GreenLineY && detectorPoint.YPoint < cycle.RedLineY)
                     {
                         totalOnGreenArrivals++;
                     }
@@ -1100,10 +1100,10 @@ namespace MOE.Common.Business
         /// <param name="planCollection"></param>
         /// <param name="chart"></param>
         /// <param name="graphStartDate"></param>
-        protected void SetPlanStrips(List<Plan> planCollection, Chart chart, DateTime graphStartDate)
+        protected void SetPlanStrips(List<PlanPcd> planCollection, Chart chart, DateTime graphStartDate)
         {
             int backGroundColor = 1;
-            foreach (Plan plan in planCollection)
+            foreach (PlanPcd plan in planCollection)
             {
                 StripLine stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans
@@ -1155,7 +1155,7 @@ namespace MOE.Common.Business
                 aogLabel.FromPosition = plan.StartTime.ToOADate();
                 aogLabel.ToPosition = plan.EndTime.ToOADate();
                 aogLabel.Text = plan.PercentArrivalOnGreen.ToString() + "% AoG\n" +
-                    plan.PercentGreen.ToString() + "% GT";
+                    plan.PercentGreenTime.ToString() + "% GT";
 
                 aogLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 aogLabel.ForeColor = Color.Blue;

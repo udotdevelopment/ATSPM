@@ -15,7 +15,7 @@ namespace MOE.Common.Business
         public WCFServiceLibrary.ApproachDelayOptions Options  { get; set; }
 
 
-        public DelayChart(WCFServiceLibrary.ApproachDelayOptions options, MOE.Common.Business.SignalPhase signalPhase)
+        public DelayChart(WCFServiceLibrary.ApproachDelayOptions options, SignalPhase signalPhase)
         {
             Options = options;
             TimeSpan reportTimespan = Options.EndDate - Options.StartDate;
@@ -195,10 +195,10 @@ namespace MOE.Common.Business
         }
 
 
-        protected void SetPlanStrips(List<Plan> planCollection, Chart chart, DateTime graphStartDate, bool showPlanStatistics)
+        protected void SetPlanStrips(List<PlanPcd> planCollection, Chart chart, DateTime graphStartDate, bool showPlanStatistics)
         {
             int backGroundColor = 1;
-            foreach (MOE.Common.Business.Plan plan in planCollection)
+            foreach (PlanPcd plan in planCollection)
             {
                 StripLine stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans

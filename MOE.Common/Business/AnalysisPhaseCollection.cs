@@ -8,115 +8,52 @@ namespace MOE.Common.Business
     public class AnalysisPhaseCollection
     {
 
-        public List<Business.AnalysisPhase> Items = new List<Business.AnalysisPhase>();
-        public Business.PlanCollection Plans;
+        public List<AnalysisPhase> Items = new List<AnalysisPhase>();
+        public List<PlanSplitMonitor> Plans { get; private set; }
+        public int MaxPhaseInUse { get; }
+        public string SignalId { get; }
 
-        private int maxPhaseInUse;
-        public int MaxPhaseInUse
+        public AnalysisPhaseCollection(string signalId, DateTime startTime, DateTime endTime, int consecutivecount)
         {
-            get
+            SignalId = signalId;
+            Models.Repositories.IControllerEventLogRepository cel = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            List<Models.Controller_Event_Log> ptedt = cel.GetSignalEventsByEventCodes(SignalId, startTime, endTime, new List<int>() { 1, 11, 4, 5, 6, 7, 21, 23 });
+            List<Models.Controller_Event_Log> dapta = cel.GetSignalEventsByEventCodes(SignalId, startTime, endTime, new List<int>() { 1 });
+            ptedt = ptedt.OrderByDescending(i => i.Timestamp).ToList();
+            var phasesInUse = dapta.Where(r => r.EventCode == 1).Select(r => r.EventParam).Distinct();
+            Plans = PlanFactory.GetSplitMonitorPlans(startTime, endTime, SignalId);
+            foreach (int row in phasesInUse)
             {
-                return maxPhaseInUse;
-            }
-        }
-
-        
-        /// <summary>
-        /// constructor Used for Termination chart.
-        /// </summary>
-        /// <param name="signalId"></param>
-        /// <param name="starttime"></param>
-        /// <param name="endtime"></param>
-        /// <param name="consecutivecount"></param>
-        public AnalysisPhaseCollection(string signalId, DateTime starttime, DateTime endtime, int consecutivecount)
-        {
-            MOE.Common.Models.Repositories.IControllerEventLogRepository cel = MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-
-
-
-            List<Models.Controller_Event_Log> PTEDT = cel.GetSignalEventsByEventCodes(signalId, starttime, endtime, new List<int>() { 1, 11, 4, 5, 6, 7, 21, 23 });
-            List<Models.Controller_Event_Log> DAPTA = cel.GetSignalEventsByEventCodes(signalId, starttime, endtime, new List<int>() { 1 });
-
-            PTEDT.OrderByDescending(i => i.Timestamp);
-
-            var PhasesInUse = (from r in DAPTA
-                            where r.EventCode == 1
-                            select r.EventParam).Distinct();
-
-            
-        
-
-
-            Plans = new PlanCollection(starttime, endtime, signalId);
-            
-
-            foreach (int row in PhasesInUse)
-            {
-                //Business.AnalysisPhase aPhase = new AnalysisPhase(row.EventParam, starttime, endtime, PTEDT, consecutivecount);
-                Business.AnalysisPhase aPhase = new AnalysisPhase(row, PTEDT, consecutivecount);
-
+                AnalysisPhase aPhase = new AnalysisPhase(row, ptedt, consecutivecount);
                 Items.Add(aPhase);
             }
             OrderPhases();
-            maxPhaseInUse = FindMaxPhase(Items);
-
-
+            MaxPhaseInUse = FindMaxPhase(Items);
         }
 
         private void OrderPhases()
         {
             Items = Items.OrderBy(i => i.PhaseNumber).ToList();
         }
-
         
-        /// <summary>
-        /// Constructor used for split monitor
-        /// </summary>
-        /// <param name="signalId"></param>
-        /// <param name="starttime"></param>
-        /// <param name="endtime"></param>
-        public AnalysisPhaseCollection(string signalId, DateTime starttime, DateTime endtime)
+        public AnalysisPhaseCollection(string signalId, DateTime startTime, DateTime endTime)
         {
-
-
-            MOE.Common.Models.Repositories.IControllerEventLogRepository cel = MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-
-
-
-            List<Models.Controller_Event_Log> PTEDT = cel.GetSignalEventsByEventCodes(signalId, starttime, endtime, new List<int>() { 1, 11, 4, 5, 6, 7, 21, 23 });
-            List<Models.Controller_Event_Log> DAPTA = cel.GetSignalEventsByEventCodes(signalId, starttime, endtime, new List<int>() { 1 });
-
-
-            var PhasesInUse = (from r in DAPTA
-                               where r.EventCode == 1
-                               select r.EventParam).Distinct();
-
-
-            Plans = new PlanCollection(starttime, endtime, signalId);
-
-
-            foreach (int row in PhasesInUse)
+            Models.Repositories.IControllerEventLogRepository cel = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            List<Models.Controller_Event_Log> ptedt = cel.GetSignalEventsByEventCodes(signalId, startTime, endTime, new List<int>() { 1, 11, 4, 5, 6, 7, 21, 23 });
+            List<Models.Controller_Event_Log> dapta = cel.GetSignalEventsByEventCodes(signalId, startTime, endTime, new List<int>() { 1 });
+            var phasesInUse = dapta.Where(d => d.EventCode == 1).Select(d => d.EventParam).Distinct();
+            Plans = PlanFactory.GetSplitMonitorPlans(startTime, endTime, signalId);
+            foreach (int row in phasesInUse)
             {
-                Business.AnalysisPhase aPhase = new AnalysisPhase( row ,signalId, PTEDT);
-
+                AnalysisPhase aPhase = new AnalysisPhase( row ,signalId, ptedt);
                 Items.Add(aPhase);
             }
             OrderPhases();
         }
 
-        protected int FindMaxPhase(List<Business.AnalysisPhase> Items)
+        private int FindMaxPhase(List<AnalysisPhase> analysisPhases)
         {
-            int maxPhaseNumber = 0;
-
-            foreach (Business.AnalysisPhase phase in Items)
-            {
-                if (phase.PhaseNumber > maxPhaseNumber)
-                {
-                    maxPhaseNumber = phase.PhaseNumber;
-                }
-            }
-
-            return maxPhaseNumber;
+            return analysisPhases.Select(phase => phase.PhaseNumber).Concat(new[] {0}).Max();
         }
 
     }

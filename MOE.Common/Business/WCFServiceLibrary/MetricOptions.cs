@@ -19,21 +19,21 @@ using System.IO;
 namespace MOE.Common.Business.WCFServiceLibrary
 {
     [DataContract]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.PCDOptions))]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.TMCOptions))]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.AoROptions))]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachDelayOptions))]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.MetricOptions))]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.PhaseTerminationOptions))]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.PreemptDetailOptions))]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.PreemptServiceMetricOptions))]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.PreemptServiceRequestOptions))]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.YellowAndRedOptions))]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachSpeedOptions))]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.SplitFailOptions))]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.SplitMonitorOptions))]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.PedDelayOptions))]
-    [KnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions))]
+    [KnownType(typeof(PCDOptions))]
+    [KnownType(typeof(TMCOptions))]
+    [KnownType(typeof(AoROptions))]
+    [KnownType(typeof(ApproachDelayOptions))]
+    [KnownType(typeof(MetricOptions))]
+    [KnownType(typeof(PhaseTerminationOptions))]
+    [KnownType(typeof(PreemptDetailOptions))]
+    [KnownType(typeof(PreemptServiceMetricOptions))]
+    [KnownType(typeof(PreemptServiceRequestOptions))]
+    [KnownType(typeof(YellowAndRedOptions))]
+    [KnownType(typeof(ApproachSpeedOptions))]
+    [KnownType(typeof(SplitFailOptions))]
+    [KnownType(typeof(SplitMonitorOptions))]
+    [KnownType(typeof(PedDelayOptions))]
+    [KnownType(typeof(ApproachVolumeOptions))]
     [KnownType(typeof(string[]))]
     public class MetricOptions
     {
@@ -64,10 +64,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public string MetricWebPath { get; set; }
         
-        public MOE.Common.Models.MetricType MetricType{ get; set; }
+        public MetricType MetricType{ get; set; }
 
-        private MOE.Common.Models.Repositories.IMetricTypeRepository _metricTypeRepository 
-            = MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
+        
 
 
 
@@ -85,14 +84,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
             MetricWebPath = ConfigurationManager.AppSettings["SPMImageLocation"];
             ReturnList = new List<string>(); 
         }
-                
 
         public virtual List<string> CreateMetric()
-        {           
-            this.MetricType = _metricTypeRepository.GetMetricsByID(this.MetricTypeID);
-
+        {
+            Models.Repositories.IMetricTypeRepository metricTypeRepository = Models.Repositories.MetricTypeRepositoryFactory.Create();
+            MetricType = metricTypeRepository.GetMetricsByID(MetricTypeID);
             LogMetricRun();  
-            
             return new List<string>();
         }
 
@@ -101,7 +98,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             Models.Repositories.IApplicationEventRepository appEventRepository =
                 Models.Repositories.ApplicationEventRepositoryFactory.Create();
-            Models.ApplicationEvent applicationEvent = new ApplicationEvent();
+            ApplicationEvent applicationEvent = new ApplicationEvent();
             applicationEvent.ApplicationName = "SPM Website";
             applicationEvent.Description = MetricType.ChartName + " Executed";
             applicationEvent.SeverityLevel = ApplicationEvent.SeverityLevels.Low;
@@ -111,17 +108,18 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public string GetSignalLocation()
         {
-            MOE.Common.Models.Repositories.ISignalsRepository signalRepository =
-                MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            Models.Repositories.ISignalsRepository signalRepository =
+                Models.Repositories.SignalsRepositoryFactory.Create();
 
             return signalRepository.GetSignalLocation(SignalID);
         }
 
         public string CreateFileName()
         {
-            if (this.MetricType == null)
+            if (MetricType == null)
             {
-                this.MetricType = _metricTypeRepository.GetMetricsByID(this.MetricTypeID);
+                Models.Repositories.IMetricTypeRepository metricTypeRepository = Models.Repositories.MetricTypeRepositoryFactory.Create();
+                MetricType = metricTypeRepository.GetMetricsByID(MetricTypeID);
             }
             
                 string fileName = MetricType.Abbreviation +

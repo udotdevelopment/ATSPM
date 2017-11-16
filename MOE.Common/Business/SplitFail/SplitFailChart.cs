@@ -12,16 +12,15 @@ namespace MOE.Common.Business.SplitFail
     {
         public Chart chart = new Chart();
         public WCFServiceLibrary.SplitFailOptions Options { get; set; }
-        public MOE.Common.Business.CustomReport.Phase Phase  { get; set; }
         public SplitFailPhase SplitFailPhase { get;}
-        public SplitFailChart(CustomReport.Phase phase, WCFServiceLibrary.SplitFailOptions options, SplitFailPhase splitFailPhase)
+        public bool GetPermissivePhase { get; }
+
+        public SplitFailChart(WCFServiceLibrary.SplitFailOptions options, SplitFailPhase splitFailPhase, bool getPermissivePhase)
         {
             Options = options;
             SplitFailPhase = splitFailPhase;
-            Phase = phase;
+            GetPermissivePhase = getPermissivePhase;
             TimeSpan reportTimespan = Options.EndDate - Options.StartDate;
-
-
             //Set the chart properties
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
             chart.ImageType = ChartImageType.Jpeg;
@@ -30,8 +29,6 @@ namespace MOE.Common.Business.SplitFail
             chart.BorderSkin.SkinStyle = BorderSkinStyle.None;
             chart.BorderSkin.BorderColor = Color.Black;
             chart.BorderSkin.BorderWidth = 1;
-
-            
 
             //Create the chart legend
             Legend chartLegend = new Legend();
@@ -54,13 +51,10 @@ namespace MOE.Common.Business.SplitFail
             chartArea.AxisY.Title = "Occupancy Ratio (percent)";
             chartArea.AxisY.Minimum = 0;
             chartArea.AxisY.Interval = 10;
-
             chartArea.AxisX.Title = "Time (Hour of Day)";
             chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
-
             chartArea.AxisX.LabelStyle.Format = "HH";
             chartArea.AxisX2.LabelStyle.Format = "HH";
-
             if (reportTimespan.Days < 1)
             {
                 if (reportTimespan.Hours > 1)
@@ -95,10 +89,7 @@ namespace MOE.Common.Business.SplitFail
             //whether there is data or not
             chart.Series["Posts"].Points.AddXY(Options.StartDate, 0);
             chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
-
             AddDataToChart(chart);
-
-
         }
 
         private void AddSeries(Chart chart)
@@ -188,13 +179,7 @@ namespace MOE.Common.Business.SplitFail
             chart.Series.Add(RORAvg);
             chart.Series.Add(GORAvg);
             chart.Series.Add(BinSplitFailSeries);
-
-
-
-
             chart.Series["SplitFail"].CustomProperties = "DrawingStyle = Cylinder,PixelPointWidth = 1";
-
-
         }
 
         protected void AddDataToChart(Chart chart)
@@ -242,25 +227,24 @@ namespace MOE.Common.Business.SplitFail
                 }
             }
             SetChartTitle(SplitFailPhase.Statistics);
-            AddPlanStrips(chart, Phase, Options.StartDate, Options.EndDate);
+            AddPlanStrips(chart, Options.StartDate, Options.EndDate);
         }
 
         private void SetChartTitle(Dictionary<string, string> statistics)
         {
             chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
             chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(Options.SignalID, Options.StartDate, Options.EndDate));
-            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(Phase.PhaseNumber, Phase.Approach.DirectionType.Description));
+            int phaseNumber = GetPermissivePhase ? SplitFailPhase.Approach.PermissivePhaseNumber.Value: SplitFailPhase.Approach.ProtectedPhaseNumber;
+            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(phaseNumber, SplitFailPhase.Approach.DirectionType.Description));
             chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
 
-        protected void AddPlanStrips(Chart chart, MOE.Common.Business.CustomReport.Phase phase, DateTime startDate, DateTime endDate)
+        protected void AddPlanStrips(Chart chart, DateTime startDate, DateTime endDate)
         {
-            PlanCollection planCollection = new PlanCollection(startDate, endDate, phase.SignalID);
-            
             int backGroundColor = 1;
 
             //Parallel.ForEach(planCollection.PlanList, plan =>
-             foreach (MOE.Common.Business.Plan plan in planCollection.PlanList)
+             foreach (PlanSplitFail plan in SplitFailPhase.Plans)
              {
                  StripLine stripline = new StripLine();
                  //Creates alternating backcolor to distinguish the plans
@@ -312,9 +296,7 @@ namespace MOE.Common.Business.SplitFail
                  PlanMetrics.FromPosition = plan.StartTime.ToOADate();
                  PlanMetrics.ToPosition = plan.EndTime.ToOADate();
 
-                 var cycleInPlan = from c in phase.Cycles
-                                   where c.CycleStart > plan.StartTime && c.CycleEnd < plan.EndTime
-                                   select c;
+                 var cyclesInPlan = plan.TotalCycles;
 
                  var failsInPlan = from s in SplitFailPhase.PercentFails
                                    where s.Item1 > plan.StartTime && s.Item1 < plan.EndTime
@@ -322,21 +304,16 @@ namespace MOE.Common.Business.SplitFail
 
                  PlanMetrics.Text += failsInPlan.Count().ToString() + " SF";
 
-                 if (cycleInPlan.Count() > 0)
+                 if (cyclesInPlan > 0)
                  {
-                     double p = Convert.ToDouble(failsInPlan.Count()) / Convert.ToDouble(cycleInPlan.Count());
+                     double p = Convert.ToDouble(failsInPlan.Count()) / Convert.ToDouble(cyclesInPlan);
                      PlanMetrics.Text += "\n" + Convert.ToInt32(p * 100).ToString() + "% SF";
                  }
-
                  PlanMetrics.ForeColor = Color.Black;
                  PlanMetrics.RowIndex = 3;
                  chart.ChartAreas[0].AxisX2.CustomLabels.Add(PlanMetrics);
-
-
-
                  //Change the background color counter for alternating color
                  backGroundColor++;
-
              }
              //);
         

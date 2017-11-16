@@ -11,20 +11,9 @@ namespace MOE.Common.Business.SplitFail
     {
         public enum StatusType { Valid, NotValid };
 
-        
+        public DateTime DetectorOn{get;set;}
 
-        public DateTime DetectorOn
-        {
-            get;
-            set;
-        }
-
-        public DateTime DetectorOff
-        {
-            get;
-            set;
-        }
-
+        public DateTime DetectorOff{get;set;}
         
         public double Duration
         {

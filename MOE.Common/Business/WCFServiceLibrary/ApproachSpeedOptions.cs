@@ -75,8 +75,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
-            string location = GetSignalLocation();
-            MOE.Common.Models.Repositories.ISignalsRepository sr = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            Models.Repositories.ISignalsRepository sr = Models.Repositories.SignalsRepositoryFactory.Create();
             Models.Signal signal = sr.GetVersionOfSignalByDate(SignalID, StartDate);
 
             List<Approach> speedApproaches = signal.GetApproachesForSignalThatSupportMetric(10);
@@ -99,7 +98,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
                         //Save an image of the chart
                         chart.ImageLocation = MetricFileLocation + chartName;
-                        chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
+                        chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
 
                         ReturnList.Add(MetricWebPath + chartName);
                     }
@@ -225,11 +224,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return chart;       
         }
 
-        private void SetChartTitles(Chart chart, MOE.Common.Models.Detector detector)
+        private void SetChartTitles(Chart chart, Models.Detector detector)
         {
-            chart.Titles.Add(ChartTitleFactory.GetChartName(this.MetricTypeID));
+            chart.Titles.Add(ChartTitleFactory.GetChartName(MetricTypeID));
             chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
-                this.SignalID, this.StartDate, this.EndDate));
+                SignalID, StartDate, EndDate));
             chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(detector.Approach.ProtectedPhaseNumber, detector.Approach.DirectionType.Description));
             chart.Titles.Add(ChartTitleFactory.GetTitle("Detection Type: " + detector.DetectionHardware.Name + "; Speed Accuracy +/- 2 mph" + "\n" + "Detector Distance from Stop Bar: " + detector.DistanceFromStopBar.ToString() + " feet; "
                 + "\n" + "Includes records over 5mph that occur between 15s after start of green to start of yellow."));
@@ -238,21 +237,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected void AddSpeedDataToChart(Chart chart,Models.Detector detector, DateTime startDate,
             DateTime endDate, int binSize)
         {
-            DetectorSpeed detectorSpeed = new DetectorSpeed(detector, startDate, endDate, binSize);
-            foreach (Plan plan in detectorSpeed.Plans)
+            DetectorSpeed detectorSpeed = new DetectorSpeed(detector, startDate, endDate, binSize, false);
+            foreach (AvgSpeedBucket bucket in detectorSpeed.AvgSpeedBucketCollection.AvgSpeedBuckets)
             {
-                if (plan.AvgSpeedBucketCollection.Items.Count > 0)
+                chart.Series["Average MPH"].Points.AddXY(bucket.StartTime, bucket.AvgSpeed);
+                chart.Series["85th Percentile Speed"].Points.AddXY(bucket.StartTime, bucket.EightyFifth);
+                chart.Series["15th Percentile Speed"].Points.AddXY(bucket.StartTime, bucket.FifteenthPercentile);
+                if (ShowPlanStatistics && ShowPostedSpeed)
                 {
-                    foreach (AvgSpeedBucket bucket in plan.AvgSpeedBucketCollection.Items)
-                    {
-                        chart.Series["Average MPH"].Points.AddXY(bucket.StartTime, bucket.AvgSpeed);
-                        chart.Series["85th Percentile Speed"].Points.AddXY(bucket.StartTime, bucket.EightyFifth);
-                        chart.Series["15th Percentile Speed"].Points.AddXY(bucket.StartTime, bucket.FifteenthPercentile);
-                        if (ShowPlanStatistics && ShowPostedSpeed)
-                        {
-                            chart.Series["Posted Speed"].Points.AddXY(bucket.StartTime, detector.Approach.MPH);
-                        }
-                    }
+                    chart.Series["Posted Speed"].Points.AddXY(bucket.StartTime, detector.Approach.MPH);
                 }
             }
             if (ShowPlanStatistics)
@@ -261,12 +254,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        protected void SetSpeedPlanStrips(List<Plan> plans, Chart chart, DateTime graphStartDate, int minSpeedFilter)
+        protected void SetSpeedPlanStrips(List<PlanSpeed> plans, Chart chart, DateTime graphStartDate, int minSpeedFilter)
         {
             int backGroundColor = 1;
-            foreach (Plan plan in plans)
+            foreach (PlanSpeed plan in plans)
             {
-                plan.SetSpeedStatistics(minSpeedFilter);
                 StripLine stripline = new StripLine();
                 float currentSize;
                 currentSize = 3;

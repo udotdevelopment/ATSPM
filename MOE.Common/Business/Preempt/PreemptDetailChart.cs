@@ -36,9 +36,84 @@ namespace MOE.Common.Business.Preempt
             AddSeries(chart);
 
             AddDataToChart(chart, DTTB, PreemptNumber);
-            PlanCollection plans = new PlanCollection(Options.StartDate, Options.EndDate, Options.SignalID);
-           // SetSimplePlanStrips(plans, chart, graphStartDate, graphEndDate, DTTB);
+            List<Plan> plans = PlanFactory.GetBasicPlans(Options.StartDate, Options.EndDate, Options.SignalID);
+            SetSimplePlanStrips(plans, chart, Options.StartDate,  DTTB);
 
+        }
+
+        public static void SetSimplePlanStrips(List<Plan> plans, Chart Chart, DateTime StartDate, ControllerEventLogs EventLog)
+        {
+            int backGroundColor = 1;
+            foreach (MOE.Common.Business.Plan plan in plans)
+            {
+                StripLine stripline = new StripLine();
+                //Creates alternating backcolor to distinguish the plans
+                if (backGroundColor % 2 == 0)
+                {
+                    stripline.BackColor = Color.FromArgb(120, Color.LightGray);
+                }
+                else
+                {
+                    stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
+                }
+
+                //Set the stripline properties
+                stripline.IntervalOffsetType = DateTimeIntervalType.Hours;
+                stripline.Interval = 1;
+                stripline.IntervalOffset = (plan.StartTime - StartDate).TotalHours;
+                stripline.StripWidth = (plan.EndTime - plan.StartTime).TotalHours;
+                stripline.StripWidthType = DateTimeIntervalType.Hours;
+
+                Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
+
+                //Add a corrisponding custom label for each strip
+                CustomLabel Plannumberlabel = new CustomLabel();
+                Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
+                Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
+                switch (plan.PlanNumber)
+                {
+                    case 254:
+                        Plannumberlabel.Text = "Free";
+                        break;
+                    case 255:
+                        Plannumberlabel.Text = "Flash";
+                        break;
+                    case 0:
+                        Plannumberlabel.Text = "Unknown";
+                        break;
+                    default:
+                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+
+                        break;
+                }
+                Plannumberlabel.LabelMark = LabelMarkStyle.LineSideMark;
+                Plannumberlabel.ForeColor = Color.Black;
+                Plannumberlabel.RowIndex = 6;
+
+
+                Chart.ChartAreas[0].AxisX2.CustomLabels.Add(Plannumberlabel);
+
+                CustomLabel planPreemptsLabel = new CustomLabel();
+                planPreemptsLabel.FromPosition = plan.StartTime.ToOADate();
+                planPreemptsLabel.ToPosition = plan.EndTime.ToOADate();
+
+                var c = from MOE.Common.Models.Controller_Event_Log r in EventLog.Events
+                        where r.EventCode == 107 && r.Timestamp > plan.StartTime && r.Timestamp < plan.EndTime
+                        select r;
+
+
+
+                string premptCount = c.Count().ToString();
+                planPreemptsLabel.Text = "Preempts Serviced During Plan: " + premptCount;
+                planPreemptsLabel.LabelMark = LabelMarkStyle.LineSideMark;
+                planPreemptsLabel.ForeColor = Color.Red;
+                planPreemptsLabel.RowIndex = 7;
+
+                Chart.ChartAreas[0].AxisX2.CustomLabels.Add(planPreemptsLabel);
+
+                backGroundColor++;
+
+            }
         }
 
         private void AddTitleAndLegend(Chart chart, int PreemptNumber)
@@ -259,83 +334,83 @@ namespace MOE.Common.Business.Preempt
 
        
 
-        protected void SetSimplePlanStrips(MOE.Common.Business.PlanCollection planCollection, Chart chart, DateTime graphStartDate, DateTime graphEndDate, MOE.Common.Business.ControllerEventLogs DTTB)
-        {
-            int backGroundColor = 1;
-            foreach (MOE.Common.Business.Plan plan in planCollection.PlanList)
-            {
-                if (plan.StartTime > graphStartDate && plan.EndTime < graphEndDate)
-                {
-                    StripLine stripline = new StripLine();
-                    //Creates alternating backcolor to distinguish the plans
-                    if (backGroundColor % 2 == 0)
-                    {
-                        stripline.BackColor = Color.FromArgb(120, Color.LightGray);
-                    }
-                    else
-                    {
-                        stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
-                    }
+        //protected void SetSimplePlanStrips(MOE.Common.Business.PlanCollection planCollection, Chart chart, DateTime graphStartDate, DateTime graphEndDate, MOE.Common.Business.ControllerEventLogs DTTB)
+        //{
+        //    int backGroundColor = 1;
+        //    foreach (MOE.Common.Business.Plan plan in planCollection.PlanList)
+        //    {
+        //        if (plan.StartTime > graphStartDate && plan.EndTime < graphEndDate)
+        //        {
+        //            StripLine stripline = new StripLine();
+        //            //Creates alternating backcolor to distinguish the plans
+        //            if (backGroundColor % 2 == 0)
+        //            {
+        //                stripline.BackColor = Color.FromArgb(120, Color.LightGray);
+        //            }
+        //            else
+        //            {
+        //                stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
+        //            }
 
-                    //Set the stripline properties
-                    stripline.IntervalOffsetType = DateTimeIntervalType.Hours;
-                    stripline.Interval = 1;
-                    stripline.IntervalOffset = (plan.StartTime - graphStartDate).TotalHours;
-                    stripline.StripWidth = (plan.EndTime - plan.StartTime).TotalHours;
-                    stripline.StripWidthType = DateTimeIntervalType.Hours;
+        //            //Set the stripline properties
+        //            stripline.IntervalOffsetType = DateTimeIntervalType.Hours;
+        //            stripline.Interval = 1;
+        //            stripline.IntervalOffset = (plan.StartTime - graphStartDate).TotalHours;
+        //            stripline.StripWidth = (plan.EndTime - plan.StartTime).TotalHours;
+        //            stripline.StripWidthType = DateTimeIntervalType.Hours;
 
-                    chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
+        //            chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
 
-                    //Add a corrisponding custom label for each strip
-                    CustomLabel Plannumberlabel = new CustomLabel();
-                    Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
-                    Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
-                    switch (plan.PlanNumber)
-                    {
-                        case 254:
-                            Plannumberlabel.Text = "Free";
-                            break;
-                        case 255:
-                            Plannumberlabel.Text = "Flash";
-                            break;
-                        case 0:
-                            Plannumberlabel.Text = "Unknown";
-                            break;
-                        default:
-                            Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+        //            //Add a corrisponding custom label for each strip
+        //            CustomLabel Plannumberlabel = new CustomLabel();
+        //            Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
+        //            Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
+        //            switch (plan.PlanNumber)
+        //            {
+        //                case 254:
+        //                    Plannumberlabel.Text = "Free";
+        //                    break;
+        //                case 255:
+        //                    Plannumberlabel.Text = "Flash";
+        //                    break;
+        //                case 0:
+        //                    Plannumberlabel.Text = "Unknown";
+        //                    break;
+        //                default:
+        //                    Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
 
-                            break;
-                    }
-                    Plannumberlabel.LabelMark = LabelMarkStyle.LineSideMark;
-                    Plannumberlabel.ForeColor = Color.Black;
-                    Plannumberlabel.RowIndex = 6;
-
-
-                    chart.ChartAreas[0].AxisX2.CustomLabels.Add(Plannumberlabel);
-
-                    CustomLabel planPreemptsLabel = new CustomLabel();
-                    planPreemptsLabel.FromPosition = plan.StartTime.ToOADate();
-                    planPreemptsLabel.ToPosition = plan.EndTime.ToOADate();
-
-                    var c = from r in DTTB.Events
-                            where r.EventCode == 107 && r.Timestamp > plan.StartTime && r.Timestamp < plan.EndTime
-                            select r;
+        //                    break;
+        //            }
+        //            Plannumberlabel.LabelMark = LabelMarkStyle.LineSideMark;
+        //            Plannumberlabel.ForeColor = Color.Black;
+        //            Plannumberlabel.RowIndex = 6;
 
 
+        //            chart.ChartAreas[0].AxisX2.CustomLabels.Add(Plannumberlabel);
 
-                    string preemptCount = c.Count().ToString();
-                    planPreemptsLabel.Text = "Preempts Serviced During Plan: " + preemptCount;
-                    planPreemptsLabel.LabelMark = LabelMarkStyle.LineSideMark;
-                    planPreemptsLabel.ForeColor = Color.Red;
-                    planPreemptsLabel.RowIndex = 7;
+        //            CustomLabel planPreemptsLabel = new CustomLabel();
+        //            planPreemptsLabel.FromPosition = plan.StartTime.ToOADate();
+        //            planPreemptsLabel.ToPosition = plan.EndTime.ToOADate();
 
-                    chart.ChartAreas[0].AxisX2.CustomLabels.Add(planPreemptsLabel);
+        //            var c = from r in DTTB.Events
+        //                    where r.EventCode == 107 && r.Timestamp > plan.StartTime && r.Timestamp < plan.EndTime
+        //                    select r;
 
-                    backGroundColor++;
 
-                }
-            }
-        }
+
+        //            string preemptCount = c.Count().ToString();
+        //            planPreemptsLabel.Text = "Preempts Serviced During Plan: " + preemptCount;
+        //            planPreemptsLabel.LabelMark = LabelMarkStyle.LineSideMark;
+        //            planPreemptsLabel.ForeColor = Color.Red;
+        //            planPreemptsLabel.RowIndex = 7;
+
+        //            chart.ChartAreas[0].AxisX2.CustomLabels.Add(planPreemptsLabel);
+
+        //            backGroundColor++;
+
+        //        }
+        //    }
+        //}
 
         }
 }

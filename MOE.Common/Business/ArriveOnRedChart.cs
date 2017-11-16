@@ -15,8 +15,7 @@ namespace MOE.Common.Business
         private double totalPercentAoR = 0;
         private double totalCars = 0;
         public WCFServiceLibrary.AoROptions Options { get; set; }
-        public ArriveOnRedChart(WCFServiceLibrary.AoROptions options, 
-            MOE.Common.Business.SignalPhase signalPhase)
+        public ArriveOnRedChart(WCFServiceLibrary.AoROptions options, SignalPhase signalPhase)
         {
             Options = options;
             TimeSpan reportTimespan = Options.EndDate - Options.StartDate;
@@ -157,16 +156,15 @@ namespace MOE.Common.Business
                     double binTotalStops = 0;
                     double binPercentAoR = 0;
                     double binDetectorHits = 0;
-                    var pcds = from item in signalPhase.Cycles
-                                where item.StartTime > dt && item.EndTime < dt.AddMinutes(Options.SelectedBinSize)
-                                select item;
-                    foreach (Cycle pcd in pcds)
+                    var cycles = signalPhase.Cycles.Where(c =>
+                        c.StartTime >= dt && c.EndTime < dt.AddMinutes(Options.SelectedBinSize));
+                    foreach (CyclePcd cycle in cycles)
                     {
-                        totalDetectorHits += pcd.DetectorEvents.Count;
-                        binDetectorHits += pcd.DetectorEvents.Count;
-                        foreach (DetectorDataPoint detectorPoint in pcd.DetectorEvents)
+                        totalDetectorHits += cycle.DetectorEvents.Count;
+                        binDetectorHits += cycle.DetectorEvents.Count;
+                        foreach (DetectorDataPoint detectorPoint in cycle.DetectorEvents)
                         {
-                            if (detectorPoint.YPoint < pcd.GreenLineY) 
+                            if (detectorPoint.YPoint < cycle.GreenLineY) 
                             {
                                 binTotalStops++;
                                 totalAoR++;
@@ -203,10 +201,10 @@ namespace MOE.Common.Business
         }
 
 
-        protected void SetPlanStrips(List<Plan> planCollection, Chart chart, DateTime graphStartDate, bool showPlanStatistics)
+        protected void SetPlanStrips(List<PlanPcd> planCollection, Chart chart, DateTime graphStartDate, bool showPlanStatistics)
         {
             int backGroundColor = 1;
-            foreach (MOE.Common.Business.Plan plan in planCollection)
+            foreach (PlanPcd plan in planCollection)
             {
                 StripLine stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans
@@ -268,7 +266,7 @@ namespace MOE.Common.Business
                     CustomLabel statisticlabel = new CustomLabel();
                     statisticlabel.FromPosition = plan.StartTime.ToOADate();
                     statisticlabel.ToPosition = plan.EndTime.ToOADate();
-                    statisticlabel.Text = (100 - plan.PercentGreen).ToString() + "% RT";
+                    statisticlabel.Text = (100 - plan.PercentGreenTime).ToString() + "% RT";
                     statisticlabel.ForeColor = Color.Red;
                     statisticlabel.RowIndex = 1;
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(statisticlabel);

@@ -14,32 +14,32 @@ namespace MOE.Common.Business
         /// </summary>
         /// <param name="EventCode"></param>
         /// <returns></returns>
-        private Cycle.EventType GetEventType(int EventCode)
+        private RedToRedCycle.EventType GetEventType(int EventCode)
         {
             switch (EventCode)
             {
 
                 case 1:
-                    return Cycle.EventType.ChangeToGreen;
+                    return RedToRedCycle.EventType.ChangeToGreen;
                 // overlap green
                 case 61:
-                    return Cycle.EventType.ChangeToGreen;
+                    return RedToRedCycle.EventType.ChangeToGreen;
                 case 7:
-                    return Cycle.EventType.GreenTermination;
+                    return RedToRedCycle.EventType.GreenTermination;
                 case 8:
-                    return Cycle.EventType.ChangeToYellow;
+                    return RedToRedCycle.EventType.ChangeToYellow;
                 case 9:
-                    return Cycle.EventType.EndYellowClearance;
+                    return RedToRedCycle.EventType.EndYellowClearance;
                 // overlap yellow
                 case 63:
-                    return Cycle.EventType.ChangeToYellow;
+                    return RedToRedCycle.EventType.ChangeToYellow;
                 case 10:
-                    return Cycle.EventType.ChangeToRed;
+                    return RedToRedCycle.EventType.ChangeToRed;
                 // overlap red
                 case 64:
-                    return Cycle.EventType.ChangeToRed;
+                    return RedToRedCycle.EventType.ChangeToRed;
                 default:
-                    return Cycle.EventType.Unknown;
+                    return RedToRedCycle.EventType.Unknown;
             }
         }
 

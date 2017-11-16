@@ -41,7 +41,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private int MetricTypeID = 5;
 
-        public MOE.Common.Business.TMC.TMCInfo TmcInfo;
+        public TMC.TMCInfo TmcInfo;
 
         public TMCOptions(string signalID, DateTime startDate, DateTime endDate, double yAxisMax, double y2AxisMax,
             int binSize, bool showPlanStatistics, bool showVolumes, int metricTypeID, bool showLaneVolumes, bool showTotalVolumes)
@@ -75,26 +75,26 @@ namespace MOE.Common.Business.WCFServiceLibrary
             ShowDataTable = false;
         }
 
-        public MOE.Common.Business.TMC.TMCInfo CreateMetric()
+        public TMC.TMCInfo CreateMetric()
         {
 
-            base.LogMetricRun();
+            LogMetricRun();
 
-            MOE.Common.Models.Repositories.ISignalsRepository repository =
-            MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            Common.Models.Signal signal = repository.GetVersionOfSignalByDate(SignalID, StartDate);
-            TmcInfo = new MOE.Common.Business.TMC.TMCInfo();
-            MOE.Common.Business.PlanCollection plans = new MOE.Common.Business.PlanCollection(StartDate, EndDate, SignalID);
+            Models.Repositories.ISignalsRepository repository =
+            Models.Repositories.SignalsRepositoryFactory.Create();
+            Models.Signal signal = repository.GetVersionOfSignalByDate(SignalID, StartDate);
+            TmcInfo = new TMC.TMCInfo();
+            List<Plan> plans = PlanFactory.GetBasicPlans(StartDate, EndDate, SignalID);
 
 
-            MOE.Common.Models.Repositories.ILaneTypeRepository ltr = MOE.Common.Models.Repositories.LaneTypeRepositoryFactory.Create();
-            List<Common.Models.LaneType> laneTypes = ltr.GetAllLaneTypes();
+            Models.Repositories.ILaneTypeRepository ltr = Models.Repositories.LaneTypeRepositoryFactory.Create();
+            List<LaneType> laneTypes = ltr.GetAllLaneTypes();
 
-            MOE.Common.Models.Repositories.IMovementTypeRepository mtr = MOE.Common.Models.Repositories.MovementTypeRepositoryFactory.Create();
-            List<Common.Models.MovementType> movementTypes = mtr.GetAllMovementTypes();
+            Models.Repositories.IMovementTypeRepository mtr = Models.Repositories.MovementTypeRepositoryFactory.Create();
+            List<MovementType> movementTypes = mtr.GetAllMovementTypes();
 
-            MOE.Common.Models.Repositories.IDirectionTypeRepository dtr = MOE.Common.Models.Repositories.DirectionTypeRepositoryFactory.Create();
-            List<Common.Models.DirectionType> directions = dtr.GetAllDirections();
+            Models.Repositories.IDirectionTypeRepository dtr = Models.Repositories.DirectionTypeRepositoryFactory.Create();
+            List<DirectionType> directions = dtr.GetAllDirections();
             
 
             CreateLaneTypeCharts(signal, "Vehicle", laneTypes, movementTypes, directions, plans, TmcInfo);
@@ -106,21 +106,21 @@ namespace MOE.Common.Business.WCFServiceLibrary
             
         }
 
-        private void CreateLaneTypeCharts(Common.Models.Signal signal, string laneTypeDescription, 
-            List<Common.Models.LaneType> laneTypes, List<Common.Models.MovementType> movementTypes,
-            List<Common.Models.DirectionType> directions, MOE.Common.Business.PlanCollection plans, MOE.Common.Business.TMC.TMCInfo tmcInfo)
+        private void CreateLaneTypeCharts(Models.Signal signal, string laneTypeDescription, 
+            List<LaneType> laneTypes, List<MovementType> movementTypes,
+            List<DirectionType> directions, List<Plan> plans, TMC.TMCInfo tmcInfo)
         {
            
 
-            foreach (Common.Models.DirectionType direction in directions)
+            foreach (DirectionType direction in directions)
             {
-                 List<Models.Approach> approaches = (from r in signal.Approaches
+                 List<Approach> approaches = (from r in signal.Approaches
                               where r.DirectionType.DirectionTypeID == direction.DirectionTypeID
                               select r).ToList();
 
                  List<Models.Detector> DetectorsByDirection = new List<Models.Detector>();
 
-                 foreach (Models.Approach a in approaches)
+                 foreach (Approach a in approaches)
                  {
                      foreach(Models.Detector d in a.Detectors)
                      {
@@ -136,11 +136,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
                  List<int> movementTypeIdsSorted = new List<int> { 3, 1, 2 };
                 foreach(int x in movementTypeIdsSorted)
                 {
-                Common.Models.LaneType lanetype = (from r in laneTypes
+                LaneType lanetype = (from r in laneTypes
                                                    where r.Description == laneTypeDescription
                                                   select r).FirstOrDefault();
 
-                Common.Models.MovementType movementType = (from r in movementTypes
+                MovementType movementType = (from r in movementTypes
                                                            where r.MovementTypeID == x
                                                            select r).FirstOrDefault();
 
@@ -168,8 +168,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
 
 
-                    MOE.Common.Business.TMC.TMCMetric TMCchart = 
-                        new MOE.Common.Business.TMC.TMCMetric(StartDate, EndDate, signal, direction, 
+                    TMC.TMCMetric TMCchart = 
+                        new TMC.TMCMetric(StartDate, EndDate, signal, direction, 
                             DetectorsForChart, lanetype, movementType, this, tmcInfo);
                     Chart chart = TMCchart.chart;
                     SetSimplePlanStrips(plans, chart, StartDate);
@@ -178,7 +178,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     string chartName = CreateFileName();
 
                     //Save an image of the chart
-                    chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
+                    chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
 
                     //ReturnList.Add(MetricWebPath + chartName);
                    tmcInfo.ImageLocations.Add(MetricWebPath + chartName);
@@ -193,10 +193,65 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
 
 
-        private void SetSimplePlanStrips(MOE.Common.Business.PlanCollection plans, Chart chart, DateTime StartDate)
+        private void SetSimplePlanStrips(List<Plan> plans, Chart chart, DateTime StartDate)
+        {
+            int backGroundColor = 1;
+            foreach (MOE.Common.Business.Plan plan in plans)
+            {
+                StripLine stripline = new StripLine();
+                //Creates alternating backcolor to distinguish the plans
+                if (backGroundColor % 2 == 0)
                 {
-                    PlanCollection.SetSimplePlanStrips(plans, chart, StartDate);
+                    stripline.BackColor = Color.FromArgb(120, Color.LightGray);
                 }
+                else
+                {
+                    stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
+                }
+
+                //Set the stripline properties
+                stripline.IntervalOffsetType = DateTimeIntervalType.Hours;
+                stripline.Interval = 1;
+                stripline.IntervalOffset = (plan.StartTime - StartDate).TotalHours;
+                stripline.StripWidth = (plan.EndTime - plan.StartTime).TotalHours;
+                stripline.StripWidthType = DateTimeIntervalType.Hours;
+
+                chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
+
+                //Add a corrisponding custom label for each strip
+                CustomLabel Plannumberlabel = new CustomLabel();
+                Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
+                Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
+                switch (plan.PlanNumber)
+                {
+                    case 254:
+                        Plannumberlabel.Text = "Free";
+                        break;
+                    case 255:
+                        Plannumberlabel.Text = "Flash";
+                        break;
+                    case 0:
+                        Plannumberlabel.Text = "Unknown";
+                        break;
+                    default:
+                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+
+                        break;
+                }
+                Plannumberlabel.LabelMark = LabelMarkStyle.LineSideMark;
+                Plannumberlabel.ForeColor = Color.Black;
+                Plannumberlabel.RowIndex = 6;
+
+
+                chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(Plannumberlabel);
+
+
+                backGroundColor++;
+
+            }
+
+
+        }
     }
 }
 
