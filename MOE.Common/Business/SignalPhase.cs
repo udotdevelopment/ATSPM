@@ -17,7 +17,7 @@ namespace MOE.Common.Business
         public List<CyclePcd> Cycles { get; private set; }
         private List<Controller_Event_Log> DetectorEvents { get; set; }
         private bool GetPermissivePhase { get; }
-        public Models.Approach Approach { get; }
+        public Approach Approach { get; }
         public double AvgDelay => TotalDelay / TotalVolume;
         public double PercentArrivalOnGreen
         {
@@ -98,14 +98,10 @@ namespace MOE.Common.Business
             }
         }
 
-       
-
-       
-
         private void GetDetectorEvents(int metricTypeId)
         {
             var celRepository = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-            DetectorEvents = new List<Models.Controller_Event_Log>();
+            DetectorEvents = new List<Controller_Event_Log>();
             var detectorsForMetric = Approach.GetDetectorsForMetricType(metricTypeId);
             foreach (Models.Detector d in detectorsForMetric)
             {

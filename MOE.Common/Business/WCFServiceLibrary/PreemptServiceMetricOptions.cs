@@ -31,31 +31,18 @@ namespace MOE.Common.Business.WCFServiceLibrary
             base.CreateMetric();
             List<string> returnString = new List<string>();
 
-            MOE.Common.Business.ControllerEventLogs eventsTable = new MOE.Common.Business.ControllerEventLogs();
+            ControllerEventLogs eventsTable = new ControllerEventLogs();
 
             eventsTable.FillforPreempt(SignalID, StartDate, EndDate);
             if (eventsTable.Events.Count > 0)
             {
-                MOE.Common.Business.Preempt.PreemptServiceMetric psChart = 
-                    new MOE.Common.Business.Preempt.PreemptServiceMetric(this, eventsTable);
+                Preempt.PreemptServiceMetric psChart = new Preempt.PreemptServiceMetric(this, eventsTable);
                 Chart chart = psChart.chart;
-                //Create the File Name
-
                 string chartName = CreateFileName();
-
-
-                //Save an image of the chart
-
-                chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
+                chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
                 returnString.Add(MetricWebPath + chartName);
-                    
-
-        
             }
-
-
             return returnString;
-
         }
     }
 }

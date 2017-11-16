@@ -14,109 +14,104 @@ namespace MOE.Common.Business.Preempt
 {
     public class PreemptDetailChart
         {
-        public Chart chart = new Chart();
+        public Chart Chart = new Chart();
         public WCFServiceLibrary.PreemptDetailOptions Options { get; set; }
 
         public PreemptDetailChart(WCFServiceLibrary.PreemptDetailOptions options, 
-            MOE.Common.Business.ControllerEventLogs DTTB)
+            ControllerEventLogs dttb)
         {
             Options = options;
-            int PreemptNumber = 0;
-            if (DTTB.Events.Count > 0)
+            int preemptNumber = 0;
+            if (dttb.Events.Count > 0)
             {
-                var r = (from e in DTTB.Events where e.EventCode != 99 select e).FirstOrDefault();
-                PreemptNumber = r.EventParam;
+                var r = (from e in dttb.Events where e.EventCode != 99 select e).FirstOrDefault();
+                preemptNumber = r.EventParam;
             }
             TimeSpan reportTimespan = Options.EndDate - Options.StartDate;
-
-            AddTitleAndLegend(chart, PreemptNumber);
-
-            AddChartArea(chart, reportTimespan);
-
-            AddSeries(chart);
-
-            AddDataToChart(chart, DTTB, PreemptNumber);
+            AddTitleAndLegend(Chart, preemptNumber);
+            AddChartArea(Chart);
+            AddSeries(Chart);
+            AddDataToChart(Chart, dttb);
             List<Plan> plans = PlanFactory.GetBasicPlans(Options.StartDate, Options.EndDate, Options.SignalID);
-            SetSimplePlanStrips(plans, chart, Options.StartDate,  DTTB);
-
+            //SetSimplePlanStrips(plans, Chart, Options.StartDate, Options.EndDate, dttb);
         }
 
-        public static void SetSimplePlanStrips(List<Plan> plans, Chart Chart, DateTime StartDate, ControllerEventLogs EventLog)
-        {
-            int backGroundColor = 1;
-            foreach (MOE.Common.Business.Plan plan in plans)
-            {
-                StripLine stripline = new StripLine();
-                //Creates alternating backcolor to distinguish the plans
-                if (backGroundColor % 2 == 0)
-                {
-                    stripline.BackColor = Color.FromArgb(120, Color.LightGray);
-                }
-                else
-                {
-                    stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
-                }
+        //public static void SetSimplePlanStrips(List<Plan> plans, Chart chart, DateTime startDate, ControllerEventLogs eventLog)
+        //{
+        //    int backGroundColor = 1;
+        //    foreach (Plan plan in plans)
+        //    {
+        //        StripLine stripline = new StripLine();
+        //        //Creates alternating backcolor to distinguish the plans
+        //        if (backGroundColor % 2 == 0)
+        //        {
+        //            stripline.BackColor = Color.FromArgb(120, Color.LightGray);
+        //        }
+        //        else
+        //        {
+        //            stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
+        //        }
 
-                //Set the stripline properties
-                stripline.IntervalOffsetType = DateTimeIntervalType.Hours;
-                stripline.Interval = 1;
-                stripline.IntervalOffset = (plan.StartTime - StartDate).TotalHours;
-                stripline.StripWidth = (plan.EndTime - plan.StartTime).TotalHours;
-                stripline.StripWidthType = DateTimeIntervalType.Hours;
+        //        //Set the stripline properties
+        //        stripline.IntervalOffsetType = DateTimeIntervalType.Hours;
+        //        stripline.Interval = 1;
+        //        stripline.IntervalOffset = (plan.StartTime - startDate).TotalHours;
+        //        stripline.StripWidth = (plan.EndTime - plan.StartTime).TotalHours;
+        //        stripline.StripWidthType = DateTimeIntervalType.Hours;
 
-                Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
+        //        chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
 
-                //Add a corrisponding custom label for each strip
-                CustomLabel Plannumberlabel = new CustomLabel();
-                Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
-                Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
-                switch (plan.PlanNumber)
-                {
-                    case 254:
-                        Plannumberlabel.Text = "Free";
-                        break;
-                    case 255:
-                        Plannumberlabel.Text = "Flash";
-                        break;
-                    case 0:
-                        Plannumberlabel.Text = "Unknown";
-                        break;
-                    default:
-                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+        //        //Add a corrisponding custom label for each strip
+        //        CustomLabel plannumberlabel = new CustomLabel();
+        //        plannumberlabel.FromPosition = plan.StartTime.ToOADate();
+        //        plannumberlabel.ToPosition = plan.EndTime.ToOADate();
+        //        switch (plan.PlanNumber)
+        //        {
+        //            case 254:
+        //                plannumberlabel.Text = "Free";
+        //                break;
+        //            case 255:
+        //                plannumberlabel.Text = "Flash";
+        //                break;
+        //            case 0:
+        //                plannumberlabel.Text = "Unknown";
+        //                break;
+        //            default:
+        //                plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
 
-                        break;
-                }
-                Plannumberlabel.LabelMark = LabelMarkStyle.LineSideMark;
-                Plannumberlabel.ForeColor = Color.Black;
-                Plannumberlabel.RowIndex = 6;
-
-
-                Chart.ChartAreas[0].AxisX2.CustomLabels.Add(Plannumberlabel);
-
-                CustomLabel planPreemptsLabel = new CustomLabel();
-                planPreemptsLabel.FromPosition = plan.StartTime.ToOADate();
-                planPreemptsLabel.ToPosition = plan.EndTime.ToOADate();
-
-                var c = from MOE.Common.Models.Controller_Event_Log r in EventLog.Events
-                        where r.EventCode == 107 && r.Timestamp > plan.StartTime && r.Timestamp < plan.EndTime
-                        select r;
+        //                break;
+        //        }
+        //        plannumberlabel.LabelMark = LabelMarkStyle.LineSideMark;
+        //        plannumberlabel.ForeColor = Color.Black;
+        //        plannumberlabel.RowIndex = 6;
 
 
+        //        chart.ChartAreas[0].AxisX2.CustomLabels.Add(plannumberlabel);
 
-                string premptCount = c.Count().ToString();
-                planPreemptsLabel.Text = "Preempts Serviced During Plan: " + premptCount;
-                planPreemptsLabel.LabelMark = LabelMarkStyle.LineSideMark;
-                planPreemptsLabel.ForeColor = Color.Red;
-                planPreemptsLabel.RowIndex = 7;
+        //        CustomLabel planPreemptsLabel = new CustomLabel();
+        //        planPreemptsLabel.FromPosition = plan.StartTime.ToOADate();
+        //        planPreemptsLabel.ToPosition = plan.EndTime.ToOADate();
 
-                Chart.ChartAreas[0].AxisX2.CustomLabels.Add(planPreemptsLabel);
+        //        var c = from Models.Controller_Event_Log r in eventLog.Events
+        //                where r.EventCode == 107 && r.Timestamp > plan.StartTime && r.Timestamp < plan.EndTime
+        //                select r;
 
-                backGroundColor++;
 
-            }
-        }
 
-        private void AddTitleAndLegend(Chart chart, int PreemptNumber)
+        //        string premptCount = c.Count().ToString();
+        //        planPreemptsLabel.Text = "Preempts Serviced During Plan: " + premptCount;
+        //        planPreemptsLabel.LabelMark = LabelMarkStyle.LineSideMark;
+        //        planPreemptsLabel.ForeColor = Color.Red;
+        //        planPreemptsLabel.RowIndex = 7;
+
+        //        chart.ChartAreas[0].AxisX2.CustomLabels.Add(planPreemptsLabel);
+
+        //        backGroundColor++;
+
+        //    }
+        //}
+
+        private void AddTitleAndLegend(Chart chart, int preemptNumber)
         {
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
             chart.ImageType = ChartImageType.Jpeg;
@@ -130,9 +125,9 @@ namespace MOE.Common.Business.Preempt
             chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
             chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(Options.SignalID, 
                 Options.StartDate, Options.EndDate));
-            if (PreemptNumber > 0)
+            if (preemptNumber > 0)
             {
-                chart.Titles.Add(ChartTitleFactory.GetBoldTitle(" Preempt Number: " + PreemptNumber.ToString()));                
+                chart.Titles.Add(ChartTitleFactory.GetBoldTitle(" Preempt Number: " + preemptNumber.ToString()));                
             }
 
             //Create the chart legend
@@ -142,7 +137,7 @@ namespace MOE.Common.Business.Preempt
             chart.Legends.Add(chartLegend);
         }
 
-        private void AddChartArea(Chart chart, TimeSpan reportTimespan)
+        private void AddChartArea(Chart chart)
         {
             //Create the chart area
             ChartArea chartArea = new ChartArea();
@@ -163,33 +158,33 @@ namespace MOE.Common.Business.Preempt
         {
            
 
-            Series Delay = new Series();
-            Delay.ChartType = SeriesChartType.StackedColumn;
-            Delay.Color = Color.FromArgb(255, 241, 113, 96);
-            Delay.Name = "Delay";
-            Delay.XValueType = ChartValueType.Int32;
+            Series delay = new Series();
+            delay.ChartType = SeriesChartType.StackedColumn;
+            delay.Color = Color.FromArgb(255, 241, 113, 96);
+            delay.Name = "Delay";
+            delay.XValueType = ChartValueType.Int32;
 
 
-            Series TimeToServiceSeries = new Series();
-            TimeToServiceSeries.ChartType = SeriesChartType.StackedColumn;
-            TimeToServiceSeries.Color = Color.FromArgb(255, 255, 193, 94);
-            TimeToServiceSeries.Name = "Time to Service";
-            TimeToServiceSeries.XValueType = ChartValueType.Int32;
+            Series timeToServiceSeries = new Series();
+            timeToServiceSeries.ChartType = SeriesChartType.StackedColumn;
+            timeToServiceSeries.Color = Color.FromArgb(255, 255, 193, 94);
+            timeToServiceSeries.Name = "Time to Service";
+            timeToServiceSeries.XValueType = ChartValueType.Int32;
 
             
 
-            Series TrackClearSeries = new Series();
-            TrackClearSeries.ChartType = SeriesChartType.StackedColumn;
-            TrackClearSeries.BorderDashStyle = ChartDashStyle.Dash;
-            TrackClearSeries.Color = Color.FromArgb(255, 151, 206, 245);
-            TrackClearSeries.Name = "Track Clear";
-            TrackClearSeries.XValueType = ChartValueType.Int32;
+            Series trackClearSeries = new Series();
+            trackClearSeries.ChartType = SeriesChartType.StackedColumn;
+            trackClearSeries.BorderDashStyle = ChartDashStyle.Dash;
+            trackClearSeries.Color = Color.FromArgb(255, 151, 206, 245);
+            trackClearSeries.Name = "Track Clear";
+            trackClearSeries.XValueType = ChartValueType.Int32;
 
-            Series DwellTimeSeries = new Series();
-            DwellTimeSeries.ChartType = SeriesChartType.StackedColumn;
-            DwellTimeSeries.Color = Color.FromArgb(255, 164, 238, 140);
-            DwellTimeSeries.Name = "Dwell Time";
-            DwellTimeSeries.XValueType = ChartValueType.Int32;
+            Series dwellTimeSeries = new Series();
+            dwellTimeSeries.ChartType = SeriesChartType.StackedColumn;
+            dwellTimeSeries.Color = Color.FromArgb(255, 164, 238, 140);
+            dwellTimeSeries.Name = "Dwell Time";
+            dwellTimeSeries.XValueType = ChartValueType.Int32;
 
             //Series EndCallSeries = new Series();
             //EndCallSeries.ChartType = SeriesChartType.StackedColumn;
@@ -200,65 +195,62 @@ namespace MOE.Common.Business.Preempt
 
 
 
-            Series CallMaxOutSeries = new Series();
-            CallMaxOutSeries.ChartType = SeriesChartType.Point;
-            CallMaxOutSeries.BorderDashStyle = ChartDashStyle.Dash;
-            CallMaxOutSeries.MarkerStyle = MarkerStyle.Cross;
-            CallMaxOutSeries.Color = Color.Red;
-            CallMaxOutSeries.Name = "Call Max Out";
-            CallMaxOutSeries.XValueType = ChartValueType.Int32;
+            Series callMaxOutSeries = new Series();
+            callMaxOutSeries.ChartType = SeriesChartType.Point;
+            callMaxOutSeries.BorderDashStyle = ChartDashStyle.Dash;
+            callMaxOutSeries.MarkerStyle = MarkerStyle.Cross;
+            callMaxOutSeries.Color = Color.Red;
+            callMaxOutSeries.Name = "Call Max Out";
+            callMaxOutSeries.XValueType = ChartValueType.Int32;
 
-            Series InputOnSeries = new Series();
-            InputOnSeries.ChartType = SeriesChartType.Point;
-            InputOnSeries.BorderDashStyle = ChartDashStyle.Dash;
-            InputOnSeries.MarkerStyle = MarkerStyle.Circle;
-            InputOnSeries.Color = Color.Green;
-            InputOnSeries.Name = "Input On";
-            InputOnSeries.XValueType = ChartValueType.Int32;
+            Series inputOnSeries = new Series();
+            inputOnSeries.ChartType = SeriesChartType.Point;
+            inputOnSeries.BorderDashStyle = ChartDashStyle.Dash;
+            inputOnSeries.MarkerStyle = MarkerStyle.Circle;
+            inputOnSeries.Color = Color.Green;
+            inputOnSeries.Name = "Input On";
+            inputOnSeries.XValueType = ChartValueType.Int32;
 
-            Series InputOffSeries = new Series();
-            InputOffSeries.ChartType = SeriesChartType.Point;
-            InputOffSeries.BorderDashStyle = ChartDashStyle.Dash;
-            InputOffSeries.MarkerStyle = MarkerStyle.Circle;
-            InputOffSeries.Color = Color.Black;
-            InputOffSeries.Name = "Input Off";
-            InputOffSeries.XValueType = ChartValueType.Int32;
-
-
-
-            Series GateDownSeries = new Series();
-            GateDownSeries.ChartType = SeriesChartType.Point;
-            GateDownSeries.BorderDashStyle = ChartDashStyle.Dash;
-            GateDownSeries.MarkerStyle = MarkerStyle.Triangle;
-            GateDownSeries.Color = Color.Purple;
-            GateDownSeries.Name = "Gate Down";
-            GateDownSeries.XValueType = ChartValueType.Int32;
+            Series inputOffSeries = new Series();
+            inputOffSeries.ChartType = SeriesChartType.Point;
+            inputOffSeries.BorderDashStyle = ChartDashStyle.Dash;
+            inputOffSeries.MarkerStyle = MarkerStyle.Circle;
+            inputOffSeries.Color = Color.Black;
+            inputOffSeries.Name = "Input Off";
+            inputOffSeries.XValueType = ChartValueType.Int32;
 
 
-            chart.Series.Add(Delay);
-            chart.Series.Add(TimeToServiceSeries);
-            chart.Series.Add(TrackClearSeries);
-            chart.Series.Add(DwellTimeSeries);
+
+            Series gateDownSeries = new Series();
+            gateDownSeries.ChartType = SeriesChartType.Point;
+            gateDownSeries.BorderDashStyle = ChartDashStyle.Dash;
+            gateDownSeries.MarkerStyle = MarkerStyle.Triangle;
+            gateDownSeries.Color = Color.Purple;
+            gateDownSeries.Name = "Gate Down";
+            gateDownSeries.XValueType = ChartValueType.Int32;
+
+
+            chart.Series.Add(delay);
+            chart.Series.Add(timeToServiceSeries);
+            chart.Series.Add(trackClearSeries);
+            chart.Series.Add(dwellTimeSeries);
             
 
             //chart.Series.Add(EndCallSeries);
-            chart.Series.Add(CallMaxOutSeries);
-            chart.Series.Add(InputOnSeries);
-            chart.Series.Add(InputOffSeries);
-            chart.Series.Add(GateDownSeries);
+            chart.Series.Add(callMaxOutSeries);
+            chart.Series.Add(inputOnSeries);
+            chart.Series.Add(inputOffSeries);
+            chart.Series.Add(gateDownSeries);
 
         }
 
-        protected void AddDataToChart(Chart chart, MOE.Common.Business.ControllerEventLogs DTTB,  int preemptNumber)
+        protected void AddDataToChart(Chart chart, ControllerEventLogs dttb)
         {
             PreemptCycleEngine engine = new PreemptCycleEngine();
-            List<PreemptCycle> cycles = engine.CreatePreemptCycle(DTTB);
-
+            List<PreemptCycle> cycles = engine.CreatePreemptCycle(dttb);
             int x = 1;
-
             foreach(PreemptCycle cycle in cycles)
             {
-
                 if (cycle.HasDelay)
                 {
                     DataPoint point = new DataPoint();
@@ -275,71 +267,45 @@ namespace MOE.Common.Business.Preempt
                     chart.Series["Time to Service"].Points.Add(point);
                     point.AxisLabel = cycle.CycleStart.ToShortTimeString();
                 }
-                    chart.Series["Track Clear"].Points.AddXY(x, cycle.TimeToTrackClear);
-                    chart.Series["Dwell Time"].Points.AddXY(x, cycle.DwellTime);
-
-
-                    if (cycle.TimeToCallMaxOut > 0)
-                    {
-
-                        chart.Series["Call Max Out"].Points.AddXY(x, cycle.TimeToCallMaxOut);
-                       
-                    }
-
-                    if (cycle.TimeToGateDown > 0)
-                    {
-
-                        chart.Series["Gate Down"].Points.AddXY(x, cycle.TimeToGateDown);
-                     
-                    }
-
-
-
+                chart.Series["Track Clear"].Points.AddXY(x, cycle.TimeToTrackClear);
+                chart.Series["Dwell Time"].Points.AddXY(x, cycle.DwellTime);
+                if (cycle.TimeToCallMaxOut > 0)
+                {
+                    chart.Series["Call Max Out"].Points.AddXY(x, cycle.TimeToCallMaxOut);
+                }
+                if (cycle.TimeToGateDown > 0)
+                {
+                    chart.Series["Gate Down"].Points.AddXY(x, cycle.TimeToGateDown);
+                }
                 foreach(DateTime d in cycle.InputOn)
                 {
-
                     if(d >= cycle.CycleStart && d <= cycle.CycleEnd)
                     {
                         chart.Series["Input On"].Points.AddXY(x, (d - cycle.CycleStart).TotalSeconds);
-                
                     }
                 }
-
                 foreach (DateTime d in cycle.InputOff)
                 {
                     if (d >= cycle.CycleStart && d <= cycle.CycleEnd)
                     {
                         chart.Series["Input Off"].Points.AddXY(x, (d - cycle.CycleStart).TotalSeconds);
-                  
                     }
                 }
-
                 x++;
             }
-
-            
             if(x <= 6)
             {
                 chart.ChartAreas[0].AxisX.Maximum = 8;
-                
-
             }
-
 
         }
 
-
-
-       
-
-       
-
-        //protected void SetSimplePlanStrips(MOE.Common.Business.PlanCollection planCollection, Chart chart, DateTime graphStartDate, DateTime graphEndDate, MOE.Common.Business.ControllerEventLogs DTTB)
+        //protected void SetSimplePlanStrips(List<Plan> plans, Chart chart, DateTime graphStartDate, DateTime graphEndDate, ControllerEventLogs DTTB)
         //{
         //    int backGroundColor = 1;
-        //    foreach (MOE.Common.Business.Plan plan in planCollection.PlanList)
+        //    foreach (Plan plan in plans)
         //    {
-        //        if (plan.StartTime > graphStartDate && plan.EndTime < graphEndDate)
+        //        if (plan.StartTime >= graphStartDate && plan.EndTime <= graphEndDate)
         //        {
         //            StripLine stripline = new StripLine();
         //            //Creates alternating backcolor to distinguish the plans
@@ -412,5 +378,5 @@ namespace MOE.Common.Business.Preempt
         //    }
         //}
 
-        }
+    }
 }

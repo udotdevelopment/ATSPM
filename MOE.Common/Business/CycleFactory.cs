@@ -48,7 +48,8 @@ namespace MOE.Common.Business
             {
                 foreach (var cycle in cycles)
                 {
-                    foreach (var controllerEventLog in detectorEvents.Where(d => d.Timestamp >= cycle.StartTime && d.Timestamp < cycle.StartTime))
+                    var eventsForCycle = detectorEvents.Where(d => d.Timestamp >= cycle.StartTime && d.Timestamp < cycle.EndTime).ToList();
+                    foreach (var controllerEventLog in eventsForCycle)
                     {
                         cycle.AddDetectorData(new DetectorDataPoint(cycle.StartTime, controllerEventLog.Timestamp, cycle.GreenEvent, cycle.YellowEvent));
                     }
@@ -102,7 +103,7 @@ namespace MOE.Common.Business
                 foreach (var cycle in cycles)
                 {
                     cycle.SpeedEvents = detectorEvents
-                        .Where(d => d.timestamp >= cycle.StartTime && d.timestamp < cycle.StartTime).ToList();
+                        .Where(d => d.timestamp >= cycle.StartTime && d.timestamp < cycle.EndTime).ToList();
                 }
             }
             return cycles;

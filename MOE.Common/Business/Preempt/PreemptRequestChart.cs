@@ -13,21 +13,20 @@ namespace MOE.Common.Business.Preempt
 {
     public class PreemptRequestChart
     {
-        public Chart chart = new Chart();
+        public Chart Chart { get; } = new Chart();
         public WCFServiceLibrary.PreemptServiceRequestOptions Options { get; set; }
 
-        public PreemptRequestChart(WCFServiceLibrary.PreemptServiceRequestOptions options,
-            MOE.Common.Business.ControllerEventLogs DTTB)
+        public PreemptRequestChart(WCFServiceLibrary.PreemptServiceRequestOptions options, ControllerEventLogs dttb)
         {
-            this.Options = options;
+            Options = options;
             //Set the chart properties
-            chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 200;
-            chart.Width = 1100;
-            chart.BorderSkin.SkinStyle = BorderSkinStyle.None;
-            chart.BorderSkin.BorderColor = Color.Black;
-            chart.BorderSkin.BorderWidth = 1;
+            Chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
+            Chart.ImageType = ChartImageType.Jpeg;
+            Chart.Height = 200;
+            Chart.Width = 1100;
+            Chart.BorderSkin.SkinStyle = BorderSkinStyle.None;
+            Chart.BorderSkin.BorderColor = Color.Black;
+            Chart.BorderSkin.BorderWidth = 1;
             TimeSpan reportTimespan = Options.EndDate - Options.StartDate;
 
             SetChartTitle();        
@@ -36,7 +35,7 @@ namespace MOE.Common.Business.Preempt
             Legend chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
             chartLegend.Docking = Docking.Left;
-            chart.Legends.Add(chartLegend);
+            Chart.Legends.Add(chartLegend);
 
             //Create the chart area
             ChartArea chartArea = new ChartArea();
@@ -66,8 +65,9 @@ namespace MOE.Common.Business.Preempt
                     chartArea.AxisX.LabelStyle.Format = "HH:mm";
                 }
             }
-
-            chart.ChartAreas.Add(chartArea);
+            chartArea.AxisX.Minimum = Options.StartDate.ToOADate();
+            chartArea.AxisX.Maximum = Options.EndDate.ToOADate();
+            Chart.ChartAreas.Add(chartArea);
 
             //Add the point series
 
@@ -89,32 +89,32 @@ namespace MOE.Common.Business.Preempt
             posts.Name = "Posts";
             posts.XValueType = ChartValueType.DateTime;
 
-            chart.Series.Add(posts);
-            chart.Series.Add(PreemptSeries);
+            Chart.Series.Add(posts);
+            Chart.Series.Add(PreemptSeries);
 
             //Add points at the start and and of the x axis to ensure
             //the graph covers the entire period selected by the user
             //whether there is data or not
-            chart.Series["Posts"].Points.AddXY(Options.StartDate, 0);
-            chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
+            //chart.Series["Posts"].Points.AddXY(Options.StartDate, 0);
+            //chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
 
-            AddDataToChart(chart, Options.StartDate, Options.EndDate, DTTB, Options.SignalID);
+            AddDataToChart(Chart, Options.StartDate, Options.EndDate, dttb, Options.SignalID);
             List<Plan> plans = PlanFactory.GetBasicPlans(Options.StartDate, Options.EndDate, Options.SignalID);
-            SetSimplePlanStrips(plans, chart, Options.StartDate, DTTB);
+            SetSimplePlanStrips(plans, Chart, Options.StartDate, dttb);
 
         }
 
         private void SetChartTitle()
         {
-            chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
-            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(Options.SignalID, Options.StartDate, Options.EndDate));
+            Chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
+            Chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(Options.SignalID, Options.StartDate, Options.EndDate));
         }
 
         protected void AddDataToChart(Chart chart,  DateTime startDate,
-     DateTime endDate,  MOE.Common.Business.ControllerEventLogs DTTB, string signalid)
+     DateTime endDate,  ControllerEventLogs DTTB, string signalid)
         {
             int maxprempt = 0;
-            foreach (MOE.Common.Models.Controller_Event_Log row in DTTB.Events)
+            foreach (Models.Controller_Event_Log row in DTTB.Events)
             {
                 if (row.EventCode == 102)
                 {
@@ -135,10 +135,10 @@ namespace MOE.Common.Business.Preempt
             }
         }
 
-        protected void SetSimplePlanStrips(List<Plan> plans, Chart chart, DateTime graphStartDate, MOE.Common.Business.ControllerEventLogs DTTB)
+        protected void SetSimplePlanStrips(List<Plan> plans, Chart chart, DateTime graphStartDate, ControllerEventLogs DTTB)
         {
             int backGroundColor = 1;
-            foreach (MOE.Common.Business.Plan plan in plans)
+            foreach (Plan plan in plans)
             {
                 StripLine stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans
@@ -191,7 +191,7 @@ namespace MOE.Common.Business.Preempt
                 planPreemptsLabel.FromPosition = plan.StartTime.ToOADate();
                 planPreemptsLabel.ToPosition = plan.EndTime.ToOADate();
 
-                var c = from MOE.Common.Models.Controller_Event_Log r in DTTB.Events
+                var c = from Models.Controller_Event_Log r in DTTB.Events
                         where r.EventCode == 102 && r.Timestamp > plan.StartTime && r.Timestamp < plan.EndTime
                         select r;
 

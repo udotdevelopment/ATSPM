@@ -48,32 +48,18 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             base.CreateMetric();
             List<string> returnList = new List<string>();
-
-            MOE.Common.Business.SignalPhaseCollection signalphasecollection =
-              new MOE.Common.Business.SignalPhaseCollection(StartDate,
-                  EndDate, SignalID,
-           false, SelectedBinSize, 9);
-
-            string location = GetSignalLocation();
-
+            SignalPhaseCollection signalphasecollection = new SignalPhaseCollection(StartDate, EndDate, SignalID, false, SelectedBinSize, 9);
             if (signalphasecollection.SignalPhaseList.Count > 0)
             {
-                foreach (MOE.Common.Business.SignalPhase signalPhase in signalphasecollection.SignalPhaseList)
+                foreach (SignalPhase signalPhase in signalphasecollection.SignalPhaseList)
                 {
-                    MOE.Common.Business.ArriveOnRedChart AoRChart = 
-                        new MOE.Common.Business.ArriveOnRedChart(this, signalPhase);
-                    Chart chart = AoRChart.chart;
-
-                    //Create the File Name
-
+                    ArriveOnRedChart aorChart = new ArriveOnRedChart(this, signalPhase);
+                    Chart chart = aorChart.chart;
                     string chartName = CreateFileName();
-                    
-
                     var removethese = new List<Title>();
-
                     foreach (Title t in chart.Titles)
                     {
-                        if (t.Text == "" || t.Text == null)
+                        if (string.IsNullOrEmpty(t.Text))
                         {
                             removethese.Add(t);
                         }
@@ -82,13 +68,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     {
                         chart.Titles.Remove(t);
                     }
-
-
-                    //Save an image of the chart
-                    chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
-
+                    chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
                     returnList.Add(MetricWebPath + chartName);
-
                 }
             }
             return returnList;

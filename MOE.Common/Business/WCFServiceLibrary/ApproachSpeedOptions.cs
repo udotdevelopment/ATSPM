@@ -77,29 +77,19 @@ namespace MOE.Common.Business.WCFServiceLibrary
             base.CreateMetric();
             Models.Repositories.ISignalsRepository sr = Models.Repositories.SignalsRepositoryFactory.Create();
             Models.Signal signal = sr.GetVersionOfSignalByDate(SignalID, StartDate);
-
             List<Approach> speedApproaches = signal.GetApproachesForSignalThatSupportMetric(10);
-
-            //If there are phases in the database add the charts
             if (speedApproaches.Count > 0)
             {
                 foreach (Approach approach in speedApproaches)
                 {
                     List<Models.Detector> speedDets = approach.GetDetectorsForMetricType(10);
-
                     foreach (Models.Detector det in speedDets)
                     {
-                        //Display the PDC chart
                         Chart chart = GetNewSpeedChart(det);
-
                         AddSpeedDataToChart(chart, det, StartDate, EndDate, SelectedBinSize);
-
                         string chartName = CreateFileName();
-
-                        //Save an image of the chart
                         chart.ImageLocation = MetricFileLocation + chartName;
                         chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
-
                         ReturnList.Add(MetricWebPath + chartName);
                     }
                 }

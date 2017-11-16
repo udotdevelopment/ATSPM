@@ -68,7 +68,8 @@ namespace MOE.Common.Business.Preempt
                     chartArea.AxisX.LabelStyle.Format = "HH:mm";
                 }
             }
-
+            chartArea.AxisX.Minimum = Options.StartDate.ToOADate();
+            chartArea.AxisX.Maximum = Options.EndDate.ToOADate();
 
             chart.ChartAreas.Add(chartArea);
 
@@ -95,13 +96,6 @@ namespace MOE.Common.Business.Preempt
 
             chart.Series.Add(posts);
             chart.Series.Add(PreemptSeries);
-
-            //Add points at the start and and of the x axis to ensure
-            //the graph covers the entire period selected by the user
-            //whether there is data or not
-            chart.Series["Posts"].Points.AddXY(Options.StartDate, 0);
-            chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
-
             AddDataToChart(chart, Options.StartDate, Options.EndDate, DTTB, Options.SignalID);
             List<Plan> plans = PlanFactory.GetBasicPlans(Options.StartDate, Options.EndDate, Options.SignalID);
             SetSimplePlanStrips(plans, chart, Options.StartDate, DTTB);

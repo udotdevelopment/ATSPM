@@ -30,31 +30,31 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
 
             List<string> returnList = new List<string>();
-            List<MOE.Common.Business.ControllerEventLogs> tables = new List<MOE.Common.Business.ControllerEventLogs>();
-            List<MOE.Common.Business.ControllerEventLogs> preTestTables = new List<MOE.Common.Business.ControllerEventLogs>();
-            MOE.Common.Business.ControllerEventLogs eventsTable = new MOE.Common.Business.ControllerEventLogs();
+            List<ControllerEventLogs> tables = new List<ControllerEventLogs>();
+            List<ControllerEventLogs> preTestTables = new List<ControllerEventLogs>();
+            ControllerEventLogs eventsTable = new ControllerEventLogs();
             eventsTable.FillforPreempt(SignalID, StartDate, EndDate);
 
-                MOE.Common.Business.ControllerEventLogs t1 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t2 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t3 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t4 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t5 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t6 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t7 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t8 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t9 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t10 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t11 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t12 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t13 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t14 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t15 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t16 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t17 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t18 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t19 = new MOE.Common.Business.ControllerEventLogs();
-                MOE.Common.Business.ControllerEventLogs t20 = new MOE.Common.Business.ControllerEventLogs();
+                ControllerEventLogs t1 = new ControllerEventLogs();
+                ControllerEventLogs t2 = new ControllerEventLogs();
+                ControllerEventLogs t3 = new ControllerEventLogs();
+                ControllerEventLogs t4 = new ControllerEventLogs();
+                ControllerEventLogs t5 = new ControllerEventLogs();
+                ControllerEventLogs t6 = new ControllerEventLogs();
+                ControllerEventLogs t7 = new ControllerEventLogs();
+                ControllerEventLogs t8 = new ControllerEventLogs();
+                ControllerEventLogs t9 = new ControllerEventLogs();
+                ControllerEventLogs t10 = new ControllerEventLogs();
+                ControllerEventLogs t11 = new ControllerEventLogs();
+                ControllerEventLogs t12 = new ControllerEventLogs();
+                ControllerEventLogs t13 = new ControllerEventLogs();
+                ControllerEventLogs t14 = new ControllerEventLogs();
+                ControllerEventLogs t15 = new ControllerEventLogs();
+                ControllerEventLogs t16 = new ControllerEventLogs();
+                ControllerEventLogs t17 = new ControllerEventLogs();
+                ControllerEventLogs t18 = new ControllerEventLogs();
+                ControllerEventLogs t19 = new ControllerEventLogs();
+                ControllerEventLogs t20 = new ControllerEventLogs();
 
 
                 preTestTables.Add(t1);
@@ -80,7 +80,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
 
 
-                foreach (MOE.Common.Models.Controller_Event_Log row in eventsTable.Events)
+                foreach (Controller_Event_Log row in eventsTable.Events)
                 {
                     switch (row.EventParam)
                     {
@@ -149,20 +149,18 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     }
                 }
 
-                foreach (MOE.Common.Business.ControllerEventLogs t in preTestTables)
+                foreach (ControllerEventLogs t in preTestTables)
                 {
                     TestForValidRecords(t, tables);
                 }
                 
-                foreach (MOE.Common.Business.ControllerEventLogs t in tables)
+                foreach (ControllerEventLogs t in tables)
                 {
                     t.Add105Events(SignalID, StartDate, EndDate);
-                    
-                    MOE.Common.Business.Preempt.PreemptDetailChart detailchart = 
-                        new MOE.Common.Business.Preempt.PreemptDetailChart(this, t);
-                    Chart chart = detailchart.chart;
+                    Preempt.PreemptDetailChart detailchart = new Preempt.PreemptDetailChart(this, t);
+                    Chart chart = detailchart.Chart;
                     string chartName = CreateFileName();
-                    chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
+                    chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
                     returnList.Add(MetricWebPath + chartName);
                 }
                 return returnList;
@@ -180,7 +178,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                                r.EventCode == 107
                                select r;
 
-                if(hasStart.Count() > 0 )
+                if(hasStart.Any() )
                 {
                     AddToTables = true;
                 }

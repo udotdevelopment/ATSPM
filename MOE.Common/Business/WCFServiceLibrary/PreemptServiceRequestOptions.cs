@@ -17,9 +17,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [DataContract]
     public class PreemptServiceRequestOptions: MetricOptions
     {
-        public PreemptServiceRequestOptions(string signalID, DateTime startDate, DateTime endDate)
+        public PreemptServiceRequestOptions(string signalId, DateTime startDate, DateTime endDate)
         {
-            SignalID = signalID;
+            SignalID = signalId;
             StartDate = startDate;
             EndDate = endDate;
 
@@ -28,26 +28,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             base.CreateMetric();
             List<string> returnList = new List<string>();
-
-            MOE.Common.Business.ControllerEventLogs eventsTable = new MOE.Common.Business.ControllerEventLogs();
-
+            ControllerEventLogs eventsTable = new ControllerEventLogs();
             eventsTable.FillforPreempt(SignalID, StartDate, EndDate);
-
-            string location = GetSignalLocation();
-
-            MOE.Common.Business.Preempt.PreemptRequestChart prChart = 
-                new MOE.Common.Business.Preempt.PreemptRequestChart(this, eventsTable);
-                Chart chart = prChart.chart;
-                string chartName = CreateFileName();
-
-
-                //Save an image of the chart
-                chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
-
-                returnList.Add(MetricWebPath + chartName);
-
-                return returnList;
-            
+            Preempt.PreemptRequestChart prChart = new Preempt.PreemptRequestChart(this, eventsTable);
+            Chart chart = prChart.Chart;
+            string chartName = CreateFileName();
+            chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
+            returnList.Add(MetricWebPath + chartName);
+            return returnList;
         }
     }
 }

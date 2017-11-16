@@ -9,48 +9,28 @@ namespace MOE.Common.Business
 {
     public class SignalPhaseCollection
     {
-        
-
-        List<SignalPhase> signalPhaseList = new List<SignalPhase>();
-        public List<SignalPhase> SignalPhaseList
-        {
-            get { return signalPhaseList; }
-        }
+        public List<SignalPhase> SignalPhaseList { get; } = new List<SignalPhase>();
 
         public SignalPhaseCollection(DateTime startDate, DateTime endDate, string signalID,
-            bool showVolume, int binSize, int metricTypeID)
+            bool showVolume, int binSize, int metricTypeId)
         {
-            MOE.Common.Models.Repositories.ISignalsRepository repository =
-                MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            Models.Repositories.ISignalsRepository repository = Models.Repositories.SignalsRepositoryFactory.Create();
             var signal = repository.GetVersionOfSignalByDate(signalID, startDate);
-     
-            List<Models.Approach> approaches = signal.GetApproachesForSignalThatSupportMetric(metricTypeID);
+            List<Models.Approach> approaches = signal.GetApproachesForSignalThatSupportMetric(metricTypeId);
             if (signal.Approaches != null && approaches.Count > 0)
             {
                 Parallel.ForEach(approaches, approach =>
                 //foreach (Models.Approach approach in approaches)
                 {
-                    String direction = approach.DirectionType.Description;
-                    bool isOverlap = approach.IsProtectedPhaseOverlap;
-                    int phaseNumber = approach.ProtectedPhaseNumber;
-                    //double offset = approach.GetOffset();
-
-                    //Get the phase
-                    MOE.Common.Business.SignalPhase signalPhase = new MOE.Common.Business.SignalPhase(
-                        startDate, endDate, approach, showVolume, binSize, metricTypeID, false);
-
-                    //try not to add the same direction twice
-                    var ExsitingPhases = from MOE.Common.Business.SignalPhase phase in this.SignalPhaseList
-                                         where phase.Approach.DirectionType.Description == signalPhase.Approach.DirectionType.Description
-                                         select phase;
-
-                    if (ExsitingPhases.Count() < 1)
+                    SignalPhase protectedSignalPhase = new SignalPhase(startDate, endDate, approach, showVolume, binSize, metricTypeId, false);
+                    SignalPhaseList.Add(protectedSignalPhase);
+                    if (approach.PermissivePhaseNumber.HasValue)
                     {
-                        this.SignalPhaseList.Add(signalPhase);
+                        SignalPhase permissiveSignalPhase = new SignalPhase(startDate, endDate, approach, showVolume, binSize, metricTypeId, true);
+                        SignalPhaseList.Add(permissiveSignalPhase);
                     }
-
                 });
-                this.signalPhaseList = signalPhaseList.OrderBy(s => s.Approach.ProtectedPhaseNumber).ToList();
+                SignalPhaseList = SignalPhaseList.OrderBy(s => s.Approach.ProtectedPhaseNumber).ToList();
             }
         }
 
