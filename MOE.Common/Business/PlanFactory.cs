@@ -57,10 +57,18 @@ namespace MOE.Common.Business
                 firstPlanEvent = new Controller_Event_Log { Timestamp = startDate };
                 planEvents.Add(firstPlanEvent);
             }
-            var tempPlanEvents = celRepository.GetSignalEventsByEventCode(signalId, startDate, endDate, 131);
-            if (tempPlanEvents != null)
+            List< Controller_Event_Log>tempPlanEvents = celRepository.GetSignalEventsByEventCode(signalId, startDate, endDate, 131).OrderBy((e => e.Timestamp)).ToList();
+
+            for (int x = 1; x < tempPlanEvents.Count(); x++)
             {
-                planEvents.AddRange(tempPlanEvents.OrderBy(e => e.Timestamp).Distinct());
+                if (tempPlanEvents[x].EventParam == tempPlanEvents[x - 1].EventParam)
+                {
+                    
+                }
+                else
+                {
+                    planEvents.Add(tempPlanEvents[x]);
+                }
             }
 
             return planEvents;
