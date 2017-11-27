@@ -344,6 +344,7 @@
     <Content Include="Scripts\RouteEdit.js" />
     <Content Include="Scripts\RouteMap.js" />
     <Content Include="Scripts\SignalDetail.js" />
+    <Content Include="Scripts\TestJavaScript.js" />
     <Content Include="Scripts\User.js" />
     <Content Include="Scripts\SignalEdit.js" />
     <Content Include="Scripts\SignalsSearch.js" />

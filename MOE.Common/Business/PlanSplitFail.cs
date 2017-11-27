@@ -8,13 +8,18 @@ namespace MOE.Common.Business
 {
     public class PlanSplitFail:Plan
     {
-        public int TotalCycles { get;  }
-        public int FailsInPlan { get; set; }
+        public double TotalCycles { get; private set; } = 0;
+        public double FailsInPlan { get; private set; } = 0;
+        public double PercentFails { get; private set; } = 0;
         public PlanSplitFail(DateTime start, DateTime end, int planNumber, List<CycleSplitFail> cycles) : base(start, end, planNumber)
         {
             var cyclesForPlan = cycles.Where(c => c.StartTime >= start && c.StartTime < end).ToList();
-            TotalCycles = cyclesForPlan.Count;
-            FailsInPlan = cyclesForPlan.Sum(c => c.FailsInCycle);
+            if (cyclesForPlan.Count > 0)
+            {
+                TotalCycles = cyclesForPlan.Count;
+                FailsInPlan = cyclesForPlan.Count(c => c.IsSplitFail);
+                PercentFails = (FailsInPlan / TotalCycles)*100;
+            }
         }
     }
 }

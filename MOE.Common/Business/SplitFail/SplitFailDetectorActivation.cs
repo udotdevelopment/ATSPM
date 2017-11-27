@@ -9,11 +9,9 @@ namespace MOE.Common.Business.SplitFail
     public class SplitFailDetectorActivation
 
     {
-        public enum StatusType { Valid, NotValid };
-
         public DateTime DetectorOn{get;set;}
-
         public DateTime DetectorOff{get;set;}
+        public bool ReviewedForOverlap { get; set; } = false;
         
         public double Duration
         {

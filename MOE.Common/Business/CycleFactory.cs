@@ -10,8 +10,13 @@ namespace MOE.Common.Business
 {
     public static class CycleFactory
     {
-        public static List<RedToRedCycle> GetRedToRedCycles(Models.Approach approach, DateTime startTime, DateTime endTime, bool getPermissivePhase, List<Controller_Event_Log> cycleEvents, List<Controller_Event_Log> detectorEvents)
-        { 
+        public static List<RedToRedCycle> GetRedToRedCycles(Models.Approach approach, DateTime startTime, DateTime endTime, bool getPermissivePhase, List<Controller_Event_Log> detectorEvents)
+        {
+            var cycleEvents = GetCycleEvents(getPermissivePhase, startTime, endTime, approach);
+            if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) != RedToRedCycle.EventType.ChangeToRed)
+            {
+                GetEventsToCompleteCycle(getPermissivePhase, startTime, endTime, approach, cycleEvents);
+            }
             List<RedToRedCycle> cycles = new List<RedToRedCycle>();
             for (int i = 0; i < cycleEvents.Count; i++)
             {
@@ -126,8 +131,22 @@ namespace MOE.Common.Business
             return cycleEvents;
         }
 
+        private static void GetEventsToCompleteCycle(bool getPermissivePhase, DateTime startDate, DateTime endDate, Models.Approach approach, List<Controller_Event_Log> cycleEvents)
+        {
+            var celRepository = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            if (getPermissivePhase)
+            {
+                cycleEvents.AddRange(celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
+                    endDate, new List<int>() { 1, 8, 10 }, approach.PermissivePhaseNumber.Value, 3));
+            }
+            else
+            {
+                var cycleEventNumbers = approach.IsProtectedPhaseOverlap ? new List<int> { 61, 63, 64 } : new List<int>() { 1, 8, 10 };
+                cycleEvents.AddRange(celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID, endDate, cycleEventNumbers, approach.ProtectedPhaseNumber, 3));
+            }
+        }
         public static List<CycleSplitFail> GetSplitFailCycles(SplitFailOptions options, Models.Approach approach, 
-            bool getPermissivePhase, List<SplitFailDetectorActivation> detectorActivations)
+            bool getPermissivePhase)
         {
             var cycleEvents = GetCycleEvents(getPermissivePhase, options.StartDate, options.EndDate, approach);
             var terminationEvents = GetTerminationEvents(getPermissivePhase, options.StartDate, options.EndDate, approach);
@@ -135,13 +154,13 @@ namespace MOE.Common.Business
             for (int i = 0; i < cycleEvents.Count; i++)
             {
                 if (i < cycleEvents.Count - 3
-                    && GetEventType(cycleEvents[i].EventCode) == RedToRedCycle.EventType.ChangeToRed
-                    && GetEventType(cycleEvents[i + 1].EventCode) == RedToRedCycle.EventType.ChangeToGreen
-                    && GetEventType(cycleEvents[i + 2].EventCode) == RedToRedCycle.EventType.ChangeToYellow
-                    && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToRed)
+                    && GetEventType(cycleEvents[i].EventCode) == RedToRedCycle.EventType.ChangeToGreen
+                    && GetEventType(cycleEvents[i + 1].EventCode) == RedToRedCycle.EventType.ChangeToYellow
+                    && GetEventType(cycleEvents[i + 2].EventCode) == RedToRedCycle.EventType.ChangeToRed
+                    && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToGreen)
                 {
                     var termEvent = GetTerminationEventBetweenStartAndEnd(cycleEvents[i].Timestamp, cycleEvents[i + 3].Timestamp, terminationEvents);
-                    cycles.Add(new CycleSplitFail(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp, cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp, termEvent, detectorActivations ));
+                    cycles.Add(new CycleSplitFail(cycleEvents[i].Timestamp, cycleEvents[i + 2].Timestamp, cycleEvents[i + 1].Timestamp, cycleEvents[i + 3].Timestamp, termEvent, options.FirstSecondsOfRed));
                     i = i + 3;
                 }
             }

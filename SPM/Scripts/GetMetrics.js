@@ -185,6 +185,7 @@ function GetSplitFailMetric(metricTypeID) {
     GetMetric(urlpathSplitFail, tosend);
 }
 
+
 function GetSplitMonitorMetric(metricTypeID) {
     var tosend = GetCommonValues();
     tosend.MetricTypeID = metricTypeID;
@@ -198,7 +199,10 @@ function GetSplitMonitorMetric(metricTypeID) {
     GetMetric(urlpathSplitMonitor, tosend);
 }
 
-$('#CreateMetric').click(function () {
+$('#CreateMetric').click(function() { CreateMetric(); });
+
+function CreateMetric() {
+    var defer = $.Deferred();
     var form = $("#MainForm")[0];
     $.validator.unobtrusive.parse(form);
     if ($(form).valid()) {
@@ -237,10 +241,12 @@ $('#CreateMetric').click(function () {
             GetYellowAndRedMetric(11);
         }
         else if (selectedMetricID == 12) {
-            GetSplitFailMetric(12); 
+            GetSplitFailMetric(12);
         }
     }
-});
+    defer.resolve();
+    return defer.promise();
+}
 
 
 

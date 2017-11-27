@@ -110,7 +110,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             Models.Repositories.ISignalsRepository signalRepository =
                 Models.Repositories.SignalsRepositoryFactory.Create();
-
             return signalRepository.GetSignalLocation(SignalID);
         }
 
@@ -136,21 +135,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
                                   EndDate.ToString("dd") +
                                   EndDate.ToString("HH") +
                                   EndDate.ToString("mm-");
-
-
-
-
                 Random r = new Random();
                 fileName += r.Next().ToString();
                 fileName += ".jpg";
-
-
-
-
             try
             {
-
-
                 if (DriveAvailable())
                 {
                     return fileName;
@@ -162,11 +151,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 throw new Exception("Path not found");
                 
             }
-
-
-        
-            
-            
         }
 
         public bool DriveAvailable()
@@ -177,20 +161,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 return true;
             }
-
-           
-
-                Directory.CreateDirectory(MetricFileLocation);
+            Directory.CreateDirectory(MetricFileLocation);
             di.Refresh();
             if (di.Exists)
-                {
-                    return true;
-                }
-   
-                    return false;
-                
-            
-           
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

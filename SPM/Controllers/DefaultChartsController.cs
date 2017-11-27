@@ -32,7 +32,7 @@ namespace SPM.Controllers
             }
         }
 
-        public ActionResult SignalSearch(MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel ssvm)
+        public ActionResult SignalSearch(SignalSearchViewModel ssvm)
         {
             return PartialView("SignalSearch", ssvm);
         }
@@ -57,16 +57,15 @@ namespace SPM.Controllers
 
         public ActionResult FillSignals(int? page, int? filterType, string filterCriteria)
         {
-            MOE.Common.Models.ViewModel.Chart.FillSignalsViewModel fsv;
+            FillSignalsViewModel fsv;
             if (page == null)
             {
-                fsv = new MOE.Common.Models.ViewModel.Chart.FillSignalsViewModel();
+                fsv = new FillSignalsViewModel();
             }
             else
             {
-                fsv = new MOE.Common.Models.ViewModel.Chart.FillSignalsViewModel(page??1, filterType, filterCriteria);
+                fsv = new FillSignalsViewModel(page??1, filterType, filterCriteria);
             }
-            
             return PartialView("FillSignals", fsv);
         }
 
@@ -82,7 +81,7 @@ namespace SPM.Controllers
         //    return PartialView("MetricsList", dcv);
         //}
 
-        public ActionResult GetMetricProperties(MOE.Common.Business.WCFServiceLibrary.MetricOptions options)
+        public ActionResult GetMetricProperties(MetricOptions options)
         {
             return PartialView("MetricProperties", options);
         }
@@ -97,71 +96,71 @@ namespace SPM.Controllers
             switch (id)
             {
                 case 1:
-                    MOE.Common.Business.WCFServiceLibrary.PhaseTerminationOptions phaseTerminationOptions =
-                        new MOE.Common.Business.WCFServiceLibrary.PhaseTerminationOptions();
+                    PhaseTerminationOptions phaseTerminationOptions =
+                        new PhaseTerminationOptions();
                     phaseTerminationOptions.SetDefaults();
                     return PartialView("PhaseTerminationOptions", phaseTerminationOptions);
 
                 case 2:
-                    MOE.Common.Business.WCFServiceLibrary.SplitMonitorOptions SplitMonitorOptions =
-                        new MOE.Common.Business.WCFServiceLibrary.SplitMonitorOptions();
+                    SplitMonitorOptions SplitMonitorOptions =
+                        new SplitMonitorOptions();
                     return PartialView("SplitMonitorOptions", SplitMonitorOptions);
                 
                 case 3:
-                    MOE.Common.Business.WCFServiceLibrary.PedDelayOptions pedDelayOptions =
-                        new MOE.Common.Business.WCFServiceLibrary.PedDelayOptions();
+                    PedDelayOptions pedDelayOptions =
+                        new PedDelayOptions();
                     pedDelayOptions.SetDefaults();
                     return PartialView("PedDelayOptions", pedDelayOptions);
 
                 case 5:
-                    MOE.Common.Business.WCFServiceLibrary.TMCOptions tMCOptions =
-                        new MOE.Common.Business.WCFServiceLibrary.TMCOptions();
+                    TMCOptions tMCOptions =
+                        new TMCOptions();
                     tMCOptions.SetDefaults();
                     return PartialView("TMCOptions", tMCOptions);
 
                 case 4:
-                    MOE.Common.Business.WCFServiceLibrary.MetricOptions preemptOptions =
-                        new MOE.Common.Business.WCFServiceLibrary.MetricOptions();
+                    MetricOptions preemptOptions =
+                        new MetricOptions();
                     preemptOptions.YAxisMax = 3;
                     preemptOptions.Y2AxisMax = 10;
                     return PartialView("PreemptOptions", preemptOptions);
                 case 6:
-                    MOE.Common.Business.WCFServiceLibrary.PCDOptions pcdOptions =
-                        new MOE.Common.Business.WCFServiceLibrary.PCDOptions();
+                    PCDOptions pcdOptions =
+                        new PCDOptions();
                     return PartialView("PCDOptions", pcdOptions);
 
                 case 7:
-                    MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions approachVolumeOptions =
-                        new MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions();
+                    ApproachVolumeOptions approachVolumeOptions =
+                        new ApproachVolumeOptions();
                     return PartialView("ApproachVolumeOptions", approachVolumeOptions);
 
                 case 8:
-                    MOE.Common.Business.WCFServiceLibrary.ApproachDelayOptions approachDelayOptions =
-                        new MOE.Common.Business.WCFServiceLibrary.ApproachDelayOptions();
+                    ApproachDelayOptions approachDelayOptions =
+                        new ApproachDelayOptions();
                     approachDelayOptions.SetDefaults();
                     return PartialView("ApproachDelayOptions", approachDelayOptions);
 
                 case 9:
-                    MOE.Common.Business.WCFServiceLibrary.AoROptions aoROptions =
-                        new MOE.Common.Business.WCFServiceLibrary.AoROptions();
+                    AoROptions aoROptions =
+                        new AoROptions();
                     aoROptions.SetDefaults();
                     return PartialView("AoROptions", aoROptions);
 
                 case 10:
-                    MOE.Common.Business.WCFServiceLibrary.ApproachSpeedOptions approachSpeedOptions =
-                        new MOE.Common.Business.WCFServiceLibrary.ApproachSpeedOptions();
+                    ApproachSpeedOptions approachSpeedOptions =
+                        new ApproachSpeedOptions();
                     approachSpeedOptions.SetDefaults();
                     return PartialView("ApproachSpeedOptions", approachSpeedOptions);
 
                 case 11:
-                    MOE.Common.Business.WCFServiceLibrary.YellowAndRedOptions yellowAndRedOptions =
-                        new MOE.Common.Business.WCFServiceLibrary.YellowAndRedOptions();
+                    YellowAndRedOptions yellowAndRedOptions =
+                        new YellowAndRedOptions();
                     yellowAndRedOptions.SetDefaults();
                     return PartialView("YellowAndRedOptions", yellowAndRedOptions);
 
                 case 12: default:
-                    MOE.Common.Business.WCFServiceLibrary.SplitFailOptions splitFailOptions =
-                        new MOE.Common.Business.WCFServiceLibrary.SplitFailOptions();
+                    SplitFailOptions splitFailOptions =
+                        new SplitFailOptions();
                     splitFailOptions.SetDefaults();
                     return PartialView("SplitFailOptions", splitFailOptions);
 
@@ -171,13 +170,13 @@ namespace SPM.Controllers
 
         public ActionResult SplitFailOptions(int id)
         {
-            MOE.Common.Business.WCFServiceLibrary.SplitFailOptions splitFailOptions =
-                new MOE.Common.Business.WCFServiceLibrary.SplitFailOptions();
+            SplitFailOptions splitFailOptions =
+                new SplitFailOptions();
             splitFailOptions.SetDefaults();
             return PartialView("SplitFailOptions", splitFailOptions);
         }
 
-        public ActionResult GetSplitFailMetric(MOE.Common.Business.WCFServiceLibrary.SplitFailOptions metricOptions)
+        public ActionResult GetSplitFailMetric(SplitFailOptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
             string[] result = new string[1] { "" };
@@ -200,15 +199,35 @@ namespace SPM.Controllers
             return PartialView("MetricResult", result);
         }
 
+        public ActionResult GetSplitFailMetricByUrl(SplitFailOptions metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 12); " +
+            "SetSplitFailMetric(" + metricOptions.FirstSecondsOfRed.ToString() +"," + metricOptions.ShowFailLines.ToString().ToLower() +
+            "," + metricOptions.ShowAvgLines.ToString().ToLower() + "," + metricOptions.ShowPercentFailLines.ToString().ToLower() + "); CreateMetric();";
+            return View("Index", defaultChartsViewModel);
+        }
+
+        private string GetCommonJavascriptProperties(MetricOptions metricOptions)
+        {
+            return @"SetCommonValues('" + metricOptions.SignalID + @"','" + metricOptions.StartDate.ToShortDateString() +
+                   "','" + metricOptions.StartDate.ToString("hh") + ":" + metricOptions.StartDate.ToString("mm") + "','" +
+                   metricOptions.StartDate.ToString("tt") + "','" + metricOptions.EndDate.ToShortDateString() +
+                   "','" + metricOptions.EndDate.ToString("hh") + ":" + metricOptions.EndDate.ToString("mm") + "','" +
+                   metricOptions.StartDate.ToString("tt") + "'," + "null, null); ";
+            //endDateDay, endTime, endAmPmDdl, yAxisMax, y2AxisMax);
+        }
+
         public ActionResult YellowAndRedOptions(int id)
         {
-            MOE.Common.Business.WCFServiceLibrary.YellowAndRedOptions yellowAndRedOptions =
-                new MOE.Common.Business.WCFServiceLibrary.YellowAndRedOptions();
+            YellowAndRedOptions yellowAndRedOptions =
+                new YellowAndRedOptions();
             yellowAndRedOptions.SetDefaults();
             return PartialView("YellowAndRedOptions", yellowAndRedOptions);
         }
 
-        public ActionResult GetYellowAndRedMetric(MOE.Common.Business.WCFServiceLibrary.YellowAndRedOptions metricOptions)
+        public ActionResult GetYellowAndRedMetric(YellowAndRedOptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
             string[] result = new string[1] { "" };
@@ -234,13 +253,13 @@ namespace SPM.Controllers
 
         public ActionResult ApproachSpeedOptions(int id)
         {
-            MOE.Common.Business.WCFServiceLibrary.ApproachSpeedOptions approachSpeedOptions =
-                new MOE.Common.Business.WCFServiceLibrary.ApproachSpeedOptions();
+            ApproachSpeedOptions approachSpeedOptions =
+                new ApproachSpeedOptions();
             approachSpeedOptions.SetDefaults();
             return PartialView("ApproachSpeedOptions", approachSpeedOptions);
         }
 
-        public ActionResult GetApproachSpeedMetric(MOE.Common.Business.WCFServiceLibrary.ApproachSpeedOptions metricOptions)
+        public ActionResult GetApproachSpeedMetric(ApproachSpeedOptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
             string[] result = new string[1] { "" };
@@ -266,13 +285,13 @@ namespace SPM.Controllers
 
         public ActionResult AoROptions(int id)
         {
-            MOE.Common.Business.WCFServiceLibrary.AoROptions aoROptions =
-                new MOE.Common.Business.WCFServiceLibrary.AoROptions();
+            AoROptions aoROptions =
+                new AoROptions();
             aoROptions.SetDefaults();
             return PartialView("AoROptions", aoROptions);
         }
 
-        public ActionResult GetAoRMetric(MOE.Common.Business.WCFServiceLibrary.AoROptions metricOptions)
+        public ActionResult GetAoRMetric(AoROptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
             string[] result = new string[1] { "" };
@@ -298,13 +317,13 @@ namespace SPM.Controllers
 
         public ActionResult ApproachDelayOptions(int id)
         {
-            MOE.Common.Business.WCFServiceLibrary.ApproachDelayOptions approachDelayOptions =
-                new MOE.Common.Business.WCFServiceLibrary.ApproachDelayOptions();
+            ApproachDelayOptions approachDelayOptions =
+                new ApproachDelayOptions();
             approachDelayOptions.SetDefaults();
             return PartialView("ApproachDelayOptions", approachDelayOptions);
         }
 
-        public ActionResult GetApproachDelayMetric(MOE.Common.Business.WCFServiceLibrary.ApproachDelayOptions metricOptions)
+        public ActionResult GetApproachDelayMetric(ApproachDelayOptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
             string[] result = new string[1] { "" };
@@ -330,13 +349,13 @@ namespace SPM.Controllers
 
         public ActionResult PhaseTerminationOptions(int id)
         {
-            MOE.Common.Business.WCFServiceLibrary.PhaseTerminationOptions phaseTerminationOptions =
-                new MOE.Common.Business.WCFServiceLibrary.PhaseTerminationOptions(); 
+            PhaseTerminationOptions phaseTerminationOptions =
+                new PhaseTerminationOptions(); 
             phaseTerminationOptions.SetDefaults();
             return PartialView("PhaseTerminationOptions", phaseTerminationOptions);
         }
 
-        public ActionResult GetPhaseTerminationMetric(MOE.Common.Business.WCFServiceLibrary.PhaseTerminationOptions metricOptions)
+        public ActionResult GetPhaseTerminationMetric(PhaseTerminationOptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
             string[] result = new string[1] { "" };
@@ -362,13 +381,13 @@ namespace SPM.Controllers
         }
         public ActionResult TMCOptions(int id)
         {
-            MOE.Common.Business.WCFServiceLibrary.TMCOptions tMCOptions =
-                new MOE.Common.Business.WCFServiceLibrary.TMCOptions();
+            TMCOptions tMCOptions =
+                new TMCOptions();
             tMCOptions.SetDefaults();
             return PartialView("TMCOptions", tMCOptions);
         }
 
-        public ActionResult GetPreemptMetric(MOE.Common.Business.WCFServiceLibrary.MetricOptions metricOptions)
+        public ActionResult GetPreemptMetric(MetricOptions metricOptions)
         {
             
             string[] result = new string[1] { "" };
@@ -377,16 +396,16 @@ namespace SPM.Controllers
                 string[] tempResult1;
                 string[] tempResult2;
                 string[] tempResult3;
-                MOE.Common.Business.WCFServiceLibrary.PreemptServiceRequestOptions requestOptions =
-                    new MOE.Common.Business.WCFServiceLibrary.PreemptServiceRequestOptions(metricOptions.SignalID,
+                PreemptServiceRequestOptions requestOptions =
+                    new PreemptServiceRequestOptions(metricOptions.SignalID,
                         metricOptions.StartDate, metricOptions.EndDate);
                 requestOptions.MetricTypeID = 14; 
-                MOE.Common.Business.WCFServiceLibrary.PreemptServiceMetricOptions serviceOptions =
-                    new MOE.Common.Business.WCFServiceLibrary.PreemptServiceMetricOptions(metricOptions.SignalID,
+                PreemptServiceMetricOptions serviceOptions =
+                    new PreemptServiceMetricOptions(metricOptions.SignalID,
                         metricOptions.StartDate, metricOptions.EndDate, metricOptions.YAxisMax??0);
                 serviceOptions.MetricTypeID = 15; 
-                MOE.Common.Business.WCFServiceLibrary.PreemptDetailOptions detailOptions =
-                    new MOE.Common.Business.WCFServiceLibrary.PreemptDetailOptions(metricOptions.SignalID,
+                PreemptDetailOptions detailOptions =
+                    new PreemptDetailOptions(metricOptions.SignalID,
                         metricOptions.StartDate, metricOptions.EndDate);
                 detailOptions.MetricTypeID = metricOptions.MetricTypeID; 
 
@@ -406,7 +425,7 @@ namespace SPM.Controllers
             return PartialView("MetricResult", result);
         }
 
-        public ActionResult GetTMCMetric(MOE.Common.Business.WCFServiceLibrary.TMCOptions metricOptions)
+        public ActionResult GetTMCMetric(TMCOptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
             //string[] result = new string[1] { "" };
@@ -439,13 +458,13 @@ namespace SPM.Controllers
 
         public ActionResult ApproachVolumeOptions(int id)
         {
-            MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions approachVolumeOptions =
-                new MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions();
+            ApproachVolumeOptions approachVolumeOptions =
+                new ApproachVolumeOptions();
             approachVolumeOptions.SetDefaults();
             return PartialView("ApproachVolumeOptions", approachVolumeOptions);
         }
 
-        public ActionResult GetApproachVolumeMetric(MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions metricOptions)
+        public ActionResult GetApproachVolumeMetric(ApproachVolumeOptions metricOptions)
         {
             MOE.Common.Models.Repositories.IApplicationEventRepository logRepository =
                 MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
@@ -473,7 +492,7 @@ namespace SPM.Controllers
         }
 
 
-        public ActionResult GetSplitMonitorMetric(MOE.Common.Business.WCFServiceLibrary.SplitMonitorOptions metricOptions)
+        public ActionResult GetSplitMonitorMetric(SplitMonitorOptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
             string[] result = new string[1] { "" };
@@ -497,13 +516,13 @@ namespace SPM.Controllers
         }
         public ActionResult PedDelayOptions(int id)
         {
-            MOE.Common.Business.WCFServiceLibrary.PedDelayOptions pedDelayOptions =
-                new MOE.Common.Business.WCFServiceLibrary.PedDelayOptions();
+            PedDelayOptions pedDelayOptions =
+                new PedDelayOptions();
             pedDelayOptions.SetDefaults();
             return PartialView("PedDelayOptions", pedDelayOptions);
         }
 
-        public ActionResult GetPedDelayMetric(MOE.Common.Business.WCFServiceLibrary.PedDelayOptions metricOptions)
+        public ActionResult GetPedDelayMetric(PedDelayOptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
             string[] result = new string[1] { "" };
@@ -526,7 +545,7 @@ namespace SPM.Controllers
             return PartialView("MetricResult", result);
         }
 
-        public ActionResult GetPCDMetric(MOE.Common.Business.WCFServiceLibrary.PCDOptions metricOptions)
+        public ActionResult GetPCDMetric(PCDOptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
             string[] result = new string[1] { "" };

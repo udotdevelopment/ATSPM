@@ -1,15 +1,15 @@
 ﻿$(function (ready) {
-    $("#SignalHeader").click(function () {
+    $("#SignalHeader").click(function() {
         GetSignals();
-    })
+    });
     //$.validator.unobtrusive.parse($("#SignalSearchContainer"));
     $.validator.unobtrusive.parse($('form'));
 });
 function AddEventsForSignalSearch() {
-    $("#FilterButton").click(function () { GetSignals(1); })
-    $("#ClearFilterButton").click(function () {
+    $("#FilterButton").click(function() { GetSignals(1); });
+    $("#ClearFilterButton").click(function() {
         ClearSignalSearch();
-    })
+    });
 }
 
 

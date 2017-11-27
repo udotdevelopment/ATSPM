@@ -36,7 +36,7 @@ namespace MOE.Common.Models.Repositories
         public Signal GetVersionOfSignalByDate(string signalId, DateTime startDate)
         {
             List<Models.Signal> signals = _db.Signals
-                .Include(signal => signal.Approaches.Select(a => a.Detectors))
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.MovementType)))
                 .Include(signal => signal.Approaches.Select(a => a.DirectionType))
                     .Where(signal => signal.SignalID == signalId)
                     .Where(signal => signal.Start <= startDate)
@@ -203,10 +203,10 @@ namespace MOE.Common.Models.Repositories
             return signals;
         }
 
-        public string GetSignalLocation(string SignalID)
+        public string GetSignalLocation(string signalId)
         {
             Models.Signal signal = (from r in _db.Signals
-                where r.SignalID == SignalID
+                where r.SignalID == signalId
                 select r).FirstOrDefault();
             string location = string.Empty;
             if (signal != null)
@@ -218,10 +218,10 @@ namespace MOE.Common.Models.Repositories
         }
 
 
-        public bool CheckReportAvialabilityForSignal(string signalId, int metricTypeID)
+        public bool CheckReportAvialabilityForSignal(string signalId, int metricTypeId)
         {
             var signal = GetLatestVersionOfAllSignals().Find(s => s.SignalID == signalId);
-            return signal.CheckReportAvailabilityForSignal(metricTypeID);
+            return signal.CheckReportAvailabilityForSignal(metricTypeId);
         }
 
 
@@ -483,10 +483,10 @@ namespace MOE.Common.Models.Repositories
             return va;
         }
 
-        public List<Signal> GetAllVersionsOfSignalBySignalID(string signalID)
+        public List<Signal> GetAllVersionsOfSignalBySignalID(string signalId)
         {
             var signals = (from r in _db.Signals
-                    where r.SignalID == signalID &&
+                    where r.SignalID == signalId &&
                     r.VersionActionId != 3
                            select r)
                 .Include(r => r.Approaches.Select(a => a.Detectors))

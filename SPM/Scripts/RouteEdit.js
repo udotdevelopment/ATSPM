@@ -18,7 +18,7 @@ function GetConfigurationTable(routeID) {
             alert("Error");
         }
     });
-//}
+}
 
 function LoadRouteEdit()
 {

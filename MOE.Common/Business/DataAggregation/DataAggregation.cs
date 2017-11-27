@@ -451,17 +451,8 @@ namespace MOE.Common.Business.DataAggregation
                 options.SetDefaults();
                 options.StartDate = startTime;
                 options.EndDate = endTime;
-                RLMSignalPhase yellowRedAcuationsPhase = null;
-                if (isPermissivePhase)
-                {
-                    yellowRedAcuationsPhase = new RLMSignalPhase(startTime, endTime, 15, options.SevereLevelSeconds,
-                        approach, true);
-                }
-                else
-                {
-                    yellowRedAcuationsPhase = new RLMSignalPhase(startTime, endTime, 15, options.SevereLevelSeconds,
-                        approach, false);
-                }
+                RLMSignalPhase yellowRedAcuationsPhase = new RLMSignalPhase(startTime, endTime, 15, options.SevereLevelSeconds,
+                        approach, isPermissivePhase);
                 _approachYellowRedActivationAggregationConcurrentQueue.Enqueue(new ApproachYellowRedActivationAggregation
                 {
                     ApproachId = approach.ApproachID,
@@ -517,30 +508,17 @@ namespace MOE.Common.Business.DataAggregation
             _approachCycleAggregationConcurrentQueue.Enqueue(approachAggregation);
         }
         
-        private void SetSplitFailData(DateTime startTime, DateTime endTime, Approach signalApproach, bool getPermissivePhase)
+        private void SetSplitFailData(DateTime startTime, DateTime endTime, Models.Approach approach, bool getPermissivePhase)
         {
-            if (!signalApproach.GetDetectorsForMetricType(12).Any()) return;
-            CustomReport.Phase phase;
-            if (getPermissivePhase)
-            {
-                phase = new CustomReport.Phase(signalApproach, startTime, endTime, new List<int> {1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64}, 1,true);
-            }
-            else
-            {
-                phase = new CustomReport.Phase(signalApproach, startTime, endTime, new List<int> {1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64}, 1, false);
-            }
-            SplitFailOptions splitFailOptions = new SplitFailOptions();
-            splitFailOptions.SetDefaults();
-            splitFailOptions.StartDate = startTime;
-            splitFailOptions.EndDate = endTime;
-            SplitFailPhase splitFailPhase = new SplitFailPhase(signalApproach, splitFailOptions, getPermissivePhase);
-            _approachSplitFailAggregationConcurrentQueue.Enqueue(new ApproachSplitFailAggregation
-            {
-                ApproachId = signalApproach.ApproachID,
-                BinStartTime = startTime,
-                SplitFailures = splitFailPhase.TotalFails,
-                IsProtectedPhase = signalApproach.IsProtectedPhaseOverlap
-            });
+            if (!approach.GetDetectorsForMetricType(12).Any()) return;
+            SplitFailPhase splitFailPhase = new SplitFailPhase(approach, new SplitFailOptions{ FirstSecondsOfRed = 5, StartDate = startTime, EndDate = endTime, MetricTypeID = 12}, getPermissivePhase);
+                _approachSplitFailAggregationConcurrentQueue.Enqueue(new ApproachSplitFailAggregation
+                {
+                    ApproachId = approach.ApproachID,
+                    BinStartTime = startTime,
+                    SplitFailures = splitFailPhase.TotalFails,
+                    IsProtectedPhase = approach.IsProtectedPhaseOverlap
+                });
         }
         
         private void SetApproachSpeedAggregationData(DateTime startTime, DateTime endTime, Approach signalApproach)

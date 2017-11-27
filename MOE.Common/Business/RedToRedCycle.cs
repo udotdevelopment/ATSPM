@@ -45,6 +45,10 @@ namespace MOE.Common.Business
         public double TotalYellowTime => (EndTime - YellowEvent).TotalSeconds;
         public double TotalRedTime => (GreenEvent - StartTime).TotalSeconds;
         public double TotalTime => (EndTime - StartTime).TotalSeconds;
+        public double TotalGreenTimeMilliseconds => (YellowEvent - GreenEvent).TotalMilliseconds;
+        public double TotalYellowTimeMilliseconds => (EndTime - YellowEvent).TotalMilliseconds;
+        public double TotalRedTimeMilliseconds => (GreenEvent - StartTime).TotalMilliseconds;
+        public double TotalTimeMilliseconds => (EndTime - StartTime).TotalMilliseconds;
 
         public RedToRedCycle(DateTime firstRedEvent, DateTime greenEvent, DateTime yellowEvent, DateTime lastRedEvent)
         {

@@ -118,7 +118,7 @@ namespace MOE.Common.Business
             }
             else
             {
-                TotalVolume = controllerRepository.GetTMCVolume(startDate, endDate, Approach.SignalID, Approach.ProtectedPhaseNumber);
+                TotalVolume = controllerRepository.GetTmcVolume(startDate, endDate, Approach.SignalID, Approach.ProtectedPhaseNumber);
                 GetSignalOverlapData(startDate, endDate, _showVolume, binSize);
             }
 
@@ -141,7 +141,7 @@ namespace MOE.Common.Business
             {
                 PhaseNumber = Approach.PermissivePhaseNumber??0;
             }
-            TotalVolume = controllerRepository.GetTMCVolume(startDate, endDate, Approach.SignalID, PhaseNumber);
+            TotalVolume = controllerRepository.GetTmcVolume(startDate, endDate, Approach.SignalID, PhaseNumber);
             List<Models.Controller_Event_Log> cycleEvents = controllerRepository.GetEventsByEventCodesParam(Approach.SignalID,
                 startDate, endDate, new List<int>() { 1, 8, 9, 10, 11 }, PhaseNumber);
             Plans = new RLMPlanCollection(cycleEvents, startDate, endDate, this.SevereRedLightViolationSeconds, Approach);

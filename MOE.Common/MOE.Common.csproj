@@ -362,7 +362,9 @@
     <Compile Include="Business\PlanSplitMonitor.cs" />
     <Compile Include="Business\PlanSpeed.cs" />
     <Compile Include="Business\CyclePcd.cs" />
+    <Compile Include="Business\GreenToGreenCycle.cs" />
     <Compile Include="Business\Speed\DetectorSpeed.cs" />
+    <Compile Include="Business\SplitFail\SplitFailBin.cs" />
     <Compile Include="Business\SplitFail\SplitFailPhase.cs" />
     <Compile Include="Business\TMC\TMCData.cs" />
     <Compile Include="Business\TMC\TMCInfo.cs" />

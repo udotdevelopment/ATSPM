@@ -62,19 +62,20 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
+            StartDate = StartDate.AddSeconds(59);
             List<string> returnString = new List<string>();
             Models.Repositories.ISignalsRepository sr = Models.Repositories.SignalsRepositoryFactory.Create();
             Models.Signal signal = sr.GetVersionOfSignalByDate(SignalID, StartDate);
             List<Approach> metricApproaches = signal.GetApproachesForSignalThatSupportMetric(MetricTypeID);
             if (metricApproaches.Count > 0)
             {
+                //Parallel.ForEach(metricApproaches, approach =>
                 foreach (Approach approach in metricApproaches)
                 {
-                    SplitFailPhase splitFailPhase = new SplitFailPhase(approach, this, false);
-                    string location = GetSignalLocation();
-                    string chartName = CreateFileName();
                     if (approach.ProtectedPhaseNumber > 0)
                     {
+                        SplitFailPhase splitFailPhase = new SplitFailPhase(approach, this, false);
+                        string chartName = CreateFileName();
                         GetChart(splitFailPhase, chartName, returnString, false, approach);
                     }
                     if(approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
@@ -83,7 +84,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         SplitFailPhase splitFailPermissivePhase = new SplitFailPhase(approach, this, true);
                         GetChart(splitFailPermissivePhase, permChartName, returnString, true, approach);
                     }
-                }
+                }//);
             }
             return returnString;
         }
@@ -91,26 +92,31 @@ namespace MOE.Common.Business.WCFServiceLibrary
         private void GetChart(SplitFailPhase splitFailPhase, string chartName, List<string> returnString, bool getPermissivePhase, Approach approach)
         {
             SplitFailChart sfChart = new SplitFailChart(this, splitFailPhase, getPermissivePhase);
-            if (getPermissivePhase)
+            var detector = approach.GetDetectorsForMetricType(12).FirstOrDefault();
+            if (detector != null)
             {
-                sfChart.chart.BackColor = Color.LightGray;
-                sfChart.chart.Titles[2].Text = "Permissive " + sfChart.chart.Titles[2].Text + " " + approach.GetDetectorsForMetricType(12).FirstOrDefault().MovementType.Description;
-            }
-            else
-            {
-                sfChart.chart.Titles[2].Text = "Protected " + sfChart.chart.Titles[2].Text + " " + approach.GetDetectorsForMetricType(12).FirstOrDefault().MovementType.Description;
+                string direction = detector.MovementType.Description;
+                if (getPermissivePhase)
+                {
+                    sfChart.Chart.BackColor = Color.LightGray;
+                    sfChart.Chart.Titles[2].Text = "Permissive " + sfChart.Chart.Titles[2].Text + " " + direction;
+                }
+                else
+                {
+                    sfChart.Chart.Titles[2].Text = "Protected " + sfChart.Chart.Titles[2].Text + " " + direction;
+                }
             }
             System.Threading.Thread.Sleep(300);
             chartName = chartName.Replace(".", (approach.DirectionType.Description + "."));
             try
             {
-                sfChart.chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
+                sfChart.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
             }
-            catch
+            catch(Exception ex)
             {
                 try
                 {
-                    sfChart.chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
+                    sfChart.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
                 }
                 catch
                 {
@@ -118,7 +124,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     Models.Repositories.ApplicationEventRepositoryFactory.Create();
                     ApplicationEvent applicationEvent = new ApplicationEvent();
                     applicationEvent.ApplicationName = "SPM Website";
-                    applicationEvent.Description = MetricType.ChartName + " Failed While Saving File";
+                    applicationEvent.Description = MetricType.ChartName + ex.Message + " Failed While Saving File";
                     applicationEvent.SeverityLevel = ApplicationEvent.SeverityLevels.Medium;
                     applicationEvent.Timestamp = DateTime.Now;
                     appEventRepository.Add(applicationEvent);

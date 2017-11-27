@@ -9,8 +9,38 @@
         }
     });
     $(".datepicker").datepicker();
+    LoadFromUrl();
 });
 
+function SetCommonValues(signalId, startDateDay, startTime, startAmPmDdl, endDateDay, endTime, endAmPmDdl, yAxisMax, y2AxisMax) {
+    $("#SignalID").val(signalId);
+    $("#StartDateDay").val(startDateDay);
+    $("#StartTime").val(startTime);
+    $("#StartAMPMddl").val(startAmPmDdl);
+    $("#EndDateDay").val(endDateDay);
+    $("#EndTime").val(endTime);
+    $("#EndAMPMddl").val(endAmPmDdl);
+    if (yAxisMax != null) {
+        $("#YAxisMax").val(yAxisMax);
+    }
+    if (y2AxisMax != null) {
+        $("#Y2AxisMax").val(y2AxisMax);
+    }
+}
+
+function SetSplitFailMetric(firstSecondsOfRed, showFailLines, showAverageLines, showPercentLines) {
+    $("#FirstSecondsOfRed").val(firstSecondsOfRed);
+    $("#ShowFailLines").prop('checked', showFailLines);
+    $("#ShowAvgLines").prop('checked', showAverageLines);
+    $("#ShowPercentFailLines").prop('checked', showPercentLines);
+}
+
+
+function SetBaseOptions() {
+    $("#SignalID").val(7062);
+    $("#StartDateDay").val('10/17/2017');
+    $("#EndDateDay").val('10/17/2017');
+}
 
 function SetControlValues(signalID, selectedMetricID) {
     $("#SignalID").val(signalID);    
@@ -31,7 +61,7 @@ function GetMetricsList(signalID, selectedMetricID)
         url: urlpathGetMetricsList,
         type: "POST",
         cache: false,
-        async: true,
+        async: false,
         datatype: "json",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(tosend),
@@ -42,7 +72,6 @@ function GetMetricsList(signalID, selectedMetricID)
         },
         onerror: function () { alert("Error"); }
     });
-    
 }
 
 $("#ResetDate").click(function () { ResetDates(); });
@@ -103,9 +132,22 @@ function GetOptions() {
 
 function GetOptionsByID(selectedID) {
     
-    var metricPath = urlOptions + "/"+ selectedID;
-    $.get(metricPath, function (data) {
-    $('#Options').html(data);
-    $.validator.unobtrusive.parse($("#Options"));
+    var metricPath = urlOptions + "/" + selectedID;
+    $.ajax({
+        url: metricPath,
+        type: "POST",
+        cache: false,
+        async: false,
+        datatype: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            $('#Options').html(data);
+            $.validator.unobtrusive.parse($("#Options"));
+        },
+        onerror: function () { alert("Error"); }
     });
+    //$.get(metricPath, function (data) {
+    //$('#Options').html(data);
+    //$.validator.unobtrusive.parse($("#Options"));
+    //});
 }
