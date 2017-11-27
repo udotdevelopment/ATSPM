@@ -35,25 +35,25 @@ namespace MOE.Common.Business
 
         public void SetDetectorActivations(List<SplitFailDetectorActivation> detectorActivations)
         {
-            var redPeriodToAnalyze = StartTime.AddSeconds(_firstSecondsOfRed);
-            var activationsDuringRed = detectorActivations.Where(d => d.DetectorOff > StartTime && d.DetectorOn < redPeriodToAnalyze && d.DetectorOn < RedEvent).ToList();
-            if (activationsDuringRed.Count == 0)
-            {
-                RedOccupancyTime = CheckForDetectorActivationBiggerThanPeriod(StartTime, redPeriodToAnalyze, detectorActivations);
-            }
-            else
-            {
-                RedOccupancyTime = GetOccupancy(StartTime, redPeriodToAnalyze, activationsDuringRed);
-            }
-            var activationsDuringGreen = detectorActivations.Where(d => d.DetectorOff > redPeriodToAnalyze && d.DetectorOn < EndTime).ToList();
-            if (activationsDuringGreen.Count == 0)
-            {
-                GreenOccupancyTime = CheckForDetectorActivationBiggerThanPeriod(StartTime, YellowEvent, detectorActivations);
-            }
-            else
-            {
-                GreenOccupancyTime = GetOccupancy(StartTime, YellowEvent, activationsDuringGreen);
-            }
+            var redPeriodToAnalyze = RedEvent.AddSeconds(_firstSecondsOfRed);
+            var activationsDuringRed = detectorActivations.Where(d => (d.DetectorOn >= RedEvent && d.DetectorOn < redPeriodToAnalyze) || (d.DetectorOff >= RedEvent && d.DetectorOff < redPeriodToAnalyze) || (d.DetectorOn <= RedEvent && d.DetectorOff >= EndTime)).ToList();
+            //if (activationsDuringRed.Count == 0)
+            //{
+            //    RedOccupancyTime = CheckForDetectorActivationBiggerThanPeriod(RedEvent, redPeriodToAnalyze, detectorActivations);
+            //}
+            //else
+            //{
+               RedOccupancyTime = GetOccupancy(RedEvent, redPeriodToAnalyze, activationsDuringRed);
+            //}
+            var activationsDuringGreen = detectorActivations.Where(d => (d.DetectorOn >= StartTime && d.DetectorOn < YellowEvent) || (d.DetectorOff >= StartTime && d.DetectorOff < YellowEvent) || (d.DetectorOn <= StartTime && d.DetectorOff >= YellowEvent)).ToList();
+            //if (activationsDuringGreen.Count == 0)
+            //{
+            //    GreenOccupancyTime = CheckForDetectorActivationBiggerThanPeriod(StartTime, YellowEvent, detectorActivations);
+            //}
+            //else
+            //{
+               GreenOccupancyTime = GetOccupancy(StartTime, YellowEvent, activationsDuringGreen);
+            //}
             double millisecondsOfRedStart = _firstSecondsOfRed * 1000;
             RedOccupancyPercent = (RedOccupancyTime / millisecondsOfRedStart) * 100;
             GreenOccupancyPercent = (GreenOccupancyTime / TotalGreenTimeMilliseconds) * 100;
@@ -76,15 +76,15 @@ namespace MOE.Common.Business
             double occupancy = 0;
             foreach (SplitFailDetectorActivation detectorActivation in cycleDetectorActivations)
             {
-                if (detectorActivation.DetectorOn < start && detectorActivation.DetectorOff > end)
+                if (detectorActivation.DetectorOn <= start && detectorActivation.DetectorOff >= end)
                 {
                     occupancy += (end - start).TotalMilliseconds;
                 }
-                else if (detectorActivation.DetectorOn < start)
+                else if (detectorActivation.DetectorOn <= start && detectorActivation.DetectorOff <= end)
                 {
                     occupancy += (detectorActivation.DetectorOff - start).TotalMilliseconds;
                 }
-                else if (detectorActivation.DetectorOff > end)
+                else if (detectorActivation.DetectorOn >= start && detectorActivation.DetectorOff >= end)
                 {
                     occupancy += (end - detectorActivation.DetectorOn).TotalMilliseconds;
                 }
@@ -93,7 +93,6 @@ namespace MOE.Common.Business
                     occupancy += detectorActivation.Duration;
                 }
             }
-            var totalTime = (end - start).TotalMilliseconds;//Check detector activations for early morning
             return occupancy;
         }
 

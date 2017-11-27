@@ -107,8 +107,8 @@ namespace MOE.Common.Business.SplitFail
                 }
                 else
                 {
-                    //AddDetectorOnToBeginningIfNecessary(options, detector, events);
-                    //AddDetectorOffToEndIfNecessary(options, detector, events);
+                    AddDetectorOnToBeginningIfNecessary(options, detector, events);
+                    AddDetectorOffToEndIfNecessary(options, detector, events);
                     AddDetectorActivationsFromList(events);
                 }
             }
@@ -119,7 +119,7 @@ namespace MOE.Common.Business.SplitFail
         {
             for (int i = 0; i < events.Count - 2; i++)
             {
-                if (events[i].EventCode == 81 && events[i + 1].EventCode == 82)
+                if (events[i].EventCode == 82 && events[i + 1].EventCode == 81)
                 {
                     _detectorActivations.Add(new SplitFailDetectorActivation
                     {
@@ -132,12 +132,12 @@ namespace MOE.Common.Business.SplitFail
 
         private static void AddDetectorOffToEndIfNecessary(SplitFailOptions options, Models.Detector detector, List<Controller_Event_Log> events)
         {
-            if (events.LastOrDefault()?.EventCode == 81)
+            if (events.LastOrDefault()?.EventCode == 82)
             {
                 events.Insert(0, new Controller_Event_Log
                 {
                     Timestamp = options.EndDate,
-                    EventCode = 82,
+                    EventCode = 81,
                     EventParam = detector.DetChannel,
                     SignalID = options.SignalID
                 });
@@ -146,12 +146,12 @@ namespace MOE.Common.Business.SplitFail
 
         private static void AddDetectorOnToBeginningIfNecessary(SplitFailOptions options, Models.Detector detector, List<Controller_Event_Log> events)
         {
-            if (events.FirstOrDefault()?.EventCode == 82)
+            if (events.FirstOrDefault()?.EventCode == 81)
             {
                 events.Insert(0, new Controller_Event_Log
                 {
                     Timestamp = options.StartDate,
-                    EventCode = 81,
+                    EventCode = 82,
                     EventParam = detector.DetChannel,
                     SignalID = options.SignalID
                 });

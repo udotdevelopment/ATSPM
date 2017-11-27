@@ -161,7 +161,7 @@ namespace MOE.Common.Business
                 {
                     var termEvent = GetTerminationEventBetweenStartAndEnd(cycleEvents[i].Timestamp, cycleEvents[i + 3].Timestamp, terminationEvents);
                     cycles.Add(new CycleSplitFail(cycleEvents[i].Timestamp, cycleEvents[i + 2].Timestamp, cycleEvents[i + 1].Timestamp, cycleEvents[i + 3].Timestamp, termEvent, options.FirstSecondsOfRed));
-                    i = i + 3;
+                    i = i + 2;
                 }
             }
             return cycles;

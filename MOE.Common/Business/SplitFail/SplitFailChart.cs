@@ -123,20 +123,41 @@ namespace MOE.Common.Business.SplitFail
 
                 }
             }
-            if (Options.ShowAvgLines)
+            foreach (var bin in SplitFailPhase.Bins)
             {
-                foreach (var bin in SplitFailPhase.Bins)
+                if (Options.ShowAvgLines)
                 {
                     chart.Series["Avg. GOR"].Points.AddXY(bin.StartTime, bin.AverageGreenOccupancyPercent);
                     chart.Series["Avg. ROR"].Points.AddXY(bin.StartTime, bin.AverageRedOccupancyPercent);
-                    if (Options.ShowPercentFailLines)
-                    {
-                        chart.Series["Percent Fails"].Points.AddXY(bin.StartTime, Convert.ToInt32(bin.PercentSplitfails));
-                    }
+                }
+                if (Options.ShowPercentFailLines)
+                {
+                    chart.Series["Percent Fails"].Points.AddXY(bin.StartTime, Convert.ToInt32(bin.PercentSplitfails));
                 }
             }
+            ExtendLinesToTheEndOfTheChart(chart);
             SetChartTitle(SplitFailPhase.Statistics);
             AddPlanStrips(chart, Options.StartDate);
+        }
+
+        private void ExtendLinesToTheEndOfTheChart(Chart chart)
+        {
+            var lastBin = SplitFailPhase.Bins.LastOrDefault();
+            if (lastBin != null)
+            {
+                if (Options.ShowAvgLines)
+                {
+
+                    chart.Series["Avg. GOR"].Points.AddXY(lastBin.StartTime.AddMinutes(15),
+                        lastBin.AverageGreenOccupancyPercent);
+                    chart.Series["Avg. ROR"].Points
+                        .AddXY(lastBin.StartTime.AddMinutes(15), lastBin.AverageRedOccupancyPercent);
+                }
+                if (Options.ShowPercentFailLines)
+                {
+                    chart.Series["Percent Fails"].Points.AddXY(lastBin.StartTime.AddMinutes(15), Convert.ToInt32(lastBin.PercentSplitfails));
+                }
+            }
         }
 
         private void SetChartTitle(Dictionary<string, string> statistics)

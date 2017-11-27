@@ -62,15 +62,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
-            StartDate = StartDate.AddSeconds(59);
+            EndDate = EndDate.AddSeconds(59);
             List<string> returnString = new List<string>();
             Models.Repositories.ISignalsRepository sr = Models.Repositories.SignalsRepositoryFactory.Create();
             Models.Signal signal = sr.GetVersionOfSignalByDate(SignalID, StartDate);
             List<Approach> metricApproaches = signal.GetApproachesForSignalThatSupportMetric(MetricTypeID);
             if (metricApproaches.Count > 0)
             {
-                //Parallel.ForEach(metricApproaches, approach =>
-                foreach (Approach approach in metricApproaches)
+                Parallel.ForEach(metricApproaches, approach =>
+                //foreach (Approach approach in metricApproaches)
                 {
                     if (approach.ProtectedPhaseNumber > 0)
                     {
@@ -84,7 +84,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         SplitFailPhase splitFailPermissivePhase = new SplitFailPhase(approach, this, true);
                         GetChart(splitFailPermissivePhase, permChartName, returnString, true, approach);
                     }
-                }//);
+                });
             }
             return returnString;
         }
