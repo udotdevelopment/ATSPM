@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace MOE.Common.Models.Repositories
 {
@@ -259,20 +260,21 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
-                var events = (from s in _db.Controller_Event_Log
-                    where s.SignalID == signalId &&
-                          s.Timestamp > timestamp &&
-                          s.EventParam == param &&
-                          eventCodes.Contains(s.EventCode)
-                    select s).OrderByDescending(s => s.Timestamp).Take(top).ToList();
+                var events =  _db.Controller_Event_Log.Where(c => 
+                    c.SignalID == signalId &&
+                    c.Timestamp > timestamp &&
+                    c.EventParam == param &&
+                    eventCodes.Contains(c.EventCode))
+                    .OrderByDescending(s => s.Timestamp)
+                    .Take(top).ToList();
                 events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
                 return events;
             }
             catch (Exception e)
             {
                 var errorLog = ApplicationEventRepositoryFactory.Create();
-                errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                    this.GetType().ToString(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.Low, e.Message);
+                errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().FullName,
+                    this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.Low, e.Message);
                 return null;
             }
         }

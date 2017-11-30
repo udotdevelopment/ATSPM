@@ -27,7 +27,12 @@ namespace MOE.Common.Business.Speed
             TotalDetectorHits = speedEvents.Count;
             Cycles = CycleFactory.GetSpeedCycles(startDate, endDate, speedEvents, getPermissivePhase, detector.Approach);
             Plans = PlanFactory.GetSpeedPlans(Cycles,startDate, endDate, detector.Approach);
-            AvgSpeedBucketCollection = new AvgSpeedBucketCollection(startDate, endDate, binSize, detector.MovementDelay.HasValue?0:detector.MovementDelay.Value, Cycles);
+            int movementDelay = 0;
+            if (detector.MovementDelay != null)
+            {
+                movementDelay = detector.MovementDelay.Value;
+            }
+            AvgSpeedBucketCollection = new AvgSpeedBucketCollection(startDate, endDate, binSize, movementDelay, Cycles);
         }
 
         

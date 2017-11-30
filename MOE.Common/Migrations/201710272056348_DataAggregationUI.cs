@@ -23,6 +23,8 @@ namespace MOE.Common.Migrations
             AddColumn("dbo.ApproachSpeedAggregations", "IsProtectedPhase", c => c.Boolean(nullable: false));
             AddColumn("dbo.ApproachSplitFailAggregations", "IsProtectedPhase", c => c.Boolean(nullable: false));
             AddColumn("dbo.ApproachYellowRedActivationAggregations", "IsProtectedPhase", c => c.Boolean(nullable: false));
+            AlterColumn("dbo.ApplicationEvents", "Class", c => c.String());
+            AlterColumn("dbo.ApplicationEvents", "Function", c => c.String());
             AlterColumn("dbo.PreemptionAggregations", "VersionId", c => c.Int(nullable: false));
             AlterColumn("dbo.PriorityAggregations", "VersionId", c => c.Int(nullable: false));
             CreateIndex("dbo.PreemptionAggregations", "VersionId");
@@ -56,6 +58,8 @@ namespace MOE.Common.Migrations
             DropIndex("dbo.PreemptionAggregations", new[] { "VersionId" });
             AlterColumn("dbo.PriorityAggregations", "VersionId", c => c.Int());
             AlterColumn("dbo.PreemptionAggregations", "VersionId", c => c.Int());
+            AlterColumn("dbo.ApplicationEvents", "Function", c => c.String(maxLength: 50));
+            AlterColumn("dbo.ApplicationEvents", "Class", c => c.String(maxLength: 50));
             DropColumn("dbo.ApproachYellowRedActivationAggregations", "IsProtectedPhase");
             DropColumn("dbo.ApproachSplitFailAggregations", "IsProtectedPhase");
             DropColumn("dbo.ApproachSpeedAggregations", "IsProtectedPhase");

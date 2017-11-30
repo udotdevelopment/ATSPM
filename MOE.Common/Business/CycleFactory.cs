@@ -15,7 +15,7 @@ namespace MOE.Common.Business
             var cycleEvents = GetCycleEvents(getPermissivePhase, startTime, endTime, approach);
             if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) != RedToRedCycle.EventType.ChangeToRed)
             {
-                GetEventsToCompleteCycle(getPermissivePhase, startTime, endTime, approach, cycleEvents);
+                GetEventsToCompleteCycle(getPermissivePhase, endTime, approach, cycleEvents);
             }
             List<RedToRedCycle> cycles = new List<RedToRedCycle>();
             for (int i = 0; i < cycleEvents.Count; i++)
@@ -36,6 +36,10 @@ namespace MOE.Common.Business
         public static List<CyclePcd> GetPcdCycles(DateTime startDate, DateTime endDate, Models.Approach approach, List<Controller_Event_Log> detectorEvents, bool getPermissivePhase)
         {
             var cycleEvents = GetCycleEvents(getPermissivePhase, startDate, endDate, approach);
+            if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) != RedToRedCycle.EventType.ChangeToRed)
+            {
+                GetEventsToCompleteCycle(getPermissivePhase, endDate, approach, cycleEvents);
+            }
             List<CyclePcd> cycles = new List<CyclePcd>();
             for (int i = 0; i < cycleEvents.Count; i++)
             {
@@ -131,24 +135,37 @@ namespace MOE.Common.Business
             return cycleEvents;
         }
 
-        private static void GetEventsToCompleteCycle(bool getPermissivePhase, DateTime startDate, DateTime endDate, Models.Approach approach, List<Controller_Event_Log> cycleEvents)
+        private static void GetEventsToCompleteCycle(bool getPermissivePhase, DateTime endDate, Models.Approach approach, List<Controller_Event_Log> cycleEvents)
         {
             var celRepository = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
             if (getPermissivePhase)
             {
-                cycleEvents.AddRange(celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
-                    endDate, new List<int>() { 1, 8, 10 }, approach.PermissivePhaseNumber.Value, 3));
+                var eventsAfterEndDate = celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
+                    endDate, new List<int>() {1, 8, 10}, approach.PermissivePhaseNumber.Value, 3);
+                if (eventsAfterEndDate != null)
+                {
+                    cycleEvents.AddRange(eventsAfterEndDate);
+                }
             }
             else
             {
                 var cycleEventNumbers = approach.IsProtectedPhaseOverlap ? new List<int> { 61, 63, 64 } : new List<int>() { 1, 8, 10 };
-                cycleEvents.AddRange(celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID, endDate, cycleEventNumbers, approach.ProtectedPhaseNumber, 3));
+                var eventsAfterEndDate = celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
+                    endDate, cycleEventNumbers, approach.ProtectedPhaseNumber, 3);
+                if (eventsAfterEndDate != null)
+                {
+                    cycleEvents.AddRange(eventsAfterEndDate);
+                }
             }
         }
         public static List<CycleSplitFail> GetSplitFailCycles(SplitFailOptions options, Models.Approach approach, 
             bool getPermissivePhase)
         {
             var cycleEvents = GetCycleEvents(getPermissivePhase, options.StartDate, options.EndDate, approach);
+            if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) != RedToRedCycle.EventType.ChangeToGreen)
+            {
+                GetEventsToCompleteCycle(getPermissivePhase, options.EndDate, approach, cycleEvents);
+            }
             var terminationEvents = GetTerminationEvents(getPermissivePhase, options.StartDate, options.EndDate, approach);
             List<CycleSplitFail> cycles = new List<CycleSplitFail>();
             for (int i = 0; i < cycleEvents.Count; i++)

@@ -188,7 +188,7 @@ namespace MOE.Common.Models.Repositories
                 catch (Exception ex)
                 {
 
-                    {
+                    
                         MOE.Common.Models.Repositories.IApplicationEventRepository repository =
                             MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
                         MOE.Common.Models.ApplicationEvent error =
@@ -203,7 +203,7 @@ namespace MOE.Common.Models.Repositories
                             };
                         repository.Add(error);
                         throw (ex);
-                    }
+                    
                 }
             }
         }

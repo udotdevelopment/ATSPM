@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Business.CustomReport;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
@@ -55,19 +56,18 @@ namespace MOE.Common.Business.SplitFail
             } while (startTime < options.EndDate);
         }
         
-        private List<SplitFailDetectorActivation> CombineDetectorActivations(List<SplitFailDetectorActivation> detectorActivations)
+        private void CombineDetectorActivations()
         {
             List<SplitFailDetectorActivation> tempDetectorActivations = new List<SplitFailDetectorActivation>();
-            foreach (var current in detectorActivations)
+            foreach (var current in _detectorActivations)
             {
                 if (!current.ReviewedForOverlap)
                 {
-                    var overlapingActivations = detectorActivations.Where(d =>
+                    var overlapingActivations = _detectorActivations.Where(d => d.ReviewedForOverlap == false &&
                         ((d.DetectorOn >= current.DetectorOn && d.DetectorOn <= current.DetectorOff && d.DetectorOff >= current.DetectorOff)
                          || (d.DetectorOn <= current.DetectorOn && d.DetectorOff >= current.DetectorOn && d.DetectorOff <= current.DetectorOff)
                          || (d.DetectorOn >= current.DetectorOn && d.DetectorOff <= current.DetectorOff)
-                         || (d.DetectorOn <= current.DetectorOn && d.DetectorOff >= current.DetectorOff))
-                        && d.ReviewedForOverlap == false).ToList();
+                         || (d.DetectorOn <= current.DetectorOn && d.DetectorOff >= current.DetectorOff))).ToList();
                     if (overlapingActivations.Any())
                     {
                         var tempDetectorActivation = new SplitFailDetectorActivation
@@ -83,11 +83,11 @@ namespace MOE.Common.Business.SplitFail
                     }
                 }
             }
-            if (detectorActivations.Count != tempDetectorActivations.Count)
+            if (_detectorActivations.Count != tempDetectorActivations.Count)
             {
-                tempDetectorActivations = CombineDetectorActivations(tempDetectorActivations);
+                _detectorActivations = tempDetectorActivations;
+                CombineDetectorActivations();
             }
-            return  tempDetectorActivations.OrderBy(t => t.DetectorOn).ToList();
         }
         
         private void SetDetectorActivations(SplitFailOptions options)
@@ -112,7 +112,7 @@ namespace MOE.Common.Business.SplitFail
                     AddDetectorActivationsFromList(events);
                 }
             }
-            _detectorActivations = CombineDetectorActivations(_detectorActivations);
+             CombineDetectorActivations();
         }
 
         private void AddDetectorActivationsFromList(List<Controller_Event_Log> events)

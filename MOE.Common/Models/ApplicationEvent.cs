@@ -37,10 +37,8 @@ namespace MOE.Common.Models
         [Required]
         public SeverityLevels SeverityLevel { get; set; }
 
-        [MaxLength(50)]
         public string Class { get; set; }
 
-        [MaxLength(50)]
         public string Function { get; set; }
     }
 }
