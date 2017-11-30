@@ -232,7 +232,8 @@ namespace SPM.Controllers
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
-            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 3); CreateMetric();";
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 3); " +
+                                                          "CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -241,7 +242,8 @@ namespace SPM.Controllers
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
-            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 4); CreateMetric();";
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 4); " +
+                                                          "CreateMetric();";
             return View("Index", defaultChartsViewModel);
 
 
@@ -256,7 +258,7 @@ namespace SPM.Controllers
                                                           metricOptions.ShowLaneVolumes.ToString().ToLower() + "," +
                                                           metricOptions.ShowTotalVolumes.ToString().ToLower() + "," +
                                                           metricOptions.ShowDataTable.ToString().ToLower() +
-                                                          "); CreateTMCChart();";
+                                                          "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -289,7 +291,7 @@ namespace SPM.Controllers
                                                           metricOptions.ShowNBWBVolume.ToString().ToLower() + "," +
                                                           metricOptions.ShowTMCDetection.ToString().ToLower() + "," +
                                                           metricOptions.ShowAdvanceDetection.ToString().ToLower() +
-                                                          "); CreateMetricWithDataTable();";
+                                                          "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -302,7 +304,8 @@ namespace SPM.Controllers
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 8); " +
-                                                          "SetApproachDelayMetric(" + metricOptions.SelectedBinSize.ToString() + "," + metricOptions.ShowPlanStatistics.ToString().ToLower() + ","+
+                                                          "SetApproachDelayMetric(" + metricOptions.SelectedBinSize.ToString() + "," + 
+                                                          metricOptions.ShowPlanStatistics.ToString().ToLower() + ","+
                                                           metricOptions.ShowTotalDelayPerHour.ToString() + "," +
                                                           metricOptions.ShowDelayPerVehicle.ToString() +
                                                           "); CreateMetric();";
@@ -314,7 +317,9 @@ namespace SPM.Controllers
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 9); " +
-                                                          "SetAoRMetric(" + metricOptions.SelectedBinSize.ToString() + "," + metricOptions.ShowPlanStatistics.ToString().ToLower()+"); CreateMetric();";
+                                                          "SetAoRMetric(" + metricOptions.SelectedBinSize.ToString() + "," + 
+                                                          metricOptions.ShowPlanStatistics.ToString().ToLower()+"); " +
+                                                          "CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -325,27 +330,27 @@ namespace SPM.Controllers
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 10); " +
                                                           "SetSpeedMetric(" + metricOptions.SelectedBinSize.ToString() + "," +
                                                           metricOptions.ShowPlanStatistics.ToString().ToLower() + "," +
-                                                          metricOptions.ShowAverageSpeed.ToString() + "," +
-                                                          metricOptions.ShowPostedSpeed.ToString() + ","+
-                                                          metricOptions.Show85Percentile.ToString() +
+                                                          metricOptions.ShowAverageSpeed.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPostedSpeed.ToString().ToLower() + ","+
+                                                          metricOptions.Show85Percentile.ToString().ToLower() +
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
-        public ActionResult GetYRAetricByUrl(YellowAndRedOptions metricOptions)
+        public ActionResult GetYRAMetricByUrl(YellowAndRedOptions metricOptions)
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 11); " +
                                                           "SetYRAMetric(" + metricOptions.SevereLevelSeconds.ToString() + "," +
                                                           metricOptions.ShowRedLightViolations.ToString().ToLower() + "," +
-                                                          metricOptions.ShowSevereRedLightViolations.ToString() + "," +
-                                                          metricOptions.ShowPercentRedLightViolations.ToString() + "," +
-                                                          metricOptions.ShowPercentSevereRedLightViolations.ToString() + "," +
-                                                          metricOptions.ShowAverageTimeRedLightViolations.ToString() + "," +
-                                                          metricOptions.ShowYellowLightOccurrences.ToString() + "," +
-                                                          metricOptions.ShowPercentYellowLightOccurrences.ToString() + "," +
-                                                          metricOptions.ShowAverageTimeYellowOccurences.ToString() +
+                                                          metricOptions.ShowSevereRedLightViolations.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPercentRedLightViolations.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPercentSevereRedLightViolations.ToString().ToLower() + "," +
+                                                          metricOptions.ShowAverageTimeRedLightViolations.ToString().ToLower() + "," +
+                                                          metricOptions.ShowYellowLightOccurrences.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPercentYellowLightOccurrences.ToString().ToLower() + "," +
+                                                          metricOptions.ShowAverageTimeYellowOccurences.ToString().ToLower() +
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
@@ -355,8 +360,10 @@ namespace SPM.Controllers
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 12); " +
-                                                          "SetSplitFailMetric(" + metricOptions.FirstSecondsOfRed.ToString() + "," + metricOptions.ShowFailLines.ToString().ToLower() +
-                                                          "," + metricOptions.ShowAvgLines.ToString().ToLower() + "," + metricOptions.ShowPercentFailLines.ToString().ToLower() + "); CreateMetric();";
+                                                          "SetSplitFailMetric(" + metricOptions.FirstSecondsOfRed.ToString() + "," + 
+                                                          metricOptions.ShowFailLines.ToString().ToLower() + "," + 
+                                                          metricOptions.ShowAvgLines.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPercentFailLines.ToString().ToLower() + "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -383,8 +390,10 @@ namespace SPM.Controllers
 
         public ActionResult GetYellowAndRedMetric(YellowAndRedOptions metricOptions)
         {
-            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
-            string[] result = new string[1] { "" };
+            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
+
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
+
             if (ModelState.IsValid)
             {
                 MetricGeneratorService.MetricGeneratorClient client =
@@ -393,15 +402,33 @@ namespace SPM.Controllers
                 {
 
                     client.Open();
-                    result = client.CreateMetric(metricOptions);
+                    result.ChartPaths = client.CreateMetric(metricOptions);
                     client.Close();
                 }
+
+
+
                 catch (Exception ex)
                 {
                     client.Close();
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
+
+            var uri = Request.Url.AbsoluteUri;
+
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \""+ uri +"\"" +
+                                             "DefaultCharts/GetYRAMetricByUrl?SevereLevelSeconds = 5 " +
+                                             "&ShowRedLightViolations = true &ShowSevereRedLightViolations = true " +
+                                             "&ShowPercentRedLightViolations = true &ShowPercentSevereRedLightViolations = true " +
+                                             "&ShowAverageTimeRedLightViolations = true " +
+                                             "& ShowYellowLightOccurrences = true " +
+                                             "&ShowPercentYellowLightOccurrences = true " +
+                                             "&ShowAverageTimeYellowOccurences = true &" +
+                                             "SignalId = 7062 & StartDate = 10 / 17 / 2017 00:01 AM & EndDate = 10 / 17 / 2017 11:59 PM" +
+                                             ");";
+
+
             return PartialView("MetricResult", result);
         }
 
