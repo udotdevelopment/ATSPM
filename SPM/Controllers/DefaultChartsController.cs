@@ -199,15 +199,169 @@ namespace SPM.Controllers
             return PartialView("MetricResult", result);
         }
 
+        public ActionResult GetPhaseTerminationMetricByUrl(PhaseTerminationOptions metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 1); " +
+                                                          "SetPhaseTerminationMetric(" + metricOptions.SelectedConsecutiveCount.ToString() + "," +
+                                                          metricOptions.ShowPlanStripes.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPedActivity.ToString().ToLower() + "," +                                                       
+                                                          "); CreateMetric();";
+            return View("Index", defaultChartsViewModel);
+        }
+
+        public ActionResult GetSplitMonitorMetricByUrl(SplitMonitorOptions metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 2); " +
+                                                          "SetSplitMonitorMetric(" + metricOptions.SelectedPercentileSplit.ToString() + "," +
+                                                          metricOptions.ShowPlanStripes.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPedActivity.ToString() + "," +
+                                                          metricOptions.ShowAverageSplit.ToString() + "," +
+                                                          metricOptions.ShowPercentMaxOutForceOff.ToString() +
+                                                          metricOptions.ShowPercentGapOuts.ToString() +
+                                                          metricOptions.ShowPercentSkip.ToString() +
+                                                          "); CreateMetric();";
+            return View("Index", defaultChartsViewModel);
+        }
+
+
+        public ActionResult GetPedDelayMetricByUrl(PedDelayOptions metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 3); ";
+            return View("Index", defaultChartsViewModel);
+        }
+
+
+        public ActionResult GetPreemptMetricByUrl(MetricOptions metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 4); ";
+            return View("Index", defaultChartsViewModel);
+
+
+        }
+
+        public ActionResult GetSTMCMetricByUrl(TMCOptions metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 5); " +
+                                                          "SetSTMCMetric(" + metricOptions.SelectedBinSize.ToString() + "," +
+                                                          metricOptions.ShowLaneVolumes.ToString().ToLower() + "," +
+                                                          metricOptions.ShowTotalVolumes.ToString() + "," +
+                                                          metricOptions.ShowDataTable.ToString() + "," +
+                                                          "); CreateMetric();";
+            return View("Index", defaultChartsViewModel);
+        }
+
+
+        public ActionResult GetPCDMetricByUrl(PCDOptions metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 6); " +
+                                                          "SetPCDMetric(" + metricOptions.SelectedBinSize.ToString() + "," +
+                                                          metricOptions.SelectedDotSize.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPlanStatistics.ToString() + "," +
+                                                          metricOptions.ShowVolumes.ToString() + "," +
+                                                          "); CreateMetric();";
+            return View("Index", defaultChartsViewModel);
+        }
+
+
+
+
+        public ActionResult GetApproachVolumeMetricByUrl(ApproachVolumeOptions metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 7); " +
+                                                          "SetApproachVolumeMetric(" + metricOptions.SelectedBinSize.ToString() + "," +
+                                                          metricOptions.ShowDirectionalSplits.ToString().ToLower() + "," +
+                                                          metricOptions.ShowTotalVolume.ToString() + "," +
+                                                          metricOptions.ShowSBEBVolume.ToString() + "," +
+                                                          metricOptions.ShowNBWBVolume.ToString() +
+                                                          metricOptions.ShowTMCDetection.ToString() +
+                                                          metricOptions.ShowAdvanceDetection.ToString() +
+                                                          "); CreateMetric();";
+            return View("Index", defaultChartsViewModel);
+        }
+
+
+
+
+
+        public ActionResult GetApproachDelayMetricByUrl(ApproachDelayOptions metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 8); " +
+                                                          "SetApproachDelayMetric(" + metricOptions.SelectedBinSize.ToString() + "," + metricOptions.ShowPlanStatistics.ToString().ToLower() + ","+
+                                                          metricOptions.ShowTotalDelayPerHour.ToString() + "," +
+                                                          metricOptions.ShowDelayPerVehicle.ToString() +
+                                                          "); CreateMetric();";
+            return View("Index", defaultChartsViewModel);
+        }
+
+        public ActionResult GetAoRMetricByUrl(AoROptions metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 9); " +
+                                                          "SetAoRMetric(" + metricOptions.SelectedBinSize.ToString() + "," + metricOptions.ShowPlanStatistics.ToString().ToLower()+"); CreateMetric();";
+            return View("Index", defaultChartsViewModel);
+        }
+
+        public ActionResult GetApproachSpeedMetricByUrl(ApproachSpeedOptions metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 10); " +
+                                                          "SetSpeedMetric(" + metricOptions.SelectedBinSize.ToString() + "," +
+                                                          metricOptions.ShowPlanStatistics.ToString().ToLower() + "," +
+                                                          metricOptions.ShowAverageSpeed.ToString() + "," +
+                                                          metricOptions.ShowPostedSpeed.ToString() + ","+
+                                                          metricOptions.Show85Percentile.ToString() +
+                                                          "); CreateMetric();";
+            return View("Index", defaultChartsViewModel);
+        }
+
+        public ActionResult GetYRAetricByUrl(YellowAndRedOptions metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 11); " +
+                                                          "SetYRAMetric(" + metricOptions.SevereLevelSeconds.ToString() + "," +
+                                                          metricOptions.ShowRedLightViolations.ToString().ToLower() + "," +
+                                                          metricOptions.ShowSevereRedLightViolations.ToString() + "," +
+                                                          metricOptions.ShowPercentRedLightViolations.ToString() + "," +
+                                                          metricOptions.ShowPercentSevereRedLightViolations.ToString() +
+                                                          metricOptions.ShowAverageTimeRedLightViolations.ToString() +
+                                                          metricOptions.ShowYellowLightOccurrences.ToString() +
+                                                          metricOptions.ShowPercentYellowLightOccurrences.ToString() +
+                                                          metricOptions.ShowAverageTimeYellowOccurences.ToString() +
+                                                          "); CreateMetric();";
+            return View("Index", defaultChartsViewModel);
+        }
+
         public ActionResult GetSplitFailMetricByUrl(SplitFailOptions metricOptions)
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 12); " +
-            "SetSplitFailMetric(" + metricOptions.FirstSecondsOfRed.ToString() +"," + metricOptions.ShowFailLines.ToString().ToLower() +
-            "," + metricOptions.ShowAvgLines.ToString().ToLower() + "," + metricOptions.ShowPercentFailLines.ToString().ToLower() + "); CreateMetric();";
+                                                          "SetSplitFailMetric(" + metricOptions.FirstSecondsOfRed.ToString() + "," + metricOptions.ShowFailLines.ToString().ToLower() +
+                                                          "," + metricOptions.ShowAvgLines.ToString().ToLower() + "," + metricOptions.ShowPercentFailLines.ToString().ToLower() + "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
+
+
+
 
         private string GetCommonJavascriptProperties(MetricOptions metricOptions)
         {

@@ -28,6 +28,98 @@ function SetCommonValues(signalId, startDateDay, startTime, startAmPmDdl, endDat
     }
 }
 
+
+
+function SetPhaseTerminationMetric(consecutiveCount, showPlans, showPed) {
+    $("#SelectedConsecutiveCount").val(consecutiveCount);
+    $("#ShowPlanStripes").val(showPlans);
+    $("#ShowPedActivity").val(showPed);
+}
+
+function SetSplitMonitorMetric(selectedPercentileSplit, showPlanStripes, showPedActivity, showAverageSplit, showPercentMaxOutForceOff,
+    showPercentGapOuts, showPercentSkip)
+{
+    $("#SelectedPercentileSplit").val(selectedPercentileSplit);
+    $("#ShowPlanStripes").val(showPlanStripes);
+    $("#ShowPedActivity").val(showPedActivity);
+    $("#ShowAverageSplit").val(showAverageSplit);
+    $("#ShowPercentMaxOutForceOff").val(showPercentMaxOutForceOff);
+    $("#ShowPercentGapOuts").val(showPercentGapOuts);
+    $("#ShowPercentSkip").val(showPercentSkip);
+
+}
+
+function SetPedDelayMetric() {
+
+}
+
+function SetPreemptionDetailsMetric() {
+
+}
+
+function SetTMCMetric(selectedBinSize, showLaneVolumes, showTotalVolumes, showDataTable) {
+    $("#SelectedBinSize").val(selectedBinSize);
+    $("#ShowLaneVolumes").val(showLaneVolumes);
+    $("#ShowTotalVolumes").val(showTotalVolumes);
+    $("#ShowDataTable").val(showDataTable);
+}
+
+function SetPCDMetric(selectedBinSize, selectedDotSize, showPlanStatistics, showVolumes) {
+    $("#SelectedBinSize").val(selectedBinSize);
+    $("#SelectedDotSize").val(selectedDotSize);
+    $("#ShowPlanStatistics").val(showPlanStatistics);
+    $("#ShowVolumes").val(showVolumes);
+}
+
+function SetApproachVolumeMetric(selectedBinSize, showDirectionalSplits, showTotalVolumes, showSBEBVolume, showNBWBVolume,
+    showTMCDetection, showAdvanceDetection) {
+    $("#SelectedBinSize").val(selectedBinSize);
+    $("#ShowDirectionalSplits").val(showDirectionalSplits);
+    $("#ShowTotalVolumes").val(showTotalVolumes);
+    $("#ShowSBEBVolume").val(showSBEBVolume);
+    $("#ShowNBWBVolume").val(showNBWBVolume);
+    $("#ShowTMCDetection").val(showTMCDetection);
+    $("#ShowAdvanceDetection").val(showAdvanceDetection);
+}
+
+function SetApproachDelayMetric(selectedBinSize, showPlanStatistics, showTotalDelayPerHour, showDelayPerVehicle) {
+    $("#SelectedBinSize").val(selectedBinSize);
+    $("#ShowPlanStatistics").val(showPlanStatistics);
+    $("#ShowTotalDelayPerHour").val(showTotalDelayPerHour);
+    $("#ShowDelayPerVehicle").val(showDelayPerVehicle);
+
+}
+
+function SetAORMetric(selectedBinSize, showPlanStatistics) {
+    $("#SelectedBinSize").val(selectedBinSize);
+    $("#ShowPlanStatistics").val(showPlanStatistics);
+}
+
+function SetYRAMetric(severeLevelSeconds, showRedLightViolations, showSevereRedLightViolations, showPercentRedLightViolations,
+    showPercentSevereRedLightViolations, showAverageTimeRedLightViolations, showYellowLightOccurrences, showPercentYellowLightOccurrences, showAverageTimeYellowOccurences)
+{
+    $("#SevereLevelSeconds").val(severeLevelSeconds);
+    $("#ShowRedLightViolations").val(showRedLightViolations);
+    $("#ShowSevereRedLightViolations").val(showSevereRedLightViolations);
+    $("#ShowPercentRedLightViolations").val(showPercentRedLightViolations);
+    $("#ShowPercentSevereRedLightViolations").val(showPercentSevereRedLightViolations);
+    $("#ShowPercentRedLightViolations").val(showPercentRedLightViolations);
+    $("#ShowPercentSevereRedLightViolations").val(showPercentSevereRedLightViolations);
+    $("#ShowAverageTimeRedLightViolations").val(showAverageTimeRedLightViolations);
+    $("#ShowYellowLightOccurrences").val(showYellowLightOccurrences);
+    $("#ShowPercentYellowLightOccurrences").val(showPercentYellowLightOccurrences);
+    $("#ShowAverageTimeYellowOccurences").val(showAverageTimeYellowOccurences);
+}
+
+function SetSpeedMetric(selectedBinSize, showPlanStatistics, showAverageSpeed, showPostedSpeed, show85Percentile)
+{
+    $("#SelectedBinSize").val(selectedBinSize);
+    $("#ShowPlanStatistics").val(showPlanStatistics);
+    $("#ShowAverageSpeed").val(showAverageSpeed);
+    $("#ShowPostedSpeed").val(showPostedSpeed);
+    $("#Show85Percentile").val(show85Percentile);
+}
+
 function SetSplitFailMetric(firstSecondsOfRed, showFailLines, showAverageLines, showPercentLines) {
     $("#FirstSecondsOfRed").val(firstSecondsOfRed);
     $("#ShowFailLines").prop('checked', showFailLines);
