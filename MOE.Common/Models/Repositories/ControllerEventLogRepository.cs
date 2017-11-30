@@ -265,9 +265,8 @@ namespace MOE.Common.Models.Repositories
                     c.Timestamp > timestamp &&
                     c.EventParam == param &&
                     eventCodes.Contains(c.EventCode))
-                    .OrderByDescending(s => s.Timestamp)
+                    .OrderBy(s => s.Timestamp)
                     .Take(top).ToList();
-                events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
                 return events;
             }
             catch (Exception e)

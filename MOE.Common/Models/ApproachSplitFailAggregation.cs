@@ -22,6 +22,14 @@ namespace MOE.Common.Models
 
         [Required]
         public int SplitFailures { get; set; }
+        [Required]
+        public int GapOuts { get; set; }
+        [Required]
+        public int ForceOffs { get; set; }
+        [Required]
+        public int MaxOuts { get; set; }
+        [Required]
+        public int UnknownTerminationTypes { get; set; }
 
         [Required]
         public bool IsProtectedPhase { get; set; }

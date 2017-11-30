@@ -21,6 +21,10 @@ namespace MOE.Common.Migrations
             AddColumn("dbo.ApproachCycleAggregations", "IsProtectedPhase", c => c.Boolean(nullable: false));
             AddColumn("dbo.ApproachPcdAggregations", "IsProtectedPhase", c => c.Boolean(nullable: false));
             AddColumn("dbo.ApproachSpeedAggregations", "IsProtectedPhase", c => c.Boolean(nullable: false));
+            AddColumn("dbo.ApproachSplitFailAggregations", "GapOuts", c => c.Int(nullable: false));
+            AddColumn("dbo.ApproachSplitFailAggregations", "ForceOffs", c => c.Int(nullable: false));
+            AddColumn("dbo.ApproachSplitFailAggregations", "MaxOuts", c => c.Int(nullable: false));
+            AddColumn("dbo.ApproachSplitFailAggregations", "UnknownTerminationTypes", c => c.Int(nullable: false));
             AddColumn("dbo.ApproachSplitFailAggregations", "IsProtectedPhase", c => c.Boolean(nullable: false));
             AddColumn("dbo.ApproachYellowRedActivationAggregations", "IsProtectedPhase", c => c.Boolean(nullable: false));
             AlterColumn("dbo.ApplicationEvents", "Class", c => c.String());
@@ -62,6 +66,10 @@ namespace MOE.Common.Migrations
             AlterColumn("dbo.ApplicationEvents", "Class", c => c.String(maxLength: 50));
             DropColumn("dbo.ApproachYellowRedActivationAggregations", "IsProtectedPhase");
             DropColumn("dbo.ApproachSplitFailAggregations", "IsProtectedPhase");
+            DropColumn("dbo.ApproachSplitFailAggregations", "UnknownTerminationTypes");
+            DropColumn("dbo.ApproachSplitFailAggregations", "MaxOuts");
+            DropColumn("dbo.ApproachSplitFailAggregations", "ForceOffs");
+            DropColumn("dbo.ApproachSplitFailAggregations", "GapOuts");
             DropColumn("dbo.ApproachSpeedAggregations", "IsProtectedPhase");
             DropColumn("dbo.ApproachPcdAggregations", "IsProtectedPhase");
             DropColumn("dbo.ApproachCycleAggregations", "IsProtectedPhase");
