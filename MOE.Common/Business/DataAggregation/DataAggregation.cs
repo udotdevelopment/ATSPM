@@ -415,23 +415,26 @@ namespace MOE.Common.Business.DataAggregation
                     {
                         SetApproachSpeedAggregationData(startTime, endTime, signalApproach);
                         SetApproachAggregationData(startTime, endTime, records, signalApproach);
-                        SetDetectorAggregationData(startTime, records, signalApproach);
+                        SetDetectorAggregationData(startTime, endTime, signalApproach);
                     }
                 }
             }
         }
 
-        private void SetDetectorAggregationData(DateTime startTime, List<Controller_Event_Log> records, Approach signalApproach)
+        private void SetDetectorAggregationData(DateTime startTime, DateTime endTime, Approach signalApproach)
         {
             //Console.Write("\n-Aggregate Detector data ");
             //DateTime dt = DateTime.Now;
+            var controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
             foreach (var detector in signalApproach.Detectors)
             {
+                int count = controllerEventLogRepository.GetDetectorActivationCount(signalApproach.SignalID, startTime,
+                    endTime, detector.DetChannel);
                 DetectorAggregation detectorAggregation = new DetectorAggregation
                 {
                     DetectorId = detector.DetectorID,
                     BinStartTime = startTime,
-                    Volume = records.Count(r => r.EventCode == 82 && r.EventParam == detector.DetChannel)
+                    Volume = count
                 };
                 _detectorAggregationConcurrentQueue.Enqueue(detectorAggregation);
             }
@@ -537,12 +540,23 @@ namespace MOE.Common.Business.DataAggregation
             if (!approach.GetDetectorsForMetricType(12).Any()) return;
             //Console.Write("\n-Aggregate Split Fail data ");
             //DateTime dt = DateTime.Now;
-            SplitFailPhase splitFailPhase = new SplitFailPhase(approach, new SplitFailOptions{ FirstSecondsOfRed = 5, StartDate = startTime, EndDate = endTime, MetricTypeID = 12}, getPermissivePhase);
+            var splitFailOptions = new SplitFailOptions
+            {
+                FirstSecondsOfRed = 5,
+                StartDate = startTime,
+                EndDate = endTime,
+                MetricTypeID = 12
+            };
+            SplitFailPhase splitFailPhase = new SplitFailPhase(approach, splitFailOptions, getPermissivePhase);
             _approachSplitFailAggregationConcurrentQueue.Enqueue(new ApproachSplitFailAggregation
             {
                 ApproachId = approach.ApproachID,
                 BinStartTime = startTime,
                 SplitFailures = splitFailPhase.TotalFails,
+                ForceOffs = splitFailPhase.Cycles.Count(c => c.TerminationEvent == CycleSplitFail.TerminationType.ForceOff),
+                MaxOuts = splitFailPhase.Cycles.Count(c => c.TerminationEvent == CycleSplitFail.TerminationType.MaxOut),
+                GapOuts = splitFailPhase.Cycles.Count(c => c.TerminationEvent == CycleSplitFail.TerminationType.GapOut),
+                UnknownTerminationTypes = splitFailPhase.Cycles.Count(c => c.TerminationEvent == CycleSplitFail.TerminationType.Unknown),
                 IsProtectedPhase = approach.IsProtectedPhaseOverlap
             });
 
