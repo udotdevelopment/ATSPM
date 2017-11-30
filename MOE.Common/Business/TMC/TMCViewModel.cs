@@ -11,7 +11,7 @@ namespace MOE.Common.Business.TMC
     public class TMCViewModel
     {
         public List<int> LaneTypeColSpans = new List<int>();
-        public List<string> ImageLocations { get; set; }
+        public List<string> ImageLocations = new List<string>();
         public bool ShowLaneVolumes { get; set; }
         public List<RecordHeader> Headers = new List<RecordHeader>();
         public List<Record> Records = new List<Record>();

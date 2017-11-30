@@ -206,7 +206,7 @@ namespace SPM.Controllers
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 1); " +
                                                           "SetPhaseTerminationMetric(" + metricOptions.SelectedConsecutiveCount.ToString() + "," +
                                                           metricOptions.ShowPlanStripes.ToString().ToLower() + "," +
-                                                          metricOptions.ShowPedActivity.ToString().ToLower() + "," +                                                       
+                                                          metricOptions.ShowPedActivity.ToString().ToLower() +                                                       
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
@@ -218,11 +218,11 @@ namespace SPM.Controllers
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 2); " +
                                                           "SetSplitMonitorMetric(" + metricOptions.SelectedPercentileSplit.ToString() + "," +
                                                           metricOptions.ShowPlanStripes.ToString().ToLower() + "," +
-                                                          metricOptions.ShowPedActivity.ToString() + "," +
-                                                          metricOptions.ShowAverageSplit.ToString() + "," +
-                                                          metricOptions.ShowPercentMaxOutForceOff.ToString() +
-                                                          metricOptions.ShowPercentGapOuts.ToString() +
-                                                          metricOptions.ShowPercentSkip.ToString() +
+                                                          metricOptions.ShowPedActivity.ToString().ToLower() + "," +
+                                                          metricOptions.ShowAverageSplit.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPercentMaxOutForceOff.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPercentGapOuts.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPercentSkip.ToString().ToLower() +
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
@@ -232,7 +232,7 @@ namespace SPM.Controllers
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
-            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 3); ";
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 3); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -241,22 +241,22 @@ namespace SPM.Controllers
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
-            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 4); ";
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 4); CreateMetric();";
             return View("Index", defaultChartsViewModel);
 
 
         }
 
-        public ActionResult GetSTMCMetricByUrl(TMCOptions metricOptions)
+        public ActionResult GetTMCMetricByUrl(TMCOptions metricOptions)
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 5); " +
-                                                          "SetSTMCMetric(" + metricOptions.SelectedBinSize.ToString() + "," +
+                                                          "SetTMCMetric(" + metricOptions.SelectedBinSize.ToString() + "," +
                                                           metricOptions.ShowLaneVolumes.ToString().ToLower() + "," +
-                                                          metricOptions.ShowTotalVolumes.ToString() + "," +
-                                                          metricOptions.ShowDataTable.ToString() + "," +
-                                                          "); CreateMetric();";
+                                                          metricOptions.ShowTotalVolumes.ToString().ToLower() + "," +
+                                                          metricOptions.ShowDataTable.ToString().ToLower() +
+                                                          "); CreateTMCChart();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -268,8 +268,8 @@ namespace SPM.Controllers
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 6); " +
                                                           "SetPCDMetric(" + metricOptions.SelectedBinSize.ToString() + "," +
                                                           metricOptions.SelectedDotSize.ToString().ToLower() + "," +
-                                                          metricOptions.ShowPlanStatistics.ToString() + "," +
-                                                          metricOptions.ShowVolumes.ToString() + "," +
+                                                          metricOptions.ShowPlanStatistics.ToString().ToLower() + "," +
+                                                          metricOptions.ShowVolumes.ToString().ToLower() + 
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
@@ -284,12 +284,12 @@ namespace SPM.Controllers
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 7); " +
                                                           "SetApproachVolumeMetric(" + metricOptions.SelectedBinSize.ToString() + "," +
                                                           metricOptions.ShowDirectionalSplits.ToString().ToLower() + "," +
-                                                          metricOptions.ShowTotalVolume.ToString() + "," +
-                                                          metricOptions.ShowSBEBVolume.ToString() + "," +
-                                                          metricOptions.ShowNBWBVolume.ToString() +
-                                                          metricOptions.ShowTMCDetection.ToString() +
-                                                          metricOptions.ShowAdvanceDetection.ToString() +
-                                                          "); CreateMetric();";
+                                                          metricOptions.ShowTotalVolume.ToString().ToLower() + "," +
+                                                          metricOptions.ShowSBEBVolume.ToString().ToLower() + "," +
+                                                          metricOptions.ShowNBWBVolume.ToString().ToLower() + "," +
+                                                          metricOptions.ShowTMCDetection.ToString().ToLower() + "," +
+                                                          metricOptions.ShowAdvanceDetection.ToString().ToLower() +
+                                                          "); CreateMetricWithDataTable();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -341,10 +341,10 @@ namespace SPM.Controllers
                                                           metricOptions.ShowRedLightViolations.ToString().ToLower() + "," +
                                                           metricOptions.ShowSevereRedLightViolations.ToString() + "," +
                                                           metricOptions.ShowPercentRedLightViolations.ToString() + "," +
-                                                          metricOptions.ShowPercentSevereRedLightViolations.ToString() +
-                                                          metricOptions.ShowAverageTimeRedLightViolations.ToString() +
-                                                          metricOptions.ShowYellowLightOccurrences.ToString() +
-                                                          metricOptions.ShowPercentYellowLightOccurrences.ToString() +
+                                                          metricOptions.ShowPercentSevereRedLightViolations.ToString() + "," +
+                                                          metricOptions.ShowAverageTimeRedLightViolations.ToString() + "," +
+                                                          metricOptions.ShowYellowLightOccurrences.ToString() + "," +
+                                                          metricOptions.ShowPercentYellowLightOccurrences.ToString() + "," +
                                                           metricOptions.ShowAverageTimeYellowOccurences.ToString() +
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
@@ -369,7 +369,7 @@ namespace SPM.Controllers
                    "','" + metricOptions.StartDate.ToString("hh") + ":" + metricOptions.StartDate.ToString("mm") + "','" +
                    metricOptions.StartDate.ToString("tt") + "','" + metricOptions.EndDate.ToShortDateString() +
                    "','" + metricOptions.EndDate.ToString("hh") + ":" + metricOptions.EndDate.ToString("mm") + "','" +
-                   metricOptions.StartDate.ToString("tt") + "'," + "null, null); ";
+                   metricOptions.EndDate.ToString("tt") + "'," + "null, null); ";
             //endDateDay, endTime, endAmPmDdl, yAxisMax, y2AxisMax);
         }
 
@@ -599,7 +599,7 @@ namespace SPM.Controllers
                     {
                         tmcvm.PopulateViewModel(tmcInfo.tmcData, metricOptions.SelectedBinSize);
                     }
-                    tmcvm.ImageLocations = tmcInfo.ImageLocations;
+                    tmcvm.ImageLocations.AddRange(tmcInfo.ImageLocations);
                 }
                 catch (Exception ex)
                 {
