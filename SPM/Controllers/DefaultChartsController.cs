@@ -278,8 +278,8 @@ namespace SPM.Controllers
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 8); " +
                                                           "SetApproachDelayMetric(" + metricOptions.SelectedBinSize.ToString() + "," + 
                                                           metricOptions.ShowPlanStatistics.ToString().ToLower() + ","+
-                                                          metricOptions.ShowTotalDelayPerHour.ToString() + "," +
-                                                          metricOptions.ShowDelayPerVehicle.ToString() +
+                                                          metricOptions.ShowTotalDelayPerHour.ToString().ToLower() + "," +
+                                                          metricOptions.ShowDelayPerVehicle.ToString().ToLower() +
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
@@ -620,7 +620,7 @@ namespace SPM.Controllers
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append("/DefaultCharts/GetGetApproachDelayMetricByUrl?");
+            sb.Append("/DefaultCharts/GetApproachDelayMetricByUrl?");
 
 
 
@@ -860,6 +860,7 @@ namespace SPM.Controllers
 
             sb.Append("/DefaultCharts/GetApproachVolumeMetricByUrl?");
 
+            sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
             sb.Append("&ShowDirectionalSplits=" + metricOptions.ShowDirectionalSplits.ToString());
             sb.Append("&ShowTotalVolume=" + metricOptions.ShowTotalVolume.ToString().ToLower());
             sb.Append("&ShowSBEBVolume=" + metricOptions.ShowSBEBVolume.ToString().ToLower());
@@ -960,7 +961,7 @@ namespace SPM.Controllers
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append("/DefaultCharts/ GetPedDelayMetricByUrl?");
+            sb.Append("/DefaultCharts/GetPedDelayMetricByUrl?");
 
 
             sb.Append("&SignalID=" + metricOptions.SignalID);

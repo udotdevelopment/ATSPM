@@ -1,4 +1,10 @@
 ﻿@model MOE.Common.Business.TMC.TMCViewModel
+    
+<script type="text/javascript">
+    function ShowMetricUrl() {
+        @Html.Raw(Model.ShowMetricUrlJavascript)
+    }</script>
+
 @if (Model.ShowDataTable)
 {
     if (Model.Headers.Count > 0)
