@@ -136,25 +136,23 @@ function PostCreateDetectorComment(ID) {
 
 function CreateNewSignal() {
     var newSignalID = prompt("Please enter the new SignalID", "123456");
-    if (newSignalID != null) {
-		$.ajax({
-			type: "POST",
-			cache: false,
-			async: true,
-			url: urlpathCreateSignal + "/" + newSignalID,
-			headers: GetRequestVerificationTokenObject(),
-			success: function (data) {
-				$('#SignalEdit').html(data);
-				SetSignalID(newSignalID);
-			},
-			statusCode: {
-				404: function (content) { alert('cannot find resource'); },
-				500: function (content) { alert(content.responseText); }
-			},
-			error: function (req, status, errorObj) {
-			}
-		});
-	}
+    $.ajax({
+        type: "POST",
+        cache: false,
+        async: true,
+        url: urlpathCreateSignal + "/" + newSignalID,
+        headers: GetRequestVerificationTokenObject(),
+        success: function (data) {
+            $('#SignalEdit').html(data);
+            SetSignalID(newSignalID);
+        },
+        statusCode: {
+            404: function (content) { alert('cannot find resource'); },
+            500: function (content) { alert(content.responseText); }
+        },
+        error: function (req, status, errorObj) {
+        }
+    });
 }
 function SetSignalID(newSignalID)
 {
