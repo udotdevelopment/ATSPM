@@ -418,6 +418,7 @@
     <Compile Include="Migrations\201710272056348_DataAggregationUI.Designer.cs">
       <DependentUpon>201710272056348_DataAggregationUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\AggregationMetricType.cs" />
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\ApproachPcdAggregation.cs" />

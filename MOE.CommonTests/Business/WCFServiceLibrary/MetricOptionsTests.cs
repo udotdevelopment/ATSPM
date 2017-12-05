@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using MOE.Common.Models;
 using MOE.CommonTests.Models;
+using System.Drawing;
+using System.Web.UI.DataVisualization.Charting;
 
 namespace MOE.Common.Business.WCFServiceLibrary.Tests
 {
@@ -71,10 +73,10 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             }
         }
 
-    
 
 
-[TestMethod()]
+
+        [TestMethod()]
         public void GetSignalLocationTest()
         {
             MetricOptions options = NewOptionsForTest();
@@ -92,7 +94,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             MetricOptions options = NewOptionsForTest();
 
 
-             var expectedMetricType = _mtr.GetMetricsByID(1);
+            var expectedMetricType = _mtr.GetMetricsByID(1);
 
             string filename = options.CreateFileName();
 
@@ -140,5 +142,37 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             return options;
 
         }
+
+        [TestMethod()]
+        public void MetricOptionsTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateMetricTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void GetSignalLocationTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateFileNameTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void DriveAvailableTest1()
+        {
+            Assert.Fail();
+        }
+
+
     }
 }

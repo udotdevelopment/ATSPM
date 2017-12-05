@@ -276,6 +276,21 @@ While each agency should consult with their IT department for specific guideline
                 new Models.MetricType { MetricID = 15, ChartName = "Preempt Service", Abbreviation = "PS", ShowOnWebsite = false }
                 );
             context.SaveChanges();
+
+            context.AggregationMetricTypes.AddOrUpdate(
+                c => c.MetricID,
+                new Models.AggregationMetricType { MetricID = 1, ChartName = "Lane by lane count", Abbreviation = "LLC", ShowOnWebsite = true },
+                new Models.AggregationMetricType { MetricID = 2, ChartName = "Advanced Counts", Abbreviation = "AC", ShowOnWebsite = true },
+                new Models.AggregationMetricType { MetricID = 3, ChartName = "Arrival on Green", Abbreviation = "AoG", ShowOnWebsite = true },
+                new Models.AggregationMetricType { MetricID = 4, ChartName = "Platoon Ratio", Abbreviation = "PR", ShowOnWebsite = true },
+                new Models.AggregationMetricType { MetricID = 5, ChartName = "Purdue Split Failure", Abbreviation = "SF", ShowOnWebsite = true },
+                new Models.AggregationMetricType { MetricID = 6, ChartName = "Pedestrian Actuations", Abbreviation = "Ped", ShowOnWebsite = true },
+                new Models.AggregationMetricType { MetricID = 7, ChartName = "Preemption", Abbreviation = "Preempt", ShowOnWebsite = true },
+                new Models.AggregationMetricType { MetricID = 8, ChartName = "Approach Delay", Abbreviation = "AD", ShowOnWebsite = true },
+                new Models.AggregationMetricType { MetricID = 9, ChartName = "Transit Signal Priority", Abbreviation = "TSP", ShowOnWebsite = true }
+
+                );
+            context.SaveChanges();
             //var mt1 = new Models.MetricType { MetricID = 1, ChartName = "Purdue Phase Termination", Abbreviation = "PPT", ShowOnWebsite = true };
             //var mt2 = new Models.MetricType { MetricID = 2, ChartName = "Split Monitor", Abbreviation = "SM", ShowOnWebsite = true };
             //var mt3 = new Models.MetricType { MetricID = 3, ChartName = "Pedestrian Delay", Abbreviation = "PedD", ShowOnWebsite = true };
@@ -317,7 +332,7 @@ While each agency should consult with their IT department for specific guideline
             //dt6.MetricTypes.Add(mt12);         
 
             //context.DetectionTypes.AddOrUpdate(d => d.DetectionTypeID, dt1, dt2, dt3, dt4, dt5, dt6);
-            foreach(var detectionType in context.DetectionTypes)
+            foreach (var detectionType in context.DetectionTypes)
             {
                 switch(detectionType.DetectionTypeID)
                 {

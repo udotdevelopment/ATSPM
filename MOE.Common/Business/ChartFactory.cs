@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,63 @@ namespace MOE.Common.Business
             SetSplitFailLegend(chart);
             return chart;
         }
+
+        public static Chart CreateApproachCycleAggregationChart(MetricOptions options)
+        {
+            Chart chart = new Chart();
+            SetImageProperties(chart);
+            chart.ChartAreas.Add(CreateChartArea(options));
+            return chart;
+        }
+
+        public static Chart CreateApproachPCDAggregationChart(MetricOptions options)
+        {
+            Chart chart = new Chart();
+            SetImageProperties(chart);
+            chart.ChartAreas.Add(CreateChartArea(options));
+            return chart;
+        }
+
+        public static Chart CreateApproachSpeedAggregationChart(MetricOptions options)
+        {
+            Chart chart = new Chart();
+            SetImageProperties(chart);
+            chart.ChartAreas.Add(CreateChartArea(options));
+            return chart;
+        }
+
+        public static Chart CreateApproachSplitFailAggregationChart(MetricOptions options)
+        {
+            Chart chart = new Chart();
+            SetImageProperties(chart);
+            chart.ChartAreas.Add(CreateChartArea(options));
+            return chart;
+        }
+
+        public static Chart CreateApproachYRAAggregationChart(MetricOptions options)
+        {
+            Chart chart = new Chart();
+            SetImageProperties(chart);
+            chart.ChartAreas.Add(CreateChartArea(options));
+            return chart;
+        }
+
+        public static Chart CreatePreemptionAggregationChart(MetricOptions options)
+        {
+            Chart chart = new Chart();
+            SetImageProperties(chart);
+            chart.ChartAreas.Add(CreateChartArea(options));
+            return chart;
+        }
+
+        public static Chart CreatePriorityAggregationChart(MetricOptions options)
+        {
+            Chart chart = new Chart();
+            SetImageProperties(chart);
+            chart.ChartAreas.Add(CreateChartArea(options));
+            return chart;
+        }
+
 
         private static void SetSplitFailLegend(Chart chart)
         {
@@ -186,6 +244,50 @@ namespace MOE.Common.Business
             }
             chartArea.AxisY.Title = "Cycle Time (Seconds) ";
             chartArea.AxisY.Minimum = 0;
+        }
+
+        public static Series CreateLineSeres(string seriesName, Color seriesColor)
+        {
+            Series s = new Series();
+            s.ChartType = SeriesChartType.Line;
+
+
+            s.Color = seriesColor;
+
+            return s;
+        }
+
+        public static Series CreateStackedAreaSeres(string seriesName, Color seriesColor)
+        {
+            Series s = new Series();
+            s.ChartType = SeriesChartType.StackedArea;
+
+
+            s.Color = seriesColor;
+
+            return s;
+        }
+
+        public static Series CreateColumnSeres(string seriesName, Color seriesColor)
+        {
+            Series s = new Series();
+            s.ChartType = SeriesChartType.Column;
+
+
+            s.Color = seriesColor;
+
+            return s;
+        }
+
+        public static Series CreateStackedColumnSeres(string seriesName, Color seriesColor)
+        {
+            Series s = new Series();
+            s.ChartType = SeriesChartType.StackedColumn;
+
+
+            s.Color = seriesColor;
+
+            return s;
         }
     }
 }

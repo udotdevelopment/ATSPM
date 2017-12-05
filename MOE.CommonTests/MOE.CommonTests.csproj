@@ -59,6 +59,8 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
@@ -88,6 +90,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Business\ApproachSpeed\AvgSpeedBucketCollectionTests.cs" />
+    <Compile Include="Business\ChartFactoryTests.cs" />
     <Compile Include="Models\InMemoryApplicationEventRepository.cs" />
     <Compile Include="Business\WCFServiceLibrary\MetricOptionsTests.cs" />
     <Compile Include="Models\Custom\ApproachTests.cs" />
