@@ -435,7 +435,10 @@
     <Compile Include="Models\PreemptionAggregation.cs" />
     <Compile Include="Models\PriorityAggregation.cs" />
     <Compile Include="Models\Repositories\ActionChart.cs" />
+    <Compile Include="Models\Repositories\IAggregationMetricTypeRepository.cs" />
     <Compile Include="Models\Repositories\IRoutePhaseDirectionRepository.cs" />
+    <Compile Include="Models\Repositories\AggregationMetricTypeRepository.cs" />
+    <Compile Include="Models\Repositories\AggregationMetricTypeRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\RoutePhaseDirectionRepository.cs" />
     <Compile Include="Models\Repositories\RoutePhaseDirectionRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\RouteSignalRepository.cs" />
