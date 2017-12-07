@@ -11,8 +11,63 @@ namespace MOE.Common.Business
 {
     public static class ChartFactory
     {
+        private static List<Series> SeriesList = new List<Series>();
+        private static List<Bin> Bins;
+
+        public static List<Bin> GetBins(AggregationMetricOptions options)
+        {
+            List <Bin> bins = new List<Bin>();
+
+            DateTime timeX = new DateTime();
+
+            timeX = options.StartDate;
+
+            while(timeX <= options.EndDate)
+            {
+                Bin bin = new Bin();
+
+                bin.Start = timeX;
+
+                timeX = timeX.AddMinutes(options.BinSize);
+
+                bins.Add(bin);
+
+
+            }
+
+            return bins;
+
+        }
+
+        public static void AddSeriesToSeriesList(Series series)
+        {
+            List<Series> checkSeries = (from r in SeriesList
+                where series.ChartType != r.ChartType
+                select r).ToList();
+
+            if (checkSeries == null || checkSeries.Count == 0)
+            {
+                SeriesList.Add(series);
+            }
+
+        }
+
+
+
+        public static Chart ChartInitialization(MetricOptions options)
+        {
+            Chart chart = new Chart();
+            SetImageProperties(chart);
+            chart.ChartAreas.Add(CreateChartArea(options));
+
+
+
+            return chart;
+        }
+
         public static Chart CreateDefaultChart(MetricOptions options)
         {
+            
             Chart chart = new Chart();
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateChartArea(options));
@@ -28,59 +83,76 @@ namespace MOE.Common.Business
             return chart;
         }
 
-        public static Chart CreateApproachCycleAggregationChart(MetricOptions options)
+        public static Chart CreateLaneByLaneAggregationChart(AggregationMetricOptions options)
         {
-            Chart chart = new Chart();
-            SetImageProperties(chart);
-            chart.ChartAreas.Add(CreateChartArea(options));
+            options.MetricTypeID = 16;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
             return chart;
         }
 
-        public static Chart CreateApproachPCDAggregationChart(MetricOptions options)
+        public static Chart CreateAdvancedCountsAggregationChart(AggregationMetricOptions options)
         {
-            Chart chart = new Chart();
-            SetImageProperties(chart);
-            chart.ChartAreas.Add(CreateChartArea(options));
+            options.MetricTypeID = 17;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
             return chart;
         }
 
-        public static Chart CreateApproachSpeedAggregationChart(MetricOptions options)
+        public static Chart CreateArrivalOnGreenAggregationChart(AggregationMetricOptions options)
         {
-            Chart chart = new Chart();
-            SetImageProperties(chart);
-            chart.ChartAreas.Add(CreateChartArea(options));
+            options.MetricTypeID = 18;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
             return chart;
         }
 
-        public static Chart CreateApproachSplitFailAggregationChart(MetricOptions options)
+        public static Chart CreatePlatoonRatioAggregationChart(AggregationMetricOptions options)
         {
-            Chart chart = new Chart();
-            SetImageProperties(chart);
-            chart.ChartAreas.Add(CreateChartArea(options));
+            options.MetricTypeID = 19;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
             return chart;
         }
 
-        public static Chart CreateApproachYRAAggregationChart(MetricOptions options)
+        public static Chart CreatePurdueSplitFailureAggregationChart(AggregationMetricOptions options)
         {
-            Chart chart = new Chart();
-            SetImageProperties(chart);
-            chart.ChartAreas.Add(CreateChartArea(options));
+            options.MetricTypeID = 20;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
             return chart;
         }
 
-        public static Chart CreatePreemptionAggregationChart(MetricOptions options)
+        public static Chart CreatePedestrianActuationAggregationChart(AggregationMetricOptions options)
         {
-            Chart chart = new Chart();
-            SetImageProperties(chart);
-            chart.ChartAreas.Add(CreateChartArea(options));
+            options.MetricTypeID = 21;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
             return chart;
         }
 
-        public static Chart CreatePriorityAggregationChart(MetricOptions options)
+        public static Chart PreemptionAggregationChart(AggregationMetricOptions options)
         {
-            Chart chart = new Chart();
-            SetImageProperties(chart);
-            chart.ChartAreas.Add(CreateChartArea(options));
+            options.MetricTypeID = 22;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
+            return chart;
+        }
+
+        public static Chart CreateApproachDelayAggregationChart(AggregationMetricOptions options)
+        {
+            options.MetricTypeID = 23;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
+            return chart;
+        }
+
+
+
+        public static Chart TransitSignalPriorityAggregationChart(AggregationMetricOptions options)
+        {
+            options.MetricTypeID = 24;
+            Chart chart = ChartInitialization(options);
             return chart;
         }
 
@@ -246,7 +318,7 @@ namespace MOE.Common.Business
             chartArea.AxisY.Minimum = 0;
         }
 
-        public static Series CreateLineSeres(string seriesName, Color seriesColor)
+        public static Series CreateLineSeries(string seriesName, Color seriesColor)
         {
             Series s = new Series();
             s.ChartType = SeriesChartType.Line;
@@ -257,7 +329,7 @@ namespace MOE.Common.Business
             return s;
         }
 
-        public static Series CreateStackedAreaSeres(string seriesName, Color seriesColor)
+        public static Series CreateStackedAreaSeries(string seriesName, Color seriesColor)
         {
             Series s = new Series();
             s.ChartType = SeriesChartType.StackedArea;
@@ -268,7 +340,7 @@ namespace MOE.Common.Business
             return s;
         }
 
-        public static Series CreateColumnSeres(string seriesName, Color seriesColor)
+        public static Series CreateColumnSeries(string seriesName, Color seriesColor)
         {
             Series s = new Series();
             s.ChartType = SeriesChartType.Column;
@@ -279,7 +351,7 @@ namespace MOE.Common.Business
             return s;
         }
 
-        public static Series CreateStackedColumnSeres(string seriesName, Color seriesColor)
+        public static Series CreateStackedColumnSeries(string seriesName, Color seriesColor)
         {
             Series s = new Series();
             s.ChartType = SeriesChartType.StackedColumn;

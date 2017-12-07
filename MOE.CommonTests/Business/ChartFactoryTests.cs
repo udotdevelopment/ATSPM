@@ -7,46 +7,55 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business.WCFServiceLibrary;
 
 namespace MOE.Common.Business.Tests
 {
     [TestClass()]
     public class ChartFactoryTests
     {
-        [TestMethod()]
-        public void CreateLineSeresTest()
+        [TestInitialize]
+        public void Initialize()
         {
             
-            var s = ChartFactory.CreateLineSeres("TestSeries", Color.Green);
+        }
+
+        [TestMethod()]
+        public void CreateLineSeriesTest()
+        {
+            
+            var s = ChartFactory.CreateLineSeries("TestSeries", Color.Green);
 
             Assert.IsTrue(s.ChartType == SeriesChartType.Line);
         }
 
         [TestMethod()]
-        public void CreateStackedAreaSeresTest()
+        public void CreateStackedAreaSeriesTest()
         {
 
-            var s = ChartFactory.CreateStackedAreaSeres("TestSeries", Color.Green);
+            var s = ChartFactory.CreateStackedAreaSeries("TestSeries", Color.Green);
 
             Assert.IsTrue(s.ChartType == SeriesChartType.StackedArea);
         }
 
         [TestMethod()]
-        public void CreateColumnSeresTest()
+        public void CreateColumnSeriesTest()
         {
 
-            var s = ChartFactory.CreateColumnSeres("TestSeries", Color.Green);
+            var s = ChartFactory.CreateColumnSeries("TestSeries", Color.Green);
 
             Assert.IsTrue(s.ChartType == SeriesChartType.Column);
         }
 
         [TestMethod()]
-        public void CreateStackedColumnSeresTest()
+        public void CreateStackedColumnSeriesTest()
         {
 
-            var s = ChartFactory.CreateStackedColumnSeres("TestSeries", Color.Green);
+            var s = ChartFactory.CreateStackedColumnSeries("TestSeries", Color.Green);
 
             Assert.IsTrue(s.ChartType == SeriesChartType.StackedColumn);
         }
+
+  
     }
 }

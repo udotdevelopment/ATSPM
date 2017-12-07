@@ -332,6 +332,7 @@
     <Compile Include="Business\ApproachVolume\ApproachVolumeViewModel.cs" />
     <Compile Include="Business\ApproachVolume\MetricInfo.cs" />
     <Compile Include="Business\ArchiveMetric.cs" />
+    <Compile Include="Business\Bin.cs" />
     <Compile Include="Business\BulkCopyOptions.cs" />
     <Compile Include="Business\ChartFactory.cs" />
     <Compile Include="Business\ChartTitleFactory.cs" />
@@ -377,6 +378,7 @@
     <Compile Include="Business\PCD\PlanFactory.cs" />
     <Compile Include="Business\TMC\TMCViewModel.cs" />
     <Compile Include="Business\WatchDog\WatchDogScan.cs" />
+    <Compile Include="Business\WCFServiceLibrary\AggregationMetricOptions.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>
     </Compile>
@@ -418,7 +420,6 @@
     <Compile Include="Migrations\201710272056348_DataAggregationUI.Designer.cs">
       <DependentUpon>201710272056348_DataAggregationUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\AggregationMetricType.cs" />
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\ApproachPcdAggregation.cs" />
@@ -435,10 +436,7 @@
     <Compile Include="Models\PreemptionAggregation.cs" />
     <Compile Include="Models\PriorityAggregation.cs" />
     <Compile Include="Models\Repositories\ActionChart.cs" />
-    <Compile Include="Models\Repositories\IAggregationMetricTypeRepository.cs" />
     <Compile Include="Models\Repositories\IRoutePhaseDirectionRepository.cs" />
-    <Compile Include="Models\Repositories\AggregationMetricTypeRepository.cs" />
-    <Compile Include="Models\Repositories\AggregationMetricTypeRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\RoutePhaseDirectionRepository.cs" />
     <Compile Include="Models\Repositories\RoutePhaseDirectionRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\RouteSignalRepository.cs" />

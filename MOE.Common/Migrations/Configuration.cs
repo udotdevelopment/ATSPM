@@ -259,79 +259,33 @@ While each agency should consult with their IT department for specific guideline
 
             context.MetricTypes.AddOrUpdate(
                 c => c.MetricID,
-                new Models.MetricType { MetricID = 1, ChartName = "Purdue Phase Termination", Abbreviation = "PPT", ShowOnWebsite = true },
-                new Models.MetricType { MetricID = 2, ChartName = "Split Monitor", Abbreviation = "SM", ShowOnWebsite = true },
-                new Models.MetricType { MetricID = 3, ChartName = "Pedestrian Delay", Abbreviation = "PedD", ShowOnWebsite = true },
-                new Models.MetricType { MetricID = 4, ChartName = "Preemption Details", Abbreviation = "PD", ShowOnWebsite = true },
-                new Models.MetricType { MetricID = 5, ChartName = "Turning Movement Counts", Abbreviation = "TMC", ShowOnWebsite = true },
-                new Models.MetricType { MetricID = 6, ChartName = "Purdue Coordination Diagram", Abbreviation = "PCD", ShowOnWebsite = true },
-                new Models.MetricType { MetricID = 7, ChartName = "Approach Volume", Abbreviation = "AV", ShowOnWebsite = true },
-                new Models.MetricType { MetricID = 8, ChartName = "Approach Delay", Abbreviation = "AD", ShowOnWebsite = true },
-                new Models.MetricType { MetricID = 9, ChartName = "Arrivals On Red", Abbreviation = "AoR", ShowOnWebsite = true, },
-                new Models.MetricType { MetricID = 10, ChartName = "Approach Speed", Abbreviation = "Speed", ShowOnWebsite = true },
-                new Models.MetricType { MetricID = 11, ChartName = "Yellow and Red Actuations", Abbreviation = "YRA", ShowOnWebsite = true },
-                new Models.MetricType { MetricID = 12, ChartName = "Purdue Split Failure", Abbreviation = "SF", ShowOnWebsite = true },
-                new Models.MetricType { MetricID = 13, ChartName = "Purdue Link Pivot", Abbreviation = "LP", ShowOnWebsite = false },
-                new Models.MetricType { MetricID = 14, ChartName = "Preempt Service Request", Abbreviation = "PSR", ShowOnWebsite = false },
-                new Models.MetricType { MetricID = 15, ChartName = "Preempt Service", Abbreviation = "PS", ShowOnWebsite = false }
+                new Models.MetricType { MetricID = 1, ChartName = "Purdue Phase Termination", Abbreviation = "PPT", ShowOnWebsite = true, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 2, ChartName = "Split Monitor", Abbreviation = "SM", ShowOnWebsite = true, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 3, ChartName = "Pedestrian Delay", Abbreviation = "PedD", ShowOnWebsite = true, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 4, ChartName = "Preemption Details", Abbreviation = "PD", ShowOnWebsite = true, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 5, ChartName = "Turning Movement Counts", Abbreviation = "TMC", ShowOnWebsite = true, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 6, ChartName = "Purdue Coordination Diagram", Abbreviation = "PCD", ShowOnWebsite = true, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 7, ChartName = "Approach Volume", Abbreviation = "AV", ShowOnWebsite = true, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 8, ChartName = "Approach Delay", Abbreviation = "AD", ShowOnWebsite = true, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 9, ChartName = "Arrivals On Red", Abbreviation = "AoR", ShowOnWebsite = true, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 10, ChartName = "Approach Speed", Abbreviation = "Speed", ShowOnWebsite = true, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 11, ChartName = "Yellow and Red Actuations", Abbreviation = "YRA", ShowOnWebsite = true, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 12, ChartName = "Purdue Split Failure", Abbreviation = "SF", ShowOnWebsite = true, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 13, ChartName = "Purdue Link Pivot", Abbreviation = "LP", ShowOnWebsite = false, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 14, ChartName = "Preempt Service Request", Abbreviation = "PSR", ShowOnWebsite = false, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 15, ChartName = "Preempt Service", Abbreviation = "PS", ShowOnWebsite = false, ShowOnAggregationSite = false },
+                new Models.MetricType { MetricID = 16, ChartName = "Lane by lane Aggregation", Abbreviation = "LLA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 17, ChartName = "Advanced Counts Aggregation", Abbreviation = "ACA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 18, ChartName = "Arrival on Green Aggregation", Abbreviation = "AoGA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 19, ChartName = "Platoon Ratio Aggregation", Abbreviation = "PRA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 20, ChartName = "Purdue Split Failure Aggregation", Abbreviation = "SFA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 21, ChartName = "Pedestrian Actuations Aggregation", Abbreviation = "PedA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 22, ChartName = "Preemption Aggregation", Abbreviation = "PreemptA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 23, ChartName = "Approach Delay Aggregation", Abbreviation = "ADA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 24, ChartName = "Transit Signal Priority Aggregation", Abbreviation = "TSPA", ShowOnWebsite = false, ShowOnAggregationSite = true }
                 );
             context.SaveChanges();
 
-            context.AggregationMetricTypes.AddOrUpdate(
-                c => c.MetricID,
-                new Models.AggregationMetricType { MetricID = 1, ChartName = "Lane by lane count", Abbreviation = "LLC", ShowOnWebsite = true },
-                new Models.AggregationMetricType { MetricID = 2, ChartName = "Advanced Counts", Abbreviation = "AC", ShowOnWebsite = true },
-                new Models.AggregationMetricType { MetricID = 3, ChartName = "Arrival on Green", Abbreviation = "AoG", ShowOnWebsite = true },
-                new Models.AggregationMetricType { MetricID = 4, ChartName = "Platoon Ratio", Abbreviation = "PR", ShowOnWebsite = true },
-                new Models.AggregationMetricType { MetricID = 5, ChartName = "Purdue Split Failure", Abbreviation = "SF", ShowOnWebsite = true },
-                new Models.AggregationMetricType { MetricID = 6, ChartName = "Pedestrian Actuations", Abbreviation = "Ped", ShowOnWebsite = true },
-                new Models.AggregationMetricType { MetricID = 7, ChartName = "Preemption", Abbreviation = "Preempt", ShowOnWebsite = true },
-                new Models.AggregationMetricType { MetricID = 8, ChartName = "Approach Delay", Abbreviation = "AD", ShowOnWebsite = true },
-                new Models.AggregationMetricType { MetricID = 9, ChartName = "Transit Signal Priority", Abbreviation = "TSP", ShowOnWebsite = true }
-
-                );
-            context.SaveChanges();
-            //var mt1 = new Models.MetricType { MetricID = 1, ChartName = "Purdue Phase Termination", Abbreviation = "PPT", ShowOnWebsite = true };
-            //var mt2 = new Models.MetricType { MetricID = 2, ChartName = "Split Monitor", Abbreviation = "SM", ShowOnWebsite = true };
-            //var mt3 = new Models.MetricType { MetricID = 3, ChartName = "Pedestrian Delay", Abbreviation = "PedD", ShowOnWebsite = true };
-            //var mt4 = new Models.MetricType { MetricID = 4, ChartName = "Preemption Details", Abbreviation = "PD", ShowOnWebsite = true };
-            //var mt5 = new Models.MetricType { MetricID = 5, ChartName = "Turning Movement Counts", Abbreviation = "TMC", ShowOnWebsite = true };
-            //var mt6 = new Models.MetricType { MetricID = 6, ChartName = "Purdue Coordination Diagram", Abbreviation = "PCD", ShowOnWebsite = true };
-            //var mt7 = new Models.MetricType { MetricID = 7, ChartName = "Approach Volume", Abbreviation = "AV", ShowOnWebsite = true };
-            //var mt8 = new Models.MetricType { MetricID = 8, ChartName = "Approach Delay", Abbreviation = "AD", ShowOnWebsite = true };
-            //var mt9 = new Models.MetricType { MetricID = 9, ChartName = "Arrivals On Red", Abbreviation = "AoR", ShowOnWebsite = true, };
-            //var mt10 = new Models.MetricType { MetricID = 10, ChartName = "Approach Speed", Abbreviation = "Speed", ShowOnWebsite = true };
-            //var mt11 = new Models.MetricType { MetricID = 11, ChartName = "Yellow and Red Actuations", Abbreviation = "YRA", ShowOnWebsite = true };
-            //var mt12 = new Models.MetricType { MetricID = 12, ChartName = "Purdue Split Failure", Abbreviation = "SF", ShowOnWebsite = true };
-            //var mt13 = new Models.MetricType { MetricID = 13, ChartName = "Purdue Link Pivot", Abbreviation = "LP", ShowOnWebsite = false };
-            //var mt14 = new Models.MetricType { MetricID = 14, ChartName = "Preempt Service Request", Abbreviation = "PSR", ShowOnWebsite = false };
-            //var mt15 = new Models.MetricType { MetricID = 15, ChartName = "Preempt Service", Abbreviation = "PS", ShowOnWebsite = false };
-
-            //dt1.MetricTypes.Add(mt1);
-            //dt1.MetricTypes.Add(mt2);
-            //dt1.MetricTypes.Add(mt3);
-            //dt1.MetricTypes.Add(mt4);
-            //dt1.MetricTypes.Add(mt14);
-            //dt1.MetricTypes.Add(mt15);
-
-            //dt2.MetricTypes.Add(mt6);
-            //dt2.MetricTypes.Add(mt7);
-            //dt2.MetricTypes.Add(mt8);
-            //dt2.MetricTypes.Add(mt9);
-            //dt2.MetricTypes.Add(mt13);
-
-            //dt3.MetricTypes.Add(mt10);
-
-            //dt4.MetricTypes.Add(mt5);
-            //dt4.MetricTypes.Add(mt7);
-            //dt4.MetricTypes.Add(mt8);
-            //dt4.MetricTypes.Add(mt9);
-
-            //dt5.MetricTypes.Add(mt11);
-
-            //dt6.MetricTypes.Add(mt12);         
-
-            //context.DetectionTypes.AddOrUpdate(d => d.DetectionTypeID, dt1, dt2, dt3, dt4, dt5, dt6);
             foreach (var detectionType in context.DetectionTypes)
             {
                 switch(detectionType.DetectionTypeID)

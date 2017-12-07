@@ -61,7 +61,7 @@ namespace MOE.Common.Models
         public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedActivationAggregations { get; set; }
         public virtual DbSet<ApproachSpeedAggregation> ApproachSpeedAggregations { get; set; }
         public virtual DbSet<DetectorAggregation> DetectorAggregations { get; set; }
-        public virtual DbSet<AggregationMetricType> AggregationMetricTypes { get; set; }
+
 
 
 

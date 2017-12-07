@@ -20,6 +20,9 @@ namespace MOE.Common.Models
         [Required]
         public bool ShowOnWebsite { get; set; }
 
+        [Required]
+        public bool ShowOnAggregationSite { get; set; }
+
         //[Required]
         //[Column("DetectionType_DetectionTypeID")]
         //public int DetectionTypeID { get; set; }
