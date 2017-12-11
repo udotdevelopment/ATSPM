@@ -15,6 +15,6 @@ namespace MOE.Common.Models
         [Required]
         public string RouteName { get; set; }
 
-        public virtual ICollection<RouteSignal> RouteSignals { get; set; }
+        public virtual List<RouteSignal> RouteSignals { get; set; }
     }
 }

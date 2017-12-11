@@ -65,25 +65,17 @@ namespace ConvertDBForHistoricalConfigurations
         private static List<RouteSignal> CreateRouteSignals(OldRoute oldRoute, Route newRoute, SPM db)
         {
             List<RouteSignal> signals = new List<RouteSignal>();
-
             IApproachRepository appRepo = ApproachRepositoryFactory.Create(db);
-
             foreach (var detail in oldRoute.Details)
             {
                 var approach = appRepo.GetApproachByApproachID(detail.ApproachId);
                 RouteSignal signal = new RouteSignal();
-
                 signal.Route = newRoute;
                 signal.Order = detail.Order;
                 signal.SignalId = approach.SignalID;
-                signal.Signal = approach.Signal;
                 signal.PhaseDirections = CreateRoutePhaseDirections(signal, detail, approach, db);
-
                 signals.Add(signal);
             }
-
-
-
             return signals;
         }
 

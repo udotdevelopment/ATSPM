@@ -4,6 +4,7 @@ using System.Linq;
 using MOE.Common.Business.SplitFail;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 using Approach = MOE.Common.Business.ApproachVolume.Approach;
 
 namespace MOE.Common.Business
@@ -91,9 +92,13 @@ namespace MOE.Common.Business
             }
         }
 
-        public static List<CycleSpeed> GetSpeedCycles(DateTime startDate, DateTime endDate, List<Speed_Events> detectorEvents, bool getPermissivePhase, Models.Approach approach)
+        public static List<CycleSpeed> GetSpeedCycles(DateTime startDate, DateTime endDate,  bool getPermissivePhase, Models.Detector detector)
         {
-            var cycleEvents = GetCycleEvents(getPermissivePhase, startDate, endDate, approach);
+            var cycleEvents = GetCycleEvents(getPermissivePhase, startDate, endDate, detector.Approach);
+            if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) != RedToRedCycle.EventType.ChangeToRed)
+            {
+                GetEventsToCompleteCycle(getPermissivePhase, endDate, detector.Approach, cycleEvents);
+            }
             List<CycleSpeed> cycles = new List<CycleSpeed>();
             for (int i = 0; i < cycleEvents.Count; i++)
             {
@@ -103,16 +108,17 @@ namespace MOE.Common.Business
                     && GetEventType(cycleEvents[i + 2].EventCode) == RedToRedCycle.EventType.ChangeToYellow
                     && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToRed)
                 {
-                    cycles.Add(new CycleSpeed(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp, cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp, detectorEvents));
+                    cycles.Add(new CycleSpeed(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp, cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp));
                     i = i + 3;
                 }
             }
             if (cycles.Any())
             {
+                ISpeedEventRepository speedEventRepository = SpeedEventRepositoryFactory.Create();
+                var speedEvents = speedEventRepository.GetSpeedEventsByDetector(startDate, cycles.LastOrDefault().EndTime, detector, detector.MinSpeedFilter ?? 5);
                 foreach (var cycle in cycles)
                 {
-                    cycle.SpeedEvents = detectorEvents
-                        .Where(d => d.timestamp >= cycle.StartTime && d.timestamp < cycle.EndTime).ToList();
+                    cycle.FindSpeedEventsForCycle(speedEvents);
                 }
             }
             return cycles;

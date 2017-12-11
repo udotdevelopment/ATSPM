@@ -24,7 +24,7 @@ namespace MOE.Common.Business
             }
         }
 
-        public MOE.Common.Business.RLMPlanCollection Plans { get; private set; }
+        public RLMPlanCollection Plans { get; private set; }
 
         public double SevereRedLightViolationSeconds { get; } = 0;
 
@@ -66,7 +66,7 @@ namespace MOE.Common.Business
         {
             get
             {
-                return this.Plans.PlanList.Sum(d => d.YellowOccurrences);
+                return Plans.PlanList.Sum(d => d.YellowOccurrences);
             }
         }
 
@@ -74,7 +74,7 @@ namespace MOE.Common.Business
         {
             get
             {
-                return this.Plans.PlanList.Sum(d => d.TotalYellowTime);
+                return Plans.PlanList.Sum(d => d.TotalYellowTime);
             }
         }
 
@@ -97,14 +97,14 @@ namespace MOE.Common.Business
                 return 0;
             }
         }
-        public MOE.Common.Models.Approach Approach { get; set; }
+        public Models.Approach Approach { get; set; }
 
 
         private int _detChannel;
         private bool _showVolume;
 
         
-        public RLMSignalPhase(DateTime startDate, DateTime endDate, int binSize, double severeRedLightViolatinsSeconds, MOE.Common.Models.Approach approach, bool usePermissivePhase)
+        public RLMSignalPhase(DateTime startDate, DateTime endDate, int binSize, double severeRedLightViolatinsSeconds, Models.Approach approach, bool usePermissivePhase)
         {            
             SevereRedLightViolationSeconds = severeRedLightViolatinsSeconds;
             Approach = approach;
@@ -130,8 +130,8 @@ namespace MOE.Common.Business
 
         private void GetSignalPhaseData(DateTime startDate, DateTime endDate, bool usePermissivePhase)
         {
-            MOE.Common.Models.Repositories.IControllerEventLogRepository controllerRepository =
-                MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            Models.Repositories.IControllerEventLogRepository controllerRepository =
+                Models.Repositories.ControllerEventLogRepositoryFactory.Create();
             if (!usePermissivePhase)
             {
                 PhaseNumber = Approach.ProtectedPhaseNumber;
@@ -144,10 +144,10 @@ namespace MOE.Common.Business
             TotalVolume = controllerRepository.GetTmcVolume(startDate, endDate, Approach.SignalID, PhaseNumber);
             List<Models.Controller_Event_Log> cycleEvents = controllerRepository.GetEventsByEventCodesParam(Approach.SignalID,
                 startDate, endDate, new List<int>() { 1, 8, 9, 10, 11 }, PhaseNumber);
-            Plans = new RLMPlanCollection(cycleEvents, startDate, endDate, this.SevereRedLightViolationSeconds, Approach);
+            Plans = new RLMPlanCollection(cycleEvents, startDate, endDate, SevereRedLightViolationSeconds, Approach);
             if (Plans.PlanList.Count == 0)
             {
-                Plans.AddItem(new RLMPlan(startDate, endDate, 0, cycleEvents, this.SevereRedLightViolationSeconds, Approach));
+                Plans.AddItem(new RLMPlan(startDate, endDate, 0, cycleEvents, SevereRedLightViolationSeconds, Approach));
             }
         }       
 
@@ -157,14 +157,14 @@ namespace MOE.Common.Business
             
             DateTime redLightTimeStamp = DateTime.MinValue;
             List<int> li = new List<int>{62,63,64};
-            MOE.Common.Models.Repositories.IControllerEventLogRepository controllerRepository =
-                MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            Models.Repositories.IControllerEventLogRepository controllerRepository =
+                Models.Repositories.ControllerEventLogRepositoryFactory.Create();
             var cycleEvents = controllerRepository.GetEventsByEventCodesParam(Approach.SignalID,
                 startDate, endDate, li, Approach.ProtectedPhaseNumber);
-            Plans = new RLMPlanCollection(cycleEvents, startDate, endDate, this.SevereRedLightViolationSeconds, Approach);
+            Plans = new RLMPlanCollection(cycleEvents, startDate, endDate, SevereRedLightViolationSeconds, Approach);
             if (Plans.PlanList.Count == 0)
             {
-                Plans.AddItem(new RLMPlan(startDate, endDate, 0, cycleEvents, this.SevereRedLightViolationSeconds, Approach));
+                Plans.AddItem(new RLMPlan(startDate, endDate, 0, cycleEvents, SevereRedLightViolationSeconds, Approach));
             }            
         }
 

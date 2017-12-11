@@ -11,6 +11,10 @@ namespace MOE.Common.Models.Repositories
     {
         SPM _db = new SPM();
 
+        public ControllerEventLogRepository()
+        {
+            _db.Database.CommandTimeout = 180;
+        }
         public List<Controller_Event_Log> GetAllAggregationCodes(string signalId, DateTime startTime, DateTime endTime)
         {
             List<int> codes = new List<int> { 150, 114, 113, 112, 105, 102, 1, 45 };

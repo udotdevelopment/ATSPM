@@ -55,7 +55,7 @@ namespace MOE.Common.Business.DataAggregation
             var options = new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"]) };
             for (DateTime dt = _startDate; dt < _startDate.AddDays(1); dt = dt.AddMinutes(binSize))
             {
-                Parallel.ForEach(signals, signal =>
+                Parallel.ForEach(signals, options, signal =>
                 //foreach (var signal in signals)
                 {
                     Console.WriteLine(signal.SignalID + " " + dt.ToString());
@@ -100,13 +100,13 @@ namespace MOE.Common.Business.DataAggregation
             DataTable detectorAggregationTable = new DataTable();
             detectorAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             detectorAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
-            detectorAggregationTable.Columns.Add(new DataColumn("DetectorID", typeof(string)));
+            detectorAggregationTable.Columns.Add(new DataColumn("DetectorPrimaryId", typeof(string)));
             detectorAggregationTable.Columns.Add(new DataColumn("Volume", typeof(double)));
             while (_detectorAggregationConcurrentQueue.TryDequeue(out var detectorAggregationData))
             {
                 DataRow dataRow = detectorAggregationTable.NewRow();
                 dataRow["BinStartTime"] = detectorAggregationData.BinStartTime;
-                dataRow["DetectorID"] = detectorAggregationData.DetectorId;
+                dataRow["DetectorPrimaryId"] = detectorAggregationData.DetectorPrimaryId;
                 dataRow["Volume"] = detectorAggregationData.Volume;
                 detectorAggregationTable.Rows.Add(dataRow);
             }
@@ -274,6 +274,10 @@ namespace MOE.Common.Business.DataAggregation
             approachAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             approachAggregationTable.Columns.Add(new DataColumn("ApproachID", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("SplitFailures", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("GapOuts", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("ForceOffs", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("MaxOuts", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("UnknownTerminationTypes", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
             while (_approachSplitFailAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
@@ -281,6 +285,10 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["BinStartTime"] = approachAggregationData.BinStartTime;
                 dataRow["ApproachID"] = approachAggregationData.ApproachId;
                 dataRow["SplitFailures"] = approachAggregationData.SplitFailures;
+                dataRow["GapOuts"] = approachAggregationData.GapOuts;
+                dataRow["ForceOffs"] = approachAggregationData.ForceOffs;
+                dataRow["MaxOuts"] = approachAggregationData.MaxOuts;
+                dataRow["UnknownTerminationTypes"] = approachAggregationData.UnknownTerminationTypes;
                 dataRow["IsProtectedPhase"] = approachAggregationData.IsProtectedPhase;
                 approachAggregationTable.Rows.Add(dataRow);
             }
@@ -385,39 +393,52 @@ namespace MOE.Common.Business.DataAggregation
             //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
             List<int> preemptCodes = new List<int> { 102, 105 };
             List<int> priorityCodes = new List<int> { 112, 113, 114 };
-            if (records.Count(r => preemptCodes.Contains(r.EventCode)) > 0)
+            Parallel.Invoke(() =>
             {
-                //Console.Write("\n-Aggregate Preempt data ");
-                //dt = DateTime.Now;
-                AggregatePreemptCodes(startTime, records, signal, preemptCodes);
-                //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
-            }
-            if (records.Count(r => priorityCodes.Contains(r.EventCode)) > 0)
+                if (records.Count(r => preemptCodes.Contains(r.EventCode)) > 0)
+                {
+                    //Console.Write("\n-Aggregate Preempt data ");
+                    //dt = DateTime.Now;
+                    AggregatePreemptCodes(startTime, records, signal, preemptCodes);
+                    //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
+                }
+            },
+            ()=>
             {
-                //Console.Write("\n-Aggregate Priority data ");
-                //dt = DateTime.Now;
-                AggregatePriorityCodes(startTime, records, signal, priorityCodes);
-                //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
-            }
-            if (signal.Approaches != null)
+                if (records.Count(r => priorityCodes.Contains(r.EventCode)) > 0)
+                {
+                    //Console.Write("\n-Aggregate Priority data ");
+                    //dt = DateTime.Now;
+                    AggregatePriorityCodes(startTime, records, signal, priorityCodes);
+                    //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
+                }
+            },
+            () =>
             {
-                ProcessApproach(signal, startTime, endTime, records);
+                if (signal.Approaches != null)
+                {
+                    ProcessApproach(signal, startTime, endTime, records);
+                }
             }
+            );
         }
 
         private void ProcessApproach(Models.Signal signal, DateTime startTime, DateTime endTime, List<Controller_Event_Log> records)
         {
             if (signal.Approaches != null)
             {
-                foreach (var signalApproach in signal.Approaches)
+                Parallel.ForEach(signal.Approaches, signalApproach =>  
+                //foreach (var signalApproach in signal.Approaches)
                 {
                     if (signalApproach.Detectors != null && signalApproach.Detectors.Count > 0)
                     {
-                        SetApproachSpeedAggregationData(startTime, endTime, signalApproach);
-                        SetApproachAggregationData(startTime, endTime, records, signalApproach);
-                        SetDetectorAggregationData(startTime, endTime, signalApproach);
+                        Parallel.Invoke(
+                            () =>{SetApproachSpeedAggregationData(startTime, endTime, signalApproach);},
+                            () =>{SetApproachAggregationData(startTime, endTime, records, signalApproach);},
+                            () =>{SetDetectorAggregationData(startTime, endTime, signalApproach);}
+                        );
                     }
-                }
+                });
             }
         }
 
@@ -425,19 +446,20 @@ namespace MOE.Common.Business.DataAggregation
         {
             //Console.Write("\n-Aggregate Detector data ");
             //DateTime dt = DateTime.Now;
-            var controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
-            foreach (var detector in signalApproach.Detectors)
+            Parallel.ForEach(signalApproach.Detectors, detector =>  
+            //foreach (var detector in signalApproach.Detectors)
             {
+                var controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
                 int count = controllerEventLogRepository.GetDetectorActivationCount(signalApproach.SignalID, startTime,
                     endTime, detector.DetChannel);
                 DetectorAggregation detectorAggregation = new DetectorAggregation
                 {
-                    DetectorId = detector.DetectorID,
+                    DetectorPrimaryId = detector.ID,
                     BinStartTime = startTime,
                     Volume = count
                 };
                 _detectorAggregationConcurrentQueue.Enqueue(detectorAggregation);
-            }
+            });
             //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
         }
         
@@ -445,17 +467,18 @@ namespace MOE.Common.Business.DataAggregation
         private void SetApproachAggregationData(DateTime startTime, DateTime endTime, List<Controller_Event_Log> records, Approach approach)
         {
             SignalPhase signalPhase = new SignalPhase(startTime, endTime, approach, false, 15, 6, false);
-            SetApproachCycleData(signalPhase, startTime, approach, records, false);
-            SetApproachPcdData(signalPhase, startTime, approach);
-            SetSplitFailData(startTime, endTime, approach, false);
-            SetYellowRedActivationData(startTime, endTime, approach, false);
+            Parallel.Invoke(() =>{SetApproachCycleData(signalPhase, startTime, approach, records, false);},
+                () => {SetApproachPcdData(signalPhase, startTime, approach);},
+                () => { SetSplitFailData(startTime, endTime, approach, false);},
+                () => { SetYellowRedActivationData(startTime, endTime, approach, false);});
             if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
             {
                 SignalPhase permissiveSignalPhase = new SignalPhase(startTime, endTime, approach, false, 15, 6, true);
-                SetApproachCycleData(permissiveSignalPhase, startTime, approach, records, true);
-                SetApproachPcdData(permissiveSignalPhase, startTime, approach);
-                SetSplitFailData(startTime, endTime, approach, true);
-                SetYellowRedActivationData(startTime, endTime, approach, true);
+                Parallel.Invoke(
+                    () =>{SetApproachCycleData(permissiveSignalPhase, startTime, approach, records, true);},
+                    () => { SetApproachPcdData(permissiveSignalPhase, startTime, approach); },
+                    () => { SetSplitFailData(startTime, endTime, approach, true); },
+                    () => { SetYellowRedActivationData(startTime, endTime, approach, true); });
             }
         }
 

@@ -31,26 +31,12 @@ namespace MOE.Common.Business
             DetectorEvents.Add(ddp);
         }
 
-        //public void AddPreempt(DetectorDataPoint ddp)
+        //public void AddSecondsToEvents(int seconds)
         //{
-        //    PreemptCollection.Add(ddp);
-        //}
-
-        //public void ClearDetectorData()
-        //{
-        //    _totalArrivalOnRed = -1;
-        //    _totalGreenTime = -1;
-        //    _totalArrivalOnGreen = -1;
-        //    _totalVolume = -1;
-        //    DetectorEvents.Clear();
-        //}
-
-        //public void FindSpeedEventsForCycle(List<Models.Speed_Events> speeds)
-        //{
-        //    SpeedsForCycle = (from r in speeds
-        //                     where r.timestamp > this.StartTime
-        //                     && r.timestamp < this.EndTime
-        //                     select r).ToList();
+        //    foreach (var detectorDataPoint in DetectorEvents)
+        //    {
+        //        detectorDataPoint.TimeStamp = detectorDataPoint.TimeStamp.AddSeconds(seconds);
+        //    }
         //}
     }
 }

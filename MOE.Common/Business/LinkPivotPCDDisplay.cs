@@ -109,32 +109,30 @@ namespace MOE.Common.Business
         /// Generates PCD charts for upstream and downstream detectors based on 
         /// a Link Pivot Link
         /// </summary>
-        /// <param name="upstreamSignalID"></param>
+        /// <param name="upstreamSignalId"></param>
         /// <param name="upstreamDirection"></param>
-        /// <param name="downstreamSignalID"></param>
+        /// <param name="downstreamSignalId"></param>
         /// <param name="downstreamDirection"></param>
         /// <param name="delta"></param>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <param name="maxYAxis"></param>
-        public LinkPivotPCDDisplay(string upstreamSignalID, string upstreamDirection,
-            string downstreamSignalID, string downstreamDirection, int delta, 
+        public LinkPivotPCDDisplay(string upstreamSignalId, string upstreamDirection,
+            string downstreamSignalId, string downstreamDirection, int delta, 
             DateTime startDate, DateTime endDate, int maxYAxis)
         {
-            Models.Repositories.ISignalsRepository signalRepository =
-                Models.Repositories.SignalsRepositoryFactory.Create();
-            Models.Signal upstreamSignal = signalRepository.GetVersionOfSignalByDate(upstreamSignalID, startDate);
-            Models.Signal downstreamSignal = signalRepository.GetVersionOfSignalByDate(downstreamSignalID, startDate);
+            Models.Repositories.ISignalsRepository signalRepository = Models.Repositories.SignalsRepositoryFactory.Create();
+            Models.Signal upstreamSignal = signalRepository.GetVersionOfSignalByDate(upstreamSignalId, startDate);
+            Models.Signal downstreamSignal = signalRepository.GetVersionOfSignalByDate(downstreamSignalId, startDate);
             Models.Approach upApproachToAnalyze = GetApproachToAnalyze(upstreamSignal, upstreamDirection);
             Models.Approach downApproachToAnalyze = GetApproachToAnalyze(downstreamSignal, downstreamDirection);
-            
             if (upApproachToAnalyze != null)
             {
-                GeneratePCD(upApproachToAnalyze, delta, startDate, endDate, true, maxYAxis);
+                GeneratePcd(upApproachToAnalyze, delta, startDate, endDate, true, maxYAxis);
             }
             if (downApproachToAnalyze != null)
             {
-                GeneratePCD(downApproachToAnalyze, delta, startDate, endDate, false, maxYAxis);
+                GeneratePcd(downApproachToAnalyze, delta, startDate, endDate, false, maxYAxis);
             }
         }
 
@@ -151,22 +149,9 @@ namespace MOE.Common.Business
             }
             return approachToAnalyze;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="signalId"></param>
-        /// <param name="direction"></param>
-        /// <param name="delta"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <param name="upstream"></param>
-        /// <param name="maxYAxis"></param>
-        private void GeneratePCD(Models.Approach approach, int delta, 
-            DateTime startDate, DateTime endDate, bool upstream, int maxYAxis)
+        
+        private void GeneratePcd(Models.Approach approach, int delta, DateTime startDate, DateTime endDate, bool upstream, int maxYAxis)
         {
-
-            
             //Create a location string to show the combined cross strees
             string location = string.Empty;
             if(approach.Signal != null)
@@ -174,22 +159,17 @@ namespace MOE.Common.Business
                 location = approach.Signal.PrimaryName + " " + approach.Signal.SecondaryName;
             }
             string chartName = string.Empty;
-            
             //find the upstream approach
             if (!String.IsNullOrEmpty(approach.DirectionType.Description))
             {
                 //Find PCD detector for this appraoch
-                 Models.Detector gd =
-                     approach.Signal.GetDetectorsForSignalThatSupportAMetricByApproachDirection(
+                 Models.Detector detector = approach.Signal.GetDetectorsForSignalThatSupportAMetricByApproachDirection(
                      6, approach.DirectionType.Description).FirstOrDefault();
-                         
                 //Check for null value
-                if(gd != null)
+                if(detector != null)
                 {
                     //Instantiate a signal phase object
-                    SignalPhase sp = new SignalPhase(
-                                            startDate, endDate,approach, false,
-                                            15,13, false);                    
+                    SignalPhase sp = new SignalPhase(startDate, endDate,approach, false, 15, 13, false);                    
                     
                     //Check the direction of the Link Pivot
                     if (upstream)
@@ -249,29 +229,20 @@ namespace MOE.Common.Business
             }
         }
 
-        /// <summary>
-        /// Creates a pcd chart specific to the Link Pivot
-        /// </summary>
-        /// <param name="sp"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <param name="location"></param>
-        /// <param name="chartNameSuffix"></param>
-        /// <param name="chartLocation"></param>
-        /// <returns>Chart Name</returns>
-        private string CreateChart(SignalPhase sp, DateTime startDate, DateTime endDate, string location,
+        
+        private string CreateChart(SignalPhase signalPhase, DateTime startDate, DateTime endDate, string location,
             string chartNameSuffix, string chartLocation, int maxYAxis, string directionBeforeAfter)
         {
             //Instantiate the chart object
             Chart chart = new Chart();
 
             //Add formatting to the chart
-            chart = GetNewChart(startDate, endDate, sp.Approach.SignalID, sp.Approach.ProtectedPhaseNumber,
-                sp.Approach.DirectionType.Description, location, sp.Approach.IsProtectedPhaseOverlap, 
+            chart = GetNewChart(startDate, endDate, signalPhase.Approach.SignalID, signalPhase.Approach.ProtectedPhaseNumber,
+                signalPhase.Approach.DirectionType.Description, location, signalPhase.Approach.IsProtectedPhaseOverlap, 
                 maxYAxis, 2000, false, 2);
 
             //Add the data to the chart
-            AddDataToChart(chart, sp, startDate, false, true);
+            AddDataToChart(chart, signalPhase, startDate, false, true);
             
             //Add info to the based on direction and before or after adjustments
             if(directionBeforeAfter == "DownstreamBefore")
@@ -309,9 +280,9 @@ namespace MOE.Common.Business
 
             //Create the File Name
             string chartName = "LinkPivot-" +
-                sp.Approach.SignalID +
+                signalPhase.Approach.SignalID +
                 "-" +
-                sp.Approach.ProtectedPhaseNumber.ToString() +
+                signalPhase.Approach.ProtectedPhaseNumber.ToString() +
                 "-" +
                 startDate.Year.ToString() +
                 startDate.ToString("MM") +
@@ -334,16 +305,6 @@ namespace MOE.Common.Business
             return chartName;
         }
 
-        /// <summary>
-        /// Gets a new chart for the pcd Diagram
-        /// </summary>
-        /// <param name="graphStartDate"></param>
-        /// <param name="graphEndDate"></param>
-        /// <param name="signalId"></param>
-        /// <param name="phase"></param>
-        /// <param name="direction"></param>
-        /// <param name="location"></param>
-        /// <returns>Chart object</returns>
         private Chart GetNewChart(DateTime graphStartDate, DateTime graphEndDate, string signalId,
             int phase, string direction, string location, bool isOverlap, double y1AxisMaximum,
             double y2AxisMaximum, bool showVolume, int dotSize)
@@ -488,14 +449,7 @@ namespace MOE.Common.Business
             return chart;
         }
 
-        /// <summary>
-        /// Adds data points to a graph with the series GreenLine, YellowLine, Redline
-        /// and Points already added.
-        /// </summary>
-        /// <param name="chart"></param>
-        /// <param name="signalPhase"></param>
-        /// <param name="startDate"></param>
-        /// <param name="signalId"></param>
+       
         private void AddDataToChart(Chart chart, SignalPhase signalPhase, DateTime startDate, bool showVolume, bool showArrivalOnGreen)
         {
             decimal totalDetectorHits = 0;
