@@ -329,8 +329,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\ActionLog\ChartData.cs" />
+    <Compile Include="Business\ApproachVolume\ApproachVolumeViewModel.cs" />
     <Compile Include="Business\ApproachVolume\MetricInfo.cs" />
     <Compile Include="Business\ArchiveMetric.cs" />
+    <Compile Include="Business\Bin.cs" />
     <Compile Include="Business\BulkCopyOptions.cs" />
     <Compile Include="Business\ChartFactory.cs" />
     <Compile Include="Business\ChartTitleFactory.cs" />
@@ -376,6 +378,7 @@
     <Compile Include="Business\PCD\PlanFactory.cs" />
     <Compile Include="Business\TMC\TMCViewModel.cs" />
     <Compile Include="Business\WatchDog\WatchDogScan.cs" />
+    <Compile Include="Business\WCFServiceLibrary\AggregationMetricOptions.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>
     </Compile>

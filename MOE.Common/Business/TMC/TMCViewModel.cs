@@ -10,6 +10,7 @@ namespace MOE.Common.Business.TMC
 
     public class TMCViewModel
     {
+        public string ShowMetricUrlJavascript { get; set; } = string.Empty;
         public List<int> LaneTypeColSpans = new List<int>();
         public List<string> ImageLocations = new List<string>();
         public bool ShowLaneVolumes { get; set; }

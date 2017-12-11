@@ -90,7 +90,7 @@ function SetApproachDelayMetric(selectedBinSize, showPlanStatistics, showTotalDe
 
 }
 
-function SetAORMetric(selectedBinSize, showPlanStatistics) {
+function SetAoRMetric(selectedBinSize, showPlanStatistics) {
     $("#SelectedBinSize").val(selectedBinSize);
     $("#ShowPlanStatistics").prop('checked',showPlanStatistics);
 }

@@ -30,6 +30,7 @@ function GetMetric(urlPath, tosend)
         },
         complete: function () {
             StopReportSpinner();
+            ShowMetricUrl();
         },
         error: function(xhr, status, error) {
             StopReportSpinner();

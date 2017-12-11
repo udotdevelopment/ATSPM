@@ -1,6 +1,12 @@
-﻿@model IEnumerable<MOE.Common.Business.ApproachVolume.MetricInfo>
+﻿@model MOE.Common.Business.ApproachVolume.ApproachVolumeViewModel
 
-@{foreach (var record in Model)
+<script type="text/javascript">
+    function ShowMetricUrl() {
+        @Html.Raw(Model.ShowMetricUrlJavascript)
+    }</script>
+
+
+@{foreach (var record in Model.InfoList)
 {
     <div class="row">
         <div class="col-md-12">

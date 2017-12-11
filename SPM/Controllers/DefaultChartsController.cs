@@ -7,6 +7,7 @@ using MOE.Common.Models.ViewModel.Chart;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Business.ApproachVolume;
 using System.Data.Entity.Migrations;
+using System.Text;
 
 namespace SPM.Controllers
 {
@@ -168,36 +169,7 @@ namespace SPM.Controllers
 
         }
 
-        public ActionResult SplitFailOptions(int id)
-        {
-            SplitFailOptions splitFailOptions =
-                new SplitFailOptions();
-            splitFailOptions.SetDefaults();
-            return PartialView("SplitFailOptions", splitFailOptions);
-        }
 
-        public ActionResult GetSplitFailMetric(SplitFailOptions metricOptions)
-        {
-            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
-            string[] result = new string[1] { "" };
-            if (ModelState.IsValid)
-            {
-                MetricGeneratorService.MetricGeneratorClient client =
-                    new MetricGeneratorService.MetricGeneratorClient();
-                try
-                {
-                    client.Open();
-                    result = client.CreateMetric(metricOptions);
-                    client.Close();
-                }
-                catch (Exception ex)
-                {
-                    client.Close();
-                    return Content("<h1>" + ex.Message + "</h1>");
-                }
-            }
-            return PartialView("MetricResult", result);
-        }
 
         public ActionResult GetPhaseTerminationMetricByUrl(PhaseTerminationOptions metricOptions)
         {
@@ -232,7 +204,8 @@ namespace SPM.Controllers
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
-            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 3); CreateMetric();";
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 3); " +
+                                                          "CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -241,7 +214,8 @@ namespace SPM.Controllers
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
-            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 4); CreateMetric();";
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 4); " +
+                                                          "CreateMetric();";
             return View("Index", defaultChartsViewModel);
 
 
@@ -256,7 +230,7 @@ namespace SPM.Controllers
                                                           metricOptions.ShowLaneVolumes.ToString().ToLower() + "," +
                                                           metricOptions.ShowTotalVolumes.ToString().ToLower() + "," +
                                                           metricOptions.ShowDataTable.ToString().ToLower() +
-                                                          "); CreateTMCChart();";
+                                                          "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -289,7 +263,7 @@ namespace SPM.Controllers
                                                           metricOptions.ShowNBWBVolume.ToString().ToLower() + "," +
                                                           metricOptions.ShowTMCDetection.ToString().ToLower() + "," +
                                                           metricOptions.ShowAdvanceDetection.ToString().ToLower() +
-                                                          "); CreateMetricWithDataTable();";
+                                                          "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -302,9 +276,10 @@ namespace SPM.Controllers
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 8); " +
-                                                          "SetApproachDelayMetric(" + metricOptions.SelectedBinSize.ToString() + "," + metricOptions.ShowPlanStatistics.ToString().ToLower() + ","+
-                                                          metricOptions.ShowTotalDelayPerHour.ToString() + "," +
-                                                          metricOptions.ShowDelayPerVehicle.ToString() +
+                                                          "SetApproachDelayMetric(" + metricOptions.SelectedBinSize.ToString() + "," + 
+                                                          metricOptions.ShowPlanStatistics.ToString().ToLower() + ","+
+                                                          metricOptions.ShowTotalDelayPerHour.ToString().ToLower() + "," +
+                                                          metricOptions.ShowDelayPerVehicle.ToString().ToLower() +
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
@@ -314,7 +289,9 @@ namespace SPM.Controllers
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 9); " +
-                                                          "SetAoRMetric(" + metricOptions.SelectedBinSize.ToString() + "," + metricOptions.ShowPlanStatistics.ToString().ToLower()+"); CreateMetric();";
+                                                          "SetAoRMetric(" + metricOptions.SelectedBinSize.ToString() + "," + 
+                                                          metricOptions.ShowPlanStatistics.ToString().ToLower()+"); " +
+                                                          "CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -325,27 +302,27 @@ namespace SPM.Controllers
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 10); " +
                                                           "SetSpeedMetric(" + metricOptions.SelectedBinSize.ToString() + "," +
                                                           metricOptions.ShowPlanStatistics.ToString().ToLower() + "," +
-                                                          metricOptions.ShowAverageSpeed.ToString() + "," +
-                                                          metricOptions.ShowPostedSpeed.ToString() + ","+
-                                                          metricOptions.Show85Percentile.ToString() +
+                                                          metricOptions.ShowAverageSpeed.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPostedSpeed.ToString().ToLower() + ","+
+                                                          metricOptions.Show85Percentile.ToString().ToLower() +
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
-        public ActionResult GetYRAetricByUrl(YellowAndRedOptions metricOptions)
+        public ActionResult GetYRAMetricByUrl(YellowAndRedOptions metricOptions)
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 11); " +
                                                           "SetYRAMetric(" + metricOptions.SevereLevelSeconds.ToString() + "," +
                                                           metricOptions.ShowRedLightViolations.ToString().ToLower() + "," +
-                                                          metricOptions.ShowSevereRedLightViolations.ToString() + "," +
-                                                          metricOptions.ShowPercentRedLightViolations.ToString() + "," +
-                                                          metricOptions.ShowPercentSevereRedLightViolations.ToString() + "," +
-                                                          metricOptions.ShowAverageTimeRedLightViolations.ToString() + "," +
-                                                          metricOptions.ShowYellowLightOccurrences.ToString() + "," +
-                                                          metricOptions.ShowPercentYellowLightOccurrences.ToString() + "," +
-                                                          metricOptions.ShowAverageTimeYellowOccurences.ToString() +
+                                                          metricOptions.ShowSevereRedLightViolations.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPercentRedLightViolations.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPercentSevereRedLightViolations.ToString().ToLower() + "," +
+                                                          metricOptions.ShowAverageTimeRedLightViolations.ToString().ToLower() + "," +
+                                                          metricOptions.ShowYellowLightOccurrences.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPercentYellowLightOccurrences.ToString().ToLower() + "," +
+                                                          metricOptions.ShowAverageTimeYellowOccurences.ToString().ToLower() +
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
@@ -355,8 +332,10 @@ namespace SPM.Controllers
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 12); " +
-                                                          "SetSplitFailMetric(" + metricOptions.FirstSecondsOfRed.ToString() + "," + metricOptions.ShowFailLines.ToString().ToLower() +
-                                                          "," + metricOptions.ShowAvgLines.ToString().ToLower() + "," + metricOptions.ShowPercentFailLines.ToString().ToLower() + "); CreateMetric();";
+                                                          "SetSplitFailMetric(" + metricOptions.FirstSecondsOfRed.ToString() + "," + 
+                                                          metricOptions.ShowFailLines.ToString().ToLower() + "," + 
+                                                          metricOptions.ShowAvgLines.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPercentFailLines.ToString().ToLower() + "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -373,6 +352,10 @@ namespace SPM.Controllers
             //endDateDay, endTime, endAmPmDdl, yAxisMax, y2AxisMax);
         }
 
+
+
+
+
         public ActionResult YellowAndRedOptions(int id)
         {
             YellowAndRedOptions yellowAndRedOptions =
@@ -383,8 +366,10 @@ namespace SPM.Controllers
 
         public ActionResult GetYellowAndRedMetric(YellowAndRedOptions metricOptions)
         {
-            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
-            string[] result = new string[1] { "" };
+            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
+
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
+
             if (ModelState.IsValid)
             {
                 MetricGeneratorService.MetricGeneratorClient client =
@@ -393,7 +378,73 @@ namespace SPM.Controllers
                 {
 
                     client.Open();
-                    result = client.CreateMetric(metricOptions);
+                    result.ChartPaths = client.CreateMetric(metricOptions);
+                    client.Close();
+                }
+
+
+
+                catch (Exception ex)
+                {
+                    client.Close();
+                    return Content("<h1>" + ex.Message + "</h1>");
+                }
+            }
+
+            string hostname = Request.Url.Authority;
+
+            StringBuilder sb = new StringBuilder();
+
+
+            sb.Append("/DefaultCharts/GetYRAMetricByUrl?");
+
+            sb.Append("&SevereLevelSeconds=" + metricOptions.SevereLevelSeconds.ToString());
+            sb.Append("&ShowRedLightViolations=" + metricOptions.ShowRedLightViolations.ToString().ToLower());
+            sb.Append("&ShowPercentRedLightViolations=" +
+                      metricOptions.ShowPercentRedLightViolations.ToString().ToLower());
+            sb.Append("&ShowPercentSevereRedLightViolations=" +
+                      metricOptions.ShowSevereRedLightViolations.ToString().ToLower());
+            sb.Append("&ShowAverageTimeRedLightViolations=" +
+                      metricOptions.ShowAverageTimeRedLightViolations.ToString().ToLower());
+            sb.Append("&ShowYellowLightOccurrences=" +
+                      metricOptions.ShowYellowLightOccurrences.ToString().ToLower());
+            sb.Append("&ShowPercentYellowLightOccurrences=" +
+                      metricOptions.ShowPercentYellowLightOccurrences.ToString().ToLower());
+            sb.Append("&ShowAverageTimeYellowOccurences="+ metricOptions.ShowAverageTimeYellowOccurences.ToString().ToLower());
+
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
+            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+       
+
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://"+ hostname.Trim() + sb +"\");";
+
+
+            return PartialView("MetricResult", result);
+        }
+
+        public ActionResult SplitFailOptions(int id)
+        {
+            SplitFailOptions splitFailOptions =
+                new SplitFailOptions();
+            splitFailOptions.SetDefaults();
+            return PartialView("SplitFailOptions", splitFailOptions);
+        }
+
+        public ActionResult GetSplitFailMetric(SplitFailOptions metricOptions)
+        {
+            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
+
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
+
+            if (ModelState.IsValid)
+            {
+                MetricGeneratorService.MetricGeneratorClient client =
+                    new MetricGeneratorService.MetricGeneratorClient();
+                try
+                {
+                    client.Open();
+                    result.ChartPaths = client.CreateMetric(metricOptions);
                     client.Close();
                 }
                 catch (Exception ex)
@@ -402,7 +453,30 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
+
+
+            string hostname = Request.Url.Authority;
+
+            StringBuilder sb = new StringBuilder();
+
+
+            sb.Append("/DefaultCharts/GetSplitFailMetricByUrl?");
+
+            sb.Append("&FirstSecondsOfRed=" + metricOptions.FirstSecondsOfRed.ToString());
+            sb.Append("&ShowFailLines="+metricOptions.ShowFailLines.ToString().ToLower());
+            sb.Append("&ShowAvgLines=" +metricOptions.ShowAvgLines.ToString().ToLower());
+            sb.Append("&ShowPercentFailLines=" + metricOptions.ShowPercentFailLines.ToString().ToLower());
+
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
+            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+
+
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+
+
             return PartialView("MetricResult", result);
+
         }
 
         public ActionResult ApproachSpeedOptions(int id)
@@ -415,8 +489,8 @@ namespace SPM.Controllers
 
         public ActionResult GetApproachSpeedMetric(ApproachSpeedOptions metricOptions)
         {
-            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
-            string[] result = new string[1] { "" };
+            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             if (ModelState.IsValid)
             {
                 MetricGeneratorService.MetricGeneratorClient client =
@@ -425,7 +499,7 @@ namespace SPM.Controllers
                 {
 
                     client.Open();
-                    result = client.CreateMetric(metricOptions);
+                    result.ChartPaths = client.CreateMetric(metricOptions);
                     client.Close();
                 }
                 catch (Exception ex)
@@ -434,6 +508,29 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
+
+            string hostname = Request.Url.Authority;
+
+            StringBuilder sb = new StringBuilder();
+
+
+            sb.Append("/DefaultCharts/GetApproachSpeedMetricByUrl?");
+
+
+            sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
+            sb.Append("&ShowPlanStatistics=" + metricOptions.ShowPlanStatistics.ToString().ToLower());
+            sb.Append("&ShowAverageSpeed=" + metricOptions.ShowAverageSpeed.ToString().ToLower());
+            sb.Append("&ShowPostedSpeed=" + metricOptions.ShowPostedSpeed.ToString().ToLower());
+            sb.Append("&Show85Percentile=" + metricOptions.Show85Percentile.ToString().ToLower());
+
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
+            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+
+
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+
+
             return PartialView("MetricResult", result);
         }
 
@@ -447,8 +544,9 @@ namespace SPM.Controllers
 
         public ActionResult GetAoRMetric(AoROptions metricOptions)
         {
-            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
-            string[] result = new string[1] { "" };
+            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
+       
             if (ModelState.IsValid)
             {
                 MetricGeneratorService.MetricGeneratorClient client =
@@ -457,7 +555,7 @@ namespace SPM.Controllers
                 {
 
                     client.Open();
-                    result = client.CreateMetric(metricOptions);
+                    result.ChartPaths = client.CreateMetric(metricOptions);
                     client.Close();
                 }
                 catch (Exception ex)
@@ -466,6 +564,25 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
+
+            string hostname = Request.Url.Authority;
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("/DefaultCharts/GetAoRMetricByUrl?");
+
+            sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
+            sb.Append("&ShowPlanStatistics=" + metricOptions.ShowPlanStatistics.ToString().ToLower());
+
+
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
+            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+
+
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+
+
             return PartialView("MetricResult", result);
         }
 
@@ -479,8 +596,8 @@ namespace SPM.Controllers
 
         public ActionResult GetApproachDelayMetric(ApproachDelayOptions metricOptions)
         {
-            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
-            string[] result = new string[1] { "" };
+            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             if (ModelState.IsValid)
             {
                 MetricGeneratorService.MetricGeneratorClient client =
@@ -489,7 +606,7 @@ namespace SPM.Controllers
                 {
 
                     client.Open();
-                    result = client.CreateMetric(metricOptions);
+                    result.ChartPaths = client.CreateMetric(metricOptions);
                     client.Close();
                 }
                 catch (Exception ex)
@@ -498,6 +615,30 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
+
+            string hostname = Request.Url.Authority;
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("/DefaultCharts/GetApproachDelayMetricByUrl?");
+
+
+
+            sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
+            sb.Append("&ShowPlanStatistics=" + metricOptions.ShowPlanStatistics.ToString().ToLower());
+            sb.Append("&ShowTotalDelayPerHour=" + metricOptions.ShowTotalDelayPerHour.ToString().ToLower());
+            sb.Append("&ShowDelayPerVehicle=" + metricOptions.ShowDelayPerVehicle.ToString().ToLower());
+
+
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
+            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+
+
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+
+
+
             return PartialView("MetricResult", result);
         }
 
@@ -511,8 +652,8 @@ namespace SPM.Controllers
 
         public ActionResult GetPhaseTerminationMetric(PhaseTerminationOptions metricOptions)
         {
-            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
-            string[] result = new string[1] { "" };
+            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             if (ModelState.IsValid)
             {
                 MetricGeneratorService.MetricGeneratorClient client =
@@ -522,7 +663,7 @@ namespace SPM.Controllers
                 {
 
                     client.Open();
-                    result = client.CreateMetric(metricOptions);
+                    result.ChartPaths = client.CreateMetric(metricOptions);
                     client.Close();
                 }
                 catch (Exception ex)
@@ -531,25 +672,41 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
+
+            string hostname = Request.Url.Authority;
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("/DefaultCharts/GetPhaseTerminationMetricByUrl?");
+
+
+            sb.Append("&SelectedConsecutiveCount=" + metricOptions.SelectedConsecutiveCount.ToString());
+            sb.Append("&ShowPlanStripes=" + metricOptions.ShowPlanStripes.ToString().ToLower());
+            sb.Append("&ShowPedActivity=" + metricOptions.ShowPedActivity.ToString().ToLower());
+    
+
+
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
+            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+
+
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+
+
             return PartialView("MetricResult", result);
         }
-        public ActionResult TMCOptions(int id)
-        {
-            TMCOptions tMCOptions =
-                new TMCOptions();
-            tMCOptions.SetDefaults();
-            return PartialView("TMCOptions", tMCOptions);
-        }
+
 
         public ActionResult GetPreemptMetric(MetricOptions metricOptions)
         {
-            
-            string[] result = new string[1] { "" };
+
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
+
             if (ModelState.IsValid)
             {
-                string[] tempResult1;
-                string[] tempResult2;
-                string[] tempResult3;
+
+
                 PreemptServiceRequestOptions requestOptions =
                     new PreemptServiceRequestOptions(metricOptions.SignalID,
                         metricOptions.StartDate, metricOptions.EndDate);
@@ -566,18 +723,46 @@ namespace SPM.Controllers
                 MetricGeneratorService.MetricGeneratorClient client =
                     new MetricGeneratorService.MetricGeneratorClient();
                 client.Open();
-                tempResult1 = client.CreateMetric(requestOptions);
-                tempResult2 = client.CreateMetric(serviceOptions);                
-                tempResult3 = client.CreateMetric(detailOptions);
+                string[] tempResult1 = client.CreateMetric(requestOptions);
+                string[] tempResult2 = client.CreateMetric(serviceOptions);
+                string[] tempResult3 = client.CreateMetric(detailOptions);
                 client.Close();
+
                 List<string> finalList = new List<string>();
                 finalList.AddRange(tempResult1);
                 finalList.AddRange(tempResult2);
                 finalList.AddRange(tempResult3);
-                result = finalList.ToArray();
+
+                result.ChartPaths = finalList.ToArray();
             }
+
+            string hostname = Request.Url.Authority;
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("/DefaultCharts/GetPreemptMetricByUrl?");
+
+
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
+            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+
+
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+
+
             return PartialView("MetricResult", result);
+
         }
+
+        public ActionResult TMCOptions(int id)
+        {
+            TMCOptions tMCOptions =
+                new TMCOptions();
+            tMCOptions.SetDefaults();
+            return PartialView("TMCOptions", tMCOptions);
+        }
+
 
         public ActionResult GetTMCMetric(TMCOptions metricOptions)
         {
@@ -607,6 +792,28 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
+
+            string hostname = Request.Url.Authority;
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("/DefaultCharts/GetTMCMetricByUrl?");
+
+
+
+            sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
+            sb.Append("&ShowLaneVolumes=" + metricOptions.ShowLaneVolumes.ToString().ToLower());
+            sb.Append("&ShowTotalVolumes=" + metricOptions.ShowTotalVolumes.ToString().ToLower());
+            sb.Append("&ShowDataTable=" + metricOptions.ShowDataTable.ToString().ToLower());
+
+
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
+            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+
+
+            tmcvm.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+
             return PartialView("GetTMCMetric", tmcvm);
         }
 
@@ -622,7 +829,7 @@ namespace SPM.Controllers
         {
             MOE.Common.Models.Repositories.IApplicationEventRepository logRepository =
                 MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-            MetricInfo[] metrics = null;
+            MOE.Common.Business.ApproachVolume.ApproachVolumeViewModel viewModel = new ApproachVolumeViewModel();
             //metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
             //string[] result = new string[1] { "" };
             if (ModelState.IsValid)
@@ -632,7 +839,7 @@ namespace SPM.Controllers
                 try
                 {                    
                     client.Open();
-                    metrics = client.CreateMetricWithDataTable((ApproachVolumeOptions)metricOptions);
+                    viewModel.InfoList = client.CreateMetricWithDataTable((ApproachVolumeOptions)metricOptions);
                     client.Close();
                    
                 }
@@ -642,14 +849,42 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 } 
             }
-            return PartialView("GetApproachVolumeMetric", metrics);
+
+
+
+
+
+            string hostname = Request.Url.Authority;
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("/DefaultCharts/GetApproachVolumeMetricByUrl?");
+
+            sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
+            sb.Append("&ShowDirectionalSplits=" + metricOptions.ShowDirectionalSplits.ToString());
+            sb.Append("&ShowTotalVolume=" + metricOptions.ShowTotalVolume.ToString().ToLower());
+            sb.Append("&ShowSBEBVolume=" + metricOptions.ShowSBEBVolume.ToString().ToLower());
+            sb.Append("&ShowNBWBVolume=" + metricOptions.ShowNBWBVolume.ToString().ToLower());
+            sb.Append("&ShowTMCDetection=" + metricOptions.ShowTMCDetection.ToString().ToLower());
+            sb.Append("&ShowAdvanceDetection=" + metricOptions.ShowAdvanceDetection.ToString().ToLower());
+
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
+            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+
+
+            viewModel.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+
+
+            return PartialView("GetApproachVolumeMetric", viewModel);
         }
 
 
         public ActionResult GetSplitMonitorMetric(SplitMonitorOptions metricOptions)
         {
-            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
-            string[] result = new string[1] { "" };
+            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
+
             if (ModelState.IsValid)
             {
                 MetricGeneratorService.MetricGeneratorClient client =
@@ -657,7 +892,7 @@ namespace SPM.Controllers
                 try
                 {
                     client.Open();
-                    result = client.CreateMetric(metricOptions);
+                    result.ChartPaths = client.CreateMetric(metricOptions);
                     client.Close();
                 }
                 catch (Exception ex)
@@ -666,8 +901,33 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
+
+            string hostname = Request.Url.Authority;
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("/DefaultCharts/GetSplitMonitorMetricByUrl?");
+
+            sb.Append("&SelectedPercentileSplit=" + metricOptions.SelectedPercentileSplit.ToString());
+            sb.Append("&ShowPlanStripes=" + metricOptions.ShowPlanStripes.ToString().ToLower());
+            sb.Append("&ShowPedActivity=" + metricOptions.ShowPedActivity.ToString().ToLower());
+            sb.Append("&ShowAverageSplit=" + metricOptions.ShowAverageSplit.ToString().ToLower());
+            sb.Append("&ShowPercentMaxOutForceOff=" + metricOptions.ShowPercentMaxOutForceOff.ToString().ToLower());
+            sb.Append("&ShowPercentGapOuts=" + metricOptions.ShowPercentGapOuts.ToString().ToLower());
+            sb.Append("&ShowPercentSkip=" + metricOptions.ShowPercentSkip.ToString().ToLower());
+
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
+            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+
+
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+
+
             return PartialView("MetricResult", result);
         }
+
+
         public ActionResult PedDelayOptions(int id)
         {
             PedDelayOptions pedDelayOptions =
@@ -678,8 +938,8 @@ namespace SPM.Controllers
 
         public ActionResult GetPedDelayMetric(PedDelayOptions metricOptions)
         {
-            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
-            string[] result = new string[1] { "" };
+            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             if (ModelState.IsValid)
             {
                 MetricGeneratorService.MetricGeneratorClient client =
@@ -687,7 +947,7 @@ namespace SPM.Controllers
                 try
                 {
                     client.Open();
-                    result = client.CreateMetric(metricOptions);
+                    result.ChartPaths = client.CreateMetric(metricOptions);
                     client.Close();
                 }
                 catch (Exception ex)
@@ -696,13 +956,29 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
+
+            string hostname = Request.Url.Authority;
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("/DefaultCharts/GetPedDelayMetricByUrl?");
+
+
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
+            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+
+
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+
+
             return PartialView("MetricResult", result);
         }
 
         public ActionResult GetPCDMetric(PCDOptions metricOptions)
         {
-            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
-            string[] result = new string[1] { "" };
+            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             if (ModelState.IsValid)
             {
                 MetricGeneratorService.MetricGeneratorClient client =
@@ -710,7 +986,7 @@ namespace SPM.Controllers
                 try
                 {                    
                     client.Open();
-                    result = client.CreateMetric(metricOptions);
+                    result.ChartPaths = client.CreateMetric(metricOptions);
                     client.Close();
                 }
                 catch (Exception ex)
@@ -719,6 +995,27 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 } 
             }
+            string hostname = Request.Url.Authority;
+
+            StringBuilder sb = new StringBuilder();
+
+
+            sb.Append("/DefaultCharts/GetPCDMetricByUrl?");
+
+            sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
+            sb.Append("&SelectedDotSize=" + metricOptions.SelectedDotSize.ToString().ToLower());
+            sb.Append("&ShowPlanStatistics=" + metricOptions.ShowPlanStatistics.ToString().ToLower());
+            sb.Append("&ShowVolumes=" + metricOptions.ShowVolumes.ToString().ToLower());
+
+
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
+            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+
+
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+
+
             return PartialView("MetricResult", result);
         }
 

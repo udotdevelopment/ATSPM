@@ -49,6 +49,7 @@ namespace MOE.Common.Models.ViewModel.Chart
         public MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel SignalSearch { get; set; }
         [AllowHtml]
         public String RunMetricJavascript { get; set; } = string.Empty;
+        
 
         public DefaultChartsViewModel()
         {

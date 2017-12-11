@@ -45,7 +45,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [Display(Name = "Show Advance Detection")]
         public bool ShowAdvanceDetection { get; set; }
 
-        public List<MOE.Common.Business.ApproachVolume.MetricInfo> MetricInfoList  = new List<ApproachVolume.MetricInfo>();
+        public List<MOE.Common.Business.ApproachVolume.MetricInfo> MetricInfoList;  
 
         
 
@@ -92,7 +92,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             base.CreateMetric();
             List<string> returnList = new List<string>();
-                   
+            MetricInfoList  = new List<ApproachVolume.MetricInfo>();
             MOE.Common.Models.Repositories.ISignalsRepository signalsRepository = 
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
             //var signal = signalsRepository.GetSignalBySignalID(this.SignalID);    

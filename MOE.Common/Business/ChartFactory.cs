@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,8 +11,63 @@ namespace MOE.Common.Business
 {
     public static class ChartFactory
     {
+        private static List<Series> SeriesList = new List<Series>();
+        private static List<Bin> Bins;
+
+        public static List<Bin> GetBins(AggregationMetricOptions options)
+        {
+            List <Bin> bins = new List<Bin>();
+
+            DateTime timeX = new DateTime();
+
+            timeX = options.StartDate;
+
+            while(timeX <= options.EndDate)
+            {
+                Bin bin = new Bin();
+
+                bin.Start = timeX;
+
+                timeX = timeX.AddMinutes(options.BinSize);
+
+                bins.Add(bin);
+
+
+            }
+
+            return bins;
+
+        }
+
+        public static void AddSeriesToSeriesList(Series series)
+        {
+            List<Series> checkSeries = (from r in SeriesList
+                where series.ChartType != r.ChartType
+                select r).ToList();
+
+            if (checkSeries == null || checkSeries.Count == 0)
+            {
+                SeriesList.Add(series);
+            }
+
+        }
+
+
+
+        public static Chart ChartInitialization(MetricOptions options)
+        {
+            Chart chart = new Chart();
+            SetImageProperties(chart);
+            chart.ChartAreas.Add(CreateChartArea(options));
+
+
+
+            return chart;
+        }
+
         public static Chart CreateDefaultChart(MetricOptions options)
         {
+            
             Chart chart = new Chart();
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateChartArea(options));
@@ -26,6 +82,80 @@ namespace MOE.Common.Business
             SetSplitFailLegend(chart);
             return chart;
         }
+
+        public static Chart CreateLaneByLaneAggregationChart(AggregationMetricOptions options)
+        {
+            options.MetricTypeID = 16;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
+            return chart;
+        }
+
+        public static Chart CreateAdvancedCountsAggregationChart(AggregationMetricOptions options)
+        {
+            options.MetricTypeID = 17;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
+            return chart;
+        }
+
+        public static Chart CreateArrivalOnGreenAggregationChart(AggregationMetricOptions options)
+        {
+            options.MetricTypeID = 18;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
+            return chart;
+        }
+
+        public static Chart CreatePlatoonRatioAggregationChart(AggregationMetricOptions options)
+        {
+            options.MetricTypeID = 19;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
+            return chart;
+        }
+
+        public static Chart CreatePurdueSplitFailureAggregationChart(AggregationMetricOptions options)
+        {
+            options.MetricTypeID = 20;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
+            return chart;
+        }
+
+        public static Chart CreatePedestrianActuationAggregationChart(AggregationMetricOptions options)
+        {
+            options.MetricTypeID = 21;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
+            return chart;
+        }
+
+        public static Chart PreemptionAggregationChart(AggregationMetricOptions options)
+        {
+            options.MetricTypeID = 22;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
+            return chart;
+        }
+
+        public static Chart CreateApproachDelayAggregationChart(AggregationMetricOptions options)
+        {
+            options.MetricTypeID = 23;
+            Chart chart = ChartInitialization(options);
+            Bins = GetBins(options);
+            return chart;
+        }
+
+
+
+        public static Chart TransitSignalPriorityAggregationChart(AggregationMetricOptions options)
+        {
+            options.MetricTypeID = 24;
+            Chart chart = ChartInitialization(options);
+            return chart;
+        }
+
 
         private static void SetSplitFailLegend(Chart chart)
         {
@@ -186,6 +316,50 @@ namespace MOE.Common.Business
             }
             chartArea.AxisY.Title = "Cycle Time (Seconds) ";
             chartArea.AxisY.Minimum = 0;
+        }
+
+        public static Series CreateLineSeries(string seriesName, Color seriesColor)
+        {
+            Series s = new Series();
+            s.ChartType = SeriesChartType.Line;
+
+
+            s.Color = seriesColor;
+
+            return s;
+        }
+
+        public static Series CreateStackedAreaSeries(string seriesName, Color seriesColor)
+        {
+            Series s = new Series();
+            s.ChartType = SeriesChartType.StackedArea;
+
+
+            s.Color = seriesColor;
+
+            return s;
+        }
+
+        public static Series CreateColumnSeries(string seriesName, Color seriesColor)
+        {
+            Series s = new Series();
+            s.ChartType = SeriesChartType.Column;
+
+
+            s.Color = seriesColor;
+
+            return s;
+        }
+
+        public static Series CreateStackedColumnSeries(string seriesName, Color seriesColor)
+        {
+            Series s = new Series();
+            s.ChartType = SeriesChartType.StackedColumn;
+
+
+            s.Color = seriesColor;
+
+            return s;
         }
     }
 }

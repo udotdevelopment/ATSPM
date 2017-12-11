@@ -52,6 +52,6 @@ namespace MOE.Common.Business.ApproachVolume
         public string Direction2 { get; set; }
 
 
-
+        public string ShowMetricUrlJavascript { get; set; } = string.Empty;
     }
 }
