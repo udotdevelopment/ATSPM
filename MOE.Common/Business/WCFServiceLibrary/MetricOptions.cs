@@ -82,7 +82,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Y2AxisMin = 0;
             MetricTypeID = 0;
             MetricFileLocation = ConfigurationManager.AppSettings["ImageLocation"];
-            MetricWebPath = ConfigurationManager.AppSettings["SPMImageLocation"];
+            MetricWebPath = ConfigurationManager.AppSettings["ImageWebLocation"];
             ReturnList = new List<string>(); 
         }
 

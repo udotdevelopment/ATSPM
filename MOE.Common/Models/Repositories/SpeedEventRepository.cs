@@ -22,6 +22,8 @@ namespace MOE.Common.Models.Repositories
 
         public List<Speed_Events> GetSpeedEventsByDetector(DateTime startDate, DateTime endDate, Models.Detector detector, int minSpeedFilter)
         {
+
+            this.db.Database.CommandTimeout = 180;
             List<Models.Speed_Events> speedEvents = (from r in db.Speed_Events
                 where r.timestamp > startDate
                       && r.timestamp < endDate

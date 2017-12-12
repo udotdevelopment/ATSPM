@@ -22,14 +22,14 @@ namespace SPM.Controllers
         {
             MOE.Common.Models.ViewModel.RouteEdit.RouteCreateViewModel routeViewModel = new MOE.Common.Models.ViewModel.RouteEdit.RouteCreateViewModel();
             routeViewModel.Route = routeRepository.GetRouteByID(id);
-            foreach (var routeSignal in routeViewModel.Route.RouteSignals)
-            {
-                if (routeSignal.Signal != null)
-                {
-                    Tuple<string, string> tuple = new Tuple<string, string>(routeSignal.Id.ToString(), routeSignal.Signal.SignalDescription);
-                    routeViewModel.SignalSelectList.Add(tuple);
-                }
-            }
+            //foreach (var routeSignal in routeViewModel.Route.RouteSignals)
+            //{
+            //    if (routeSignal.Signal != null)
+            //    {
+            //        Tuple<string, string> tuple = new Tuple<string, string>(routeSignal.Id.ToString(), routeSignal.Signal.SignalDescription);
+            //        routeViewModel.SignalSelectList.Add(tuple);
+            //    }
+            //}
             return View(routeViewModel);
         }
 
@@ -73,14 +73,14 @@ namespace SPM.Controllers
         {
             var routeSignalRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
             var routeSignal = routeSignalRepository.GetByRouteSignalId(id);
-            if (routeSignal.Signal == null)
-            {
-                return Content("Signal Not Found");
-            }
-            if (routeSignal.Signal.Approaches == null)
-            {
-                return Content("Approaches Not Found");
-            }
+            //if (routeSignal.Signal == null)
+            //{
+            //    return Content("Signal Not Found");
+            //}
+            //if (routeSignal.Signal.Approaches == null)
+            //{
+            //    return Content("Approaches Not Found");
+            //}
             return PartialView(routeSignal);
         }
 

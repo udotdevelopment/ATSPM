@@ -526,7 +526,6 @@
     <Compile Include="Business\RLM\RLMPlanCollection.cs" />
     <Compile Include="Business\PlanFactory.cs" />
     <Compile Include="Business\RLM\RLMSignalPhaseCollection.cs" />
-    <Compile Include="Business\Route.cs" />
     <Compile Include="Business\ScriptGenerator\GenerateAddData.cs" />
     <Compile Include="Business\Signal.cs" />
     <Compile Include="Business\RLM\RLMSignalPhase.cs" />

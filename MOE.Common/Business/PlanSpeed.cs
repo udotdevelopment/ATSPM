@@ -25,7 +25,8 @@ namespace MOE.Common.Business
         public void SetSpeedStatistics(List<CycleSpeed> cycles)
         {
             List<int> rawSpeeds = new List<int>();
-            foreach (CycleSpeed cycle in cycles.Where(c => c.StartTime >= StartTime && c.StartTime < EndTime))
+            var cyclesForPlan = cycles.Where(c => c.StartTime >= StartTime && c.StartTime < EndTime);
+            foreach (CycleSpeed cycle in cyclesForPlan)
             {
                 rawSpeeds.AddRange(cycle.SpeedEvents.Select(s => s.MPH));
             }

@@ -11,39 +11,30 @@ namespace MOE.Common.Models.Repositories
 {
     public class RouteRepository : IRouteRepository
     {
-        MOE.Common.Models.SPM db = new SPM();
+        SPM db = new SPM();
 
-        public List<Models.Route> GetAllRoutes()
+        public List<Route> GetAllRoutes()
         {
-            List<Models.Route> routes = (from r in db.Routes
+            List<Route> routes = (from r in db.Routes
                                                  orderby r.RouteName
                                                  select r).ToList();
             return routes;
         }
 
-        public Models.Route GetRouteByID(int routeID)
+        public Route GetRouteByID(int routeID)
         {
-            Models.Route route = db.Routes
+            Route route = db.Routes
                 .Include(r => r.RouteSignals.Select(s => s.PhaseDirections))
                 .Where(r => r.Id == routeID).FirstOrDefault();
             if(route != null)
             {
-                var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-                foreach (var routeSignal in route.RouteSignals)
-                {
-                    var signal = signalRepository.GetLatestVersionOfSignalBySignalID(routeSignal.SignalId);
-                    if (signal != null)
-                    {
-                        routeSignal.Signal = signal;
-                    }
-                }
                 return route;
             }
             else
             {
-                MOE.Common.Models.Repositories.IApplicationEventRepository repository =
-                    MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                MOE.Common.Models.ApplicationEvent error = new ApplicationEvent();
+                IApplicationEventRepository repository =
+                    ApplicationEventRepositoryFactory.Create();
+                ApplicationEvent error = new ApplicationEvent();
                 error.ApplicationName = "MOE.Common";
                 error.Class = "Models.Repository.ApproachRouteRepository";
                 error.Function = "GetByRouteID";
@@ -58,33 +49,20 @@ namespace MOE.Common.Models.Repositories
         public Route GetRouteByIDAndDate(int routeId, DateTime startDate)
         {
             Route route = db.Routes
-                .Include(r => r.RouteSignals.Select(s => s.PhaseDirections))
-                .Where(r => r.Id == routeId).FirstOrDefault();
-            if (route != null)
-            {
-                var signalRepository = SignalsRepositoryFactory.Create();
-                foreach (var routeSignal in route.RouteSignals)
-                {
-                    var signal = signalRepository.GetVersionOfSignalByDate(routeSignal.SignalId, startDate);
-                    if (signal != null)
-                    {
-                        routeSignal.Signal = signal;
-                    }
-                }
-            }
+                .Include(r => r.RouteSignals.Select(s => s.PhaseDirections)).FirstOrDefault(r => r.Id == routeId);
             return route;
         }
 
-        public Models.Route GetRouteByName(string routeName)
+        public Route GetRouteByName(string routeName)
     {
-                    Models.Route route = (from r in db.Routes
+                    Route route = (from r in db.Routes
                                                   where r.RouteName == routeName
                                                  select r).FirstOrDefault();
             return route;
     }
         public void DeleteByID(int routeID)
         {
-            Models.Route route = (from r in db.Routes
+            Route route = (from r in db.Routes
                                           where r.Id == routeID
                                           select r).FirstOrDefault();
 
@@ -94,13 +72,13 @@ namespace MOE.Common.Models.Repositories
 
         public void Update(Route newRoute)
         {
-            Models.Route route = (from r in db.Routes
+            Route route = (from r in db.Routes
                                           where r.Id == newRoute.Id
                                           select r).FirstOrDefault();
 
             if(route != null)
             {
-            Models.Route newroute = new Models.Route();
+            Route newroute = new Route();
 
             newroute.Id = route.Id;
             newroute.RouteName = newroute.RouteName;
@@ -112,9 +90,9 @@ namespace MOE.Common.Models.Repositories
 
                     catch (Exception ex)
             {
-                MOE.Common.Models.Repositories.IApplicationEventRepository repository =
-                        MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                MOE.Common.Models.ApplicationEvent error = new ApplicationEvent();
+                IApplicationEventRepository repository =
+                        ApplicationEventRepositoryFactory.Create();
+                ApplicationEvent error = new ApplicationEvent();
                 error.ApplicationName = "MOE.Common";
                 error.Class = "Models.Repository.ApproachRouteRepository";
                 error.Function = "UpdateByID";
@@ -127,7 +105,7 @@ namespace MOE.Common.Models.Repositories
             
             }
         }
-        public void Add(Models.Route newRoute)
+        public void Add(Route newRoute)
     {
         try
         {
@@ -137,9 +115,9 @@ namespace MOE.Common.Models.Repositories
 
         catch (Exception ex)
         {
-            MOE.Common.Models.Repositories.IApplicationEventRepository repository =
-                    MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-            MOE.Common.Models.ApplicationEvent error = new ApplicationEvent();
+            IApplicationEventRepository repository =
+                    ApplicationEventRepositoryFactory.Create();
+            ApplicationEvent error = new ApplicationEvent();
             error.ApplicationName = "MOE.Common";
             error.Class = "Models.Repository.ApproachRouteRepository";
             error.Function = "Add";
