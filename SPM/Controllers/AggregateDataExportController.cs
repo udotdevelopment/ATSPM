@@ -1,0 +1,152 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
+using SPM.Models;
+using MOE.Common.Models;
+
+namespace SPM.Controllers
+{
+    public class AggregateDataExportController : Controller
+    {
+        MOE.Common.Models.Repositories.IMetricTypeRepository metricTyperepository =
+            MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
+
+        MOE.Common.Models.Repositories.IDirectionTypeRepository directionTypeRepository =
+            MOE.Common.Models.Repositories.DirectionTypeRepositoryFactory.Create();
+
+        MOE.Common.Models.Repositories.IMovementTypeRepository movementTypeRepository =
+            MOE.Common.Models.Repositories.MovementTypeRepositoryFactory.Create();
+
+        MOE.Common.Models.Repositories.ILaneTypeRepository laneTypeRepository =
+            MOE.Common.Models.Repositories.LaneTypeRepositoryFactory.Create();
+
+        MOE.Common.Models.Repositories.IControllerEventLogRepository cr =
+            MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+        //private ApplicationDbContext db = new ApplicationDbContext();
+
+        // GET: DataExportViewModels
+        public ActionResult Index(AggDataExportViewModel vm)
+        {
+            //MOE.Common.Models.Repositories.ISignalsRepository signalsRepository =
+            //    MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            //Signal signal = signalsRepository.GetSignalVersionByVersionId(Convert.ToInt32(versionId));
+            //mc.Signal = signal;
+            List<MetricType> allMetricTypes = metricTyperepository.GetAllToDisplayMetrics();
+            List<DirectionType> allDirectionTypes = directionTypeRepository.GetAllDirections();
+            List<MovementType> allMovementTypes = movementTypeRepository.GetAllMovementTypes();
+            List<LaneType> allLaneTypes = laneTypeRepository.GetAllLaneTypes();
+            vm.AllMetricTypes = allMetricTypes;
+            vm.AllApproachTypes = allDirectionTypes;
+            vm.AllMovementTypes = allMovementTypes;
+            vm.AllLaneTypes = allLaneTypes;
+            MOE.Common.Models.Repositories.IRouteRepository routeRepository =
+                MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
+            vm.Routes = routeRepository.GetAllRoutes();
+
+            return View(vm);
+        }
+        // GET: DataExportViewModels
+        public ActionResult AggregateDataExport()
+        {
+            return View();
+        }
+
+        public static List<int> StringToIntList(string str)
+        {
+            return str.Split(',').Select(int.Parse).ToList();
+        }
+
+        // POST: DataExportViewModels/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AggregateDataExport(AggDataExportViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                int StartHour = 0;
+                int StartMinute = 0;
+                int EndHour = 0;
+                int EndMinute = 0;
+                if (vm.StartDateHour != null)
+                    StartHour = (int)vm.StartDateHour;
+                if (vm.StartDateMinute != null)
+                    StartMinute = (int)vm.StartDateMinute;
+                if (vm.EndDateHour != null)
+                    EndHour = (int)vm.EndDateHour;
+                if (vm.EndDateMinute != null)
+                    EndMinute = (int)vm.EndDateMinute;
+                //int Count = cr.GetEventCountByEventCodesParamDateTimeRange(vm.SignalId, vm.StartDateDate,
+                //    vm.EndDateDate, StartHour, StartMinute, EndHour, EndMinute,
+                //    inputEventCodes, inputParam);
+                //vm.Count = Count;
+                return RedirectToAction("AggregateDataExport");
+            }
+
+            return View(vm);
+        }
+
+        // POST: DataExportViewModels/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,StartDateDate,EndDateDate,StartDateHour,StartDateMinute,EndDateHour,EndDateMinute,Count")] DataExportViewModel dataExportViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                //db.DataExportViewModels.Add(dataExportViewModel);
+                //db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(dataExportViewModel);
+        }
+
+        //// GET: DataExportViewModels/Edit/5
+        //public ActionResult Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    DataExportViewModel dataExportViewModel = db.DataExportViewModels.Find(id);
+        //    if (dataExportViewModel == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(dataExportViewModel);
+        //}
+
+        // POST: DataExportViewModels/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit([Bind(Include = "SignalId,StartDateDate,EndDateDate,StartDateHour,StartDateMinute,EndDateHour,EndDateMinute,Count")] DataExportViewModel vm)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        vm.Count = cr.GetEventCountByEventCodesParamDateTimeRange(vm.SignalId, vm.StartDateDate, vm.EndDateDate,
+        //            vm.StartDateHour, vm.StartDateMinute, vm.EndDateHour, vm.EndDateMinute, eventCodes, param);
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(dataExportViewModel);
+        //}
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                //db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+    }
+}
