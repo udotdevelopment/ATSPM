@@ -1,7 +1,14 @@
-﻿namespace MOE.Common.Models.Repositories
+﻿using System;
+using System.Collections.Generic;
+
+namespace MOE.Common.Models.Repositories
 {
     public interface IPreemptAggregationDatasRepository
     {
-        void Save(PreemptionAggregation preemptionAggregationDataAggregationData);
+        List<PreemptionAggregation> GetPreemptAggregationByVersionIdAndDateRange(int versionId, DateTime start,
+            DateTime end);
+        DetectorAggregation Add(PreemptionAggregation preemptionAggregation);
+        void Update(PreemptionAggregation preemptionAggregation);
+        void Remove(PreemptionAggregation preemptionAggregation);
     }
 }
