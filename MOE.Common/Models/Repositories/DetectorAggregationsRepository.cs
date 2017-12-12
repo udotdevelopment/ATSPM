@@ -24,10 +24,10 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public List<DetectorAggregation> GetActivationsByDetectorIDandDateRange(string detectorId, DateTime start, DateTime end)
+        public List<DetectorAggregation> GetActivationsByDetectorIDandDateRange(int detectorId, DateTime start, DateTime end)
         {
             List<DetectorAggregation> activationsList = (from r in this._db.DetectorAggregations
-                where r.DetectorId == detectorId
+                where r.DetectorPrimaryId == detectorId
                       && r.BinStartTime >= start && r.BinStartTime <= end
                                                          select r).ToList();
 

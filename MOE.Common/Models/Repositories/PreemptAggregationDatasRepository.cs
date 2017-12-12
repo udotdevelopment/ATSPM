@@ -57,6 +57,9 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-
+        DetectorAggregation IPreemptAggregationDatasRepository.Add(PreemptionAggregation preemptionAggregation)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
