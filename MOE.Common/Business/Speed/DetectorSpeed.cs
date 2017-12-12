@@ -11,8 +11,6 @@ namespace MOE.Common.Business.Speed
     public class DetectorSpeed
     {
         public List<PlanSpeed> Plans { get; set; } 
-        private readonly ISpeedEventRepository _speedEventRepository = SpeedEventRepositoryFactory.Create();
-        private readonly IControllerEventLogRepository _controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
         public int TotalDetectorHits { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
@@ -21,11 +19,10 @@ namespace MOE.Common.Business.Speed
 
         public DetectorSpeed(Models.Detector detector, DateTime startDate, DateTime endDate, int binSize, bool getPermissivePhase)
         {
-            var speedEvents = _speedEventRepository.GetSpeedEventsByDetector(startDate, endDate, detector, detector.MinSpeedFilter ?? 5);
             StartDate = startDate;
             EndDate = endDate;
-            TotalDetectorHits = speedEvents.Count;
-            Cycles = CycleFactory.GetSpeedCycles(startDate, endDate, speedEvents, getPermissivePhase, detector.Approach);
+            Cycles = CycleFactory.GetSpeedCycles(startDate, endDate, getPermissivePhase, detector);
+            TotalDetectorHits = Cycles.Sum(c => c.SpeedEvents.Count);
             Plans = PlanFactory.GetSpeedPlans(Cycles,startDate, endDate, detector.Approach);
             int movementDelay = 0;
             if (detector.MovementDelay != null)

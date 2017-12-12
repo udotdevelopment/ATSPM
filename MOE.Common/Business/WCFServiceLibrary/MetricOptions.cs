@@ -34,6 +34,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(SplitMonitorOptions))]
     [KnownType(typeof(PedDelayOptions))]
     [KnownType(typeof(ApproachVolumeOptions))]
+    [KnownType(typeof(AggregationMetricOptions))]
     [KnownType(typeof(string[]))]
     public class MetricOptions
     {
@@ -81,7 +82,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Y2AxisMin = 0;
             MetricTypeID = 0;
             MetricFileLocation = ConfigurationManager.AppSettings["ImageLocation"];
-            MetricWebPath = ConfigurationManager.AppSettings["SPMImageLocation"];
+            MetricWebPath = ConfigurationManager.AppSettings["ImageWebLocation"];
             ReturnList = new List<string>(); 
         }
 
@@ -169,5 +170,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
             return false;
         }
+
+
     }
 }

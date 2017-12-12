@@ -11,9 +11,8 @@ namespace MOE.Common.Business
         public List<Speed_Events> SpeedEvents { get; set; }
         
 
-        public CycleSpeed(DateTime firstRedEvent, DateTime greenEvent, DateTime yellowEvent, DateTime lastRedEvent, List<Speed_Events> speeds):base(firstRedEvent, greenEvent, yellowEvent, lastRedEvent)
+        public CycleSpeed(DateTime firstRedEvent, DateTime greenEvent, DateTime yellowEvent, DateTime lastRedEvent):base(firstRedEvent, greenEvent, yellowEvent, lastRedEvent)
         {
-            FindSpeedEventsForCycle(speeds);
         }
 
         public void FindSpeedEventsForCycle(List<Models.Speed_Events> speeds)

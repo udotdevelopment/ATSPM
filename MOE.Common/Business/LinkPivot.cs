@@ -9,71 +9,30 @@ namespace MOE.Common.Business
 {
     public class LinkPivot
     {
-        private List<LinkPivotPair> pairedApproaches = new List<LinkPivotPair>();
-        public List<LinkPivotPair> PairedApproaches
-        {
-            get { return pairedApproaches; }
-        }
+        public List<LinkPivotPair> PairedApproaches { get; } = new List<LinkPivotPair>();
+        public Data.LinkPivot.LinkPivotAdjustmentDataTable Adjustment { get; } = new Data.LinkPivot.LinkPivotAdjustmentDataTable();
+        public List<DateTime> Dates { get; } = new List<DateTime>();
 
-        private Data.LinkPivot.LinkPivotAdjustmentDataTable adjustment = 
-            new Data.LinkPivot.LinkPivotAdjustmentDataTable();
-        public Data.LinkPivot.LinkPivotAdjustmentDataTable Adjustment
-        {
-            get { return adjustment; }
-        }
-
-        private List<DateTime> dates = new List<DateTime>();
-        public List<DateTime> Dates
-        {
-            get { return dates; }
-        }
-
-        /// <summary>
-        /// Creates a list of LinkPivotPair objects and exposes a LinkPivotAdjustment Table
-        /// </summary>
-        /// <param name="routeId"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <param name="cycleTime"></param>
-        /// <param name="chartLocation"></param>
-        /// <param name="direction"></param>
-        /// <param name="bias"></param>
-        /// <param name="biasDirection"></param>
-        /// <param name="days"></param>
         public  LinkPivot(int routeId, DateTime startDate, DateTime endDate, int cycleTime, string chartLocation,
             string direction, double bias, string biasDirection, List<DayOfWeek> days)
         {
-            var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
+            var routeRepository = Models.Repositories.RouteRepositoryFactory.Create();
             var route = routeRepository.GetRouteByIDAndDate(routeId, startDate);
-            //TODO:Fix for Routes
-            //var _ApproachRouteDetail = (from ard in db.RouteSignals
-            //                            .Include("Approach")
-            //                            where ard.RouteId == routeId
-            //                            orderby ard.Order
-            //                            select ard).ToList();
-
-
-
             // Get a list of dates that matches the parameters passed by the user
-            dates = GetDates(startDate, endDate, days);
-
+            Dates = GetDates(startDate, endDate, days);
             //Make a list of numbers to use as indices to perform parallelism 
             List<int> indices = new List<int>();
             if (direction == "Upstream")
             {
-                //TODO:Fix for Routes
-                //for (int i = _ApproachRouteDetail.Count - 1; i > 0; i--)
-                //{
-                //    indices.Add(i);
-                //}
+                for (int i = route.RouteSignals.Count - 1; i > 0; i--)
+                {
+                    indices.Add(i);
+                }
                 //Parallel.ForEach(indices, i =>
                 foreach (int i in indices)
                 {
-                    //TODO: Fix for new routes
-                    //pairedApproaches.Add(new LinkPivotPair(_ApproachRouteDetail[i].SignalId, GetOppositeDirection(_ApproachRouteDetail[i].DirectionType1),
-                    //        _ApproachRouteDetail[i].Signal.PrimaryName + " " + _ApproachRouteDetail[i].Signal.SecondaryName, _ApproachRouteDetail[i - 1].SignalId,
-                    //        GetOppositeDirection(_ApproachRouteDetail[i - 1].DirectionType1), _ApproachRouteDetail[i - 1].Signal.PrimaryName + " " + _ApproachRouteDetail[i - 1].Signal.SecondaryName,
-                    //        startDate, endDate, cycleTime, chartLocation, bias, biasDirection, dates, i + 1));
+                    //PairedApproaches.Add(new LinkPivotPair(route.RouteSignals[i].SignalId, route.RouteSignals[i].Signal.SignalDescription, route.RouteSignals[i - 1].SignalId, route.RouteSignals[i - 1].Signal.SignalDescription,
+                    //        startDate, endDate, cycleTime, chartLocation, bias, biasDirection, Dates, i + 1));
                 }
                 //);
             }
@@ -161,25 +120,25 @@ namespace MOE.Common.Business
             int cumulativeChange = 0;
 
             //Determine the adjustment by adding the previous rows adjustment to the current rows delta
-            for (int i = adjustment.Count - 1; i >= 0; i--)
+            for (int i = Adjustment.Count - 1; i >= 0; i--)
             {
                 //if the new adjustment is greater than the cycle time than the adjustment should subtract
                 // the cycle time from the current adjustment and the result should be the new adjustment
-                if (cumulativeChange + adjustment[i].Delta > cycleTime)
+                if (cumulativeChange + Adjustment[i].Delta > cycleTime)
                 {
-                    adjustment[i].Adjustment = cumulativeChange + adjustment[i].Delta - cycleTime;
-                    cumulativeChange = cumulativeChange + adjustment[i].Delta - cycleTime;
+                    Adjustment[i].Adjustment = cumulativeChange + Adjustment[i].Delta - cycleTime;
+                    cumulativeChange = cumulativeChange + Adjustment[i].Delta - cycleTime;
                 }
                 else
                 {
-                    adjustment[i].Adjustment = cumulativeChange + adjustment[i].Delta;
-                    cumulativeChange = cumulativeChange + adjustment[i].Delta;
+                    Adjustment[i].Adjustment = cumulativeChange + Adjustment[i].Delta;
+                    cumulativeChange = cumulativeChange + Adjustment[i].Delta;
                 }
             }
 
         }
 
-        private string GetOppositeDirection(MOE.Common.Models.DirectionType direction)
+        private string GetOppositeDirection(Models.DirectionType direction)
         {
             string oppositeDirection = string.Empty;
             if (direction.Description.ToUpper() == "Northbound".ToUpper())

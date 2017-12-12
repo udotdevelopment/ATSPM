@@ -19,7 +19,7 @@ namespace MOE.Common.Migrations
             DropIndex("dbo.ApproachRouteDetail", new[] { "ApproachID" });
             DropIndex("dbo.Detectors", "IX_DetectorIDUnique");
             DropIndex("dbo.SPMWatchDogErrorEvents", new[] { "SignalID" });
-            DropPrimaryKey("Signals");
+            DropPrimaryKey("Signals", "PK_dbo.Signals");
 
             CreateTable(
                 "dbo.VersionActions",
@@ -57,7 +57,8 @@ namespace MOE.Common.Migrations
             DropColumn("dbo.ApproachRouteDetail", "ApproachOrder");
             DropColumn("dbo.ApproachRouteDetail", "ApproachID");
             DropTable("dbo.SignalWithDetections");
-            DropTable("dbo.ApproachRoute");
+            //This only exists on UDOT Database
+            //DropTable("dbo.ApproachRoute");
             DropTable("dbo.ApproachRouteDetail");
            
             //Original Data Aggragation Migration
