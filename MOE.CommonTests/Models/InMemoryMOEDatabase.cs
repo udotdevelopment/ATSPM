@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -12,6 +13,8 @@ namespace MOE.CommonTests.Models
 {
     public class InMemoryMOEDatabase
     {
+        private static Random rnd = new Random();
+
         public List<Common.Models.Signal> Signals = new List<Common.Models.Signal>();
         public List<Common.Models.Detector> Detectors = new List<Common.Models.Detector>();
         public List<Common.Models.Approach> Approaches = new List<Common.Models.Approach>();
@@ -24,12 +27,18 @@ namespace MOE.CommonTests.Models
         public List<Common.Models.LaneType> LaneTypes = new List<Common.Models.LaneType>();
         public List<Common.Models.DetectionHardware> DetectionHardwares = new List<Common.Models.DetectionHardware>();
         public List<Common.Models.ApplicationEvent> ApplicaitonEvents = new List<ApplicationEvent>();
+        public List<Common.Models.ApproachSpeedAggregation> ApproachSpeedAggregations = new List<ApproachSpeedAggregation>();
+        public List<Common.Models.ApproachCycleAggregation> ApproachCycleAggregations = new List<ApproachCycleAggregation>();
+        public List<Common.Models.ApproachSplitFailAggregation> ApproachSplitFailAggregations = new List<ApproachSplitFailAggregation>();
 
         public void ClearTables()
         {
             Detectors.Clear();
             Approaches.Clear();
             Signals.Clear();
+            ApproachSplitFailAggregations.Clear();
+            ApproachCycleAggregations.Clear();
+            ApproachSpeedAggregations.Clear();
 
         }
 
@@ -46,6 +55,31 @@ namespace MOE.CommonTests.Models
             PopulateDetectionHardware();
             PoplateMetricTypes();
 
+        }
+
+        private void PopulateApproachSplitFailAggregations()
+        {
+            int appId = Approaches.FirstOrDefault().ApproachID;
+            DateTime start = DateTime.Now.AddDays(-1);
+            if (appId != null)
+            {
+                for (int i = 0; i > 1000; i++)
+                {
+                    Common.Models.ApproachSplitFailAggregation asfa = new ApproachSplitFailAggregation();
+                    asfa.Id = i;
+                    asfa.ApproachId = appId;
+                    asfa.BinStartTime = start;
+                    asfa.IsProtectedPhase = false;
+                    asfa.ForceOffs = rnd.Next(1, 256);
+                    asfa.GapOuts = rnd.Next(1, 256);
+                    asfa.MaxOuts = rnd.Next(1, 256);
+                    asfa.SplitFailures = rnd.Next(1, 256);
+                    asfa.UnknownTerminationTypes = rnd.Next(1, 256);
+                    start = start.AddMinutes(5);
+                    ApproachSplitFailAggregations.Add(asfa);
+
+                }
+            }
         }
 
         private void PoplateMetricTypes()

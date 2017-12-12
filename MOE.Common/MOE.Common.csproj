@@ -436,7 +436,11 @@
     <Compile Include="Models\PreemptionAggregation.cs" />
     <Compile Include="Models\PriorityAggregation.cs" />
     <Compile Include="Models\Repositories\ActionChart.cs" />
+    <Compile Include="Models\Repositories\DetectorAggregationsRepository.cs" />
+    <Compile Include="Models\Repositories\DetectorAggregationsRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\IDetectorAggregationsRepository.cs" />
     <Compile Include="Models\Repositories\IRoutePhaseDirectionRepository.cs" />
+    <Compile Include="Models\Repositories\IApproachSplitFailAggregationRepository.cs" />
     <Compile Include="Models\Repositories\RoutePhaseDirectionRepository.cs" />
     <Compile Include="Models\Repositories\RoutePhaseDirectionRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\RouteSignalRepository.cs" />
@@ -695,6 +699,8 @@
     <Compile Include="Models\Repositories\DetectionTypeRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\MovementTypeRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\MenuRepository.cs" />
+    <Compile Include="Models\Repositories\ApproachSplitFailAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\ApproachSplitFailAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\SPMMenuRepository.cs" />
     <Compile Include="Models\Repositories\SPMMenuRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\SignalsRepositoryTest.cs" />

@@ -11,22 +11,52 @@ namespace MOE.Common.Models.Repositories
     {
         SPM db = new SPM();
 
-        public void Save(PreemptionAggregation preemptAggregationData)
+     
+        private Models.SPM _db;
+
+
+        public PreemptAggregationDatasRepository()
         {
-            try
-            {
-                db.PreemptionAggregations.Add(preemptAggregationData);
-                db.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                var errorLog = ApplicationEventRepositoryFactory.Create();
-                errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                    this.GetType().ToString(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message
-                    );
-                throw new Exception("Unable to save Preemption Aggragation Data");
-            }
+            _db = new SPM();
         }
+
+        public PreemptAggregationDatasRepository(SPM context)
+        {
+            _db = context;
+        }
+        public PreemptionAggregation Add(PreemptionAggregation preemptionAggregation)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+        public List<DetectorAggregation> GetActivationsByDetectorIDandDateRange(string detectorId, DateTime Start, DateTime End)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<PreemptionAggregation> GetPreemptAggregationByVersionIdAndDateRange(int versionId, DateTime start, DateTime end)
+        {
+            var records = (from r in this._db.PreemptionAggregations
+                                                           where r.VersionId == versionId
+                      && r.BinStartTime >= start && r.BinStartTime <= end
+                select r).ToList();
+
+            return records;
+        }
+
+        public void Remove(PreemptionAggregation preemptionAggregation)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void Update(PreemptionAggregation preemptionAggregation)
+        {
+            throw new NotImplementedException();
+        }
+
+
     }
 }

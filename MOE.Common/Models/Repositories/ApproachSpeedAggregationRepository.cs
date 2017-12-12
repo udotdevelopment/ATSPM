@@ -10,92 +10,48 @@ namespace MOE.Common.Models.Repositories
 {
     public class ApproachSpeedAggregationRepository : IApproachSpeedAggregationRepository
     {
-        Models.SPM db = new SPM();
-        
+        private Models.SPM _db;
+
+
+        public ApproachSpeedAggregationRepository()
+        {
+            _db = new SPM();
+        }
+
+        public ApproachSpeedAggregationRepository(SPM context)
+        {
+            _db = context;
+        }
+
+        public List<ApproachSpeedAggregation> GetSpeedsByApproachIDandDateRange(int approachId, DateTime start, DateTime end)
+        {
+            var activationsList = (from r in this._db.ApproachSpeedAggregations
+                where r.ApproachId == approachId
+                      && r.BinStartTime >= start && r.BinStartTime <= end
+                select r).ToList();
+
+            return activationsList;
+        }
+
         public void Update(MOE.Common.Models.ApproachSpeedAggregation approachSpeedAggregation)
         {
-            MOE.Common.Models.ApplicationEvent g = (from r in db.ApplicationEvents
-                                             where r.ID == approachSpeedAggregation.Id
-                                             select r).FirstOrDefault();
-            try
-            {
-                if (g != null)
-                {
-                    db.Entry(g).CurrentValues.SetValues(approachSpeedAggregation);
-                    db.SaveChanges();
-                }
-                else
-                {
-                    db.ApproachSpeedAggregations.Add(approachSpeedAggregation);
-                    db.SaveChanges();
-                }
-            }
-            catch (Exception e)
-            {
-                var errorLog = ApplicationEventRepositoryFactory.Create();
-                errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                    this.GetType().ToString(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
-                throw e;
-            }
-            
+            throw new NotImplementedException();
+
         }
 
         public void Remove(MOE.Common.Models.ApproachSpeedAggregation approachSpeedAggregation)
         {
-            MOE.Common.Models.ApplicationEvent g = (from r in db.ApplicationEvents
-                                             where r.ID == approachSpeedAggregation.Id
-                                             select r).FirstOrDefault();
-            if (g != null)
-            {
-                try
-                {
-                    db.ApplicationEvents.Remove(g);
-                    db.SaveChanges();
-                }
-                catch (Exception e)
-                {
-                    var errorLog = ApplicationEventRepositoryFactory.Create();
-                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().ToString(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
-                    throw e;
-                }
-            }
+            throw new NotImplementedException();
         }
 
         public void Remove(int id)
         {
-            MOE.Common.Models.ApplicationEvent g = db.ApplicationEvents.Find(id);
-            if (g != null)
-            {
-                try
-                {
-                    db.ApplicationEvents.Remove(g);
-                    db.SaveChanges();
-                }
-                catch (Exception e)
-                {
-                    var errorLog = ApplicationEventRepositoryFactory.Create();
-                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().ToString(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
-                    throw e;
-                }
-            }
+            throw new NotImplementedException();
         }
         public void Add(MOE.Common.Models.ApproachSpeedAggregation approachSpeedAggregation)
         {
-            try
-            {
-                db.ApproachSpeedAggregations.Add(approachSpeedAggregation);
-                db.SaveChanges();
-            }
-            catch(Exception e)
-            {
-                var errorLog = ApplicationEventRepositoryFactory.Create();
-                errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                    this.GetType().ToString(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
-                throw e;
-            }
-            
+            throw new NotImplementedException();
+
 
         }
     }

@@ -96,6 +96,7 @@ namespace MOE.Common.Business
             options.MetricTypeID = 17;
             Chart chart = ChartInitialization(options);
             Bins = GetBins(options);
+            Models.Repositories.Detector
             return chart;
         }
 
