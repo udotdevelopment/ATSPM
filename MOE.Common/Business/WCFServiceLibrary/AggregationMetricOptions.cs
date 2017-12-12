@@ -32,7 +32,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             Sum,
             Average
-
         };
 
         public enum AggregationGroups
@@ -43,17 +42,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Route
         }
 
-
-
         public List<KeyValuePair<string, int>> BinSizes = new List<KeyValuePair<string, int>>();
 
         public AggregationMetricOptions()
         {
-
             PopulateBinSizeList();
-
-
-
         }
 
         private void PopulateBinSizeList()
@@ -73,8 +66,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             BinSizes.Add(y);
         }
 
-
-
     public ChartTypes ChartType;
 
     public AggregationOpperations AggregationOpperation;
@@ -89,12 +80,5 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
     public int BinSize { get; set; }
     }
-
-
-
-
-
-
-
-    }
+    
 }

@@ -94,6 +94,31 @@
         </div>
     </div>
 
+    <div class="panel panel-signal">
+        <div class="panel-heading">
+            dATA aGGREGATION
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                @Html.CheckBoxListFor(x => x.LaneTypeIDs,
+                    x => x.AllLaneTypes,
+                    x => x.LaneTypeID,
+                    x => x.Description,
+                    x => x.AllLaneTypes,
+                    Position.Vertical)
+            </div>
+            <div class="form-group">
+                Sum:<input checked="checked"
+                           id="Sum"
+                           type="radio"
+                           value="Sum"/>
+                Average:<input checked="checked"
+                           id="Sum"
+                           type="radio"
+                           value="Average" />
+            </div>
+        </div>
+    </div>
 }
 </body>
 
