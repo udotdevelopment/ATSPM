@@ -75,19 +75,19 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
 
 
-    public ChartTypes ChartType;
+        public ChartTypes ChartType;
 
-    public AggregationOpperations AggregationOpperation;
+        public AggregationOpperations AggregationOpperation;
 
-    public AggregationGroups GroupBy;
+        public AggregationGroups GroupBy;
 
-    public List<Models.Signal> Signals = new List<Models.Signal>();
+        public List<Models.Signal> Signals = new List<Models.Signal>();
 
-    public List<Models.Approach> Approaches = new List<Models.Approach>();
+        public List<Models.Approach> Approaches = new List<Models.Approach>();
 
-    public List<Models.Detector> Detectors = new List<Models.Detector>();
+        public List<Models.Detector> Detectors = new List<Models.Detector>();
 
-    public int BinSize { get; set; }
+        public int BinSize { get; set; }
     }
 
 
@@ -96,5 +96,5 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
 
 
-    }
+    
 }

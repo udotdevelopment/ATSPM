@@ -31,21 +31,48 @@ namespace MOE.Common.Business
                 //Parallel.ForEach(indices, i =>
                 foreach (int i in indices)
                 {
-                    //PairedApproaches.Add(new LinkPivotPair(route.RouteSignals[i].SignalId, route.RouteSignals[i].Signal.SignalDescription, route.RouteSignals[i - 1].SignalId, route.RouteSignals[i - 1].Signal.SignalDescription,
-                    //        startDate, endDate, cycleTime, chartLocation, bias, biasDirection, Dates, i + 1));
+                    var signalRepository = Models.Repositories.SignalsRepositoryFactory.Create();
+                    var signal = signalRepository.GetVersionOfSignalByDate(route.RouteSignals[i].SignalId, startDate);
+                    var primaryPhaseDirection = route.RouteSignals[i].PhaseDirections.FirstOrDefault(p => p.IsPrimaryApproach);
+                    var downstreamPrimaryPhaseDirection = route.RouteSignals[i-1].PhaseDirections.FirstOrDefault(p => p.IsPrimaryApproach == false);
+                    var dowstreamSignal = signalRepository.GetVersionOfSignalByDate(route.RouteSignals[i-1].SignalId, startDate);
+                    var approach = signal.Approaches.FirstOrDefault(a =>
+                        a.DirectionTypeID == primaryPhaseDirection.DirectionTypeId &&
+                        a.IsProtectedPhaseOverlap == primaryPhaseDirection.IsOverlap &&
+                        a.ProtectedPhaseNumber == primaryPhaseDirection.Phase);
+                    var downstreamApproach = dowstreamSignal.Approaches.FirstOrDefault(a =>
+                        a.DirectionTypeID == downstreamPrimaryPhaseDirection.DirectionTypeId &&
+                        a.IsProtectedPhaseOverlap == downstreamPrimaryPhaseDirection.IsOverlap &&
+                        a.ProtectedPhaseNumber == downstreamPrimaryPhaseDirection.Phase);
+                    PairedApproaches.Add(new LinkPivotPair(approach, downstreamApproach, startDate, endDate, cycleTime, chartLocation, bias, 
+                        biasDirection, Dates, i + 1));
                 }
                 //);
             }
             else
             {
-                //TODO:Fix for Routes
-                //for (int i = 0; i < _ApproachRouteDetail.Count - 1; i++)
-                //{
-                //    indices.Add(i);
-                //}
+                for (int i = 0; i < route.RouteSignals.Count - 1; i++)
+                {
+                    indices.Add(i);
+                }
                 //Parallel.ForEach(indices, i =>
                 foreach (int i in indices)
                 {
+                    var signalRepository = Models.Repositories.SignalsRepositoryFactory.Create();
+                    var signal = signalRepository.GetVersionOfSignalByDate(route.RouteSignals[i].SignalId, startDate);
+                    var primaryPhaseDirection = route.RouteSignals[i].PhaseDirections.FirstOrDefault(p => p.IsPrimaryApproach);
+                    var downstreamPrimaryPhaseDirection = route.RouteSignals[i + 1].PhaseDirections.FirstOrDefault(p => p.IsPrimaryApproach == false);
+                    var dowstreamSignal = signalRepository.GetVersionOfSignalByDate(route.RouteSignals[i + 1].SignalId, startDate);
+                    var approach = signal.Approaches.FirstOrDefault(a =>
+                        a.DirectionTypeID == primaryPhaseDirection.DirectionTypeId &&
+                        a.IsProtectedPhaseOverlap == primaryPhaseDirection.IsOverlap &&
+                        a.ProtectedPhaseNumber == primaryPhaseDirection.Phase);
+                    var downstreamApproach = dowstreamSignal.Approaches.FirstOrDefault(a =>
+                        a.DirectionTypeID == downstreamPrimaryPhaseDirection.DirectionTypeId &&
+                        a.IsProtectedPhaseOverlap == downstreamPrimaryPhaseDirection.IsOverlap &&
+                        a.ProtectedPhaseNumber == downstreamPrimaryPhaseDirection.Phase);
+                    PairedApproaches.Add(new LinkPivotPair(approach, downstreamApproach, startDate, endDate, cycleTime, chartLocation, bias,
+                        biasDirection, Dates, i + 1));
                     //TODO: Fix for new routes
                     //pairedApproaches.Add(new LinkPivotPair(_ApproachRouteDetail[i].SignalId, _ApproachRouteDetail[i].DirectionType1.Description,
                     //        _ApproachRouteDetail[i].Signal.PrimaryName + " " + _ApproachRouteDetail[i].Signal.SecondaryName, _ApproachRouteDetail[i + 1].SignalId, _ApproachRouteDetail[i + 1].DirectionType1.Description,
@@ -54,19 +81,19 @@ namespace MOE.Common.Business
                 //);
             }
 
-            
+
 
             ////If the user has selected the end of the list create a reverse sort the LinkPivotPair list
             ////otherwise build the list as ordered in the database
             //if (direction == "Upstream")
             //{
             //    //build a reverse sort LinkPivotPair list
-            //   for (int i = detailTable.Rows.Count-1; i > 0; i--)
-            //   {
-            //       pairedApproaches.Add(new LinkPivotPair(detailTable[i].SignalId, detailTable[i].Direction,
-            //           detailTable[i].Location, detailTable[i - 1].SignalId, detailTable[i - 1].Direction,
-            //           detailTable[i - 1].Location, startDate, endDate, cycleTime, chartLocation, bias, biasDirection, dates));
-            //   }
+            //    for (int i = detailTable.Rows.Count - 1; i > 0; i--)
+            //    {
+            //        pairedApproaches.Add(new LinkPivotPair(detailTable[i].SignalId, detailTable[i].Direction,
+            //            detailTable[i].Location, detailTable[i - 1].SignalId, detailTable[i - 1].Direction,
+            //            detailTable[i - 1].Location, startDate, endDate, cycleTime, chartLocation, bias, biasDirection, dates));
+            //    }
             //}
             //else
             //{
@@ -83,38 +110,32 @@ namespace MOE.Common.Business
             foreach (int i in indices)
             {
                 //Make sure the list is in the correct order after parrallel processing
-                //TODO:Fix for Routes
-                //var lpps = from pair in pairedApproaches
-                //           where pair.SignalId == _ApproachRouteDetail[i].SignalId
-                //          select pair;
-
-                //foreach (var lpp in lpps)
-                //{
-                //    adjustment.AddLinkPivotAdjustmentRow(lpp.SignalId, Convert.ToInt32(lpp.SecondsAdded), 0,
-                //        lpp.PAOGUpstreamBefore, lpp.PAOGDownstreamBefore, lpp.AOGUpstreamBefore, lpp.AOGDownstreamBefore,
-                //        lpp.PAOGUpstreamPredicted, lpp.PAOGDownstreamPredicted, lpp.AOGUpstreamPredicted, lpp.AOGDownstreamPredicted,
-                //        lpp.Location, lpp.DownSignalId, lpp.DownstreamApproachDirection, lpp.UpstreamApproachDirection,
-                //        lpp.ResultChartLocation, lpp.DownstreamLocation, lpp.AOGTotalBefore, lpp.PAOGTotalBefore,
-                //        lpp.AOGTotalPredicted, lpp.PAOGTotalPredicted, lpp.LinkNumber,lpp.TotalVolumeDownstream,
-                //        lpp.TotalVolumeUpstream);
-                //}
+                var lpp = PairedApproaches.FirstOrDefault(p => p.SignalApproach.SignalID == route.RouteSignals[i].SignalId);
+                Adjustment.AddLinkPivotAdjustmentRow(lpp.SignalApproach.SignalID, Convert.ToInt32(lpp.SecondsAdded), 0,
+                    lpp.PaogUpstreamBefore, lpp.PaogDownstreamBefore, lpp.AogUpstreamBefore, lpp.AogDownstreamBefore,
+                    lpp.PaogUpstreamPredicted, lpp.PaogDownstreamPredicted, lpp.AogUpstreamPredicted, lpp.AogDownstreamPredicted,
+                    lpp.SignalApproach.Signal.SignalDescription, lpp.DownSignalApproach.Signal.SignalID, lpp.DownSignalApproach.DirectionType.Description,
+                    lpp.SignalApproach.DirectionType.Description, lpp.ResultChartLocation, lpp.DownSignalApproach.Signal.SignalDescription, 
+                    lpp.AogTotalBefore, lpp.PaogTotalBefore,
+                    lpp.AogTotalPredicted, lpp.PaogTotalPredicted, lpp.LinkNumber, lpp.TotalVolumeDownstream,
+                    lpp.TotalVolumeUpstream);
             }
 
             //Set the end row to have zero for the ajustments. No adjustment can be made because 
             //downstream is unknown. The end row is determined by the starting point seleceted by the user
             if (direction == "Upstream")
             {
-                //TODO: Fix for new routes
                 //End row for upstream is index 0
-                //adjustment.AddLinkPivotAdjustmentRow(_ApproachRouteDetail[0].SignalId, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, _ApproachRouteDetail[0].Signal.PrimaryName + " " + _ApproachRouteDetail[0].Signal.SecondaryName,
-                //    "","","","","",0,0,0,0,1,0,0);
+                Adjustment.AddLinkPivotAdjustmentRow(PairedApproaches[0].SignalApproach.SignalID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    PairedApproaches[0].SignalApproach.Signal.SignalDescription,
+                    "", "", "", "", "", 0, 0, 0, 0, 1, 0, 0);
             }
             else
             {
-                //TODO: Fix for new routes
                 //End row for downstream is last row in the detail table
-                //adjustment.AddLinkPivotAdjustmentRow(_ApproachRouteDetail[_ApproachRouteDetail.Count - 1].SignalId, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                //    _ApproachRouteDetail[_ApproachRouteDetail.Count - 1].Signal.PrimaryName + " " + _ApproachRouteDetail[_ApproachRouteDetail.Count - 1].Signal.SecondaryName, "", "", "", "", "", 0, 0, 0, 0, _ApproachRouteDetail.Count, 0, 0);
+                Adjustment.AddLinkPivotAdjustmentRow(PairedApproaches[PairedApproaches.Count - 1].SignalApproach.SignalID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    PairedApproaches[PairedApproaches.Count - 1].SignalApproach.Signal.SignalDescription, "", "", "", "", "", 0, 0, 0, 0,
+                    PairedApproaches.Count, 0, 0);
             }
 
             int cumulativeChange = 0;
