@@ -149,16 +149,6 @@ namespace MOE.Common.Models
                 .HasMany(al => al.MetricTypes);
         }
 
-        
-
-       
-
-       
-
-        
-
-
-
-
+        //public System.Data.Entity.DbSet<SPM.Models.AggDataExportViewModel> AggDataExportViewModels { get; set; }
     }
 }

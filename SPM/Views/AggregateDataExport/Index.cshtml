@@ -1,0 +1,129 @@
+﻿@using MvcCheckBoxList.Model;
+@model SPM.Models.AggDataExportViewModel
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Raw Data Export</title>
+</head>
+<body>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="panel panel-signal">
+        <div class="panel-heading">
+            Metric
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                @Html.CheckBoxListFor(x => x.MetricTypeIDs,
+                    x => x.AllMetricTypes,
+                    x => x.MetricID,
+                    x => x.ChartName,
+                    x => x.AllMetricTypes,
+                    Position.Vertical)
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-signal">
+        <div class="panel-heading">
+            Signals
+        </div>
+        <div class="panel-body">
+            Load Route:  @Html.DropDownListFor(m=>m.SelectedRouteID, new SelectList(Model.Routes, "Id", "RouteName"), "Select A Route", 
+                             new {@onchange = "LoadRoute()"})
+    
+            <div id="SignalSearchContainer" class="col-md-6 panel-min-width">
+                @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearchViewModel))
+            </div>
+            
+            <div id="RouteSignals">
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-signal">
+        <div class="panel-heading">
+            Approach Filter
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                @Html.CheckBoxListFor(x => x.ApproachTypeIDs,
+                    x => x.AllApproachTypes,
+                    x => x.DirectionTypeID,
+                    x => x.Description,
+                    x => x.AllApproachTypes,
+                    Position.Vertical)
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-signal">
+        <div class="panel-heading">
+            Movement Type Filter
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                @Html.CheckBoxListFor(x => x.MovementTypeIDs,
+                    x => x.AllMovementTypes,
+                    x => x.MovementTypeID,
+                    x => x.Description,
+                    x => x.AllMovementTypes,
+                    Position.Vertical)
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-signal">
+        <div class="panel-heading">
+            Vehicle Type Filter
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                @Html.CheckBoxListFor(x => x.LaneTypeIDs,
+                    x => x.AllLaneTypes,
+                    x => x.LaneTypeID,
+                    x => x.Description,
+                    x => x.AllLaneTypes,
+                    Position.Vertical)
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-signal">
+        <div class="panel-heading">
+            dATA aGGREGATION
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                @Html.CheckBoxListFor(x => x.LaneTypeIDs,
+                    x => x.AllLaneTypes,
+                    x => x.LaneTypeID,
+                    x => x.Description,
+                    x => x.AllLaneTypes,
+                    Position.Vertical)
+            </div>
+            <div class="form-group">
+                Sum:<input checked="checked"
+                           id="Sum"
+                           type="radio"
+                           value="Sum"/>
+                Average:<input checked="checked"
+                           id="Sum"
+                           type="radio"
+                           value="Average" />
+            </div>
+        </div>
+    </div>
+}
+</body>
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/Scripts/AggregateDataExport.js"></script>
+<script> var urlpathGetRouteSignals = '@Url.Action("Details", "Routes")';</script>
+}

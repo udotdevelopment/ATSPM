@@ -11,22 +11,49 @@ namespace MOE.Common.Models.Repositories
     {
         SPM db = new SPM();
 
-        public void Save(PriorityAggregation priorityAggregation)
+
+        private Models.SPM _db;
+
+
+        public PriorityAggregationDatasRepository()
         {
-            try
-            {
-                db.PriorityAggregations.Add(priorityAggregation);
-                db.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                var errorLog = ApplicationEventRepositoryFactory.Create();
-                errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                    this.GetType().ToString(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message
-                    );
-                throw new Exception("Unable to save Priority Aggragation Data");
-            }
+            _db = new SPM();
         }
+
+        public PriorityAggregationDatasRepository(SPM context)
+        {
+            _db = context;
+        }
+        public PriorityAggregation Add(PriorityAggregation priorityAggregation)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+
+
+        public List<PriorityAggregation> GetPriorityAggregationByVersionIdAndDateRange(int versionId, DateTime start, DateTime end)
+        {
+            var records = (from r in this._db.PriorityAggregations
+                           where r.VersionId == versionId
+                      && r.BinStartTime >= start && r.BinStartTime <= end
+                select r).ToList();
+
+            return records;
+        }
+
+        public void Remove(PriorityAggregation priorityAggregation)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void Update(PriorityAggregation priorityAggregation)
+        {
+            throw new NotImplementedException();
+        }
+
+
     }
 }

@@ -96,6 +96,7 @@
     <Compile Include="Models\Custom\ApproachTests.cs" />
     <Compile Include="Models\Custom\ImporterTests.cs" />
     <Compile Include="Models\InMemoryApproachRepository.cs" />
+    <Compile Include="Models\InMemoryApproachSpeedAggregationRepository.cs" />
     <Compile Include="Models\InMemoryControllerTypeRepository.cs" />
     <Compile Include="Models\InMemoryDetectionHardwareRepository.cs" />
     <Compile Include="Models\InMemoryDetectionTypeRepository.cs" />
