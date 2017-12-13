@@ -421,9 +421,9 @@
     <Compile Include="Migrations\201710272056348_DataAggregationUI.Designer.cs">
       <DependentUpon>201710272056348_DataAggregationUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201712130759456_MetricTypeUpdate.cs" />
-    <Compile Include="Migrations\201712130759456_MetricTypeUpdate.Designer.cs">
-      <DependentUpon>201712130759456_MetricTypeUpdate.cs</DependentUpon>
+    <Compile Include="Migrations\201712131644508_MetricTypeUpdates.cs" />
+    <Compile Include="Migrations\201712131644508_MetricTypeUpdates.Designer.cs">
+      <DependentUpon>201712131644508_MetricTypeUpdates.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
@@ -838,8 +838,8 @@
     <EmbeddedResource Include="Migrations\201710272056348_DataAggregationUI.resx">
       <DependentUpon>201710272056348_DataAggregationUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201712130759456_MetricTypeUpdate.resx">
-      <DependentUpon>201712130759456_MetricTypeUpdate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201712131644508_MetricTypeUpdates.resx">
+      <DependentUpon>201712131644508_MetricTypeUpdates.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

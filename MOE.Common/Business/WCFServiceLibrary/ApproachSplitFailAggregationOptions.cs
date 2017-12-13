@@ -12,7 +12,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     {
        
 
-        public IApproachSplitFailAggregationRepository Repo =  ApproachSplitFailAggregationRepositoryFactory.Create();
+        
 
         public  void ApproachSplitFailAggregationOption()
         {
@@ -21,18 +21,29 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 foreach (var appr in Approaches)
                 {
-                    List<ApproachSplitFailAggregation> aggregations =
-                        Repo.GetApproachSplitFailAggregationByVersionIdAndDateRange(appr.VersionID,StartDate, EndDate);
 
-                    Series s = new Series();
+
+                    Series splitFailSeries = new Series();
 
                     DateTime reportStart = StartDate;
 
 
-                    var sum = aggregations.Sum(r => r.ForceOffs);
+                    //var sum = aggregations.Sum(r => r.ForceOffs);
 
-                   // s.Points.AddXY()
+                    //while (reportStart < EndDate)
+                    //{
+                    //    var binValues = (from r in aggregations
+                    //        where r.BinStartTime <= reportStart && r.BinStartTime > reportStart.AddMinutes(BinSize)
+                    //        select r).ToList();
 
+                    //    int sfSum = binValues.Sum(f => f.SplitFailures);
+
+                    //    splitFailSeries.Points.AddXY(sfSum, reportStart);
+
+                    //    reportStart = reportStart.AddMinutes(BinSize);
+                    //}
+
+                    
 
                 }
             }

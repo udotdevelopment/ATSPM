@@ -7,13 +7,13 @@ namespace MOE.Common.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class MetricTypeUpdate : IMigrationMetadata
+    public sealed partial class MetricTypeUpdates : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(MetricTypeUpdate));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(MetricTypeUpdates));
         
         string IMigrationMetadata.Id
         {
-            get { return "201712130759456_MetricTypeUpdate"; }
+            get { return "201712131644508_MetricTypeUpdates"; }
         }
         
         string IMigrationMetadata.Source

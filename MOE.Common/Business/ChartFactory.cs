@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.WCFServiceLibrary;
+using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business
 {
@@ -96,7 +98,7 @@ namespace MOE.Common.Business
             options.MetricTypeID = 17;
             Chart chart = ChartInitialization(options);
             Bins = GetBins(options);
-            //Models.Repositories.Detector
+            
             return chart;
         }
 
@@ -121,7 +123,17 @@ namespace MOE.Common.Business
             options.MetricTypeID = 20;
             Chart chart = ChartInitialization(options);
             Bins = GetBins(options);
+            var records = GetApproachAggregationRecords(options);
             return chart;
+        }
+
+        public static List<ApproachSplitFailAggregation> GetApproachAggregationRecords(AggregationMetricOptions options)
+        {
+            IApproachSplitFailAggregationRepository Repo = ApproachSplitFailAggregationRepositoryFactory.Create();
+
+            List<ApproachSplitFailAggregation> aggregations =
+            Repo.GetApproachSplitFailAggregationByVersionIdAndDateRange(options.Approaches.FirstOrDefault().VersionID, options.StartDate, options.EndDate);
+            return aggregations;
         }
 
         public static Chart CreatePedestrianActuationAggregationChart(AggregationMetricOptions options)
