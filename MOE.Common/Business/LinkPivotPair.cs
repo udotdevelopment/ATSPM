@@ -39,16 +39,15 @@ namespace MOE.Common.Business
         public double PaogTotalBefore { get; set; }
         public double AogTotalPredicted { get; set; }
         public double PaogTotalPredicted { get; set; }
-        public Approach UpstreamSignalApproach { get; }
+        public Approach SignalApproach { get; }
         public Approach DownSignalApproach { get; }
         public DateTime StartDate { get; }
         public int LinkNumber { get; set; }
 
-
-        public LinkPivotPair(Approach upstreamSignalApproach, Approach downSignalApproach, DateTime startDate, DateTime endDate, int cycleTime, 
+        public LinkPivotPair(Approach signalApproach, Approach downSignalApproach, DateTime startDate, DateTime endDate, int cycleTime, 
             string chartLocation, double bias, string biasDirection, List<DateTime> dates, int linkNumber)
         {
-            UpstreamSignalApproach = upstreamSignalApproach;
+            SignalApproach = signalApproach;
             DownSignalApproach = downSignalApproach;
             StartDate = startDate;
             LinkNumber = linkNumber;
@@ -56,10 +55,6 @@ namespace MOE.Common.Business
             //Check to see if both directions have detection if so analyze both
             if (UpstreamPcd.Count > 0 && DownstreamPcd.Count > 0)
             {
-                //Data.LinkPivotTableAdapters.Graph_DetectorsTableAdapter gda = 
-                //    new Data.LinkPivotTableAdapters.Graph_DetectorsTableAdapter();
-                //int? recordedCycleTime = gda.GetCycleTime(startDate, Convert.ToInt32(signalId));
-
                 //if a bias was provided bias the results in the direction specified
                 if (bias != 0)
                 {
@@ -74,7 +69,7 @@ namespace MOE.Common.Business
                 //remove the seconds from the pcd to produce the optimized pcd
                 //int secondsToRemove = Convert.ToInt32(cycleTime - secondsAdded);
                 //upstreamPCD.LinkPivotAddSeconds(secondsToRemove);
-                //downstreamPCD.LinkPivotAddSeconds(secondsToRemove*-1);
+                //downstreamPCD.LinkPivotAddSeconds(secondsToRemove * -1);
 
                 //pAOGUpstreamPredicted = upstreamPCD.PercentArrivalOnGreen;
                 //aOGUpstreamPredicted = upstreamPCD.TotalArrivalOnGreen;
@@ -429,7 +424,7 @@ namespace MOE.Common.Business
             {
                 DateTime tempStartDate = dt;
                 DateTime tempEndDate = new DateTime(dt.Year, dt.Month, dt.Day, endDate.Hour, endDate.Minute, endDate.Second);
-                SignalPhase upstreamPcd = new SignalPhase(tempStartDate, tempEndDate, UpstreamSignalApproach, false, 15, 13, false);
+                SignalPhase upstreamPcd = new SignalPhase(tempStartDate, tempEndDate, SignalApproach, false, 15, 13, false);
                 UpstreamPcd.Add(upstreamPcd);
                 AogUpstreamBefore += upstreamPcd.TotalArrivalOnGreen;
                 TotalVolumeUpstream += upstreamPcd.TotalVolume;
@@ -542,7 +537,7 @@ namespace MOE.Common.Business
                                 d.Key,
                                 d.Value);
             
-                string chartName = "LinkPivot-" + UpstreamSignalApproach.SignalID + UpstreamSignalApproach.DirectionType.Abbreviation +
+                string chartName = "LinkPivot-" + SignalApproach.SignalID + SignalApproach.DirectionType.Abbreviation +
                 DownSignalApproach.SignalID + DownSignalApproach.DirectionType.Abbreviation + 
                 DateTime.Now.Day.ToString()+
                 DateTime.Now.Hour.ToString() +

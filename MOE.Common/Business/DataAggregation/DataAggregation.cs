@@ -35,6 +35,10 @@ namespace MOE.Common.Business.DataAggregation
             new ConcurrentQueue<ApproachYellowRedActivationAggregation>();
         private ConcurrentQueue<DetectorAggregation> _detectorAggregationConcurrentQueue =
             new ConcurrentQueue<DetectorAggregation>();
+        private ConcurrentQueue<PriorityAggregation> _priorityAggregationConcurrentQueue =
+            new ConcurrentQueue<PriorityAggregation>();
+        private ConcurrentQueue<PreemptionAggregation> _preemptAggregationConcurrentQueue =
+            new ConcurrentQueue<PreemptionAggregation>();
 
 
         public void StartAggregation(string[] args)
@@ -91,8 +95,110 @@ namespace MOE.Common.Business.DataAggregation
                     Console.WriteLine("Saving Detector Data to Database...");
                     BulkSaveDetectorData();
                 }
+                if (_priorityAggregationConcurrentQueue.Count > 0)
+                {
+                    Console.WriteLine("Saving Priority Data to Database...");
+                    BulkSavePriorityData();
+                }
+                if (_preemptAggregationConcurrentQueue.Count > 0)
+                {
+                    Console.WriteLine("Saving Preempt Data to Database...");
+                    BulkSavePreemptData();
+                }
             }
             _startDate = _startDate.AddDays(1);
+        }
+
+        private void BulkSavePreemptData()
+        {
+            DataTable preemptAggregationTable = new DataTable();
+            preemptAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
+            preemptAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
+            preemptAggregationTable.Columns.Add(new DataColumn("SignalID", typeof(string)));
+            preemptAggregationTable.Columns.Add(new DataColumn("PreemptNumber", typeof(int)));
+            preemptAggregationTable.Columns.Add(new DataColumn("PreemptRequests", typeof(int)));
+            preemptAggregationTable.Columns.Add(new DataColumn("PreemptServices", typeof(int)));
+            preemptAggregationTable.Columns.Add(new DataColumn("VersionId", typeof(int)));
+
+            while (_preemptAggregationConcurrentQueue.TryDequeue(out var preemptionAggregation))
+            {
+                DataRow dataRow = preemptAggregationTable.NewRow();
+                dataRow["BinStartTime"] = preemptionAggregation.BinStartTime;
+                dataRow["SignalID"] = preemptionAggregation.SignalId;
+                dataRow["PreemptNumber"] = preemptionAggregation.PreemptNumber;
+                dataRow["PreemptRequests"] = preemptionAggregation.PreemptRequests;
+                dataRow["PreemptServices"] = preemptionAggregation.PreemptServices;
+                dataRow["VersionId"] = preemptionAggregation.VersionId;
+                preemptAggregationTable.Rows.Add(dataRow);
+            }
+            string connectionString =
+                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
+                sqlBulkCopy.DestinationTableName = "PreemptionAggregations";
+                sqlBulkCopy.BulkCopyTimeout = 180;
+                sqlBulkCopy.BatchSize = 50000;
+                try
+                {
+                    connection.Open();
+                    sqlBulkCopy.WriteToServer(preemptAggregationTable);
+                    connection.Close();
+                }
+                catch (Exception e)
+                {
+                    IApplicationEventRepository applicationEventRepository = ApplicationEventRepositoryFactory.Create();
+                    applicationEventRepository.QuickAdd("AggregateAtspmData", "AggregateAtspmData", "BulkSave", ApplicationEvent.SeverityLevels.High, e.Message);
+                }
+            }
+        }
+
+        private void BulkSavePriorityData()
+        {
+            DataTable priorityAggregationTable = new DataTable();
+            priorityAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
+            priorityAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
+            priorityAggregationTable.Columns.Add(new DataColumn("SignalID", typeof(string)));
+            priorityAggregationTable.Columns.Add(new DataColumn("PriorityNumber", typeof(int)));
+            priorityAggregationTable.Columns.Add(new DataColumn("TotalCycles", typeof(int)));
+            priorityAggregationTable.Columns.Add(new DataColumn("PriorityRequests", typeof(int)));
+            priorityAggregationTable.Columns.Add(new DataColumn("PriorityServiceEarlyGreen", typeof(int)));
+            priorityAggregationTable.Columns.Add(new DataColumn("PriorityServiceExtendedGreen", typeof(int)));
+            priorityAggregationTable.Columns.Add(new DataColumn("VersionId", typeof(int)));
+
+            while (_priorityAggregationConcurrentQueue.TryDequeue(out var priorityAggregationData))
+            {
+                DataRow dataRow = priorityAggregationTable.NewRow();
+                dataRow["BinStartTime"] = priorityAggregationData.BinStartTime;
+                dataRow["SignalID"] = priorityAggregationData.SignalID;
+                dataRow["PriorityNumber"] = priorityAggregationData.PriorityNumber;
+                dataRow["TotalCycles"] = priorityAggregationData.TotalCycles;
+                dataRow["PriorityRequests"] = priorityAggregationData.PriorityRequests;
+                dataRow["PriorityServiceEarlyGreen"] = priorityAggregationData.PriorityServiceEarlyGreen;
+                dataRow["PriorityServiceExtendedGreen"] = priorityAggregationData.PriorityServiceExtendedGreen;
+                dataRow["VersionId"] = priorityAggregationData.VersionId;
+                priorityAggregationTable.Rows.Add(dataRow);
+            }
+            string connectionString =
+                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
+                sqlBulkCopy.DestinationTableName = "PriorityAggregations";
+                sqlBulkCopy.BulkCopyTimeout = 180;
+                sqlBulkCopy.BatchSize = 50000;
+                try
+                {
+                    connection.Open();
+                    sqlBulkCopy.WriteToServer(priorityAggregationTable);
+                    connection.Close();
+                }
+                catch (Exception e)
+                {
+                    IApplicationEventRepository applicationEventRepository = ApplicationEventRepositoryFactory.Create();
+                    applicationEventRepository.QuickAdd("AggregateAtspmData", "AggregateAtspmData", "BulkSave", ApplicationEvent.SeverityLevels.High, e.Message);
+                }
+            }
         }
 
         private void BulkSaveDetectorData()

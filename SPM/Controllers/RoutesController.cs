@@ -34,7 +34,7 @@ namespace SPM.Controllers
             {
                 return HttpNotFound();
             }
-            return View(route);
+            return PartialView(route);
         }
 
         public ActionResult Create()

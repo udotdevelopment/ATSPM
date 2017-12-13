@@ -187,6 +187,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActionLogsController.cs" />
+    <Compile Include="Controllers\AggregateDataExportController.cs" />
     <Compile Include="Controllers\ApproachesController.cs" />
     <Compile Include="Controllers\ApproachRouteDetailsController.cs" />
     <Compile Include="Controllers\RouteOldController.cs" />
@@ -213,6 +214,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AggDataExportViewModel.cs" />
     <Compile Include="Models\MetricResultViewModel.cs" />
     <Compile Include="Models\DataExportViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -309,6 +311,7 @@
     <Content Include="Scripts\ActionLog.js" />
     <Content Include="Scripts\AddData.js" />
     <Content Include="Scripts\AddRouteData.js" />
+    <Content Include="Scripts\AggregateDataExport.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Chart.min.js.map">
@@ -563,6 +566,10 @@
     <Content Include="Views\Routes\Edit.cshtml" />
     <Content Include="Views\Routes\Index.cshtml" />
     <Content Include="Views\RouteSignals\ApproachesForRoute.cshtml" />
+    <Content Include="Views\AggregateDataExport\AggregateDataExport.cshtml" />
+    <Content Include="Views\AggregateDataExport\Index.cshtml" />
+    <Content Include="Views\Routes\EditorTemplates\RouteSignal.cshtml" />
+    <Content Include="Views\Routes\EditorTemplates\RoutePhaseDirection.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
