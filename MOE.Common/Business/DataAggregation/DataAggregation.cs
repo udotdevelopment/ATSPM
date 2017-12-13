@@ -635,7 +635,7 @@ namespace MOE.Common.Business.DataAggregation
                         PriorityServiceExtendedGreen = records.Count(r => r.EventCode == 114)
                     };
                     var priorityAggregationDataRepository = PriorityAggregationDatasRepositoryFactory.Create();
-                    priorityAggregationDataRepository.Save(priorityAggregation);
+                    priorityAggregationDataRepository.Add(priorityAggregation);
                 }
             }
         }
@@ -656,7 +656,7 @@ namespace MOE.Common.Business.DataAggregation
                         PreemptServices = records.Count(r => r.EventCode == 105)
                     };
                     var priorityAggregationDataRepository = PreemptAggregationDatasRepositoryFactory.Create();
-                    priorityAggregationDataRepository.Save(preemptionAggregationData);
+                    priorityAggregationDataRepository.Add(preemptionAggregationData);
                 }
             }
         }

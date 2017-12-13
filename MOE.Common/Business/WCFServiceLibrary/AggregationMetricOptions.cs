@@ -30,6 +30,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public enum AggregationOpperations
         {
+            Unknown,
             Sum,
             Average
 
@@ -37,6 +38,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public enum AggregationGroups
         {
+            Unknown,
             Movement,
             Approach,
             Signal,
@@ -75,25 +77,23 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
 
 
-    public ChartTypes ChartType;
+    public  ChartTypes ChartType;
 
-    public AggregationOpperations AggregationOpperation;
+    public AggregationOpperations AggregationOpperation { get; set; }
 
-    public AggregationGroups GroupBy;
+    public AggregationGroups GroupBy = new AggregationGroups();
 
     public List<Models.Signal> Signals = new List<Models.Signal>();
 
-    public List<Models.Approach> Approaches = new List<Models.Approach>();
+     public List<Series> SeriesList = new List<Series>();
+
+     public List<Models.Approach> Approaches = new List<Models.Approach>();
 
     public List<Models.Detector> Detectors = new List<Models.Detector>();
 
     public int BinSize { get; set; }
     }
 
-
-
-
-
-
+    
 
     }

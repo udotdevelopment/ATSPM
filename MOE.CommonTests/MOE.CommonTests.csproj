@@ -60,6 +60,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -91,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Business\ApproachSpeed\AvgSpeedBucketCollectionTests.cs" />
     <Compile Include="Business\ChartFactoryTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\AggregationMetricOptionsTests.cs" />
     <Compile Include="Models\InMemoryApplicationEventRepository.cs" />
     <Compile Include="Business\WCFServiceLibrary\MetricOptionsTests.cs" />
     <Compile Include="Models\Custom\ApproachTests.cs" />
@@ -119,6 +121,10 @@
     <ProjectReference Include="..\MOE.Common\MOE.Common.csproj">
       <Project>{87951632-A7BE-4E04-B62C-C4FC2FC0CD5A}</Project>
       <Name>MOE.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SPM\SPM.csproj">
+      <Project>{9589DEB3-61EF-4517-AF80-CCB7996AD4DD}</Project>
+      <Name>SPM</Name>
     </ProjectReference>
     <ProjectReference Include="..\WavetronicsSpeedListener\WavetronicsSpeedListener.csproj">
       <Project>{23FADD7C-2165-4EED-B930-C6ACDD2AC12F}</Project>

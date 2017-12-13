@@ -379,6 +379,7 @@
     <Compile Include="Business\TMC\TMCViewModel.cs" />
     <Compile Include="Business\WatchDog\WatchDogScan.cs" />
     <Compile Include="Business\WCFServiceLibrary\AggregationMetricOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptions.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>
     </Compile>
@@ -419,6 +420,10 @@
     <Compile Include="Migrations\201710272056348_DataAggregationUI.cs" />
     <Compile Include="Migrations\201710272056348_DataAggregationUI.Designer.cs">
       <DependentUpon>201710272056348_DataAggregationUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712130759456_MetricTypeUpdate.cs" />
+    <Compile Include="Migrations\201712130759456_MetricTypeUpdate.Designer.cs">
+      <DependentUpon>201712130759456_MetricTypeUpdate.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
@@ -832,6 +837,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710272056348_DataAggregationUI.resx">
       <DependentUpon>201710272056348_DataAggregationUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712130759456_MetricTypeUpdate.resx">
+      <DependentUpon>201712130759456_MetricTypeUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
