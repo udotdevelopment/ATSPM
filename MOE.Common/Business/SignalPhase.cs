@@ -106,7 +106,7 @@ namespace MOE.Common.Business
             foreach (Models.Detector d in detectorsForMetric)
             {
                 DetectorEvents.AddRange(celRepository.GetEventsByEventCodesParamWithOffset(Approach.SignalID, StartDate,
-                    EndDate, new List<int> { 81 }, d.DetChannel, d.GetOffset()));
+                    EndDate, new List<int> { 81 }, d.DetChannel, d.GetOffset(), d.LatencyCorrection));
             }
         }
 

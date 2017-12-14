@@ -203,18 +203,9 @@ namespace MOE.Common.Business
         /// <summary>
         /// A collection of detector activations for the cycle
         /// </summary>
-        protected List<RLMDetectorDataPoint> detectorCollection;
-        public List<RLMDetectorDataPoint> DetectorCollection
-        {
-            get
-            {
-                return detectorCollection;
-            }
-            set
-            {
-                detectorCollection = value;
-            }
-        }       
+       
+        public List<RLMDetectorDataPoint> DetectorCollection { get; set; }
+      
 
         
 
@@ -283,12 +274,12 @@ namespace MOE.Common.Business
             redClearanceEvent = DateTime.MinValue;
             redEvent = DateTime.MinValue;
             redEndEvent = DateTime.MinValue;
-            detectorCollection = new List<RLMDetectorDataPoint>();
+            DetectorCollection = new List<RLMDetectorDataPoint>();
         }
 
         public void AddDetector(RLMDetectorDataPoint ddp)
         {
-            detectorCollection.Add(ddp);
+            DetectorCollection.Add(ddp);
         }
 
 
@@ -300,8 +291,8 @@ namespace MOE.Common.Business
 
         public void ClearDetectorData()
         {
-            
-            detectorCollection.Clear();
+
+            DetectorCollection.Clear();
         }
         
 
