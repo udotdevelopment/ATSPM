@@ -12,6 +12,7 @@ namespace MOE.Common.Models.Repositories
 
         List<MetricType> GetAllToDisplayMetrics();
 
+        List<MetricType> GetAllToAggregateMetrics();
         List<MetricType> GetBasicMetrics();
 
         List<MetricType> GetMetricsByIDs(List<int> metricIDs);
