@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Eventing.Reader;
 using MOE.Common.Models.Repositories;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -26,6 +27,10 @@ namespace SPM.Models
         public virtual List<int> LaneTypeIDs { get; set; }
         public virtual ICollection<LaneType> AllLaneTypes { get; set; }
         //public List<SelectListItem> AggregateMetricsList { get; set; }
+
+        public bool Weekdays { get; set; }
+        public bool Weekends { get; set; }
+        public bool IsSum { get; set; }
         public List<string> WeekdayWeekendIDs { get; set; }
         public ICollection<string> SelectedWeekdayWeekend { get; set; }
         public List<Route> Routes { get; set; }
@@ -117,5 +122,6 @@ namespace SPM.Models
             //    AggregateMetricsList.Add(new SelectListItem { Value = m.MetricID.ToString(), Text = m.ChartName });
             //}
         }
+
     }
 }
