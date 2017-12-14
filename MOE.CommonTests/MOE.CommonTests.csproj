@@ -61,6 +61,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -111,6 +112,7 @@
     <Compile Include="Models\InMemoryRegionsRepository.cs" />
     <Compile Include="Models\InMemorySignalsRepository.cs" />
     <Compile Include="Models\Repositories\SignalsRepositoryTests.cs" />
+    <Compile Include="MOE\CommonTests\Models\InMemoryApproachSplitFailAggregationRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
