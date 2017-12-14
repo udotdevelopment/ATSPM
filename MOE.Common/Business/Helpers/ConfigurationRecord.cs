@@ -27,6 +27,7 @@ namespace MOE.Common.Business.Helpers
         public string LaneType { get; set; }
         public string MovementType { get; set; }
         public string Comment { get; set; }
+        public string LatencyCorrection { get; set; }
 
         public ConfigurationRecord(MOE.Common.Models.Detector gd)
         {          
@@ -55,6 +56,7 @@ namespace MOE.Common.Business.Helpers
             this.PermissivePhaseNumber = gd.Approach.PermissivePhaseNumber.ToString();
             this.ProtectedPhaseNumber = gd.Approach.ProtectedPhaseNumber.ToString();
             this.DetectionHardware = gd.DetectionHardware.Name;
+            this.LatencyCorrection = gd.LatencyCorrection.ToString();
 
             if (gd.LaneType != null)
             {
