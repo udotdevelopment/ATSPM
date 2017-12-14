@@ -100,13 +100,30 @@
         </div>
         <div class="panel-body">
             <div class="form-group">
-                @Html.CheckBoxListFor(x => x.LaneTypeIDs,
-                    x => x.AllLaneTypes,
-                    x => x.LaneTypeID,
-                    x => x.Description,
-                    x => x.AllLaneTypes,
-                    Position.Vertical)
+                <label>
+                    @Html.RadioButton("DataAggregation", "Movement")
+                    Movement (aggregate lanes)
+                </label>
             </div>
+            <div class="form-group">
+                <label>
+                    @Html.RadioButton("DataAggregation", "Approach")
+                    Approach (aggregate lanes)
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    @Html.RadioButton("DataAggregation", "Signal")
+                    Signal (aggregate lanes)
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    @Html.RadioButton("DataAggregation", "Route")
+                    Route (aggregate signals)
+                </label>
+            </div>
+            <br/>
             <div class="form-group">                
                 @Html.RadioButtonFor(model => model.IsSum, "false") Sum
                 @Html.RadioButtonFor(model => model.IsSum, "true") Average

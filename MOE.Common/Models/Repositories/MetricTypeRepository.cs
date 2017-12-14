@@ -35,6 +35,14 @@ namespace MOE.Common.Models.Repositories
             return results;
         }
 
+        public List<MetricType> GetAllToAggregateMetrics()
+        {
+            List<Models.MetricType> results = (from r in db.MetricTypes
+                where r.ShowOnAggregationSite == true
+                select r).ToList();
+            return results;
+        }
+
         public List<MetricType> GetBasicMetrics()
         {
             Models.DetectionType dt = (from d in db.DetectionTypes where d.DetectionTypeID == 1 select d).FirstOrDefault();

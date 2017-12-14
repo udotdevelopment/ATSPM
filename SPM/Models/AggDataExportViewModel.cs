@@ -33,6 +33,7 @@ namespace SPM.Models
         public bool IsSum { get; set; }
         public List<string> WeekdayWeekendIDs { get; set; }
         public ICollection<string> SelectedWeekdayWeekend { get; set; }
+        public string DataAggregationType { get; set; }
         public List<Route> Routes { get; set; }
         public int SelectedRouteID { get; set; }
 

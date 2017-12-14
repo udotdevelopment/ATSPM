@@ -36,7 +36,7 @@ namespace SPM.Controllers
             //    MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
             //Signal signal = signalsRepository.GetSignalVersionByVersionId(Convert.ToInt32(versionId));
             //mc.Signal = signal;
-            List<MetricType> allMetricTypes = metricTyperepository.GetAllToDisplayMetrics();
+            List<MetricType> allMetricTypes = metricTyperepository.GetAllToAggregateMetrics();
             List<DirectionType> allDirectionTypes = directionTypeRepository.GetAllDirections();
             List<MovementType> allMovementTypes = movementTypeRepository.GetAllMovementTypes();
             List<LaneType> allLaneTypes = laneTypeRepository.GetAllLaneTypes();
