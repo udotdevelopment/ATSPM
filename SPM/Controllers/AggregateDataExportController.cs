@@ -44,6 +44,9 @@ namespace SPM.Controllers
             vm.AllApproachTypes = allDirectionTypes;
             vm.AllMovementTypes = allMovementTypes;
             vm.AllLaneTypes = allLaneTypes;
+            List<string> WeekdayWeekends = new List<string>();
+            WeekdayWeekends.Add("Weekdays");
+            WeekdayWeekends.Add("Weekends");
             MOE.Common.Models.Repositories.IRouteRepository routeRepository =
                 MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
             vm.Routes = routeRepository.GetAllRoutes();
@@ -70,18 +73,6 @@ namespace SPM.Controllers
         {
             if (ModelState.IsValid)
             {
-                int StartHour = 0;
-                int StartMinute = 0;
-                int EndHour = 0;
-                int EndMinute = 0;
-                if (vm.StartDateHour != null)
-                    StartHour = (int)vm.StartDateHour;
-                if (vm.StartDateMinute != null)
-                    StartMinute = (int)vm.StartDateMinute;
-                if (vm.EndDateHour != null)
-                    EndHour = (int)vm.EndDateHour;
-                if (vm.EndDateMinute != null)
-                    EndMinute = (int)vm.EndDateMinute;
                 //int Count = cr.GetEventCountByEventCodesParamDateTimeRange(vm.SignalId, vm.StartDateDate,
                 //    vm.EndDateDate, StartHour, StartMinute, EndHour, EndMinute,
                 //    inputEventCodes, inputParam);
