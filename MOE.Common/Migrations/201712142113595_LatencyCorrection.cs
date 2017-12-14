@@ -8,7 +8,7 @@ namespace MOE.Common.Migrations
         public override void Up()
         {
             AddColumn("dbo.MetricTypes", "ShowOnAggregationSite", c => c.Boolean(nullable: false));
-            AddColumn("dbo.Detectors", "LatencyCorrection", c => c.Int(nullable: false));
+            AddColumn("dbo.Detectors", "LatencyCorrection", c => c.Double(nullable: false));
         }
         
         public override void Down()
