@@ -13,6 +13,8 @@ namespace MOE.Common.Business
 {
     public static class ChartFactory
     {
+        private static Random _rnd = new Random();
+
         private static List<Series> SeriesList = new List<Series>();
         private static List<Bin> Bins;
 
@@ -31,6 +33,8 @@ namespace MOE.Common.Business
                 bin.Start = timeX;
 
                 timeX = timeX.AddMinutes(options.BinSize);
+
+                bin.End = timeX;
 
                 bins.Add(bin);
 
@@ -61,6 +65,17 @@ namespace MOE.Common.Business
             Chart chart = new Chart();
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateChartArea(options));
+
+
+
+            return chart;
+        }
+
+        public static Chart ChartInitialization(AggregationMetricOptions options)
+        {
+            Chart chart = new Chart();
+            SetImageProperties(chart);
+            chart.ChartAreas.Add(CreateSplitFailAggregationChartArea(options));
 
 
 
@@ -123,17 +138,56 @@ namespace MOE.Common.Business
             options.MetricTypeID = 20;
             Chart chart = ChartInitialization(options);
             Bins = GetBins(options);
-            var records = GetApproachAggregationRecords(options);
+            foreach (var a in options.Approaches)
+            {
+                Series s = CreateLineSeries(a.Description, Color.FromArgb(_rnd.Next(100,255), _rnd.Next(100, 255), _rnd.Next(100, 255)));
+                List<ApproachSplitFailAggregation> records = GetApproachAggregationRecords(a,options);
+                PopulateBinsWithSplitFailAggregateSums(records);
+                foreach (var bin in Bins)
+                {
+                    s.Points.AddXY(bin.Start, bin.Value);
+                }
+
+                chart.Series.Add(s);
+            }
             return chart;
         }
 
-        public static List<ApproachSplitFailAggregation> GetApproachAggregationRecords(AggregationMetricOptions options)
+        private static void PopulateBinsWithSplitFailAggregateSums(List<ApproachSplitFailAggregation> records)
+        {
+            foreach (var bin in Bins)
+            {
+                var recordsForBins = from r in records
+                    where r.BinStartTime >= bin.Start && r.BinStartTime < bin.End
+                    select r;
+
+                bin.Value = recordsForBins.Sum(s => s.SplitFailures);
+            }
+        }
+
+        private static void PopulateBinsWithSplitFailAggregateAverages(List<ApproachSplitFailAggregation> records)
+        {
+            foreach (var bin in Bins)
+            {
+                var recordsForBins = from r in records
+                    where r.BinStartTime >= bin.Start && r.BinStartTime < bin.End
+                    select r;
+
+                bin.Value = Convert.ToInt32( recordsForBins.Average(s => s.SplitFailures));
+            }
+        }
+
+        public static List<ApproachSplitFailAggregation> GetApproachAggregationRecords(Approach approach, AggregationMetricOptions options)
         {
             IApproachSplitFailAggregationRepository Repo = ApproachSplitFailAggregationRepositoryFactory.Create();
-
-            List<ApproachSplitFailAggregation> aggregations =
-            Repo.GetApproachSplitFailAggregationByVersionIdAndDateRange(options.Approaches.FirstOrDefault().VersionID, options.StartDate, options.EndDate);
-            return aggregations;
+            if (approach != null)
+            { 
+                List<ApproachSplitFailAggregation> aggregations =
+                    Repo.GetApproachSplitFailAggregationByVersionIdAndDateRange(
+                        approach.ApproachID, options.StartDate, options.EndDate);
+                return aggregations;
+            }
+            return null;
         }
 
         public static Chart CreatePedestrianActuationAggregationChart(AggregationMetricOptions options)
@@ -169,6 +223,16 @@ namespace MOE.Common.Business
             return chart;
         }
 
+        public static Series GetSeriesFromBins()
+        {
+            Series s = new Series();
+            foreach(Bin bin in Bins)
+            {
+                s.Points.AddXY(bin.Start, bin.Value);
+            }
+
+            return s;
+        }
 
         private static void SetSplitFailLegend(Chart chart)
         {
@@ -185,6 +249,16 @@ namespace MOE.Common.Business
             SetSplitFailYAxis(chartArea, options);
             SetSplitFailXAxis(chartArea, options);
             SetSplitFailX2Axis(chartArea, options);
+            return chartArea;
+        }
+
+        private static ChartArea CreateSplitFailAggregationChartArea(AggregationMetricOptions options)
+        {
+            ChartArea chartArea = new ChartArea();
+            chartArea.Name = "ChartArea1";
+            SetSplitFailAggregationYAxis(chartArea, options);
+            SetSplitFailAggregationXAxis(chartArea, options);
+    
             return chartArea;
         }
 
@@ -245,6 +319,53 @@ namespace MOE.Common.Business
             chartArea.AxisY.Title = "Occupancy Ratio (percent)";
             chartArea.AxisY.Minimum = 0;
             chartArea.AxisY.Interval = 10;
+        }
+
+        private static void SetSplitFailAggregationYAxis(ChartArea chartArea, AggregationMetricOptions options)
+        {
+            if (options.YAxisMax != null)
+            {
+                chartArea.AxisY.Maximum = options.YAxisMax.Value;
+            }
+            else
+            {
+                chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
+            }
+            if (options.AggregationOpperation == AggregationMetricOptions.AggregationOpperations.Sum)
+            {
+                chartArea.AxisY.Title = "Sum of SplitFailures";
+            }
+            else if (options.AggregationOpperation == AggregationMetricOptions.AggregationOpperations.Average)
+            {
+                chartArea.AxisY.Title = "Average of SplitFailures";
+            }
+            else
+            {
+                chartArea.AxisY.Title = "";
+            }
+
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Interval = 10;
+        }
+        private static void SetSplitFailAggregationXAxis(ChartArea chartArea, AggregationMetricOptions options)
+        {
+            var reportTimespan = options.EndDate - options.StartDate;
+            chartArea.AxisX.Title = "Time (Hour of Day)";
+            chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
+            chartArea.AxisX.LabelStyle.Format = "HH";
+            chartArea.AxisX.Minimum = options.StartDate.ToOADate();
+            chartArea.AxisX.Maximum = options.EndDate.ToOADate();
+            if (reportTimespan.Days < 1)
+            {
+                if (reportTimespan.Hours > 1)
+                {
+                    chartArea.AxisX.Interval = 1;
+                }
+                else
+                {
+                    chartArea.AxisX.LabelStyle.Format = "HH:mm";
+                }
+            }
         }
 
         private static void SetImageProperties(Chart chart)
@@ -374,5 +495,7 @@ namespace MOE.Common.Business
 
             return s;
         }
+
+
     }
 }

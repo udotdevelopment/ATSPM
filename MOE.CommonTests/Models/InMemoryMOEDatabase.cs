@@ -57,13 +57,13 @@ namespace MOE.CommonTests.Models
 
         }
 
-        private void PopulateApproachSplitFailAggregations()
+        public int  PopulateApproachSplitFailAggregationsWithRandomRecords()
         {
             int appId = Approaches.FirstOrDefault().ApproachID;
             DateTime start = DateTime.Now.AddDays(-1);
             if (appId != null)
             {
-                for (int i = 0; i > 1000; i++)
+                for (int i = 0; i < 1000; i++)
                 {
                     Common.Models.ApproachSplitFailAggregation asfa = new ApproachSplitFailAggregation();
                     asfa.Id = i;
@@ -80,6 +80,7 @@ namespace MOE.CommonTests.Models
 
                 }
             }
+            return appId;
         }
 
         private void PoplateMetricTypes()

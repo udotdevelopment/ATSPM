@@ -16,18 +16,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void AggregationMetricOptionsTest()
         {
-            AggregationMetricOptions metricOptions = new AggregationMetricOptions();
-
-              MetricResultViewModel result = new MetricResultViewModel();
-
-            SPM.MetricGeneratorService.MetricGeneratorClient client =
-                new SPM.MetricGeneratorService.MetricGeneratorClient();
-
-     
-                client.Open();
-                result.ChartPaths = client.CreateMetric(metricOptions);
-                client.Close();
             
+       
 
             
         }

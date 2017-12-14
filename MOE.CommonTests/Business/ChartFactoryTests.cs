@@ -3,11 +3,13 @@ using MOE.Common.Business;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.WCFServiceLibrary;
+using MOE.CommonTests.Models;
 
 namespace MOE.Common.Business.Tests
 {
@@ -17,13 +19,13 @@ namespace MOE.Common.Business.Tests
         [TestInitialize]
         public void Initialize()
         {
-            
+
         }
 
         [TestMethod()]
         public void CreateLineSeriesTest()
         {
-            
+
             var s = ChartFactory.CreateLineSeries("TestSeries", Color.Green);
 
             Assert.IsTrue(s.ChartType == SeriesChartType.Line);
@@ -56,6 +58,40 @@ namespace MOE.Common.Business.Tests
             Assert.IsTrue(s.ChartType == SeriesChartType.StackedColumn);
         }
 
-  
+        [TestMethod()]
+        public void CreatePurdueSplitFailureAggregationChartTest()
+        {
+            MOE.CommonTests.Models.InMemoryMOEDatabase _db = new InMemoryMOEDatabase();
+            _db.PopulateSignal();
+            _db.PopulateSignalsWithApproaches();
+            _db.PopulateApproachesWithDetectors();
+            int apprId = _db.PopulateApproachSplitFailAggregationsWithRandomRecords();
+
+            MOE.CommonTests.Models.InMemoryApproachSplitFailAggregationRepository asfs = new InMemoryApproachSplitFailAggregationRepository(_db);
+            
+
+            var options = new AggregationMetricOptions();
+
+            options.BinSize = 15;
+            options.StartDate = DateTime.Now.AddDays(-1);
+            options.EndDate = DateTime.Now;
+            options.Approaches.Add((from a in _db.Approaches where a.ApproachID == apprId select a).FirstOrDefault());
+            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.GroupBy = AggregationMetricOptions.AggregationGroups.Approach;
+
+            MOE.Common.Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.SetApplicationEventRepository(asfs);
+
+            Chart chart = ChartFactory.CreatePurdueSplitFailureAggregationChart(options);
+
+            Assert.IsNotNull(chart);
+
+            string path = @"c:\SPMImages\testchart" + DateTime.Now.Month.ToString() +"_"+ DateTime.Now.Day.ToString() 
+                + "_" + DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString() + ".jpeg";
+
+            chart.SaveImage(path);
+
+           Assert.IsTrue( File.Exists(path));
+
+        }
     }
 }
