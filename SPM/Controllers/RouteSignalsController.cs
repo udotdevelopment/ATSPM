@@ -100,8 +100,7 @@ namespace SPM.Controllers
                 {
                     var primaryApproach = signal.PhaseDirections.Where(p => p.IsPrimaryApproach).DefaultIfEmpty(new RoutePhaseDirection()).FirstOrDefault();
                     var opposingApproach = signal.PhaseDirections.Where(p => p.IsPrimaryApproach == false).DefaultIfEmpty(new RoutePhaseDirection()).FirstOrDefault();
-                    viewModel.PrimaryApproaches.Add(primaryApproach);
-                    viewModel.OpposingApproaches.Add(opposingApproach);
+                    viewModel.PairedApproaches.Add(new Tuple<RoutePhaseDirection, RoutePhaseDirection>(primaryApproach, opposingApproach));
                 }
             }
             return PartialView(viewModel);

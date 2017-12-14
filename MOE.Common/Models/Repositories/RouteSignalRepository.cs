@@ -114,7 +114,7 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
-                if (!db.RouteSignals.Contains(newRouteDetail))
+                if (!db.RouteSignals.Any(s => s.SignalId == newRouteDetail.SignalId && s.RouteId == newRouteDetail.RouteId))
                 {
                     db.RouteSignals.Add(newRouteDetail);
                     db.SaveChanges();
