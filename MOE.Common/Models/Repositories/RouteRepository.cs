@@ -24,8 +24,7 @@ namespace MOE.Common.Models.Repositories
         public Route GetRouteByID(int routeID)
         {
             Route route = db.Routes
-                .Include(r => r.RouteSignals.Select(s => s.PhaseDirections))
-                .Where(r => r.Id == routeID).FirstOrDefault();
+                .Include(r => r.RouteSignals.Select(s => s.PhaseDirections)).FirstOrDefault(r => r.Id == routeID);
             if(route != null)
             {
                 return route;
