@@ -38,11 +38,12 @@ namespace SPM.Controllers
             var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
             var route = routeRepository.GetRouteByID(id);
             List <MOE.Common.Models.Signal> signals = new List<Signal>();
-            //foreach (var routeSignal in route.RouteSignals)
-            //{
-            //    signals.Add(routeSignal.Signal);
-
-            //}
+            var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            foreach (var routeSignal in route.RouteSignals)
+            {
+                var signal = signalRepository.GetLatestVersionOfSignalBySignalID(routeSignal.SignalId);
+                signals.Add(signal);
+            }
             return PartialView("FillSignals", signals);
         }
 

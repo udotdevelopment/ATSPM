@@ -46,6 +46,7 @@ namespace MOE.Common.Models.Repositories
         {
             var routeSignal = db.RouteSignals.Include("PhaseDirections").Where(r => r.Id ==id).FirstOrDefault();
             var signalRepository = SignalsRepositoryFactory.Create();
+            routeSignal.Signal = signalRepository.GetLatestVersionOfSignalBySignalID(routeSignal.SignalId);
             return routeSignal;
         }
 
@@ -113,8 +114,11 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
-                db.RouteSignals.Add(newRouteDetail);
-                db.SaveChanges();
+                if (!db.RouteSignals.Contains(newRouteDetail))
+                {
+                    db.RouteSignals.Add(newRouteDetail);
+                    db.SaveChanges();
+                }
             }
             catch (Exception ex)
             {

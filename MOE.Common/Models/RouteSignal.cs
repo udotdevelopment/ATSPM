@@ -24,6 +24,8 @@ namespace MOE.Common.Models
         [Required]
         [Display(Name = "Signal")]     
         public string SignalId { get; set; }
+        [NotMapped]
+        public Signal Signal { get; set; }
         public List<RoutePhaseDirection> PhaseDirections { get; set; }
 
     }
