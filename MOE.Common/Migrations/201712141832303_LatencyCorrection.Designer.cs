@@ -7,13 +7,13 @@ namespace MOE.Common.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class MetricTypeUpdates : IMigrationMetadata
+    public sealed partial class LatencyCorrection : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(MetricTypeUpdates));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(LatencyCorrection));
         
         string IMigrationMetadata.Id
         {
-            get { return "201712131644508_MetricTypeUpdates"; }
+            get { return "201712141832303_LatencyCorrection"; }
         }
         
         string IMigrationMetadata.Source
