@@ -361,7 +361,7 @@ namespace MOE.Common.Models.Repositories
 
 
         public List<Controller_Event_Log> GetEventsByEventCodesParamWithOffset(string signalId,
-           DateTime startTime, DateTime endTime, List<int> eventCodes, int param, double offset)
+           DateTime startTime, DateTime endTime, List<int> eventCodes, int param, double offset, double latencyCorrection)
         {
             try
             {
@@ -376,6 +376,7 @@ namespace MOE.Common.Models.Repositories
                 foreach(var cel in events)
                 {
                     cel.Timestamp = cel.Timestamp.AddMilliseconds(offset);
+                    cel.Timestamp = cel.Timestamp.AddSeconds(0 - latencyCorrection);
                 }
                 return events;
             }

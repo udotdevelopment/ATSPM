@@ -79,7 +79,7 @@ namespace MOE.Common.Models
         public int? MovementDelay { get; set; }
 
         [Display(Name = "Latency Correction")]
-        public int LatencyCorrection { get; set; }
+        public double LatencyCorrection { get; set; }
 
         public List<int> DetectorCommentIDs { get; set; }
         [Display(Name="Detector Comment")]

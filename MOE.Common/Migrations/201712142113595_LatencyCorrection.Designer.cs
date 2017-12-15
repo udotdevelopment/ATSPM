@@ -13,7 +13,7 @@ namespace MOE.Common.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201712141832303_LatencyCorrection"; }
+            get { return "201712142113595_LatencyCorrection"; }
         }
         
         string IMigrationMetadata.Source

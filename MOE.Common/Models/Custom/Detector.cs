@@ -69,6 +69,7 @@ namespace MOE.Common.Models
             if (this.DecisionPoint == null)
                 this.DecisionPoint = 0;
             double offset = Convert.ToDouble(((DistanceFromStopBar / (this.Approach.MPH * 1.467)) - this.DecisionPoint) * 1000);
+            
             return offset;
         }
         
