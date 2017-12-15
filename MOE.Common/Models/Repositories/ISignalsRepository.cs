@@ -11,6 +11,7 @@ namespace MOE.Common.Models.Repositories
         
 
         List<Models.Signal> GetAllSignals();
+        string GetSignalDescription(string signalId);
         List<Models.Signal> GetAllEnabledSignals();
         List<Models.Signal> EagerLoadAllSignals();
         Models.Signal GetLatestVersionOfSignalBySignalID(string signalID);

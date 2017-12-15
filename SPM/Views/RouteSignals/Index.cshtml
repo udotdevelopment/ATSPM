@@ -3,8 +3,8 @@
 @Html.AntiForgeryToken()
 @Html.HiddenFor(model => model.Route.Id)
 <div class="row">
-    <div class="col-md-7">
-        <div class="col-md-8">
+    <div class="col-md-12">
+        <div class="col-md-3">
             @Html.DropDownListFor(model => model.SignalSelectList, new SelectList(Model.SignalSelectList, "Item1", "Item2"), new { @id = "SelectedSignalsList", @class = "form-control", @size = 10, @onchange = "DisplayApproaches(this.value)" })
             <div class="row">
                 <a class="ui-button" href="javascript:MoveUp()">Move Up<span class="glyphicon glyphicon-arrow-up"></span></a>
@@ -12,14 +12,15 @@
                 <a class="ui-button" href="javascript:Remove()">Remove<span class="glyphicon glyphicon-remove"></span></a>
             </div>
         </div>
+        <div id="DeleteConfirmation"></div>
         <div id="ApproachList" class="col-md-4"></div>
+        <div id="RouteApproachList" onload="DisplayRouteApproaches" class="col-md-4">
+        </div>
     </div>
     </div>
 <div class="row">
     <div id="SignalSearchContainer" class="col-md-6 panel-min-width">
         @Html.Partial("RouteMap", new ViewDataDictionary(Model.RouteMap))
-    </div>
-    <div id="RouteApproachList" onload="DisplayRouteApproaches" class="col-md-6">
     </div>
 </div>
 
@@ -31,4 +32,5 @@
     <script> var urlpathRouteApproaches = '@Url.Action("ApproachesForRoute", "RouteSignals")';</script>
     <script> var urlpathCreateRouteSignal = '@Url.Action("Create", "RouteSignals")';</script>
     <script> var urlpathUpdateApproach = '@Url.Action("UpdateApproach", "RouteSignals")';</script>
+    <script> var urlpathDeleteSignal = '@Url.Action("Delete", "RouteSignals")';</script>
 }
