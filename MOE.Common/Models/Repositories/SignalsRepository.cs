@@ -217,6 +217,20 @@ namespace MOE.Common.Models.Repositories
             return location;
         }
 
+        public string GetSignalDescription(string signalId)
+        {
+            Models.Signal signal = (from r in _db.Signals
+                where r.SignalID == signalId
+                select r).FirstOrDefault();
+            string location = string.Empty;
+            if (signal != null)
+            {
+                location = signal.SignalDescription;
+            }
+
+            return location;
+        }
+
 
         public bool CheckReportAvialabilityForSignal(string signalId, int metricTypeId)
         {

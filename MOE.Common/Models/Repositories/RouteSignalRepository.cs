@@ -50,6 +50,16 @@ namespace MOE.Common.Models.Repositories
             return routeSignal;
         }
 
+        public void DeleteById(int id)
+        {
+            var routeSignal = db.RouteSignals.Find(id);
+            if (routeSignal != null)
+            {
+                db.RouteSignals.Remove(routeSignal);
+                db.SaveChanges();
+            }
+        }
+
         public void DeleteByRouteID(int routeID)
         {
             List<RouteSignal> routes = (from r in db.RouteSignals
