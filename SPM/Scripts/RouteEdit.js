@@ -2,7 +2,6 @@
 window.onload = function () { DisplayRouteApproaches(); };
 
 function GetConfigurationTable(routeID) {
-
     $.ajax({
         type: "Get",
         cache: false,
@@ -18,6 +17,38 @@ function GetConfigurationTable(routeID) {
             alert("Error");
         }
     });
+}
+function MoveUp() {
+    $('#SelectedSignalsList option:selected:first-child').prop("selected", false);
+    before = $('#SelectedSignalsList option:selected:first').prev();
+    $('#SelectedSignalsList option:selected').detach().insertBefore(before);
+}
+function MoveDown() {
+    $('#SelectedSignalsList option:selected:last-child').prop("selected", false);
+    after = $('#SelectedSignalsList option:selected:last').next();
+    $('#SelectedSignalsList option:selected').detach().insertAfter(after);
+}
+function Remove() {
+    var routeSignalId = $('#SelectedSignalsList option:selected').val();
+    $.ajax({
+        type: "Get",
+        cache: false,
+        async: true,
+        data: { "id": routeSignalId },
+        url: urlpathDeleteSignal,
+        success: function (data) { $('#DeleteConfirmation').html(data); },
+        statusCode: {
+            404: function (content) { alert('cannot find resource'); },
+            500: function (content) { alert(content.responseText); }
+        },
+        error: function (req, status, errorObj) {
+            alert("Error");
+        }
+    });
+}
+
+function DeleteRouteSignal() {
+    $('#SelectedSignalsList option:selected').remove();
 }
 
 function LoadRouteEdit()

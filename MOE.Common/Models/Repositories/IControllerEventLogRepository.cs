@@ -25,7 +25,7 @@ namespace MOE.Common.Models.Repositories
             DateTime startTime, DateTime endTime, int startHour, int startMinute, int endHour, int endMinute,
             List<int> eventCodes, int param);
         List<Controller_Event_Log> GetEventsByEventCodesParamWithOffset(string signalId,
-           DateTime startTime, DateTime endTime, List<int> eventCodes, int param, double offset);
+           DateTime startTime, DateTime endTime, List<int> eventCodes, int param, double offset, double latencyCorrection);
         Controller_Event_Log GetFirstEventBeforeDate(string signalId,
             int eventCode, DateTime date);
         List<Controller_Event_Log> GetSignalEventsBetweenDates(string signalId,

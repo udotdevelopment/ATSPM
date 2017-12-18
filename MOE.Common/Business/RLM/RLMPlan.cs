@@ -590,8 +590,9 @@ namespace MOE.Common.Business
             List<Models.Controller_Event_Log> detectorActivations = new List<Models.Controller_Event_Log>();
             foreach(var d in detectors)
             {
-                detectorActivations.AddRange(repository.GetEventsByEventCodesParam(Approach.SignalID, this.StartTime, this.EndTime,
-                    new List<int> { 82 }, d.DetChannel));
+                detectorActivations.AddRange(repository.GetEventsByEventCodesParamWithOffset(Approach.SignalID, this.StartTime, this.EndTime,
+                    new List<int> { 82 }, d.DetChannel,0,d.LatencyCorrection));
+
             }
             this.totalVolume = detectorActivations.Count;
             foreach(RLMCycle cycle in rlmCycleCollection)

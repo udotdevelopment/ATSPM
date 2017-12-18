@@ -27,7 +27,7 @@ namespace SPM.Controllers
             {
                 if (routeSignal.SignalId != null)
                 {
-                    Tuple<string, string> tuple = new Tuple<string, string>(routeSignal.Id.ToString(), signalRepository.GetSignalLocation(routeSignal.SignalId));
+                    Tuple<string, string> tuple = new Tuple<string, string>(routeSignal.Id.ToString(), signalRepository.GetSignalDescription(routeSignal.SignalId));
                     routeViewModel.SignalSelectList.Add(tuple);
                 }
             }
@@ -176,31 +176,31 @@ namespace SPM.Controllers
         //    return View(routeSignal);
         //}
 
-        //// GET: RouteSignals/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    RouteSignal routeSignal = db.RouteSignals.Find(id);
-        //    if (routeSignal == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(routeSignal);
-        //}
+        // GET: RouteSignals/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var routeSignalRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
+            RouteSignal routeSignal = routeSignalRepository.GetByRouteSignalId(id.Value);
+            if (routeSignal == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView(routeSignal);
+        }
 
-        //// POST: RouteSignals/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    RouteSignal routeSignal = db.RouteSignals.Find(id);
-        //    db.RouteSignals.Remove(routeSignal);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+        // POST: RouteSignals/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var routeSignalRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
+            routeSignalRepository.DeleteById(id);
+            return Content("Delete Successful");
+        }
 
         //protected override void Dispose(bool disposing)
         //{

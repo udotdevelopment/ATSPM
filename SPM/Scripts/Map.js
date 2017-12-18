@@ -201,19 +201,7 @@ function AddSignalFromPin(e) {
     }
 }
 
-function MoveUp() {
-    $('#SelectedSignalsList option:selected:first-child').prop("selected", false);
-    before = $('#SelectedSignalsList option:selected:first').prev();
-    $('#SelectedSignalsList option:selected').detach().insertBefore(before);
-}
-function MoveDown() {
-    $('#SelectedSignalsList option:selected:last-child').prop("selected", false);
-    after = $('#SelectedSignalsList option:selected:last').next();
-    $('#SelectedSignalsList option:selected').detach().insertAfter(after);
-}
-function Remove() {
-    $('#SelectedSignalsList option:selected').remove();
-}
+
 
 
 function displayInfobox(e) {
