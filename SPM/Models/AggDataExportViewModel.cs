@@ -35,7 +35,7 @@ namespace SPM.Models
         public ICollection<string> SelectedWeekdayWeekend { get; set; }
         public string DataAggregationType { get; set; }
         public List<Route> Routes { get; set; }
-        public int SelectedRouteID { get; set; }
+        public int SelectedRouteId { get; set; }
 
         public SignalSearchViewModel SignalSearchViewModel { get; set; }
 

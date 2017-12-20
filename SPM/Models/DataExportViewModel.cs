@@ -11,19 +11,20 @@ namespace SPM.Models
         //[Key]
         //public int Id { get; set; }
         [Required]
+        [Display(Name = "Signal Id")]
         public string SignalId { get; set; }
-        [Required]
+        [Display(Name = "Event Codes")]
         public string EventCodes { get; set; }
+        [Display(Name = "Event Parameters")]
         public string EventParams { get; set; }
         public IEnumerable<MOE.Common.Models.Controller_Event_Log> ControllerEventLogs { get; set; }
         [Required]
-        public DateTime StartDateDate { get; set; }
+        [Display(Name = "Start Date")]
+        public DateTime StartDate { get; set; }
         [Required]
-        public DateTime EndDateDate { get; set; }
-        public int? StartDateHour { get; set; }
-        public int? StartDateMinute { get; set; }
-        public int? EndDateHour { get; set; }
-        public int? EndDateMinute { get; set; }
+        [Display(Name = "End Date")]
+        public DateTime EndDate { get; set; }
+        [Display(Name = "Count")]
         public int? Count { get; set; }
     }
 }

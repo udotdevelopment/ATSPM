@@ -345,6 +345,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\RawDataExport.js" />
     <Content Include="Scripts\RouteEdit.js" />
     <Content Include="Scripts\RouteMap.js" />
     <Content Include="Scripts\SignalDetail.js" />
@@ -570,6 +571,7 @@
     <Content Include="Views\AggregateDataExport\Index.cshtml" />
     <Content Include="Views\Routes\EditorTemplates\RouteSignal.cshtml" />
     <Content Include="Views\Routes\EditorTemplates\RoutePhaseDirection.cshtml" />
+    <Content Include="Views\DataExport\GenerateData.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

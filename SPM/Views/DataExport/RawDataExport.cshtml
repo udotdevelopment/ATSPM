@@ -40,58 +40,31 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.StartDateDate, htmlAttributes: new {@class = "control-label col-md-4", @placeholder = "Start Date", aria_label = "Start Date" })
+            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-4", @placeholder = "Start Date", aria_label = "Start Date" })
             <div class="col-md-8">
-                @Html.EditorFor(model => model.StartDateDate, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.StartDateDate, "", new {@class = "text-danger"})
+                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.EndDateDate, htmlAttributes: new { @class = "control-label col-md-4", @placeholder = "End Date", aria_label = "End Date" })
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-4", @placeholder = "End Date", aria_label = "End Date" })
             <div class="col-md-8">
-                @Html.EditorFor(model => model.EndDateDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EndDateDate, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
             </div>
         </div>
-         <div class="form-group">
-            @Html.LabelFor(model => model.StartDateHour, htmlAttributes: new { @class = "control-label col-md-4", @placeholder = "Start Hour", aria_label = "Start Hour" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.StartDateHour, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.StartDateMinute, htmlAttributes: new { @class = "control-label col-md-4", @placeholder = "Start Minute", aria_label = "Start Minute" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.StartDateMinute, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.StartDateMinute, htmlAttributes: new { @class = "control-label col-md-4", @placeholder = "Start Minute", aria_label = "Start Minute" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.StartDateMinute, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.EndDateMinute, htmlAttributes: new { @class = "control-label col-md-4", @placeholder = "End Minute", aria_label = "End Minute" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.EndDateMinute, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-4 col-md-8">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-
-        @*
-                        @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                        @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-                    *@
-
     </div>
+    
+    <div class="col-md-offset-4 col-md-8">
+        <button id="CheckRecordCount" type="button" onclick="GetRecordCount()" class="btn btn-default">Check Record Count</button>
+    </div>
+    <div id ="GenerateData"></div>
 }
 </body>
 </html>
+
+
+@section Scripts {
+    <script> var urlpathGetRecordCount = '@Url.Action("GetRecordCount", "DataExport")';</script>
+<script src="~/Scripts/RawDataExport.js"></script>>}

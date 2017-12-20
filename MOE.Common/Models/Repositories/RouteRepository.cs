@@ -25,6 +25,7 @@ namespace MOE.Common.Models.Repositories
         {
             Route route = db.Routes
                 .Include(r => r.RouteSignals.Select(s => s.PhaseDirections)).FirstOrDefault(r => r.Id == routeID);
+            route.RouteSignals = route.RouteSignals.OrderBy(s => s.Order).ToList();
             if(route != null)
             {
                 return route;

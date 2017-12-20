@@ -6,20 +6,26 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using MOE.Common.Models;
+using SPM.Filters;
 using SPM.Models;
 
 namespace SPM.Controllers
 {
     public class DataExportController : Controller
     {
-        MOE.Common.Models.Repositories.IControllerEventLogRepository cr =
+        MOE.Common.Models.Repositories.IControllerEventLogRepository controllerEventLogRepository =
             MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
         //private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: DataExportViewModels
         public ActionResult RawDataExport()
         {
-            return View();
+            DataExportViewModel viewModel = new DataExportViewModel();
+            DateTime date = DateTime.Today;
+            viewModel.StartDate = date.AddDays(-1);
+            viewModel.EndDate = date;
+            return View(viewModel);
         }
 
         public static List<int> StringToIntList(string str)
@@ -31,33 +37,73 @@ namespace SPM.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateJsonAntiForgeryToken]
         public ActionResult RawDataExport(DataExportViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                int StartHour = 0;
-                int StartMinute = 0;
-                int EndHour = 0;
-                int EndMinute = 0;
-                if (vm.StartDateHour != null)
-                    StartHour = (int)vm.StartDateHour;
-                if (vm.StartDateMinute != null)
-                    StartMinute = (int)vm.StartDateMinute;
-                if (vm.EndDateHour != null)
-                    EndHour = (int)vm.EndDateHour;
-                if (vm.EndDateMinute != null)
-                    EndMinute = (int)vm.EndDateMinute;
                 List<int> inputEventCodes = StringToIntList(vm.EventCodes);
                 int inputParam = Convert.ToInt32(vm.EventParams);
-                int Count = cr.GetEventCountByEventCodesParamDateTimeRange(vm.SignalId, vm.StartDateDate,
-                    vm.EndDateDate, StartHour, StartMinute, EndHour, EndMinute,
-                    inputEventCodes, inputParam);
-                vm.Count = Count;
+                //int Count = controllerEventLogRepository.GetRecordCount().GetEventCountByEventCodesParamDateTimeRange(vm.SignalId, vm.StartDate,
+                //    vm.EndDate, StartHour, StartMinute, EndHour, EndMinute,
+                //    inputEventCodes, inputParam);
+                //vm.Count = Count;
                 return RedirectToAction("RawDataExport");
             }
-
             return View(vm);
+        }
+
+        public ActionResult GetRecordCount(DataExportViewModel dataExportViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                List<int> eventParams = new List<int>();
+                List<int> eventCodes = new List<int>();
+                if (!String.IsNullOrEmpty(dataExportViewModel.EventParams))
+                {
+                    try
+                    {
+                        string[] parameters = dataExportViewModel.EventParams.Split(',');
+                        foreach (string parameter in parameters)
+                        {
+                            eventParams.Add(Convert.ToInt32(parameter));
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        return Content("Unable to process Event Parameters");
+                    }
+                
+                }
+                if (!String.IsNullOrEmpty(dataExportViewModel.EventCodes))
+                {
+                    try
+                    {
+                        string[] codes = dataExportViewModel.EventParams.Split(',');
+                        foreach (string code in codes)
+                        {
+                            eventCodes.Add(Convert.ToInt32(code));
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        return Content("Unable to process Event Codes");
+                    }
+                }
+                int recordCount = controllerEventLogRepository.GetRecordCountByParameterAndEvent(dataExportViewModel.SignalId,
+                    dataExportViewModel.StartDate, dataExportViewModel.EndDate, eventParams, eventCodes);
+                if (recordCount > 1048576)
+                {
+                    return Content("The data set you have selected is too large. Your current request will generate " + recordCount.ToString() +
+                        " records. Please reduces the number of records you have selected.");
+                }
+                else
+                {
+                    List<Controller_Event_Log> events = controllerEventLogRepository.GetRecordsByParameterAndEvent(dataExportViewModel.SignalId,
+                        dataExportViewModel.StartDate, dataExportViewModel.EndDate, eventParams, eventCodes);
+                }
+            }
+            return Content("This request cannot be processed. You may be missing parameters");
         }
 
         // POST: DataExportViewModels/Create
