@@ -7,14 +7,14 @@ using CsvHelper.Configuration;
 
 namespace MOE.Common.Models
 {
-    public class ApproachCycleAggregation
+    public class ApproachCycleAggregation: Aggregation
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public  override int Id { get; set; }
 
         [Required]
-        public DateTime BinStartTime { get; set; }
+        public override DateTime BinStartTime { get; set; }
 
         [Required]
         public int ApproachId { get; set; }
