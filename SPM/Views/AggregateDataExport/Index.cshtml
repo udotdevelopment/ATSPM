@@ -42,7 +42,7 @@
                 </h5>
             </div>
             <div id="collapseSignals" class="panel-body panel-collapse collapse">
-                Load Route:  @Html.DropDownListFor(m => m.SelectedRouteID, new SelectList(Model.Routes, "Id", "RouteName"), "Select A Route",
+                Load Route:  @Html.DropDownListFor(m => m.SelectedRouteId, new SelectList(Model.Routes, "Id", "RouteName"), "Select A Route",
                              new { @onchange = "LoadRoute()" })
 
                 <div id="SignalSearchContainer" class="col-md-6 panel-min-width">

@@ -17,6 +17,34 @@ namespace MOE.Common.Models.Repositories
             return routes;
         }
 
+        public void MoveRouteSignalUp(int routeId, int routeSignalId)
+        {
+            var route = db.Routes.Find(routeId);
+            var signal = route.RouteSignals.FirstOrDefault(r => r.Id == routeSignalId);
+            int order = signal.Order;
+            var swapSignal = route.RouteSignals.FirstOrDefault(r => r.Order == order-1);
+            if (swapSignal != null)
+            {
+                signal.Order--;
+                swapSignal.Order++;
+                db.SaveChanges();
+            }
+        }
+
+        public void MoveRouteSignalDown(int routeId, int routeSignalId)
+        {
+            var route = db.Routes.Find(routeId);
+            var signal = route.RouteSignals.FirstOrDefault(r => r.Id == routeSignalId);
+            int order = signal.Order;
+            var swapSignal = route.RouteSignals.FirstOrDefault(r => r.Order == order + 1);
+            if (swapSignal != null)
+            {
+                signal.Order++;
+                swapSignal.Order--;
+                db.SaveChanges();
+            }
+        }
+
         public List<RouteSignal> GetByRouteID(int routeID)
         {
             List<RouteSignal> routes = (from r in db.RouteSignals
@@ -44,7 +72,7 @@ namespace MOE.Common.Models.Repositories
 
         public RouteSignal GetByRouteSignalId(int id)
         {
-            var routeSignal = db.RouteSignals.Include("PhaseDirections").Where(r => r.Id ==id).FirstOrDefault();
+            var routeSignal = db.RouteSignals.Include("PhaseDirections").FirstOrDefault(r => r.Id ==id);
             var signalRepository = SignalsRepositoryFactory.Create();
             routeSignal.Signal = signalRepository.GetLatestVersionOfSignalBySignalID(routeSignal.SignalId);
             return routeSignal;

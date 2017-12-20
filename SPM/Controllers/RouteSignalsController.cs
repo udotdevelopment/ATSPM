@@ -120,6 +120,22 @@ namespace SPM.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        public void MoveSignalUp(int routeId, int signalId)
+        {
+            var routePhaseDirectionRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
+                routePhaseDirectionRepository.MoveRouteSignalUp(routeId, signalId);
+        }
+
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        public void MoveSignalDown(int routeId, int signalId)
+        {
+            var routePhaseDirectionRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
+            routePhaseDirectionRepository.MoveRouteSignalDown(routeId, signalId);
+        }
+
         //// GET: RouteSignals/Details/5
         //public ActionResult Details(int? id)
         //{
@@ -194,21 +210,12 @@ namespace SPM.Controllers
 
         // POST: RouteSignals/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [ValidateJsonAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             var routeSignalRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
             routeSignalRepository.DeleteById(id);
-            return Content("Delete Successful");
+            return Content("Delete Successful!");
         }
-
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        db.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
     }
 }

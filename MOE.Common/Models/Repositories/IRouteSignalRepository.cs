@@ -15,6 +15,8 @@ namespace MOE.Common.Models.Repositories
         void UpdateByRouteAndApproachID(int routeID, string signalId, int newOrderNumber);
         void Add(Models.RouteSignal newRouteDetail);
         Models.RouteSignal GetByRouteSignalId(int id);
+        void MoveRouteSignalUp(int routeId, int routeSignalId);
+        void MoveRouteSignalDown(int routeId, int routeSignalId);
     }
 
 }
