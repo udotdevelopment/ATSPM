@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Spatial;
+using CsvHelper.Configuration;
 
 namespace MOE.Common.Models
 {
@@ -19,5 +20,21 @@ namespace MOE.Common.Models
         public virtual Detector Detector { get; set; }
         [Required]
         public int Volume { get; set; }
+
+        public sealed class DetectorAggregationClassMap : ClassMap<DetectorAggregation>
+        {
+            public DetectorAggregationClassMap()
+            {
+
+                Map(m => m.Detector).Ignore();
+                Map(m => m.Id).Name("Record Number");
+                Map(m => m.BinStartTime).Name("Bin Start Time");
+                Map(m => m.DetectorPrimaryId).Name("Detector ID");
+                Map(m => m.Volume).Name("Volume");
+
+            }
+        }
     }
+
+
 }

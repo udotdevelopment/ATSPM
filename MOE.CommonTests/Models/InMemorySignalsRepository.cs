@@ -270,6 +270,11 @@ namespace MOE.CommonTests.Models
             return _db.Signals;
         }
 
+        public string GetSignalDescription(string signalId)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Common.Models.Signal> GetAllEnabledSignals()
         {
             return _db.Signals;

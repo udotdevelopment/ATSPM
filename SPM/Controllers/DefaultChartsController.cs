@@ -395,8 +395,11 @@ namespace SPM.Controllers
 
             StringBuilder sb = new StringBuilder();
 
+           
 
             sb.Append("/DefaultCharts/GetYRAMetricByUrl?");
+
+           
 
             sb.Append("&SevereLevelSeconds=" + metricOptions.SevereLevelSeconds.ToString());
             sb.Append("&ShowRedLightViolations=" + metricOptions.ShowRedLightViolations.ToString().ToLower());
@@ -413,13 +416,18 @@ namespace SPM.Controllers
             sb.Append("&ShowAverageTimeYellowOccurences="+ metricOptions.ShowAverageTimeYellowOccurences.ToString().ToLower());
 
             sb.Append("&SignalID=" + metricOptions.SignalID);
-            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
-            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
-       
+
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
+
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
 
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://"+ hostname.Trim() + sb +"\");";
 
-
+          
             return PartialView("MetricResult", result);
         }
 
@@ -468,8 +476,13 @@ namespace SPM.Controllers
             sb.Append("&ShowPercentFailLines=" + metricOptions.ShowPercentFailLines.ToString().ToLower());
 
             sb.Append("&SignalID=" + metricOptions.SignalID);
-            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
-            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
+
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
 
 
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
@@ -524,8 +537,13 @@ namespace SPM.Controllers
             sb.Append("&Show85Percentile=" + metricOptions.Show85Percentile.ToString().ToLower());
 
             sb.Append("&SignalID=" + metricOptions.SignalID);
-            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
-            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
+
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
 
 
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
@@ -576,8 +594,13 @@ namespace SPM.Controllers
 
 
             sb.Append("&SignalID=" + metricOptions.SignalID);
-            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
-            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
+
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
 
 
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
@@ -631,8 +654,13 @@ namespace SPM.Controllers
 
 
             sb.Append("&SignalID=" + metricOptions.SignalID);
-            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
-            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
+
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
 
 
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
@@ -683,12 +711,16 @@ namespace SPM.Controllers
             sb.Append("&SelectedConsecutiveCount=" + metricOptions.SelectedConsecutiveCount.ToString());
             sb.Append("&ShowPlanStripes=" + metricOptions.ShowPlanStripes.ToString().ToLower());
             sb.Append("&ShowPedActivity=" + metricOptions.ShowPedActivity.ToString().ToLower());
-    
 
 
             sb.Append("&SignalID=" + metricOptions.SignalID);
-            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
-            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
+
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
 
 
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
@@ -742,11 +774,14 @@ namespace SPM.Controllers
 
             sb.Append("/DefaultCharts/GetPreemptMetricByUrl?");
 
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
-            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
-            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
 
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
 
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
 
@@ -806,10 +841,14 @@ namespace SPM.Controllers
             sb.Append("&ShowTotalVolumes=" + metricOptions.ShowTotalVolumes.ToString().ToLower());
             sb.Append("&ShowDataTable=" + metricOptions.ShowDataTable.ToString().ToLower());
 
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
-            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
-            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
+
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
 
 
             tmcvm.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
@@ -869,8 +908,13 @@ namespace SPM.Controllers
             sb.Append("&ShowAdvanceDetection=" + metricOptions.ShowAdvanceDetection.ToString().ToLower());
 
             sb.Append("&SignalID=" + metricOptions.SignalID);
-            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
-            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
+
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
 
 
             viewModel.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
@@ -917,8 +961,13 @@ namespace SPM.Controllers
             sb.Append("&ShowPercentSkip=" + metricOptions.ShowPercentSkip.ToString().ToLower());
 
             sb.Append("&SignalID=" + metricOptions.SignalID);
-            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
-            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
+
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
 
 
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
@@ -965,8 +1014,13 @@ namespace SPM.Controllers
 
 
             sb.Append("&SignalID=" + metricOptions.SignalID);
-            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
-            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
+
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
 
 
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
@@ -1007,10 +1061,14 @@ namespace SPM.Controllers
             sb.Append("&ShowPlanStatistics=" + metricOptions.ShowPlanStatistics.ToString().ToLower());
             sb.Append("&ShowVolumes=" + metricOptions.ShowVolumes.ToString().ToLower());
 
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
-            sb.Append("&StartDate=" + metricOptions.StartDate.ToString());
-            sb.Append("&EndDate=" + metricOptions.EndDate.ToString());
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
+
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
 
 
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
