@@ -77,7 +77,8 @@ namespace MOE.Common.Business.Tests
             options.EndDate = DateTime.Now;
             options.Approaches.Add((from a in _db.Approaches where a.ApproachID == apprId select a).FirstOrDefault());
             options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-            options.GroupBy = AggregationMetricOptions.AggregationGroups.Approach;
+            options.AggregationSeries = AggregationMetricOptions.AggregationSeriesOptions.Approach;
+            options.GroupBy = AggregationMetricOptions.AggregationGroups.None;
 
             MOE.Common.Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.SetApplicationEventRepository(asfs);
 

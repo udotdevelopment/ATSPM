@@ -93,6 +93,7 @@
   <ItemGroup>
     <Compile Include="Business\ApproachSpeed\AvgSpeedBucketCollectionTests.cs" />
     <Compile Include="Business\ChartFactoryTests.cs" />
+    <Compile Include="Business\ColorFactoryTests.cs" />
     <Compile Include="Business\Export\ExporterTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\AggregationMetricOptionsTests.cs" />
     <Compile Include="Models\InMemoryApplicationEventRepository.cs" />
