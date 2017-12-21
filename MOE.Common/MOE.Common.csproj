@@ -335,7 +335,10 @@
     <Compile Include="Business\ApproachVolume\ApproachVolumeViewModel.cs" />
     <Compile Include="Business\ApproachVolume\MetricInfo.cs" />
     <Compile Include="Business\ArchiveMetric.cs" />
-    <Compile Include="Business\Bin.cs" />
+    <Compile Include="Business\Bins\Bin.cs" />
+    <Compile Include="Business\Bins\BinFactory.cs" />
+    <Compile Include="Business\Bins\LargeBin.cs" />
+    <Compile Include="Business\Bins\SmallBin.cs" />
     <Compile Include="Business\BulkCopyOptions.cs" />
     <Compile Include="Business\ChartFactory.cs" />
     <Compile Include="Business\ChartTitleFactory.cs" />
@@ -437,6 +440,7 @@
     <Compile Include="Models\ApproachSpeedAggregation.cs" />
     <Compile Include="Models\ApproachCycleAggregation.cs" />
     <Compile Include="Models\Custom\ActionLog.cs" />
+    <Compile Include="Models\Custom\Aggregation.cs" />
     <Compile Include="Models\DatabaseInitializer.cs" />
     <Compile Include="Models\DetectionHardware.cs" />
     <Compile Include="Models\DetectorAggregation.cs" />

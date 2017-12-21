@@ -33,6 +33,11 @@ namespace MOE.CommonTests.Models
             return results;
         }
 
+        public List<MetricType> GetAllToAggregateMetrics()
+        {
+            throw new NotImplementedException();
+        }
+
         public List<MetricType> GetBasicMetrics()
         {
             throw new NotImplementedException();

@@ -38,7 +38,7 @@ namespace SPM.Models
         public string ChartType { get; set; }
         public string ColorSelection { get; set; }
         public List<Route> Routes { get; set; }
-        public int SelectedRouteID { get; set; }
+        public int SelectedRouteId { get; set; }
 
         public SignalSearchViewModel SignalSearchViewModel { get; set; }
 

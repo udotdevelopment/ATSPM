@@ -15,6 +15,38 @@ namespace MOE.Common.Models.Repositories
         {
             _db.Database.CommandTimeout = 180;
         }
+
+        public int GetRecordCountByParameterAndEvent(string signalId, DateTime startTime, DateTime endTime, List<int> eventParameters,
+            List<int> eventCodes)
+        {
+            IQueryable<Controller_Event_Log> query = _db.Controller_Event_Log.Where(c =>
+                c.SignalID == signalId && c.Timestamp >= startTime && c.Timestamp <= endTime);
+            if (eventParameters != null && eventParameters.Count > 0)
+            {
+                query.Where(c => eventParameters.Contains(c.EventParam));
+            }
+            if (eventCodes != null && eventCodes.Count > 0)
+            {
+                query.Where(c => eventCodes.Contains(c.EventCode));
+            }
+            return  query.Count();
+        }
+
+        public List<Controller_Event_Log> GetRecordsByParameterAndEvent(string signalId, DateTime startTime, DateTime endTime, List<int> eventParameters, List<int> eventCodes)
+        {
+            IQueryable<Controller_Event_Log> query = _db.Controller_Event_Log.Where(c =>
+                c.SignalID == signalId && c.Timestamp >= startTime && c.Timestamp <= endTime);
+            if (eventParameters != null && eventParameters.Count > 0)
+            {
+                query.Where(c => eventParameters.Contains(c.EventParam));
+            }
+            if (eventCodes != null && eventCodes.Count > 0)
+            {
+                query.Where(c => eventCodes.Contains(c.EventCode));
+            }
+            return query.ToList();
+        }
+
         public List<Controller_Event_Log> GetAllAggregationCodes(string signalId, DateTime startTime, DateTime endTime)
         {
             List<int> codes = new List<int> { 150, 114, 113, 112, 105, 102, 1, 45 };

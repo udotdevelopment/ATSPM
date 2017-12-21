@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Spatial;
+using CsvHelper.Configuration;
 
 namespace MOE.Common.Models
 {
-    public class ApproachCycleAggregation
+    public class ApproachCycleAggregation: Aggregation
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public  override int Id { get; set; }
 
         [Required]
-        public DateTime BinStartTime { get; set; }
+        public override DateTime BinStartTime { get; set; }
 
         [Required]
         public int ApproachId { get; set; }
@@ -37,5 +38,25 @@ namespace MOE.Common.Models
 
         [Required]
         public bool IsProtectedPhase { get; set; }
+
+        public sealed class ApproachCycleAggregationClassMap : ClassMap<ApproachCycleAggregation>
+        {
+            public ApproachCycleAggregationClassMap()
+            {
+
+                Map(m => m.Approach).Ignore();
+                Map(m => m.Id).Name("Record Number");
+                Map(m => m.BinStartTime).Name("Bin Start Time");
+                Map(m => m.ApproachId).Name("Approach ID");
+                Map(m => m.RedTime).Name("RedTime");
+                Map(m => m.YellowTime).Name("YellowTime");
+                Map(m => m.GreenTime).Name("GreenTime");
+                Map(m => m.TotalCycles).Name("Total Cycles");
+                Map(m => m.PedActuations).Name("Ped Actuations");
+                Map(m => m.IsProtectedPhase).Name("Is Protected Phase");
+            }
+        }
     }
+
+
 }
