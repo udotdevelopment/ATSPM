@@ -23,11 +23,11 @@ namespace MOE.Common.Models.Repositories
                 c.SignalID == signalId && c.Timestamp >= startTime && c.Timestamp <= endTime);
             if (eventParameters != null && eventParameters.Count > 0)
             {
-                query.Where(c => eventParameters.Contains(c.EventParam));
+                query = query.Where(c => eventParameters.Contains(c.EventParam));
             }
             if (eventCodes != null && eventCodes.Count > 0)
             {
-                query.Where(c => eventCodes.Contains(c.EventCode));
+                query = query.Where(c => eventCodes.Contains(c.EventCode));
             }
             return  query.Count();
         }
@@ -38,11 +38,11 @@ namespace MOE.Common.Models.Repositories
                 c.SignalID == signalId && c.Timestamp >= startTime && c.Timestamp <= endTime);
             if (eventParameters != null && eventParameters.Count > 0)
             {
-                query.Where(c => eventParameters.Contains(c.EventParam));
+                query = query.Where(c => eventParameters.Contains(c.EventParam));
             }
             if (eventCodes != null && eventCodes.Count > 0)
             {
-                query.Where(c => eventCodes.Contains(c.EventCode));
+                query = query.Where(c => eventCodes.Contains(c.EventCode));
             }
             return query.ToList();
         }

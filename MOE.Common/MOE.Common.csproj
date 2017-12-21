@@ -817,6 +817,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Business\AggregateDataExport\" />
     <Folder Include="Business\KML\" />
   </ItemGroup>
   <ItemGroup>
