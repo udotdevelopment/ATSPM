@@ -1,4 +1,5 @@
 ﻿@using MvcCheckBoxList.Model;
+@using SPM.Controllers
 @model SPM.Models.AggDataExportViewModel
 
 <!DOCTYPE html>
@@ -125,29 +126,21 @@
                 </h5>
             </div>
             <div id="collapseDataAggregation" class="panel-body panel-collapse collapse">
-                <div class="form-group">               
-                    <label>
-                        @Html.RadioButton("DataAggregation", "Movement")
-                        Movement (aggregate lanes)
-                    </label>
+                <div class="form-group">
+                    @Html.RadioButtonFor(model => model.EnumSeriesGroupBy, "Movement")
+                    <label>Location - Movement (aggregate lanes)</label>
                 </div>
                 <div class="form-group">
-                    <label>
-                        @Html.RadioButton("DataAggregation", "Approach")
-                        Approach (aggregate lanes)
-                    </label>
+                    @Html.RadioButtonFor(model => model.EnumSeriesGroupBy, "Approach")
+                    <label>Location - Approach (aggregate movements)</label>
                 </div>
                 <div class="form-group">
-                    <label>
-                        @Html.RadioButton("DataAggregation", "Signal")
-                        Signal (aggregate lanes)
-                    </label>
+                    @Html.RadioButtonFor(model => model.EnumSeriesGroupBy, "Signal")
+                    <label>Location - Signal (aggregate approaches)</label>
                 </div>
                 <div class="form-group">
-                    <label>
-                        @Html.RadioButton("DataAggregation", "Route")
-                        Route (aggregate signals)
-                    </label>
+                    @Html.RadioButtonFor(model => model.EnumSeriesGroupBy, "Route")
+                    <label>Location - Route (aggregate signals)</label>
                 </div>
                 <br />
                 <div class="form-group">
@@ -217,9 +210,51 @@
             </div>
         </div>
 
+        <div class="panel panel-signal">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a id="ChartType" data-toggle="collapse" href="#collapseChartType">
+                        Chart Type
+                    </a>
+                </h5>
+            </div>
+            <div id="collapseChartType" class="panel-body panel-collapse collapse">
+                <div class="form-group">
+                    <label>Column</label>              
+                    <div class="form-group">
+                        <label>
+                            @Html.RadioButton("ChartType", "ColumnStacked")
+                            Stacked
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            @Html.RadioButton("ChartType", "ColumnStandard")
+                            Standard
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Line</label>              
+                    <div class="form-group">
+                        <label>
+                            @Html.RadioButton("ChartType", "LineStacked")
+                            Stacked
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            @Html.RadioButton("ChartType", "LineStandard")
+                            Standard
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div>
             <div class="col-md-2">
-                <button id="CreateChart" type="button" class="btn btn-primary">Create Chart &nbsp; <span id='RunReportSpinner' class="glyphicon"></span></button>
+                <button id="CreateChart" type="submit" class="btn btn-primary" name="Create"
+                        >Create Chart &nbsp; <span id='RunReportSpinner' class="glyphicon"></span></button>
             </div>
             <div class="col-md-4">
                 <button id="ExportData" type="button" class="btn btn-primary">Export Data &nbsp; <span id='RunReportSpinner' class="glyphicon"></span></button>

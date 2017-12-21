@@ -51,9 +51,20 @@ namespace SPM.Controllers
                 MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
             vm.Routes = routeRepository.GetAllRoutes();
 
+            if (Request.Form["Create"] != null)
+            {
+                //Create agg data export report
+            }
             return View(vm);
         }
         // GET: DataExportViewModels
+        public enum EnumSeriesGroupBy
+        {
+            Movement,
+            Approach,
+            Signal,
+            Route
+        }
         public ActionResult AggregateDataExport()
         {
             return View();
@@ -83,21 +94,21 @@ namespace SPM.Controllers
             return View(vm);
         }
 
-        // POST: DataExportViewModels/Create
+        // POST: AggDataExportViewModels/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,StartDateDate,EndDateDate,StartDateHour,StartDateMinute,EndDateHour,EndDateMinute,Count")] DataExportViewModel dataExportViewModel)
+        public ActionResult Create([Bind(Include = "Id,MetricTypeIDs,ApproachTypeIDs,EnumSeriesGroupBy,LaneTypeIDs,Weekdays,Weekend,IsSum,SelectedRouteID,StartDateDay,EndDateDay,StartTime,SelectedStartAMPM,EndDateDay,SelectedEndAMPM")] AggDataExportViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                //db.DataExportViewModels.Add(dataExportViewModel);
+                //db.DataExportViewModels.Add(vm);
                 //db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(dataExportViewModel);
+            return View(vm);
         }
 
         //// GET: DataExportViewModels/Edit/5

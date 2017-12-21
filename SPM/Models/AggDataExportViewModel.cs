@@ -24,6 +24,8 @@ namespace SPM.Models
         public virtual ICollection<DirectionType> AllApproachTypes { get; set; }
         public virtual List<int> MovementTypeIDs { get; set; }
         public virtual ICollection<MovementType> AllMovementTypes { get; set; }
+        public SPM.Controllers.AggregateDataExportController.EnumSeriesGroupBy EnumSeriesGroupBy { get; set; }
+
         public virtual List<int> LaneTypeIDs { get; set; }
         public virtual ICollection<LaneType> AllLaneTypes { get; set; }
         //public List<SelectListItem> AggregateMetricsList { get; set; }
@@ -33,7 +35,8 @@ namespace SPM.Models
         public bool IsSum { get; set; }
         public List<string> WeekdayWeekendIDs { get; set; }
         public ICollection<string> SelectedWeekdayWeekend { get; set; }
-        public string DataAggregationType { get; set; }
+        public string ChartType { get; set; }
+        public string ColorSelection { get; set; }
         public List<Route> Routes { get; set; }
         public int SelectedRouteID { get; set; }
 
