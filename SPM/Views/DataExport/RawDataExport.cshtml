@@ -1,4 +1,5 @@
-﻿@model SPM.Models.DataExportViewModel
+﻿@using System.Web.UI.WebControls
+@model SPM.Models.DataExportViewModel
 
 @{
 //Layout = null;
@@ -17,49 +18,57 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.SignalId, htmlAttributes: new { @class = "control-label col-md-4", @placeholder = "Signal Id", aria_label = "Signal Id" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.SignalId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SignalId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.EventCodes, htmlAttributes: new { @class = "control-label col-md-4", @placeholder = "Signal Id", aria_label = "Signal Id" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.EventCodes, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EventCodes, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.EventParams, htmlAttributes: new { @class = "control-label col-md-4", @placeholder = "Signal Id", aria_label = "Signal Id" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.EventParams, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SignalId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-4", @placeholder = "Start Date", aria_label = "Start Date" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+        <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @*@Html.LabelFor(model => model.SignalId, htmlAttributes: new { @class = "control-label col-md-4", @placeholder = "Signal Id", aria_label = "Signal Id" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.SignalId, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SignalId, "", new { @class = "text-danger" })
+                    </div>*@
+                <div id="SignalSearchContainer" class="panel-min-width">
+                    @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
+                </div>
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-4", @placeholder = "End Date", aria_label = "End Date" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EventCodes, htmlAttributes: new {@class = "control-label col-md-4", @placeholder = "Signal Id", aria_label = "Signal Id"})
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.EventCodes, new {htmlAttributes = new {@class = "form-control", PlaceHolder = "Comma Separated List"}})
+                        @Html.ValidationMessageFor(model => model.EventCodes, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EventParams, htmlAttributes: new {@class = "control-label col-md-4", @placeholder = "Signal Id", aria_label = "Signal Id"})
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.EventParams, new {htmlAttributes = new {@class = "form-control", PlaceHolder = "Comma Separated List"}})
+                        @Html.ValidationMessageFor(model => model.SignalId, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.StartDate, htmlAttributes: new {@class = "control-label col-md-4", @placeholder = "Start Date", aria_label = "Start Date"})
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.StartDate, new {htmlAttributes = new {@class = "form-control"}})
+                        @Html.ValidationMessageFor(model => model.StartDate, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EndDate, htmlAttributes: new {@class = "control-label col-md-4", @placeholder = "End Date", aria_label = "End Date"})
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.EndDate, new {htmlAttributes = new {@class = "form-control"}})
+                        @Html.ValidationMessageFor(model => model.EndDate, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+                <input type="submit" value="Download" class="btn btn-default"/>
+                <button id="CheckRecordCount" type="button" onclick="GetRecordCount()" class="btn btn-primary" >Check Record Count<span id='RunReportSpinner' class="glyphicon"></span></button>
+                <div id="GenerateData"></div>
             </div>
         </div>
     </div>
-    
-    <div class="col-md-offset-4 col-md-8">
-        <button id="CheckRecordCount" type="button" onclick="GetRecordCount()" class="btn btn-default">Check Record Count</button>
-    </div>
-    <div id ="GenerateData"></div>
+
 }
 </body>
 </html>
@@ -67,4 +76,9 @@
 
 @section Scripts {
     <script> var urlpathGetRecordCount = '@Url.Action("GetRecordCount", "DataExport")';</script>
-<script src="~/Scripts/RawDataExport.js"></script>>}
+    <script> var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';</script>    
+    <script> var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';</script>
+    <script src="~/Scripts/RawDataExport.js"></script>
+    <script src="~/Scripts/Map.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
+}
