@@ -36,7 +36,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         };
 
-        public enum AggregationGroups
+        public enum AggregationSeriesOptions
         {
             Unknown,
             Movement,
@@ -45,43 +45,53 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Route
         }
 
+        public enum AggregationMetrics
+        {
+            LaneByLaneCounts,
+            AdvancedCounts,
+            ArrivalonGreen,
+            PlatoonRatio,
+            SplitFail,
+            PedestrianActuations,
+            Preemption,
+            TSP,
+            DataQuality
+        }
+
+        public enum AggregationGroups
+        {
+            Hour,
+            Day,
+            Month,
+            Year,
+            None,
+            Signal
+        }
 
 
-        public List<KeyValuePair<string, int>> BinSizes = new List<KeyValuePair<string, int>>();
+
+       
 
         public AggregationMetricOptions()
         {
 
-            PopulateBinSizeList();
+            
 
 
 
         }
 
-        private void PopulateBinSizeList()
-        {
-            KeyValuePair<string, int> q = new KeyValuePair<string, int>("Fifteen Minutes", 15);
-            KeyValuePair<string, int> h = new KeyValuePair<string, int>("Hour", 60);
-            KeyValuePair<string, int> d = new KeyValuePair<string, int>("Day", 1440);
-            KeyValuePair<string, int> w = new KeyValuePair<string, int>("Week", 10080);
-            KeyValuePair<string, int> m = new KeyValuePair<string, int>("Month", 43800);
-            KeyValuePair<string, int> y = new KeyValuePair<string, int>("Year", 525600);
-
-            BinSizes.Add(q);
-            BinSizes.Add(h);
-            BinSizes.Add(d);
-            BinSizes.Add(w);
-            BinSizes.Add(m);
-            BinSizes.Add(y);
-        }
 
 
 
-        public ChartTypes ChartType;
 
-        public AggregationOpperations AggregationOpperation;
+        public ChartTypes ChartType { get; set; }
 
-        public AggregationGroups GroupBy;
+        public AggregationOpperations AggregationOpperation { get; set; }
+
+        public AggregationGroups GroupBy { get; set; }
+
+        public AggregationSeriesOptions AggregationSeries { get; set; }
 
         public List<Models.Signal> Signals = new List<Models.Signal>();
 

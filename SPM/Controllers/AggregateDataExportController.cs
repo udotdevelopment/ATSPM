@@ -65,6 +65,15 @@ namespace SPM.Controllers
             Signal,
             Route
         }
+        public enum EnumAggregationXaxis
+        {
+            Hour,
+            Day,
+            Month,
+            Year,
+            NoAggregation,
+            LocationSignal
+        }
         public ActionResult AggregateDataExport()
         {
             return View();
