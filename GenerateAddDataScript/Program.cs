@@ -11,7 +11,7 @@ namespace GenerateAddDataScript
     {
         static void Main(string[] args)
         {
-            //MOE.Common.Business.ScriptGenerator.GenerateAddData.CreateScript();
+            MOE.Common.Business.ScriptGenerator.GenerateAddData.CreateScript();
             MOE.Common.Business.ScriptGenerator.GenerateAddData.CreateRouteScript();
         }
     }
