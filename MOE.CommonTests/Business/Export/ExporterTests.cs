@@ -27,7 +27,7 @@ namespace MOE.Common.Business.Export.Tests
             string filepath = @"c:\temp\recordsExport.csv";
 
 
-            var exporter = new Exporter(recordList, filepath);
+            var exporter = new Exporter();
 
             Assert.IsTrue(File.Exists(filepath));
 
