@@ -14,6 +14,7 @@ using System.Runtime.Serialization;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using MOE.Common.Business.DataAggregation;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
@@ -100,6 +101,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public List<Models.Detector> Detectors = new List<Models.Detector>();
 
         public int BinSize { get; set; }
+
+        public override List<string> CreateMetric()
+        {
+            base.CreateMetric();
+            
+            return ReturnList;
+        }
     }
 
     

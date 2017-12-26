@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business.DataAggregation;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
@@ -97,6 +98,15 @@ namespace MOE.Common.Business
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateSplitFailChartArea(options));
             SetSplitFailLegend(chart);
+            return chart;
+        }
+
+        public static Chart CreateSplitFailureAggregationChart(ApproachSplitFailAggregationOptions options)
+        {
+            Chart chart = new Chart();
+            SetImageProperties(chart);
+            chart.ChartAreas.Add(CreateSplitFailAggregationChartArea(options));
+            //SetSplitFailAggregationLegend(chart);
             return chart;
         }
 
