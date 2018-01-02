@@ -30,6 +30,10 @@ namespace MOE.CommonTests.Models
         public List<Common.Models.ApproachSpeedAggregation> ApproachSpeedAggregations = new List<ApproachSpeedAggregation>();
         public List<Common.Models.ApproachCycleAggregation> ApproachCycleAggregations = new List<ApproachCycleAggregation>();
         public List<Common.Models.ApproachSplitFailAggregation> ApproachSplitFailAggregations = new List<ApproachSplitFailAggregation>();
+        public List<Common.Models.Route> Routes = new List<Route>();
+        public List<Common.Models.RouteSignal> RouteSignals = new List<RouteSignal>();
+        public List<Common.Models.RoutePhaseDirection> RoutePhaseDirection = new List<RoutePhaseDirection>();
+
 
         public void ClearTables()
         {
@@ -55,6 +59,33 @@ namespace MOE.CommonTests.Models
             PopulateDetectionHardware();
             PoplateMetricTypes();
 
+        }
+
+        public void PopulateRoutes()
+        {
+            Route r = new Route();
+            for(int i = 1; i<5; i++)
+            {
+                r.Id = i;
+                r.RouteName = "Route - " + i.ToString();
+                Routes.Add(r);
+            }
+        }
+
+        public void PopulateRouteSignals()
+        {
+            if (Signals.Count > 1)
+            {
+                PopulateSignal();
+                PopulateSignalsWithApproaches();
+                PopulateApproachesWithDetectors();
+                
+            }
+
+            foreach (var r in Routes)
+            {
+                
+            }
         }
 
         public int  PopulateApproachSplitFailAggregationsWithRandomRecords()
