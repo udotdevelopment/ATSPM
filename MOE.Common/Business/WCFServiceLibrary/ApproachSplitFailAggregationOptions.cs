@@ -3,6 +3,7 @@ using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Web.UI.DataVisualization.Charting;
@@ -26,6 +27,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var metricTypeRepository = MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
             MetricType = metricTypeRepository.GetMetricsByID(MetricTypeID);
             base.CreateMetric();
+       
             SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this);
             int i = 1;
             Chart chart = ChartFactory.CreateSplitFailureAggregationChart(this);

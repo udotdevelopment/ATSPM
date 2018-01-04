@@ -12,7 +12,7 @@ using MOE.Common.Models.Repositories;
 
 namespace FTPfromAllControllers
 {
-    class FTPfromAllControllers
+    public class FTPfromAllControllers
     {
 
         static void Main(string[] args)
@@ -114,17 +114,22 @@ namespace FTPfromAllControllers
 
             IPAddress ip;
 
-            hasValidIP = IPAddress.TryParse(signal.IpAddress, out ip);
+           
 
-
+            
 
             if (signal.IpAddress == "0")
             {
-                hasValidIP = false;
+                return false;
+            }
+
+            if (signal.IpAddress == "0.0.0.0")
+            {
+                return false;
             }
 
             //test to see if the address is reachable
-            if (hasValidIP)
+            if (IPAddress.TryParse(signal.IpAddress, out ip))
             {
                 Ping pingSender = new Ping();
                 PingOptions pingOptions = new PingOptions();
@@ -141,6 +146,10 @@ namespace FTPfromAllControllers
                 if (reply.Status != IPStatus.Success)
                 {
                     hasValidIP = false;
+                }
+                else
+                {
+                    hasValidIP = true;
                 }
             }
 
