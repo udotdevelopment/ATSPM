@@ -368,7 +368,7 @@ namespace MOE.Common.Models.Repositories
                     signal.PrimaryName + " " + signal.SecondaryName, signal.RegionID.ToString());
                 pin.MetricTypes = signal.GetMetricTypesString();
                 pins.Add(pin);
-                Console.WriteLine(pin.SignalID);
+                //Console.WriteLine(pin.SignalID);
             }
             return (pins);
         }

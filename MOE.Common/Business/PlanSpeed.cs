@@ -11,6 +11,7 @@ namespace MOE.Common.Business
     public class PlanSpeed:Plan
     {
         public int EightyFifth { get; set; }
+        public int Fifteenth { get; set; }
 
         public int AvgSpeed { get; set; }
 
@@ -39,6 +40,7 @@ namespace MOE.Common.Business
                 StdDevAvgSpeed = Convert.ToInt32(Math.Round(Math.Sqrt(rawSpeeds.Average(v => Math.Pow(v - rawaverage, 2)))));
             }
             EightyFifth = GetPercentile(rawSpeeds, .85);
+            Fifteenth = GetPercentile(rawSpeeds, .15);
         }
 
         private int GetPercentile(List<int> speeds, double percentile)

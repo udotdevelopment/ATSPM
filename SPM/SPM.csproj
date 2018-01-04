@@ -296,6 +296,7 @@
     <Content Include="Images\NewUDOTLogo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\orangePin.png" />
     <Content Include="Images\pointer_shadow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
