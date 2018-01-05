@@ -80,23 +80,6 @@ namespace SPM.Controllers
 
         }
 
-        // GET: DataExportViewModels
-        //public enum AggregationSeriesOptions
-        //{
-        //    Movement,
-        //    Approach,
-        //    Signal,
-        //    Route
-        //}
-        //public enum AggregationGroups
-        //{
-        //    Hour,
-        //    Day,
-        //    Month,
-        //    Year,
-        //    NoAggregation,
-        //    LocationSignal
-        //}
         public ActionResult AggregateDataExport()
         {
             return View();
@@ -131,7 +114,7 @@ namespace SPM.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,MetricTypeIDs,ApproachTypeIDs,AggregationSeriesOptions,LaneTypeIDs,Weekdays,Weekend,IsSum,SelectedRouteID,StartDateDay,EndDateDay,StartTime,SelectedStartAMPM,EndDateDay,SelectedEndAMPM")] AggDataExportViewModel vm)
+        public ActionResult Create([Bind(Include = "Id,MetricTypeIDs,ApproachTypeIDs,AggSeriesOptions,LaneTypeIDs,Weekdays,Weekend,IsSum,SelectedRouteID,StartDateDay,EndDateDay,StartTime,SelectedStartAMPM,EndDateDay,SelectedEndAMPM")] AggDataExportViewModel vm)
         {
             if (ModelState.IsValid)
             {

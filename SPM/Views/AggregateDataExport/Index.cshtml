@@ -162,27 +162,27 @@
             <div id="collapseDataAggregation" class="panel-body panel-collapse collapse">
                 <label>Aggregation (X-axis)</label>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.AggregationGroups, "Hour")
+                    @Html.RadioButtonFor(model => model.AggGroups, "Hour")
                     <label>Time - Hour</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.AggregationGroups, "Day")
+                    @Html.RadioButtonFor(model => model.AggGroups, "Day")
                     <label>Time - Day</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.AggregationGroups, "Month")
+                    @Html.RadioButtonFor(model => model.AggGroups, "Month")
                     <label>Time - Month</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.AggregationGroups, "Year")
+                    @Html.RadioButtonFor(model => model.AggGroups, "Year")
                     <label>Time - Year</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.AggregationGroups, "None")
+                    @Html.RadioButtonFor(model => model.AggGroups, "None")
                     <label>Time - No Aggregation</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.AggregationGroups, "Signal")
+                    @Html.RadioButtonFor(model => model.AggGroups, "Signal")
                     <label>Location - Signal</label>
                 </div>
                 <div class="form-group">
@@ -193,19 +193,19 @@
                 <br/>
                 <label>Series - Group By</label>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.AggregationSeriesOptions, "Movement")
+                    @Html.RadioButtonFor(model => model.AggSeriesOptions, "Movement")
                     <label>Location - Movement (aggregate lanes)</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.AggregationSeriesOptions, "Approach")
+                    @Html.RadioButtonFor(model => model.AggSeriesOptions, "Approach")
                     <label>Location - Approach (aggregate movements)</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.AggregationSeriesOptions, "Signal")
+                    @Html.RadioButtonFor(model => model.AggSeriesOptions, "Signal")
                     <label>Location - Signal (aggregate approaches)</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.AggregationSeriesOptions, "Route")
+                    @Html.RadioButtonFor(model => model.AggSeriesOptions, "Route")
                     <label>Location - Route (aggregate signals)</label>
                 </div>
                 <br/>
@@ -234,13 +234,13 @@
                     <label>Column</label>              
                     <div class="form-group">
                         <label>
-                            @Html.RadioButton("ChartType", "ColumnStacked")
+                            @Html.RadioButtonFor(model => model.AggChartTypes, "StackedColumn")
                             Stacked
                         </label>
                     </div>
                     <div class="form-group">
                         <label>
-                            @Html.RadioButton("ChartType", "ColumnStandard")
+                            @Html.RadioButtonFor(model => model.AggChartTypes, "Column")
                             Standard
                         </label>
                     </div>
@@ -249,13 +249,13 @@
                     <label>Line</label>              
                     <div class="form-group">
                         <label>
-                            @Html.RadioButton("ChartType", "LineStacked")
+                            @Html.RadioButtonFor(model => model.AggChartTypes, "StackedLine")
                             Stacked
                         </label>
                     </div>
                     <div class="form-group">
                         <label>
-                            @Html.RadioButton("ChartType", "LineStandard")
+                            @Html.RadioButtonFor(model => model.AggChartTypes, "Line")
                             Standard
                         </label>
                     </div>
