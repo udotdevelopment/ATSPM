@@ -248,14 +248,6 @@ While each agency should consult with their IT department for specific guideline
 
              );
 
-            //context.SaveChanges();
-            //var detectionTypes = context.DetectionTypes.ToDictionary(d => d.DetectionTypeID, d => d);
-            //var dt1 = new Models.DetectionType { DetectionTypeID = 1, Description = "Basic", MetricTypes = new List<Models.MetricType>() };
-            //var dt2 = new Models.DetectionType { DetectionTypeID = 2, Description = "Advanced Count", MetricTypes = new List<Models.MetricType>() };
-            //var dt3 = new Models.DetectionType { DetectionTypeID = 3, Description = "Advanced Speed", MetricTypes = new List<Models.MetricType>() };
-            //var dt4 = new Models.DetectionType { DetectionTypeID = 4, Description = "Lane-by-lane Count", MetricTypes = new List<Models.MetricType>() };
-            //var dt5 = new Models.DetectionType { DetectionTypeID = 5, Description = "Lane-by-lane with Speed Restriction", MetricTypes = new List<Models.MetricType>() };
-            //var dt6 = new Models.DetectionType { DetectionTypeID = 6, Description = "Stop Bar Presence", MetricTypes = new List<Models.MetricType>() };
 
             context.MetricTypes.AddOrUpdate(
                 c => c.MetricID,
@@ -323,25 +315,6 @@ While each agency should consult with their IT department for specific guideline
                 }
             }
             context.SaveChanges();
-
-            //context.MetricTypes.AddOrUpdate(
-            //    c => c.ChartName,
-            //    new Models.MetricType { MetricID = 1, ChartName = "Purdue Phase Termination", Abbreviation = "PPT" ,ShowOnWebsite = true    },
-            //    new Models.MetricType { MetricID = 2, ChartName = "Split Monitor", Abbreviation = "SM", ShowOnWebsite = true                },
-            //    new Models.MetricType { MetricID = 3, ChartName = "Pedestrian Delay", Abbreviation = "PedD", ShowOnWebsite = true           },
-            //    new Models.MetricType { MetricID = 4, ChartName = "Preemption Details", Abbreviation = "PD", ShowOnWebsite = true           },
-            //    new Models.MetricType { MetricID = 5, ChartName = "Turning Movement Counts", Abbreviation = "TMC", ShowOnWebsite = true     },
-            //    new Models.MetricType { MetricID = 6, ChartName = "Purdue Coordination Diagram", Abbreviation = "PCD", ShowOnWebsite = true },
-            //    new Models.MetricType { MetricID = 7, ChartName = "Approach Volume", Abbreviation = "AV", ShowOnWebsite = true              },
-            //    new Models.MetricType { MetricID = 8, ChartName = "Approach Delay", Abbreviation = "AD", ShowOnWebsite = true               },
-            //    new Models.MetricType { MetricID = 9, ChartName = "Arrivals On Red", Abbreviation = "AoR", ShowOnWebsite = true,             },
-            //    new Models.MetricType { MetricID = 10, ChartName = "Approach Speed", Abbreviation = "Speed", ShowOnWebsite = true           },
-            //    new Models.MetricType { MetricID = 11, ChartName = "Yellow and Red Actuations", Abbreviation = "YRA", ShowOnWebsite = true  },
-            //    new Models.MetricType { MetricID = 12, ChartName = "Purdue Split Failure", Abbreviation = "SF", ShowOnWebsite = true        },
-            //    new Models.MetricType { MetricID = 13, ChartName = "Purdue Link Pivot", Abbreviation = "LP", ShowOnWebsite = false          },
-            //    new Models.MetricType { MetricID = 14, ChartName = "Preempt Service Request", Abbreviation = "PSR", ShowOnWebsite = false   },
-            //    new Models.MetricType { MetricID = 15, ChartName = "Preempt Service", Abbreviation = "PS", ShowOnWebsite = false            }
-            //    );
 
             context.SaveChanges();
 
