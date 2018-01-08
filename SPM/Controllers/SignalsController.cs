@@ -263,8 +263,8 @@ namespace SPM.Controllers
             signal.ControllerTypeID = 1;
             signal.Start = DateTime.MaxValue;          
             signal.Note = "Create New";
-            signal.VersionID = 1;
             signal.Enabled = true;
+            signal.VersionList = new List<Signal>();
             return signal;
         }
                 
@@ -599,22 +599,6 @@ namespace SPM.Controllers
             return null;//View(wctv);
         }
 
-        // POST: Signals/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateJsonAntiForgeryToken]
-        //[Authorize(Roles = "Admin")]
-        //public string DeleteConfirmed(string id)
-        //{
-        //    try
-        //    {
-        //        _signalsRepository.Remove(id);
-        //        return id + " Removed";
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return ex.Message;
-        //    }
-        //}
 
         protected override void Dispose(bool disposing)
         {

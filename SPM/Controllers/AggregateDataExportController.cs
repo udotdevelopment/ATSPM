@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using MOE.Common.Business.WCFServiceLibrary;
 using SPM.Models;
 using MOE.Common.Models;
 
@@ -51,29 +52,34 @@ namespace SPM.Controllers
                 MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
             vm.Routes = routeRepository.GetAllRoutes();
 
+            MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions options
+                = SetOptionFromVm(vm);
             if (Request.Form["Create"] != null)
             {
                 //Create agg data export report
+                MOE.Common.Business.ChartFactory.CreateLaneByLaneAggregationChart(options);
             }
             return View(vm);
         }
-        // GET: DataExportViewModels
-        public enum EnumSeriesGroupBy
+
+        private AggregationMetricOptions SetOptionFromVm(AggDataExportViewModel vm)
         {
-            Movement,
-            Approach,
-            Signal,
-            Route
+            MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions options
+                = new AggregationMetricOptions();
+            //options.Approaches = vm.ApproachTypeIDs;
+            //options.BinSize = vm.SelectedBinSize;
+            //options.ChartType = vm.ChartType;
+            //options.GroupBy = ;
+            //options.Detectors = ;
+            //options.Signals = ;
+            options.EndDate = vm.EndDateDay;
+            //options.MetricTypeID = ;
+            //options.SignalID = ;
+            options.StartDate = vm.StartDateDay;
+            return options;
+
         }
-        public enum EnumAggregationXaxis
-        {
-            Hour,
-            Day,
-            Month,
-            Year,
-            NoAggregation,
-            LocationSignal
-        }
+
         public ActionResult AggregateDataExport()
         {
             return View();
@@ -108,7 +114,7 @@ namespace SPM.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,MetricTypeIDs,ApproachTypeIDs,EnumSeriesGroupBy,LaneTypeIDs,Weekdays,Weekend,IsSum,SelectedRouteID,StartDateDay,EndDateDay,StartTime,SelectedStartAMPM,EndDateDay,SelectedEndAMPM")] AggDataExportViewModel vm)
+        public ActionResult Create([Bind(Include = "Id,MetricTypeIDs,ApproachTypeIDs,AggSeriesOptions,LaneTypeIDs,Weekdays,Weekend,IsSum,SelectedRouteID,StartDateDay,EndDateDay,StartTime,SelectedStartAMPM,EndDateDay,SelectedEndAMPM")] AggDataExportViewModel vm)
         {
             if (ModelState.IsValid)
             {

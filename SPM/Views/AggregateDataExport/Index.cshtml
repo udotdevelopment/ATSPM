@@ -162,27 +162,27 @@
             <div id="collapseDataAggregation" class="panel-body panel-collapse collapse">
                 <label>Aggregation (X-axis)</label>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.EnumAggregationXaxis, "Hour")
+                    @Html.RadioButtonFor(model => model.AggGroups, "Hour")
                     <label>Time - Hour</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.EnumAggregationXaxis, "Day")
+                    @Html.RadioButtonFor(model => model.AggGroups, "Day")
                     <label>Time - Day</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.EnumAggregationXaxis, "Month")
+                    @Html.RadioButtonFor(model => model.AggGroups, "Month")
                     <label>Time - Month</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.EnumAggregationXaxis, "Year")
+                    @Html.RadioButtonFor(model => model.AggGroups, "Year")
                     <label>Time - Year</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.EnumAggregationXaxis, "NoAggregation")
+                    @Html.RadioButtonFor(model => model.AggGroups, "None")
                     <label>Time - No Aggregation</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.EnumAggregationXaxis, "LocationSignal")
+                    @Html.RadioButtonFor(model => model.AggGroups, "Signal")
                     <label>Location - Signal</label>
                 </div>
                 <div class="form-group">
@@ -193,19 +193,19 @@
                 <br/>
                 <label>Series - Group By</label>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.EnumSeriesGroupBy, "Movement")
+                    @Html.RadioButtonFor(model => model.AggSeriesOptions, "Movement")
                     <label>Location - Movement (aggregate lanes)</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.EnumSeriesGroupBy, "Approach")
+                    @Html.RadioButtonFor(model => model.AggSeriesOptions, "Approach")
                     <label>Location - Approach (aggregate movements)</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.EnumSeriesGroupBy, "Signal")
+                    @Html.RadioButtonFor(model => model.AggSeriesOptions, "Signal")
                     <label>Location - Signal (aggregate approaches)</label>
                 </div>
                 <div class="form-group">
-                    @Html.RadioButtonFor(model => model.EnumSeriesGroupBy, "Route")
+                    @Html.RadioButtonFor(model => model.AggSeriesOptions, "Route")
                     <label>Location - Route (aggregate signals)</label>
                 </div>
                 <br/>
@@ -234,13 +234,13 @@
                     <label>Column</label>              
                     <div class="form-group">
                         <label>
-                            @Html.RadioButton("ChartType", "ColumnStacked")
+                            @Html.RadioButtonFor(model => model.AggChartTypes, "StackedColumn")
                             Stacked
                         </label>
                     </div>
                     <div class="form-group">
                         <label>
-                            @Html.RadioButton("ChartType", "ColumnStandard")
+                            @Html.RadioButtonFor(model => model.AggChartTypes, "Column")
                             Standard
                         </label>
                     </div>
@@ -249,13 +249,13 @@
                     <label>Line</label>              
                     <div class="form-group">
                         <label>
-                            @Html.RadioButton("ChartType", "LineStacked")
+                            @Html.RadioButtonFor(model => model.AggChartTypes, "StackedLine")
                             Stacked
                         </label>
                     </div>
                     <div class="form-group">
                         <label>
-                            @Html.RadioButton("ChartType", "LineStandard")
+                            @Html.RadioButtonFor(model => model.AggChartTypes, "Line")
                             Standard
                         </label>
                     </div>
@@ -282,5 +282,29 @@
 @section Scripts
 {
     <script type="text/javascript" src="~/Scripts/AggregateDataExport.js"></script>
-<script> var urlpathGetRouteSignals = '@Url.Action("Details", "Routes")';</script>
+    <script type="text/javascript" src="~/Scripts/Map.js"></script>
+    <script type="text/javascript" src="~/Scripts/GetMetrics.js"></script>
+    <script type="text/javascript" src="~/Scripts/AddData.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
+<script>
+    var urlpathGetRouteSignals = '@Url.Action("Details", "Routes")';
+    var urlpathPhaseTermination = '@Url.Action("GetPhaseTerminationMetric", "DefaultCharts")';
+    var urlpathPedDelay = '@Url.Action("GetPedDelayMetric", "DefaultCharts")';
+    var urlpathTMC = '@Url.Action("GetTMCMetric", "DefaultCharts")';
+    var urlpathPCD = '@Url.Action("GetPCDMetric", "DefaultCharts")';
+    var urlpathSplitMonitor = '@Url.Action("GetSplitMonitorMetric", "DefaultCharts")';
+    var urlpathPreempt = '@Url.Action("GetPreemptMetric", "DefaultCharts")';
+    var urlpathApproachVolume = '@Url.Action("GetApproachVolumeMetric", "DefaultCharts")';
+    var urlpathApproachDelay = '@Url.Action("GetApproachDelayMetric", "DefaultCharts")';
+    var urlpathAoR = '@Url.Action("GetAoRMetric", "DefaultCharts")';
+    var urlpathApproachSpeed = '@Url.Action("GetApproachSpeedMetric", "DefaultCharts")';
+    var urlpathYellowAndRed = '@Url.Action("GetYellowAndRedMetric", "DefaultCharts")';
+    var urlpathSplitFail = '@Url.Action("GetSplitFailMetric", "DefaultCharts")';
+    var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';
+    var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';
+    var urlpathGetMetricsList = '@Url.Action("GetMetricsList", "DefaultCharts")';
+    var urlpathGetChartComment = '@Url.Action("GetChartComment", "DefaultCharts")';
+    var urlpathFillSignals = '@Url.Action("FillSignals", "DefaultCharts")';
+    var urlOptions = '@Url.Action("MetricOptions", "DefaultCharts")';
+</script>
 }

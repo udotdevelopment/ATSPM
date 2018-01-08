@@ -233,7 +233,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 chart.Series["Average MPH"].Points.AddXY(bucket.StartTime, bucket.AvgSpeed);
                 chart.Series["85th Percentile Speed"].Points.AddXY(bucket.StartTime, bucket.EightyFifth);
                 chart.Series["15th Percentile Speed"].Points.AddXY(bucket.StartTime, bucket.FifteenthPercentile);
-                if (ShowPlanStatistics && ShowPostedSpeed)
+                if (ShowPostedSpeed)
                 {
                     chart.Series["Posted Speed"].Points.AddXY(bucket.StartTime, detector.Approach.MPH);
                 }
@@ -314,6 +314,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 eightyfifthLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 eightyfifthLabel.ForeColor = Color.Blue;
                 eightyfifthLabel.RowIndex = 2;
+
+                CustomLabel fifthteenthLabel = new CustomLabel();
+                fifthteenthLabel.FromPosition = plan.StartTime.ToOADate();
+                fifthteenthLabel.ToPosition = plan.EndTime.ToOADate();
+                fifthteenthLabel.Text = "15% Sp " + plan.Fifteenth.ToString() + "\n";
+                fifthteenthLabel.LabelMark = LabelMarkStyle.LineSideMark;
+                fifthteenthLabel.ForeColor = Color.Blue;
+                fifthteenthLabel.RowIndex = 3;
 
                 if (ShowPlanStatistics)
                 {

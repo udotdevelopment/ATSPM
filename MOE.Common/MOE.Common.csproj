@@ -363,6 +363,7 @@
     <Compile Include="Business\CycleSpeed.cs" />
     <Compile Include="Business\DataAggregation\DataAggregation.cs" />
     <Compile Include="Business\DataAggregation\SpliFailAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\SplitFailAggregationByRoute.cs" />
     <Compile Include="Business\Export\Exporter.cs" />
     <Compile Include="Business\Helpers\ApproachVolumeTable.cs" />
     <Compile Include="Business\Helpers\ConfigurationRecord.cs" />

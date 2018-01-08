@@ -59,9 +59,10 @@ namespace MOE.Common.Models
             {
                 metricTypesString += metric.MetricID + ",";
             }
+
             if (!String.IsNullOrEmpty(metricTypesString))
             {
-                metricTypesString.TrimEnd(',');
+                metricTypesString =  metricTypesString.TrimEnd(',');
             }
             return metricTypesString;
         }

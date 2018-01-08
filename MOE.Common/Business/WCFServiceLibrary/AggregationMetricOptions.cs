@@ -45,6 +45,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Route
         }
 
+        //wouldn't be used because the AggMetrics are incorporated into [MetricTypes]
         public enum AggregationMetrics
         {
             LaneByLaneCounts,
