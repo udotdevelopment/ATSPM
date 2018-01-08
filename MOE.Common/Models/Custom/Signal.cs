@@ -352,5 +352,11 @@ namespace MOE.Common.Models
             }
             return approachesForMeticType.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a =>a.DirectionType.Description).ToList();
         }
+
+        public List<DirectionType> GetAvailableDirections()
+        {
+            List<DirectionType> directions = Approaches.Select(a => a.DirectionType).Distinct().ToList();
+            return directions;
+        }
     }
 }

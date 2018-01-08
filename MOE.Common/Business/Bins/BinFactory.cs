@@ -5,280 +5,148 @@ using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace MOE.Common.Business.Bins
 {
-    public class BinFactory
+    public class BinFactoryOptions
     {
-        BinSizes BinSize { get; set; }
+        public enum BinSizes{FifteenMinutes, ThirtyMinutes, Hour, Day, Month, Year,
+            Week
+        }
+        public enum TimeOptions{StartToEnd, TimePeriod}
 
-        //public static List<KeyValuePair<string, int>> BinSizes = new List<KeyValuePair<string, int>>();
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+        public int? TimeOfDayStartHour { get; set; }
+        public int? TimeOfDayStartMinute { get; set; }
+        public int? TimeOfDayEndHour { get; set; }
+        public int? TimeOfDayEndMinute { get; set; }
+        public List<DayOfWeek> DaysOfWeek { get; set; }
+        public TimeOptions TimeOption { get; set; }
+        public BinSizes BinSize { get; set; }
 
-        public List<Bin>Bins = new List<Bin>();
-
-        public enum BinSizes {Fifteen, Hour,  Day, Week, Month, Year};
-
-        public int TODStartHour { get; set; }
-        public int TODStartMinute { get; set; }
-        public int TODEndHour { get; set; }
-        public int TODEndMinute { get; set; }
-        public BinFactory( BinSizes binSize, DateTime start, DateTime end, int todStartHour, int todStartMinute, int todEndHour, int todEndMinute, List<DayOfWeek> daysOfWeek)
+        public BinFactoryOptions(DateTime start, DateTime end, int? timeOfDayStartHour, int? timeOfDayStartMinute, int? timeOfDayEndHour, int? timeOfDayEndMinute, List<DayOfWeek> daysOfWeek, BinSizes binSize, TimeOptions timeOption)
         {
-            TODStartHour = todStartHour;
-            TODStartMinute = todStartMinute;
-            TODEndHour = todEndHour;
-            TODEndMinute = todEndMinute;
-            //PopulateBinSizeList();
-
+            Start = start;
+            End = end;
+            TimeOfDayStartHour = timeOfDayStartHour;
+            TimeOfDayStartMinute = timeOfDayStartMinute;
+            TimeOfDayEndHour = timeOfDayEndHour;
+            TimeOfDayEndMinute = timeOfDayEndMinute;
+            DaysOfWeek = daysOfWeek;
             BinSize = binSize;
-
-            BinEngine(start, end, daysOfWeek);
+            TimeOption = timeOption;
         }
-
-        private void BinEngine(DateTime startDate, DateTime endDate, List<DayOfWeek> daysOfWeek)
-        {
-
-
-            switch (BinSize)
-            {
-
-                case BinSizes.Fifteen:
-                {
-                    CreateFifteenMinuteBins(startDate, endDate, daysOfWeek);
-                }
-
-                 break;
-
-                case BinSizes.Hour:
-                {
-                    CreateHourBins(startDate, endDate, daysOfWeek);
-                }
-                    break;
-
-                case BinSizes.Day:
-                {
-                    CreateDayBins(startDate, endDate, daysOfWeek);
-                }
-                    break;
-
-                case BinSizes.Week:
-                {
-                    CreateWeekBins(startDate, endDate, daysOfWeek);
-                }
-                    break;
-
-                case BinSizes.Month:
-                {
-                    CreateMonthBins(startDate, endDate, daysOfWeek);
-                }
-                    break;
-
-                case BinSizes.Year:
-                {
-
-                    CreateYearBins( startDate,  endDate,  daysOfWeek);
-                }
-                break;
-        }
-            ;
-
-
-            //Get the dates that match the daytype for the given period
-
-
-
-        }
-
-        private void CreateFifteenMinuteBins(DateTime startDate, DateTime endDate, List<DayOfWeek> daysOfWeek)
-        {
-            DateTime tempDate = startDate;
-            List<DateTime>dates = GetDateList(daysOfWeek, tempDate, endDate);
-
-
-            while (tempDate <= endDate)
-            {
-                if(dates.Contains(tempDate))
-                {
-                    DateTime segStart = tempDate.Date.AddHours(TODStartHour).AddMinutes(TODStartMinute);
-                    DateTime segEnd = tempDate.Date.AddHours(TODEndHour).AddMinutes(TODEndMinute);
-
-                    while (segStart <= segEnd)
-                    {
-                        Bin bin = new Bin
-                        {
-                            Start = segStart,
-                            End = segStart.AddMinutes(15)
-
-
-                        };
-                        segStart = segStart.AddMinutes(15);
-                        Bins.Add(bin);
-                    }
-                }
-
-                tempDate = tempDate.AddDays(1);
-
-            }
-        }
-        private void CreateHourBins(DateTime startDate, DateTime endDate, List<DayOfWeek> daysOfWeek)
-        {
-            DateTime tempDate = startDate;
-            List<DateTime> dates = GetDateList(daysOfWeek, tempDate, endDate);
-
-
-            while (tempDate <= endDate)
-            {
-                if (dates.Contains(tempDate))
-                {
-                    DateTime segStart = tempDate.Date.AddHours(TODStartHour).AddMinutes(TODStartMinute);
-                    DateTime segEnd = tempDate.Date.AddHours(TODEndHour).AddMinutes(TODEndMinute);
-
-                    while (segStart <= segEnd)
-                    {
-                        Bin bin = new Bin
-                        {
-                            Start = segStart,
-                            End = segStart.AddHours(1)
-
-
-                        };
-                        segStart = segStart.AddHours(1);
-                        Bins.Add(bin);
-                    }
-                }
-
-                tempDate = tempDate.AddDays(1);
-
-            }
-        }
-        private void CreateDayBins(DateTime startDate, DateTime endDate, List<DayOfWeek> daysOfWeek)
-        {
-            DateTime tempDate = startDate.Date;
-            List<DateTime> dates = GetDateList(daysOfWeek, tempDate, endDate);
-
-            while (tempDate <= endDate)
-            {
-                if (dates.Contains(tempDate))
-                {
-                    LargeBin bin = new LargeBin
-                    {
-                        Start = tempDate,
-                        End = tempDate.AddDays(1),
-                        DaysOfWeek = daysOfWeek,
-                        TODStartHour = TODStartHour,
-                        TODStartMinute = TODStartMinute,
-                        TODEndHour = TODEndHour,
-                        TODEndMinute = TODEndMinute,
-                        Dates = new List<DateTime>()
-                    };
-
-                    Bins.Add(bin);
-                }
-
-                tempDate = tempDate.AddDays(1);
-
-            }
-        }
-
-
-
-        private void CreateWeekBins(DateTime startDate, DateTime endDate, List<DayOfWeek> daysOfWeek)
-        {
-            DateTime tempDate = startDate;
-
-            while (tempDate <= endDate)
-            {
-                LargeBin bin = new LargeBin
-                {
-                    Start = tempDate,
-                    End = tempDate.AddDays(7),
-                    DaysOfWeek = daysOfWeek,
-                    TODStartHour = TODStartHour,
-                    TODStartMinute = TODStartMinute,
-                    TODEndHour = TODEndHour,
-                    TODEndMinute = TODEndMinute,
-                    Dates = GetDateList(daysOfWeek, tempDate, tempDate.AddDays(7))
-                };
-
-                Bins.Add(bin);
-
-                tempDate = tempDate.AddDays(7);
-
-            }
-        }
-
-        private void CreateYearBins(DateTime startDate, DateTime endDate, List<DayOfWeek> daysOfWeek)
-        {
-            DateTime tempDate = startDate;
-
-            while (tempDate <= endDate)
-            {
-                LargeBin bin = new LargeBin
-                {
-                    Start = tempDate,
-                    End = tempDate.AddYears(1),
-                    DaysOfWeek = daysOfWeek,
-                    TODStartHour = TODStartHour,
-                    TODStartMinute = TODStartMinute,
-                    TODEndHour = TODEndHour,
-                    TODEndMinute = TODEndMinute,
-                    Dates = GetDateList(daysOfWeek, tempDate, tempDate.AddYears(1))
-                };
-
-                Bins.Add(bin);
-
-                tempDate = tempDate.AddYears(1);
-
-            }
-             
-        }
-
-        private void CreateMonthBins(DateTime startDate, DateTime endDate, List<DayOfWeek> daysOfWeek)
-        {
-            DateTime tempDate = startDate;
-
-            while (tempDate <= endDate)
-            {
-                LargeBin bin = new LargeBin
-                {
-                    Start = tempDate,
-                    End = tempDate.AddMonths(1),
-                    DaysOfWeek = daysOfWeek,
-                    TODStartHour = TODStartHour,
-                    TODStartMinute = TODStartMinute,
-                    TODEndHour = TODEndHour,
-                    TODEndMinute = TODEndMinute,
-                    Dates = GetDateList(daysOfWeek, tempDate, tempDate.AddMonths(1))
-                };
-
-                Bins.Add(bin);
-
-                tempDate = tempDate.AddMonths(1);
-
-            }
-
-        }
-
-
-
-
-        private List<DateTime>  GetDateList(List<DayOfWeek> daysOfWeek, DateTime startDay, DateTime endDay )
-        {
-            List<DateTime> dtList = new List<DateTime>();
-            DateTime tempDate = startDay;
-
-            while (tempDate <= endDay)
-            {
-                if (daysOfWeek.Contains(tempDate.DayOfWeek))
-                {
-                    dtList.Add(tempDate);
-                }
-                tempDate = tempDate.AddDays(1);
-            }
-
-            return dtList;
-        }
-
-
-
     }
+    public static class BinFactory
+    {
+        public static BinsContainer GetBins(BinFactoryOptions timeOptions)
+        {
+            switch (timeOptions.BinSize)
+            {
+                case BinFactoryOptions.BinSizes.FifteenMinutes:
+                    return GetBinsForRange(timeOptions, 15);
+                case BinFactoryOptions.BinSizes.ThirtyMinutes:
+                    return GetBinsForRange(timeOptions, 30);
+                case BinFactoryOptions.BinSizes.Hour:
+                    return GetBinsForRange(timeOptions, 60);
+                case BinFactoryOptions.BinSizes.Day:
+                    return GetBinsForRange(timeOptions, 60*24);
+                case BinFactoryOptions.BinSizes.Week:
+                    return GetBinsForRange(timeOptions, 60*24*7);
+                case BinFactoryOptions.BinSizes.Month:
+                    return GetMonthBinsForRange(timeOptions);
+                case BinFactoryOptions.BinSizes.Year:
+                    return CreateYearBinsForRange(timeOptions);
+                default:
+                    return GetBinsForRange(timeOptions, 15);
+            }
+        }
 
+        private static BinsContainer CreateYearBinsForRange(BinFactoryOptions timeOptions)
+        {
+            BinsContainer binsContainer = new BinsContainer();
+            List < Bin > bins = new List<Bin>();
+            for (DateTime startTime = new DateTime(timeOptions.Start.Year,1,1); startTime.Year <= timeOptions.End.Year; startTime = startTime.AddYears(1))
+            {
+                if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
+                {
+                    bins.Add(new Bin {Start = startTime, End = startTime.AddYears(1)});
+                }
+                else
+                {
+                    if (timeOptions.DaysOfWeek.Contains(startTime.DayOfWeek) &&
+                        startTime.TimeOfDay >= timeOptions.Start.TimeOfDay &&
+                        startTime.TimeOfDay <= timeOptions.End.TimeOfDay)
+                    {
+                        bins.Add(new Bin { Start = startTime, End = startTime.AddYears(1) });
+                    }
+                }
+            }
+            binsContainer.Bins = bins;
+            return binsContainer;
+        }
 
+        private static BinsContainer GetMonthBinsForRange(BinFactoryOptions timeOptions)
+        {
+            BinsContainer binsContainer = new BinsContainer();
+            List < Bin > bins = new List<Bin>();
+            for (DateTime startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month,1); startTime.Year <= timeOptions.End.Year && startTime.Month <= timeOptions.End.Month; startTime = startTime.AddMonths(1))
+            {
+                if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
+                {
+                    bins.Add(new Bin {Start = startTime, End = startTime.AddMonths(1)});
+                }
+                else
+                {
+                    if (timeOptions.DaysOfWeek.Contains(startTime.DayOfWeek) &&
+                        startTime.TimeOfDay >= timeOptions.Start.TimeOfDay &&
+                        startTime.TimeOfDay <= timeOptions.End.TimeOfDay)
+                    {
+                        bins.Add(new Bin { Start = startTime, End = startTime.AddMonths(1) });
+                    }
+                }
+            }
+            binsContainer.Bins = bins;
+            return binsContainer;
+        }
+
+        private static BinsContainer GetBinsForRange(BinFactoryOptions timeOptions, int minutes)
+        {
+            BinsContainer binsContainer = new BinsContainer();
+            TimeSpan startTimeSpan = new TimeSpan();
+            TimeSpan endTimeSpan = new TimeSpan();
+            if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod &&
+                timeOptions.TimeOfDayStartHour != null &&
+                timeOptions.TimeOfDayStartMinute != null &&
+                timeOptions.TimeOfDayEndHour != null &&
+                timeOptions.TimeOfDayEndMinute != null)
+            {
+                startTimeSpan = new TimeSpan(0, timeOptions.TimeOfDayStartHour.Value,
+                    timeOptions.TimeOfDayStartMinute.Value, 0);
+                endTimeSpan = new TimeSpan(0, timeOptions.TimeOfDayEndHour.Value,
+                    timeOptions.TimeOfDayEndMinute.Value, 0);
+            }
+            
+            List<Bin> bins = new List<Bin>();
+            for (DateTime startTime = timeOptions.Start; startTime < timeOptions.End; startTime = startTime.AddMinutes(minutes))
+            {
+                if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
+                {
+                    bins.Add(new Bin {Start = startTime, End = startTime.AddMinutes(minutes)});
+                }
+                else
+                {
+                    
+                    TimeSpan periodStartTimeSpan = new TimeSpan(0, startTime.Hour,
+                        startTime.Minute, 0);
+                    if (timeOptions.DaysOfWeek.Contains(startTime.DayOfWeek) &&
+                        periodStartTimeSpan >= startTimeSpan &&
+                        periodStartTimeSpan < endTimeSpan)
+                    {
+                        bins.Add(new Bin { Start = startTime, End = startTime.AddMinutes(minutes) });
+                    }
+                }
+            }
+            binsContainer.Bins = bins;
+            return binsContainer;
+        }
+    }
 }

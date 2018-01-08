@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace MOE.Common.Models.Repositories
 {
@@ -21,14 +22,18 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public List<ApproachSplitFailAggregation> GetApproachSplitFailAggregationByVersionIdAndDateRange(int approachId, DateTime start, DateTime end)
+        public int GetApproachSplitFailAggregationByVersionIdAndDateRange(int approachId, DateTime start, DateTime end)
         {
-            var records = (from r in this._db.ApproachSplitFailAggregations
-                           where r.ApproachId == approachId
-                      && r.BinStartTime >= start && r.BinStartTime <= end
-                select r).ToList();
-
-            return records;
+            int splitFails = 0;
+            if (_db.ApproachSplitFailAggregations.Any(r => r.ApproachId == approachId
+                                                           && r.BinStartTime >= start && r.BinStartTime <= end))
+            {
+                splitFails = _db.ApproachSplitFailAggregations.Where(r => r.ApproachId == approachId
+                                                                              && r.BinStartTime >= start &&
+                                                                              r.BinStartTime <= end)
+                    .Sum(r => r.SplitFailures);
+            }
+            return splitFails;
         }
 
         public void Remove(ApproachSplitFailAggregation approachSplitFailAggregation)

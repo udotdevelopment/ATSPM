@@ -79,10 +79,39 @@ namespace MOE.Common.Models.Repositories
             _db.SaveChanges();
         }
 
+        public List<Signal> GetSignalsBetweenDates(string signalId, DateTime startDate, DateTime endDate)
+        {
+            List<Models.Signal> signals = new List<Signal>();
+            Models.Signal signalBeforeStart = _db.Signals
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.MovementType)))
+                .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                .Where(signal => signal.SignalID == signalId
+                                 && signal.Start <= startDate
+                                 && signal.VersionActionId != 3).OrderByDescending(s => s.Start)
+                                 .Take(1)
+                                 .FirstOrDefault();
+            if (signalBeforeStart != null)
+            {
+                signals.Add(signalBeforeStart);
+            }
+            if (_db.Signals.Any(signal => signal.SignalID == signalId
+                                 && signal.Start > startDate
+                                 && signal.Start < endDate
+                                 && signal.VersionActionId != 3))
+            {
+                signals.AddRange(_db.Signals
+                    .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.MovementType)))
+                    .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                    .Where(signal => signal.SignalID == signalId
+                                     && signal.Start > startDate
+                                     && signal.Start < endDate
+                                     && signal.VersionActionId != 3).ToList());
+            }
+            return signals;
+        }
+
         public Signal CopySignalToNewVersion(Signal originalVersion)
         {
-
-
             Common.Models.Signal newVersion = new Signal();
 
             originalVersion.VersionAction = (from r in _db.VersionActions

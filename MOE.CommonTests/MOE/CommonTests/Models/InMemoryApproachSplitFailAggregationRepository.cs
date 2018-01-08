@@ -20,13 +20,13 @@ namespace MOE.CommonTests.Models
             _db = context;
         }
 
-        public List<ApproachSplitFailAggregation> GetApproachSplitFailAggregationByVersionIdAndDateRange(int approachId, DateTime start, DateTime end)
+        public int GetApproachSplitFailAggregationByVersionIdAndDateRange(int approachId, DateTime start, DateTime end)
         {
          
                 var records = (from r in this._db.ApproachSplitFailAggregations
                     where r.ApproachId == approachId
                           && r.BinStartTime >= start && r.BinStartTime <= end
-                    select r).ToList();
+                    select r).Sum(r => r.SplitFailures);
 
                 return records;
             

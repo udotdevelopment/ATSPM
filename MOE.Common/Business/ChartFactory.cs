@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business.Bins;
 using MOE.Common.Business.DataAggregation;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
@@ -33,7 +34,7 @@ namespace MOE.Common.Business
 
                 bin.Start = timeX;
 
-                timeX = timeX.AddMinutes(options.BinSize);
+                //timeX = timeX.AddMinutes(options.BinSize);
 
                 bin.End = timeX;
 
@@ -76,7 +77,7 @@ namespace MOE.Common.Business
         {
             Chart chart = new Chart();
             SetImageProperties(chart);
-            chart.ChartAreas.Add(CreateSplitFailAggregationChartArea(options));
+            chart.ChartAreas.Add(CreateTimeXIntYChartArea(options));
 
 
 
@@ -97,16 +98,16 @@ namespace MOE.Common.Business
             Chart chart = new Chart();
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateSplitFailChartArea(options));
-            SetSplitFailLegend(chart);
+            SetLegend(chart);
             return chart;
         }
 
-        public static Chart CreateSplitFailureAggregationChart(ApproachSplitFailAggregationOptions options)
+        public static Chart CreateTimeXIntYChart(AggregationMetricOptions options)
         {
             Chart chart = new Chart();
             SetImageProperties(chart);
-            chart.ChartAreas.Add(CreateSplitFailAggregationChartArea(options));
-            //SetSplitFailAggregationLegend(chart);
+            chart.ChartAreas.Add(CreateTimeXIntYChartArea(options));
+            SetLegend(chart);
             return chart;
         }
 
@@ -192,10 +193,10 @@ namespace MOE.Common.Business
             IApproachSplitFailAggregationRepository Repo = ApproachSplitFailAggregationRepositoryFactory.Create();
             if (approach != null)
             { 
-                List<ApproachSplitFailAggregation> aggregations =
-                    Repo.GetApproachSplitFailAggregationByVersionIdAndDateRange(
-                        approach.ApproachID, options.StartDate, options.EndDate);
-                return aggregations;
+                //List<ApproachSplitFailAggregation> aggregations =
+                //    Repo.GetApproachSplitFailAggregationByVersionIdAndDateRange(
+                //        approach.ApproachID, options.StartDate, options.EndDate);
+                //return aggregations;
             }
             return null;
         }
@@ -244,7 +245,7 @@ namespace MOE.Common.Business
             return s;
         }
 
-        private static void SetSplitFailLegend(Chart chart)
+        private static void SetLegend(Chart chart)
         {
             Legend chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
@@ -262,13 +263,12 @@ namespace MOE.Common.Business
             return chartArea;
         }
 
-        private static ChartArea CreateSplitFailAggregationChartArea(AggregationMetricOptions options)
+        private static ChartArea CreateTimeXIntYChartArea(AggregationMetricOptions options)
         {
             ChartArea chartArea = new ChartArea();
             chartArea.Name = "ChartArea1";
-            SetSplitFailAggregationYAxis(chartArea, options);
-            SetSplitFailAggregationXAxis(chartArea, options);
-    
+            SetIntYAxis(chartArea, options);
+            SetTimeXAxis(chartArea, options);
             return chartArea;
         }
 
@@ -331,7 +331,7 @@ namespace MOE.Common.Business
             chartArea.AxisY.Interval = 10;
         }
 
-        private static void SetSplitFailAggregationYAxis(ChartArea chartArea, AggregationMetricOptions options)
+        private static void SetIntYAxis(ChartArea chartArea, AggregationMetricOptions options)
         {
             if (options.YAxisMax != null)
             {
@@ -353,29 +353,34 @@ namespace MOE.Common.Business
             {
                 chartArea.AxisY.Title = "";
             }
-
             chartArea.AxisY.Minimum = 0;
-            chartArea.AxisY.Interval = 10;
         }
-        private static void SetSplitFailAggregationXAxis(ChartArea chartArea, AggregationMetricOptions options)
+        private static void SetTimeXAxis(ChartArea chartArea, AggregationMetricOptions options)
         {
             var reportTimespan = options.EndDate - options.StartDate;
             chartArea.AxisX.Title = "Time (Hour of Day)";
-            chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX.LabelStyle.Format = "HH";
+            switch (options.TimeOptions.BinSize)
+            {
+                case BinFactoryOptions.BinSizes.FifteenMinutes:
+                    chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
+                    chartArea.AxisX.LabelStyle.Format = "MM/dd/yyyy HH:mm";
+                    break;
+                case BinFactoryOptions.BinSizes.Month:
+                    chartArea.AxisX.IntervalType = DateTimeIntervalType.Months;
+                    chartArea.AxisX.LabelStyle.Format = "MM/yyyy";
+                    break;
+                case BinFactoryOptions.BinSizes.Year:
+                    chartArea.AxisX.IntervalType = DateTimeIntervalType.Years;
+                    chartArea.AxisX.LabelStyle.Format = "yyyy";
+                    break;
+                default:
+                    chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
+                    chartArea.AxisX.LabelStyle.Format = "HH";
+                break;
+            }
             chartArea.AxisX.Minimum = options.StartDate.ToOADate();
             chartArea.AxisX.Maximum = options.EndDate.ToOADate();
-            if (reportTimespan.Days < 1)
-            {
-                if (reportTimespan.Hours > 1)
-                {
-                    chartArea.AxisX.Interval = 1;
-                }
-                else
-                {
-                    chartArea.AxisX.LabelStyle.Format = "HH:mm";
-                }
-            }
+            chartArea.AxisX.Interval = 1;
         }
 
         private static void SetImageProperties(Chart chart)
@@ -466,10 +471,7 @@ namespace MOE.Common.Business
         {
             Series s = new Series();
             s.ChartType = SeriesChartType.Line;
-
-
             s.Color = seriesColor;
-
             return s;
         }
 
@@ -477,10 +479,7 @@ namespace MOE.Common.Business
         {
             Series s = new Series();
             s.ChartType = SeriesChartType.StackedArea;
-
-
             s.Color = seriesColor;
-
             return s;
         }
 
@@ -488,10 +487,7 @@ namespace MOE.Common.Business
         {
             Series s = new Series();
             s.ChartType = SeriesChartType.Column;
-
-
             s.Color = seriesColor;
-
             return s;
         }
 
@@ -499,13 +495,36 @@ namespace MOE.Common.Business
         {
             Series s = new Series();
             s.ChartType = SeriesChartType.StackedColumn;
-
-
             s.Color = seriesColor;
-
             return s;
         }
 
 
+        public static Chart CreateStringXIntYChart(AggregationMetricOptions options)
+        {
+            Chart chart = new Chart();
+            SetImageProperties(chart);
+            chart.ChartAreas.Add(CreateStringXIntYChartArea(options));
+            SetLegend(chart);
+            return chart;
+        }
+
+        private static ChartArea CreateStringXIntYChartArea(AggregationMetricOptions options)
+        {
+            ChartArea chartArea = new ChartArea();
+            chartArea.Name = "ChartArea1";
+            SetIntYAxis(chartArea, options);
+            SetStringXAxis(chartArea, options);
+            return chartArea;
+        }
+
+        private static void SetStringXAxis(ChartArea chartArea, AggregationMetricOptions options)
+        {
+            chartArea.AxisX.Title = "Signals";
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.LabelAutoFitStyle = LabelAutoFitStyles.None;
+            chartArea.AxisX.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12);
+            chartArea.AxisX.LabelStyle.Angle = 45;
+        }
     }
 }

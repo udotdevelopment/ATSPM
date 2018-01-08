@@ -92,6 +92,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Business\ApproachSpeed\AvgSpeedBucketCollectionTests.cs" />
+    <Compile Include="Business\Bins\BinFactoryTests.cs" />
     <Compile Include="Business\ChartFactoryTests.cs" />
     <Compile Include="Business\ColorFactoryTests.cs" />
     <Compile Include="Business\Export\ExporterTests.cs" />

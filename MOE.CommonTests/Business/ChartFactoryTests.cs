@@ -70,26 +70,26 @@ namespace MOE.Common.Business.Tests
             MOE.CommonTests.Models.InMemoryApproachSplitFailAggregationRepository asfs = new InMemoryApproachSplitFailAggregationRepository(_db);
             
 
-            var options = new AggregationMetricOptions();
+           // var options = new AggregationMetricOptions();
 
-            options.BinSize = 15;
-            options.StartDate = DateTime.Now.AddDays(-1);
-            options.EndDate = DateTime.Now;
-            options.Approaches.Add((from a in _db.Approaches where a.ApproachID == apprId select a).FirstOrDefault());
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-            options.AggregationSeries = AggregationMetricOptions.AggregationSeriesOptions.Approach;
-            options.GroupBy = AggregationMetricOptions.AggregationGroups.None;
+            //options.BinSize = 15;
+            //options.StartDate = DateTime.Now.AddDays(-1);
+            //options.EndDate = DateTime.Now;
+            //options.Approaches.Add((from a in _db.Approaches where a.ApproachID == apprId select a).FirstOrDefault());
+            //options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            //options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
+            //options.GroupBy = AggregationMetricOptions.XAxisTimeTypes.Hour;
 
             MOE.Common.Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.SetApplicationEventRepository(asfs);
 
-            Chart chart = ChartFactory.CreatePurdueSplitFailureAggregationChart(options);
+            //Chart chart = ChartFactory.CreatePurdueSplitFailureAggregationChart(options);
 
-            Assert.IsNotNull(chart);
+            //Assert.IsNotNull(chart);
 
             string path = @"c:\SPMImages\testchart" + DateTime.Now.Month.ToString() +"_"+ DateTime.Now.Day.ToString() 
                 + "_" + DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString() + ".jpeg";
 
-            chart.SaveImage(path);
+            //chart.SaveImage(path);
 
            Assert.IsTrue( File.Exists(path));
 

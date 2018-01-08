@@ -448,5 +448,10 @@ namespace MOE.CommonTests.Models
             }
 
         }
+
+        public List<Signal> GetSignalsBetweenDates(string signalId, DateTime startDate, DateTime endDate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

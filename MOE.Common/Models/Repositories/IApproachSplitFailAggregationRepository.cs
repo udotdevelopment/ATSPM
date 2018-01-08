@@ -5,7 +5,7 @@ namespace MOE.Common.Models.Repositories
 {
     public interface IApproachSplitFailAggregationRepository
     {
-        List<ApproachSplitFailAggregation> GetApproachSplitFailAggregationByVersionIdAndDateRange(int versionId, DateTime start,
+        int GetApproachSplitFailAggregationByVersionIdAndDateRange(int versionId, DateTime start,
             DateTime end);
         ApproachSplitFailAggregation Add(ApproachSplitFailAggregation priorityAggregation);
         void Update(ApproachSplitFailAggregation priorityAggregation);
