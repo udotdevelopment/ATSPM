@@ -335,10 +335,9 @@
     <Compile Include="Business\ApproachVolume\ApproachVolumeViewModel.cs" />
     <Compile Include="Business\ApproachVolume\MetricInfo.cs" />
     <Compile Include="Business\ArchiveMetric.cs" />
+    <Compile Include="Business\Bins\BinsContainer.cs" />
     <Compile Include="Business\Bins\Bin.cs" />
     <Compile Include="Business\Bins\BinFactory.cs" />
-    <Compile Include="Business\Bins\LargeBin.cs" />
-    <Compile Include="Business\Bins\SmallBin.cs" />
     <Compile Include="Business\BulkCopyOptions.cs" />
     <Compile Include="Business\ChartFactory.cs" />
     <Compile Include="Business\ChartTitleFactory.cs" />
