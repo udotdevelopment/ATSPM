@@ -42,11 +42,14 @@ function GetRouteMap() {
 
 function ReportTypeChange() {
     var regionDdl = $("#Regions")[0];
+    var regionMy = document.getElementById('Regions');
     CenterMap(regionDdl.options[regionDdl.selectedIndex].value);
 }
 
 function RegionChange(e) {
     CenterMap(e.options[e.selectedIndex].value);
+    var metricsMy = document.getElementById('MetricTypes');
+
 }
 
 function CenterMap(region) {
@@ -79,16 +82,16 @@ function GetMapWithCenter(lat, long, zoom) {
         zoom: zoom
     });
 
-    dataLayer = new Microsoft.Maps.EntityCollection();
+
+    dataLayer = [];
+    AddData();
     map.entities.push(dataLayer);
 
-    var infoboxLayer = new Microsoft.Maps.EntityCollection();
+    var infoboxLayer = [];
     map.entities.push(infoboxLayer);
 
     infobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), { visible: false, offset: new Microsoft.Maps.Point(0, 20) });
     infoboxLayer.push(infobox);
-
-    AddData();
 }
 
 
