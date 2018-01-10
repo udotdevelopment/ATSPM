@@ -6,7 +6,7 @@ using MOE.Common.Models.Repositories;
 
 namespace MOE.CommonTests.Models
 {
-    public class InMemoryApproachSplitFailAggregationRepository: IApproachSplitFailAggregationRepository
+    public partial class InMemoryApproachSplitFailAggregationRepository: IApproachSplitFailAggregationRepository
     {
         private InMemoryMOEDatabase _db;
 
@@ -20,16 +20,23 @@ namespace MOE.CommonTests.Models
             _db = context;
         }
 
-        public int GetApproachSplitFailAggregationByVersionIdAndDateRange(int approachId, DateTime start, DateTime end)
+        public int GetApproachSplitFailAggregationByApproachIdAndDateRange(int approachId, DateTime start,
+            DateTime end)
         {
-         
-                var records = (from r in this._db.ApproachSplitFailAggregations
-                    where r.ApproachId == approachId
-                          && r.BinStartTime >= start && r.BinStartTime <= end
-                    select r).Sum(r => r.SplitFailures);
 
-                return records;
-            
+            int splitFails = 0;
+            if (_db.ApproachSplitFailAggregations.Any(r => r.ApproachId == approachId
+                                                           && r.BinStartTime >= start && r.BinStartTime <= end))
+            {
+                splitFails = _db.ApproachSplitFailAggregations.Where(r => r.ApproachId == approachId
+                                                                          && r.BinStartTime >= start &&
+                                                                          r.BinStartTime <= end)
+                    .Sum(r => r.SplitFailures);
+            }
+            return splitFails;
+
+
+
         }
 
         public ApproachSplitFailAggregation Add(ApproachSplitFailAggregation priorityAggregation)

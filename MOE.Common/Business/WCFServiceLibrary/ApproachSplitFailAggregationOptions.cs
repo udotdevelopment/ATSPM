@@ -22,7 +22,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override void GetTimeAggregateChart(Models.Signal signal, Chart chart)
         {
-            SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this, signal, BinsContainer);
+            SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this, signal,  BinsContainer);
             int i = 1;
             foreach (var approachSplitFails in spliFailAggregationBySignal.ApproachSplitFailures)
             {
@@ -100,12 +100,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 series.ChartArea = "ChartArea1";
                 SetSeriestype(series);
                 spliFailAggregationBySignal.GetSplitFailuresByBin(BinsContainer);
-                foreach (var bin in BinsContainer.Bins)
-                {
-                    series.Points.AddXY(bin.Start, bin.Value);
-                }
-                chart.Series.Add(series);
-                i++;
+
+
+
+                    foreach (var bin in BinsContainer.Bins)
+                    {
+                        series.Points.AddXY(bin.Start, bin.Value);
+                    }
+                    chart.Series.Add(series);
+                    i++;
+                
             }
         }
 

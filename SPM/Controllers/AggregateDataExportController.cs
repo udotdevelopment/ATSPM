@@ -64,19 +64,20 @@ namespace SPM.Controllers
 
         private AggregationMetricOptions SetOptionFromVm(AggDataExportViewModel vm)
         {
-            MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions options
-                = new AggregationMetricOptions();
-            //options.Approaches = vm.ApproachTypeIDs;
-            //options.BinSize = vm.SelectedBinSize;
-            //options.ChartType = vm.ChartType;
-            //options.GroupBy = ;
-            //options.Detectors = ;
-            //options.Signals = ;
-            options.EndDate = vm.EndDateDay;
-            //options.MetricTypeID = ;
-            //options.SignalID = ;
-            options.StartDate = vm.StartDateDay;
-            return options;
+            //MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions options
+            //    = new AggregationMetricOptions();
+            ////options.Approaches = vm.ApproachTypeIDs;
+            ////options.BinSize = vm.SelectedBinSize;
+            ////options.ChartType = vm.ChartType;
+            ////options.GroupBy = ;
+            ////options.Detectors = ;
+            ////options.Signals = ;
+            //options.EndDate = vm.EndDateDay;
+            ////options.MetricTypeID = ;
+            ////options.SignalID = ;
+            //options.StartDate = vm.StartDateDay;
+            //return options;
+            return null;
 
         }
 

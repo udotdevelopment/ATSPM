@@ -19,16 +19,20 @@ namespace MOE.Common.Business.DataAggregation
 
         public void GetSplitFailuresByBin(BinsContainer binsContainer)
         {
-            foreach (var bin in binsContainer.Bins)
-            {
-                int summedSplitFailures = 0;
-                foreach (var approachSplitFail in ApproachSplitFailures)
+
+
+
+                foreach (var bin in binsContainer.Bins)
                 {
-                    summedSplitFailures += approachSplitFail.BinsContainer.Bins.Where(a => a.Start == bin.Start)
-                        .Sum(a => a.Value);
+                    int summedSplitFailures = 0;
+                    foreach (var approachSplitFail in ApproachSplitFailures)
+                    {
+                        summedSplitFailures += approachSplitFail.BinsContainer.Bins.Where(a => a.Start == bin.Start)
+                            .Sum(a => a.Value);
+                    }
+                    bin.Value = summedSplitFailures;
                 }
-                bin.Value = summedSplitFailures;
-            }
+            
         }
 
 
@@ -74,14 +78,17 @@ namespace MOE.Common.Business.DataAggregation
             Approach = approach;
             var splitFailAggregationRepository =
                 MOE.Common.Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.Create();
-            foreach (var bin in binsContainer.Bins)
-            {
 
-                var splitFails = splitFailAggregationRepository.GetApproachSplitFailAggregationByVersionIdAndDateRange(
-                    approach.ApproachID, bin.Start, bin.End);
-                BinsContainer.Bins.Add(new Bin{Start = bin.Start, End = bin.End, Value = splitFails});
 
-            }
+                foreach (var bin in BinsContainer.Bins)
+                {
+
+                    var splitFails = splitFailAggregationRepository
+                        .GetApproachSplitFailAggregationByApproachIdAndDateRange(
+                            approach.ApproachID, bin.Start, bin.End);
+                    BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Value = splitFails});
+
+                }
         }
         
 

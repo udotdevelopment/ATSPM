@@ -27,9 +27,18 @@ namespace MOE.CommonTests.Models
         public List<Common.Models.LaneType> LaneTypes = new List<Common.Models.LaneType>();
         public List<Common.Models.DetectionHardware> DetectionHardwares = new List<Common.Models.DetectionHardware>();
         public List<Common.Models.ApplicationEvent> ApplicaitonEvents = new List<ApplicationEvent>();
-        public List<Common.Models.ApproachSpeedAggregation> ApproachSpeedAggregations = new List<ApproachSpeedAggregation>();
+
         public List<Common.Models.ApproachCycleAggregation> ApproachCycleAggregations = new List<ApproachCycleAggregation>();
+        public List<Common.Models.ApproachPcdAggregation>   ApproachPcdAggregations = new List<ApproachPcdAggregation>();
+        public List<Common.Models.ApproachSpeedAggregation>     ApproachSpeedAggregations = new List<ApproachSpeedAggregation>();
         public List<Common.Models.ApproachSplitFailAggregation> ApproachSplitFailAggregations = new List<ApproachSplitFailAggregation>();
+        public List<Common.Models.ApproachYellowRedActivationAggregation> ApproachYellowRedActivationAggregation
+            = new List<ApproachYellowRedActivationAggregation>();
+        public List<Common.Models.PreemptionAggregation> PreemptionAggregations = new List<PreemptionAggregation>();
+
+        public List<Common.Models.PriorityAggregation> PriorityAggregations = new List<PriorityAggregation>();
+
+
         public List<Common.Models.Route> Routes = new List<Route>();
         public List<Common.Models.RouteSignal> RouteSignals = new List<RouteSignal>();
         public List<Common.Models.RoutePhaseDirection> RoutePhaseDirection = new List<RoutePhaseDirection>();
@@ -43,6 +52,52 @@ namespace MOE.CommonTests.Models
             ApproachSplitFailAggregations.Clear();
             ApproachCycleAggregations.Clear();
             ApproachSpeedAggregations.Clear();
+            ApproachPcdAggregations.Clear();
+            ApproachSpeedAggregations.Clear();
+            ApproachYellowRedActivationAggregation.Clear();
+            PreemptionAggregations.Clear();
+            PriorityAggregations.Clear();
+
+
+        }
+
+        public void PopulateApproachSplitFailAggregations(DateTime start, DateTime end, int approachId)
+        {
+            for (DateTime startTime = start.Date; startTime <= end.Date.AddHours(23).AddMinutes(59); startTime = startTime.AddMinutes(15))
+            {
+                ApproachSplitFailAggregation r = new ApproachSplitFailAggregation();
+                r.ApproachId = approachId;
+                r.BinStartTime = startTime;
+                r.ForceOffs = rnd.Next(1, 200);
+                r.GapOuts = rnd.Next(1, 200);
+                r.MaxOuts = rnd.Next(1, 200);
+                r.SplitFailures = rnd.Next(1, 200);
+                r.UnknownTerminationTypes = rnd.Next(0, 3);
+                r.IsProtectedPhase = false;
+
+                ApproachSplitFailAggregations.Add(r);
+            }
+
+
+        }
+
+        public void PopulateApproachCycleAggregations(DateTime start, DateTime end, int approachId)
+        {
+            for (DateTime startTime = start.Date; startTime <= end; startTime = startTime.AddMinutes(15))
+            {
+                ApproachCycleAggregation r = new ApproachCycleAggregation();
+                r.ApproachId = approachId;
+                r.BinStartTime = startTime;
+                r.GreenTime = rnd.Next(1, 200);
+                r.PedActuations = rnd.Next(1, 200);
+                r.RedTime = rnd.Next(1, 200);
+                r.TotalCycles = rnd.Next(1, 15);
+                r.YellowTime = rnd.Next(1, 200);
+                r.IsProtectedPhase = false;
+
+                ApproachCycleAggregations.Add(r);
+            }
+
 
         }
 
@@ -804,5 +859,8 @@ namespace MOE.CommonTests.Models
 
 
         }
+
+        
+
     }
 }

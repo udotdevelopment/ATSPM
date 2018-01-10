@@ -194,7 +194,7 @@ namespace MOE.Common.Business
             if (approach != null)
             { 
                 //List<ApproachSplitFailAggregation> aggregations =
-                //    Repo.GetApproachSplitFailAggregationByVersionIdAndDateRange(
+                //    Repo.GetApproachSplitFailAggregationByApproachIdAndDateRange(
                 //        approach.ApproachID, options.StartDate, options.EndDate);
                 //return aggregations;
             }
@@ -365,13 +365,30 @@ namespace MOE.Common.Business
                     chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
                     chartArea.AxisX.LabelStyle.Format = "MM/dd/yyyy HH:mm";
                     break;
+                case BinFactoryOptions.BinSizes.Hour:
+                    chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
+                    chartArea.AxisX.LabelStyle.Format = "HH";
+                    break;
+                case BinFactoryOptions.BinSizes.Day:
+                    chartArea.AxisX.IntervalType = DateTimeIntervalType.Days;
+                    chartArea.AxisX.LabelStyle.Format = "dd";
+                    chartArea.AxisX.Title = "Day of Month";
+                    break;
+                case BinFactoryOptions.BinSizes.Week:
+                    chartArea.AxisX.IntervalType = DateTimeIntervalType.Weeks;
+                    chartArea.AxisX.LabelStyle.Format = "MM/dd/yy";
+                    
+                    chartArea.AxisX.Title = "Start of Week";
+                    break;
                 case BinFactoryOptions.BinSizes.Month:
                     chartArea.AxisX.IntervalType = DateTimeIntervalType.Months;
-                    chartArea.AxisX.LabelStyle.Format = "MM/yyyy";
+                    chartArea.AxisX.LabelStyle.Format = "MM/yyyy";                 
+                    chartArea.AxisX.Title = "Month and Year";
                     break;
                 case BinFactoryOptions.BinSizes.Year:
                     chartArea.AxisX.IntervalType = DateTimeIntervalType.Years;
                     chartArea.AxisX.LabelStyle.Format = "yyyy";
+                    chartArea.AxisX.Title = "Year";
                     break;
                 default:
                     chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;

@@ -22,7 +22,7 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public int GetApproachSplitFailAggregationByVersionIdAndDateRange(int approachId, DateTime start, DateTime end)
+        public int GetApproachSplitFailAggregationByApproachIdAndDateRange(int approachId, DateTime start, DateTime end)
         {
             int splitFails = 0;
             if (_db.ApproachSplitFailAggregations.Any(r => r.ApproachId == approachId

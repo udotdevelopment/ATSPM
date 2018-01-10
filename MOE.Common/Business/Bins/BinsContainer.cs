@@ -11,6 +11,8 @@ namespace MOE.Common.Business.Bins
         public List<Bin> Bins { get; set; } = new List<Bin>();
         public int SumValue { get { return Bins.Sum(b => b.Value); }}
         public int AverageValue { get { return Convert.ToInt32(Math.Round(Bins.Average(b => b.Value))); } }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
 
     }
 }

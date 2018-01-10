@@ -14,16 +14,16 @@ namespace MOE.Common.Business.DataAggregation
         {
             Container = new List<SpliFailAggregationBySignal>();
 
-            foreach (var sig in options.Signals)
-            {
-                options.SignalID = sig.SignalID;
-                var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-                Models.Signal signal = signalRepository.GetVersionOfSignalByDate(sig.SignalID, options.StartDate);
+            //foreach (var sig in options.Signals)
+            //{
+            //    options.SignalID = sig.SignalID;
+            //    var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            //    Models.Signal signal = signalRepository.GetVersionOfSignalByDate(sig.SignalID, options.StartDate);
 
-                SpliFailAggregationBySignal signalAggregation = new SpliFailAggregationBySignal(options);
+            //    SpliFailAggregationBySignal signalAggregation = new SpliFailAggregationBySignal(options);
 
-                Container.Add(signalAggregation);
-            }
+            //    Container.Add(signalAggregation);
+            //}
 
         }
         
@@ -43,7 +43,7 @@ namespace MOE.Common.Business.DataAggregation
             //Approach = approach;
             //var splitFailAggregationRepository =
             //    MOE.Common.Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.Create();
-            //SplitFails = splitFailAggregationRepository.GetApproachSplitFailAggregationByVersionIdAndDateRange(
+            //SplitFails = splitFailAggregationRepository.GetApproachSplitFailAggregationByApproachIdAndDateRange(
             //    approach.ApproachID, start, end);
         }
     }
