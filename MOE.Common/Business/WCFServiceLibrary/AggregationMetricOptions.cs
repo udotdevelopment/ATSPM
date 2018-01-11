@@ -58,7 +58,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
             TSP,
             DataQuality
         }
-        
+        public enum AggregationGroups
+        {
+            Hour,
+            Day,
+            Month,
+            Year,
+            None,
+            Signal
+        }
+
         public AggregationMetricOptions()
         {
         }
