@@ -24,8 +24,8 @@ namespace SPM.Models
         public virtual ICollection<DirectionType> AllApproachTypes { get; set; }
         public virtual List<int> MovementTypeIDs { get; set; }
         public virtual ICollection<MovementType> AllMovementTypes { get; set; }
-        //public MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.AggregationSeriesOptions AggSeriesOptions { get; set; }
-        //public MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.AggregationGroups AggGroups { get; set; }
+        public MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.XAxisAggregationSeriesOptions AggSeriesOptions { get; set; }
+        public MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.AggregationGroups AggGroups { get; set; }
         public virtual List<int> LaneTypeIDs { get; set; }
         public virtual ICollection<LaneType> AllLaneTypes { get; set; }
         //public List<SelectListItem> AggregateMetricsList { get; set; }

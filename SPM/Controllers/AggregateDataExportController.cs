@@ -52,34 +52,34 @@ namespace SPM.Controllers
                 MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
             vm.Routes = routeRepository.GetAllRoutes();
 
-            MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions options
-                = SetOptionFromVm(vm);
+            //MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions options
+            //    = SetOptionFromVm(vm);
             if (Request.Form["Create"] != null)
             {
                 //Create agg data export report
-                MOE.Common.Business.ChartFactory.CreateLaneByLaneAggregationChart(options);
+
+              //  MOE.Common.Business.ChartFactory.CreateLaneByLaneAggregationChart(options);
             }
             return View(vm);
         }
 
-        private AggregationMetricOptions SetOptionFromVm(AggDataExportViewModel vm)
-        {
-            //MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions options
-            //    = new AggregationMetricOptions();
-            ////options.Approaches = vm.ApproachTypeIDs;
-            ////options.BinSize = vm.SelectedBinSize;
-            ////options.ChartType = vm.ChartType;
-            ////options.GroupBy = ;
-            ////options.Detectors = ;
-            ////options.Signals = ;
-            //options.EndDate = vm.EndDateDay;
-            ////options.MetricTypeID = ;
-            ////options.SignalID = ;
-            //options.StartDate = vm.StartDateDay;
-            //return options;
-            return null;
+        //private AggregationMetricOptions SetOptionFromVm(AggDataExportViewModel vm)
+        //{
+        //    //MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions options
+        //    //    = new AggregationMetricOptions();
+        //    ////options.Approaches = vm.ApproachTypeIDs;
+        //    ////options.BinSize = vm.SelectedBinSize;
+        //    ////options.ChartType = vm.ChartType;
+        //    ////options.GroupBy = ;
+        //    ////options.Detectors = ;
+        //    ////options.Signals = ;
+        //    //options.EndDate = vm.EndDateDay;
+        //    ////options.MetricTypeID = ;
+        //    ////options.SignalID = ;
+        //    //options.StartDate = vm.StartDateDay;
+        //    //return options;
 
-        }
+        //}
 
         public ActionResult AggregateDataExport()
         {
