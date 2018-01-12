@@ -30,12 +30,14 @@ namespace MOE.CommonTests.Models
 
         public List<RoutePhaseDirection> GetAll()
         {
-            throw new System.NotImplementedException();
+            List<RoutePhaseDirection> list = _db.RoutePhaseDirection;
+            return list;
         }
 
         public RoutePhaseDirection GetByID(int routeID)
         {
-            throw new System.NotImplementedException();
+            RoutePhaseDirection pd = _db.RoutePhaseDirection.Find(r => r.Id == routeID);
+            return pd;
         }
 
         public void Update(RoutePhaseDirection routePhaseDirection)

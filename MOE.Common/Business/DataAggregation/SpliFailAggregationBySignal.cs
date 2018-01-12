@@ -80,7 +80,7 @@ namespace MOE.Common.Business.DataAggregation
                 MOE.Common.Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.Create();
 
 
-                foreach (var bin in BinsContainer.Bins)
+                foreach (var bin in binsContainer.Bins)
                 {
 
                     var splitFails = splitFailAggregationRepository

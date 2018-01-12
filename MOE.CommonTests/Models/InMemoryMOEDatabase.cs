@@ -32,7 +32,7 @@ namespace MOE.CommonTests.Models
         public List<Common.Models.ApproachPcdAggregation>   ApproachPcdAggregations = new List<ApproachPcdAggregation>();
         public List<Common.Models.ApproachSpeedAggregation>     ApproachSpeedAggregations = new List<ApproachSpeedAggregation>();
         public List<Common.Models.ApproachSplitFailAggregation> ApproachSplitFailAggregations = new List<ApproachSplitFailAggregation>();
-        public List<Common.Models.ApproachYellowRedActivationAggregation> ApproachYellowRedActivationAggregation
+        public List<Common.Models.ApproachYellowRedActivationAggregation> ApproachYellowRedActivationAggregations
             = new List<ApproachYellowRedActivationAggregation>();
         public List<Common.Models.PreemptionAggregation> PreemptionAggregations = new List<PreemptionAggregation>();
 
@@ -54,28 +54,104 @@ namespace MOE.CommonTests.Models
             ApproachSpeedAggregations.Clear();
             ApproachPcdAggregations.Clear();
             ApproachSpeedAggregations.Clear();
-            ApproachYellowRedActivationAggregation.Clear();
+            ApproachYellowRedActivationAggregations.Clear();
             PreemptionAggregations.Clear();
             PriorityAggregations.Clear();
 
 
         }
 
+        public void PopulatePreemptionAggregations(DateTime start, DateTime end, string signalId, int versionId)
+        {
+            for (DateTime startTime = start.Date; startTime <= end.Date.AddHours(23).AddMinutes(59); startTime = startTime.AddMinutes(15))
+            {
+                PreemptionAggregation r = new PreemptionAggregation();
+                r.VersionId = versionId;
+                r.SignalId = signalId;
+                r.BinStartTime = startTime;
+                r.PreemptNumber = rnd.Next(1, 200);
+                r.PreemptServices = rnd.Next(1, 200);
+
+
+                PreemptionAggregations.Add(r);
+            }
+
+
+        }
+
+        public void PopulatePriorityAggregations(DateTime start, DateTime end, string signalId, int versionId)
+        {
+            for (DateTime startTime = start.Date; startTime <= end.Date.AddHours(23).AddMinutes(59); startTime = startTime.AddMinutes(15))
+            {
+                PriorityAggregation r = new PriorityAggregation();
+                r.VersionId = versionId;
+                r.SignalID = signalId;
+                r.BinStartTime = startTime;
+                r.PriorityNumber = rnd.Next(1, 64);
+                r.PriorityRequests = rnd.Next(1, 200);
+                r.PriorityServiceEarlyGreen = rnd.Next(1, 200);
+                r.PriorityServiceExtendedGreen = rnd.Next(1, 200);
+                r.TotalCycles = rnd.Next(1, 200);
+               
+                PriorityAggregations.Add(r);
+            }
+
+        }
+
         public void PopulateApproachSplitFailAggregations(DateTime start, DateTime end, int approachId)
         {
+            
             for (DateTime startTime = start.Date; startTime <= end.Date.AddHours(23).AddMinutes(59); startTime = startTime.AddMinutes(15))
             {
                 ApproachSplitFailAggregation r = new ApproachSplitFailAggregation();
                 r.ApproachId = approachId;
                 r.BinStartTime = startTime;
-                r.ForceOffs = rnd.Next(1, 200);
-                r.GapOuts = rnd.Next(1, 200);
-                r.MaxOuts = rnd.Next(1, 200);
-                r.SplitFailures = rnd.Next(1, 200);
+                r.ForceOffs = rnd.Next(0, 10);
+                r.GapOuts = rnd.Next(0, 10);
+                r.MaxOuts = rnd.Next(0, 10);
+                r.SplitFailures = rnd.Next(0, 5);
                 r.UnknownTerminationTypes = rnd.Next(0, 3);
                 r.IsProtectedPhase = false;
 
                 ApproachSplitFailAggregations.Add(r);
+            }
+
+
+        }
+
+        public void PopulateApproachYellowRedActivationAggregations(DateTime start, DateTime end, int approachId)
+        {
+            for (DateTime startTime = start.Date; startTime <= end.Date.AddHours(23).AddMinutes(59); startTime = startTime.AddMinutes(15))
+            {
+                ApproachYellowRedActivationAggregation r = new ApproachYellowRedActivationAggregation();
+                r.ApproachId = approachId;
+                r.BinStartTime = startTime;
+                r.SevereRedLightViolations = rnd.Next(0, 2);
+                r.TotalRedLightViolations = rnd.Next(0, 5);
+                r.IsProtectedPhase = false;
+
+                ApproachYellowRedActivationAggregations.Add(r);
+            }
+
+
+        }
+
+
+        public void PopulateApproachSpeedAggregations(DateTime start, DateTime end, int approachId)
+        {
+            for (DateTime startTime = start.Date; startTime <= end.Date.AddHours(23).AddMinutes(59); startTime = startTime.AddMinutes(15))
+            {
+                ApproachSpeedAggregation r = new ApproachSpeedAggregation();
+                r.ApproachId = approachId;
+                r.BinStartTime = startTime;
+                r.Speed15Th = rnd.Next(10, 20);
+                r.Speed85Th = rnd.Next(40, 60);
+                r.SpeedVolume = rnd.Next(1, 200);
+                r.SummedSpeed = rnd.Next(1, 200);
+              
+                r.IsProtectedPhase = false;
+
+                ApproachSpeedAggregations.Add(r);
             }
 
 
@@ -101,6 +177,24 @@ namespace MOE.CommonTests.Models
 
         }
 
+        public void PopulateApproachPcdAggregations(DateTime start, DateTime end, int approachId)
+        {
+            for (DateTime startTime = start.Date; startTime <= end; startTime = startTime.AddMinutes(15))
+            {
+                ApproachPcdAggregation r = new ApproachPcdAggregation();
+                r.ApproachId = approachId;
+                r.BinStartTime = startTime;
+                r.ArrivalsOnGreen = rnd.Next(1, 200);
+                r.ArrivalsOnRed = rnd.Next(1, 200);
+                r.ArrivalsOnYellow = rnd.Next(1, 200);
+                r.IsProtectedPhase = false;
+
+                ApproachPcdAggregations.Add(r);
+            }
+
+
+        }
+
 
         public InMemoryMOEDatabase()
         {
@@ -119,7 +213,7 @@ namespace MOE.CommonTests.Models
         public void PopulateRoutes()
         {
             Route r = new Route();
-            for(int i = 1; i<5; i++)
+            for(int i = 1; i<4; i++)
             {
                 r.Id = i;
                 r.RouteName = "Route - " + i.ToString();
@@ -127,7 +221,7 @@ namespace MOE.CommonTests.Models
             }
         }
 
-        public void PopulateRouteSignals()
+        public void PopulateRouteWithRouteSignals()
         {
             if (Signals.Count > 1)
             {
@@ -139,7 +233,63 @@ namespace MOE.CommonTests.Models
 
             foreach (var r in Routes)
             {
+                int rsid = 1;
+                    List<Signal> signals = (from s in Signals where s.RegionID == r.Id select s).ToList();
+                    int order = 1;
+                    foreach (var signal in signals)
+                    {
+                        RouteSignal rs = new RouteSignal();
+                        rs.Order = order;
+                        rs.RouteId = r.Id;
+                        rs.SignalId = signal.SignalID;
+                        order++;
+                        rs.Id = rsid;
+                        RouteSignals.Add(rs);
+                        rsid++;
+                    }
+
                 
+            }
+        }
+
+        public void PopulateRouteSignalsWithPhaseDirection()
+        {
+            int pdid = 1;
+            foreach (var rs in RouteSignals)
+            {
+                RoutePhaseDirection rpd = new RoutePhaseDirection();
+                for (int i = 1; i < 4; i++)
+                {
+                    rpd.DirectionTypeId = i;
+                    rpd.IsOverlap = false;
+                    rpd.RouteSignalId = rs.Id;
+                    switch (i)
+                    {
+                        case 1:
+                            rpd.IsPrimaryApproach = true;
+                            rpd.IsOverlap = false;
+                            rpd.Phase = 2;
+                            break;
+                        case 2:
+                            rpd.IsPrimaryApproach = false;
+                            rpd.IsOverlap = false;
+                            rpd.Phase = 4;
+                            break;
+                        case 3:
+                            rpd.IsPrimaryApproach = false;
+                            rpd.IsOverlap = false;
+                            rpd.Phase = 6;
+                            break;
+                        case 4:
+                            rpd.IsPrimaryApproach = false;
+                            rpd.IsOverlap = false;
+                            rpd.Phase = 8;
+                            break;
+
+                    }
+                    pdid++;
+                    RoutePhaseDirection.Add(rpd);
+                }
             }
         }
 
@@ -455,14 +605,45 @@ namespace MOE.CommonTests.Models
 
                 s.SignalID = "10" + i.ToString();
                 s.VersionID = i;
-                s.Start = Convert.ToDateTime("1/1/9999");
+                s.Start = Convert.ToDateTime("1/1/2010");
                 s.PrimaryName = "Primary: " + i.ToString();
                 s.SecondaryName = "Secondary: " + i.ToString();
-
+                s.VersionActionId = 1;
+                s.RegionID = 1;
                 Signals.Add(s);
 
             }
-            
+
+            for (int i = 1; i < 6; i++)
+            {
+                MOE.Common.Models.Signal s = new Signal();
+
+                s.SignalID = "20" + i.ToString();
+                s.VersionID = i;
+                s.Start = Convert.ToDateTime("1/1/2010");
+                s.PrimaryName = "Primary: " + i.ToString();
+                s.SecondaryName = "Secondary: " + i.ToString();
+                s.VersionActionId = 1;
+                s.RegionID = 2;
+                Signals.Add(s);
+
+            }
+
+            for (int i = 1; i < 6; i++)
+            {
+                MOE.Common.Models.Signal s = new Signal();
+
+                s.SignalID = "30" + i.ToString();
+                s.VersionID = i;
+                s.Start = Convert.ToDateTime("1/1/2010");
+                s.PrimaryName = "Primary: " + i.ToString();
+                s.SecondaryName = "Secondary: " + i.ToString();
+                s.VersionActionId = 1;
+                s.RegionID = 3;
+                Signals.Add(s);
+
+            }
+
         }
 
         public void PopulateSignalsWithApproaches()
@@ -509,7 +690,7 @@ namespace MOE.CommonTests.Models
                 Approach c = new Approach
                 {
                     ApproachID = (s.VersionID * 1060) + 1,
-                    Description = "SB Approach for Signal " + s.SignalID,
+                    Description = "EB Approach for Signal " + s.SignalID,
                     DirectionType = (from r in DirectionTypes
                         where r.Abbreviation == "EB"
                         select r).FirstOrDefault(),
@@ -526,7 +707,7 @@ namespace MOE.CommonTests.Models
                 Approach d = new Approach
                 {
                     ApproachID = (s.VersionID * 1080) + 1,
-                    Description = "SB Approach for Signal " + s.SignalID,
+                    Description = "WB Approach for Signal " + s.SignalID,
                     DirectionType = (from r in DirectionTypes
                         where r.Abbreviation == "WB"
                         select r).FirstOrDefault(),
@@ -768,6 +949,87 @@ namespace MOE.CommonTests.Models
                 ShowOnWebsite = false
             };
 
+            var b16 = new MOE.Common.Models.MetricType
+            {
+                MetricID = 16,
+                ChartName = "Lane by lane Aggregation",
+                Abbreviation = "LLA",
+                ShowOnWebsite = false,
+                ShowOnAggregationSite = true
+            };
+            var b17 = new MOE.Common.Models.MetricType
+            {
+                MetricID = 17,
+                ChartName = "Advanced Counts Aggregation",
+                Abbreviation = "ACA",
+                ShowOnWebsite = false,
+                ShowOnAggregationSite = true
+            };
+            var b18 = new MOE.Common.Models.MetricType
+            {
+                MetricID = 18,
+                ChartName = "Arrival on Green Aggregation",
+                Abbreviation = "AoGA",
+                ShowOnWebsite = false,
+                ShowOnAggregationSite = true
+            };
+            var b19 = new MOE.Common.Models.MetricType
+            {
+                MetricID = 19,
+                ChartName = "Platoon Ratio Aggregation",
+                Abbreviation = "PRA",
+                ShowOnWebsite = false,
+                ShowOnAggregationSite = true
+            };
+            var b20 = new MOE.Common.Models.MetricType
+            {
+                MetricID = 20,
+                ChartName = "Purdue Split Failure Aggregation",
+                Abbreviation = "SFA",
+                ShowOnWebsite = false,
+                ShowOnAggregationSite = true
+            };
+            var b21 = new MOE.Common.Models.MetricType
+            {
+                MetricID = 21,
+                ChartName = "Pedestrian Actuations Aggregation",
+                Abbreviation = "PedA",
+                ShowOnWebsite = false,
+                ShowOnAggregationSite = true
+            };
+            var b22 = new MOE.Common.Models.MetricType
+            {
+                MetricID = 22,
+                ChartName = "Preemption Aggregation",
+                Abbreviation = "PreemptA",
+                ShowOnWebsite = false,
+                ShowOnAggregationSite = true
+            };
+            var b23 = new MOE.Common.Models.MetricType
+            {
+                MetricID = 23,
+                ChartName = "Approach Delay Aggregation",
+                Abbreviation = "ADA",
+                ShowOnWebsite = false,
+                ShowOnAggregationSite = true
+            };
+            var b24 = new MOE.Common.Models.MetricType
+            {
+                MetricID = 24,
+                ChartName = "Transit Signal Priority Aggregation",
+                Abbreviation = "TSPA",
+                ShowOnWebsite = false,
+                ShowOnAggregationSite = true
+            };
+            var b25 = new MOE.Common.Models.MetricType
+            {
+                MetricID = 25,
+                ChartName = "Approach Speed Aggregation",
+                Abbreviation = "ASA",
+                ShowOnWebsite = false,
+                ShowOnAggregationSite = true
+            };
+
             MetricTypes.Add(b1);
             MetricTypes.Add(b2);
             MetricTypes.Add(b3);
@@ -783,6 +1045,16 @@ namespace MOE.CommonTests.Models
             MetricTypes.Add(b13);
             MetricTypes.Add(b14);
             MetricTypes.Add(b15);
+            MetricTypes.Add(b16);
+            MetricTypes.Add(b17);
+            MetricTypes.Add(b18);
+            MetricTypes.Add(b19);
+            MetricTypes.Add(b20);
+            MetricTypes.Add(b21);
+            MetricTypes.Add(b22);
+            MetricTypes.Add(b23);
+            MetricTypes.Add(b24);
+            MetricTypes.Add(b25);
 
 
         }

@@ -156,5 +156,21 @@ namespace MOE.Common.Business.Bins.Tests
             var bins = BinFactory.GetBins(binFactoryOptions);
             Assert.IsTrue(bins.Bins.Count == 2);
         }
+
+        [TestMethod()]
+        public void YearOfWednesdaysShouldReturn52Bins()
+        {
+            List<DayOfWeek>weekdays = new List<DayOfWeek>();
+            weekdays.Add(DayOfWeek.Wednesday);
+
+            BinFactoryOptions binFactoryOptions = new BinFactoryOptions(
+                Convert.ToDateTime("1/1/2017 12:00 AM"),
+                Convert.ToDateTime("12/31/2017 11:59 PM"),
+                null, null, null, null, weekdays,
+                BinFactoryOptions.BinSizes.Year,
+                BinFactoryOptions.TimeOptions.TimePeriod);
+            var bins = BinFactory.GetBins(binFactoryOptions);
+            Assert.IsTrue(bins.Bins.Count == 52);
+        }
     }
 }

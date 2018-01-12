@@ -42,6 +42,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Direction,
             Approach,
             Signal,
+            SignalByDirection,
             Route
         }
 
@@ -155,6 +156,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 case XAxisAggregationSeriesOptions.Signal:
                     GetSignalCharts();
                     break;
+                case XAxisAggregationSeriesOptions.SignalByDirection:
+                    GetSignalByDirectionCharts();
+                    break;
                 default:
                     GetTimeCharts();
                     break;
@@ -165,6 +169,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             Chart chart = ChartFactory.CreateStringXIntYChart(this);
             GetSignalAggregateChart(Signals, chart);
+            SaveChartImage(chart);
+        }
+
+        private void GetSignalByDirectionCharts()
+        {
+            Chart chart = ChartFactory.CreateStringXIntYChart(this);
+            GetSignalByDirectionAggregateChart(Signals, chart);
             SaveChartImage(chart);
         }
 
@@ -217,6 +228,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected abstract void GetDirectionAggregateChart(Models.Signal signal, Chart chart);
 
         protected abstract void GetSignalAggregateChart(List<Models.Signal> signals, Chart chart);
+
+        protected abstract void GetSignalByDirectionAggregateChart(List<Models.Signal> signals, Chart chart);
 
         protected abstract void GetApproachAggregateChart(Models.Signal signal, Chart chart);
 

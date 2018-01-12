@@ -115,34 +115,94 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override void GetSignalAggregateChart(List<Models.Signal> signals, Chart chart)
         {
-            List<SpliFailAggregationBySignal> spliFailAggregationBySignals = new List<SpliFailAggregationBySignal>();
-            foreach (var signal in signals)
-            {
-                spliFailAggregationBySignals.Add(new SpliFailAggregationBySignal(this, signal, BinsContainer));
-            }
+           
+            
             Series series = new Series();
             series.Color = GetSeriesColorByNumber(1);
-            series.Name = "Signals";
+            series.Name = "Split Fails";
             series.ChartArea = "ChartArea1";
             SetSeriestype(series);
-            int i = 1;
-            foreach (var spliFailAggregationBySignal in spliFailAggregationBySignals)
-            {
-                DataPoint dataPoint = new DataPoint();
-                dataPoint.XValue = i;
-                if (AggregationOpperation == AggregationOpperations.Sum)
-                {
-                    dataPoint.SetValueY(spliFailAggregationBySignal.TotalSplitFailures);
-                }
-                else
-                {
-                    dataPoint.SetValueY(spliFailAggregationBySignal.TotalSplitFailures);
-                }
-                dataPoint.AxisLabel = spliFailAggregationBySignal.Signal.SignalDescription;
-                series.Points.Add(dataPoint);
-                i++;
-            }
             chart.Series.Add(series);
+
+            int i = 1;
+            foreach (var signal in signals)
+            {
+                List<SpliFailAggregationBySignal> spliFailAggregationBySignals = new List<SpliFailAggregationBySignal>
+                {
+                    new SpliFailAggregationBySignal(this, signal, BinsContainer)
+                };
+
+          
+                foreach (var spliFailAggregationBySignal in spliFailAggregationBySignals)
+                {
+                    DataPoint dataPoint = new DataPoint();
+                    dataPoint.XValue = i;
+                    if (AggregationOpperation == AggregationOpperations.Sum)
+                    {
+                        dataPoint.SetValueY(spliFailAggregationBySignal.TotalSplitFailures);
+                    }
+                    else
+                    {
+                        dataPoint.SetValueY(spliFailAggregationBySignal.TotalSplitFailures);
+                    }
+                    dataPoint.AxisLabel = spliFailAggregationBySignal.Signal.SignalID;
+                    series.Points.Add(dataPoint);
+                    
+                }
+                
+                i++;
+                
+            }
+
+        }
+
+        protected override void GetSignalByDirectionAggregateChart(List<Models.Signal> signals, Chart chart)
+        {
+            var direcitonRepository = Models.Repositories.DirectionTypeRepositoryFactory.Create();
+
+            var directionsList = direcitonRepository.GetAllDirections();
+
+            int columnCounter = 1;
+
+            var colorCount = 1;
+            foreach (var direction in directionsList)
+            {
+                Series series = new Series();
+                series.Color = GetSeriesColorByNumber(colorCount);
+                series.Name = direction.Description;
+                series.ChartArea = "ChartArea1";
+                SetSeriestype(series);
+                chart.Series.Add(series);
+                colorCount++;
+            }
+
+
+            foreach (var signal in signals)
+            {
+                SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this, signal, BinsContainer);
+
+
+                foreach (var direction in directionsList)
+                {
+
+
+                    DataPoint dataPoint = new DataPoint();
+                    dataPoint.XValue = columnCounter;
+                    if (AggregationOpperation == AggregationOpperations.Sum)
+                    {
+                        dataPoint.SetValueY(spliFailAggregationBySignal.GetSplitFailsByDirection(direction));
+                    }
+                    else
+                    {
+                        dataPoint.SetValueY(spliFailAggregationBySignal.GetAverageSplitFailsByDirection(direction));
+                    }
+                    dataPoint.AxisLabel = signal.SignalID;
+                    chart.Series[direction.Description].Points.Add(dataPoint);
+                    
+                }
+
+                columnCounter++;
+            }
         }
 
         protected override void GetDirectionAggregateChart(Models.Signal signal, Chart chart)
@@ -153,6 +213,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             series.Name = signal.SignalDescription;
             series.ChartArea = "ChartArea1";
             SetSeriestype(series);
+            chart.Series.Add(series);
+
             int i = 1;
             List<DirectionType> directions = signal.GetAvailableDirections();
             foreach (var direction in directions)
@@ -171,10 +233,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 series.Points.Add(dataPoint);
                 i++;
             }
-            chart.Series.Add(series);
+            
         }
 
     }
+
+    
 
 
 }
