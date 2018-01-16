@@ -97,7 +97,7 @@ namespace MOE.Common.Business.Bins
 
 
             List<Bin> bins = new List<Bin>();
-            for (DateTime startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month, 1); startTime.Year <= timeOptions.End.Year && startTime.Month <= timeOptions.End.Month; startTime = startTime.AddMonths(1))
+            for (DateTime startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month, 1); startTime.Date <= timeOptions.End.Date; startTime = startTime.AddMonths(1))
             {
                 if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
                 {

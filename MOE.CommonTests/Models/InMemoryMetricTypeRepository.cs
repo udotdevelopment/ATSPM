@@ -22,7 +22,10 @@ namespace MOE.CommonTests.Models
 
         public List<MetricType> GetAllMetrics()
         {
-            throw new NotImplementedException();
+            List<Common.Models.MetricType> results = (from r in _db.MetricTypes
+               
+                select r).ToList();
+            return results;
         }
 
         public List<MetricType> GetAllToDisplayMetrics()

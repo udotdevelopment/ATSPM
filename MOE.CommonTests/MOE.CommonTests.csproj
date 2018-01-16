@@ -118,7 +118,6 @@
     <Compile Include="Models\InMemoryRouteSignalsRepository.cs" />
     <Compile Include="Models\InMemoryRouteRepository.cs" />
     <Compile Include="Models\InMemorySignalsRepository.cs" />
-    <Compile Include="Models\Repositories\SignalsRepositoryTests.cs" />
     <Compile Include="Models\InMemoryApproachSplitFailAggregationRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

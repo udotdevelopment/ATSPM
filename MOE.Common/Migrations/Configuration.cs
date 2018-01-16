@@ -274,7 +274,9 @@ While each agency should consult with their IT department for specific guideline
                 new Models.MetricType { MetricID = 21, ChartName = "Pedestrian Actuations Aggregation", Abbreviation = "PedA", ShowOnWebsite = false, ShowOnAggregationSite = true },
                 new Models.MetricType { MetricID = 22, ChartName = "Preemption Aggregation", Abbreviation = "PreemptA", ShowOnWebsite = false, ShowOnAggregationSite = true },
                 new Models.MetricType { MetricID = 23, ChartName = "Approach Delay Aggregation", Abbreviation = "ADA", ShowOnWebsite = false, ShowOnAggregationSite = true },
-                new Models.MetricType { MetricID = 24, ChartName = "Transit Signal Priority Aggregation", Abbreviation = "TSPA", ShowOnWebsite = false, ShowOnAggregationSite = true }
+                new Models.MetricType { MetricID = 24, ChartName = "Transit Signal Priority Aggregation", Abbreviation = "TSPA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 25, ChartName = "Appraoch Speed Aggregation", Abbreviation = "ASA", ShowOnWebsite = false, ShowOnAggregationSite = true }
+
                 );
             context.SaveChanges();
 

@@ -451,7 +451,31 @@ namespace MOE.CommonTests.Models
 
         public List<Signal> GetSignalsBetweenDates(string signalId, DateTime startDate, DateTime endDate)
         {
-            throw new NotImplementedException();
+            List<Common.Models.Signal> signals = new List<Signal>();
+            Common.Models.Signal signalBeforeStart = _db.Signals
+
+                .Where(signal => signal.SignalID == signalId
+                                 && signal.Start <= startDate
+                                 && signal.VersionActionId != 3).OrderByDescending(s => s.Start)
+                .Take(1)
+                .FirstOrDefault();
+            if (signalBeforeStart != null)
+            {
+                signals.Add(signalBeforeStart);
+            }
+            if (_db.Signals.Any(signal => signal.SignalID == signalId
+                                          && signal.Start > startDate
+                                          && signal.Start < endDate
+                                          && signal.VersionActionId != 3))
+            {
+                signals.AddRange(_db.Signals
+
+                    .Where(signal => signal.SignalID == signalId
+                                     && signal.Start > startDate
+                                     && signal.Start < endDate
+                                     && signal.VersionActionId != 3).ToList());
+            }
+            return signals;
         }
     }
 }
