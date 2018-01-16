@@ -38,6 +38,10 @@ namespace SPM.Controllers
             //Signal signal = signalsRepository.GetSignalVersionByVersionId(Convert.ToInt32(versionId));
             //mc.Signal = signal;
             List<MetricType> allMetricTypes = metricTyperepository.GetAllToAggregateMetrics();
+            foreach (var metricType in allMetricTypes)
+            {
+                vm.MetricItems.Add(metricType.MetricID, metricType.ChartName);
+            }
             List<DirectionType> allDirectionTypes = directionTypeRepository.GetAllDirections();
             List<MovementType> allMovementTypes = movementTypeRepository.GetAllMovementTypes();
             List<LaneType> allLaneTypes = laneTypeRepository.GetAllLaneTypes();
@@ -57,8 +61,14 @@ namespace SPM.Controllers
             if (Request.Form["Create"] != null)
             {
                 //Create agg data export report
-
-              //  MOE.Common.Business.ChartFactory.CreateLaneByLaneAggregationChart(options);
+                    switch (vm.SelectedMetric)
+                    {
+                        case 17:
+                        //    AoROptions options = new AoROptions();
+                            //CreateArrivalOnGreenAggregationChart()
+                            break;
+                    }
+                
             }
             return View(vm);
         }
