@@ -11,6 +11,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
             MetricTypeID = 21;
         }
 
+        protected override void GetSignalByPhaseAggregateCharts(List<Models.Signal> signals, Chart chart)
+        {
+
+
+
+
+        }
+
         protected override void GetRouteAggregateChart(List<Models.Signal> signals, Chart chart)
         {
             throw new System.NotImplementedException();

@@ -74,13 +74,18 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 }
                 //else
                 //{
-                //    dataPoint.SetValueY(approachSplitFails.AverageSplitFailures);
+                //    dataPoint.SetValueY(approachSplitFails.AveragePreemptsServiced);
                 //}
                 dataPoint.AxisLabel = approachSplitFails.Approach.Description;
                 series.Points.Add(dataPoint);
                 i++;
             }
             chart.Series.Add(series);
+        }
+
+        protected override void GetSignalByPhaseAggregateCharts(List<Models.Signal> signals, Chart chart)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void GetRouteAggregateChart(List<Models.Signal> signals, Chart chart)

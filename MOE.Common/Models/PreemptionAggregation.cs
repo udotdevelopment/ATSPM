@@ -43,7 +43,7 @@ namespace MOE.Common.Models
                 Map(m => m.BinStartTime).Name("Bin Start Time");
                 Map(m => m.VersionId).Name("Version ID");
                 Map(m => m.PreemptNumber).Name("Preempt Number");
-                Map(m => m.PreemptRequests).Name("Preempt Requestss");
+                Map(m => m.PreemptRequests).Name("Preempt Requests");
                 Map(m => m.PreemptServices).Name("Preempt Services");
             }
         }

@@ -24,6 +24,17 @@ namespace MOE.Common.Models.Repositories
         {
             _db = context;
         }
+
+        public int GetPreemptAggregationTotalByVersionIdAndDateRange(int versionId, DateTime start, DateTime end)
+        {
+            int serviced = (from r in this._db.PreemptionAggregations
+                where r.VersionId == versionId
+                      && r.BinStartTime >= start && r.BinStartTime <= end
+                select r.PreemptServices).Sum();
+
+            return serviced;
+        }
+
         public PreemptionAggregation Add(PreemptionAggregation preemptionAggregation)
         {
             throw new NotImplementedException();

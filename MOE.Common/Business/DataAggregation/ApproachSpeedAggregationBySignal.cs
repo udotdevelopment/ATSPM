@@ -62,10 +62,10 @@ namespace MOE.Common.Business.DataAggregation
 
         public int GetAverageSpeedByDirection(DirectionType direction)
         {
-            int splitFails = Convert.ToInt32(Math.Round(ApproachSpeeds
+            int speed = Convert.ToInt32(Math.Round(ApproachSpeeds
                 .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
                 .Average(a => a.BinsContainer.SumValue)));
-            return splitFails;
+            return speed;
         }
     }
 

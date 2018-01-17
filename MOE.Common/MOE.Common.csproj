@@ -365,6 +365,7 @@
     <Compile Include="Business\CycleSpeed.cs" />
     <Compile Include="Business\DataAggregation\ApproachSpeedAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\DataAggregation.cs" />
+    <Compile Include="Business\DataAggregation\PreemptAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\SpliFailAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\SplitFailAggregationByRoute.cs" />
     <Compile Include="Business\Export\Exporter.cs" />
@@ -393,6 +394,7 @@
     <Compile Include="Business\WCFServiceLibrary\AggregationMetricOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSpeedAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\SignalPreemptAggregationOptions.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>
     </Compile>

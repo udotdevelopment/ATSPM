@@ -43,7 +43,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Approach,
             Signal,
             SignalByDirection,
-            Route
+            Route,
+            SignalByPhase
         }
 
         //wouldn't be used because the AggMetrics are incorporated into [MetricTypes]
@@ -98,7 +99,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             BinsContainer = BinFactory.GetBins(TimeOptions);
         }
 
-        protected void GetSignalObjects()
+        public void GetSignalObjects()
         {
             if (Signals.Count == 0)
             {
@@ -168,11 +169,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 case XAxisAggregationSeriesOptions.SignalByDirection:
                     GetSignalByDirectionCharts();
                     break;
+                case XAxisAggregationSeriesOptions.SignalByPhase:
+                    GetSignalByPhaseCharts();
+                    break;
                 default:
                     GetTimeCharts();
                     break;
             }
         }
+
+        private void GetSignalByPhaseCharts()
+        {
+            Chart chart = ChartFactory.CreateStringXIntYChart(this);
+            GetSignalByPhaseAggregateCharts(Signals, chart);
+            SaveChartImage(chart);
+        }
+
 
         private void GetSignalCharts()
         {
@@ -231,7 +243,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 SaveChartImage(chart);
             }
         }
-
+        protected abstract void GetSignalByPhaseAggregateCharts(List<Models.Signal> signals, Chart chart);
         protected abstract void GetRouteAggregateChart(List<Models.Signal> signals, Chart chart);
 
         protected abstract void GetDirectionAggregateChart(Models.Signal signal, Chart chart);

@@ -98,6 +98,8 @@
     <Compile Include="Business\Export\ExporterTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\AggregationMetricOptionsTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsTests.cs" />
+    <Compile Include="Models\InMemoryPreemptAggregationDatasRepository.cs" />
+    <Compile Include="Business\WCFServiceLibrary\SignalPreemptAggregationOptionsTests.cs" />
     <Compile Include="Models\InMemoryApplicationEventRepository.cs" />
     <Compile Include="Business\WCFServiceLibrary\MetricOptionsTests.cs" />
     <Compile Include="Models\Custom\ApproachTests.cs" />
