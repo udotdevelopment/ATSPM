@@ -61,7 +61,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
 
             var expectedMetricType = _mtr.GetMetricsByID(1);
 
-            Models.ApplicationEvent applicationEvent = _db.ApplicaitonEvents.Take(1).FirstOrDefault();
+            Models.ApplicationEvent applicationEvent = _db.ApplicationEvents.Take(1).FirstOrDefault();
 
             if (applicationEvent != null)
             {

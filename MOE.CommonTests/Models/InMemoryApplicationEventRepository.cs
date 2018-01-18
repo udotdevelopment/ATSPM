@@ -60,7 +60,7 @@ namespace MOE.CommonTests.Models
 
         public void Add(ApplicationEvent applicationEvent)
         {
-            _db.ApplicaitonEvents.Add(applicationEvent);
+            _db.ApplicationEvents.Add(applicationEvent);
         }
 
         public void Remove(ApplicationEvent applicationEvent)
@@ -86,7 +86,7 @@ namespace MOE.CommonTests.Models
                 SeverityLevel = severity
             };
 
-            _db.ApplicaitonEvents.Add(applicationEvent);
+            _db.ApplicationEvents.Add(applicationEvent);
         }
 
         public List<ApplicationEvent> GetEventsByDateDescriptions(DateTime startDate, DateTime endDate, List<string> descriptions)
