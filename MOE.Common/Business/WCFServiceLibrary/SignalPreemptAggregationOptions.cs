@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business.DataAggregation;
 using MOE.Common.Models;
 
 namespace MOE.Common.Business.WCFServiceLibrary
@@ -19,24 +20,44 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             MOE.Common.Models.Repositories.IPreemptAggregationDatasRepository repo =
                 MOE.Common.Models.Repositories.PreemptAggregationDatasRepositoryFactory.Create();
-            
-            foreach (var sig in signals)
+
+
+
+
+                //int maxPhase = (from r in aggregations select r.PreemptNumber).Max();
+
+            for (int seriesCounter = 1; seriesCounter < 16; seriesCounter++)
             {
-                List<PreemptionAggregation> aggregations =
-                    repo.GetPreemptAggregationByVersionIdAndDateRange(sig.VersionID, this.StartDate, this.EndDate);
+                Series series = new Series();
+                series.Color = GetSeriesColorByNumber(seriesCounter);
+                series.Name = "Preempt#" + seriesCounter.ToString();
+                series.ChartArea = "ChartArea1";
+                SetSeriestype(series);
+                chart.Series.Add(series);
+            }
 
-                int maxPhase = (from r in aggregations select r.PreemptNumber).Max();
 
-                for (int seriesCounter = 0; seriesCounter < maxPhase; seriesCounter++)
+            foreach (var signal in signals)
+            {
+                for (int seriesCounter = 1; seriesCounter < 16; seriesCounter++)
                 {
-                    Series series = new Series();
-                    series.Color = GetSeriesColorByNumber(seriesCounter);
-                    series.Name = "Preempt#" + seriesCounter.ToString();
-                    series.ChartArea = "ChartArea1";
-                    SetSeriestype(series);
-                    spliFailAggregationBySignal.GetSplitFailuresByBin(BinsContainer);
+                    PreemptAggregationBySignal preemptAggregationBySignal =
+                        new PreemptAggregationBySignal(this, signal, BinsContainer);
+
+                    preemptAggregationBySignal.GetPreemptTotalsBySignalByPreemptNumber(BinsContainer, seriesCounter);
+
+                    foreach (var totals in preemptAggregationBySignal.PreemptionTotals)
+                    {
+                        foreach (var bin in totals.BinsContainer.Bins)
+                        {
+                            chart.Series[seriesCounter-1].Points.AddXY(signal.SignalID, bin.Value);
+                        }
+                    }
                 }
             }
+
+                
+            
 
 
         }
@@ -66,11 +87,45 @@ namespace MOE.Common.Business.WCFServiceLibrary
             throw new System.NotImplementedException();
         }
 
-        protected override void GetTimeAggregateChart(Models.Signal signal, Chart chart)
+        protected void GetTimeAggregateChart(List<Models.Signal> signals, Chart chart)
         {
-            throw new System.NotImplementedException();
-        }
+            
 
+
+            int i = 1;
+          
+            foreach(Models.Signal signal in signals)
+            {
+                Series series = new Series();
+                series.Color = GetSeriesColorByNumber(i);
+                series.Name = signal.SignalID;
+                series.ChartArea = "ChartArea1";
+                series.BorderWidth = 2;
+                SetSeriestype(series);
+                chart.Series.Add(series);
+                i++;
+                
+
+                PreemptAggregationBySignal preemptAggregationBySignal =
+                    new PreemptAggregationBySignal(this, signal, BinsContainer);
+
+                preemptAggregationBySignal.GetPreemptsByBin(BinsContainer);
+
+                foreach (var preemptsreempts in preemptAggregationBySignal.PreemptionTotals)
+            {
+
+
+                if (AggregationOpperation == AggregationOpperations.Sum)
+                {
+                    foreach (var bin in preemptsreempts.BinsContainer.Bins)
+                    {
+                        series.Points.AddXY(bin.Start, bin.Value);
+                    }
+                }
+        
+
+            }
+            }
 
     }
-}
+}}

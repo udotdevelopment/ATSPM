@@ -258,6 +258,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected Color GetSeriesColorByNumber(int colorNumber)
         {
+            while (colorNumber > 10)
+            {
+                colorNumber = colorNumber - 10;
+            }
+
             switch (colorNumber)
             {
                 case 1:

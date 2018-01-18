@@ -173,8 +173,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
 
             options.SignalIds.Add("101");
-            //options.SignalIds.Add("8279");
-            //options.SignalIds.Add("7185");
+            options.SignalIds.Add("102");
+            options.SignalIds.Add("103");
             PopulateApproachesWithSplitFailtAggregationRecords(options);
             
 

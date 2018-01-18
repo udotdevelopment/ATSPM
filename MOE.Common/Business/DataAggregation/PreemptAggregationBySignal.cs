@@ -14,23 +14,25 @@ namespace MOE.Common.Business.DataAggregation
         public int TotalPreemptsServiced { get { return PreemptionTotals.Sum(c => c.BinsContainer.SumValue); } }
         public int AveragePreemptsServiced { get { return Convert.ToInt32(Math.Round(PreemptionTotals.Average(c => c.BinsContainer.SumValue))); } }
 
-        public void GetSplitFailuresByBin(BinsContainer binsContainer)
+        public void GetPreemptsByBin(BinsContainer binsContainer)
         {
 
 
 
             foreach (var bin in binsContainer.Bins)
             {
-                int summedSplitFailures = 0;
+                int summedServicedPreempts = 0;
                 foreach (var preempt in PreemptionTotals)
                 {
-                    summedSplitFailures += preempt.BinsContainer.Bins.Where(a => a.Start == bin.Start)
+                    summedServicedPreempts += preempt.BinsContainer.Bins.Where(a => a.Start == bin.Start)
                         .Sum(a => a.Value);
                 }
-                bin.Value = summedSplitFailures;
+                bin.Value = summedServicedPreempts;
             }
 
         }
+
+     
 
 
         public double Order { get; set; }
@@ -46,6 +48,17 @@ namespace MOE.Common.Business.DataAggregation
 
         }
 
+        public void GetPreemptTotalsBySignalByPreemptNumber(BinsContainer binsContainer, int preemptNumber)
+        {
+
+            PreemptionTotals.Clear();
+
+            PreemptionTotals.Add(
+                new SignalPreemptAggregationContainer(Signal,  binsContainer, preemptNumber));
+
+
+        }
+
 
 
     }
@@ -55,9 +68,12 @@ namespace MOE.Common.Business.DataAggregation
         public Models.Signal Signal { get; }
         public BinsContainer BinsContainer { get; set; } = new BinsContainer();
 
-        public SignalPreemptAggregationContainer(Models.Signal signal, BinsContainer binsContainer)//, AggregationMetricOptions.XAxisTimeTypes aggregationType)
+        public SignalPreemptAggregationContainer(Models.Signal signal, BinsContainer binsContainer) //, AggregationMetricOptions.XAxisTimeTypes aggregationType)
         {
             Signal = signal;
+
+           
+
             var preemptAggregationRepository =
                 MOE.Common.Models.Repositories.PreemptAggregationDatasRepositoryFactory.Create();
 
@@ -67,8 +83,38 @@ namespace MOE.Common.Business.DataAggregation
 
                 var servicedTotal = preemptAggregationRepository
                     .GetPreemptAggregationTotalByVersionIdAndDateRange(
-                        signal.VersionID, bin.Start, bin.End);
+                        Signal.VersionID, bin.Start, bin.End);
                 BinsContainer.Bins.Add(new Bin { Start = bin.Start, End = bin.End, Value = servicedTotal });
+
+            }
+        }
+
+
+
+        public SignalPreemptAggregationContainer(Models.Signal signal, BinsContainer binsContainer, int preemptNumber)
+        {
+
+            Signal = signal;
+
+            var preemptAggregationRepository =
+                MOE.Common.Models.Repositories.PreemptAggregationDatasRepositoryFactory.Create();
+
+
+            foreach (var bin in binsContainer.Bins)
+            {
+
+                var servicedTotal = preemptAggregationRepository
+                    .GetPreemptAggregationTotalByVersionIdPreemptNumberAndDateRange(
+                        Signal.VersionID, bin.Start, bin.End, preemptNumber);
+
+                if (servicedTotal != null)
+                {
+                    BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Value = servicedTotal});
+                }
+                else
+                {
+                    BinsContainer.Bins.Add(new Bin { Start = bin.Start, End = bin.End, Value = 0 });
+                }
 
             }
         }

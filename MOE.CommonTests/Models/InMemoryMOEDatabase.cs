@@ -69,8 +69,9 @@ namespace MOE.CommonTests.Models
                 r.VersionId = versionId;
                 r.SignalId = signalId;
                 r.BinStartTime = startTime;
-                r.PreemptNumber = rnd.Next(1, 200);
+                r.PreemptNumber = rnd.Next(1, 16);
                 r.PreemptServices = rnd.Next(1, 200);
+                r.PreemptRequests = rnd.Next(1, 200);
 
 
                 PreemptionAggregations.Add(r);

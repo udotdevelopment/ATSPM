@@ -34,6 +34,39 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         }
 
         [TestMethod()]
+        public void GetPreemptByTimeTest()
+        {
+            SignalPreemptAggregationOptions options = new SignalPreemptAggregationOptions();
+
+
+            options.StartDate = DateTime.Now.AddMonths(-1);
+            options.EndDate = DateTime.Now;
+            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.TimeOptions = new BinFactoryOptions(
+                DateTime.Now.AddMonths(-1),
+                DateTime.Now,
+                null, null, null, null, null,
+                BinFactoryOptions.BinSizes.Day,
+                BinFactoryOptions.TimeOptions.StartToEnd);
+
+            options.SignalIds.Add("101");
+            options.SignalIds.Add("102");
+            options.SignalIds.Add("103");
+            PopulateSignalsWithPreemptionAggregationRecords(options);
+            options.GetSignalObjects();
+
+            options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
+            options.CreateMetric();
+            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.CreateMetric();
+            options.ChartType = AggregationMetricOptions.ChartTypes.Line;
+            options.CreateMetric();
+            options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
+            Assert.IsTrue(options.CreateMetric().Count > 0);
+        }
+
+        [TestMethod()]
         public void GetPreemptBySignalByPhaseChartTest()
         {
             SignalPreemptAggregationOptions options = new SignalPreemptAggregationOptions();
@@ -51,8 +84,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
 
             options.SignalIds.Add("101");
-            options.SignalIds.Add("102");
-            options.SignalIds.Add("103");
+            //options.SignalIds.Add("102");
+            //options.SignalIds.Add("103");
             PopulateSignalsWithPreemptionAggregationRecords(options);
             options.GetSignalObjects();
 

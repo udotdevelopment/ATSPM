@@ -11,6 +11,11 @@ namespace MOE.Common.Models.Repositories
         int GetPreemptAggregationTotalByVersionIdAndDateRange(int versionId, DateTime start,
             DateTime end);
 
+
+        int GetPreemptAggregationTotalByVersionIdPreemptNumberAndDateRange(int versionId, DateTime start,
+            DateTime end, int preemptNumber);
+
+
         DetectorAggregation Add(PreemptionAggregation preemptionAggregation);
         void Update(PreemptionAggregation preemptionAggregation);
         void Remove(PreemptionAggregation preemptionAggregation);

@@ -26,10 +26,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             int i = 1;
             foreach (var approachSplitFails in spliFailAggregationBySignal.ApproachSplitFailures)
             {
-                if (i > 10)
-                {
-                    i = 1;
-                }
+                
+ 
                 Series series = new Series();
                 series.Color = GetSeriesColorByNumber(i);
                 series.Name = approachSplitFails.Approach.Description;
@@ -184,7 +182,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             foreach (var signal in signals)
             {
-                SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this, signal, BinsContainer);
+                SpliFailAggregationBySignal spliFailAggregationBySignal 
+                    = new SpliFailAggregationBySignal(this, signal, BinsContainer);
 
 
                 foreach (var direction in directionsList)
