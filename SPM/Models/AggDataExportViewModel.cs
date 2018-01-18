@@ -19,6 +19,8 @@ namespace SPM.Models
         public int Id { get; set; }
         [Required]
         public virtual List<int> MetricTypeIDs { get; set; }
+        public Dictionary<int, string> MetricItems { get; set; }
+        public int SelectedMetric { get; set; }
         public virtual ICollection<MetricType> AllMetricTypes { get; set; }
         public virtual List<int> ApproachTypeIDs { get; set; }
         public virtual ICollection<DirectionType> AllApproachTypes { get; set; }
@@ -86,7 +88,8 @@ namespace SPM.Models
         {
             _metricRepository = MetricTypeRepositoryFactory.Create();
             var regionRepositry = MOE.Common.Models.Repositories.RegionsRepositoryFactory.Create();
-            GetMetrics(_metricRepository);
+            List<MetricType> allMetricTypes = _metricRepository.GetAllToAggregateMetrics();
+            MetricItems = new Dictionary<int, string>();
             SignalSearchViewModel = new MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel(regionRepositry, _metricRepository);
             SetDefaultDates();
             SetBinSizeList();
@@ -115,16 +118,6 @@ namespace SPM.Models
             EndAMPMList = new List<SelectListItem>();
             EndAMPMList.Add(new SelectListItem { Value = "AM", Text = "AM" });
             EndAMPMList.Add(new SelectListItem { Value = "PM", Text = "PM", Selected = true });
-        }
-        public void GetMetrics(IMetricTypeRepository metricRepository)
-        {
-            List<MOE.Common.Models.MetricType> metricTypes = metricRepository.GetAllToDisplayMetrics();
-            //TODO: change metricTypes to aggregateMetricTypes after Shane's check-in
-            //AggregateMetricsList = new List<SelectListItem>();
-            //foreach (MOE.Common.Models.MetricType m in metricTypes)
-            //{
-            //    AggregateMetricsList.Add(new SelectListItem { Value = m.MetricID.ToString(), Text = m.ChartName });
-            //}
         }
 
     }
