@@ -26,7 +26,7 @@ namespace MOE.CommonTests.Models
         public List<Common.Models.MovementType> MovementTypes = new List<Common.Models.MovementType>();
         public List<Common.Models.LaneType> LaneTypes = new List<Common.Models.LaneType>();
         public List<Common.Models.DetectionHardware> DetectionHardwares = new List<Common.Models.DetectionHardware>();
-        public List<Common.Models.ApplicationEvent> ApplicaitonEvents = new List<ApplicationEvent>();
+        public List<Common.Models.ApplicationEvent> ApplicationEvents = new List<ApplicationEvent>();
 
         public List<Common.Models.ApproachCycleAggregation> ApproachCycleAggregations = new List<ApproachCycleAggregation>();
         public List<Common.Models.ApproachPcdAggregation>   ApproachPcdAggregations = new List<ApproachPcdAggregation>();
@@ -49,6 +49,9 @@ namespace MOE.CommonTests.Models
             Detectors.Clear();
             Approaches.Clear();
             Signals.Clear();
+            RoutePhaseDirection.Clear();
+            RouteSignals.Clear();
+            Routes.Clear();
             ApproachSplitFailAggregations.Clear();
             ApproachCycleAggregations.Clear();
             ApproachSpeedAggregations.Clear();
@@ -224,7 +227,7 @@ namespace MOE.CommonTests.Models
 
         public void PopulateRouteWithRouteSignals()
         {
-            if (Signals.Count > 1)
+            if (Signals.Count <  1)
             {
                 PopulateSignal();
                 PopulateSignalsWithApproaches();
@@ -620,7 +623,7 @@ namespace MOE.CommonTests.Models
                 MOE.Common.Models.Signal s = new Signal();
 
                 s.SignalID = "20" + i.ToString();
-                s.VersionID = i;
+                s.VersionID = i+7;
                 s.Start = Convert.ToDateTime("1/1/2010");
                 s.PrimaryName = "Primary: " + i.ToString();
                 s.SecondaryName = "Secondary: " + i.ToString();
@@ -635,7 +638,7 @@ namespace MOE.CommonTests.Models
                 MOE.Common.Models.Signal s = new Signal();
 
                 s.SignalID = "30" + i.ToString();
-                s.VersionID = i;
+                s.VersionID = i+14;
                 s.Start = Convert.ToDateTime("1/1/2010");
                 s.PrimaryName = "Primary: " + i.ToString();
                 s.SecondaryName = "Secondary: " + i.ToString();

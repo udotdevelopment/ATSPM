@@ -83,8 +83,6 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateHourMetricTest()
         {
-            ApproachSplitFailAggregationRepositoryFactory.SetApplicationEventRepository(new InMemoryApproachSplitFailAggregationRepository(Db));
-            MOE.Common.Models.Repositories.SignalsRepositoryFactory.SetSignalsRepository(new InMemorySignalsRepository(Db));
 
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
 
@@ -119,9 +117,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateDayMetricTest()
         {
-            ApproachSplitFailAggregationRepositoryFactory.SetApplicationEventRepository(new InMemoryApproachSplitFailAggregationRepository(Db));
-            MOE.Common.Models.Repositories.SignalsRepositoryFactory.SetSignalsRepository(new InMemorySignalsRepository(Db));
-
+     
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
 
 
@@ -155,9 +151,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateWeekMetricTest()
         {
-            ApproachSplitFailAggregationRepositoryFactory.SetApplicationEventRepository(new InMemoryApproachSplitFailAggregationRepository(Db));
-            MOE.Common.Models.Repositories.SignalsRepositoryFactory.SetSignalsRepository(new InMemorySignalsRepository(Db));
-
+   
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
 
 
@@ -407,6 +401,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
             Assert.IsTrue(options.CreateMetric().Count > 0);
         }
+
+        
 
 
     }

@@ -39,15 +39,49 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             SignalPreemptAggregationOptions options = new SignalPreemptAggregationOptions();
 
 
-            options.StartDate = DateTime.Now.AddMonths(-1);
-            options.EndDate = DateTime.Now;
+
+            options.StartDate = DateTime.Now.AddDays(-21);//Convert.ToDateTime("10/17/2017");
+            options.EndDate = DateTime.Now; //Convert.ToDateTime("10/18/2017");
             options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
-                DateTime.Now.AddMonths(-1),
-                DateTime.Now,
+                DateTime.Now.AddDays(-21),//Convert.ToDateTime("10/17/2017 7:00 AM"), 
+                DateTime.Now,//Convert.ToDateTime("10/17/2017 8:00 AM"), 
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.Day,
+                BinFactoryOptions.BinSizes.Week,
+                BinFactoryOptions.TimeOptions.StartToEnd);
+
+            options.SignalIds.Add("101");
+            options.SignalIds.Add("102");
+            options.SignalIds.Add("103");
+            PopulateSignalsWithPreemptionAggregationRecords(options);
+            options.GetSignalObjects();
+
+            options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
+            options.CreateMetric();
+            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.CreateMetric();
+            options.ChartType = AggregationMetricOptions.ChartTypes.Line;
+            options.CreateMetric();
+            options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
+            Assert.IsTrue(options.CreateMetric().Count > 0);
+        }
+        [TestMethod]
+        public void GetPreemptByRouteTest()
+        {
+            SignalPreemptAggregationOptions options = new SignalPreemptAggregationOptions();
+
+
+
+            options.StartDate = DateTime.Now.AddDays(-21);//Convert.ToDateTime("10/17/2017");
+            options.EndDate = DateTime.Now; //Convert.ToDateTime("10/18/2017");
+            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Route;
+            options.TimeOptions = new BinFactoryOptions(
+                DateTime.Now.AddDays(-21),//Convert.ToDateTime("10/17/2017 7:00 AM"), 
+                DateTime.Now,//Convert.ToDateTime("10/17/2017 8:00 AM"), 
+                null, null, null, null, null,
+                BinFactoryOptions.BinSizes.Week,
                 BinFactoryOptions.TimeOptions.StartToEnd);
 
             options.SignalIds.Add("101");

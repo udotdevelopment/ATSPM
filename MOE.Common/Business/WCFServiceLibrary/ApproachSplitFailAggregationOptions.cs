@@ -120,16 +120,18 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
            
             
-            Series series = new Series();
-            series.Color = GetSeriesColorByNumber(1);
-            series.Name = "Split Fails";
-            series.ChartArea = "ChartArea1";
-            SetSeriestype(series);
-            chart.Series.Add(series);
+            
 
             int i = 1;
             foreach (var signal in signals)
             {
+                Series series = new Series();
+                series.Color = GetSeriesColorByNumber(i);
+                series.Name = signal.SignalID;
+                series.ChartArea = "ChartArea1";
+                SetSeriestype(series);
+                chart.Series.Add(series);
+
                 List<SpliFailAggregationBySignal> spliFailAggregationBySignals = new List<SpliFailAggregationBySignal>
                 {
                     new SpliFailAggregationBySignal(this, signal, BinsContainer)
