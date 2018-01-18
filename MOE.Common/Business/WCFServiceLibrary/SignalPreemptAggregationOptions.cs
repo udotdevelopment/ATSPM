@@ -120,7 +120,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             int i = 1;
           
-       
+
                 Series series = new Series();
                 series.Color = GetSeriesColorByNumber(i);
                 series.Name = signal.SignalID;
