@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
 using SPM.Models;
 using MOE.Common.Models;
@@ -63,9 +64,32 @@ namespace SPM.Controllers
                 //Create agg data export report
                     switch (vm.SelectedMetric)
                     {
-                        case 17:
+                        case 20:
                         //    AoROptions options = new AoROptions();
-                            //CreateArrivalOnGreenAggregationChart()
+                        //CreateArrivalOnGreenAggregationChart()
+                            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+                            options.StartDate = vm.StartDateDay;
+                            options.EndDate = vm.EndDateDay;
+                            int startHour;
+                            if (vm.StartTime != null)
+                            {
+                                ////startHour = vm.StartTime;
+                                //if (vm.SelectedStartAMPM.ToUpper().Contains("PM"))
+                                //{
+                                //   // startHour += 12;
+                                //}
+                            }
+                            else
+                            {
+                                startHour = 0;
+                            }
+                            options.AggregationOpperation = vm.IsSum
+                            ? AggregationMetricOptions.AggregationOpperations.Sum
+                            : AggregationMetricOptions.AggregationOpperations.Average;
+                        //options.TimeOptions = new BinFactoryOptions(vm.StartDateDay, vm.EndDateDay,
+                        //    );
+    
+
                             break;
                     }
                 
