@@ -87,15 +87,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
             throw new System.NotImplementedException();
         }
 
-        protected void GetTimeAggregateChart(List<Models.Signal> signals, Chart chart)
+        protected override void GetTimeAggregateChart(Models.Signal signal, Chart chart)
         {
             
 
 
             int i = 1;
           
-            foreach(Models.Signal signal in signals)
-            {
+
                 Series series = new Series();
                 series.Color = GetSeriesColorByNumber(i);
                 series.Name = signal.SignalID;
@@ -125,7 +124,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         
 
             }
-            }
+            
 
     }
 }}
