@@ -5,9 +5,12 @@
 <!DOCTYPE html>
 
 <html>
+<script type="text/javascript">function LoadFromUrl() {
+    @Html.Raw(Model.RunMetricJavascript)
+}</script>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Raw Data Export</title>
+    <title>Aggregate Data Export</title>
 </head>
 <body>
     @using (Html.BeginForm())
@@ -137,14 +140,14 @@
                             @Html.DropDownList("EndAMPMddl", Model.EndAMPMList, new { @class = "form-control AMPMWidth", title = "AM PM component of end date" })
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    @*<div class="col-md-12">
                         @Html.ValidationMessageFor(model => model.StartTime, "", new { id = "StartTime-error", @class = "text-danger" })
                         @Html.ValidationMessageFor(model => model.StartDateDay, "", new { id = "StartDateDay-error", @class = "text-danger" })
                         @Html.ValidationMessageFor(model => model.SelectedStartAMPM, "", new { id = "SelectedStartAMPM-error", @class = "text-danger" })
                         @Html.ValidationMessageFor(model => model.EndTime, "", new { id = "EndTime-error", @class = "text-danger" })
                         @Html.ValidationMessageFor(model => model.EndDateDay, "", new { id = "EndDateDay-error", @class = "text-danger" })
                         @Html.ValidationMessageFor(model => model.SelectedEndAMPM, "", new { id = "SelectedEndAMPM-error", @class = "text-danger" })
-                    </div>
+                    </div>*@
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <button id="ResetDate" type="button" class="btn">Reset Date</button>
                     </div>

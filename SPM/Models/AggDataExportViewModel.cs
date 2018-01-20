@@ -43,6 +43,7 @@ namespace SPM.Models
         public int SelectedRouteId { get; set; }
 
         public SignalSearchViewModel SignalSearchViewModel { get; set; }
+        public String RunMetricJavascript { get; set; } = string.Empty;
 
         //[Required]
         //[Display(Name = "Signal ID")]

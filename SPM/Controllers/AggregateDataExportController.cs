@@ -10,6 +10,7 @@ using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
 using SPM.Models;
 using MOE.Common.Models;
+using MOE.Common.Models.ViewModel.Chart;
 
 namespace SPM.Controllers
 {
@@ -30,6 +31,11 @@ namespace SPM.Controllers
         MOE.Common.Models.Repositories.IControllerEventLogRepository cr =
             MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
         //private ApplicationDbContext db = new ApplicationDbContext();
+
+        public ActionResult SignalSearch(SignalSearchViewModel ssvm)
+        {
+            return PartialView("SignalSearch", ssvm);
+        }
 
         // GET: DataExportViewModels
         public ActionResult Index(AggDataExportViewModel vm)
@@ -67,26 +73,58 @@ namespace SPM.Controllers
                         case 20:
                         //    AoROptions options = new AoROptions();
                         //CreateArrivalOnGreenAggregationChart()
+                            //BinFactoryOptions.BinSizes selectedBinSize = vm.SelectedBinSize;
+
+                            List<DayOfWeek> daysOfWeek = new List<DayOfWeek>();
+                            if (vm.Weekdays)
+                            {
+                                daysOfWeek.Add(DayOfWeek.Monday);
+                                daysOfWeek.Add(DayOfWeek.Tuesday);
+                                daysOfWeek.Add(DayOfWeek.Wednesday);
+                                daysOfWeek.Add(DayOfWeek.Thursday);
+                                daysOfWeek.Add(DayOfWeek.Friday);
+                            }
+                            if (vm.Weekends)
+                            {
+                                daysOfWeek.Add(DayOfWeek.Saturday);
+                                daysOfWeek.Add(DayOfWeek.Sunday);
+                            }
                             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
                             options.StartDate = vm.StartDateDay;
                             options.EndDate = vm.EndDateDay;
-                            int startHour;
+                            int startHour, startMinute, endHour, endMinute;
+                            BinFactoryOptions.TimeOptions timeOption = BinFactoryOptions.TimeOptions.StartToEnd;
                             if (vm.StartTime != null)
                             {
-                                ////startHour = vm.StartTime;
-                                //if (vm.SelectedStartAMPM.ToUpper().Contains("PM"))
-                                //{
-                                //   // startHour += 12;
-                                //}
+                                timeOption = BinFactoryOptions.TimeOptions.TimePeriod;
+                                int[] hourMin = SplitHourMinute(vm.StartTime);
+                                startHour = hourMin[0];
+                                startMinute = hourMin[1];
+                                if (vm.SelectedStartAMPM.ToUpper().Contains("PM") && startHour < 12)
+                                {
+                                    startHour += 12;
+                                }
                             }
-                            else
+                            if (vm.EndTime != null)
                             {
-                                startHour = 0;
+                                timeOption = BinFactoryOptions.TimeOptions.TimePeriod;
+                                int[] hourMin = SplitHourMinute(vm.EndTime);
+                                endHour = hourMin[0];
+                                endMinute = hourMin[1];
+                                if (vm.SelectedEndAMPM.ToUpper().Contains("PM") && endHour < 12)
+                                {
+                                    endHour += 12;
+                                }
                             }
-                            options.AggregationOpperation = vm.IsSum
-                            ? AggregationMetricOptions.AggregationOpperations.Sum
-                            : AggregationMetricOptions.AggregationOpperations.Average;
+
+                        //    options.AggregationOpperation = vm.IsSum
+                        //    ? AggregationMetricOptions.AggregationOpperations.Sum
+                        //    : AggregationMetricOptions.AggregationOpperations.Average;
                         //options.TimeOptions = new BinFactoryOptions(vm.StartDateDay, vm.EndDateDay,
+                        //    (vm.StartTime!=null) ? startHour : null, (vm.StartTime!=null) ? startMinute : null,
+                        //    (vm.EndTime!=null) ? endHour : null, (vm.EndTime!=null) ? endMinute : null,
+                        //    daysOfWeek, 
+                        //    )
                         //    );
     
 
@@ -95,6 +133,15 @@ namespace SPM.Controllers
                 
             }
             return View(vm);
+        }
+
+        private int[] SplitHourMinute(String timeFromFrontEnd)
+        {
+            int[] HourMinute = new int[]{0, 0};
+            string[] splitted = timeFromFrontEnd.Split(':');
+            int.TryParse(splitted[0], out HourMinute[0]);
+            int.TryParse(splitted[1], out HourMinute[1]);
+            return HourMinute;
         }
 
         //private AggregationMetricOptions SetOptionFromVm(AggDataExportViewModel vm)
