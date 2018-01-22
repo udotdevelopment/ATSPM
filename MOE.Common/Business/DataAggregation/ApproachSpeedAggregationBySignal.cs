@@ -39,14 +39,14 @@ namespace MOE.Common.Business.DataAggregation
 
         public double Order { get; set; }
 
-        public ApproachSpeedAggregationBySignal(AggregationMetricOptions options, Models.Signal signal, BinsContainer binsContainer)
+        public ApproachSpeedAggregationBySignal(AggregationMetricOptions options, Models.Signal signal, List<BinsContainer> binsContainers)
         {
             Signal = signal;
             ApproachSpeeds = new List<ApproachSpeedAggregationContainer>();
             foreach (var approach in signal.Approaches)
             {
                 ApproachSpeeds.Add(
-                    new ApproachSpeedAggregationContainer(approach, binsContainer));
+                    new ApproachSpeedAggregationContainer(approach, binsContainers));
             }
 
         }
@@ -74,21 +74,20 @@ namespace MOE.Common.Business.DataAggregation
         public Approach Approach { get; }
         public BinsContainer BinsContainer { get; set; } = new BinsContainer();
 
-        public ApproachSpeedAggregationContainer(Approach approach, BinsContainer binsContainer)//, AggregationMetricOptions.XAxisTimeTypes aggregationType)
+        public ApproachSpeedAggregationContainer(Approach approach, List<BinsContainer> binsContainer)//, AggregationMetricOptions.XAxisTimeTypes aggregationType)
         {
             Approach = approach;
-            var splitFailAggregationRepository =
-                MOE.Common.Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.Create();
-
-
-            foreach (var bin in binsContainer.Bins)
+            var splitFailAggregationRepository = Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.Create();
+            var container = binsContainer.FirstOrDefault();
+            if (container != null)
             {
-
-                var splitFails = splitFailAggregationRepository
-                    .GetApproachSplitFailAggregationByApproachIdAndDateRange(
-                        approach.ApproachID, bin.Start, bin.End);
-                BinsContainer.Bins.Add(new Bin { Start = bin.Start, End = bin.End, Value = splitFails });
-
+                foreach (var bin in container.Bins)
+                {
+                    var splitFails = splitFailAggregationRepository
+                        .GetApproachSplitFailAggregationByApproachIdAndDateRange(
+                            approach.ApproachID, bin.Start, bin.End);
+                    BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Value = splitFails});
+                }
             }
         }
 

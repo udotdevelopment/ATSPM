@@ -47,7 +47,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected override void GetTimeAggregateChart(Models.Signal signal, Chart chart)
         {
             ApproachSpeedAggregationBySignal approachSpeedAggregatBySignal =
-                new ApproachSpeedAggregationBySignal(this, signal, BinsContainer);
+                new ApproachSpeedAggregationBySignal(this, signal, BinsContainers);
             int i = 1;
             foreach (var approachSplitFails in approachSpeedAggregatBySignal.ApproachSpeeds)
             {

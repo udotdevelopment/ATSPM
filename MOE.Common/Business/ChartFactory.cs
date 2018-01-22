@@ -78,9 +78,7 @@ namespace MOE.Common.Business
             Chart chart = new Chart();
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateTimeXIntYChartArea(options));
-
-
-
+            chart.Titles.Add(options.ChartTitle);
             return chart;
         }
 
@@ -108,6 +106,7 @@ namespace MOE.Common.Business
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateTimeXIntYChartArea(options));
             SetLegend(chart);
+            chart.Titles.Add(options.ChartTitle);
             return chart;
         }
 
@@ -395,8 +394,30 @@ namespace MOE.Common.Business
                     chartArea.AxisX.LabelStyle.Format = "HH";
                 break;
             }
-            chartArea.AxisX.Minimum = options.StartDate.ToOADate();
-            chartArea.AxisX.Maximum = options.EndDate.ToOADate();
+            DateTime tempStart;
+            DateTime tempEnd;
+            if (options.TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod && (options.TimeOptions.BinSize == BinFactoryOptions.BinSizes.FifteenMinutes ||
+                                                                                               options.TimeOptions.BinSize == BinFactoryOptions.BinSizes.ThirtyMinutes ||
+                                                                                               options.TimeOptions.BinSize == BinFactoryOptions.BinSizes.Hour))
+            {
+                tempStart = new DateTime(options.TimeOptions.Start.Year, options.TimeOptions.Start.Month,
+                    options.TimeOptions.Start.Day, options.TimeOptions.TimeOfDayStartHour ?? 0,
+                    options.TimeOptions.TimeOfDayStartMinute ?? 0, 0);
+                tempEnd = new DateTime(options.TimeOptions.Start.Year, options.TimeOptions.Start.Month,
+                    options.TimeOptions.Start.Day, options.TimeOptions.TimeOfDayEndHour ?? 0,
+                    options.TimeOptions.TimeOfDayEndMinute ?? 0, 0);
+            }
+            else
+            {
+                tempStart = new DateTime(options.TimeOptions.Start.Year, options.TimeOptions.Start.Month,
+                    options.TimeOptions.Start.Day, options.TimeOptions.TimeOfDayStartHour ?? 0,
+                    options.TimeOptions.TimeOfDayStartMinute ?? 0, 0);
+                tempEnd = new DateTime(options.TimeOptions.End.Year, options.TimeOptions.End.Month,
+                    options.TimeOptions.End.Day, options.TimeOptions.TimeOfDayEndHour ?? 0,
+                    options.TimeOptions.TimeOfDayEndMinute ?? 0, 0);
+            }
+            chartArea.AxisX.Minimum = tempStart.ToOADate();
+            chartArea.AxisX.Maximum = tempEnd.ToOADate();
             chartArea.AxisX.Interval = 1;
         }
 
@@ -523,6 +544,7 @@ namespace MOE.Common.Business
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateStringXIntYChartArea(options));
             SetLegend(chart);
+            chart.Titles.Add(options.ChartTitle);
             return chart;
         }
 

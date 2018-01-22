@@ -570,9 +570,13 @@
     <Content Include="Views\Routes\Index.cshtml" />
     <Content Include="Views\RouteSignals\ApproachesForRoute.cshtml" />
     <Content Include="Views\AggregateDataExport\AggregateDataExport.cshtml" />
-    <Content Include="Views\AggregateDataExport\Index.cshtml" />
+    <Content Include="Views\AggregateDataExport\IndexV1.cshtml" />
     <Content Include="Views\Routes\EditorTemplates\RouteSignal.cshtml" />
     <Content Include="Views\Routes\EditorTemplates\RoutePhaseDirection.cshtml" />
+    <Content Include="Views\RouteSignals\SignalsList.cshtml" />
+    <Content Include="Views\AggregateDataExport\Index.cshtml" />
+    <Content Include="Views\AggregateDataExport\CreateMetric.cshtml" />
+    <Content Include="Views\AggregateDataExport\DisplayTemplates\Signal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -35,6 +35,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(PedDelayOptions))]
     [KnownType(typeof(ApproachVolumeOptions))]
     [KnownType(typeof(AggregationMetricOptions))]
+    [KnownType(typeof(ApproachSplitFailAggregationOptions))]
     [KnownType(typeof(string[]))]
     public class MetricOptions
     {

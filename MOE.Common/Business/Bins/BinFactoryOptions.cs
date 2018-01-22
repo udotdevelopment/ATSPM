@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace MOE.Common.Business.Bins
 {
+    [DataContract]
     public class BinFactoryOptions
     {
 
@@ -12,17 +14,34 @@ namespace MOE.Common.Business.Bins
                 Week
             }
             public enum TimeOptions { StartToEnd, TimePeriod }
-
+        [DataMember]
             public DateTime Start { get; set; }
-            public DateTime End { get; set; }
-            public int? TimeOfDayStartHour { get; set; }
-            public int? TimeOfDayStartMinute { get; set; }
-            public int? TimeOfDayEndHour { get; set; }
-            public int? TimeOfDayEndMinute { get; set; }
-            public List<DayOfWeek> DaysOfWeek { get; set; }
-            public TimeOptions TimeOption { get; set; }
-            public BinSizes BinSize { get; set; }
-            public List<DateTime> DateList { get; set; }
+        [DataMember]
+        public DateTime End { get; set; }
+
+        [DataMember]
+        public int? TimeOfDayStartHour { get; set; }
+
+        [DataMember]
+        public int? TimeOfDayStartMinute { get; set; }
+
+        [DataMember]
+        public int? TimeOfDayEndHour { get; set; }
+
+        [DataMember]
+        public int? TimeOfDayEndMinute { get; set; }
+
+        [DataMember]
+        public List<DayOfWeek> DaysOfWeek { get; set; }
+
+        [DataMember]
+        public TimeOptions TimeOption { get; set; }
+
+        [DataMember]
+        public BinSizes BinSize { get; set; }
+
+        [DataMember]
+        public List<DateTime> DateList { get; set; }
 
             public BinFactoryOptions(DateTime start, DateTime end, int? timeOfDayStartHour, int? timeOfDayStartMinute, int? timeOfDayEndHour, int? timeOfDayEndMinute, List<DayOfWeek> daysOfWeek, BinSizes binSize, TimeOptions timeOption)
             {

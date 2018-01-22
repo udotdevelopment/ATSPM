@@ -16,7 +16,7 @@ namespace MOE.Common.Business.Bins.Tests
         {
             BinFactoryOptions binFactoryOptions = new BinFactoryOptions(Convert.ToDateTime("10/17/2017 12:00 AM"), Convert.ToDateTime("10/17/2017 1:00 AM"), null, null, null, null, null, BinFactoryOptions.BinSizes.FifteenMinutes, BinFactoryOptions.TimeOptions.StartToEnd);
             var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.Bins.Count == 4);
+            Assert.IsTrue(bins.FirstOrDefault().Bins.Count == 4);
         }
 
         [TestMethod()]
@@ -36,7 +36,7 @@ namespace MOE.Common.Business.Bins.Tests
                 BinFactoryOptions.BinSizes.FifteenMinutes, 
                 BinFactoryOptions.TimeOptions.TimePeriod);
             var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.Bins.Count == 16);
+            Assert.IsTrue(bins.First().Bins.Count == 16);
         }
 
         [TestMethod()]
@@ -56,7 +56,7 @@ namespace MOE.Common.Business.Bins.Tests
                 BinFactoryOptions.BinSizes.ThirtyMinutes,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.Bins.Count == 8);
+            Assert.IsTrue(bins.First().Bins.Count == 8);
         }
 
         [TestMethod()]
@@ -76,7 +76,7 @@ namespace MOE.Common.Business.Bins.Tests
                 BinFactoryOptions.BinSizes.Hour,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.Bins.Count == 4);
+            Assert.IsTrue(bins.First().Bins.Count == 4);
         }
 
         [TestMethod()]
@@ -89,7 +89,7 @@ namespace MOE.Common.Business.Bins.Tests
                 BinFactoryOptions.BinSizes.ThirtyMinutes,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.Bins.Count == 2);
+            Assert.IsTrue(bins.First().Bins.Count == 2);
         }
 
         [TestMethod()]
@@ -102,7 +102,7 @@ namespace MOE.Common.Business.Bins.Tests
                 BinFactoryOptions.BinSizes.Hour,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.Bins.Count == 5);
+            Assert.IsTrue(bins.First().Bins.Count == 5);
         }
 
         [TestMethod()]
@@ -115,7 +115,7 @@ namespace MOE.Common.Business.Bins.Tests
                 BinFactoryOptions.BinSizes.Day,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.Bins.Count == 11);
+            Assert.IsTrue(bins.First().Bins.Count == 11);
         }
 
         [TestMethod()]
@@ -128,7 +128,7 @@ namespace MOE.Common.Business.Bins.Tests
                 BinFactoryOptions.BinSizes.Week,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.Bins.Count == 2);
+            Assert.IsTrue(bins.First().Bins.Count == 2);
         }
 
         [TestMethod()]
@@ -141,7 +141,7 @@ namespace MOE.Common.Business.Bins.Tests
                 BinFactoryOptions.BinSizes.Month,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.Bins.Count == 3);
+            Assert.IsTrue(bins.First().Bins.Count == 3);
         }
 
         [TestMethod()]
@@ -154,7 +154,7 @@ namespace MOE.Common.Business.Bins.Tests
                 BinFactoryOptions.BinSizes.Year,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.Bins.Count == 2);
+            Assert.IsTrue(bins.Count == 2);
         }
 
         [TestMethod()]
@@ -170,7 +170,7 @@ namespace MOE.Common.Business.Bins.Tests
                 BinFactoryOptions.BinSizes.Year,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.Bins.Count == 52);
+            Assert.IsTrue(bins.First().Bins.Count == 52);
         }
     }
 }

@@ -1,0 +1,19 @@
+﻿@model MOE.Common.Models.Signal
+
+<div>
+    <h4>Signal</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        @Html.HiddenFor(m => m.VersionID)
+        @Html.HiddenFor(model => model.SignalID)
+        <dt>
+            @Html.DisplayNameFor(model => model.SignalDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SignalDescription)
+        </dd>
+
+       
+    </dl>
+</div>
