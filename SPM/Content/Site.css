@@ -28,6 +28,11 @@
     vertical-align:middle;
 }
 
+.center-check {
+    text-align: center;
+    position: center;
+}
+
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
