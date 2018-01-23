@@ -101,7 +101,15 @@ namespace SPM.Controllers
                 }
                 timeOptions = BinFactoryOptions.TimeOptions.TimePeriod;
             }
-            List<DayOfWeek> daysOfWeek = new List<DayOfWeek>{ DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday};
+            List<DayOfWeek> daysOfWeek = new List<DayOfWeek>();
+            if (aggDataExportViewModel.Weekends)
+            {
+                daysOfWeek.AddRange(new List<DayOfWeek>{DayOfWeek.Sunday, DayOfWeek.Saturday});
+            }
+            if (aggDataExportViewModel.Weekdays)
+            {
+                daysOfWeek.AddRange(new List<DayOfWeek>{ DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+            }
             options.TimeOptions = new BinFactoryOptions(
                 aggDataExportViewModel.StartDateDay,
                 aggDataExportViewModel.EndDateDay,

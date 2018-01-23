@@ -33,8 +33,8 @@ namespace SPM.Models
         public virtual ICollection<LaneType> AllLaneTypes { get; set; }
         ////public List<SelectListItem> AggregateMetricsList { get; set; }
 
-        //public bool Weekdays { get; set; }
-        //public bool Weekends { get; set; }
+        public bool Weekdays { get; set; }
+        public bool Weekends { get; set; }
         public bool IsSum { get; set; }
         //public List<string> WeekdayWeekendIDs { get; set; }
         //public ICollection<string> SelectedWeekdayWeekend { get; set; }

@@ -29,8 +29,14 @@
                         @Html.EditorFor(model => model.EndDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
                         @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
                         @Html.DropDownListFor(model => model.SelectedEndAMPM, Model.EndAMPMList, 
-                                new { @class = "form-control AMPMWidth", title = "AM PM component of end date" })
+                            new { @class = "form-control AMPMWidth", title = "AM PM component of end date" })
                     </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.CheckBoxFor(model => model.Weekdays, false)  Weekdays
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.CheckBoxFor(model => model.Weekends, false)  Weekends
                 </div>
             </div>
         </div>
