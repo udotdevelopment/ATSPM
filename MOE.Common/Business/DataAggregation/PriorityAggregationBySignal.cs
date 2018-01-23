@@ -36,13 +36,13 @@ namespace MOE.Common.Business.DataAggregation
 
         public double Order { get; set; }
 
-        public PriorityAggregationBySignal(AggregationMetricOptions options, Models.Signal signal, BinsContainer binsContainer)
+        public PriorityAggregationBySignal(AggregationMetricOptions options, Models.Signal signal, List<BinsContainer> binsContainers)
         {
             Signal = signal;
             PriorityTotals = new List<SignalPriorityAggregationContainer>();
 
             PriorityTotals.Add(
-                new SignalPriorityAggregationContainer(Signal, binsContainer));
+                new SignalPriorityAggregationContainer(Signal, binsContainers));
 
 
         }
@@ -67,7 +67,7 @@ namespace MOE.Common.Business.DataAggregation
         public Models.Signal Signal { get; }
         public BinsContainer BinsContainer { get; set; } = new BinsContainer();
 
-        public SignalPriorityAggregationContainer(Models.Signal signal, BinsContainer binsContainer) //, AggregationMetricOptions.XAxisTimeTypes aggregationType)
+        public SignalPriorityAggregationContainer(Models.Signal signal, List<BinsContainer> binsContainers) //, AggregationMetricOptions.XAxisTimeTypes aggregationType)
         {
             Signal = signal;
 
@@ -76,18 +76,21 @@ namespace MOE.Common.Business.DataAggregation
             var priorityAggregationRepository =
                 MOE.Common.Models.Repositories.PriorityAggregationDatasRepositoryFactory.Create();
 
-
-            foreach (var bin in binsContainer.Bins)
+            var container = binsContainers.FirstOrDefault();
+            if (container != null)
             {
+                foreach (var bin in container.Bins)
+                {
 
-                var records = priorityAggregationRepository
-                    .GetPriorityAggregationByVersionIdAndDateRange(
-                        Signal.VersionID, bin.Start, bin.End);
+                    var records = priorityAggregationRepository
+                        .GetPriorityAggregationByVersionIdAndDateRange(
+                            Signal.VersionID, bin.Start, bin.End);
 
-                var totalRequests = records.Sum(s => s.PriorityRequests);
+                    var totalRequests = records.Sum(s => s.PriorityRequests);
 
-                BinsContainer.Bins.Add(new Bin { Start = bin.Start, End = bin.End, Value = totalRequests });
+                    BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Value = totalRequests});
 
+                }
             }
         }
 

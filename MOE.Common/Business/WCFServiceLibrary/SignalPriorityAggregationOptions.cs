@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business.Bins;
 using MOE.Common.Business.DataAggregation;
 
 namespace MOE.Common.Business.WCFServiceLibrary
@@ -39,9 +41,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 for (int seriesCounter = 1; seriesCounter < 16; seriesCounter++)
                 {
                     PriorityAggregationBySignal priorityAggregationBySignal =
-                        new PriorityAggregationBySignal(this, signal, BinsContainer);
+                        new PriorityAggregationBySignal(this, signal, BinsContainers);
 
-                    priorityAggregationBySignal.GetPriorityTotalsBySignalByPriorityNumber(BinsContainer, seriesCounter);
+                    priorityAggregationBySignal.GetPriorityTotalsBySignalByPriorityNumber(BinsContainers.FirstOrDefault(), seriesCounter);
 
                     foreach (var totals in priorityAggregationBySignal.PriorityTotals)
                     {
@@ -76,7 +78,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 chart.Series.Add(series);
 
                 PriorityAggregationBySignal priorityAggregationBySignal =
-                        new PriorityAggregationBySignal(this, signal, BinsContainer);
+                        new PriorityAggregationBySignal(this, signal, BinsContainers);
 
                 foreach (var totals in priorityAggregationBySignal.PriorityTotals)
                 {
@@ -117,7 +119,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 chart.Series.Add(series);
 
                 PriorityAggregationBySignal priorityAggregationBySignal =
-                    new PriorityAggregationBySignal(this, signal, BinsContainer);
+                    new PriorityAggregationBySignal(this, signal, BinsContainers);
 
                 foreach (var totals in priorityAggregationBySignal.PriorityTotals)
                 {
@@ -155,9 +157,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
 
             PriorityAggregationBySignal priorityAggregationBySignal =
-                new PriorityAggregationBySignal(this, signal, BinsContainer);
+                new PriorityAggregationBySignal(this, signal, BinsContainers);
 
-            priorityAggregationBySignal.GetPriorityByBin(BinsContainer);
+            priorityAggregationBySignal.GetPriorityByBin(BinsContainers.FirstOrDefault());
 
             foreach (var p in priorityAggregationBySignal.PriorityTotals)
             {

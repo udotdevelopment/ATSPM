@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business.Bins;
 using MOE.Common.Business.DataAggregation;
 using MOE.Common.Models;
 
@@ -120,7 +121,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 chart.Series.Add(series);
 
                 PreemptAggregationBySignal preemptAggregationBySignal =
-                    new PreemptAggregationBySignal(this, signal, BinsContainer);
+                    new PreemptAggregationBySignal(this, signal, BinsContainers);
 
                 foreach (var totals in preemptAggregationBySignal.PreemptionTotals)
                 {
