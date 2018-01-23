@@ -12,7 +12,8 @@
                 </a>
             </h5>
         </div>
-        <div id="collapseDateTime" class="panel-body panel-collapse collapse in">
+    </div>
+         <div id="collapseDateTime" class="panel-body panel-collapse collapse in">
             <div class="col-md-7 col-sm-7 col-xs-7">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     @Html.LabelFor(model => model.StartDateDay, htmlAttributes: new { @class = "control-label" })
@@ -38,11 +39,36 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     @Html.CheckBoxFor(model => model.Weekends, false)  Weekends
                 </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.DropDownListFor(model=>model.SelectedBinSize, new SelectList(Model.BinSizeList))
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.DropDownListFor(model => model.SelectedAggregationSeriesOptions, new SelectList(Model.AggSeriesOptions))
+                </div>                
+            </div>
+        </div>
+   
+    <div class="panel panel-signal">
+        <div class="panel-heading">
+            <h5 class="panel-title">
+                <a id="Metric" data-toggle="collapse" href="#collapseMetric">
+                    Metric
+                </a>
+            </h5>
+        </div>
+        <div id="collapseMetric" class="panel-body panel-collapse collapse">
+            <div class="form-group">
+                @foreach (var metricItem in Model.MetricItems)
+                {
+                    <div>
+
+                        @Html.RadioButtonFor(m=>m.SelectedMetric, metricItem.Key)
+                        @Html.Label(metricItem.Value)
+                    </div>
+                }
             </div>
         </div>
     </div>
-
-
     <button id="CreateMetric" type="submit" class="btn btn-primary">Create Chart &nbsp;<span id='RunReportSpinner' class="glyphicon"></span></button>
         <div id="Results"></div>
         

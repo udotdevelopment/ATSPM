@@ -38,18 +38,18 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 for (int seriesCounter = 1; seriesCounter < 16; seriesCounter++)
                 {
-                    PriorityAggregationBySignal priorityAggregationBySignal =
-                        new PriorityAggregationBySignal(this, signal, BinsContainer);
+                    //PriorityAggregationBySignal priorityAggregationBySignal =
+                    //    new PriorityAggregationBySignal(this, signal, BinsContainer);
 
-                    priorityAggregationBySignal.GetPriorityTotalsBySignalByPriorityNumber(BinsContainer, seriesCounter);
+                    //priorityAggregationBySignal.GetPriorityTotalsBySignalByPriorityNumber(BinsContainer, seriesCounter);
 
-                    foreach (var totals in priorityAggregationBySignal.PriorityTotals)
-                    {
-                        foreach (var bin in totals.BinsContainer.Bins)
-                        {
-                            chart.Series[seriesCounter - 1].Points.AddXY(signal.SignalID, bin.Value);
-                        }
-                    }
+                    //foreach (var totals in priorityAggregationBySignal.PriorityTotals)
+                    //{
+                    //    foreach (var bin in totals.BinsContainer.Bins)
+                    //    {
+                    //        chart.Series[seriesCounter - 1].Points.AddXY(signal.SignalID, bin.Value);
+                    //    }
+                    //}
                 }
             }
 
@@ -75,16 +75,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 SetSeriestype(series);
                 chart.Series.Add(series);
 
-                PriorityAggregationBySignal priorityAggregationBySignal =
-                        new PriorityAggregationBySignal(this, signal, BinsContainer);
+                //PriorityAggregationBySignal priorityAggregationBySignal =
+                //        new PriorityAggregationBySignal(this, signal, BinsContainer);
 
-                foreach (var totals in priorityAggregationBySignal.PriorityTotals)
-                {
-                    foreach (var bin in totals.BinsContainer.Bins)
-                    {
-                        series.Points.AddXY(bin.Start, bin.Value);
-                    }
-                }
+                //foreach (var totals in priorityAggregationBySignal.PriorityTotals)
+                //{
+                //    foreach (var bin in totals.BinsContainer.Bins)
+                //    {
+                //        series.Points.AddXY(bin.Start, bin.Value);
+                //    }
+                //}
 
                 i++;
             }
@@ -116,18 +116,18 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 SetSeriestype(series);
                 chart.Series.Add(series);
 
-                PriorityAggregationBySignal priorityAggregationBySignal =
-                    new PriorityAggregationBySignal(this, signal, BinsContainer);
+                //PriorityAggregationBySignal priorityAggregationBySignal =
+                //    new PriorityAggregationBySignal(this, signal, BinsContainer);
 
-                foreach (var totals in priorityAggregationBySignal.PriorityTotals)
-                {
-                    foreach (var bin in totals.BinsContainer.Bins)
-                    {
-                        series.Points.AddXY(bin.Start, bin.Value);
-                    }
-                }
+                //foreach (var totals in priorityAggregationBySignal.PriorityTotals)
+                //{
+                //    foreach (var bin in totals.BinsContainer.Bins)
+                //    {
+                //        series.Points.AddXY(bin.Start, bin.Value);
+                //    }
+                //}
 
-                i++;
+                //i++;
             }
         }
 
@@ -154,25 +154,25 @@ namespace MOE.Common.Business.WCFServiceLibrary
             i++;
 
 
-            PriorityAggregationBySignal priorityAggregationBySignal =
-                new PriorityAggregationBySignal(this, signal, BinsContainer);
+            //PriorityAggregationBySignal priorityAggregationBySignal =
+            //    new PriorityAggregationBySignal(this, signal, BinsContainer);
 
-            priorityAggregationBySignal.GetPriorityByBin(BinsContainer);
+            //priorityAggregationBySignal.GetPriorityByBin(BinsContainer);
 
-            foreach (var p in priorityAggregationBySignal.PriorityTotals)
-            {
-
-
-                if (AggregationOpperation == AggregationMetricOptions.AggregationOpperations.Sum)
-                {
-                    foreach (var bin in p.BinsContainer.Bins)
-                    {
-                        series.Points.AddXY(bin.Start, bin.Value);
-                    }
-                }
+            //foreach (var p in priorityAggregationBySignal.PriorityTotals)
+            //{
 
 
-            }
+            //    if (AggregationOpperation == AggregationMetricOptions.AggregationOpperations.Sum)
+            //    {
+            //        foreach (var bin in p.BinsContainer.Bins)
+            //        {
+            //            series.Points.AddXY(bin.Start, bin.Value);
+            //        }
+            //    }
+
+
+            //}
 
 
         }

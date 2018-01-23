@@ -119,16 +119,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 SetSeriestype(series);
                 chart.Series.Add(series);
 
-                PreemptAggregationBySignal preemptAggregationBySignal =
-                    new PreemptAggregationBySignal(this, signal, BinsContainer);
+                //PreemptAggregationBySignal preemptAggregationBySignal =
+                //    new PreemptAggregationBySignal(this, signal, BinsContainer);
 
-                foreach (var totals in preemptAggregationBySignal.PreemptionTotals)
-                {
-                    foreach (var bin in totals.BinsContainer.Bins)
-                    {
-                        series.Points.AddXY(bin.Start, bin.Value);
-                    }
-                }
+                //foreach (var totals in preemptAggregationBySignal.PreemptionTotals)
+                //{
+                //    foreach (var bin in totals.BinsContainer.Bins)
+                //    {
+                //        series.Points.AddXY(bin.Start, bin.Value);
+                //    }
+                //}
 
                 i++;
             }

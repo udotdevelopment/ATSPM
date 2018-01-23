@@ -8,6 +8,8 @@ using System.Runtime.Serialization;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using MOE.Common.Business.Bins;
+using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 using MOE.Common.Models.ViewModel.Chart;
 
@@ -27,7 +29,8 @@ namespace SPM.Models
         public virtual ICollection<DirectionType> AllApproachTypes { get; set; }
         public virtual List<int> MovementTypeIDs { get; set; }
         public virtual ICollection<MovementType> AllMovementTypes { get; set; }
-        public MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.XAxisAggregationSeriesOptions AggSeriesOptions { get; set; }
+        public List<MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.XAxisAggregationSeriesOptions> AggSeriesOptions { get; set; }
+        public  AggregationMetricOptions.XAxisAggregationSeriesOptions SelectedAggregationSeriesOptions { get; set; }
         public MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.AggregationGroups AggGroups { get; set; }
         public virtual List<int> LaneTypeIDs { get; set; }
         public virtual ICollection<LaneType> AllLaneTypes { get; set; }
@@ -75,7 +78,8 @@ namespace SPM.Models
         //[Required]
         //[DataMember]
         //[Display(Name = "Volume Bin Size")]
-        //public string SelectedBinSize { get; set; }
+        public List<MOE.Common.Business.Bins.BinFactoryOptions.BinSizes> BinSizeList { get; set; }
+        public BinFactoryOptions.BinSizes SelectedBinSize { get; set; }
         //[DataMember]
         //public List<string> BinSizeList { get; set; }
 
@@ -90,19 +94,21 @@ namespace SPM.Models
             MetricItems = new Dictionary<int, string>();
             //SignalSearchViewModel = new MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel(regionRepositry, _metricRepository);
             SetDefaultDates();
-            //SetBinSizeList();
+            SetBinSizeList();
+            SetAggregationOptions();
         }
 
-        //protected void SetBinSizeList()
-        //{
-        //    BinSizeList = new List<string>();
-        //    BinSizeList.Add("15 minutes");
-        //    BinSizeList.Add("1 hour");
-        //    BinSizeList.Add("1 day");
-        //    BinSizeList.Add("1 week");
-        //    BinSizeList.Add("1 month");
-        //    BinSizeList.Add("1 year");
-        //}
+        private void SetAggregationOptions()
+        {
+            AggSeriesOptions = new List<AggregationMetricOptions.XAxisAggregationSeriesOptions>();
+            AggSeriesOptions.AddRange(new List<AggregationMetricOptions.XAxisAggregationSeriesOptions>{AggregationMetricOptions.XAxisAggregationSeriesOptions.Time, AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach, AggregationMetricOptions.XAxisAggregationSeriesOptions.Direction, AggregationMetricOptions.XAxisAggregationSeriesOptions.Route, AggregationMetricOptions.XAxisAggregationSeriesOptions.Signal, AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByDirection, AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase});
+        }
+
+        protected void SetBinSizeList()
+        {
+            BinSizeList = new List<BinFactoryOptions.BinSizes>();
+            BinSizeList.AddRange(new List<BinFactoryOptions.BinSizes>{BinFactoryOptions.BinSizes.FifteenMinutes, BinFactoryOptions.BinSizes.ThirtyMinutes, BinFactoryOptions.BinSizes.Hour, BinFactoryOptions.BinSizes.Day, BinFactoryOptions.BinSizes.Month, BinFactoryOptions.BinSizes.Year});
+        }
 
         protected void SetDefaultDates()
         {

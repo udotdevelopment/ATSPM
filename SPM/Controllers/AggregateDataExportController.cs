@@ -48,6 +48,18 @@ namespace SPM.Controllers
             {
                 aggDataExportViewModel.Signals.Add(signalRepository.GetLatestVersionOfSignalBySignalID(routeignal.SignalId));
             }
+            List<MetricType> allMetricTypes = metricTyperepository.GetAllToAggregateMetrics();
+            foreach (var metricType in allMetricTypes)
+            {
+                aggDataExportViewModel.MetricItems.Add(metricType.MetricID, metricType.ChartName);
+            }
+            List<DirectionType> allDirectionTypes = directionTypeRepository.GetAllDirections();
+            List<MovementType> allMovementTypes = movementTypeRepository.GetAllMovementTypes();
+            List<LaneType> allLaneTypes = laneTypeRepository.GetAllLaneTypes();
+            aggDataExportViewModel.AllMetricTypes = allMetricTypes;
+            aggDataExportViewModel.AllApproachTypes = allDirectionTypes;
+            aggDataExportViewModel.AllMovementTypes = allMovementTypes;
+            aggDataExportViewModel.AllLaneTypes = allLaneTypes;
             return PartialView(aggDataExportViewModel);
         }
 
@@ -60,7 +72,7 @@ namespace SPM.Controllers
             options.StartDate = aggDataExportViewModel.StartDateDay;
             options.EndDate = aggDataExportViewModel.EndDateDay;
             options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = aggDataExportViewModel.SelectedAggregationSeriesOptions;
             string[] startTime;
             string[] endTime;
             int? startHour = null;
@@ -114,7 +126,7 @@ namespace SPM.Controllers
                 aggDataExportViewModel.StartDateDay,
                 aggDataExportViewModel.EndDateDay,
                 startHour, startMinute, endHour, endMinute, daysOfWeek,
-                BinFactoryOptions.BinSizes.Hour,
+                aggDataExportViewModel.SelectedBinSize,
                 timeOptions);
             foreach (var signal in aggDataExportViewModel.Signals)
             {
@@ -149,18 +161,7 @@ namespace SPM.Controllers
             //    MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
             //Signal signal = signalsRepository.GetSignalVersionByVersionId(Convert.ToInt32(versionId));
             //mc.Signal = signal;
-            List<MetricType> allMetricTypes = metricTyperepository.GetAllToAggregateMetrics();
-            foreach (var metricType in allMetricTypes)
-            {
-                viewModel.MetricItems.Add(metricType.MetricID, metricType.ChartName);
-            }
-            List<DirectionType> allDirectionTypes = directionTypeRepository.GetAllDirections();
-            List<MovementType> allMovementTypes = movementTypeRepository.GetAllMovementTypes();
-            List<LaneType> allLaneTypes = laneTypeRepository.GetAllLaneTypes();
-            viewModel.AllMetricTypes = allMetricTypes;
-                viewModel.AllApproachTypes = allDirectionTypes;
-                viewModel.AllMovementTypes = allMovementTypes;
-                viewModel.AllLaneTypes = allLaneTypes;
+
             //List<string> WeekdayWeekends = new List<string>();
             //WeekdayWeekends.Add("Weekdays");
             //WeekdayWeekends.Add("Weekends");
