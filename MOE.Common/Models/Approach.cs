@@ -41,11 +41,16 @@ namespace MOE.Common.Models
         [Display(Name = "Protected Phase")]
         public int ProtectedPhaseNumber { get; set; }
 
-        [Display(Name = "Overlap")]
+        [Display(Name = "Protected Phase Overlap")]
         public bool IsProtectedPhaseOverlap { get; set; }
 
         [Display(Name = "Permissive Phase")]
         public int? PermissivePhaseNumber { get; set; }
+
+        [Display(Name = "Permissive Phase Overlap")]
+        public bool IsPermissivePhaseOverlap { get; set; }
+
+
 
         public virtual ICollection<Detector> Detectors { get; set; }
 

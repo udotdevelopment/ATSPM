@@ -129,8 +129,12 @@ namespace MOE.Common.Business
             List<Controller_Event_Log> cycleEvents;
             if (getPermissivePhase)
             {
+                var cycleEventNumbers = approach.IsPermissivePhaseOverlap ? new List<int> { 61, 63, 64 } : new List<int>() { 1, 8, 10 };
                 cycleEvents = celRepository.GetEventsByEventCodesParam(approach.SignalID, startDate,
-                    endDate, new List<int>() { 1, 8, 10 }, approach.PermissivePhaseNumber.Value);
+                    endDate, cycleEventNumbers, approach.PermissivePhaseNumber.Value);
+
+                //cycleEvents = celRepository.GetEventsByEventCodesParam(approach.SignalID, startDate,
+                //    endDate, new List<int>() { 1, 8, 10 }, approach.PermissivePhaseNumber.Value);
             }
             else
             {
@@ -146,12 +150,21 @@ namespace MOE.Common.Business
             var celRepository = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
             if (getPermissivePhase)
             {
+                var cycleEventNumbers = approach.IsPermissivePhaseOverlap ? new List<int> { 61, 63, 64 } : new List<int>() { 1, 8, 10 };
                 var eventsAfterEndDate = celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
-                    endDate, new List<int>() {1, 8, 10}, approach.PermissivePhaseNumber.Value, 3);
+                    endDate, cycleEventNumbers, approach.PermissivePhaseNumber.Value, 3);
                 if (eventsAfterEndDate != null)
                 {
+
                     cycleEvents.AddRange(eventsAfterEndDate);
                 }
+
+                //var eventsAfterEndDate = celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
+                //    endDate, new List<int>() {1, 8, 10}, approach.PermissivePhaseNumber.Value, 3);
+                //if (eventsAfterEndDate != null)
+                //{
+                //    cycleEvents.AddRange(eventsAfterEndDate);
+                //}
             }
             else
             {

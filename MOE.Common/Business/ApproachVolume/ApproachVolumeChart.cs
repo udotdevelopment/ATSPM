@@ -489,7 +489,7 @@ DateTime endDate, string signalId, string direction1, string direction2, Approac
           //  {
                 KeyValuePair<DateTime, int> D1Peak = findPeakHour(D1Volumes, binSizeMultiplier);
                 DateTime D1PeakHour = D1Peak.Key;
-                int D1PeakHourVolume = D1Peak.Value;
+                int D1PeakHourVolume = D1Peak.Value/4;
                 int D1PHvol = findPeakValueinHour(D1PeakHour, D1Volumes, binSizeMultiplier);
                 // Find the Peak hour factor for Direciton1
                 double D1PHF = 0;
@@ -506,7 +506,7 @@ DateTime endDate, string signalId, string direction1, string direction2, Approac
                 KeyValuePair<DateTime, int> D2Peak = findPeakHour(D2Volumes, binSizeMultiplier);
 
                 DateTime D2PeakHour = D2Peak.Key;
-                int D2PeakHourVolume = D2Peak.Value;
+                int D2PeakHourVolume = D2Peak.Value/4;
                 int D2PHvol = findPeakValueinHour(D2PeakHour, D2Volumes, binSizeMultiplier);
                 // Find the Peak hour factor for Direciton2
                 double D2PHF = 0;

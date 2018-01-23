@@ -1,36 +1,33 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.DataAggregation;
-using MOE.Common.Models;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
-    public class SignalPreemptAggregationOptions: AggregationMetricOptions
-
-
+    public class SignalPriorityAggregationOptions : AggregationMetricOptions
     {
+        
 
-        public SignalPreemptAggregationOptions()
+        public SignalPriorityAggregationOptions()
         {
-            MetricTypeID = 22;
+            MetricTypeID = 24;
         }
 
         protected override void GetSignalByPhaseAggregateCharts(List<Models.Signal> signals, Chart chart)
         {
-            MOE.Common.Models.Repositories.IPreemptAggregationDatasRepository repo =
-                MOE.Common.Models.Repositories.PreemptAggregationDatasRepositoryFactory.Create();
+            MOE.Common.Models.Repositories.IPriorityAggregationDatasRepository repo =
+                MOE.Common.Models.Repositories.PriorityAggregationDatasRepositoryFactory.Create();
 
 
 
 
-                //int maxPhase = (from r in aggregations select r.PreemptNumber).Max();
+            //int maxPhase = (from r in aggregations select r.PriorityNumber).Max();
 
             for (int seriesCounter = 1; seriesCounter < 16; seriesCounter++)
             {
                 Series series = new Series();
                 series.Color = GetSeriesColorByNumber(seriesCounter);
-                series.Name = "Preempt#" + seriesCounter.ToString();
+                series.Name = "Priority#" + seriesCounter.ToString();
                 series.ChartArea = "ChartArea1";
                 SetSeriestype(series);
                 chart.Series.Add(series);
@@ -41,31 +38,31 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 for (int seriesCounter = 1; seriesCounter < 16; seriesCounter++)
                 {
-                    PreemptAggregationBySignal preemptAggregationBySignal =
-                        new PreemptAggregationBySignal(this, signal, BinsContainer);
+                    PriorityAggregationBySignal priorityAggregationBySignal =
+                        new PriorityAggregationBySignal(this, signal, BinsContainer);
 
-                    preemptAggregationBySignal.GetPreemptTotalsBySignalByPreemptNumber(BinsContainer, seriesCounter);
+                    priorityAggregationBySignal.GetPriorityTotalsBySignalByPriorityNumber(BinsContainer, seriesCounter);
 
-                    foreach (var totals in preemptAggregationBySignal.PreemptionTotals)
+                    foreach (var totals in priorityAggregationBySignal.PriorityTotals)
                     {
                         foreach (var bin in totals.BinsContainer.Bins)
                         {
-                            chart.Series[seriesCounter-1].Points.AddXY(signal.SignalID, bin.Value);
+                            chart.Series[seriesCounter - 1].Points.AddXY(signal.SignalID, bin.Value);
                         }
                     }
                 }
             }
 
-                
-            
+
+
 
 
         }
 
         protected override void GetRouteAggregateChart(List<Models.Signal> signals, Chart chart)
         {
-            MOE.Common.Models.Repositories.IPreemptAggregationDatasRepository repo =
-                MOE.Common.Models.Repositories.PreemptAggregationDatasRepositoryFactory.Create();
+            MOE.Common.Models.Repositories.IPriorityAggregationDatasRepository repo =
+                MOE.Common.Models.Repositories.PriorityAggregationDatasRepositoryFactory.Create();
 
 
             int i = 1;
@@ -78,16 +75,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 SetSeriestype(series);
                 chart.Series.Add(series);
 
-                PreemptAggregationBySignal preemptAggregationBySignal =
-                        new PreemptAggregationBySignal(this, signal, BinsContainer);
-                
-                    foreach (var totals in preemptAggregationBySignal.PreemptionTotals)
+                PriorityAggregationBySignal priorityAggregationBySignal =
+                        new PriorityAggregationBySignal(this, signal, BinsContainer);
+
+                foreach (var totals in priorityAggregationBySignal.PriorityTotals)
+                {
+                    foreach (var bin in totals.BinsContainer.Bins)
                     {
-                        foreach (var bin in totals.BinsContainer.Bins)
-                        {
-                            series.Points.AddXY(bin.Start, bin.Value);
-                        }
+                        series.Points.AddXY(bin.Start, bin.Value);
                     }
+                }
 
                 i++;
             }
@@ -95,7 +92,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override void GetDirectionAggregateChart(Models.Signal signal, Chart chart)
         {
-            
+
         }
 
         protected override void GetSignalAggregateChart(List<Models.Signal> signals, Chart chart)
@@ -105,8 +102,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override void GetSignalByDirectionAggregateChart(List<Models.Signal> signals, Chart chart)
         {
-            MOE.Common.Models.Repositories.IPreemptAggregationDatasRepository repo =
-                MOE.Common.Models.Repositories.PreemptAggregationDatasRepositoryFactory.Create();
+            MOE.Common.Models.Repositories.IPriorityAggregationDatasRepository repo =
+                MOE.Common.Models.Repositories.PriorityAggregationDatasRepositoryFactory.Create();
 
 
             int i = 1;
@@ -119,10 +116,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 SetSeriestype(series);
                 chart.Series.Add(series);
 
-                PreemptAggregationBySignal preemptAggregationBySignal =
-                    new PreemptAggregationBySignal(this, signal, BinsContainer);
+                PriorityAggregationBySignal priorityAggregationBySignal =
+                    new PriorityAggregationBySignal(this, signal, BinsContainer);
 
-                foreach (var totals in preemptAggregationBySignal.PreemptionTotals)
+                foreach (var totals in priorityAggregationBySignal.PriorityTotals)
                 {
                     foreach (var bin in totals.BinsContainer.Bins)
                     {
@@ -136,47 +133,48 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override void GetApproachAggregateChart(Models.Signal signal, Chart chart)
         {
-           
+
         }
 
         protected override void GetTimeAggregateChart(Models.Signal signal, Chart chart)
         {
-            
+
 
 
             int i = 1;
-          
 
-                Series series = new Series();
-                series.Color = GetSeriesColorByNumber(i);
-                series.Name = signal.SignalID;
-                series.ChartArea = "ChartArea1";
-                series.BorderWidth = 2;
-                SetSeriestype(series);
-                chart.Series.Add(series);
-                i++;
-                
 
-                PreemptAggregationBySignal preemptAggregationBySignal =
-                    new PreemptAggregationBySignal(this, signal, BinsContainer);
+            Series series = new Series();
+            series.Color = GetSeriesColorByNumber(i);
+            series.Name = signal.SignalID;
+            series.ChartArea = "ChartArea1";
+            series.BorderWidth = 2;
+            SetSeriestype(series);
+            chart.Series.Add(series);
+            i++;
 
-                preemptAggregationBySignal.GetPreemptsByBin(BinsContainer);
 
-                foreach (var preemptsreempts in preemptAggregationBySignal.PreemptionTotals)
+            PriorityAggregationBySignal priorityAggregationBySignal =
+                new PriorityAggregationBySignal(this, signal, BinsContainer);
+
+            priorityAggregationBySignal.GetPriorityByBin(BinsContainer);
+
+            foreach (var p in priorityAggregationBySignal.PriorityTotals)
             {
 
 
-                if (AggregationOpperation == AggregationOpperations.Sum)
+                if (AggregationOpperation == AggregationMetricOptions.AggregationOpperations.Sum)
                 {
-                    foreach (var bin in preemptsreempts.BinsContainer.Bins)
+                    foreach (var bin in p.BinsContainer.Bins)
                     {
                         series.Points.AddXY(bin.Start, bin.Value);
                     }
                 }
-        
+
 
             }
-            
 
+
+        }
     }
-}}
+}

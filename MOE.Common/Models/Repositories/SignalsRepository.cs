@@ -51,8 +51,13 @@ namespace MOE.Common.Models.Repositories
 
         public Signal GetSignalVersionByVersionId(int versionId)
         {
-            var version = (from r in _db.Signals where r.VersionID == versionId select r).FirstOrDefault();
+            var version = _db.Signals
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.MovementType)))
+                .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                .Where(signal => signal.VersionID == versionId).FirstOrDefault();
+
             return version;
+
         }
 
         public void SetVersionToDeleted(int versionId)

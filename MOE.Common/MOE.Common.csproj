@@ -366,6 +366,7 @@
     <Compile Include="Business\DataAggregation\ApproachSpeedAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\DataAggregation.cs" />
     <Compile Include="Business\DataAggregation\PreemptAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\PriorityAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\SpliFailAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\SplitFailAggregationByRoute.cs" />
     <Compile Include="Business\Export\Exporter.cs" />
@@ -395,6 +396,7 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachSpeedAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\SignalPriorityAggregationOptions.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>
     </Compile>
@@ -439,6 +441,10 @@
     <Compile Include="Migrations\201712142113595_LatencyCorrection.cs" />
     <Compile Include="Migrations\201712142113595_LatencyCorrection.Designer.cs">
       <DependentUpon>201712142113595_LatencyCorrection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801231846598_PermissivePhasesCanBeOverlaps.cs" />
+    <Compile Include="Migrations\201801231846598_PermissivePhasesCanBeOverlaps.Designer.cs">
+      <DependentUpon>201801231846598_PermissivePhasesCanBeOverlaps.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
@@ -857,6 +863,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712142113595_LatencyCorrection.resx">
       <DependentUpon>201712142113595_LatencyCorrection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801231846598_PermissivePhasesCanBeOverlaps.resx">
+      <DependentUpon>201801231846598_PermissivePhasesCanBeOverlaps.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

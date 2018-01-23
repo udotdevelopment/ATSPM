@@ -104,6 +104,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Approaches.First().IsProtectedPhaseOverlap)
                     </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Approaches.First().IsPermissivePhaseOverlap)
+                    </th>
                     <th></th>
                 </tr>
 
@@ -124,6 +127,9 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.IsProtectedPhaseOverlap)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsPermissivePhaseOverlap)
                         </td>
                     </tr>
                 }
