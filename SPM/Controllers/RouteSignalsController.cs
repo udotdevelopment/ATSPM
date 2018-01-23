@@ -34,6 +34,20 @@ namespace SPM.Controllers
             return View(routeViewModel);
         }
 
+        // GET: RouteSignals
+        public ActionResult SignalsList(int id)
+        {
+            var routeSignalRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
+            List<RouteSignal> routeSignals = routeSignalRepository.GetByRouteID(id);
+            List<Signal> signals = new List<Signal>();
+            var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            foreach (var routeSignal in routeSignals)
+            {
+                signals.Add(signalRepository.GetLatestVersionOfSignalBySignalID(routeSignal.SignalId));
+            }
+            return PartialView(signals);
+        }
+
         public ActionResult RouteInfoBox(string signalID)
         {
             SignalInfoBoxViewModel viewModel = new SignalInfoBoxViewModel(signalID);

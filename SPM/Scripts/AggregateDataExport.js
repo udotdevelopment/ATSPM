@@ -1,5 +1,5 @@
 ﻿function LoadRoute() {
-    var RouteId = $("#SelectedRouteID").val();
+    var RouteId = $("#SelectedRouteId").val();
     $.ajax({
         url: urlpathGetRouteSignals + "/" + RouteId,
         type: "GET",

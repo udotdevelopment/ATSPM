@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 
@@ -92,7 +93,7 @@ namespace MOE.Common.Business
             {
                 var errorLog = ApplicationEventRepositoryFactory.Create();
                 errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                    this.GetType().ToString(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
                 throw new Exception("Error creating Percentile");
             }
             return percentileValue;

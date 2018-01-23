@@ -42,9 +42,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 for (int seriesCounter = 1; seriesCounter < 16; seriesCounter++)
                 {
                     PreemptAggregationBySignal preemptAggregationBySignal =
-                        new PreemptAggregationBySignal(this, signal, BinsContainer);
+                        new PreemptAggregationBySignal(this, signal, BinsContainers);
 
-                    preemptAggregationBySignal.GetPreemptTotalsBySignalByPreemptNumber(BinsContainer, seriesCounter);
+                    preemptAggregationBySignal.GetPreemptTotalsBySignalByPreemptNumber(BinsContainers, seriesCounter);
 
                     foreach (var totals in preemptAggregationBySignal.PreemptionTotals)
                     {
@@ -79,7 +79,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 chart.Series.Add(series);
 
                 PreemptAggregationBySignal preemptAggregationBySignal =
-                        new PreemptAggregationBySignal(this, signal, BinsContainer);
+                        new PreemptAggregationBySignal(this, signal, BinsContainers);
                 
                     foreach (var totals in preemptAggregationBySignal.PreemptionTotals)
                     {
@@ -158,9 +158,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 
 
                 PreemptAggregationBySignal preemptAggregationBySignal =
-                    new PreemptAggregationBySignal(this, signal, BinsContainer);
+                    new PreemptAggregationBySignal(this, signal, BinsContainers);
 
-                preemptAggregationBySignal.GetPreemptsByBin(BinsContainer);
+                preemptAggregationBySignal.GetPreemptsByBin(BinsContainers);
 
                 foreach (var preemptsreempts in preemptAggregationBySignal.PreemptionTotals)
             {

@@ -82,7 +82,39 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public List<Models.Signal> Signals { get; set; } = new List<Models.Signal>();
         public List<Models.Approach> Approaches { get; set; } = new List<Models.Approach>();
         public List<Models.Detector> Detectors { get; set; } = new List<Models.Detector>();
-        public BinsContainer BinsContainer { get; set; } = new BinsContainer();
+        public List<BinsContainer> BinsContainers { get; set; } = new List<BinsContainer>();
+
+        public string ChartTitle
+        {
+            get
+            {
+                string chartTitle;
+                chartTitle = "AggregationChart\n";
+                foreach (var signal in Signals)
+                {
+                    chartTitle += signal.SignalDescription + " ";
+                }
+                chartTitle += "\n";
+                chartTitle += TimeOptions.Start.ToString() + " to " + TimeOptions.End.ToString() +"\n";
+                if (TimeOptions.DaysOfWeek != null)
+                {
+                    foreach (var dayOfWeek in TimeOptions.DaysOfWeek)
+                    {
+                        chartTitle += dayOfWeek.ToString() + " ";
+                    }
+                }
+                if (TimeOptions.TimeOfDayStartHour != null && TimeOptions.TimeOfDayStartMinute != null &&
+                    TimeOptions.TimeOfDayEndHour != null && TimeOptions.TimeOfDayEndMinute != null)
+                {
+                    chartTitle += new TimeSpan(0, TimeOptions.TimeOfDayStartHour.Value, TimeOptions.TimeOfDayStartMinute.Value, 0)
+                        .ToString() + " to " + new TimeSpan(0, TimeOptions.TimeOfDayEndHour.Value,
+                        TimeOptions.TimeOfDayEndMinute.Value, 0).ToString() +"\n";
+                }
+                chartTitle += TimeOptions.BinSize.ToString() + " bins ";
+                chartTitle += XAxisAggregationSeriesOption.ToString() + " Aggregation";
+                return chartTitle;
+            }
+        }
 
         public override List<string> CreateMetric()
         {
@@ -96,7 +128,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void SetBins()
         {
-            BinsContainer = BinFactory.GetBins(TimeOptions);
+            BinsContainers = BinFactory.GetBins(TimeOptions);
         }
 
         public void GetSignalObjects()

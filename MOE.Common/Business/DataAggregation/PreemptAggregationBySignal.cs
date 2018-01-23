@@ -14,20 +14,21 @@ namespace MOE.Common.Business.DataAggregation
         public int TotalPreemptsServiced { get { return PreemptionTotals.Sum(c => c.BinsContainer.SumValue); } }
         public int AveragePreemptsServiced { get { return Convert.ToInt32(Math.Round(PreemptionTotals.Average(c => c.BinsContainer.SumValue))); } }
 
-        public void GetPreemptsByBin(BinsContainer binsContainer)
+        public void GetPreemptsByBin(List<BinsContainer> binsContainers)
         {
-
-
-
-            foreach (var bin in binsContainer.Bins)
+            var container = binsContainers.FirstOrDefault();
+            if (container != null)
             {
-                int summedServicedPreempts = 0;
-                foreach (var preempt in PreemptionTotals)
+                foreach (var bin in container.Bins)
                 {
-                    summedServicedPreempts += preempt.BinsContainer.Bins.Where(a => a.Start == bin.Start)
-                        .Sum(a => a.Value);
+                    int summedServicedPreempts = 0;
+                    foreach (var preempt in PreemptionTotals)
+                    {
+                        summedServicedPreempts += preempt.BinsContainer.Bins.Where(a => a.Start == bin.Start)
+                            .Sum(a => a.Value);
+                    }
+                    bin.Value = summedServicedPreempts;
                 }
-                bin.Value = summedServicedPreempts;
             }
 
         }
@@ -37,24 +38,24 @@ namespace MOE.Common.Business.DataAggregation
 
         public double Order { get; set; }
 
-        public PreemptAggregationBySignal(AggregationMetricOptions options, Models.Signal signal, BinsContainer binsContainer)
+        public PreemptAggregationBySignal(AggregationMetricOptions options, Models.Signal signal, List<BinsContainer> binsContainers)
         {
             Signal = signal;
             PreemptionTotals = new List<SignalPreemptAggregationContainer>();
 
                 PreemptionTotals.Add(
-                    new SignalPreemptAggregationContainer(Signal, binsContainer));
+                    new SignalPreemptAggregationContainer(Signal, binsContainers));
             
 
         }
 
-        public void GetPreemptTotalsBySignalByPreemptNumber(BinsContainer binsContainer, int preemptNumber)
+        public void GetPreemptTotalsBySignalByPreemptNumber(List<BinsContainer> binsContainers, int preemptNumber)
         {
 
             PreemptionTotals.Clear();
 
             PreemptionTotals.Add(
-                new SignalPreemptAggregationContainer(Signal,  binsContainer, preemptNumber));
+                new SignalPreemptAggregationContainer(Signal,  binsContainers, preemptNumber));
 
 
         }
@@ -68,54 +69,46 @@ namespace MOE.Common.Business.DataAggregation
         public Models.Signal Signal { get; }
         public BinsContainer BinsContainer { get; set; } = new BinsContainer();
 
-        public SignalPreemptAggregationContainer(Models.Signal signal, BinsContainer binsContainer) //, AggregationMetricOptions.XAxisTimeTypes aggregationType)
+        public SignalPreemptAggregationContainer(Models.Signal signal, List<BinsContainer> binsContainers) //, AggregationMetricOptions.XAxisTimeTypes aggregationType)
         {
             Signal = signal;
-
-           
-
             var preemptAggregationRepository =
                 MOE.Common.Models.Repositories.PreemptAggregationDatasRepositoryFactory.Create();
-
-
-            foreach (var bin in binsContainer.Bins)
+            var container = binsContainers.FirstOrDefault();
+            if (container != null)
             {
-
-                var servicedTotal = preemptAggregationRepository
-                    .GetPreemptAggregationTotalByVersionIdAndDateRange(
-                        Signal.VersionID, bin.Start, bin.End);
-                BinsContainer.Bins.Add(new Bin { Start = bin.Start, End = bin.End, Value = servicedTotal });
-
+                foreach (var bin in container.Bins)
+                {
+                    var servicedTotal = preemptAggregationRepository
+                        .GetPreemptAggregationTotalByVersionIdAndDateRange(
+                            Signal.VersionID, bin.Start, bin.End);
+                    BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Value = servicedTotal});
+                }
             }
         }
 
-
-
-        public SignalPreemptAggregationContainer(Models.Signal signal, BinsContainer binsContainer, int preemptNumber)
+        public SignalPreemptAggregationContainer(Models.Signal signal, List<BinsContainer> binsContainers, int preemptNumber)
         {
-
             Signal = signal;
-
-            var preemptAggregationRepository =
-                MOE.Common.Models.Repositories.PreemptAggregationDatasRepositoryFactory.Create();
-
-
-            foreach (var bin in binsContainer.Bins)
+            var preemptAggregationRepository = Models.Repositories.PreemptAggregationDatasRepositoryFactory.Create();
+            var container = binsContainers.FirstOrDefault();
+            if (container != null)
             {
-
-                var servicedTotal = preemptAggregationRepository
-                    .GetPreemptAggregationTotalByVersionIdPreemptNumberAndDateRange(
-                        Signal.VersionID, bin.Start, bin.End, preemptNumber);
-
-                if (servicedTotal != null)
+                foreach (var bin in container.Bins)
                 {
-                    BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Value = servicedTotal});
-                }
-                else
-                {
-                    BinsContainer.Bins.Add(new Bin { Start = bin.Start, End = bin.End, Value = 0 });
-                }
+                    var servicedTotal = preemptAggregationRepository
+                        .GetPreemptAggregationTotalByVersionIdPreemptNumberAndDateRange(
+                            Signal.VersionID, bin.Start, bin.End, preemptNumber);
 
+                    if (servicedTotal != null)
+                    {
+                        BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Value = servicedTotal});
+                    }
+                    else
+                    {
+                        BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Value = 0});
+                    }
+                }
             }
         }
 

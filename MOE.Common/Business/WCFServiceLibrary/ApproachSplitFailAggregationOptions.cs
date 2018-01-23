@@ -22,12 +22,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override void GetTimeAggregateChart(Models.Signal signal, Chart chart)
         {
-            SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this, signal,  BinsContainer);
+            SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this, signal,  BinsContainers);
             int i = 1;
             foreach (var approachSplitFails in spliFailAggregationBySignal.ApproachSplitFailures)
             {
-                
- 
                 Series series = new Series();
                 series.Color = GetSeriesColorByNumber(i);
                 series.Name = approachSplitFails.Approach.Description;
@@ -36,9 +34,27 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 SetSeriestype(series);
                 if (AggregationOpperation == AggregationOpperations.Sum)
                 {
-                    foreach (var bin in approachSplitFails.BinsContainer.Bins)
+                    if ((TimeOptions.BinSize == BinFactoryOptions.BinSizes.Month || TimeOptions.BinSize == BinFactoryOptions.BinSizes.Year) &&
+                        TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)
                     {
-                        series.Points.AddXY(bin.Start, bin.Value);
+                        foreach (var binsContainer in approachSplitFails.BinsContainers)
+                        {
+                            if (AggregationOpperation == AggregationOpperations.Sum)
+                            {
+                                series.Points.AddXY(binsContainer.Start, binsContainer.SumValue);
+                            }
+                            else
+                            {
+                                series.Points.AddXY(binsContainer.Start, binsContainer.AverageValue);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var bin in approachSplitFails.BinsContainers.FirstOrDefault().Bins)
+                        {
+                            series.Points.AddXY(bin.Start, bin.Value);
+                        }
                     }
                 }
                 //else
@@ -55,20 +71,21 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override void GetApproachAggregateChart(Models.Signal signal, Chart chart)
         {
-            SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this, signal, BinsContainer);
+            SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this, signal, BinsContainers);
             Series series = new Series();
-            series.Color = GetSeriesColorByNumber(1);
             series.Name = signal.SignalDescription;
             series.ChartArea = "ChartArea1";
             SetSeriestype(series);
             int i = 1;
             foreach (var approachSplitFails in spliFailAggregationBySignal.ApproachSplitFailures)
             {
+                
                 DataPoint dataPoint = new DataPoint();
                 dataPoint.XValue = i;
+                dataPoint.Color = GetSeriesColorByNumber(i);
                 if (AggregationOpperation == AggregationOpperations.Sum)
                 {
-                    dataPoint.SetValueY(approachSplitFails.BinsContainer.SumValue);
+                    dataPoint.SetValueY(approachSplitFails.BinsContainers.FirstOrDefault().SumValue);
                 }
                 //else
                 //{
@@ -78,7 +95,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 series.Points.Add(dataPoint);
                 i++;
             }
-            chart.Series.Add(series);
+                chart.Series.Add(series);
         }
 
         protected override void GetSignalByPhaseAggregateCharts(List<Models.Signal> signals, Chart chart)
@@ -92,7 +109,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             List<SpliFailAggregationBySignal> spliFailAggregationBySignals = new List<SpliFailAggregationBySignal>();
             foreach (var signal in signals)
             {
-                spliFailAggregationBySignals.Add(new SpliFailAggregationBySignal(this, signal, BinsContainer));
+                spliFailAggregationBySignals.Add(new SpliFailAggregationBySignal(this, signal, BinsContainers));
             }
             int i = 1;
             foreach (var spliFailAggregationBySignal in spliFailAggregationBySignals)
@@ -102,26 +119,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 series.Name = spliFailAggregationBySignal.Signal.SignalDescription;
                 series.ChartArea = "ChartArea1";
                 SetSeriestype(series);
-                spliFailAggregationBySignal.GetSplitFailuresByBin(BinsContainer);
-
-
-
-                    foreach (var bin in BinsContainer.Bins)
+                spliFailAggregationBySignal.GetSplitFailuresByBin(BinsContainers);
+                var container = BinsContainers.FirstOrDefault();
+                if (container != null)
+                {
+                    foreach (var bin in container.Bins)
                     {
                         series.Points.AddXY(bin.Start, bin.Value);
                     }
                     chart.Series.Add(series);
                     i++;
-                
+                }
             }
         }
 
         protected override void GetSignalAggregateChart(List<Models.Signal> signals, Chart chart)
         {
-           
-            
-            
-
             int i = 1;
             foreach (var signal in signals)
             {
@@ -134,7 +147,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
                 List<SpliFailAggregationBySignal> spliFailAggregationBySignals = new List<SpliFailAggregationBySignal>
                 {
-                    new SpliFailAggregationBySignal(this, signal, BinsContainer)
+                    new SpliFailAggregationBySignal(this, signal, BinsContainers)
                 };
 
           
@@ -185,7 +198,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var signal in signals)
             {
                 SpliFailAggregationBySignal spliFailAggregationBySignal 
-                    = new SpliFailAggregationBySignal(this, signal, BinsContainer);
+                    = new SpliFailAggregationBySignal(this, signal, BinsContainers);
 
 
                 foreach (var direction in directionsList)
@@ -213,7 +226,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override void GetDirectionAggregateChart(Models.Signal signal, Chart chart)
         {
-            SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this, signal, BinsContainer);
+            SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this, signal, BinsContainers);
             Series series = new Series();
             series.Color = GetSeriesColorByNumber(1);
             series.Name = signal.SignalDescription;

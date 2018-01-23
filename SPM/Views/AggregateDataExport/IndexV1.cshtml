@@ -1,0 +1,350 @@
+﻿@using MvcCheckBoxList.Model;
+@using SPM.Controllers
+@model SPM.Models.AggDataExportViewModel
+
+<!DOCTYPE html>
+
+<html>
+<script type="text/javascript">function LoadFromUrl() {
+    @Html.Raw(Model.RunMetricJavascript)
+}</script>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Aggregate Data Export</title>
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="panel panel-signal">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a id="Metric" data-toggle="collapse" href="#collapseMetric">
+                        Metric
+                    </a>
+                </h5>
+            </div>
+            <div id="collapseMetric" class="panel-body panel-collapse collapse">
+                <div class="form-group">
+                @foreach (var metricItem in Model.MetricItems)
+                {
+                    <div>
+                        @Html.RadioButtonFor(m=>m.SelectedMetric, metricItem.Key)
+                        @Html.Label(metricItem.Value)
+                    </div>
+                }
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-signal">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a id="Signals" data-toggle="collapse" href="#collapseSignals">
+                        Signals
+                    </a>
+                </h5>
+            </div>
+            <div id="collapseSignals" class="panel-body panel-collapse collapse">
+                
+
+                @*<div id="SignalSearchContainer" class="col-md-6 panel-min-width">
+                    @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearchViewModel))
+                </div>*@
+                <div id="Routes" class="col-md-6">
+                    Load Route: @Html.DropDownListFor(m => m.SelectedRouteId, new SelectList(Model.Routes, "Id", "RouteName"), "Select A Route",
+                                         new {@onchange = "LoadRoute()"})
+                    <div id="RouteSignals">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-signal">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a id="Approach" data-toggle="collapse" href="#collapseLocation">
+                        Location Filters
+                    </a>
+                </h5>
+            </div>
+            <div id="collapseLocation" class="panel-body panel-collapse collapse">
+                <label>Approach</label>
+                <div class="form-group">
+                    @Html.CheckBoxListFor(x => x.ApproachTypeIDs,
+                        x => x.AllApproachTypes,
+                        x => x.DirectionTypeID,
+                        x => x.Description,
+                        x => x.AllApproachTypes,
+                        Position.Vertical)
+                </div>
+
+                <label>Movement Type</label>
+                <div class="form-group">
+                    @Html.CheckBoxListFor(x => x.MovementTypeIDs,
+                        x => x.AllMovementTypes,
+                        x => x.MovementTypeID,
+                        x => x.Description,
+                        x => x.AllMovementTypes,
+                        Position.Vertical)
+                </div>
+
+                <label>Vehicle Type</label>
+                <div class="form-group">
+                    @Html.CheckBoxListFor(x => x.LaneTypeIDs,
+                    x => x.AllLaneTypes,
+                    x => x.LaneTypeID,
+                    x => x.Description,
+                    x => x.AllLaneTypes,
+                    Position.Vertical)
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-signal">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a id="DateTime" data-toggle="collapse" href="#collapseDateTime">
+                        Date/Time
+                    </a>
+                </h5>
+            </div>
+            <div id="collapseDateTime" class="panel-body panel-collapse collapse">
+                @*<div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.LabelFor(model => model.StartDateDay, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group-custom">
+                        @Html.EditorFor(model => model.StartDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.LabelFor(model => model.EndDateDay, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group-custom">
+                        @Html.EditorFor(model => model.EndDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
+                    </div>
+                </div>*@
+
+                <div class="col-md-7 col-sm-7 col-xs-7">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        @Html.LabelFor(model => model.StartDateDay, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group-custom">
+                            @Html.EditorFor(model => model.StartDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
+                            @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of start date" } })
+                            @Html.DropDownList("StartAMPMddl", Model.StartAMPMList, new { @class = "form-control AMPMWidth", title = "AM PM component of start date" })
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        @Html.LabelFor(model => model.EndDateDay, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group-custom">
+                            @Html.EditorFor(model => model.EndDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
+                            @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
+                            @Html.DropDownList("EndAMPMddl", Model.EndAMPMList, new { @class = "form-control AMPMWidth", title = "AM PM component of end date" })
+                        </div>
+                    </div>
+                    @*<div class="col-md-12">
+                        @Html.ValidationMessageFor(model => model.StartTime, "", new { id = "StartTime-error", @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.StartDateDay, "", new { id = "StartDateDay-error", @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.SelectedStartAMPM, "", new { id = "SelectedStartAMPM-error", @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.EndTime, "", new { id = "EndTime-error", @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.EndDateDay, "", new { id = "EndDateDay-error", @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.SelectedEndAMPM, "", new { id = "SelectedEndAMPM-error", @class = "text-danger" })
+                    </div>*@
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <button id="ResetDate" type="button" class="btn">Reset Date</button>
+                    </div>
+                </div>
+                <div class="col-md-5 col-sm-5 col-xs-5 col-left col-nomargin dateSelector">
+                    <div id="StartEndDaySelector" class="col-nomargin col-left jquery-datepickermoveleft"></div>
+                </div>
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.CheckBoxFor(model => model.Weekdays, false)  Weekdays
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.CheckBoxFor(model => model.Weekends, false)  Weekends
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.LabelFor(model => model.StartTime, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group-custom">
+                        @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of start date" } })
+                        @Html.DropDownList("StartAMPMddl", Model.StartAMPMList, new { @class = "form-control AMPMWidth", title = "AM PM component of start date" })
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.LabelFor(model => model.EndTime, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group-custom">
+                        @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of start date" } })
+                        @Html.DropDownList("StartAMPMddl", Model.EndAMPMList, new { @class = "form-control AMPMWidth", title = "AM PM component of end date" })
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    @*@Html.ValidationMessageFor(model => model.StartTime, "", new { id = "StartTime-error", @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.StartDateDay, "", new { id = "StartDateDay-error", @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.SelectedStartAMPM, "", new { id = "SelectedStartAMPM-error", @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.EndTime, "", new { id = "EndTime-error", @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.EndDateDay, "", new { id = "EndDateDay-error", @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.SelectedEndAMPM, "", new { id = "SelectedEndAMPM-error", @class = "text-danger" })*@
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="panel panel-signal">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a id="DataAggregation" data-toggle="collapse" href="#collapseDataAggregation">
+                        Data Aggregation
+                    </a>
+                </h5>
+            </div>
+            <div id="collapseDataAggregation" class="panel-body panel-collapse collapse">
+                <label>Aggregation (X-axis)</label>
+                <div class="form-group">
+                    @Html.RadioButtonFor(model => model.AggGroups, "Hour")
+                    <label>Time - Hour</label>
+                </div>
+                <div class="form-group">
+                    @Html.RadioButtonFor(model => model.AggGroups, "Day")
+                    <label>Time - Day</label>
+                </div>
+                <div class="form-group">
+                    @Html.RadioButtonFor(model => model.AggGroups, "Month")
+                    <label>Time - Month</label>
+                </div>
+                <div class="form-group">
+                    @Html.RadioButtonFor(model => model.AggGroups, "Year")
+                    <label>Time - Year</label>
+                </div>
+                <div class="form-group">
+                    @Html.RadioButtonFor(model => model.AggGroups, "None")
+                    <label>Time - No Aggregation</label>
+                </div>
+                <div class="form-group">
+                    @Html.RadioButtonFor(model => model.AggGroups, "Signal")
+                    <label>Location - Signal</label>
+                </div>
+                <div class="form-group">
+                    <label>Aggregation Type</label><br/>
+                    @Html.RadioButtonFor(model => model.IsSum, "true") Sum 15-minute bins
+                    @Html.RadioButtonFor(model => model.IsSum, "false") Average 15-minute bins
+                </div>
+                <br/>
+                <label>Series - Group By</label>
+                <div class="form-group">
+                    @Html.RadioButtonFor(model => model.AggSeriesOptions, "Movement")
+                    <label>Location - Movement (aggregate lanes)</label>
+                </div>
+                <div class="form-group">
+                    @Html.RadioButtonFor(model => model.AggSeriesOptions, "Approach")
+                    <label>Location - Approach (aggregate movements)</label>
+                </div>
+                <div class="form-group">
+                    @Html.RadioButtonFor(model => model.AggSeriesOptions, "Signal")
+                    <label>Location - Signal (aggregate approaches)</label>
+                </div>
+                <div class="form-group">
+                    @Html.RadioButtonFor(model => model.AggSeriesOptions, "Route")
+                    <label>Location - Route (aggregate signals)</label>
+                </div>
+                <br/>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.LabelFor(model => model.SelectedBinSize, new { htmlAttributes = new { @class = "control-label" } })
+                    <div class="input-group-custom">
+                        @Html.DropDownListFor(model => model.SelectedBinSize,
+                            new SelectList(Model.BinSizeList, 15), new { @id = "SelectedBinSize", @class = "form-control col-md-6" })
+                    </div>
+                </div>
+                <br />
+
+            </div>
+        </div>
+
+        <div class="panel panel-signal">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a id="ChartType" data-toggle="collapse" href="#collapseChartType">
+                        Chart Type
+                    </a>
+                </h5>
+            </div>
+            <div id="collapseChartType" class="panel-body panel-collapse collapse">
+                <div class="form-group">
+                    <label>Column</label>              
+                    <div class="form-group">
+                        <label>
+                            @Html.RadioButtonFor(model => model.AggChartTypes, "StackedColumn")
+                            Stacked
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            @Html.RadioButtonFor(model => model.AggChartTypes, "Column")
+                            Standard
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Line</label>              
+                    <div class="form-group">
+                        <label>
+                            @Html.RadioButtonFor(model => model.AggChartTypes, "StackedLine")
+                            Stacked
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            @Html.RadioButtonFor(model => model.AggChartTypes, "Line")
+                            Standard
+                        </label>
+                    </div>
+                </div>
+                <br/>
+                <label>Color Selection</label>
+            </div>
+        </div>
+        <div>
+            <div class="col-md-2">
+                <button id="CreateChart" type="submit" class="btn btn-primary" name="Create"
+                        >Create Chart &nbsp; <span id='RunReportSpinner' class="glyphicon"></span></button>
+            </div>
+            <div class="col-md-4">
+                <button id="ExportData" type="button" class="btn btn-primary">Export Data &nbsp; <span id='RunReportSpinner' class="glyphicon"></span></button>
+            </div>
+            <div class="col-md-6">
+                <button id="SaveReport" type="button" class="btn btn-primary">Save Report &nbsp; <span id='RunReportSpinner' class="glyphicon"></span></button>
+            </div>
+        </div>
+    }
+</body>
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/Scripts/AggregateDataExport.js"></script>
+    <script type="text/javascript" src="~/Scripts/Map.js"></script>
+    <script type="text/javascript" src="~/Scripts/GetMetrics.js"></script>
+    <script type="text/javascript" src="~/Scripts/AddData.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
+<script>
+    var urlpathGetRouteSignals = '@Url.Action("SignalsList", "RouteSignals")';
+    var urlpathPhaseTermination = '@Url.Action("GetPhaseTerminationMetric", "DefaultCharts")';
+    var urlpathPedDelay = '@Url.Action("GetPedDelayMetric", "DefaultCharts")';
+    var urlpathTMC = '@Url.Action("GetTMCMetric", "DefaultCharts")';
+    var urlpathPCD = '@Url.Action("GetPCDMetric", "DefaultCharts")';
+    var urlpathSplitMonitor = '@Url.Action("GetSplitMonitorMetric", "DefaultCharts")';
+    var urlpathPreempt = '@Url.Action("GetPreemptMetric", "DefaultCharts")';
+    var urlpathApproachVolume = '@Url.Action("GetApproachVolumeMetric", "DefaultCharts")';
+    var urlpathApproachDelay = '@Url.Action("GetApproachDelayMetric", "DefaultCharts")';
+    var urlpathAoR = '@Url.Action("GetAoRMetric", "DefaultCharts")';
+    var urlpathApproachSpeed = '@Url.Action("GetApproachSpeedMetric", "DefaultCharts")';
+    var urlpathYellowAndRed = '@Url.Action("GetYellowAndRedMetric", "DefaultCharts")';
+    var urlpathSplitFail = '@Url.Action("GetSplitFailMetric", "DefaultCharts")';
+    var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';
+    var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';
+    var urlpathGetMetricsList = '@Url.Action("GetMetricsList", "DefaultCharts")';
+    var urlpathGetChartComment = '@Url.Action("GetChartComment", "DefaultCharts")';
+    var urlpathFillSignals = '@Url.Action("FillSignals", "DefaultCharts")';
+    var urlOptions = '@Url.Action("MetricOptions", "DefaultCharts")';
+</script>
+}

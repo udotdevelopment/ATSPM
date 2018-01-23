@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
+using Microsoft.EntityFrameworkCore.Internal;
 using NuGet;
 
 namespace MOE.Common.Models.Repositories 
@@ -47,7 +48,7 @@ namespace MOE.Common.Models.Repositories
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().ToString(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
                     throw new Exception("");
                 }
             
@@ -77,10 +78,10 @@ namespace MOE.Common.Models.Repositories
             }
             catch (Exception e)
             {
-                    var errorLog = ApplicationEventRepositoryFactory.Create();
-                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().ToString(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
-                    throw new Exception("");
+                var errorLog = ApplicationEventRepositoryFactory.Create();
+                errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                    this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                throw new Exception("");
             }
         }
     }
