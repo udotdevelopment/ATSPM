@@ -1,5 +1,28 @@
 ﻿
 @model SPM.Models.AggDataExportViewModel
+    
+<div class="panel panel-signal">
+    <div class="panel-heading">
+        <h5 class="panel-title">
+            <a id="Metric" data-toggle="collapse" href="#collapseMetric">
+                Metric
+            </a>
+        </h5>
+    </div>
+    <div id="collapseMetric" class="panel-body panel-collapse collapse">
+        <div class="form-group">
+            @foreach (var metricItem in Model.MetricItems)
+            {
+                <div>
+
+                    @Html.RadioButtonFor(m=>m.SelectedMetric, metricItem.Key)
+                    @Html.Label(metricItem.Value)
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
 <div class="panel panel-signal">
     <div class="panel-heading">
         <h5 class="panel-title">

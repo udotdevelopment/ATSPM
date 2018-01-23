@@ -18,11 +18,11 @@ namespace SPM.Models
         public List<Route> Routes { get; set; }
         public int SelectedRouteId { get; set; }
         public List<Signal> Signals { get; set; } = new List<Signal>();
-        //[Required]
-        //public virtual List<int> MetricTypeIDs { get; set; }
-        //public Dictionary<int, string> MetricItems { get; set; }
-        //public int SelectedMetric { get; set; }
-        //public virtual ICollection<MetricType> AllMetricTypes { get; set; }
+        [Required]
+        public virtual List<int> MetricTypeIDs { get; set; }
+        public Dictionary<int, string> MetricItems { get; set; }
+        public int SelectedMetric { get; set; }
+        public virtual ICollection<MetricType> AllMetricTypes { get; set; }
         //public virtual List<int> ApproachTypeIDs { get; set; }
         //public virtual ICollection<DirectionType> AllApproachTypes { get; set; }
         //public virtual List<int> MovementTypeIDs { get; set; }
@@ -85,17 +85,17 @@ namespace SPM.Models
 
         //public int? Count { get; set; }
 
-        //private IMetricTypeRepository _metricRepository;
-        //public AggDataExportViewModel()
-        //{
-        //    _metricRepository = MetricTypeRepositoryFactory.Create();
-        //    var regionRepositry = MOE.Common.Models.Repositories.RegionsRepositoryFactory.Create();
-        //    List<MetricType> allMetricTypes = _metricRepository.GetAllToAggregateMetrics();
-        //    MetricItems = new Dictionary<int, string>();
-        //    SignalSearchViewModel = new MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel(regionRepositry, _metricRepository);
-        //    SetDefaultDates();
-        //    SetBinSizeList();
-        //}
+        private IMetricTypeRepository _metricRepository;
+        public AggDataExportViewModel()
+        {
+            _metricRepository = MetricTypeRepositoryFactory.Create();
+            var regionRepositry = MOE.Common.Models.Repositories.RegionsRepositoryFactory.Create();
+            List<MetricType> allMetricTypes = _metricRepository.GetAllToAggregateMetrics();
+            MetricItems = new Dictionary<int, string>();
+            //SignalSearchViewModel = new MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel(regionRepositry, _metricRepository);
+            //SetDefaultDates();
+            //SetBinSizeList();
+        }
 
         //protected void SetBinSizeList()
         //{
