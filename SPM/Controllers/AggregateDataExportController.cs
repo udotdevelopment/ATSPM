@@ -73,6 +73,10 @@ namespace SPM.Controllers
             {
                 startTime = aggDataExportViewModel.StartTime.Split(':');
                 startHour = Convert.ToInt32(startTime[0]);
+                if (aggDataExportViewModel.SelectedStartAMPM.Contains("PM"))
+                {
+                    startHour += 12;
+                }
                 if (startTime.Length > 1)
                 {
                     startMinute = Convert.ToInt32(startTime[1]);
@@ -83,6 +87,10 @@ namespace SPM.Controllers
                 }
                 endTime = aggDataExportViewModel.EndTime.Split(':');
                 endHour = Convert.ToInt32(endTime[0]);
+                if (aggDataExportViewModel.SelectedEndAMPM.Contains("PM"))
+                {
+                    endHour += 12;
+                }
                 if (endTime.Length > 1)
                 {
                     endMinute = Convert.ToInt32(endTime[1]);
