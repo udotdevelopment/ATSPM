@@ -416,7 +416,7 @@ namespace MOE.Common.Business
                     options.TimeOptions.End.Day, options.TimeOptions.TimeOfDayEndHour ?? 0,
                     options.TimeOptions.TimeOfDayEndMinute ?? 0, 0);
             }
-            //chartArea.AxisX.Minimum = tempStart.ToOADate();
+            chartArea.AxisX.Minimum = tempStart.AddHours(-1).ToOADate();
             chartArea.AxisX.Maximum = tempEnd.ToOADate();
             chartArea.AxisX.Interval = 1;
         }

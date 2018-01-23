@@ -123,13 +123,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 PreemptAggregationBySignal preemptAggregationBySignal =
                     new PreemptAggregationBySignal(this, signal, BinsContainers);
 
-                foreach (var totals in preemptAggregationBySignal.PreemptionTotals)
-                {
-                    foreach (var bin in totals.BinsContainer.Bins)
-                    {
-                        series.Points.AddXY(bin.Start, bin.Value);
-                    }
-                }
+                //foreach (var totals in preemptAggregationBySignal.PreemptionTotals)
+                //{
+                //    foreach (var bin in totals.BinsContainer.Bins)
+                //    {
+                //        series.Points.AddXY(bin.Start, bin.Value);
+                //    }
+                //}
 
                 i++;
             }

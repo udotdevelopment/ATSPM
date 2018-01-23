@@ -45,13 +45,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
                     priorityAggregationBySignal.GetPriorityTotalsBySignalByPriorityNumber(BinsContainers.FirstOrDefault(), seriesCounter);
 
-                    foreach (var totals in priorityAggregationBySignal.PriorityTotals)
-                    {
-                        foreach (var bin in totals.BinsContainer.Bins)
-                        {
-                            chart.Series[seriesCounter - 1].Points.AddXY(signal.SignalID, bin.Value);
-                        }
-                    }
+                    //foreach (var totals in priorityAggregationBySignal.PriorityTotals)
+                    //{
+                    //    foreach (var bin in totals.BinsContainer.Bins)
+                    //    {
+                    //        chart.Series[seriesCounter - 1].Points.AddXY(signal.SignalID, bin.Value);
+                    //    }
+                    //}
                 }
             }
 
@@ -80,13 +80,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 PriorityAggregationBySignal priorityAggregationBySignal =
                         new PriorityAggregationBySignal(this, signal, BinsContainers);
 
-                foreach (var totals in priorityAggregationBySignal.PriorityTotals)
-                {
-                    foreach (var bin in totals.BinsContainer.Bins)
-                    {
-                        series.Points.AddXY(bin.Start, bin.Value);
-                    }
-                }
+                //foreach (var totals in priorityAggregationBySignal.PriorityTotals)
+                //{
+                //    foreach (var bin in totals.BinsContainer.Bins)
+                //    {
+                //        series.Points.AddXY(bin.Start, bin.Value);
+                //    }
+                //}
 
                 i++;
             }
@@ -121,15 +121,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 PriorityAggregationBySignal priorityAggregationBySignal =
                     new PriorityAggregationBySignal(this, signal, BinsContainers);
 
-                foreach (var totals in priorityAggregationBySignal.PriorityTotals)
-                {
-                    foreach (var bin in totals.BinsContainer.Bins)
-                    {
-                        series.Points.AddXY(bin.Start, bin.Value);
-                    }
-                }
+                //foreach (var totals in priorityAggregationBySignal.PriorityTotals)
+                //{
+                //    foreach (var bin in totals.BinsContainer.Bins)
+                //    {
+                //        series.Points.AddXY(bin.Start, bin.Value);
+                //    }
+                //}
 
-                i++;
+                //i++;
             }
         }
 
@@ -161,20 +161,20 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             priorityAggregationBySignal.GetPriorityByBin(BinsContainers.FirstOrDefault());
 
-            foreach (var p in priorityAggregationBySignal.PriorityTotals)
-            {
+            //foreach (var p in priorityAggregationBySignal.PriorityTotals)
+            //{
 
 
-                if (AggregationOpperation == AggregationMetricOptions.AggregationOpperations.Sum)
-                {
-                    foreach (var bin in p.BinsContainer.Bins)
-                    {
-                        series.Points.AddXY(bin.Start, bin.Value);
-                    }
-                }
+            //    if (AggregationOpperation == AggregationMetricOptions.AggregationOpperations.Sum)
+            //    {
+            //        foreach (var bin in p.BinsContainer.Bins)
+            //        {
+            //            series.Points.AddXY(bin.Start, bin.Value);
+            //        }
+            //    }
 
 
-            }
+            //}
 
 
         }
