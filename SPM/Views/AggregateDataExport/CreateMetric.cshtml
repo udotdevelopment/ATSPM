@@ -4,28 +4,38 @@
 {
     @Html.AntiForgeryToken()
     @Html.DisplayFor(m => m.Signals)
-    @*<table class="table table-striped">
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Signals.FirstOrDefault().SignalID)</th>
-            <th>
-                @Html.DisplayNameFor(model => model.Signals.FirstOrDefault().SignalDescription)
-            </th>
-            <th></th>
-        </tr>
+    <div class="panel panel-signal">
+        <div class="panel-heading">
+            <h5 class="panel-title">
+                <a id="DateTime"  data-toggle="collapse" href="#collapseDateTime">
+                    Date/Time
+                </a>
+            </h5>
+        </div>
+        <div id="collapseDateTime" class="panel-body panel-collapse collapse in">
+            <div class="col-md-7 col-sm-7 col-xs-7">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.LabelFor(model => model.StartDateDay, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group-custom">
+                        @Html.EditorFor(model => model.StartDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
+                        @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of start date" } })
+                        @Html.DropDownList("StartAMPMddl", Model.StartAMPMList, new { @class = "form-control AMPMWidth", title = "AM PM component of start date" })
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.LabelFor(model => model.EndDateDay, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group-custom">
+                        @Html.EditorFor(model => model.EndDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
+                        @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
+                        @Html.DropDownList("EndAMPMddl", Model.EndAMPMList, new { @class = "form-control AMPMWidth", title = "AM PM component of end date" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        @foreach (var item in Model.Signals) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SignalID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SignalDescription)
-                </td>
-            </tr>
-        }*@
-        <button type="submit" class="btn btn-primary" value="Create Metric">Create Metric</button>
+
+    <button id="CreateMetric" type="submit" class="btn btn-primary">Create Chart &nbsp;<span id='RunReportSpinner' class="glyphicon"></span></button>
         <div id="Results"></div>
-
-
-    @*</table>*@
+        
 }

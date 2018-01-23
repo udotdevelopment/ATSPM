@@ -57,16 +57,49 @@ namespace SPM.Controllers
         public ActionResult CreateMetric(AggDataExportViewModel aggDataExportViewModel)
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
-            options.StartDate = Convert.ToDateTime("10/17/2017");
-            options.EndDate = Convert.ToDateTime("10/18/2017");
+            options.StartDate = aggDataExportViewModel.StartDateDay;
+            options.EndDate = aggDataExportViewModel.EndDateDay;
             options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByDirection;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            string[] startTime;
+            string[] endTime;
+            int? startHour = null;
+            int? startMinute = null;
+            int? endHour= null;
+            int? endMinute = null;
+            BinFactoryOptions.TimeOptions timeOptions = BinFactoryOptions.TimeOptions.StartToEnd;
+            if (!String.IsNullOrEmpty(aggDataExportViewModel.StartTime) &&
+                !String.IsNullOrEmpty(aggDataExportViewModel.EndTime))
+            {
+                startTime = aggDataExportViewModel.StartTime.Split(':');
+                startHour = Convert.ToInt32(startTime[0]);
+                if (startTime.Length > 1)
+                {
+                    startMinute = Convert.ToInt32(startTime[1]);
+                }
+                else
+                {
+                    startMinute = 0;
+                }
+                endTime = aggDataExportViewModel.EndTime.Split(':');
+                endHour = Convert.ToInt32(endTime[0]);
+                if (endTime.Length > 1)
+                {
+                    endMinute = Convert.ToInt32(endTime[1]);
+                }
+                else
+                {
+                    endMinute = 0;
+                }
+                timeOptions = BinFactoryOptions.TimeOptions.TimePeriod;
+            }
+            List<DayOfWeek> daysOfWeek = new List<DayOfWeek>{ DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday};
             options.TimeOptions = new BinFactoryOptions(
-                Convert.ToDateTime("10/17/2017"),
-                Convert.ToDateTime("10/18/2017"),
-                null, null, null, null, null,
+                aggDataExportViewModel.StartDateDay,
+                aggDataExportViewModel.EndDateDay,
+                startHour, startMinute, endHour, endMinute, daysOfWeek,
                 BinFactoryOptions.BinSizes.Hour,
-                BinFactoryOptions.TimeOptions.StartToEnd);
+                timeOptions);
             foreach (var signal in aggDataExportViewModel.Signals)
             {
                 options.SignalIds.Add(signal.SignalID);

@@ -34,12 +34,19 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 SetSeriestype(series);
                 if (AggregationOpperation == AggregationOpperations.Sum)
                 {
-                    if (TimeOptions.BinSize == BinFactoryOptions.BinSizes.Month &&
+                    if ((TimeOptions.BinSize == BinFactoryOptions.BinSizes.Month || TimeOptions.BinSize == BinFactoryOptions.BinSizes.Year) &&
                         TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)
                     {
                         foreach (var binsContainer in approachSplitFails.BinsContainers)
                         {
-                            series.Points.AddXY(binsContainer.Start, binsContainer.SumValue);
+                            if (AggregationOpperation == AggregationOpperations.Sum)
+                            {
+                                series.Points.AddXY(binsContainer.Start, binsContainer.SumValue);
+                            }
+                            else
+                            {
+                                series.Points.AddXY(binsContainer.Start, binsContainer.AverageValue);
+                            }
                         }
                     }
                     else

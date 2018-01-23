@@ -1,7 +1,7 @@
 ﻿@using MvcCheckBoxList.Model;
 @model SPM.Models.AggDataExportViewModel
     
-<div class="panel panel-signal">
+@*<div class="panel panel-signal">
     <div class="panel-heading">
         <h5 class="panel-title">
             <a id="Metric" data-toggle="collapse" href="#collapseMetric">
@@ -21,7 +21,7 @@
             }
         </div>
     </div>
-</div>
+</div>*@
 
 <div class="panel panel-signal">
     <div class="panel-heading">
@@ -31,7 +31,7 @@
             </a>
         </h5>
     </div>
-    <div id="collapseSignals" class="panel-body panel-collapse collapse">
+    <div id="collapseSignals" class="panel-body panel-collapse collapse in">
                 
 
         @*<div id="SignalSearchContainer" class="col-md-6 panel-min-width">
@@ -46,7 +46,7 @@
     </div>
 </div>
 
-<div class="panel panel-signal">
+@*<div class="panel panel-signal">
     <div class="panel-heading">
         <h5 class="panel-title">
             <a id="Approach" data-toggle="collapse" href="#collapseLocation">
@@ -85,21 +85,11 @@
                 Position.Vertical)
         </div>
     </div>
-</div>
+</div>*@
 
-<div class="panel panel-signal">
-    <div class="panel-heading">
-        <h5 class="panel-title">
-            <a id="DateTime" data-toggle="collapse" href="#collapseDateTime">
-                Date/Time
-            </a>
-        </h5>
-    </div>
-    <div id="collapseDateTime" class="panel-body panel-collapse collapse">
-    </div>
-</div>
 
-<div class="panel panel-signal">
+
+@*<div class="panel panel-signal">
     <div class="panel-heading">
         <h5 class="panel-title">
             <a id="DataAggregation" data-toggle="collapse" href="#collapseDataAggregation">
@@ -163,12 +153,12 @@
                 @Html.DropDownListFor(model => model.SelectedBinSize,
                             new SelectList(Model.BinSizeList, 15), new { @id = "SelectedBinSize", @class = "form-control col-md-6" })
             </div>
-        </div>*@
+        </div>
         <br />
     </div>
-</div>
+</div>*@
 
-<div class="panel panel-signal">
+@*<div class="panel panel-signal">
     <div class="panel-heading">
         <h5 class="panel-title">
             <a id="ChartType" data-toggle="collapse" href="#collapseChartType">
@@ -210,7 +200,7 @@
         <br />
         <label>Color Selection</label>
     </div>
-</div>
+</div>*@
 
 @section Scripts
 {

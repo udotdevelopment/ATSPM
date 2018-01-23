@@ -79,31 +79,31 @@ namespace MOE.Common.Business.Bins
         private static List<BinsContainer> GetYearBinsForRange(BinFactoryOptions timeOptions)
         {
             List<BinsContainer> binsContainers = new List<BinsContainer>();
-            for (DateTime startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month, 1); startTime.Year <= timeOptions.End.Year && startTime.Month <= timeOptions.End.Month; startTime = startTime.AddYears(1))
+            if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
             {
-                BinsContainer binsContainer = new BinsContainer();
-                if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
+                BinsContainer binsContainer = new BinsContainer{Start = timeOptions.Start, End = timeOptions.End};
+
+                for (DateTime startTime = new DateTime(timeOptions.Start.Year, 1, 1);
+                    startTime.Date <= timeOptions.End.Date;
+                    startTime = startTime.AddYears(1))
                 {
                     binsContainer.Bins.Add(new Bin { Start = startTime, End = startTime.AddYears(1) });
                 }
-                else
-                {
-                    for (DateTime tempDate = startTime; tempDate < startTime.AddYears(1); tempDate = tempDate.AddDays(1))
-                    {
-                        if (timeOptions.DaysOfWeek.Contains(tempDate.DayOfWeek))
-                        {
-                            DateTime startDate = new DateTime(tempDate.Year, tempDate.Month, tempDate.Day,
-                                timeOptions.TimeOfDayStartHour ?? 0,
-                                timeOptions.TimeOfDayStartMinute ?? 0, 0);
-                            DateTime endDate = new DateTime(tempDate.Year, tempDate.Month, tempDate.Day,
-                                timeOptions.TimeOfDayEndHour ?? 11,
-                                timeOptions.TimeOfDayEndMinute ?? 59, 0);
-                            Bin bin = new Bin {Start = startDate, End = endDate};
-                            binsContainer.Bins.Add(bin);
-                        }
-                    }
-                }
                 binsContainers.Add(binsContainer);
+            }
+            else
+            {
+                for (DateTime startTime = new DateTime(timeOptions.Start.Year, 1, 1);
+                    startTime.Date <= timeOptions.End.Date;
+                    startTime = startTime.AddYears(1))
+                {
+                    binsContainers.Add(new BinsContainer
+                    {
+                        Start = startTime,
+                        End = startTime.AddYears(1),
+                        Bins = GetDayBinsForRange(startTime, startTime.AddYears(1), timeOptions.TimeOfDayStartHour.Value, timeOptions.TimeOfDayStartMinute.Value, timeOptions.TimeOfDayEndHour.Value, timeOptions.TimeOfDayEndMinute.Value, timeOptions.DaysOfWeek)
+                    });
+                }
             }
             return binsContainers;
         }

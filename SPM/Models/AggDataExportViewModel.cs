@@ -49,32 +49,28 @@ namespace SPM.Models
         ////[Required]
         ////[Display(Name = "Signal ID")]
         ////public string SignalId { get; set; }
-        //[Required]
-        //[DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        //[Display(Name = "Start Date")]
-        //public DateTime StartDateDay { get; set; }
-        //[Required]
-        //[Display(Name = "Start Time")]
-        //public string StartTime { get; set; }
-        //[Required]
-        //[Display(Name = "Start AM/PM")]
-        //public string SelectedStartAMPM { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Start Date")]
+        public DateTime StartDateDay { get; set; }
+        [Display(Name = "Start Time")]
+        public string StartTime { get; set; }
+        [Display(Name = "Start AM/PM")]
+        public string SelectedStartAMPM { get; set; }
 
-        //[Required]
-        //[DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        //[Display(Name = "End Date")]
-        //public DateTime EndDateDay { get; set; }
-        //[Required]
-        //[Display(Name = "End Time")]
-        //public string EndTime { get; set; }
-        //[Required]
-        //[Display(Name = "End AM/PM")]
-        //public string SelectedEndAMPM { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "End Date")]
+        public DateTime EndDateDay { get; set; }
+        [Display(Name = "End Time")]
+        public string EndTime { get; set; }
+        [Display(Name = "End AM/PM")]
+        public string SelectedEndAMPM { get; set; }
 
-        //public List<SelectListItem> StartAMPMList { get; set; }
-        //public List<SelectListItem> EndAMPMList { get; set; }
+        public List<SelectListItem> StartAMPMList { get; set; }
+        public List<SelectListItem> EndAMPMList { get; set; }
 
         //[Required]
         //[DataMember]
@@ -93,7 +89,7 @@ namespace SPM.Models
             List<MetricType> allMetricTypes = _metricRepository.GetAllToAggregateMetrics();
             MetricItems = new Dictionary<int, string>();
             //SignalSearchViewModel = new MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel(regionRepositry, _metricRepository);
-            //SetDefaultDates();
+            SetDefaultDates();
             //SetBinSizeList();
         }
 
@@ -108,19 +104,17 @@ namespace SPM.Models
         //    BinSizeList.Add("1 year");
         //}
 
-        //protected void SetDefaultDates()
-        //{
-        //    StartDateDay = DateTime.Today;
-        //    EndDateDay = DateTime.Today;
-        //    StartTime = "12:00";
-        //    EndTime = "11:59";
-        //    StartAMPMList = new List<SelectListItem>();
-        //    StartAMPMList.Add(new SelectListItem { Value = "AM", Text = "AM", Selected = true });
-        //    StartAMPMList.Add(new SelectListItem { Value = "PM", Text = "PM" });
-        //    EndAMPMList = new List<SelectListItem>();
-        //    EndAMPMList.Add(new SelectListItem { Value = "AM", Text = "AM" });
-        //    EndAMPMList.Add(new SelectListItem { Value = "PM", Text = "PM", Selected = true });
-        //}
+        protected void SetDefaultDates()
+        {
+            StartDateDay = Convert.ToDateTime("10/17/2017");
+            EndDateDay = Convert.ToDateTime("10/18/2017");
+            StartAMPMList = new List<SelectListItem>();
+            StartAMPMList.Add(new SelectListItem { Value = "AM", Text = "AM", Selected = true });
+            StartAMPMList.Add(new SelectListItem { Value = "PM", Text = "PM" });
+            EndAMPMList = new List<SelectListItem>();
+            EndAMPMList.Add(new SelectListItem { Value = "AM", Text = "AM" });
+            EndAMPMList.Add(new SelectListItem { Value = "PM", Text = "PM", Selected = true });
+        }
 
     }
 }

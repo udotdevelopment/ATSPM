@@ -46,39 +46,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             //}
         }
 
-        //[TestMethod()]
-        //public void CreateMetricTest()
-        //{
-
-
-        //    ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
-
-
-        //    options.StartDate = DateTime.Now.AddDays(-1);//Convert.ToDateTime("10/17/2017");
-        //    options.EndDate = DateTime.Now; //Convert.ToDateTime("10/18/2017");
-        //    options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-        //    options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
-        //    options.TimeOptions = new BinFactoryOptions(
-        //        DateTime.Now.AddDays(-1),//Convert.ToDateTime("10/17/2017 7:00 AM"), 
-        //        DateTime.Now,//Convert.ToDateTime("10/17/2017 8:00 AM"), 
-        //        null, null, null, null, null, 
-        //        BinFactoryOptions.BinSizes.FifteenMinutes, 
-        //        BinFactoryOptions.TimeOptions.StartToEnd);
-        //    options.SignalIds.Add("101");
-        //    //options.SignalIds.Add("8279");
-        //    //options.SignalIds.Add("7185");
-        //    PopulateApproachesWithSplitFailtAggregationRecords(options);
-
-
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-        //    Assert.IsTrue(options.CreateMetric().Count > 0);
-        //}
+        
 
         [TestMethod()]
         public void CreateColumnMetricMultipleSignalsStartToFinishTest()
@@ -87,13 +55,13 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByDirection;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
-                null, null, null, null, null,
+                7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSizes.Hour,
-                BinFactoryOptions.TimeOptions.StartToEnd);
+                BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.SignalIds.Add("5114");
             options.SignalIds.Add("8279");
@@ -773,6 +741,162 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             Assert.IsTrue(options.CreateMetric().Count > 0);
         }
 
+        //Month Bin tests
+
+        [TestMethod()]
+        public void CreateMetricLineYearBinStartToFinishTest()
+        {
+            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+            options.StartDate = Convert.ToDateTime("1/1/2016");
+            options.EndDate = Convert.ToDateTime("12/31/2017");
+            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.TimeOptions = new BinFactoryOptions(
+                Convert.ToDateTime("1/1/2016"),
+                Convert.ToDateTime("12/31/2017"),
+                null, null, null, null, null,
+                BinFactoryOptions.BinSizes.Year,
+                BinFactoryOptions.TimeOptions.StartToEnd);
+            options.SignalIds.Add("5114");
+            options.ChartType = AggregationMetricOptions.ChartTypes.Line;
+            Assert.IsTrue(options.CreateMetric().Count > 0);
+        }
+
+        [TestMethod]
+        public void CreateColumnMetricYearBinStartToFinishTest()
+        {
+            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+            options.StartDate = Convert.ToDateTime("1/1/2016");
+            options.EndDate = Convert.ToDateTime("12/31/2017");
+            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.TimeOptions = new BinFactoryOptions(
+                Convert.ToDateTime("1/1/2016"),
+                Convert.ToDateTime("12/31/2017"),
+                null, null, null, null, null,
+                BinFactoryOptions.BinSizes.Year,
+                BinFactoryOptions.TimeOptions.StartToEnd);
+            options.SignalIds.Add("5114");
+            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            Assert.IsTrue(options.CreateMetric().Count > 0);
+        }
+
+        [TestMethod]
+        public void CreateStackedColumnMetricYearBinStartToFinishTest()
+        {
+            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+            options.StartDate = Convert.ToDateTime("1/1/2016");
+            options.EndDate = Convert.ToDateTime("12/31/2017");
+            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.TimeOptions = new BinFactoryOptions(
+                Convert.ToDateTime("1/1/2016"),
+                Convert.ToDateTime("12/31/2017"),
+                null, null, null, null, null,
+                BinFactoryOptions.BinSizes.Year,
+                BinFactoryOptions.TimeOptions.StartToEnd);
+            options.SignalIds.Add("5114");
+            options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
+            Assert.IsTrue(options.CreateMetric().Count > 0);
+        }
+
+        [TestMethod]
+        public void CreateMetricAreaYearBinStartToFinishTest()
+        {
+            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+            options.StartDate = Convert.ToDateTime("1/1/2016");
+            options.EndDate = Convert.ToDateTime("12/31/2017");
+            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.TimeOptions = new BinFactoryOptions(
+                Convert.ToDateTime("1/1/2016"),
+                Convert.ToDateTime("12/31/2017"),
+                null, null, null, null, null,
+                BinFactoryOptions.BinSizes.Year,
+                BinFactoryOptions.TimeOptions.StartToEnd);
+            options.SignalIds.Add("5114");
+            options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
+            Assert.IsTrue(options.CreateMetric().Count > 0);
+        }
+
+        [TestMethod]
+        public void CreateMetricLineYearBinHours()
+        {
+            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+            options.StartDate = Convert.ToDateTime("1/1/2016");
+            options.EndDate = Convert.ToDateTime("12/31/2017");
+            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.TimeOptions = new BinFactoryOptions(
+                Convert.ToDateTime("1/1/2016"),
+                Convert.ToDateTime("12/31/2017"),
+                7, 30, 9, 30, new List<DayOfWeek> { DayOfWeek.Monday},
+                BinFactoryOptions.BinSizes.Year,
+                BinFactoryOptions.TimeOptions.TimePeriod);
+            options.SignalIds.Add("5114");
+            options.ChartType = AggregationMetricOptions.ChartTypes.Line;
+            Assert.IsTrue(options.CreateMetric().Count > 0);
+        }
+
+        [TestMethod]
+        public void CreateMetricColumnYearBinHours()
+        {
+            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+            options.StartDate = Convert.ToDateTime("1/1/2016");
+            options.EndDate = Convert.ToDateTime("12/31/2017");
+            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.TimeOptions = new BinFactoryOptions(
+                Convert.ToDateTime("1/1/2016"),
+                Convert.ToDateTime("12/31/2017"),
+                7, 30, 9, 30, new List<DayOfWeek> { DayOfWeek.Monday},
+                BinFactoryOptions.BinSizes.Year,
+                BinFactoryOptions.TimeOptions.TimePeriod);
+            options.SignalIds.Add("5114");
+            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            Assert.IsTrue(options.CreateMetric().Count > 0);
+        }
+
+        [TestMethod]
+        public void CreateMetricStackedColumnYearBinHours()
+        {
+            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+            options.StartDate = Convert.ToDateTime("1/1/2016");
+            options.EndDate = Convert.ToDateTime("12/31/2017");
+            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.TimeOptions = new BinFactoryOptions(
+                Convert.ToDateTime("1/1/2016"),
+                Convert.ToDateTime("12/31/2017"),
+                7, 30, 9, 30, new List<DayOfWeek> { DayOfWeek.Monday},
+                BinFactoryOptions.BinSizes.Year,
+                BinFactoryOptions.TimeOptions.TimePeriod);
+            options.SignalIds.Add("5114");
+            options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
+            Assert.IsTrue(options.CreateMetric().Count > 0);
+        }
+
+        [TestMethod]
+        public void CreateMetricAreaYearBinHours()
+        {
+            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+            options.StartDate = Convert.ToDateTime("1/1/2016");
+            options.EndDate = Convert.ToDateTime("12/31/2017");
+            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.TimeOptions = new BinFactoryOptions(
+                Convert.ToDateTime("1/1/2016"),
+                Convert.ToDateTime("12/31/2017"),
+                7, 30, 9, 30, new List<DayOfWeek> { DayOfWeek.Monday},
+                BinFactoryOptions.BinSizes.Year,
+                BinFactoryOptions.TimeOptions.TimePeriod);
+            options.SignalIds.Add("5114");
+            options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
+            Assert.IsTrue(options.CreateMetric().Count > 0);
+        }
+
+        
+
         //Thirty Minute Bin tests
 
         [TestMethod()]
@@ -926,331 +1050,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
             Assert.IsTrue(options.CreateMetric().Count > 0);
         }
-
-        //[TestMethod()]
-        //public void CreateHourMetricTest()
-        //{
-
-        //    ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
-
-
-        //    options.StartDate = DateTime.Now.AddDays(-1);//Convert.ToDateTime("10/17/2017");
-        //    options.EndDate = DateTime.Now; //Convert.ToDateTime("10/18/2017");
-        //    options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-        //    options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
-        //    options.TimeOptions = new BinFactoryOptions(
-        //        DateTime.Today.AddHours(7),//Convert.ToDateTime("10/17/2017 7:00 AM"), 
-        //        DateTime.Today.AddHours(8),//Convert.ToDateTime("10/17/2017 8:00 AM"), 
-        //        null, null, null, null, null,
-        //        BinFactoryOptions.BinSizes.Hour,
-        //        BinFactoryOptions.TimeOptions.StartToEnd);
-
-        //    options.SignalIds.Add("101");
-        //    //options.SignalIds.Add("8279");
-        //    //options.SignalIds.Add("7185");
-        //    PopulateApproachesWithSplitFailtAggregationRecords(options);
-
-
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-        //    Assert.IsTrue(options.CreateMetric().Count > 0);
-        //}
-
-        //[TestMethod()]
-        //public void CreateDayMetricTest()
-        //{
-
-        //    ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
-
-
-        //    options.StartDate = DateTime.Now.AddDays(-7);//Convert.ToDateTime("10/17/2017");
-        //    options.EndDate = DateTime.Now; //Convert.ToDateTime("10/18/2017");
-        //    options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-        //    options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
-        //    options.TimeOptions = new BinFactoryOptions(
-        //        DateTime.Now.AddDays(-7),//Convert.ToDateTime("10/17/2017 7:00 AM"), 
-        //        DateTime.Now,//Convert.ToDateTime("10/17/2017 8:00 AM"), 
-        //        null, null, null, null, null,
-        //        BinFactoryOptions.BinSizes.Day,
-        //        BinFactoryOptions.TimeOptions.StartToEnd);
-
-        //    options.SignalIds.Add("101");
-        //    //options.SignalIds.Add("8279");
-        //    //options.SignalIds.Add("7185");
-        //    PopulateApproachesWithSplitFailtAggregationRecords(options);
-
-
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-        //    Assert.IsTrue(options.CreateMetric().Count > 0);
-        //}
-
-        //[TestMethod()]
-        //public void CreateWeekMetricTest()
-        //{
-
-        //    ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
-
-
-        //    options.StartDate = DateTime.Now.AddDays(-21);//Convert.ToDateTime("10/17/2017");
-        //    options.EndDate = DateTime.Now; //Convert.ToDateTime("10/18/2017");
-        //    options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-        //    options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
-        //    options.TimeOptions = new BinFactoryOptions(
-        //        DateTime.Now.AddDays(-21),//Convert.ToDateTime("10/17/2017 7:00 AM"), 
-        //        DateTime.Now,//Convert.ToDateTime("10/17/2017 8:00 AM"), 
-        //        null, null, null, null, null,
-        //        BinFactoryOptions.BinSizes.Week,
-        //        BinFactoryOptions.TimeOptions.StartToEnd);
-
-        //    options.SignalIds.Add("101");
-        //    options.SignalIds.Add("102");
-        //    options.SignalIds.Add("103");
-        //    PopulateApproachesWithSplitFailtAggregationRecords(options);
-
-
-
-
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-        //    Assert.IsTrue(options.CreateMetric().Count > 0);
-        //}
-
-        //[TestMethod()]
-        //public void CreateMonthMetricTest()
-        //{
-
-
-        //    ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
-
-
-        //    options.StartDate = DateTime.Now.AddMonths(-3);//Convert.ToDateTime("10/17/2017");
-        //    options.EndDate = DateTime.Now; //Convert.ToDateTime("10/18/2017");
-        //    options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-        //    options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
-        //    options.TimeOptions = new BinFactoryOptions(
-        //        DateTime.Now.AddMonths(-3),//Convert.ToDateTime("10/17/2017 7:00 AM"), 
-        //        DateTime.Now,//Convert.ToDateTime("10/17/2017 8:00 AM"), 
-        //        null, null, null, null, null,
-        //        BinFactoryOptions.BinSizes.Month,
-        //        BinFactoryOptions.TimeOptions.StartToEnd);
-
-        //    options.SignalIds.Add("101");
-        //    //options.SignalIds.Add("8279");
-        //    //options.SignalIds.Add("7185");
-        //    PopulateApproachesWithSplitFailtAggregationRecords(options);
-
-
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-        //    Assert.IsTrue(options.CreateMetric().Count > 0);
-        //}
-
-
-
-        //[TestMethod()]
-        //public void CreateYearMetricTest()
-        //{
-        //    ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
-
-
-        //    options.StartDate = DateTime.Now.AddYears(-3);//Convert.ToDateTime("10/17/2017");
-        //    options.EndDate = DateTime.Now; //Convert.ToDateTime("10/18/2017");
-        //    options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-        //    options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
-        //    options.TimeOptions = new BinFactoryOptions(
-        //        DateTime.Now.AddYears(-3),//Convert.ToDateTime("10/17/2017 7:00 AM"), 
-        //        DateTime.Now,//Convert.ToDateTime("10/17/2017 8:00 AM"), 
-        //        null, null, null, null, null,
-        //        BinFactoryOptions.BinSizes.Year,
-        //        BinFactoryOptions.TimeOptions.StartToEnd);
-
-        //    options.SignalIds.Add("101");
-        //    //options.SignalIds.Add("8279");
-        //    //options.SignalIds.Add("7185");
-        //    PopulateApproachesWithSplitFailtAggregationRecords(options);
-
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-        //    Assert.IsTrue(options.CreateMetric().Count > 0);
-        //}
-
-        //[TestMethod()]
-        //public void YearOfWednesdaysTest()
-        //{
-        //    List<DayOfWeek> daysofWeek = new List<DayOfWeek>();
-        //    daysofWeek.Add(DayOfWeek.Wednesday);
-        //    ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
-
-
-        //    options.StartDate = DateTime.Now.AddYears(-3);//Convert.ToDateTime("10/17/2017");
-        //    options.EndDate = DateTime.Now; //Convert.ToDateTime("10/18/2017");
-        //    options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-        //    options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
-        //    options.TimeOptions = new BinFactoryOptions(
-        //        DateTime.Now.AddYears(-3),//Convert.ToDateTime("10/17/2017 7:00 AM"), 
-        //        DateTime.Now,//Convert.ToDateTime("10/17/2017 8:00 AM"), 
-        //        null, null, null, null, daysofWeek,
-        //        BinFactoryOptions.BinSizes.Year,
-        //        BinFactoryOptions.TimeOptions.TimePeriod);
-
-        //    options.SignalIds.Add("101");
-        //    //options.SignalIds.Add("8279");
-        //    //options.SignalIds.Add("7185");
-        //    PopulateApproachesWithSplitFailtAggregationRecords(options);
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-        //    Assert.IsTrue(options.CreateMetric().Count > 0);
-        //}
-
-        //[TestMethod()]
-        //public void YearOfWednesdaysAndFullYearProduceDifferentResultsTest()
-        //{
-        //    List<DayOfWeek> daysofWeek = new List<DayOfWeek>();
-        //    daysofWeek.Add(DayOfWeek.Wednesday);
-        //    ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
-
-
-        //    options.StartDate = DateTime.Now.AddYears(-3);//Convert.ToDateTime("10/17/2017");
-        //    options.EndDate = DateTime.Now; //Convert.ToDateTime("10/18/2017");
-        //    options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-        //    options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
-        //    options.TimeOptions = new BinFactoryOptions(
-        //        DateTime.Now.AddYears(-3),//Convert.ToDateTime("10/17/2017 7:00 AM"), 
-        //        DateTime.Now,//Convert.ToDateTime("10/17/2017 8:00 AM"), 
-        //        null, null, null, null, daysofWeek,
-        //        BinFactoryOptions.BinSizes.Year,
-        //        BinFactoryOptions.TimeOptions.StartToEnd);
-
-        //    options.SignalIds.Add("101");
-        //    //options.SignalIds.Add("8279");
-        //    //options.SignalIds.Add("7185");
-        //    PopulateApproachesWithSplitFailtAggregationRecords(options);
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-
-        //    options.TimeOptions = new BinFactoryOptions(
-        //        DateTime.Now.AddYears(-3),//Convert.ToDateTime("10/17/2017 7:00 AM"), 
-        //        DateTime.Now,//Convert.ToDateTime("10/17/2017 8:00 AM"), 
-        //        null, null, null, null, null,
-        //        BinFactoryOptions.BinSizes.Year,
-        //        BinFactoryOptions.TimeOptions.StartToEnd);
-
-
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-
-
-
-        //    Assert.IsTrue(options.CreateMetric().Count > 0);
-        //}
-
-        //[TestMethod()]
-        //public void CreateSignalMetricTest()
-        //{
-        //    ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
-
-
-        //    options.StartDate = DateTime.Now.AddMonths(-1);
-        //    options.EndDate = DateTime.Now;
-        //    options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-        //    options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Signal;
-        //    options.TimeOptions = new BinFactoryOptions(
-        //        DateTime.Now.AddMonths(-1),
-        //        DateTime.Now,
-        //        null, null, null, null, null,
-        //        BinFactoryOptions.BinSizes.Day,
-        //        BinFactoryOptions.TimeOptions.StartToEnd);
-
-        //    options.SignalIds.Add("101");
-        //    options.SignalIds.Add("102");
-        //    options.SignalIds.Add("103");
-        //    PopulateApproachesWithSplitFailtAggregationRecords(options);
-
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-        //    Assert.IsTrue(options.CreateMetric().Count > 0);
-        //}
-
-        //[TestMethod]
-        //public void CreateSignalByDirectionMetricTest()
-        //{
-        //    ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
-
-
-        //    options.StartDate = DateTime.Now.AddMonths(-1);
-        //    options.EndDate = DateTime.Now;
-        //    options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
-        //    options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByDirection;
-        //    options.TimeOptions = new BinFactoryOptions(
-        //        DateTime.Now.AddMonths(-1),
-        //        DateTime.Now,
-        //        null, null, null, null, null,
-        //        BinFactoryOptions.BinSizes.Day,
-        //        BinFactoryOptions.TimeOptions.StartToEnd);
-
-        //    options.SignalIds.Add("101");
-        //    options.SignalIds.Add("102");
-        //    options.SignalIds.Add("103");
-        //    PopulateApproachesWithSplitFailtAggregationRecords(options);
-
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-        //    options.CreateMetric();
-        //    options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-        //    Assert.IsTrue(options.CreateMetric().Count > 0);
-        //}
-
-
-
+        
 
     }
 }
