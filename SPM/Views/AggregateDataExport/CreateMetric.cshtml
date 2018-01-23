@@ -1,53 +1,9 @@
 ﻿
 @model SPM.Models.AggDataExportViewModel
-@using (Ajax.BeginForm("CreateMetric", "AggregateDataExport", new AjaxOptions {InsertionMode = System.Web.Mvc.Ajax.InsertionMode.Replace, UpdateTargetId = "Results", HttpMethod = "POST"}))
+@using (Ajax.BeginForm("CreateMetric", "AggregateDataExport", new AjaxOptions { InsertionMode = System.Web.Mvc.Ajax.InsertionMode.Replace, UpdateTargetId = "Results", HttpMethod = "POST" }))
 {
     @Html.AntiForgeryToken()
     @Html.DisplayFor(m => m.Signals)
-    <div class="panel panel-signal">
-        <div class="panel-heading">
-            <h5 class="panel-title">
-                <a id="DateTime"  data-toggle="collapse" href="#collapseDateTime">
-                    Date/Time
-                </a>
-            </h5>
-        </div>
-    </div>
-         <div id="collapseDateTime" class="panel-body panel-collapse collapse in">
-            <div class="col-md-7 col-sm-7 col-xs-7">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    @Html.LabelFor(model => model.StartDateDay, htmlAttributes: new { @class = "control-label" })
-                    <div class="input-group-custom">
-                        @Html.EditorFor(model => model.StartDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
-                        @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of start date" } })
-                        @Html.DropDownListFor(model => model.SelectedStartAMPM, Model.StartAMPMList, 
-                                new { @class = "form-control AMPMWidth", title = "AM PM component of start date" })
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    @Html.LabelFor(model => model.EndDateDay, htmlAttributes: new { @class = "control-label" })
-                    <div class="input-group-custom">
-                        @Html.EditorFor(model => model.EndDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
-                        @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
-                        @Html.DropDownListFor(model => model.SelectedEndAMPM, Model.EndAMPMList, 
-                            new { @class = "form-control AMPMWidth", title = "AM PM component of end date" })
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    @Html.CheckBoxFor(model => model.Weekdays, false)  Weekdays
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    @Html.CheckBoxFor(model => model.Weekends, false)  Weekends
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    @Html.DropDownListFor(model=>model.SelectedBinSize, new SelectList(Model.BinSizeList))
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    @Html.DropDownListFor(model => model.SelectedAggregationSeriesOptions, new SelectList(Model.AggSeriesOptions))
-                </div>                
-            </div>
-        </div>
-   
     <div class="panel panel-signal">
         <div class="panel-heading">
             <h5 class="panel-title">
@@ -56,20 +12,85 @@
                 </a>
             </h5>
         </div>
-        <div id="collapseMetric" class="panel-body panel-collapse collapse">
+        <div id="collapseMetric" class="panel-body panel-collapse collapse in">
             <div class="form-group">
                 @foreach (var metricItem in Model.MetricItems)
                 {
                     <div>
-
-                        @Html.RadioButtonFor(m=>m.SelectedMetric, metricItem.Key)
+                        @Html.RadioButtonFor(m => m.SelectedMetric, metricItem.Key)
                         @Html.Label(metricItem.Value)
                     </div>
                 }
             </div>
         </div>
     </div>
+
+    <div class="panel panel-signal">
+        <div class="panel-heading">
+            <h5 class="panel-title">
+                <a id="DateTime" data-toggle="collapse" href="#collapseDateTime">
+                    Date/Time
+                </a>
+            </h5>
+        </div>
+    </div>
+    <div id="collapseDateTime" class="panel-body panel-collapse collapse in">
+    <div class="col-md-7 col-sm-7 col-xs-7">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            @Html.LabelFor(model => model.StartDateDay, htmlAttributes: new { @class = "control-label" })
+            <div class="input-group-custom">
+                @Html.EditorFor(model => model.StartDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
+                @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of start date" } })
+                @Html.DropDownListFor(model => model.SelectedStartAMPM, Model.StartAMPMList,
+                    new { @class = "form-control AMPMWidth", title = "AM PM component of start date" })
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            @Html.LabelFor(model => model.EndDateDay, htmlAttributes: new { @class = "control-label" })
+            <div class="input-group-custom">
+                @Html.EditorFor(model => model.EndDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
+                @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
+                @Html.DropDownListFor(model => model.SelectedEndAMPM, Model.EndAMPMList,
+                    new { @class = "form-control AMPMWidth", title = "AM PM component of end date" })
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            @Html.CheckBoxFor(model => model.Weekdays, false)  Weekdays
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            @Html.CheckBoxFor(model => model.Weekends, false)  Weekends
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            @Html.DropDownListFor(model => model.SelectedBinSize, new SelectList(Model.BinSizeList))
+        </div>
+    </div>
+    </div>
+
+        <div class="panel panel-signal">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a id="DataAggregation" data-toggle="collapse" href="#collapseDataAggregation">
+                        Data Aggregation
+                    </a>
+                </h5>
+            </div>
+            <div id="collapseDataAggregation" class="panel-body panel-collapse collapse">
+                <label>Aggregation (X-axis)</label>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.DropDownListFor(model => model.SelectedAggregationSeriesOptions, new SelectList(Model.AggSeriesOptions))
+                </div>
+            </div>
+        </div>
+
+
+
     <button id="CreateMetric" type="submit" class="btn btn-primary">Create Chart &nbsp;<span id='RunReportSpinner' class="glyphicon"></span></button>
-        <div id="Results"></div>
-        
+    <div id="Results"></div>
+
+
+}
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/Scripts/AggregateDataExport.js"></script>
 }
