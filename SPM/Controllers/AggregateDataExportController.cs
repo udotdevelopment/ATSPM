@@ -105,13 +105,13 @@ namespace SPM.Controllers
             {
                 viewModel.MetricItems.Add(metricType.MetricID, metricType.ChartName);
             }
-            //List<DirectionType> allDirectionTypes = directionTypeRepository.GetAllDirections();
-            //List<MovementType> allMovementTypes = movementTypeRepository.GetAllMovementTypes();
-            //List<LaneType> allLaneTypes = laneTypeRepository.GetAllLaneTypes();
-                viewModel.AllMetricTypes = allMetricTypes;
-            //vm.AllApproachTypes = allDirectionTypes;
-            //vm.AllMovementTypes = allMovementTypes;
-            //vm.AllLaneTypes = allLaneTypes;
+            List<DirectionType> allDirectionTypes = directionTypeRepository.GetAllDirections();
+            List<MovementType> allMovementTypes = movementTypeRepository.GetAllMovementTypes();
+            List<LaneType> allLaneTypes = laneTypeRepository.GetAllLaneTypes();
+            viewModel.AllMetricTypes = allMetricTypes;
+                viewModel.AllApproachTypes = allDirectionTypes;
+                viewModel.AllMovementTypes = allMovementTypes;
+                viewModel.AllLaneTypes = allLaneTypes;
             //List<string> WeekdayWeekends = new List<string>();
             //WeekdayWeekends.Add("Weekdays");
             //WeekdayWeekends.Add("Weekends");

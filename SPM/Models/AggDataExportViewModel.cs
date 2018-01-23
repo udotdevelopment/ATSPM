@@ -23,22 +23,22 @@ namespace SPM.Models
         public Dictionary<int, string> MetricItems { get; set; }
         public int SelectedMetric { get; set; }
         public virtual ICollection<MetricType> AllMetricTypes { get; set; }
-        //public virtual List<int> ApproachTypeIDs { get; set; }
-        //public virtual ICollection<DirectionType> AllApproachTypes { get; set; }
-        //public virtual List<int> MovementTypeIDs { get; set; }
-        //public virtual ICollection<MovementType> AllMovementTypes { get; set; }
-        //public MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.XAxisAggregationSeriesOptions AggSeriesOptions { get; set; }
-        //public MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.AggregationGroups AggGroups { get; set; }
-        //public virtual List<int> LaneTypeIDs { get; set; }
-        //public virtual ICollection<LaneType> AllLaneTypes { get; set; }
+        public virtual List<int> ApproachTypeIDs { get; set; }
+        public virtual ICollection<DirectionType> AllApproachTypes { get; set; }
+        public virtual List<int> MovementTypeIDs { get; set; }
+        public virtual ICollection<MovementType> AllMovementTypes { get; set; }
+        public MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.XAxisAggregationSeriesOptions AggSeriesOptions { get; set; }
+        public MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.AggregationGroups AggGroups { get; set; }
+        public virtual List<int> LaneTypeIDs { get; set; }
+        public virtual ICollection<LaneType> AllLaneTypes { get; set; }
         ////public List<SelectListItem> AggregateMetricsList { get; set; }
 
         //public bool Weekdays { get; set; }
         //public bool Weekends { get; set; }
-        //public bool IsSum { get; set; }
+        public bool IsSum { get; set; }
         //public List<string> WeekdayWeekendIDs { get; set; }
         //public ICollection<string> SelectedWeekdayWeekend { get; set; }
-        //public MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.ChartTypes AggChartTypes { get; set; }
+        public MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.ChartTypes AggChartTypes { get; set; }
         //public string ColorSelection { get; set; }
         //public List<Route> Routes { get; set; }
         //public int SelectedRouteId { get; set; }
