@@ -85,6 +85,8 @@ namespace MOE.Common.Business.DataAggregation
                     approach.ApproachID, startDate, endDate);
             if (splitFails != null)
             {
+
+                ConcurrentBag<BinsContainer> concurrentBinContainers = new ConcurrentBag<BinsContainer>();
                 //foreach (var binsContainer in binsContainers)
                 Parallel.ForEach(binsContainers, binsContainer =>
                 {
@@ -124,9 +126,9 @@ namespace MOE.Common.Business.DataAggregation
 
                     });
                     tempBinsContainer.Bins = concurrentBins.OrderBy(c => c.Start).ToList();
-                    BinsContainers.Add(tempBinsContainer);
+                    concurrentBinContainers.Add(tempBinsContainer);
                 });
-                BinsContainers = BinsContainers.OrderBy(b => b.Start).ToList();
+                BinsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
             }
         }
     }

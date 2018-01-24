@@ -12,7 +12,7 @@ using MOE.CommonTests.Models;
 namespace MOE.Common.Business.WCFServiceLibrary.Tests
 {
     [TestClass()]
-    public class ApproachSplitFailAggregationOptionsTests
+    public class ApproachSplitFailAggregationApproachOptionsTests
     {
         //public InMemoryMOEDatabase Db = new InMemoryMOEDatabase();
 
@@ -46,16 +46,19 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             //}
         }
 
-        
+      
+
+        //**************************************Approach Aggregation********************************************************************
+        //*************************************************************************************************************************
 
         [TestMethod()]
-        public void CreateColumnMetricMultipleSignalsStartToFinishTest()
+        public void CreateApproachColumnMetricMultipleSignalsStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -64,13 +67,13 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.SignalIds.Add("5114");
-            options.SignalIds.Add("8279");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); 
+            Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod()]
-        public void CreateColumnMetricMultipleApproachesStartToFinishTest()
+        public void CreateApproachColumnMetricMultipleApproachesStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
@@ -85,36 +88,36 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod()]
-        public void CreateLineMetricStartToFinishTest()
+        public void CreateApproachLineMetricStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
-                Convert.ToDateTime("10/17/2017"), 
-                Convert.ToDateTime("10/18/2017"), 
+                Convert.ToDateTime("10/17/2017"),
+                Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSizes.FifteenMinutes,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateColumnMetricStartToFinishTest()
+        public void CreateApproachColumnMetricStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -123,17 +126,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateStackedColumnMetricStartToFinishTest()
+        public void CreateApproachStackedColumnMetricStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -142,17 +145,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaStartToFinishTest()
+        public void CreateApproachMetricAreaStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -161,36 +164,36 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricLineHours()
+        public void CreateApproachMetricLineHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
-                7, 30, 9, 30, new List<DayOfWeek>{ DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
+                7, 30, 9, 30, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSizes.FifteenMinutes,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricColumnHours()
+        public void CreateApproachMetricColumnHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -199,17 +202,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricStackedColumnHours()
+        public void CreateApproachMetricStackedColumnHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -218,17 +221,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaHours()
+        public void CreateApproachMetricAreaHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -237,20 +240,20 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
 
         //Sixty Minute Bin tests
 
         [TestMethod()]
-        public void CreateMetricLine60MinuteBinStartToFinishTest()
+        public void CreateApproachMetricLine60MinuteBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -259,17 +262,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateColumnMetric60MinuteBinStartToFinishTest()
+        public void CreateApproachColumnMetric60MinuteBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -278,17 +281,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateStackedColumnMetric60MinuteBinStartToFinishTest()
+        public void CreateApproachStackedColumnMetric60MinuteBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -297,17 +300,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricArea60MinuteBinStartToFinishTest()
+        public void CreateApproachMetricArea60MinuteBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -316,17 +319,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricLine60MinuteBinHours()
+        public void CreateApproachMetricLine60MinuteBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -335,17 +338,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricColumn60MinuteBinHours()
+        public void CreateApproachMetricColumn60MinuteBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -354,17 +357,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricStackedColumn60MinuteBinHours()
+        public void CreateApproachMetricStackedColumn60MinuteBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -373,17 +376,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricArea60MinuteBinHours()
+        public void CreateApproachMetricArea60MinuteBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -392,19 +395,19 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         //Day Bin tests
 
         [TestMethod()]
-        public void CreateMetricLineDayBinStartToFinishTest()
+        public void CreateApproachMetricLineDayBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -413,17 +416,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateColumnMetricDayBinStartToFinishTest()
+        public void CreateApproachColumnMetricDayBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -432,17 +435,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateStackedColumnMetricDayBinStartToFinishTest()
+        public void CreateApproachStackedColumnMetricDayBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -451,17 +454,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaDayBinStartToFinishTest()
+        public void CreateApproachMetricAreaDayBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -470,17 +473,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricLineDayBinHours()
+        public void CreateApproachMetricLineDayBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -489,17 +492,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricColumnDayBinHours()
+        public void CreateApproachMetricColumnDayBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -508,17 +511,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricStackedColumnDayBinHours()
+        public void CreateApproachMetricStackedColumnDayBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -527,17 +530,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaDayBinHours()
+        public void CreateApproachMetricAreaDayBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -546,19 +549,19 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         //Month Bin tests
 
         [TestMethod()]
-        public void CreateMetricLineMonthBinStartToFinishTest()
+        public void CreateApproachMetricLineMonthBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -567,17 +570,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateColumnMetricMonthBinStartToFinishTest()
+        public void CreateApproachColumnMetricMonthBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -586,17 +589,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateStackedColumnMetricMonthBinStartToFinishTest()
+        public void CreateApproachStackedColumnMetricMonthBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -605,17 +608,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaMonthBinStartToFinishTest()
+        public void CreateApproachMetricAreaMonthBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -624,17 +627,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricLineMonthBinHours()
+        public void CreateApproachMetricLineMonthBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -643,17 +646,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricColumnMonthBinHours()
+        public void CreateApproachMetricColumnMonthBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -662,17 +665,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricStackedColumnMonthBinHours()
+        public void CreateApproachMetricStackedColumnMonthBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -681,17 +684,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaMonthBinHours()
+        public void CreateApproachMetricAreaMonthBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -700,17 +703,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaMonthBinSingleDayType()
+        public void CreateApproachMetricAreaMonthBinSingleDayType()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -719,17 +722,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricStackedColumnMonthBinSingleDayType()
+        public void CreateApproachMetricStackedColumnMonthBinSingleDayType()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -738,19 +741,19 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         //Month Bin tests
 
         [TestMethod()]
-        public void CreateMetricLineYearBinStartToFinishTest()
+        public void CreateApproachMetricLineYearBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
@@ -759,17 +762,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateColumnMetricYearBinStartToFinishTest()
+        public void CreateApproachColumnMetricYearBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
@@ -778,17 +781,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateStackedColumnMetricYearBinStartToFinishTest()
+        public void CreateApproachStackedColumnMetricYearBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
@@ -797,17 +800,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaYearBinStartToFinishTest()
+        public void CreateApproachMetricAreaYearBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
@@ -816,97 +819,97 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricLineYearBinHours()
+        public void CreateApproachMetricLineYearBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
-                7, 30, 9, 30, new List<DayOfWeek> { DayOfWeek.Monday},
+                7, 30, 9, 30, new List<DayOfWeek> { DayOfWeek.Monday },
                 BinFactoryOptions.BinSizes.Year,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricColumnYearBinHours()
+        public void CreateApproachMetricColumnYearBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
-                7, 30, 9, 30, new List<DayOfWeek> { DayOfWeek.Monday},
+                7, 30, 9, 30, new List<DayOfWeek> { DayOfWeek.Monday },
                 BinFactoryOptions.BinSizes.Year,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricStackedColumnYearBinHours()
+        public void CreateApproachMetricStackedColumnYearBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
-                7, 30, 9, 30, new List<DayOfWeek> { DayOfWeek.Monday},
+                7, 30, 9, 30, new List<DayOfWeek> { DayOfWeek.Monday },
                 BinFactoryOptions.BinSizes.Year,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaYearBinHours()
+        public void CreateApproachMetricAreaYearBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
-                7, 30, 9, 30, new List<DayOfWeek> { DayOfWeek.Monday},
+                7, 30, 9, 30, new List<DayOfWeek> { DayOfWeek.Monday },
                 BinFactoryOptions.BinSizes.Year,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
-        
+
 
         //Thirty Minute Bin tests
 
         [TestMethod()]
-        public void CreateMetricLine30MinuteBinStartToFinishTest()
+        public void CreateApproachMetricLine30MinuteBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -915,17 +918,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateColumnMetric30MinuteBinStartToFinishTest()
+        public void CreateApproachColumnMetric30MinuteBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -934,17 +937,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateStackedColumnMetric30MinuteBinStartToFinishTest()
+        public void CreateApproachStackedColumnMetric30MinuteBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -953,17 +956,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricArea30MinuteBinStartToFinishTest()
+        public void CreateApproachMetricArea30MinuteBinStartToFinishTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -972,17 +975,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricLine30MinuteBinHours()
+        public void CreateApproachMetricLine30MinuteBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -991,17 +994,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricColumn30MinuteBinHours()
+        public void CreateApproachMetricColumn30MinuteBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1010,17 +1013,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricStackedColumn30MinuteBinHours()
+        public void CreateApproachMetricStackedColumn30MinuteBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1029,17 +1032,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricArea30MinuteBinHours()
+        public void CreateApproachMetricArea30MinuteBinHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1048,7 +1051,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
 
@@ -1056,7 +1059,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
 
 
         [TestMethod()]
-        public void CreateColumnMetricMultipleApproachesStartToFinishAverageTest()
+        public void CreateApproachColumnMetricMultipleApproachesStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
@@ -1071,17 +1074,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod()]
-        public void CreateLineMetricStartToFinishAverageTest()
+        public void CreateApproachLineMetricStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1090,17 +1093,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateColumnMetricStartToFinishAverageTest()
+        public void CreateApproachColumnMetricStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1109,17 +1112,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateStackedColumnMetricStartToFinishAverageTest()
+        public void CreateApproachStackedColumnMetricStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1128,17 +1131,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaStartToFinishAverageTest()
+        public void CreateApproachMetricAreaStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1147,17 +1150,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricLineHoursAverage()
+        public void CreateApproachMetricLineHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1166,17 +1169,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricColumnHoursAverage()
+        public void CreateApproachMetricColumnHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1185,17 +1188,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricStackedColumnHoursAverage()
+        public void CreateApproachMetricStackedColumnHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1204,17 +1207,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaHoursAverage()
+        public void CreateApproachMetricAreaHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1223,20 +1226,20 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
 
         //Sixty Minute Bin tests
 
         [TestMethod()]
-        public void CreateMetricLine60MinuteBinStartToFinishAverageTest()
+        public void CreateApproachMetricLine60MinuteBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1245,17 +1248,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateColumnMetric60MinuteBinStartToFinishAverageTest()
+        public void CreateApproachColumnMetric60MinuteBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1264,17 +1267,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateStackedColumnMetric60MinuteBinStartToFinishAverageTest()
+        public void CreateApproachStackedColumnMetric60MinuteBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1283,17 +1286,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricArea60MinuteBinStartToFinishAverageTest()
+        public void CreateApproachMetricArea60MinuteBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1302,17 +1305,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricLine60MinuteBinHoursAverage()
+        public void CreateApproachMetricLine60MinuteBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1321,17 +1324,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricColumn60MinuteBinHoursAverage()
+        public void CreateApproachMetricColumn60MinuteBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1340,17 +1343,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricStackedColumn60MinuteBinHoursAverage()
+        public void CreateApproachMetricStackedColumn60MinuteBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1359,17 +1362,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricArea60MinuteBinHoursAverage()
+        public void CreateApproachMetricArea60MinuteBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1378,19 +1381,19 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         //Day Bin tests
 
         [TestMethod()]
-        public void CreateMetricLineDayBinStartToFinishTestAverage()
+        public void CreateApproachMetricLineDayBinStartToFinishTestAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -1399,17 +1402,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateColumnMetricDayBinStartToFinishTestAverage()
+        public void CreateApproachColumnMetricDayBinStartToFinishTestAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -1418,17 +1421,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateStackedColumnMetricDayBinStartToFinishAverageTest()
+        public void CreateApproachStackedColumnMetricDayBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -1437,17 +1440,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaDayBinStartToFinishAverageTest()
+        public void CreateApproachMetricAreaDayBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -1456,17 +1459,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricLineDayBinHourAverages()
+        public void CreateApproachMetricLineDayBinHourAverages()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -1475,17 +1478,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricColumnDayBinHoursAverage()
+        public void CreateApproachMetricColumnDayBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -1494,17 +1497,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricStackedColumnDayBinHoursAverage()
+        public void CreateApproachMetricStackedColumnDayBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -1513,17 +1516,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaDayBinHoursAverage()
+        public void CreateApproachMetricAreaDayBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -1532,19 +1535,19 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         //Month Bin tests
 
         [TestMethod()]
-        public void CreateMetricLineMonthBinStartToFinishAverageTest()
+        public void CreateApproachMetricLineMonthBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1553,17 +1556,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateColumnMetricMonthBinStartToFinishAverageTest()
+        public void CreateApproachColumnMetricMonthBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1572,17 +1575,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateStackedColumnMetricMonthBinStartToFinishAverageTest()
+        public void CreateApproachStackedColumnMetricMonthBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1591,17 +1594,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaMonthBinStartToFinishAverageTest()
+        public void CreateApproachMetricAreaMonthBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1610,17 +1613,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricLineMonthBinAverageHours()
+        public void CreateApproachMetricLineMonthBinAverageHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1629,17 +1632,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricColumnMonthBinAverageHours()
+        public void CreateApproachMetricColumnMonthBinAverageHours()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1648,17 +1651,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricStackedColumnMonthBinHoursAverage()
+        public void CreateApproachMetricStackedColumnMonthBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1667,17 +1670,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaMonthBinHoursAverage()
+        public void CreateApproachMetricAreaMonthBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1686,17 +1689,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaMonthBinSingleDayTypeAverage()
+        public void CreateApproachMetricAreaMonthBinSingleDayTypeAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1705,17 +1708,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricStackedColumnMonthBinSingleDayTypeAverage()
+        public void CreateApproachMetricStackedColumnMonthBinSingleDayTypeAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1724,19 +1727,19 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         //Month Bin tests
 
         [TestMethod()]
-        public void CreateMetricLineYearBinStartToFinishAverageTest()
+        public void CreateApproachMetricLineYearBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1745,17 +1748,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateColumnMetricYearBinStartToFinishAverageTest()
+        public void CreateApproachColumnMetricYearBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1764,17 +1767,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateStackedColumnMetricYearBinStartToFinishAverageTest()
+        public void CreateApproachStackedColumnMetricYearBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1783,17 +1786,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaYearBinStartToFinishAverageTest()
+        public void CreateApproachMetricAreaYearBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1802,17 +1805,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricLineYearBinHoursAverage()
+        public void CreateApproachMetricLineYearBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1821,17 +1824,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricColumnYearBinHoursAverage()
+        public void CreateApproachMetricColumnYearBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1840,17 +1843,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricStackedColumnYearBinHoursAverage()
+        public void CreateApproachMetricStackedColumnYearBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1859,17 +1862,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricAreaYearBinHoursAverage()
+        public void CreateApproachMetricAreaYearBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("12/31/2017"),
@@ -1878,7 +1881,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("5114");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
 
@@ -1886,13 +1889,13 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         //Thirty Minute Bin tests
 
         [TestMethod()]
-        public void CreateMetricLine30MinuteBinStartToFinishAverageTest()
+        public void CreateApproachMetricLine30MinuteBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1901,17 +1904,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateColumnMetric30MinuteBinStartToFinishAverageTest()
+        public void CreateApproachColumnMetric30MinuteBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1920,17 +1923,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateStackedColumnMetric30MinuteBinStartToFinishAverageTest()
+        public void CreateApproachStackedColumnMetric30MinuteBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1939,17 +1942,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricArea30MinuteBinStartToFinishAverageTest()
+        public void CreateApproachMetricArea30MinuteBinStartToFinishAverageTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1958,17 +1961,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricLine30MinuteBinHoursAverage()
+        public void CreateApproachMetricLine30MinuteBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1977,17 +1980,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Line;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricColumn30MinuteBinHoursAverage()
+        public void CreateApproachMetricColumn30MinuteBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1996,17 +1999,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.Column;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricStackedColumn30MinuteBinHoursAverage()
+        public void CreateApproachMetricStackedColumn30MinuteBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -2015,17 +2018,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedColumn;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
 
         [TestMethod]
-        public void CreateMetricArea30MinuteBinHoursAverage()
+        public void CreateApproachMetricArea30MinuteBinHoursAverage()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -2034,8 +2037,11 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.ChartType = AggregationMetricOptions.ChartTypes.StackedLine;
-            Assert.IsTrue(options.CreateMetric().Count > 0);
+           Assert.IsTrue(options.CreateMetric().Count > 0); Assert.IsTrue(options.SeriesCount > 0);
         }
+
+
+
 
 
     }
