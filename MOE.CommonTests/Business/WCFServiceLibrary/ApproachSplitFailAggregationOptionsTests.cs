@@ -54,7 +54,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -75,7 +75,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -94,7 +94,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"), 
@@ -113,7 +113,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -132,7 +132,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -151,7 +151,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -170,7 +170,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -189,7 +189,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -208,7 +208,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -227,7 +227,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -249,7 +249,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -268,7 +268,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -287,7 +287,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -306,7 +306,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -325,7 +325,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -344,7 +344,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -363,7 +363,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -382,7 +382,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -403,7 +403,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -422,7 +422,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -441,7 +441,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -460,7 +460,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -479,7 +479,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -498,7 +498,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -517,7 +517,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -536,7 +536,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -557,7 +557,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -576,7 +576,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -595,7 +595,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -614,7 +614,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -633,7 +633,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -652,7 +652,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -671,7 +671,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -690,7 +690,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -709,7 +709,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -728,7 +728,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -749,7 +749,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -768,7 +768,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -787,7 +787,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -806,7 +806,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -825,7 +825,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -844,7 +844,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -863,7 +863,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -882,7 +882,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -905,7 +905,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -924,7 +924,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -943,7 +943,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -962,7 +962,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -981,7 +981,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1000,7 +1000,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1019,7 +1019,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1038,7 +1038,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1061,7 +1061,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1080,7 +1080,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1099,7 +1099,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1118,7 +1118,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1137,7 +1137,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1156,7 +1156,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1175,7 +1175,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1194,7 +1194,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1213,7 +1213,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1235,7 +1235,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1254,7 +1254,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1273,7 +1273,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1292,7 +1292,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1311,7 +1311,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1330,7 +1330,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1349,7 +1349,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1368,7 +1368,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1389,7 +1389,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -1408,7 +1408,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -1427,7 +1427,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -1446,7 +1446,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -1465,7 +1465,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -1484,7 +1484,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -1503,7 +1503,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -1522,7 +1522,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -1543,7 +1543,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -1562,7 +1562,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -1581,7 +1581,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -1600,7 +1600,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -1619,7 +1619,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -1638,7 +1638,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -1657,7 +1657,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -1676,7 +1676,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -1695,7 +1695,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -1714,7 +1714,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -1735,7 +1735,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -1754,7 +1754,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -1773,7 +1773,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -1792,7 +1792,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -1811,7 +1811,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -1830,7 +1830,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -1849,7 +1849,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -1868,7 +1868,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("12/31/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -1891,7 +1891,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1910,7 +1910,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1929,7 +1929,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1948,7 +1948,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1967,7 +1967,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -1986,7 +1986,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -2005,7 +2005,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -2024,7 +2024,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Average;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Average;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),

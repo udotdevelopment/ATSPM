@@ -37,7 +37,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     foreach (var binsContainer in approachSplitFails.BinsContainers)
                     {
-                        if (AggregationOpperation == AggregationOpperations.Sum)
+                        if (AggregationOperation == AggregationOperations.Sum)
                         {
                             series.Points.AddXY(binsContainer.Start, binsContainer.SumValue);
                         }
@@ -51,7 +51,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     foreach (var bin in approachSplitFails.BinsContainers.FirstOrDefault().Bins)
                     {
-                        if (AggregationOpperation == AggregationOpperations.Sum)
+                        if (AggregationOperation == AggregationOperations.Sum)
                         {
                             series.Points.AddXY(bin.Start, bin.Sum);
                         }
@@ -80,7 +80,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 DataPoint dataPoint = new DataPoint();
                 dataPoint.XValue = i;
                 dataPoint.Color = GetSeriesColorByNumber(i);
-                if (AggregationOpperation == AggregationOpperations.Sum)
+                if (AggregationOperation == AggregationOperations.Sum)
                 {
                     dataPoint.SetValueY(approachSplitFails.BinsContainers.FirstOrDefault().SumValue);
                 }
@@ -152,7 +152,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     DataPoint dataPoint = new DataPoint();
                     dataPoint.XValue = i;
-                    if (AggregationOpperation == AggregationOpperations.Sum)
+                    if (AggregationOperation == AggregationOperations.Sum)
                     {
                         dataPoint.SetValueY(spliFailAggregationBySignal.TotalSplitFailures);
                     }
@@ -204,7 +204,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
                     DataPoint dataPoint = new DataPoint();
                     dataPoint.XValue = columnCounter;
-                    if (AggregationOpperation == AggregationOpperations.Sum)
+                    if (AggregationOperation == AggregationOperations.Sum)
                     {
                         dataPoint.SetValueY(spliFailAggregationBySignal.GetSplitFailsByDirection(direction));
                     }
@@ -237,7 +237,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 DataPoint dataPoint = new DataPoint();
                 dataPoint.XValue = i;
-                if (AggregationOpperation == AggregationOpperations.Sum)
+                if (AggregationOperation == AggregationOperations.Sum)
                 {
                     dataPoint.SetValueY(spliFailAggregationBySignal.GetSplitFailsByDirection(direction));
                 }

@@ -71,7 +71,7 @@ namespace SPM.Controllers
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = aggDataExportViewModel.StartDateDay;
             options.EndDate = aggDataExportViewModel.EndDateDay;
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = aggDataExportViewModel.SelectedAggregationOperation;
             options.XAxisAggregationSeriesOption = aggDataExportViewModel.SelectedAggregationSeriesOptions;
             string[] startTime;
             string[] endTime;
@@ -132,7 +132,7 @@ namespace SPM.Controllers
             {
                 options.SignalIds.Add(signal.SignalID);
             }
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = aggDataExportViewModel.SelectedChartType;
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             MetricGeneratorService.MetricGeneratorClient client =
                     new MetricGeneratorService.MetricGeneratorClient();

@@ -61,7 +61,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 series.ChartArea = "ChartArea1";
                 series.BorderWidth = 2;
                 SetSeriestype(series);
-                if (AggregationOpperation == AggregationOpperations.Sum)
+                if (AggregationOperation == AggregationOperations.Sum)
                 {
                     foreach (var bin in approachSplitFails.BinsContainer.Bins)
                     {

@@ -27,10 +27,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Column,
             StackedColumn,
             Line,
-            StackedLine
+            StackedLine,
+            Pie
         };
 
-        public enum AggregationOpperations
+        public enum AggregationOperations
         {
             Sum,
             Average
@@ -76,7 +77,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public Business.Bins.BinFactoryOptions TimeOptions { get; set; }
         public ChartTypes ChartType { get; set; }
-        public AggregationOpperations AggregationOpperation { get; set; }
+        public AggregationOperations AggregationOperation { get; set; }
         public XAxisAggregationSeriesOptions XAxisAggregationSeriesOption { get; set; }
         public List<string> SignalIds { get; set; } = new List<string>();
         public List<Models.Signal> Signals { get; set; } = new List<Models.Signal>();
@@ -112,7 +113,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 }
                 chartTitle += TimeOptions.BinSize.ToString() + " bins ";
                 chartTitle += XAxisAggregationSeriesOption.ToString() + " Aggregation ";
-                chartTitle += AggregationOpperation.ToString();
+                chartTitle += AggregationOperation.ToString();
                 return chartTitle;
             }
         }

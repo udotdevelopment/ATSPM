@@ -167,7 +167,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
 
 
-                if (AggregationOpperation == AggregationOpperations.Sum)
+                if (AggregationOperation == AggregationOperations.Sum)
                 {
                     foreach (var bin in preemptsreempts.BinsContainer.Bins)
                     {

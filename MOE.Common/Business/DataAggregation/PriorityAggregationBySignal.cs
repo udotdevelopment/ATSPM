@@ -77,21 +77,21 @@ namespace MOE.Common.Business.DataAggregation
                 MOE.Common.Models.Repositories.PriorityAggregationDatasRepositoryFactory.Create();
 
             var container = binsContainers.FirstOrDefault();
-            if (container != null)
-            {
-                foreach (var bin in container.Bins)
-                {
+            //if (container != null)
+            //{
+            //    foreach (var bin in container.Bins)
+            //    {
 
-                    var records = priorityAggregationRepository
-                        .GetPriorityAggregationByVersionIdAndDateRange(
-                            Signal.VersionID, bin.Start, bin.End);
+            //        var records = priorityAggregationRepository
+            //            .GetPriorityAggregationByVersionIdAndDateRange(
+            //                Signal.VersionID, bin.Start, bin.End);
 
-                    var totalRequests = records.Sum(s => s.PriorityRequests);
+            //        var totalRequests = records.Sum(s => s.PriorityRequests);
 
-                    BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Value = totalRequests});
+            //        BinsContainer.Bins.Add(new Bin (bin.Start, bin.End){ Sum = totalRequests});
 
-                }
-            }
+            //    }
+            //}
         }
 
 

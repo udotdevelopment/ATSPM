@@ -340,11 +340,11 @@ namespace MOE.Common.Business
             {
                 chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
             }
-            if (options.AggregationOpperation == AggregationMetricOptions.AggregationOpperations.Sum)
+            if (options.AggregationOperation == AggregationMetricOptions.AggregationOperations.Sum)
             {
                 chartArea.AxisY.Title = "Sum of SplitFailures";
             }
-            else if (options.AggregationOpperation == AggregationMetricOptions.AggregationOpperations.Average)
+            else if (options.AggregationOperation == AggregationMetricOptions.AggregationOperations.Average)
             {
                 chartArea.AxisY.Title = "Average of SplitFailures";
             }
