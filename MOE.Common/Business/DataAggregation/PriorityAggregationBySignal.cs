@@ -24,9 +24,9 @@ namespace MOE.Common.Business.DataAggregation
                 foreach (var preempt in PriorityTotals)
                 {
                     summedServicedPriority += preempt.BinsContainer.Bins.Where(a => a.Start == bin.Start)
-                        .Sum(a => a.Value);
+                        .Sum(a => a.Sum);
                 }
-                bin.Value = summedServicedPriority;
+                bin.Sum = summedServicedPriority;
             }
 
         }
@@ -65,7 +65,7 @@ namespace MOE.Common.Business.DataAggregation
     public class SignalPriorityAggregationContainer
     {
         public Models.Signal Signal { get; }
-        public BinsContainer BinsContainer { get; set; } = new BinsContainer();
+        public BinsContainer BinsContainer { get; set; }
 
         public SignalPriorityAggregationContainer(Models.Signal signal, BinsContainer binsContainer) //, AggregationMetricOptions.XAxisTimeTypes aggregationType)
         {
@@ -86,7 +86,7 @@ namespace MOE.Common.Business.DataAggregation
 
                 var totalRequests = records.Sum(s => s.PriorityRequests);
 
-                BinsContainer.Bins.Add(new Bin { Start = bin.Start, End = bin.End, Value = totalRequests });
+                BinsContainer.Bins.Add(new Bin { Start = bin.Start, End = bin.End, Sum = totalRequests });
 
             }
         }
@@ -111,7 +111,7 @@ namespace MOE.Common.Business.DataAggregation
 
                 var totalRequests = records.Sum(s => s.PriorityRequests);
 
-                BinsContainer.Bins.Add(new Bin { Start = bin.Start, End = bin.End, Value = totalRequests });
+                BinsContainer.Bins.Add(new Bin { Start = bin.Start, End = bin.End, Sum = totalRequests });
 
             } 
         }

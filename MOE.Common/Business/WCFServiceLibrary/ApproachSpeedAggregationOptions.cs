@@ -65,7 +65,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     foreach (var bin in approachSplitFails.BinsContainer.Bins)
                     {
-                        series.Points.AddXY(bin.Start, bin.Value);
+                        series.Points.AddXY(bin.Start, bin.Sum);
                     }
                 }
 

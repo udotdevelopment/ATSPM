@@ -53,7 +53,7 @@ namespace MOE.Common.Business.Bins
         private static List<BinsContainer> GetDayBinsContainersForRange(BinFactoryOptions timeOptions)
         {
             List<BinsContainer> binsContainers = new List<BinsContainer>();
-            BinsContainer binsContainer = new BinsContainer();
+            BinsContainer binsContainer = new BinsContainer(timeOptions.Start, timeOptions.End);
             for (DateTime startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month, timeOptions.Start.Day,0,0,0); startTime.Date <= timeOptions.End.Date; startTime = startTime.AddDays(1))
             {
                 if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
@@ -81,7 +81,7 @@ namespace MOE.Common.Business.Bins
             List<BinsContainer> binsContainers = new List<BinsContainer>();
             if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
             {
-                BinsContainer binsContainer = new BinsContainer{Start = timeOptions.Start, End = timeOptions.End};
+                BinsContainer binsContainer = new BinsContainer(timeOptions.Start, timeOptions.End);
 
                 for (DateTime startTime = new DateTime(timeOptions.Start.Year, 1, 1);
                     startTime.Date <= timeOptions.End.Date;
@@ -97,10 +97,8 @@ namespace MOE.Common.Business.Bins
                     startTime.Date <= timeOptions.End.Date;
                     startTime = startTime.AddYears(1))
                 {
-                    binsContainers.Add(new BinsContainer
+                    binsContainers.Add(new BinsContainer(startTime, startTime.AddYears(1))
                     {
-                        Start = startTime,
-                        End = startTime.AddYears(1),
                         Bins = GetDayBinsForRange(startTime, startTime.AddYears(1), timeOptions.TimeOfDayStartHour.Value, timeOptions.TimeOfDayStartMinute.Value, timeOptions.TimeOfDayEndHour.Value, timeOptions.TimeOfDayEndMinute.Value, timeOptions.DaysOfWeek)
                     });
                 }
@@ -113,7 +111,7 @@ namespace MOE.Common.Business.Bins
             List<BinsContainer> binsContainers = new List<BinsContainer>();
             if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
             {
-                BinsContainer binsContainer = new BinsContainer();
+                BinsContainer binsContainer = new BinsContainer(timeOptions.Start, timeOptions.End);
                 for (DateTime startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month, 1);
                     startTime.Date <= timeOptions.End.Date;
                     startTime = startTime.AddMonths(1))
@@ -128,10 +126,8 @@ namespace MOE.Common.Business.Bins
                     startTime.Date <= timeOptions.End.Date;
                     startTime = startTime.AddMonths(1))
                 {
-                    binsContainers.Add(new BinsContainer
+                    binsContainers.Add(new BinsContainer(startTime, startTime.AddMonths(1))
                     {
-                        Start = startTime,
-                        End = startTime.AddMonths(1),
                         Bins = GetDayBinsForRange(startTime, startTime.AddMonths(1), timeOptions.TimeOfDayStartHour.Value, timeOptions.TimeOfDayStartMinute.Value, timeOptions.TimeOfDayEndHour.Value, timeOptions.TimeOfDayEndMinute.Value, timeOptions.DaysOfWeek)
                     });
                 }
@@ -155,7 +151,7 @@ namespace MOE.Common.Business.Bins
                 endTimeSpan = new TimeSpan(0, timeOptions.TimeOfDayEndHour.Value,
                     timeOptions.TimeOfDayEndMinute.Value, 0);
             }
-            BinsContainer binsContainer = new BinsContainer();
+            BinsContainer binsContainer = new BinsContainer(timeOptions.Start, timeOptions.End);
             for (DateTime startTime = timeOptions.Start; startTime < timeOptions.End; startTime = startTime.AddMinutes(minutes))
             {
                 if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)

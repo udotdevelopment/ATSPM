@@ -29,9 +29,9 @@ namespace MOE.Common.Business.DataAggregation
                     foreach (var approachSplitFail in ApproachSplitFailures)
                     {
                         summedSplitFailures += approachSplitFail.BinsContainers.FirstOrDefault().Bins.Where(a => a.Start == bin.Start)
-                            .Sum(a => a.Value);
+                            .Sum(a => a.Sum);
                     }
-                    bin.Value = summedSplitFailures;
+                    bin.Sum = summedSplitFailures;
                 }
             }
         }
@@ -45,8 +45,9 @@ namespace MOE.Common.Business.DataAggregation
             ApproachSplitFailures = new List<ApproachSplitFailAggregationContainer>();
             foreach (var approach in signal.Approaches)
             {
-                ApproachSplitFailures.Add(
-                    new ApproachSplitFailAggregationContainer(approach, binsContainers));
+                 ApproachSplitFailures.Add(
+                        new ApproachSplitFailAggregationContainer(approach, binsContainers, options.StartDate,
+                            options.EndDate));
             }
 
         }
@@ -74,29 +75,59 @@ namespace MOE.Common.Business.DataAggregation
         public Approach Approach { get; }
         public List<BinsContainer> BinsContainers { get; set; } = new List<BinsContainer>();
 
-        public ApproachSplitFailAggregationContainer(Approach approach, List<BinsContainer> binsContainers)
+        public ApproachSplitFailAggregationContainer(Approach approach, List<BinsContainer> binsContainers, DateTime startDate, DateTime endDate)
         {
             Approach = approach;
-            //foreach (var binsContainer in binsContainers)
-            Parallel.ForEach(binsContainers, binsContainer =>
+            var splitFailAggregationRepository =
+                Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.Create();
+            List<ApproachSplitFailAggregation> splitFails =
+                splitFailAggregationRepository.GetApproachSplitFailsAggregationByApproachIdAndDateRange(
+                    approach.ApproachID, startDate, endDate);
+            if (splitFails != null)
             {
-                
-                BinsContainer tempBinsContainer = new BinsContainer{Start = binsContainer.Start, End = binsContainer.End};
-                ConcurrentBag<Bin> concurrentBins = new ConcurrentBag<Bin>();
-                //foreach (var bin in binsContainer.Bins)
-                Parallel.ForEach(binsContainer.Bins, bin =>
+                //foreach (var binsContainer in binsContainers)
+                Parallel.ForEach(binsContainers, binsContainer =>
                 {
-                    var splitFailAggregationRepository =
-                        Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.Create();
-                    var splitFails = splitFailAggregationRepository
-                        .GetApproachSplitFailAggregationByApproachIdAndDateRange(
-                            approach.ApproachID, bin.Start, bin.End);
-                    concurrentBins.Add(new Bin {Start = bin.Start, End = bin.End, Value = splitFails});
+
+                    BinsContainer tempBinsContainer =
+                        new BinsContainer(binsContainer.Start, binsContainer.End);
+                    ConcurrentBag<Bin> concurrentBins = new ConcurrentBag<Bin>();
+                    //foreach (var bin in binsContainer.Bins)
+                    Parallel.ForEach(binsContainer.Bins, bin =>
+                    {
+                        if (splitFails.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
+                        {
+                            int splitFailCount =
+                                splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                    .Sum(s => s.SplitFailures);
+                            double splitFailAverage =
+                                splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                    .Average(s => s.SplitFailures);
+                            concurrentBins.Add(new Bin
+                            {
+                                Start = bin.Start,
+                                End = bin.End,
+                                Sum = splitFailCount,
+                                Average = splitFailAverage
+                            });
+                        }
+                        else
+                        {
+                            concurrentBins.Add(new Bin
+                            {
+                                Start = bin.Start,
+                                End = bin.End,
+                                Sum = 0,
+                                Average = 0
+                            });
+                        }
+
+                    });
+                    tempBinsContainer.Bins = concurrentBins.OrderBy(c => c.Start).ToList();
+                    BinsContainers.Add(tempBinsContainer);
                 });
-                tempBinsContainer.Bins = concurrentBins.OrderBy(c => c.Start).ToList();
-                BinsContainers.Add(tempBinsContainer);
-            });
-            BinsContainers = BinsContainers.OrderBy(b => b.Start).ToList();
+                BinsContainers = BinsContainers.OrderBy(b => b.Start).ToList();
+            }
         }
     }
         

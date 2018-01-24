@@ -50,7 +50,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     {
                         foreach (var bin in totals.BinsContainer.Bins)
                         {
-                            chart.Series[seriesCounter-1].Points.AddXY(signal.SignalID, bin.Value);
+                            chart.Series[seriesCounter-1].Points.AddXY(signal.SignalID, bin.Sum);
                         }
                     }
                 }
@@ -85,7 +85,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     {
                         foreach (var bin in totals.BinsContainer.Bins)
                         {
-                            series.Points.AddXY(bin.Start, bin.Value);
+                            series.Points.AddXY(bin.Start, bin.Sum);
                         }
                     }
 
@@ -170,7 +170,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     foreach (var bin in preemptsreempts.BinsContainer.Bins)
                     {
-                        series.Points.AddXY(bin.Start, bin.Value);
+                        series.Points.AddXY(bin.Start, bin.Sum);
                     }
                 }
         

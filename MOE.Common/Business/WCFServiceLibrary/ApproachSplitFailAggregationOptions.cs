@@ -32,38 +32,35 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 series.ChartArea = "ChartArea1";
                 series.BorderWidth = 2;
                 SetSeriestype(series);
-                if (AggregationOpperation == AggregationOpperations.Sum)
+                if ((TimeOptions.BinSize == BinFactoryOptions.BinSizes.Month || TimeOptions.BinSize == BinFactoryOptions.BinSizes.Year) &&
+                    TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)
                 {
-                    if ((TimeOptions.BinSize == BinFactoryOptions.BinSizes.Month || TimeOptions.BinSize == BinFactoryOptions.BinSizes.Year) &&
-                        TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)
+                    foreach (var binsContainer in approachSplitFails.BinsContainers)
                     {
-                        foreach (var binsContainer in approachSplitFails.BinsContainers)
+                        if (AggregationOpperation == AggregationOpperations.Sum)
                         {
-                            if (AggregationOpperation == AggregationOpperations.Sum)
-                            {
-                                series.Points.AddXY(binsContainer.Start, binsContainer.SumValue);
-                            }
-                            else
-                            {
-                                series.Points.AddXY(binsContainer.Start, binsContainer.AverageValue);
-                            }
+                            series.Points.AddXY(binsContainer.Start, binsContainer.SumValue);
                         }
-                    }
-                    else
-                    {
-                        foreach (var bin in approachSplitFails.BinsContainers.FirstOrDefault().Bins)
+                        else
                         {
-                            series.Points.AddXY(bin.Start, bin.Value);
+                            series.Points.AddXY(binsContainer.Start, binsContainer.AverageValue);
                         }
                     }
                 }
-                //else
-                //{
-                //    foreach (var splitFail in approachSplitFails.AverageSplitFails)
-                //    {
-                //        series.Points.AddXY(splitFail.Key, splitFail.Value);
-                //    }
-                //}
+                else
+                {
+                    foreach (var bin in approachSplitFails.BinsContainers.FirstOrDefault().Bins)
+                    {
+                        if (AggregationOpperation == AggregationOpperations.Sum)
+                        {
+                            series.Points.AddXY(bin.Start, bin.Sum);
+                        }
+                        else
+                        {
+                            series.Points.AddXY(bin.Start, bin.Average);
+                        }
+                    }
+                }
                 chart.Series.Add(series);
                 i++;
             }
@@ -87,10 +84,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     dataPoint.SetValueY(approachSplitFails.BinsContainers.FirstOrDefault().SumValue);
                 }
-                //else
-                //{
-                //    dataPoint.SetValueY(approachSplitFails.AveragePreemptsServiced);
-                //}
+                else
+                {
+                    dataPoint.SetValueY(approachSplitFails.BinsContainers.FirstOrDefault().AverageValue);
+                }
                 dataPoint.AxisLabel = approachSplitFails.Approach.Description;
                 series.Points.Add(dataPoint);
                 i++;
@@ -125,7 +122,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     foreach (var bin in container.Bins)
                     {
-                        series.Points.AddXY(bin.Start, bin.Value);
+                        series.Points.AddXY(bin.Start, bin.Sum);
                     }
                     chart.Series.Add(series);
                     i++;

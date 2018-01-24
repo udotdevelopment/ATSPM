@@ -25,9 +25,9 @@ namespace MOE.Common.Business.DataAggregation
                     foreach (var preempt in PreemptionTotals)
                     {
                         summedServicedPreempts += preempt.BinsContainer.Bins.Where(a => a.Start == bin.Start)
-                            .Sum(a => a.Value);
+                            .Sum(a => a.Sum);
                     }
-                    bin.Value = summedServicedPreempts;
+                    bin.Sum = summedServicedPreempts;
                 }
             }
 
@@ -67,7 +67,7 @@ namespace MOE.Common.Business.DataAggregation
     public class SignalPreemptAggregationContainer
     {
         public Models.Signal Signal { get; }
-        public BinsContainer BinsContainer { get; set; } = new BinsContainer();
+        public BinsContainer BinsContainer { get; set; }
 
         public SignalPreemptAggregationContainer(Models.Signal signal, List<BinsContainer> binsContainers) //, AggregationMetricOptions.XAxisTimeTypes aggregationType)
         {
@@ -82,7 +82,7 @@ namespace MOE.Common.Business.DataAggregation
                     var servicedTotal = preemptAggregationRepository
                         .GetPreemptAggregationTotalByVersionIdAndDateRange(
                             Signal.VersionID, bin.Start, bin.End);
-                    BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Value = servicedTotal});
+                    BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Sum = servicedTotal});
                 }
             }
         }
@@ -102,11 +102,11 @@ namespace MOE.Common.Business.DataAggregation
 
                     if (servicedTotal != null)
                     {
-                        BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Value = servicedTotal});
+                        BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Sum = servicedTotal});
                     }
                     else
                     {
-                        BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Value = 0});
+                        BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Sum = 0});
                     }
                 }
             }

@@ -12,6 +12,7 @@ namespace MOE.Common.Business
     {
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
-        public int Value { get; set; }
+        public int Sum { get; set; }
+        public double Average { get; set; }
     }
 }

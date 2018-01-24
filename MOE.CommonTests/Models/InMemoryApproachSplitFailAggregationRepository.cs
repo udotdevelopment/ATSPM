@@ -20,7 +20,7 @@ namespace MOE.CommonTests.Models
             _db = context;
         }
 
-        public int GetApproachSplitFailAggregationByApproachIdAndDateRange(int approachId, DateTime start,
+        public int GetApproachSplitFailCountAggregationByApproachIdAndDateRange(int approachId, DateTime start,
             DateTime end)
         {
 
@@ -50,6 +50,11 @@ namespace MOE.CommonTests.Models
         }
 
         public void Remove(ApproachSplitFailAggregation priorityAggregation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<ApproachSplitFailAggregation> GetApproachSplitFailsAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate)
         {
             throw new NotImplementedException();
         }

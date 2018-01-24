@@ -95,7 +95,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     chartTitle += signal.SignalDescription + " ";
                 }
                 chartTitle += "\n";
-                chartTitle += TimeOptions.Start.ToString() + " to " + TimeOptions.End.ToString() +"\n";
+                chartTitle += TimeOptions.Start.ToShortDateString() + " to " + TimeOptions.End.ToShortDateString() +"\n";
                 if (TimeOptions.DaysOfWeek != null)
                 {
                     foreach (var dayOfWeek in TimeOptions.DaysOfWeek)
@@ -111,7 +111,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         TimeOptions.TimeOfDayEndMinute.Value, 0).ToString() +"\n";
                 }
                 chartTitle += TimeOptions.BinSize.ToString() + " bins ";
-                chartTitle += XAxisAggregationSeriesOption.ToString() + " Aggregation";
+                chartTitle += XAxisAggregationSeriesOption.ToString() + " Aggregation ";
+                chartTitle += AggregationOpperation.ToString();
                 return chartTitle;
             }
         }

@@ -26,12 +26,12 @@ namespace MOE.Common.Business.DataAggregation
                 foreach (var apprSpeed in ApproachSpeeds)
                 {
                     summedSpeedTotals += apprSpeed.BinsContainer.Bins.Where(a => a.Start == bin.Start)
-                        .Sum(a => a.Value);
+                        .Sum(a => a.Sum);
 
                     summedVolumes += apprSpeed.BinsContainer.Bins.Where(a => a.Start == bin.Start)
-                        .Sum(a => a.Value);
+                        .Sum(a => a.Sum);
                 }
-                bin.Value = summedSpeedTotals;
+                bin.Sum = summedSpeedTotals;
             }
 
         }
@@ -72,7 +72,7 @@ namespace MOE.Common.Business.DataAggregation
     public class ApproachSpeedAggregationContainer
     {
         public Approach Approach { get; }
-        public BinsContainer BinsContainer { get; set; } = new BinsContainer();
+        public BinsContainer BinsContainer { get; set; } 
 
         public ApproachSpeedAggregationContainer(Approach approach, List<BinsContainer> binsContainer)//, AggregationMetricOptions.XAxisTimeTypes aggregationType)
         {
@@ -84,9 +84,9 @@ namespace MOE.Common.Business.DataAggregation
                 foreach (var bin in container.Bins)
                 {
                     var splitFails = splitFailAggregationRepository
-                        .GetApproachSplitFailAggregationByApproachIdAndDateRange(
+                        .GetApproachSplitFailCountAggregationByApproachIdAndDateRange(
                             approach.ApproachID, bin.Start, bin.End);
-                    BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Value = splitFails});
+                    BinsContainer.Bins.Add(new Bin {Start = bin.Start, End = bin.End, Sum = splitFails});
                 }
             }
         }
