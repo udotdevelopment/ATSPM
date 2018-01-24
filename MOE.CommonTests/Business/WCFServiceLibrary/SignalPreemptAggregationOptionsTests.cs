@@ -42,7 +42,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
 
             options.StartDate = DateTime.Now.AddDays(-21);//Convert.ToDateTime("10/17/2017");
             options.EndDate = DateTime.Now; //Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
             options.TimeOptions = new BinFactoryOptions(
                 DateTime.Now.AddDays(-21),//Convert.ToDateTime("10/17/2017 7:00 AM"), 
@@ -75,7 +75,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
 
             options.StartDate = DateTime.Now.AddDays(-21);//Convert.ToDateTime("10/17/2017");
             options.EndDate = DateTime.Now; //Convert.ToDateTime("10/18/2017");
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Route;
             options.TimeOptions = new BinFactoryOptions(
                 DateTime.Now.AddDays(-21),//Convert.ToDateTime("10/17/2017 7:00 AM"), 
@@ -108,7 +108,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
 
             options.StartDate = DateTime.Now.AddMonths(-1);
             options.EndDate = DateTime.Now;
-            options.AggregationOpperation = AggregationMetricOptions.AggregationOpperations.Sum;
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
             options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
             options.TimeOptions = new BinFactoryOptions(
                 DateTime.Now.AddMonths(-1),

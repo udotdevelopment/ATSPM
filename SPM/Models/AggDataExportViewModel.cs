@@ -31,7 +31,10 @@ namespace SPM.Models
         public virtual ICollection<MovementType> AllMovementTypes { get; set; }
         public List<MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.XAxisAggregationSeriesOptions> AggSeriesOptions { get; set; }
         public  AggregationMetricOptions.XAxisAggregationSeriesOptions SelectedAggregationSeriesOptions { get; set; }
-        public MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.AggregationGroups AggGroups { get; set; }
+        public List<AggregationMetricOptions.AggregationOperations> AggregationOperationsList { get; set; }
+        public AggregationMetricOptions.AggregationOperations SelectedAggregationOperation { get; set; }
+        public List<AggregationMetricOptions.ChartTypes>  ChartTypesList { get; set; }
+        public AggregationMetricOptions.ChartTypes SelectedChartType  { get; set; }
         public virtual List<int> LaneTypeIDs { get; set; }
         public virtual ICollection<LaneType> AllLaneTypes { get; set; }
         ////public List<SelectListItem> AggregateMetricsList { get; set; }
@@ -95,10 +98,22 @@ namespace SPM.Models
             //SignalSearchViewModel = new MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel(regionRepositry, _metricRepository);
             SetDefaultDates();
             SetBinSizeList();
-            SetAggregationOptions();
+            SetXAxisAggregationOptions();
+            SetAggregationOperations();
+            SetChartTypes();
         }
 
-        private void SetAggregationOptions()
+        private void SetChartTypes()
+        {
+            ChartTypesList = new List<AggregationMetricOptions.ChartTypes>{AggregationMetricOptions.ChartTypes.Column, AggregationMetricOptions.ChartTypes.Line, AggregationMetricOptions.ChartTypes.StackedColumn, AggregationMetricOptions.ChartTypes.StackedLine, AggregationMetricOptions.ChartTypes.Pie};
+        }
+
+        private void SetAggregationOperations()
+        {
+            AggregationOperationsList = new List<AggregationMetricOptions.AggregationOperations>{ AggregationMetricOptions.AggregationOperations.Sum, AggregationMetricOptions.AggregationOperations.Average};
+        }
+
+        private void SetXAxisAggregationOptions()
         {
             AggSeriesOptions = new List<AggregationMetricOptions.XAxisAggregationSeriesOptions>();
             AggSeriesOptions.AddRange(new List<AggregationMetricOptions.XAxisAggregationSeriesOptions>{AggregationMetricOptions.XAxisAggregationSeriesOptions.Time, AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach, AggregationMetricOptions.XAxisAggregationSeriesOptions.Direction, AggregationMetricOptions.XAxisAggregationSeriesOptions.Route, AggregationMetricOptions.XAxisAggregationSeriesOptions.Signal, AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByDirection, AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase});

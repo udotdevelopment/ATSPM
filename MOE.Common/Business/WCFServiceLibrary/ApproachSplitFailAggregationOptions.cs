@@ -15,6 +15,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 {
     public class ApproachSplitFailAggregationOptions: AggregationMetricOptions
     {
+        public int SeriesCount { get; set; } = 0;
         public  ApproachSplitFailAggregationOptions()
         {
             MetricTypeID = 20;
@@ -27,43 +28,40 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var approachSplitFails in spliFailAggregationBySignal.ApproachSplitFailures)
             {
                 Series series = new Series();
+                SeriesCount++;
                 series.Color = GetSeriesColorByNumber(i);
                 series.Name = approachSplitFails.Approach.Description;
                 series.ChartArea = "ChartArea1";
-                series.BorderWidth = 2;
                 SetSeriestype(series);
-                if (AggregationOpperation == AggregationOpperations.Sum)
+                if ((TimeOptions.BinSize == BinFactoryOptions.BinSizes.Month || TimeOptions.BinSize == BinFactoryOptions.BinSizes.Year) &&
+                    TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)
                 {
-                    if ((TimeOptions.BinSize == BinFactoryOptions.BinSizes.Month || TimeOptions.BinSize == BinFactoryOptions.BinSizes.Year) &&
-                        TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)
+                    foreach (var binsContainer in approachSplitFails.BinsContainers)
                     {
-                        foreach (var binsContainer in approachSplitFails.BinsContainers)
+                        if (AggregationOperation == AggregationOperations.Sum)
                         {
-                            if (AggregationOpperation == AggregationOpperations.Sum)
-                            {
-                                series.Points.AddXY(binsContainer.Start, binsContainer.SumValue);
-                            }
-                            else
-                            {
-                                series.Points.AddXY(binsContainer.Start, binsContainer.AverageValue);
-                            }
+                            series.Points.AddXY(binsContainer.Start, binsContainer.SumValue);
                         }
-                    }
-                    else
-                    {
-                        foreach (var bin in approachSplitFails.BinsContainers.FirstOrDefault().Bins)
+                        else
                         {
-                            series.Points.AddXY(bin.Start, bin.Value);
+                            series.Points.AddXY(binsContainer.Start, binsContainer.AverageValue);
                         }
                     }
                 }
-                //else
-                //{
-                //    foreach (var splitFail in approachSplitFails.AverageSplitFails)
-                //    {
-                //        series.Points.AddXY(splitFail.Key, splitFail.Value);
-                //    }
-                //}
+                else
+                {
+                    foreach (var bin in approachSplitFails.BinsContainers.FirstOrDefault().Bins)
+                    {
+                        if (AggregationOperation == AggregationOperations.Sum)
+                        {
+                            series.Points.AddXY(bin.Start, bin.Sum);
+                        }
+                        else
+                        {
+                            series.Points.AddXY(bin.Start, bin.Average);
+                        }
+                    }
+                }
                 chart.Series.Add(series);
                 i++;
             }
@@ -73,6 +71,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this, signal, BinsContainers);
             Series series = new Series();
+            SeriesCount++;
             series.Name = signal.SignalDescription;
             series.ChartArea = "ChartArea1";
             SetSeriestype(series);
@@ -83,14 +82,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 DataPoint dataPoint = new DataPoint();
                 dataPoint.XValue = i;
                 dataPoint.Color = GetSeriesColorByNumber(i);
-                if (AggregationOpperation == AggregationOpperations.Sum)
+                if (AggregationOperation == AggregationOperations.Sum)
                 {
                     dataPoint.SetValueY(approachSplitFails.BinsContainers.FirstOrDefault().SumValue);
                 }
-                //else
-                //{
-                //    dataPoint.SetValueY(approachSplitFails.AveragePreemptsServiced);
-                //}
+                else
+                {
+                    dataPoint.SetValueY(approachSplitFails.BinsContainers.FirstOrDefault().AverageValue);
+                }
                 dataPoint.AxisLabel = approachSplitFails.Approach.Description;
                 series.Points.Add(dataPoint);
                 i++;
@@ -115,6 +114,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var spliFailAggregationBySignal in spliFailAggregationBySignals)
             {
                 Series series = new Series();
+                SeriesCount++;
                 series.Color = GetSeriesColorByNumber(i);
                 series.Name = spliFailAggregationBySignal.Signal.SignalDescription;
                 series.ChartArea = "ChartArea1";
@@ -125,7 +125,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     foreach (var bin in container.Bins)
                     {
-                        series.Points.AddXY(bin.Start, bin.Value);
+                        series.Points.AddXY(bin.Start, bin.Sum);
                     }
                     chart.Series.Add(series);
                     i++;
@@ -139,6 +139,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var signal in signals)
             {
                 Series series = new Series();
+                SeriesCount++;
                 series.Color = GetSeriesColorByNumber(i);
                 series.Name = signal.SignalID;
                 series.ChartArea = "ChartArea1";
@@ -155,7 +156,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     DataPoint dataPoint = new DataPoint();
                     dataPoint.XValue = i;
-                    if (AggregationOpperation == AggregationOpperations.Sum)
+                    if (AggregationOperation == AggregationOperations.Sum)
                     {
                         dataPoint.SetValueY(spliFailAggregationBySignal.TotalSplitFailures);
                     }
@@ -186,6 +187,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var direction in directionsList)
             {
                 Series series = new Series();
+                SeriesCount++;
                 series.Color = GetSeriesColorByNumber(colorCount);
                 series.Name = direction.Description;
                 series.ChartArea = "ChartArea1";
@@ -207,7 +209,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
                     DataPoint dataPoint = new DataPoint();
                     dataPoint.XValue = columnCounter;
-                    if (AggregationOpperation == AggregationOpperations.Sum)
+                    if (AggregationOperation == AggregationOperations.Sum)
                     {
                         dataPoint.SetValueY(spliFailAggregationBySignal.GetSplitFailsByDirection(direction));
                     }
@@ -228,6 +230,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this, signal, BinsContainers);
             Series series = new Series();
+            SeriesCount++;
             series.Color = GetSeriesColorByNumber(1);
             series.Name = signal.SignalDescription;
             series.ChartArea = "ChartArea1";
@@ -240,7 +243,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 DataPoint dataPoint = new DataPoint();
                 dataPoint.XValue = i;
-                if (AggregationOpperation == AggregationOpperations.Sum)
+                if (AggregationOperation == AggregationOperations.Sum)
                 {
                     dataPoint.SetValueY(spliFailAggregationBySignal.GetSplitFailsByDirection(direction));
                 }

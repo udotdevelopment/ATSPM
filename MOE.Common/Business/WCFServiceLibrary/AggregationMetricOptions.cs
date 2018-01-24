@@ -27,10 +27,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Column,
             StackedColumn,
             Line,
-            StackedLine
+            StackedLine,
+            Pie
         };
 
-        public enum AggregationOpperations
+        public enum AggregationOperations
         {
             Sum,
             Average
@@ -76,7 +77,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public Business.Bins.BinFactoryOptions TimeOptions { get; set; }
         public ChartTypes ChartType { get; set; }
-        public AggregationOpperations AggregationOpperation { get; set; }
+        public AggregationOperations AggregationOperation { get; set; }
         public XAxisAggregationSeriesOptions XAxisAggregationSeriesOption { get; set; }
         public List<string> SignalIds { get; set; } = new List<string>();
         public List<Models.Signal> Signals { get; set; } = new List<Models.Signal>();
@@ -95,7 +96,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     chartTitle += signal.SignalDescription + " ";
                 }
                 chartTitle += "\n";
-                chartTitle += TimeOptions.Start.ToString() + " to " + TimeOptions.End.ToString() +"\n";
+                chartTitle += TimeOptions.Start.ToShortDateString() + " to " + TimeOptions.End.ToShortDateString() +"\n";
                 if (TimeOptions.DaysOfWeek != null)
                 {
                     foreach (var dayOfWeek in TimeOptions.DaysOfWeek)
@@ -111,7 +112,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         TimeOptions.TimeOfDayEndMinute.Value, 0).ToString() +"\n";
                 }
                 chartTitle += TimeOptions.BinSize.ToString() + " bins ";
-                chartTitle += XAxisAggregationSeriesOption.ToString() + " Aggregation";
+                chartTitle += XAxisAggregationSeriesOption.ToString() + " Aggregation ";
+                chartTitle += AggregationOperation.ToString();
                 return chartTitle;
             }
         }
@@ -338,15 +340,23 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 case ChartTypes.StackedColumn:
                     series.ChartType = SeriesChartType.StackedColumn;
+                    series.BorderWidth = 2;
                     break;
                 case ChartTypes.Line:
                     series.ChartType = SeriesChartType.Line;
+                    series.BorderWidth = 3;
                     break;
                 case ChartTypes.Column:
                     series.ChartType = SeriesChartType.Column;
+                    series.BorderWidth = 2;
                     break;
                 case ChartTypes.StackedLine:
                     series.ChartType = SeriesChartType.StackedArea;
+                    series.BorderWidth = 2;
+                    break;
+                case ChartTypes.Pie:
+                    series.ChartType = SeriesChartType.Pie;
+                    series.BorderWidth = 2;
                     break;
             }
         }

@@ -1,6 +1,6 @@
 ﻿
 @model SPM.Models.AggDataExportViewModel
-@using (Ajax.BeginForm("CreateMetric", "AggregateDataExport", new AjaxOptions { InsertionMode = System.Web.Mvc.Ajax.InsertionMode.Replace, UpdateTargetId = "Results", HttpMethod = "POST" }))
+@using (Ajax.BeginForm("CreateMetric", "AggregateDataExport", new AjaxOptions { InsertionMode = System.Web.Mvc.Ajax.InsertionMode.Replace, UpdateTargetId = "Results", HttpMethod = "POST", OnBegin = "StartReportSpinner()", OnSuccess = "StopReportSpinner()", OnFailure = "StopReportSpinner()" }))
 {
     @Html.AntiForgeryToken()
     @Html.DisplayFor(m => m.Signals)
@@ -78,6 +78,12 @@
                 <label>Aggregation (X-axis)</label>
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     @Html.DropDownListFor(model => model.SelectedAggregationSeriesOptions, new SelectList(Model.AggSeriesOptions))
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.DropDownListFor(model => model.SelectedAggregationOperation, new SelectList(Model.AggregationOperationsList),  new { @class = "form-control" })
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.DropDownListFor(model => model.SelectedChartType, new SelectList(Model.ChartTypesList), new { @class = "form-control" })
                 </div>
             </div>
         </div>

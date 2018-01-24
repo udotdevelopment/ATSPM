@@ -18,7 +18,7 @@ namespace MOE.Common.Business.Bins
 
                 foreach (var containter in BinsContainers)
                 {
-                    sum = sum + containter.Bins.Sum(b => b.Value);
+                    sum = sum + containter.Bins.Sum(b => b.Sum);
                 }
 
                 return sum;
@@ -52,7 +52,7 @@ namespace MOE.Common.Business.Bins
 
                     foreach (var containter in BinsContainers)
                     {
-                        sum = sum + containter.Bins.Sum(b => b.Value);
+                        sum = sum + containter.Bins.Sum(b => b.Sum);
                         count = count + containter.Bins.Count;
                     }
 

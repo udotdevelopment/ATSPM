@@ -155,7 +155,7 @@ namespace MOE.Common.Business
                 PopulateBinsWithSplitFailAggregateSums(records);
                 foreach (var bin in Bins)
                 {
-                    s.Points.AddXY(bin.Start, bin.Value);
+                    s.Points.AddXY(bin.Start, bin.Sum);
                 }
 
                 chart.Series.Add(s);
@@ -171,7 +171,7 @@ namespace MOE.Common.Business
                     where r.BinStartTime >= bin.Start && r.BinStartTime < bin.End
                     select r;
 
-                bin.Value = recordsForBins.Sum(s => s.SplitFailures);
+                bin.Sum = recordsForBins.Sum(s => s.SplitFailures);
             }
         }
 
@@ -183,7 +183,7 @@ namespace MOE.Common.Business
                     where r.BinStartTime >= bin.Start && r.BinStartTime < bin.End
                     select r;
 
-                bin.Value = Convert.ToInt32( recordsForBins.Average(s => s.SplitFailures));
+                bin.Sum = Convert.ToInt32( recordsForBins.Average(s => s.SplitFailures));
             }
         }
 
@@ -238,7 +238,7 @@ namespace MOE.Common.Business
             Series s = new Series();
             foreach(Bin bin in Bins)
             {
-                s.Points.AddXY(bin.Start, bin.Value);
+                s.Points.AddXY(bin.Start, bin.Sum);
             }
 
             return s;
@@ -340,11 +340,11 @@ namespace MOE.Common.Business
             {
                 chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
             }
-            if (options.AggregationOpperation == AggregationMetricOptions.AggregationOpperations.Sum)
+            if (options.AggregationOperation == AggregationMetricOptions.AggregationOperations.Sum)
             {
                 chartArea.AxisY.Title = "Sum of SplitFailures";
             }
-            else if (options.AggregationOpperation == AggregationMetricOptions.AggregationOpperations.Average)
+            else if (options.AggregationOperation == AggregationMetricOptions.AggregationOperations.Average)
             {
                 chartArea.AxisY.Title = "Average of SplitFailures";
             }
