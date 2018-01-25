@@ -4,6 +4,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.DisplayFor(m => m.Signals)
+
     <div class="panel panel-signal">
         <div class="panel-heading">
             <h5 class="panel-title">
@@ -22,6 +23,7 @@
                     </div>
                 }
             </div>
+            @Html.ValidationMessageFor(model => model.SelectedMetric, "", new { id = "SelectedMetric-error", @class = "text-danger" })
         </div>
     </div>
 
@@ -35,7 +37,7 @@
         </div>
     </div>
     <div id="collapseDateTime" class="panel-body panel-collapse collapse in">
-    <div class="col-md-7 col-sm-7 col-xs-7">
+    <div class="col-md-6 col-sm-6 col-xs-6">
         <div class="col-md-12 col-sm-12 col-xs-12">
             @Html.LabelFor(model => model.StartDateDay, htmlAttributes: new { @class = "control-label" })
             <div class="input-group-custom">
@@ -61,7 +63,8 @@
             @Html.CheckBoxFor(model => model.Weekends, false)  Weekends
         </div>
         <div class="col-md-12 col-sm-12 col-xs-12">
-            @Html.DropDownListFor(model => model.SelectedBinSize, new SelectList(Model.BinSizeList))
+            @Html.LabelFor(model => model.SelectedBinSize, htmlAttributes: new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.SelectedBinSize, new SelectList(Model.BinSizeList), new { @class = "form-control" })
         </div>
     </div>
     </div>
@@ -74,10 +77,10 @@
                     </a>
                 </h5>
             </div>
-            <div id="collapseDataAggregation" class="panel-body panel-collapse collapse">
+            <div id="collapseDataAggregation" class="panel-body panel-collapse collapse in">
                 <label>Aggregation (X-axis)</label>
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    @Html.DropDownListFor(model => model.SelectedAggregationSeriesOptions, new SelectList(Model.AggSeriesOptions))
+                    @Html.DropDownListFor(model => model.SelectedAggregationSeriesOptions, new SelectList(Model.AggSeriesOptions), new { @class = "form-control" })
                 </div>
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     @Html.DropDownListFor(model => model.SelectedAggregationOperation, new SelectList(Model.AggregationOperationsList),  new { @class = "form-control" })
