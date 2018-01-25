@@ -12,7 +12,7 @@
     </div>
     <div id="collapseSignals" class="panel-body panel-collapse collapse in">
                 
-        <div id="Routes" class="col-md-6">
+        <div id="Routes" class="col-md-12">
             Load Route: @Html.DropDownListFor(m => m.SelectedRouteId, new SelectList(Model.Routes, "Id", "RouteName"), "Select A Route",
                             new {@onchange = "LoadRoute()"})
             <div id="RouteSignals">
