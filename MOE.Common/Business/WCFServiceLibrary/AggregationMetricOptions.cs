@@ -340,15 +340,23 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 case ChartTypes.StackedColumn:
                     series.ChartType = SeriesChartType.StackedColumn;
+                    series.BorderWidth = 2;
                     break;
                 case ChartTypes.Line:
                     series.ChartType = SeriesChartType.Line;
+                    series.BorderWidth = 3;
                     break;
                 case ChartTypes.Column:
                     series.ChartType = SeriesChartType.Column;
+                    series.BorderWidth = 2;
                     break;
                 case ChartTypes.StackedLine:
                     series.ChartType = SeriesChartType.StackedArea;
+                    series.BorderWidth = 2;
+                    break;
+                case ChartTypes.Pie:
+                    series.ChartType = SeriesChartType.Pie;
+                    series.BorderWidth = 2;
                     break;
             }
         }

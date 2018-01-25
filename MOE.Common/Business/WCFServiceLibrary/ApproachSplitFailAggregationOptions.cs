@@ -15,6 +15,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 {
     public class ApproachSplitFailAggregationOptions: AggregationMetricOptions
     {
+        public int SeriesCount { get; set; } = 0;
         public  ApproachSplitFailAggregationOptions()
         {
             MetricTypeID = 20;
@@ -27,10 +28,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var approachSplitFails in spliFailAggregationBySignal.ApproachSplitFailures)
             {
                 Series series = new Series();
+                SeriesCount++;
                 series.Color = GetSeriesColorByNumber(i);
                 series.Name = approachSplitFails.Approach.Description;
                 series.ChartArea = "ChartArea1";
-                series.BorderWidth = 2;
                 SetSeriestype(series);
                 if ((TimeOptions.BinSize == BinFactoryOptions.BinSizes.Month || TimeOptions.BinSize == BinFactoryOptions.BinSizes.Year) &&
                     TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)
@@ -70,6 +71,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this, signal, BinsContainers);
             Series series = new Series();
+            SeriesCount++;
             series.Name = signal.SignalDescription;
             series.ChartArea = "ChartArea1";
             SetSeriestype(series);
@@ -112,6 +114,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var spliFailAggregationBySignal in spliFailAggregationBySignals)
             {
                 Series series = new Series();
+                SeriesCount++;
                 series.Color = GetSeriesColorByNumber(i);
                 series.Name = spliFailAggregationBySignal.Signal.SignalDescription;
                 series.ChartArea = "ChartArea1";
@@ -136,6 +139,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var signal in signals)
             {
                 Series series = new Series();
+                SeriesCount++;
                 series.Color = GetSeriesColorByNumber(i);
                 series.Name = signal.SignalID;
                 series.ChartArea = "ChartArea1";
@@ -183,6 +187,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var direction in directionsList)
             {
                 Series series = new Series();
+                SeriesCount++;
                 series.Color = GetSeriesColorByNumber(colorCount);
                 series.Name = direction.Description;
                 series.ChartArea = "ChartArea1";
@@ -225,6 +230,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             SpliFailAggregationBySignal spliFailAggregationBySignal = new SpliFailAggregationBySignal(this, signal, BinsContainers);
             Series series = new Series();
+            SeriesCount++;
             series.Color = GetSeriesColorByNumber(1);
             series.Name = signal.SignalDescription;
             series.ChartArea = "ChartArea1";

@@ -47,7 +47,7 @@ namespace MOE.Common.Models
         [Display(Name = "Permissive Phase")]
         public int? PermissivePhaseNumber { get; set; }
 
-        [Display(Name = "Permissive Phase Overlap")]
+        [Display(Name = "Perm. Phase Overlap")]
         public bool IsPermissivePhaseOverlap { get; set; }
 
 
