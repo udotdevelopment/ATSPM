@@ -198,7 +198,7 @@ While each agency should consult with their IT department for specific guideline
               new Models.Menu { MenuId = 10, MenuName = "Purdue Link Pivot", Controller = "LinkPivot", Action="Analysis", ParentId = 1, Application = "SignalPerformanceMetrics", DisplayOrder = 2 },
               new Models.Menu { MenuId = 11, MenuName = "Admin", Controller = "#", Action = "#", ParentId = 0, Application = "SignalPerformanceMetrics", DisplayOrder = 6 },
               new Models.Menu { MenuId = 12, MenuName = "Signal Configuration", Controller = "Signals", Action = "Index", ParentId = 11, Application = "SignalPerformanceMetrics", DisplayOrder = 1 },
-              new Models.Menu { MenuId = 13, MenuName = "Route Configuration", Controller = "ApproachRoutes", Action = "Index", ParentId = 11, Application = "SignalPerformanceMetrics", DisplayOrder = 2 },
+              new Models.Menu { MenuId = 13, MenuName = "Route Configuration", Controller = "Routes", Action = "Index", ParentId = 11, Application = "SignalPerformanceMetrics", DisplayOrder = 2 },
               new Models.Menu { MenuId = 14, MenuName = "Security", Controller = "#", Action = "#", ParentId = 11, Application = "SignalPerformanceMetrics", DisplayOrder = 4 },
               new Models.Menu { MenuId = 15, MenuName = "Roles", Controller = "Account", Action = "RoleAddToUser", ParentId = 14, Application = "SignalPerformanceMetrics", DisplayOrder = 2 },
               new Models.Menu { MenuId = 16, MenuName = "Menu Configuration", Controller = "Menus", Action = "Index", ParentId = 11, Application = "SignalPerformanceMetrics", DisplayOrder = 3 },
