@@ -80,6 +80,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Controllers\AggregateDataExportControllerTests.cs" />
     <Compile Include="Controllers\SignalsControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
