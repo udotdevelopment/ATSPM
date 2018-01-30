@@ -166,7 +166,7 @@ namespace MOE.Common.Business.Bins.Tests
             BinFactoryOptions binFactoryOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017 12:00 AM"),
                 Convert.ToDateTime("12/31/2017 11:59 PM"),
-                null, null, null, null, weekdays,
+                0, 1, 23, 59, weekdays,
                 BinFactoryOptions.BinSizes.Year,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             var bins = BinFactory.GetBins(binFactoryOptions);
