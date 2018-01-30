@@ -284,7 +284,7 @@ namespace SPM.Controllers
             {
                 newSignal = MOE.Common.Models.Signal.CopySignal(signal, newId);
                 newSignal.VersionActionId = 1;
-                newSignal.Start = DateTime.MaxValue;
+                newSignal.Start = DateTime.Now;
                 newSignal.Note = "Copy of Signal " + id;
             }
             try

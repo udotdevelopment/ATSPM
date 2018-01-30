@@ -27,7 +27,7 @@ namespace MOE.CommonTests.Models
         public List<Common.Models.LaneType> LaneTypes = new List<Common.Models.LaneType>();
         public List<Common.Models.DetectionHardware> DetectionHardwares = new List<Common.Models.DetectionHardware>();
         public List<Common.Models.ApplicationEvent> ApplicationEvents = new List<ApplicationEvent>();
-
+        public List<WatchDogApplicationSettings> ApplicationSettings = new List<WatchDogApplicationSettings>();
         public List<Common.Models.ApproachCycleAggregation> ApproachCycleAggregations = new List<ApproachCycleAggregation>();
         public List<Common.Models.ApproachPcdAggregation>   ApproachPcdAggregations = new List<ApproachPcdAggregation>();
         public List<Common.Models.ApproachSpeedAggregation>     ApproachSpeedAggregations = new List<ApproachSpeedAggregation>();
@@ -62,6 +62,28 @@ namespace MOE.CommonTests.Models
             PriorityAggregations.Clear();
 
 
+        }
+
+        public void PopulateApplicationSettings()
+        {
+            WatchDogApplicationSettings record = new WatchDogApplicationSettings
+            {
+                ID = 1,
+                ConsecutiveCount = 3,
+                LowHitThreshold = 3,
+                ApplicationID = 1,
+                DefaultEmailAddress = "test@test.com",
+                EmailServer = "test.utah.gov",
+                FromEmailAddress = "sender@test.com",
+                MaxDegreeOfParallelism = 5,
+                MaximumPedestrianEvents = 5,
+                MinPhaseTerminations = 4
+
+
+                
+            };
+            
+            ApplicationSettings.Add(record);
         }
 
         public void PopulatePreemptionAggregations(DateTime start, DateTime end, string signalId, int versionId)
@@ -257,9 +279,10 @@ namespace MOE.CommonTests.Models
 
         public void PopulateRoutes()
         {
-            Route r = new Route();
+           
             for(int i = 1; i<4; i++)
             {
+                Route r = new Route();
                 r.Id = i;
                 r.RouteName = "Route - " + i.ToString();
                 Routes.Add(r);

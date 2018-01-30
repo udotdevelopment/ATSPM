@@ -23,6 +23,7 @@ namespace SPM.Models
         [Required]
         public virtual List<int> MetricTypeIDs { get; set; }
         public Dictionary<int, string> MetricItems { get; set; }
+        [Display(Name = "Metric Selection")]
         public int SelectedMetric { get; set; }
         public virtual ICollection<MetricType> AllMetricTypes { get; set; }
         public virtual List<int> ApproachTypeIDs { get; set; }
@@ -82,6 +83,7 @@ namespace SPM.Models
         //[DataMember]
         //[Display(Name = "Volume Bin Size")]
         public List<MOE.Common.Business.Bins.BinFactoryOptions.BinSizes> BinSizeList { get; set; }
+        [Display(Name = "Bin Size")]
         public BinFactoryOptions.BinSizes SelectedBinSize { get; set; }
         //[DataMember]
         //public List<string> BinSizeList { get; set; }

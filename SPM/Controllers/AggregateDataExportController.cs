@@ -152,92 +152,11 @@ namespace SPM.Controllers
 
         // GET: DataExportViewModels
         public ActionResult Index()
-            {
-                AggDataExportViewModel viewModel = new AggDataExportViewModel();
-                var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
-                viewModel.Routes = routeRepository.GetAllRoutes();
+        {
+            AggDataExportViewModel viewModel = new AggDataExportViewModel();
+            var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
+            viewModel.Routes = routeRepository.GetAllRoutes();
 
-            //MOE.Common.Models.Repositories.ISignalsRepository signalsRepository =
-            //    MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            //Signal signal = signalsRepository.GetSignalVersionByVersionId(Convert.ToInt32(versionId));
-            //mc.Signal = signal;
-
-            //List<string> WeekdayWeekends = new List<string>();
-            //WeekdayWeekends.Add("Weekdays");
-            //WeekdayWeekends.Add("Weekends");
-            //MOE.Common.Models.Repositories.IRouteRepository routeRepository =
-            //    MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
-            //vm.Routes = routeRepository.GetAllRoutes();
-
-            ////MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions options
-            ////    = SetOptionFromVm(vm);
-            //if (Request.Form["Create"] != null)
-            //{
-            //    //Create agg data export report
-            //        switch (vm.SelectedMetric)
-            //        {
-            //            case 20:
-            //            //    AoROptions options = new AoROptions();
-            //            //CreateArrivalOnGreenAggregationChart()
-            //                //BinFactoryOptions.BinSizes selectedBinSize = vm.SelectedBinSize;
-
-            //                List<DayOfWeek> daysOfWeek = new List<DayOfWeek>();
-            //                if (vm.Weekdays)
-            //                {
-            //                    daysOfWeek.Add(DayOfWeek.Monday);
-            //                    daysOfWeek.Add(DayOfWeek.Tuesday);
-            //                    daysOfWeek.Add(DayOfWeek.Wednesday);
-            //                    daysOfWeek.Add(DayOfWeek.Thursday);
-            //                    daysOfWeek.Add(DayOfWeek.Friday);
-            //                }
-            //                if (vm.Weekends)
-            //                {
-            //                    daysOfWeek.Add(DayOfWeek.Saturday);
-            //                    daysOfWeek.Add(DayOfWeek.Sunday);
-            //                }
-            //                ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
-            //                options.StartDate = vm.StartDateDay;
-            //                options.EndDate = vm.EndDateDay;
-            //                int startHour, startMinute, endHour, endMinute;
-            //                BinFactoryOptions.TimeOptions timeOption = BinFactoryOptions.TimeOptions.StartToEnd;
-            //                if (vm.StartTime != null)
-            //                {
-            //                    timeOption = BinFactoryOptions.TimeOptions.TimePeriod;
-            //                    int[] hourMin = SplitHourMinute(vm.StartTime);
-            //                    startHour = hourMin[0];
-            //                    startMinute = hourMin[1];
-            //                    if (vm.SelectedStartAMPM.ToUpper().Contains("PM") && startHour < 12)
-            //                    {
-            //                        startHour += 12;
-            //                    }
-            //                }
-            //                if (vm.EndTime != null)
-            //                {
-            //                    timeOption = BinFactoryOptions.TimeOptions.TimePeriod;
-            //                    int[] hourMin = SplitHourMinute(vm.EndTime);
-            //                    endHour = hourMin[0];
-            //                    endMinute = hourMin[1];
-            //                    if (vm.SelectedEndAMPM.ToUpper().Contains("PM") && endHour < 12)
-            //                    {
-            //                        endHour += 12;
-            //                    }
-            //                }
-
-            //            //    options.AggregationOpperation = vm.IsSum
-            //            //    ? AggregationMetricOptions.AggregationOpperations.Sum
-            //            //    : AggregationMetricOptions.AggregationOpperations.Average;
-            //            //options.TimeOptions = new BinFactoryOptions(vm.StartDateDay, vm.EndDateDay,
-            //            //    (vm.StartTime!=null) ? startHour : null, (vm.StartTime!=null) ? startMinute : null,
-            //            //    (vm.EndTime!=null) ? endHour : null, (vm.EndTime!=null) ? endMinute : null,
-            //            //    daysOfWeek, 
-            //            //    )
-            //            //    );
-
-
-            //                break;
-            //        }
-
-            //}
             return View(viewModel);
         }
 
@@ -250,24 +169,6 @@ namespace SPM.Controllers
             return HourMinute;
         }
 
-        //private AggregationMetricOptions SetOptionFromVm(AggDataExportViewModel vm)
-        //{
-        //    //MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions options
-        //    //    = new AggregationMetricOptions();
-        //    ////options.Approaches = vm.ApproachTypeIDs;
-        //    ////options.BinSize = vm.SelectedBinSize;
-        //    ////options.ChartType = vm.ChartType;
-        //    ////options.GroupBy = ;
-        //    ////options.Detectors = ;
-        //    ////options.Signals = ;
-        //    //options.EndDate = vm.EndDateDay;
-        //    ////options.MetricTypeID = ;
-        //    ////options.SignalID = ;
-        //    //options.StartDate = vm.StartDateDay;
-        //    //return options;
-
-        //}
-
         public ActionResult AggregateDataExport()
         {
             return View();
@@ -277,73 +178,6 @@ namespace SPM.Controllers
         {
             return str.Split(',').Select(int.Parse).ToList();
         }
-
-        // POST: DataExportViewModels/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AggregateDataExport(AggDataExportViewModel vm)
-        {
-            if (ModelState.IsValid)
-            {
-                //int Count = cr.GetEventCountByEventCodesParamDateTimeRange(vm.SignalId, vm.StartDateDate,
-                //    vm.EndDateDate, StartHour, StartMinute, EndHour, EndMinute,
-                //    inputEventCodes, inputParam);
-                //vm.Count = Count;
-                return RedirectToAction("AggregateDataExport");
-            }
-
-            return View(vm);
-        }
-
-        // POST: AggDataExportViewModels/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,MetricTypeIDs,ApproachTypeIDs,AggSeriesOptions,LaneTypeIDs,Weekdays,Weekend,IsSum,SelectedRouteID,StartDateDay,EndDateDay,StartTime,SelectedStartAMPM,EndDateDay,SelectedEndAMPM")] AggDataExportViewModel vm)
-        {
-            if (ModelState.IsValid)
-            {
-                //db.DataExportViewModels.Add(vm);
-                //db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(vm);
-        }
-
-        //// GET: DataExportViewModels/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    DataExportViewModel dataExportViewModel = db.DataExportViewModels.Find(id);
-        //    if (dataExportViewModel == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(dataExportViewModel);
-        //}
-
-        // POST: DataExportViewModels/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "SignalId,StartDateDate,EndDateDate,StartDateHour,StartDateMinute,EndDateHour,EndDateMinute,Count")] DataExportViewModel vm)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        vm.Count = cr.GetEventCountByEventCodesParamDateTimeRange(vm.SignalId, vm.StartDateDate, vm.EndDateDate,
-        //            vm.StartDateHour, vm.StartDateMinute, vm.EndDateHour, vm.EndDateMinute, eventCodes, param);
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(dataExportViewModel);
-        //}
 
         protected override void Dispose(bool disposing)
         {

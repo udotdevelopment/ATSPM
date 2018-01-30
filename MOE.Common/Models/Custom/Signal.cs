@@ -317,11 +317,15 @@ namespace MOE.Common.Models
             newSignal.Enabled = origSignal.Enabled;
             newSignal.Approaches = new List<Approach>();
 
-            foreach (Approach a in origSignal.Approaches)
+            if (origSignal.Approaches != null)
             {
-                Approach aForNewSignal = Approach.CopyApproachForSignal(a.ApproachID); //this does the db.Save inside.
-                newSignal.Approaches.Add(aForNewSignal);
+                foreach (Approach a in origSignal.Approaches)
+                {
+                    Approach aForNewSignal =
+                        Approach.CopyApproachForSignal(a.ApproachID); //this does the db.Save inside.
+                    newSignal.Approaches.Add(aForNewSignal);
 
+                }
             }
         }
         public static Signal CopySignal(Signal origSignal, string newSignalID)

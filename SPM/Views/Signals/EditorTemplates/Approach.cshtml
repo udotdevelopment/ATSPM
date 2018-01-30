@@ -13,7 +13,7 @@
                 <a class="pull-right" href="javascript:CopyApproach(@Model.ApproachID)">Copy &nbsp;<span class="glyphicon glyphicon-copy" aria-hidden="true"></span></a>                &nbsp;                
             </h5>
         </div>
-        <div id="ApproachConfigurationCollapse_@(Model.ApproachID)" class="panel-collapse collapse panel-body" role="tabpanel">
+        <div id="ApproachConfigurationCollapse_@(Model.ApproachID)" class="panel-collapse in collapse panel-body" role="tabpanel">
             @Html.HiddenFor(model => model.ApproachID)
             @Html.HiddenFor(model => model.SignalID)
             @Html.HiddenFor(model => model.VersionID)
@@ -51,17 +51,18 @@
             <div class="form-group-configuration-tool  text-center form-group col-md-2">
                 @Html.LabelFor(model => model.IsProtectedPhaseOverlap, htmlAttributes: new { @class = "control-label" })
                 <div style="text-align:center;">
-                    @Html.EditorFor(model => model.IsProtectedPhaseOverlap, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.IsProtectedPhaseOverlap, new { htmlAttributes = new { Name = Model.Index + "IsProtectedPhaseOverlap", @class = "form -control" } })
                     @Html.ValidationMessageFor(model => model.IsProtectedPhaseOverlap, "", new { id = "IsProtectedPhaseOverlap-error", @class = "text-danger" })
                 </div>
             </div>
-            <div class="form-group-configuration-tool  text-center form-group col-md-3">
+            <div class="form-group-configuration-tool  text-center form-group col-md-2">
                 @Html.LabelFor(model => model.IsPermissivePhaseOverlap, htmlAttributes: new { @class = "control-label" })
                 <div style="text-align:center;">
-                    @Html.EditorFor(model => model.IsPermissivePhaseOverlap, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.IsPermissivePhaseOverlap, "", new { id = "IsPPermissivePhaseOverlap-error", @class = "text-danger" })
+                    @Html.EditorFor(model => model.IsPermissivePhaseOverlap, new { htmlAttributes = new { Name = Model.Index + "IsPermissivePhaseOverlap", @class = "form -control" } })
+                    @Html.ValidationMessageFor(model => model.IsPermissivePhaseOverlap, "", new { id = "IsPermissivePhaseOverlap-error", @class = "text-danger" })
                 </div>
             </div>
+
             <div id="DetectorsList_@Model.ApproachID" class="center-block col-md-12">
                 @Html.LabelFor(model => model.Detectors, htmlAttributes: new { @class = "control-label" })
                 <span onclick="GetCreateNewDetector('@Model.ApproachID', '@Model.VersionID')" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
