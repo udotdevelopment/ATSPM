@@ -88,22 +88,39 @@ namespace SPM.Controllers.Tests
             var controller = new RoutesController();
             var result = controller.Edit(1) as ViewResult;
             var preEditRoute = result.Model as Route;
+            preEditRoute.RouteName = "I changed this";
 
             controller.Edit(preEditRoute);
 
-            Assert.IsTrue(route.RouteName == "Route - 1");
+            var postEditRoute = _db.Routes.Find(r => r.Id == 1);
+
+            Assert.IsTrue(postEditRoute.RouteName == "I changed this");
         }
 
         [TestMethod()]
         public void DeleteTest()
         {
-            Assert.Fail();
+            var controller = new RoutesController();
+            var result = controller.Delete(1) as ViewResult;
+            var route = result.Model as Route;
+
+            Assert.IsTrue(route.RouteName == "Route - 1");
+
+
         }
 
         [TestMethod()]
         public void DeleteConfirmedTest()
         {
-            Assert.Fail();
+            var routeThere = _db.Routes.Find(r => r.Id == 1);
+
+            Assert.IsNotNull(routeThere);
+
+            var controller = new RoutesController();
+            controller.DeleteConfirmed(1);
+            var routeGone = _db.Routes.Find(r => r.Id == 1);
+
+            Assert.IsNull(routeGone);
         }
     }
 }

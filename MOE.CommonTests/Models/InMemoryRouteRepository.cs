@@ -61,7 +61,15 @@ namespace MOE.CommonTests.Models
 
         public void Update(Route route)
         {
-            throw new NotImplementedException();
+            var checkRoute = _db.Routes.Find(r => r.Id == route.Id);
+            if (checkRoute != null)
+            {
+                checkRoute.RouteName = route.RouteName;
+                if (route.RouteSignals != null)
+                {
+                    checkRoute.RouteSignals = route.RouteSignals;
+                }
+            }
         }
     }
 }
