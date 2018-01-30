@@ -15,7 +15,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             MetricTypeID = 24;
         }
 
-        protected override void GetSignalByPhaseAggregateCharts(List<Models.Signal> signals, Chart chart)
+        protected override void GetSignalByPhaseAggregateCharts(Models.Signal signal1, Chart chart)
         {
             MOE.Common.Models.Repositories.IPriorityAggregationDatasRepository repo =
                 MOE.Common.Models.Repositories.PriorityAggregationDatasRepositoryFactory.Create();
@@ -36,7 +36,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
 
 
-            foreach (var signal in signals)
+            foreach (var signal in Signals)
             {
                 for (int seriesCounter = 1; seriesCounter < 16; seriesCounter++)
                 {

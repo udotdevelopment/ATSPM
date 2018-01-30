@@ -20,7 +20,7 @@ namespace MOE.Common.Business.Export.Tests
             _db.PopulateSignal();
             _db.PopulateSignalsWithApproaches();
             _db.PopulateApproachesWithDetectors();
-            _db.PopulateApproachSplitFailAggregationsWithRandomRecords();
+            //_db.PopulateApproachSplitFailAggregationsWithRandomRecords();
 
             var recordList = from r in _db.ApproachSplitFailAggregations select r;
 

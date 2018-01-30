@@ -102,25 +102,66 @@ namespace MOE.CommonTests.Models
 
         }
 
-        public void PopulateApproachSplitFailAggregations(DateTime start, DateTime end, int approachId)
+        public void PopulateApproachSplitFailAggregationsWithValue3(DateTime start, DateTime end, Approach approach)
         {
             
-            for (DateTime startTime = start.Date; startTime <= end.Date.AddHours(23).AddMinutes(59); startTime = startTime.AddMinutes(15))
+            for (DateTime startTime = start; startTime <= end; startTime = startTime.AddMinutes(15))
             {
                 ApproachSplitFailAggregation r = new ApproachSplitFailAggregation();
-                r.ApproachId = approachId;
+                r.ApproachId = approach.ApproachID;
                 r.BinStartTime = startTime;
-                r.ForceOffs = rnd.Next(0, 10);
-                r.GapOuts = rnd.Next(0, 10);
-                r.MaxOuts = rnd.Next(0, 10);
-                r.SplitFailures = rnd.Next(0, 5);
-                r.UnknownTerminationTypes = rnd.Next(0, 3);
-                r.IsProtectedPhase = false;
-
+                r.ForceOffs = 3;
+                r.GapOuts = 3;
+                r.MaxOuts = 3;
+                r.SplitFailures = 3;
+                r.UnknownTerminationTypes = 3;
+                r.IsProtectedPhase = true;
                 ApproachSplitFailAggregations.Add(r);
+                if (approach.PermissivePhaseNumber != null)
+                {
+                    ApproachSplitFailAggregation approach2 = new ApproachSplitFailAggregation();
+                    approach2.ApproachId = approach.ApproachID;
+                    approach2.BinStartTime = startTime;
+                    approach2.ForceOffs = 3;
+                    approach2.GapOuts = 3;
+                    approach2.MaxOuts = 3;
+                    approach2.SplitFailures = 3;
+                    approach2.UnknownTerminationTypes = 3;
+                    approach2.IsProtectedPhase = false;
+                    ApproachSplitFailAggregations.Add(approach2);
+                }
             }
+        }
 
 
+        public void PopulateApproachSplitFailAggregationsWithRandomRecords(DateTime start, DateTime end, Approach approach)
+        {
+            for (DateTime startTime = start; startTime <= end; startTime = startTime.AddMinutes(15))
+            {
+                ApproachSplitFailAggregation r = new ApproachSplitFailAggregation();
+                r.ApproachId = approach.ApproachID;
+                r.BinStartTime = startTime;
+                r.ForceOffs = rnd.Next(1, 5); 
+                r.GapOuts = rnd.Next(1, 5);
+                r.MaxOuts = rnd.Next(1, 5);
+                r.SplitFailures = rnd.Next(1, 5);
+                r.UnknownTerminationTypes = rnd.Next(1, 5);
+                r.IsProtectedPhase = true;
+                ApproachSplitFailAggregations.Add(r);
+                if (approach.PermissivePhaseNumber != null)
+                {
+                    ApproachSplitFailAggregation approach2 = new ApproachSplitFailAggregation();
+                    approach2.ApproachId = approach.ApproachID;
+                    approach2.BinStartTime = startTime;
+                    approach2.ForceOffs = rnd.Next(1, 5);
+                    approach2.GapOuts = rnd.Next(1, 5);
+                    approach2.MaxOuts = rnd.Next(1, 5);
+                    approach2.SplitFailures = rnd.Next(1, 5);
+                    approach2.UnknownTerminationTypes = rnd.Next(1, 5);
+                    approach2.IsProtectedPhase = false;
+                    ApproachSplitFailAggregations.Add(approach2);
+                }
+            }
         }
 
         public void PopulateApproachYellowRedActivationAggregations(DateTime start, DateTime end, int approachId)
@@ -143,7 +184,7 @@ namespace MOE.CommonTests.Models
 
         public void PopulateApproachSpeedAggregations(DateTime start, DateTime end, int approachId)
         {
-            for (DateTime startTime = start.Date; startTime <= end.Date.AddHours(23).AddMinutes(59); startTime = startTime.AddMinutes(15))
+            for (DateTime startTime = start; startTime <= end; startTime = startTime.AddMinutes(15))
             {
                 ApproachSpeedAggregation r = new ApproachSpeedAggregation();
                 r.ApproachId = approachId;
@@ -297,31 +338,6 @@ namespace MOE.CommonTests.Models
             }
         }
 
-        public int  PopulateApproachSplitFailAggregationsWithRandomRecords()
-        {
-            int appId = Approaches.FirstOrDefault().ApproachID;
-            DateTime start = DateTime.Now.AddDays(-1);
-            if (appId != null)
-            {
-                for (int i = 0; i < 1000; i++)
-                {
-                    Common.Models.ApproachSplitFailAggregation asfa = new ApproachSplitFailAggregation();
-                    asfa.Id = i;
-                    asfa.ApproachId = appId;
-                    asfa.BinStartTime = start;
-                    asfa.IsProtectedPhase = false;
-                    asfa.ForceOffs = rnd.Next(1, 256);
-                    asfa.GapOuts = rnd.Next(1, 256);
-                    asfa.MaxOuts = rnd.Next(1, 256);
-                    asfa.SplitFailures = rnd.Next(1, 256);
-                    asfa.UnknownTerminationTypes = rnd.Next(1, 256);
-                    start = start.AddMinutes(5);
-                    ApproachSplitFailAggregations.Add(asfa);
-
-                }
-            }
-            return appId;
-        }
 
         private void PoplateMetricTypes()
         {

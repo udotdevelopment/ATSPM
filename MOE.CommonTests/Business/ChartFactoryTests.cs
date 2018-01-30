@@ -65,7 +65,7 @@ namespace MOE.Common.Business.Tests
             _db.PopulateSignal();
             _db.PopulateSignalsWithApproaches();
             _db.PopulateApproachesWithDetectors();
-            int apprId = _db.PopulateApproachSplitFailAggregationsWithRandomRecords();
+            //int apprId = _db.PopulateApproachSplitFailAggregationsWithRandomRecords();
 
             MOE.CommonTests.Models.InMemoryApproachSplitFailAggregationRepository asfs = new InMemoryApproachSplitFailAggregationRepository(_db);
             

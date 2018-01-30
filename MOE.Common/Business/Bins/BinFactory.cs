@@ -54,7 +54,7 @@ namespace MOE.Common.Business.Bins
         {
             List<BinsContainer> binsContainers = new List<BinsContainer>();
             BinsContainer binsContainer = new BinsContainer(timeOptions.Start, timeOptions.End);
-            for (DateTime startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month, timeOptions.Start.Day,0,0,0); startTime.Date <= timeOptions.End.Date; startTime = startTime.AddDays(1))
+            for (DateTime startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month, timeOptions.Start.Day,0,0,0); startTime.Date < timeOptions.End.Date; startTime = startTime.AddDays(1))
             {
                 if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
                 {
@@ -84,7 +84,7 @@ namespace MOE.Common.Business.Bins
                 BinsContainer binsContainer = new BinsContainer(timeOptions.Start, timeOptions.End);
 
                 for (DateTime startTime = new DateTime(timeOptions.Start.Year, 1, 1);
-                    startTime.Date <= timeOptions.End.Date;
+                    startTime.Date < timeOptions.End.Date;
                     startTime = startTime.AddYears(1))
                 {
                     binsContainer.Bins.Add(new Bin { Start = startTime, End = startTime.AddYears(1) });
@@ -94,7 +94,7 @@ namespace MOE.Common.Business.Bins
             else
             {
                 for (DateTime startTime = new DateTime(timeOptions.Start.Year, 1, 1);
-                    startTime.Date <= timeOptions.End.Date;
+                    startTime.Date < timeOptions.End.Date;
                     startTime = startTime.AddYears(1))
                 {
                     binsContainers.Add(new BinsContainer(startTime, startTime.AddYears(1))
@@ -113,7 +113,7 @@ namespace MOE.Common.Business.Bins
             {
                 BinsContainer binsContainer = new BinsContainer(timeOptions.Start, timeOptions.End);
                 for (DateTime startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month, 1);
-                    startTime.Date <= timeOptions.End.Date;
+                    startTime.Date < timeOptions.End.Date;
                     startTime = startTime.AddMonths(1))
                 {
                     binsContainer.Bins.Add(new Bin {Start = startTime, End = startTime.AddMonths(1)});
@@ -123,7 +123,7 @@ namespace MOE.Common.Business.Bins
             else
             {
                 for (DateTime startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month, 1);
-                    startTime.Date <= timeOptions.End.Date;
+                    startTime.Date < timeOptions.End.Date;
                     startTime = startTime.AddMonths(1))
                 {
                     binsContainers.Add(new BinsContainer(startTime, startTime.AddMonths(1))

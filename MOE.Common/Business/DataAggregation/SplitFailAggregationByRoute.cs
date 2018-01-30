@@ -12,7 +12,7 @@ namespace MOE.Common.Business.DataAggregation
     {
         public SplitFailAggregationByRoute(AggregationMetricOptions options)
         {
-            Container = new List<SpliFailAggregationBySignal>();
+            Container = new List<SplitFailAggregationBySignal>();
 
             //foreach (var sig in options.Signals)
             //{
@@ -27,7 +27,7 @@ namespace MOE.Common.Business.DataAggregation
 
         }
         
-        public List<SpliFailAggregationBySignal> Container { get; }
+        public List<SplitFailAggregationBySignal> Container { get; }
 
 
     }

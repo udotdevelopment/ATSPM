@@ -1,6 +1,8 @@
 ﻿using MOE.Common.Business.DataAggregation;
 using System.Collections.Generic;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business.Bins;
+using MOE.Common.Models;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
@@ -11,7 +13,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             MetricTypeID = 21;
         }
 
-        protected override void GetSignalByPhaseAggregateCharts(List<Models.Signal> signals, Chart chart)
+        protected override void GetSignalByPhaseAggregateCharts(Models.Signal signal, Chart chart)
         {
 
 
@@ -44,34 +46,44 @@ namespace MOE.Common.Business.WCFServiceLibrary
             throw new System.NotImplementedException();
         }
 
-        protected override void GetTimeAggregateChart(Models.Signal signal, Chart chart)
+        protected override List<BinsContainer> SetBinsContainersBySignal(Models.Signal signal)
         {
-            ApproachSpeedAggregationBySignal approachSpeedAggregatBySignal =
-                new ApproachSpeedAggregationBySignal(this, signal, BinsContainers);
-            int i = 1;
-            foreach (var approachSplitFails in approachSpeedAggregatBySignal.ApproachSpeeds)
-            {
-                if (i > 10)
-                {
-                    i = 1;
-                }
-                Series series = new Series();
-                series.Color = GetSeriesColorByNumber(i);
-                series.Name = approachSplitFails.Approach.Description;
-                series.ChartArea = "ChartArea1";
-                series.BorderWidth = 2;
-                SetSeriestype(series);
-                if (AggregationOperation == AggregationOperations.Sum)
-                {
-                    foreach (var bin in approachSplitFails.BinsContainer.Bins)
-                    {
-                        series.Points.AddXY(bin.Start, bin.Sum);
-                    }
-                }
-
-                chart.Series.Add(series);
-                i++;
-            }
+            throw new System.NotImplementedException();
         }
+
+        protected override List<BinsContainer> SetBinsContainersByApproach(Approach approach)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        //protected override void GetTimeAggregateChart(Models.Signal signal, Chart chart)
+        //{
+        //    ApproachSpeedAggregationBySignal approachSpeedAggregatBySignal =
+        //        new ApproachSpeedAggregationBySignal(this, signal, BinsContainers);
+        //    int i = 1;
+        //    foreach (var approachSplitFails in approachSpeedAggregatBySignal.ApproachSpeeds)
+        //    {
+        //        if (i > 10)
+        //        {
+        //            i = 1;
+        //        }
+        //        Series series = new Series();
+        //        series.Color = GetSeriesColorByNumber(i);
+        //        series.Name = approachSplitFails.Approach.Description;
+        //        series.ChartArea = "ChartArea1";
+        //        series.BorderWidth = 2;
+        //        SetSeriestype(series);
+        //        if (AggregationOperation == AggregationOperations.Sum)
+        //        {
+        //            foreach (var bin in approachSplitFails.BinsContainer.Bins)
+        //            {
+        //                series.Points.AddXY(bin.Start, bin.Sum);
+        //            }
+        //        }
+
+        //        chart.Series.Add(series);
+        //        i++;
+        //    }
+        //}
     }
 }

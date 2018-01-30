@@ -54,9 +54,11 @@ namespace MOE.CommonTests.Models
             throw new NotImplementedException();
         }
 
-        public List<ApproachSplitFailAggregation> GetApproachSplitFailsAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate)
+        public List<ApproachSplitFailAggregation> GetApproachSplitFailsAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate, bool getProtectedPhase)
         {
-            throw new NotImplementedException();
+            return _db.ApproachSplitFailAggregations.Where(r => r.ApproachId == approachId
+                                                                && r.BinStartTime >= startDate &&
+                                                                r.BinStartTime < endDate && r.IsProtectedPhase == getProtectedPhase).ToList();
         }
     }
 }
