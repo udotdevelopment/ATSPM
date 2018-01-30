@@ -106,6 +106,7 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsByApproachTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsByTimeTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPriorityAggregationOptionsTests.cs" />
+    <Compile Include="Models\InMemoryApplicationSettingsRepository.cs" />
     <Compile Include="Models\InMemoryPreemptAggregationDatasRepository.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptAggregationOptionsTests.cs" />
     <Compile Include="Models\InMemoryApplicationEventRepository.cs" />

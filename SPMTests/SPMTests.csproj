@@ -81,7 +81,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Controllers\ActionLogsControllerTests.cs" />
+    <Compile Include="Controllers\RoutesControllerTests.cs" />
     <Compile Include="Controllers\SignalsControllerTests.cs" />
+    <Compile Include="Controllers\WatchDogApplicationSettingsControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -27,7 +27,7 @@ namespace MOE.Common.Models.Repositories
             return new DetectorRepository(context);
         }
 
-        public static void SetArchivedMetricsRepository(IDetectorRepository newRepository)
+        public static void SetDetectorRepository(IDetectorRepository newRepository)
         {
             detectorRepository = newRepository;
         }

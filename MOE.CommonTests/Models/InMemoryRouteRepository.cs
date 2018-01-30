@@ -24,22 +24,27 @@ namespace MOE.CommonTests.Models
 
         public void Add(Route newRoute)
         {
-            throw new NotImplementedException();
+            _db.Routes.Add(newRoute);
         }
 
         public void DeleteByID(int routeID)
         {
-            throw new NotImplementedException();
+            Route route = _db.Routes.Find(r => r.Id == routeID);
+
+            _db.Routes.Remove(route);
         }
 
         public List<Route> GetAllRoutes()
         {
-            throw new NotImplementedException();
+            List<Route> routes = _db.Routes;
+            return routes;
         }
 
         public Route GetRouteByID(int routeID)
         {
-            throw new NotImplementedException();
+            Route route = _db.Routes.Find(r => r.Id == routeID);
+
+            return route;
         }
 
         public Route GetRouteByIDAndDate(int routeId, DateTime startDate)

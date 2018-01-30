@@ -41,12 +41,14 @@ namespace MOE.CommonTests.Models
 
         public Detector GetDetectorByID(int ID)
         {
-            throw new NotImplementedException();
+            var det = _db.Detectors.Where(d => d.ID == ID).FirstOrDefault();
+            return det;
         }
 
         public List<Detector> GetDetectorsBySignalID(string SignalID)
         {
-            throw new NotImplementedException();
+            List < MOE.Common.Models.Detector > dets = _db.Signals.Find(s=> s.SignalID == SignalID).GetDetectorsForSignal();
+            return dets;
         }
 
         public List<Detector> GetDetectorsBySignalIDAndMetricType(string SignalID, int MetricID)
