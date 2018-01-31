@@ -18,22 +18,41 @@ namespace SPM.Controllers.Tests
         {
             _db.ClearTables();
             _db.PopulateMetricTypes();
+            _db.PopulateMovementTypes();
+            _db.PopulateDirectionTypes();
+            _db.PopulateLaneTypes();
             _db.PopulateSignal();
             _db.PopulateRoutes();
-            _db.PopulateRouteWithRouteSignals();
-            _db.PopulateRouteSignalsWithPhaseDirection();
+            _db.PopulateRegions();
+
+            //_db.PopulateRouteWithRouteSignals();
+            //_db.PopulateRouteSignalsWithPhaseDirection();
 
             InMemoryRouteRepository routeRepo = new InMemoryRouteRepository(_db);
             MOE.Common.Models.Repositories.RouteRepositoryFactory.SetApproachRouteRepository(routeRepo);
+            InMemorySignalsRepository signalRepo = new InMemorySignalsRepository(_db);
+            MOE.Common.Models.Repositories.SignalsRepositoryFactory.SetSignalsRepository(signalRepo);
+            InMemoryRegionRepository regionRepo = new InMemoryRegionRepository(_db);
+            MOE.Common.Models.Repositories.RegionsRepositoryFactory.SetArchivedMetricsRepository(regionRepo);
+
+            InMemoryMetricTypeRepository metricRepo = new InMemoryMetricTypeRepository();
+            MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.SetMetricsRepository(metricRepo);
+            InMemoryMovementTypeRepository movementRepo = new InMemoryMovementTypeRepository();
+            MOE.Common.Models.Repositories.MovementTypeRepositoryFactory.SetMovementTypeRepository(movementRepo);
+            InMemoryDirectionTypeRepository directionTypeRepo = new InMemoryDirectionTypeRepository();
+            MOE.Common.Models.Repositories.DirectionTypeRepositoryFactory.SetDirectionsRepository(directionTypeRepo);
+            InMemoryLaneTypeRepository laneTypeRepo = new InMemoryLaneTypeRepository();
+            MOE.Common.Models.Repositories.LaneTypeRepositoryFactory.SetLaneTypeRepository(laneTypeRepo);
+
         }
         [TestMethod()]
         public void CreateMetricTest()
         {
             int a = 0;
             Assert.IsTrue(a==0);
-            int id = 20; //Aggregate Metric
+            int id = 1; //RouteID
             var TestController = new AggregateDataExportController();
-            var TestActionResult = TestController.CreateMetric(20);
+            var TestActionResult = TestController.CreateMetric(id);
             Assert.IsNull(TestActionResult);
         }
     }
