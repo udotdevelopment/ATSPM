@@ -61,7 +61,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             SplitFailAggregationBySignal splitFailAggregationBySignal =
                 new SplitFailAggregationBySignal(this, signal, BinsContainers);
-            return splitFailAggregationBySignal.TotalSplitFailures;
+            return splitFailAggregationBySignal.AverageSplitFailures;
         }
 
 
@@ -78,10 +78,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 SplitFailAggregationBySignal splitFail = new SplitFailAggregationBySignal(this, signal, BinsContainers);
                 for (int i = 0; i < BinsContainers.Count; i++)
                 {
-                    for (var binIndex = 0; binIndex < BinsContainers[0].Bins.Count; binIndex++)
+                    for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
                     {
-                        var bin = BinsContainers[0].Bins[binIndex];
+                        var bin = BinsContainers[i].Bins[binIndex];
                         bin.Sum += splitFail.BinsContainers[i].Bins[binIndex].Sum;
+                        bin.Average = Convert.ToInt32(Math.Round((double) (bin.Sum / signals.Count)));
                     }
                 }
 

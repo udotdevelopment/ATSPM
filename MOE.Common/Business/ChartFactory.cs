@@ -356,38 +356,49 @@ namespace MOE.Common.Business
         }
         private static void SetTimeXAxis(ChartArea chartArea, AggregationMetricOptions options)
         {
-            var reportTimespan = options.EndDate - options.StartDate;
+            //var reportTimespan = options.EndDate - options.StartDate;
             chartArea.AxisX.Title = "Time (Hour of Day)";
+            chartArea.AxisX.LabelStyle.Angle = 45;
             switch (options.TimeOptions.BinSize)
             {
                 case BinFactoryOptions.BinSizes.FifteenMinutes:
                     chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
                     chartArea.AxisX.LabelStyle.Format = "MM/dd/yyyy HH:mm";
+                    chartArea.AxisX.Minimum = options.StartDate.AddMinutes(-15).ToOADate();
+                    break;
+                case BinFactoryOptions.BinSizes.ThirtyMinutes:
+                    chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
+                    chartArea.AxisX.LabelStyle.Format = "MM/dd/yyyy HH:mm";
+                    chartArea.AxisX.Minimum = options.StartDate.AddMinutes(-30).ToOADate();
                     break;
                 case BinFactoryOptions.BinSizes.Hour:
                     chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
                     chartArea.AxisX.LabelStyle.Format = "HH";
+                    chartArea.AxisX.Minimum = options.StartDate.AddHours(-1).ToOADate();
                     break;
                 case BinFactoryOptions.BinSizes.Day:
                     chartArea.AxisX.IntervalType = DateTimeIntervalType.Days;
                     chartArea.AxisX.LabelStyle.Format = "dd";
                     chartArea.AxisX.Title = "Day of Month";
+                    chartArea.AxisX.Minimum = options.StartDate.AddDays(-1).ToOADate();
                     break;
                 case BinFactoryOptions.BinSizes.Week:
                     chartArea.AxisX.IntervalType = DateTimeIntervalType.Weeks;
                     chartArea.AxisX.LabelStyle.Format = "MM/dd/yy";
-                    
                     chartArea.AxisX.Title = "Start of Week";
+                    chartArea.AxisX.Minimum = options.StartDate.AddDays(-7).ToOADate();
                     break;
                 case BinFactoryOptions.BinSizes.Month:
                     chartArea.AxisX.IntervalType = DateTimeIntervalType.Months;
                     chartArea.AxisX.LabelStyle.Format = "MM/yyyy";                 
                     chartArea.AxisX.Title = "Month and Year";
+                    chartArea.AxisX.Minimum = options.StartDate.AddMonths(-1).ToOADate();
                     break;
                 case BinFactoryOptions.BinSizes.Year:
                     chartArea.AxisX.IntervalType = DateTimeIntervalType.Years;
                     chartArea.AxisX.LabelStyle.Format = "yyyy";
                     chartArea.AxisX.Title = "Year";
+                    chartArea.AxisX.Minimum = options.StartDate.AddYears(-1).ToOADate();
                     break;
                 default:
                     chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
@@ -406,18 +417,18 @@ namespace MOE.Common.Business
                 tempEnd = new DateTime(options.TimeOptions.Start.Year, options.TimeOptions.Start.Month,
                     options.TimeOptions.Start.Day, options.TimeOptions.TimeOfDayEndHour ?? 0,
                     options.TimeOptions.TimeOfDayEndMinute ?? 0, 0);
+                chartArea.AxisX.Minimum = tempStart.AddMinutes(-15).ToOADate();
+                chartArea.AxisX.Maximum = tempEnd.ToOADate();
             }
-            else
-            {
-                tempStart = new DateTime(options.TimeOptions.Start.Year, options.TimeOptions.Start.Month,
-                    options.TimeOptions.Start.Day, options.TimeOptions.TimeOfDayStartHour ?? 0,
-                    options.TimeOptions.TimeOfDayStartMinute ?? 0, 0);
-                tempEnd = new DateTime(options.TimeOptions.End.Year, options.TimeOptions.End.Month,
-                    options.TimeOptions.End.Day, options.TimeOptions.TimeOfDayEndHour ?? 0,
-                    options.TimeOptions.TimeOfDayEndMinute ?? 0, 0);
-            }
-            chartArea.AxisX.Minimum = tempStart.AddHours(-1).ToOADate();
-            chartArea.AxisX.Maximum = tempEnd.ToOADate();
+            //else
+            //{
+            //    tempStart = new DateTime(options.TimeOptions.Start.Year, options.TimeOptions.Start.Month,
+            //        options.TimeOptions.Start.Day, options.TimeOptions.TimeOfDayStartHour ?? 0,
+            //        options.TimeOptions.TimeOfDayStartMinute ?? 0, 0);
+            //    tempEnd = new DateTime(options.TimeOptions.End.Year, options.TimeOptions.End.Month,
+            //        options.TimeOptions.End.Day, options.TimeOptions.TimeOfDayEndHour ?? 0,
+            //        options.TimeOptions.TimeOfDayEndMinute ?? 0, 0);
+            //}
             chartArea.AxisX.Interval = 1;
         }
 
