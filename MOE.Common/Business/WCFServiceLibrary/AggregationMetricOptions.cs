@@ -20,6 +20,7 @@ using NuGet;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
+    [DataContract]
     public abstract class AggregationMetricOptions : MetricOptions
     {
         
@@ -50,37 +51,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
             RouteBySignal
         }
 
-        //wouldn't be used because the AggMetrics are incorporated into [MetricTypes]
-        public enum AggregationMetrics
-        {
-            LaneByLaneCounts,
-            AdvancedCounts,
-            ArrivalonGreen,
-            PlatoonRatio,
-            SplitFail,
-            PedestrianActuations,
-            Preemption,
-            TSP,
-            DataQuality
-        }
-        public enum AggregationGroups
-        {
-            Hour,
-            Day,
-            Month,
-            Year,
-            None,
-            Signal
-        }
-
-        public AggregationMetricOptions()
-        {
-        }
-
+        [DataMember]
         public Business.Bins.BinFactoryOptions TimeOptions { get; set; }
+        [DataMember]
         public ChartTypes ChartType { get; set; }
+        [DataMember]
         public AggregationOperations AggregationOperation { get; set; }
+        [DataMember]
         public XAxisAggregationSeriesOptions XAxisAggregationSeriesOption { get; set; }
+        [DataMember]
         public List<string> SignalIds { get; set; } = new List<string>();
         public List<Models.Signal> Signals { get; set; } = new List<Models.Signal>();
         public List<Models.Approach> Approaches { get; set; } = new List<Models.Approach>();

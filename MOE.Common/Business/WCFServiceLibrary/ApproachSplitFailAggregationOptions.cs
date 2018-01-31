@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.DataAggregation;
@@ -13,10 +14,10 @@ using static MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
+
+    [DataContract]
     public class ApproachSplitFailAggregationOptions: AggregationMetricOptions
     {
-        public int SeriesCount { get; set; } = 0;
-        public int DataPointCount { get; set; } = 0;
         public  ApproachSplitFailAggregationOptions()
         {
             MetricTypeID = 20;
@@ -289,7 +290,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var direction in directionsList)
             {
                 Series series = new Series();
-                SeriesCount++;
                 series.Color = GetSeriesColorByNumber(colorCount);
                 series.Name = direction.Description;
                 series.ChartArea = "ChartArea1";
@@ -304,7 +304,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 foreach (var direction in directionsList)
                 {
                     DataPoint dataPoint = new DataPoint();
-                    DataPointCount++;
                     dataPoint.XValue = columnCounter;
                     if (AggregationOperation == AggregationOperations.Sum)
                     {
