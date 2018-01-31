@@ -1,0 +1,153 @@
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using MOE.Common.Business.Bins;
+using MOE.Common.Business.SplitFail;
+using MOE.Common.Business.WCFServiceLibrary;
+using MOE.Common.Models;
+
+namespace MOE.Common.Business.DataAggregation
+{
+    public class SplitFailAggregationBySignal
+    {
+        public Models.Signal Signal { get; }
+        public List<ApproachSplitFailAggregationContainer> ApproachSplitFailures { get;}
+        public int TotalSplitFailures { get { return BinsContainers.Sum(c => c.SumValue); } }
+
+        public int AverageSplitFailures
+        {
+            get
+            {
+                if (BinsContainers.Count > 1)
+                {
+                    return Convert.ToInt32(Math.Round(BinsContainers.Average(b => b.SumValue)));
+                }
+                else
+                {
+                    double numberOfBins = 0;
+                    foreach (var binsContainer in BinsContainers)
+                    {
+                        numberOfBins += binsContainer.Bins.Count;
+                    }
+                    return Convert.ToInt32(Math.Round(TotalSplitFailures / numberOfBins));
+                }
+            }
+        }
+
+        public List<BinsContainer> BinsContainers{get;set;}
+        
+
+        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal, List<BinsContainer> binsContainers)
+        {
+            BinsContainers = binsContainers;
+            Signal = signal;
+            ApproachSplitFailures = new List<ApproachSplitFailAggregationContainer>();
+            foreach (var approach in signal.Approaches)
+            {
+                 ApproachSplitFailures.Add(
+                        new ApproachSplitFailAggregationContainer(approach, binsContainers, options.StartDate,
+                            options.EndDate, true));
+                if (approach.PermissivePhaseNumber != null)
+                {
+                    ApproachSplitFailures.Add(
+                        new ApproachSplitFailAggregationContainer(approach, binsContainers, options.StartDate,
+                            options.EndDate, false));
+                }
+            }
+            SetSumSplitFailuresByBin();
+        }
+
+        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal, List<BinsContainer> binsContainers, int phaseNumber)
+        {
+            BinsContainers = binsContainers;
+            Signal = signal;
+            ApproachSplitFailures = new List<ApproachSplitFailAggregationContainer>();
+            foreach (var approach in signal.Approaches)
+            {
+                if (approach.ProtectedPhaseNumber == phaseNumber)
+                {
+                    ApproachSplitFailures.Add(
+                        new ApproachSplitFailAggregationContainer(approach, binsContainers, options.StartDate,
+                            options.EndDate, true));
+                    if (approach.PermissivePhaseNumber != null)
+                    {
+                        ApproachSplitFailures.Add(
+                            new ApproachSplitFailAggregationContainer(approach, binsContainers, options.StartDate,
+                                options.EndDate, false));
+                    }
+                }
+            }
+            SetSumSplitFailuresByBin();
+        }
+
+        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal, List<BinsContainer> binsContainers, DirectionType direction)
+        {
+            BinsContainers = binsContainers;
+            Signal = signal;
+            ApproachSplitFailures = new List<ApproachSplitFailAggregationContainer>();
+            foreach (var approach in signal.Approaches)
+            {
+                if (approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
+                {
+                    ApproachSplitFailures.Add(
+                        new ApproachSplitFailAggregationContainer(approach, binsContainers, options.StartDate,
+                            options.EndDate, true));
+                    if (approach.PermissivePhaseNumber != null)
+                    {
+                        ApproachSplitFailures.Add(
+                            new ApproachSplitFailAggregationContainer(approach, binsContainers, options.StartDate,
+                                options.EndDate, false));
+                    }
+                }
+            }
+            SetSumSplitFailuresByBin();
+        }
+
+        private void SetSumSplitFailuresByBin()
+        {
+            for (int i = 0; i < BinsContainers.Count; i++)
+            {
+                for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
+                {
+                    var bin = BinsContainers[i].Bins[binIndex];
+                    foreach (var approachSplitFailAggregationContainer in ApproachSplitFailures)
+                    {
+                        bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                    }
+                }
+            }
+        }
+
+        public int GetSplitFailsByDirection(DirectionType direction)
+        {
+            int splitFails = 0;
+            if (ApproachSplitFailures != null)
+            {
+                splitFails = ApproachSplitFailures
+                    .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
+                    .Sum(a => a.BinsContainers.FirstOrDefault().SumValue);
+            }
+            return splitFails;
+        }
+
+        public int GetAverageSplitFailsByDirection(DirectionType direction)
+        {
+            var approachSplitFailuresByDirection = ApproachSplitFailures
+                .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID);
+            int splitFails = 0;
+            if (approachSplitFailuresByDirection.Any())
+            {
+                splitFails = Convert.ToInt32(Math.Round(approachSplitFailuresByDirection
+                    .Average(a => a.BinsContainers.FirstOrDefault().SumValue)));
+            }
+            return splitFails;
+        }
+    }
+    
+        
+    
+        
+}

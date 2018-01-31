@@ -17,7 +17,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             MetricTypeID = 22;
         }
 
-        protected override void GetSignalByPhaseAggregateCharts(List<Models.Signal> signals, Chart chart)
+        protected override void GetSignalByPhaseAggregateCharts(Models.Signal signal1, Chart chart)
         {
             MOE.Common.Models.Repositories.IPreemptAggregationDatasRepository repo =
                 MOE.Common.Models.Repositories.PreemptAggregationDatasRepositoryFactory.Create();
@@ -38,7 +38,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
 
 
-            foreach (var signal in signals)
+            foreach (var signal in Signals)
             {
                 for (int seriesCounter = 1; seriesCounter < 16; seriesCounter++)
                 {
@@ -140,44 +140,54 @@ namespace MOE.Common.Business.WCFServiceLibrary
            
         }
 
-        protected override void GetTimeAggregateChart(Models.Signal signal, Chart chart)
+        protected override List<BinsContainer> SetBinsContainersBySignal(Models.Signal signal)
         {
+            throw new System.NotImplementedException();
+        }
+
+        protected override List<BinsContainer> SetBinsContainersByApproach(Approach approach)
+        {
+            throw new System.NotImplementedException();
+        }
+
+    //    /protected override void GetTimeAggregateChart(Models.Signal signal, Chart chart)
+    //    {
             
 
 
-            int i = 1;
+    //        int i = 1;
           
 
-                Series series = new Series();
-                series.Color = GetSeriesColorByNumber(i);
-                series.Name = signal.SignalID;
-                series.ChartArea = "ChartArea1";
-                series.BorderWidth = 2;
-                SetSeriestype(series);
-                chart.Series.Add(series);
-                i++;
+    //            Series series = new Series();
+    //            series.Color = GetSeriesColorByNumber(i);
+    //            series.Name = signal.SignalID;
+    //            series.ChartArea = "ChartArea1";
+    //            series.BorderWidth = 2;
+    //            SetSeriestype(series);
+    //            chart.Series.Add(series);
+    //            i++;
                 
 
-                PreemptAggregationBySignal preemptAggregationBySignal =
-                    new PreemptAggregationBySignal(this, signal, BinsContainers);
+    //            PreemptAggregationBySignal preemptAggregationBySignal =
+    //                new PreemptAggregationBySignal(this, signal, BinsContainers);
 
-                preemptAggregationBySignal.GetPreemptsByBin(BinsContainers);
+    //            preemptAggregationBySignal.GetPreemptsByBin(BinsContainers);
 
-                foreach (var preemptsreempts in preemptAggregationBySignal.PreemptionTotals)
-            {
+    //            foreach (var preemptsreempts in preemptAggregationBySignal.PreemptionTotals)
+    //        {
 
 
-                if (AggregationOperation == AggregationOperations.Sum)
-                {
-                    foreach (var bin in preemptsreempts.BinsContainer.Bins)
-                    {
-                        series.Points.AddXY(bin.Start, bin.Sum);
-                    }
-                }
+    //            if (AggregationOperation == AggregationOperations.Sum)
+    //            {
+    //                foreach (var bin in preemptsreempts.BinsContainer.Bins)
+    //                {
+    //                    series.Points.AddXY(bin.Start, bin.Sum);
+    //                }
+    //            }
         
 
-            }
+    //        }
             
 
-    }
+    //}
 }}

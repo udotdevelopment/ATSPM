@@ -10,6 +10,6 @@ namespace MOE.Common.Models.Repositories
         ApproachSplitFailAggregation Add(ApproachSplitFailAggregation priorityAggregation);
         void Update(ApproachSplitFailAggregation priorityAggregation);
         void Remove(ApproachSplitFailAggregation priorityAggregation);
-        List<ApproachSplitFailAggregation> GetApproachSplitFailsAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate);
+        List<ApproachSplitFailAggregation> GetApproachSplitFailsAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate, bool getProtectedPhase);
     }
 }

@@ -41,8 +41,7 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public List<ApproachSplitFailAggregation> GetApproachSplitFailsAggregationByApproachIdAndDateRange(int approachId, DateTime startDate,
-            DateTime endDate)
+        public List<ApproachSplitFailAggregation> GetApproachSplitFailsAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate, bool getProtectedPhase)
         {
             return _db.ApproachSplitFailAggregations.Where(r => r.ApproachId == approachId
                                                                           && r.BinStartTime >= startDate &&
