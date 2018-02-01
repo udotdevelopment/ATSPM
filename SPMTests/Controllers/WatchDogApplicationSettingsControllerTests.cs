@@ -22,8 +22,8 @@ namespace SPM.Controllers.Tests
         [TestMethod()]
         public void EditTest()
         {
-            InMemoryApplicationSettingsRepository appRep = new InMemoryApplicationSettingsRepository();
-            MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.SetMetricsRepository(appRep);
+            //InMemoryApplicationSettingsRepository appRep = new InMemoryApplicationSettingsRepository();
+            //MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.SetMetricsRepository(appRep);
 
             WatchDogApplicationSettingsController controller = new WatchDogApplicationSettingsController();
             ActionResult ar = controller.Edit();

@@ -28,14 +28,6 @@ namespace SPM.Controllers
         MOE.Common.Models.Repositories.ILaneTypeRepository laneTypeRepository =
             MOE.Common.Models.Repositories.LaneTypeRepositoryFactory.Create();
 
-        MOE.Common.Models.Repositories.IControllerEventLogRepository cr =
-            MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-        //private ApplicationDbContext db = new ApplicationDbContext();
-
-        //public ActionResult SignalSearch(SignalSearchViewModel ssvm)
-        //{
-        //    return PartialView("SignalSearch", ssvm);
-        //}
 
         // GET: DataExportViewModels
         public ActionResult CreateMetric(int id)

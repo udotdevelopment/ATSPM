@@ -38,7 +38,10 @@ namespace MOE.CommonTests.Models
 
         public List<MetricType> GetAllToAggregateMetrics()
         {
-            throw new NotImplementedException();
+            List<Common.Models.MetricType> results = (from r in _db.MetricTypes
+                where r.ShowOnAggregationSite == true
+                select r).ToList();
+            return results;
         }
 
         public List<MetricType> GetBasicMetrics()

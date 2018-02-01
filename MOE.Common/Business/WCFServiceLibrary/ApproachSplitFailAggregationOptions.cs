@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.DataAggregation;
@@ -13,10 +14,10 @@ using static MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
+
+    [DataContract]
     public class ApproachSplitFailAggregationOptions: AggregationMetricOptions
     {
-        public int SeriesCount { get; set; } = 0;
-        public int DataPointCount { get; set; } = 0;
         public  ApproachSplitFailAggregationOptions()
         {
             MetricTypeID = 20;
@@ -61,7 +62,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             SplitFailAggregationBySignal splitFailAggregationBySignal =
                 new SplitFailAggregationBySignal(this, signal, BinsContainers);
-            return splitFailAggregationBySignal.TotalSplitFailures;
+            return splitFailAggregationBySignal.AverageSplitFailures;
         }
 
 
@@ -78,10 +79,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 SplitFailAggregationBySignal splitFail = new SplitFailAggregationBySignal(this, signal, BinsContainers);
                 for (int i = 0; i < BinsContainers.Count; i++)
                 {
-                    for (var binIndex = 0; binIndex < BinsContainers[0].Bins.Count; binIndex++)
+                    for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
                     {
-                        var bin = BinsContainers[0].Bins[binIndex];
+                        var bin = BinsContainers[i].Bins[binIndex];
                         bin.Sum += splitFail.BinsContainers[i].Bins[binIndex].Sum;
+                        bin.Average = Convert.ToInt32(Math.Round((double) (bin.Sum / signals.Count)));
                     }
                 }
 
@@ -288,7 +290,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var direction in directionsList)
             {
                 Series series = new Series();
-                SeriesCount++;
                 series.Color = GetSeriesColorByNumber(colorCount);
                 series.Name = direction.Description;
                 series.ChartArea = "ChartArea1";
@@ -303,7 +304,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 foreach (var direction in directionsList)
                 {
                     DataPoint dataPoint = new DataPoint();
-                    DataPointCount++;
                     dataPoint.XValue = columnCounter;
                     if (AggregationOperation == AggregationOperations.Sum)
                     {

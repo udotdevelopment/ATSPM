@@ -131,6 +131,7 @@
     <Compile Include="Models\InMemoryPriorityAggregationDatasRepository.cs" />
     <Compile Include="Models\InMemoryRegionsRepository.cs" />
     <Compile Include="Models\InMemoryRoutePhaseDirectionRepository.cs" />
+    <Compile Include="Models\InMemoryRegionRepository.cs" />
     <Compile Include="Models\InMemoryRouteSignalsRepository.cs" />
     <Compile Include="Models\InMemoryRouteRepository.cs" />
     <Compile Include="Models\InMemorySignalsRepository.cs" />

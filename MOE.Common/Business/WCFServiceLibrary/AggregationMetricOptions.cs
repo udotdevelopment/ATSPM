@@ -20,6 +20,7 @@ using NuGet;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
+    [DataContract]
     public abstract class AggregationMetricOptions : MetricOptions
     {
         
@@ -50,37 +51,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
             RouteBySignal
         }
 
-        //wouldn't be used because the AggMetrics are incorporated into [MetricTypes]
-        public enum AggregationMetrics
-        {
-            LaneByLaneCounts,
-            AdvancedCounts,
-            ArrivalonGreen,
-            PlatoonRatio,
-            SplitFail,
-            PedestrianActuations,
-            Preemption,
-            TSP,
-            DataQuality
-        }
-        public enum AggregationGroups
-        {
-            Hour,
-            Day,
-            Month,
-            Year,
-            None,
-            Signal
-        }
-
-        public AggregationMetricOptions()
-        {
-        }
-
+        [DataMember]
         public Business.Bins.BinFactoryOptions TimeOptions { get; set; }
+        [DataMember]
         public ChartTypes ChartType { get; set; }
+        [DataMember]
         public AggregationOperations AggregationOperation { get; set; }
+        [DataMember]
         public XAxisAggregationSeriesOptions XAxisAggregationSeriesOption { get; set; }
+        [DataMember]
         public List<string> SignalIds { get; set; } = new List<string>();
         public List<Models.Signal> Signals { get; set; } = new List<Models.Signal>();
         public List<Models.Approach> Approaches { get; set; } = new List<Models.Approach>();
@@ -435,24 +414,52 @@ namespace MOE.Common.Business.WCFServiceLibrary
         private void GetTimeXAxisRouteChart(List<Models.Signal> signals, Chart chart)
         {
             SetSumBinsContainersByRoute(signals);
-            foreach (var binsContainer in BinsContainers)
+            if (XAxisAggregationSeriesOption == XAxisAggregationSeriesOptions.Route &&
+                TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod &&
+                new List<BinFactoryOptions.BinSizes>{ BinFactoryOptions.BinSizes.Month, BinFactoryOptions.BinSizes.Year}.Contains(TimeOptions.BinSize))
             {
                 Series series = new Series();
-                series.Name = binsContainer.Start.ToShortDateString() +"-"+ binsContainer.End.ToShortDateString();
+                series.Name = BinsContainers.FirstOrDefault().Start.ToShortDateString() + "-" +
+                              BinsContainers.FirstOrDefault().End.ToShortDateString();
                 series.ChartArea = "ChartArea1";
                 SetSeriestype(series);
-                foreach (var bin in binsContainer.Bins)
+                series.Color = GetSeriesColorByNumber(0);
+                foreach (var binContainer in BinsContainers)
                 {
                     if (AggregationOperation == AggregationOperations.Sum)
                     {
-                        series.Points.AddXY(bin.Start, bin.Sum);
+                        series.Points.AddXY(binContainer.Start, binContainer.SumValue);
                     }
                     else
                     {
-                        series.Points.AddXY(bin.Start, bin.Average);
+                        series.Points.AddXY(binContainer.Start, binContainer.AverageValue);
                     }
                 }
                 chart.Series.Add(series);
+            }
+            else
+            {
+                for (var index = 0; index < BinsContainers.Count; index++)
+                {
+                    var binsContainer = BinsContainers[index];
+                    Series series = new Series();
+                    series.Name = binsContainer.Start.ToShortDateString() + "-" + binsContainer.End.ToShortDateString();
+                    series.ChartArea = "ChartArea1";
+                    SetSeriestype(series);
+                    series.Color = GetSeriesColorByNumber(index);
+                    foreach (var bin in binsContainer.Bins)
+                    {
+                        if (AggregationOperation == AggregationOperations.Sum)
+                        {
+                            series.Points.AddXY(bin.Start, bin.Sum);
+                        }
+                        else
+                        {
+                            series.Points.AddXY(bin.Start, bin.Average);
+                        }
+                    }
+                    chart.Series.Add(series);
+                }
             }
         }
 
@@ -500,10 +507,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void GetApproachTimeSeriesByProtectedPermissive(Chart chart, int i, Approach approach, bool getPermissivePhase)
         {
+            string phaseDescription = getPermissivePhase == true ? "Phase " + approach.PermissivePhaseNumber : "Phase " + approach.ProtectedPhaseNumber;
             List<BinsContainer> binsContainers = SetBinsContainersByApproach(approach, getPermissivePhase);
             Series series = new Series();
             series.Color = GetSeriesColorByNumber(i);
-            series.Name = approach.Description;
+            series.Name = approach.Description + phaseDescription;
             series.ChartArea = "ChartArea1";
             SetSeriestype(series);
             if ((TimeOptions.BinSize == BinFactoryOptions.BinSizes.Month || TimeOptions.BinSize == BinFactoryOptions.BinSizes.Year) &&
@@ -547,6 +555,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             switch (colorNumber)
             {
+                case 0:
+                    return Color.FromArgb(33, 119, 242);
                 case 1:
                     return Color.FromArgb(178, 4, 0);
 

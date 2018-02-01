@@ -38,7 +38,7 @@ namespace MOE.CommonTests.Models
 
         public List<Common.Models.PriorityAggregation> PriorityAggregations = new List<PriorityAggregation>();
 
-
+        public List<Common.Models.Region> Regions = new List<Region>();
         public List<Common.Models.Route> Routes = new List<Route>();
         public List<Common.Models.RouteSignal> RouteSignals = new List<RouteSignal>();
         public List<Common.Models.RoutePhaseDirection> RoutePhaseDirection = new List<RoutePhaseDirection>();
@@ -60,10 +60,38 @@ namespace MOE.CommonTests.Models
             ApproachYellowRedActivationAggregations.Clear();
             PreemptionAggregations.Clear();
             PriorityAggregations.Clear();
-
+            Regions.Clear();
 
         }
 
+        public void PopulateRegions()
+        {
+            var R1 = new Region
+            {
+                ID = 1,
+                Description = "Region 1"
+            };
+            var R2 = new Region
+            {
+                ID = 2,
+                Description = "Region 2"
+            };
+            var R3 = new Region
+            {
+                ID = 3,
+                Description = "Region 3"
+            };
+            var R4 = new Region
+            {
+                ID = 4,
+                Description = "Region 4"
+            };
+
+            Regions.Add(R1);
+            Regions.Add(R2);
+            Regions.Add(R3);
+            Regions.Add(R4);
+        }
         public void PopulateApplicationSettings()
         {
             WatchDogApplicationSettings record = new WatchDogApplicationSettings
@@ -302,6 +330,7 @@ namespace MOE.CommonTests.Models
             foreach (var r in Routes)
             {
                 int rsid = 1;
+                r.RouteSignals = new List<RouteSignal>();
                     List<Signal> signals = (from s in Signals where s.RegionID == r.Id select s).ToList();
                     int order = 1;
                     foreach (var signal in signals)
@@ -313,6 +342,7 @@ namespace MOE.CommonTests.Models
                         order++;
                         rs.Id = rsid;
                         RouteSignals.Add(rs);
+                        r.RouteSignals.Add(rs);
                         rsid++;
                     }
 
@@ -362,7 +392,7 @@ namespace MOE.CommonTests.Models
         }
 
 
-        private void PoplateMetricTypes()
+        public void PoplateMetricTypes()
         {
             var mt1 = new MetricType
             {
@@ -492,7 +522,7 @@ namespace MOE.CommonTests.Models
 
 
 
-        private void PopulateDetectionHardware()
+        public void PopulateDetectionHardware()
         {
             var dh1 = new DetectionHardware {ID = 0, Name = "Unknown"};
             var dh2 = new DetectionHardware {ID = 1, Name = "Wavetronix Matrix"};
@@ -509,7 +539,7 @@ namespace MOE.CommonTests.Models
             DetectionHardwares.Add(dh6);
         }
 
-        private void PopulateLaneTypes()
+        public void PopulateLaneTypes()
         {
             var l1 =  new LaneType {LaneTypeID = 1, Description = "Vehicle", Abbreviation = "V"};
             var l2 = new LaneType {LaneTypeID = 2, Description = "Bike", Abbreviation = "Bike"};
@@ -529,7 +559,7 @@ namespace MOE.CommonTests.Models
 
         }
 
-        private void PopulateMovementTypes()
+        public void PopulateMovementTypes()
         {
             var m1 = new MovementType {MovementTypeID = 1, Description = "Thru", Abbreviation = "T", DisplayOrder = 3};
             var m2 = new MovementType {MovementTypeID = 2, Description = "Right", Abbreviation = "R", DisplayOrder = 5};
@@ -544,7 +574,7 @@ namespace MOE.CommonTests.Models
             MovementTypes.Add(m5);
         }
 
-        private void PopulateControllerTypes()
+        public void PopulateControllerTypes()
         {
 
             var val1 = new ControllerType
