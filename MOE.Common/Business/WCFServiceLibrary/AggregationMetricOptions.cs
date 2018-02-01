@@ -42,6 +42,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public enum XAxisAggregationSeriesOptions
         {
             Time,
+            TimeOfDay,
             Direction,
             Approach,
             Signal,
@@ -116,6 +117,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public void GetSignalObjects()
         {
+            if (Signals == null)
+            {
+                Signals = new List<Models.Signal>();
+            }
             if (Signals.Count == 0)
             {
                 var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
@@ -169,6 +174,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 case XAxisAggregationSeriesOptions.Time:
                     GetTimeCharts();
                     break;
+                case XAxisAggregationSeriesOptions.TimeOfDay:
+                    GetTimeOfDayCharts();
+                    break;
                 case XAxisAggregationSeriesOptions.Approach:
                     GetApproachCharts();
                     break;
@@ -195,6 +203,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     break;
             }
         }
+
 
         private void GetSignalByPhaseCharts()
         {
@@ -300,6 +309,18 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 chart = ChartFactory.CreateTimeXIntYChart(this);
                 GetTimeXAxisApproachSeriesChart(signal, chart);
+                SaveChartImage(chart);
+            }
+        }
+
+
+        private void GetTimeOfDayCharts()
+        {
+            Chart chart;
+            foreach (var signal in Signals)
+            {
+                chart = ChartFactory.CreateTimeXIntYChart(this);
+                GetTimeOfDayAggregateXAxisApproachSeriesChart(signal, chart);
                 SaveChartImage(chart);
             }
         }
@@ -490,6 +511,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
         }
 
 
+        private void GetTimeOfDayAggregateXAxisApproachSeriesChart(Models.Signal signal, Chart chart)
+        {
+            int i = 1;
+            foreach (var approach in signal.Approaches)
+            {
+                GetApproachTimeAggregateSeriesByProtectedPermissive(chart, i, approach, true);
+                i++;
+                if (approach.PermissivePhaseNumber != null)
+                {
+                    GetApproachTimeAggregateSeriesByProtectedPermissive(chart, i, approach, false);
+                    i++;
+                }
+            }
+        }
+
+
         protected void GetTimeXAxisApproachSeriesChart(Models.Signal signal, Chart chart)
         {
             int i = 1;
@@ -503,6 +540,78 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     i++;
                 }
             }
+        }
+
+
+        private void GetApproachTimeAggregateSeriesByProtectedPermissive(Chart chart, int seriesColor, Approach approach, bool getPermissivePhase)
+        {
+
+            string phaseDescription = getPermissivePhase == true ? "Phase " + approach.PermissivePhaseNumber : "Phase " + approach.ProtectedPhaseNumber;
+            List<BinsContainer> binsContainers = SetBinsContainersByApproach(approach, getPermissivePhase);
+            Series series = new Series();
+            series.Color = GetSeriesColorByNumber(seriesColor);
+            series.Name = approach.Description + phaseDescription;
+            series.ChartArea = "ChartArea1";
+            SetSeriestype(series);
+            foreach (var binsContainer in binsContainers)
+            {
+                foreach (var bin in binsContainer.Bins)
+                {
+                    if (AggregationOperation == AggregationOperations.Sum)
+                    {
+                        series.Points.AddXY(new DateTime(DateTime.Today.Year, bin.Start.Month, DateTime.Today.Day, bin.Start.Hour, bin.Start.Minute,0).ToOADate(), 
+                            bin.Sum);
+                    }
+                    else
+                    {
+                        series.Points.AddXY(new DateTime(DateTime.Today.Year, bin.Start.Month, DateTime.Today.Day, bin.Start.Hour, bin.Start.Minute, 0).ToOADate(),
+                            bin.Average);
+                    }
+                }
+            }
+            chart.Series.Add(series);
+        }
+        
+
+        private void GetApproachTimeSeriesTimeAggregateByProtectedPermissive(Chart chart, int i, Approach approach, bool getPermissivePhase)
+        {
+            string phaseDescription = getPermissivePhase == true ? "Phase " + approach.PermissivePhaseNumber : "Phase " + approach.ProtectedPhaseNumber;
+            List<BinsContainer> binsContainers = SetBinsContainersByApproach(approach, getPermissivePhase);
+            Series series = new Series();
+            series.Color = GetSeriesColorByNumber(i);
+            series.Name = approach.Description + phaseDescription;
+            series.ChartArea = "ChartArea1";
+            SetSeriestype(series);
+            if ((TimeOptions.BinSize == BinFactoryOptions.BinSizes.Month || TimeOptions.BinSize == BinFactoryOptions.BinSizes.Year) &&
+                TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)
+            {
+                foreach (var binsContainer in binsContainers)
+                {
+                    if (AggregationOperation == AggregationOperations.Sum)
+                    {
+                        series.Points.AddXY(binsContainer.Start, binsContainer.SumValue);
+                    }
+                    else
+                    {
+                        series.Points.AddXY(binsContainer.Start, binsContainer.AverageValue);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var bin in binsContainers.FirstOrDefault()?.Bins)
+                {
+                    if (AggregationOperation == AggregationOperations.Sum)
+                    {
+                        series.Points.AddXY(bin.Start, bin.Sum);
+                    }
+                    else
+                    {
+                        series.Points.AddXY(bin.Start, bin.Average);
+                    }
+                }
+            }
+            chart.Series.Add(series);
         }
 
         private void GetApproachTimeSeriesByProtectedPermissive(Chart chart, int i, Approach approach, bool getPermissivePhase)

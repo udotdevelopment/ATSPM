@@ -25,12 +25,10 @@ namespace MOE.Common.Business.DataAggregation
                     approach.ApproachID, startDate, endDate, getProtectedPhase);
             if (splitFails != null)
             {
-
                 ConcurrentBag<BinsContainer> concurrentBinContainers = new ConcurrentBag<BinsContainer>();
                 //foreach (var binsContainer in binsContainers)
                 Parallel.ForEach(binsContainers, binsContainer =>
                 {
-
                     BinsContainer tempBinsContainer =
                         new BinsContainer(binsContainer.Start, binsContainer.End);
                     ConcurrentBag<Bin> concurrentBins = new ConcurrentBag<Bin>();

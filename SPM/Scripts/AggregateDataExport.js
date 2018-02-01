@@ -1,4 +1,22 @@
-﻿function LoadRoute() {
+﻿$(function (ready) {
+    SetDateTextBoxes
+
+});
+
+function SetDateTextBoxes (){
+    $(".datepicker").attr('type', 'text');
+    $("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
+    $("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
+    $("#StartEndDaySelector").datepicker({
+        onSelect: function (dateText) {
+            $("#StartDateDay").val(dateText);
+            $("#EndDateDay").val(dateText);
+        }
+    });
+    $(".datepicker").datepicker();
+}
+
+function LoadRoute() {
     var RouteId = $("#SelectedRouteId").val();
     $.ajax({
         url: urlpathGetRouteSignals + "/" + RouteId,
@@ -9,24 +27,13 @@
         success: function (data) {
             $('#RouteSignals').html(data);
             $.validator.unobtrusive.parse($("#RouteSignals"));
+            SetDateTextBoxes();
         },
         onerror: function () { alert("Error"); }
     });
 }
 
-//$(function (ready) {
-//    $(".datepicker").attr('type', 'text');
-//    $("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
-//    $("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
-//    $("#StartEndDaySelector").datepicker({
-//        onSelect: function (dateText) {
-//            $("#StartDateDay").val(dateText);
-//            $("#EndDateDay").val(dateText);
-//        }
-//    });
-//    $(".datepicker").datepicker();
-//    LoadFromUrl();
-//});
+
 
 function SetCommonValues(signalId, startDateDay, startTime, startAmPmDdl, endDateDay, endTime, endAmPmDdl, yAxisMax, y2AxisMax) {
     $("#SignalID").val(signalId);
