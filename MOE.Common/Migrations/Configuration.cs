@@ -215,8 +215,8 @@ While each agency should consult with their IT department for specific guideline
               new Models.Menu { MenuId = 45, MenuName = "Mark Taylor", Controller = "Images", Action = "TTTMarkTaylor.pdf", ParentId = 44, Application = "SignalPerformanceMetrics", DisplayOrder = 3 },
               new Models.Menu { MenuId = 46, MenuName = "Jamie Mackey", Controller = "Images", Action = "TTTJamieMackey.pdf", ParentId = 44, Application = "SignalPerformanceMetrics", DisplayOrder = 2 },
               new Models.Menu { MenuId = 47, MenuName = "Derek Lowe & Shane Johnson", Controller = "Images", Action = "TTTDerekLoweShaneJohnson.pdf", ParentId = 44, Application = "SignalPerformanceMetrics", DisplayOrder = 1 },
-               new Models.Menu { MenuId = 48, MenuName = "Aggregate Data", Controller = "AggregateDataExport", Action = "Index", ParentId = 1, Application = "SignalPerformanceMetrics", DisplayOrder = 3 }
-
+              new Models.Menu { MenuId = 48, MenuName = "Aggregate Data", Controller = "AggregateDataExport", Action = "Index", ParentId = 2, Application = "SignalPerformanceMetrics", DisplayOrder = 3 },
+              new Models.Menu { MenuId = 49, MenuName = "Raw Data Export", Controller = "DataExport", Action = "RawDataExport", ParentId = 2, Application = "SignalPerformanceMetrics", DisplayOrder = 4 }
             );
 
             context.ExternalLinks.AddOrUpdate(
