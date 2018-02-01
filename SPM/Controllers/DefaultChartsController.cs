@@ -391,7 +391,7 @@ namespace SPM.Controllers
                 }
             }
 
-            string hostname = Request.Url.Authority;
+           
 
             StringBuilder sb = new StringBuilder();
 
@@ -425,9 +425,13 @@ namespace SPM.Controllers
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
 
-            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://"+ hostname.Trim() + sb +"\");";
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
 
-          
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
+
+
             return PartialView("MetricResult", result);
         }
 
@@ -463,7 +467,7 @@ namespace SPM.Controllers
             }
 
 
-            string hostname = Request.Url.Authority;
+           
 
             StringBuilder sb = new StringBuilder();
 
@@ -484,8 +488,11 @@ namespace SPM.Controllers
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
 
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
 
-            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
 
 
             return PartialView("MetricResult", result);
@@ -522,7 +529,7 @@ namespace SPM.Controllers
                 }
             }
 
-            string hostname = Request.Url.Authority;
+            
 
             StringBuilder sb = new StringBuilder();
 
@@ -545,8 +552,11 @@ namespace SPM.Controllers
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
 
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
 
-            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
 
 
             return PartialView("MetricResult", result);
@@ -583,7 +593,7 @@ namespace SPM.Controllers
                 }
             }
 
-            string hostname = Request.Url.Authority;
+          
 
             StringBuilder sb = new StringBuilder();
 
@@ -602,8 +612,11 @@ namespace SPM.Controllers
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
 
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
 
-            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
 
 
             return PartialView("MetricResult", result);
@@ -639,7 +652,7 @@ namespace SPM.Controllers
                 }
             }
 
-            string hostname = Request.Url.Authority;
+         
 
             StringBuilder sb = new StringBuilder();
 
@@ -662,9 +675,11 @@ namespace SPM.Controllers
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
 
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
 
-            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
-
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
 
 
             return PartialView("MetricResult", result);
@@ -701,7 +716,7 @@ namespace SPM.Controllers
                 }
             }
 
-            string hostname = Request.Url.Authority;
+
 
             StringBuilder sb = new StringBuilder();
 
@@ -722,8 +737,11 @@ namespace SPM.Controllers
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
 
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
 
-            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" +hostname.Trim() + sb + "\");";
 
 
             return PartialView("MetricResult", result);
@@ -768,7 +786,7 @@ namespace SPM.Controllers
                 result.ChartPaths = finalList.ToArray();
             }
 
-            string hostname = Request.Url.Authority;
+           
 
             StringBuilder sb = new StringBuilder();
 
@@ -783,8 +801,11 @@ namespace SPM.Controllers
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
 
-            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
 
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
 
             return PartialView("MetricResult", result);
 
@@ -828,7 +849,7 @@ namespace SPM.Controllers
                 }
             }
 
-            string hostname = Request.Url.Authority;
+           
 
             StringBuilder sb = new StringBuilder();
 
@@ -850,9 +871,12 @@ namespace SPM.Controllers
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
 
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
 
-            tmcvm.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
-
+            tmcvm.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
+            
             return PartialView("GetTMCMetric", tmcvm);
         }
 
@@ -893,7 +917,7 @@ namespace SPM.Controllers
 
 
 
-            string hostname = Request.Url.Authority;
+           
 
             StringBuilder sb = new StringBuilder();
 
@@ -916,8 +940,11 @@ namespace SPM.Controllers
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
 
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
 
-            viewModel.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+            viewModel.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
 
 
             return PartialView("GetApproachVolumeMetric", viewModel);
@@ -946,7 +973,7 @@ namespace SPM.Controllers
                 }
             }
 
-            string hostname = Request.Url.Authority;
+           
 
             StringBuilder sb = new StringBuilder();
 
@@ -969,9 +996,12 @@ namespace SPM.Controllers
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
 
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
 
-            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
-
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
+            
 
             return PartialView("MetricResult", result);
         }
@@ -1006,8 +1036,6 @@ namespace SPM.Controllers
                 }
             }
 
-            string hostname = Request.Url.Authority;
-
             StringBuilder sb = new StringBuilder();
 
             sb.Append("/DefaultCharts/GetPedDelayMetricByUrl?");
@@ -1022,8 +1050,11 @@ namespace SPM.Controllers
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
 
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
 
-            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
 
 
             return PartialView("MetricResult", result);
@@ -1049,7 +1080,7 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 } 
             }
-            string hostname = Request.Url.Authority;
+            
 
             StringBuilder sb = new StringBuilder();
 
@@ -1070,9 +1101,12 @@ namespace SPM.Controllers
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
 
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
 
-            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
-
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
+ 
 
             return PartialView("MetricResult", result);
         }
