@@ -330,6 +330,7 @@ namespace MOE.CommonTests.Models
             foreach (var r in Routes)
             {
                 int rsid = 1;
+                r.RouteSignals = new List<RouteSignal>();
                     List<Signal> signals = (from s in Signals where s.RegionID == r.Id select s).ToList();
                     int order = 1;
                     foreach (var signal in signals)
@@ -341,6 +342,7 @@ namespace MOE.CommonTests.Models
                         order++;
                         rs.Id = rsid;
                         RouteSignals.Add(rs);
+                        r.RouteSignals.Add(rs);
                         rsid++;
                     }
 

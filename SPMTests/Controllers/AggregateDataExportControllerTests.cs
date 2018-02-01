@@ -25,8 +25,8 @@ namespace SPM.Controllers.Tests
             _db.PopulateRoutes();
             _db.PopulateRegions();
 
-            //_db.PopulateRouteWithRouteSignals();
-            //_db.PopulateRouteSignalsWithPhaseDirection();
+            _db.PopulateRouteWithRouteSignals();
+            _db.PopulateRouteSignalsWithPhaseDirection();
 
             InMemoryRouteRepository routeRepo = new InMemoryRouteRepository(_db);
             MOE.Common.Models.Repositories.RouteRepositoryFactory.SetApproachRouteRepository(routeRepo);
@@ -48,12 +48,12 @@ namespace SPM.Controllers.Tests
         [TestMethod()]
         public void CreateMetricTest()
         {
-            int a = 0;
-            Assert.IsTrue(a==0);
+            //int a = 0;
+            //Assert.IsTrue(a==0);
             int id = 1; //RouteID
             var TestController = new AggregateDataExportController();
             var TestActionResult = TestController.CreateMetric(id);
-            Assert.IsNull(TestActionResult);
+            Assert.IsNotNull(TestActionResult);
         }
     }
 }
