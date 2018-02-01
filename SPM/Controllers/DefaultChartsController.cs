@@ -723,7 +723,7 @@ namespace SPM.Controllers
             sb.Append("&EndDate=" + _endDate);
 
 
-            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"http://" + hostname.Trim() + sb + "\");";
+            result.ShowMetricUrlJavascript = "window.history.pushState('', '', '" +  sb + "');";
 
 
             return PartialView("MetricResult", result);

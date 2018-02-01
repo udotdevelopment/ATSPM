@@ -14,7 +14,7 @@
                 
         <div id="Routes" class="col-md-12">
             Load Route: @Html.DropDownListFor(m => m.SelectedRouteId, new SelectList(Model.Routes, "Id", "RouteName"), "Select A Route",
-                            new {@onchange = "LoadRoute()"})
+                            new {@onchange = "LoadRoute()", @class="form-control"})
             <div id="RouteSignals">
             </div>
         </div>
