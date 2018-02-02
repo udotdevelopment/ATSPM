@@ -90,6 +90,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
+        
         protected override List<BinsContainer> SetBinsContainersByApproach(Models.Approach approach, bool getprotectedPhase)
         {
             ApproachSplitFailAggregationContainer approachSplitFailAggregationContainer = new ApproachSplitFailAggregationContainer(approach, BinsContainers, StartDate,

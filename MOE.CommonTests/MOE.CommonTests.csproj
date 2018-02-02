@@ -112,6 +112,7 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsByRouteBySignalTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsBySignalTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsByApproachTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsByTimeAggregationTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsByTimeTests.cs" />
     <Compile Include="Models\InMemoryPreemptAggregationDatasRepository.cs" />
     <Compile Include="Models\InMemoryApplicationEventRepository.cs" />

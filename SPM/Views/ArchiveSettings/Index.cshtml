@@ -1,0 +1,64 @@
+﻿@using MvcCheckBoxList.Model;
+@model SPM.Models.ArchiveSettingsViewModel
+
+
+<div class="col-md-12 col-sm-12 col-xs-12">
+    @Html.LabelFor(model => model.TablePartitionsList, new { @class = "control-label" })
+    @Html.DropDownListFor(model => model.SelectedTablePartition, new SelectList(Model.TablePartitionsList), new { @class = "form-control" })
+</div>
+
+<div class="col-md-12 col-sm-12 col-xs-12">
+    @Html.LabelFor(model => model.MonthsToRemoveIndex, new { @class = "control-label" })
+    @Html.EditorFor(model => model.MonthsToRemoveIndex, new { htmlAttributes = new { @class = "form-control"}})
+</div>
+
+<div class="col-md-12 col-sm-12 col-xs-12">
+    @Html.LabelFor(model => model.MonthsToRemoveData, new { @class = "control-label" })
+    @Html.EditorFor(model => model.MonthsToRemoveData, new { htmlAttributes = new { @class = "form-control" } })
+</div>
+
+<div class="col-md-12 col-sm-12 col-xs-12">
+    @Html.DropDownListFor(model => model.SelecteDeleteOrMove, new SelectList(Model.DeleteOrMoveOptionList), new { @class = "form-control" })
+    @Html.LabelFor(model => model.ArchivePath, new { @class = "control-label" })
+    @Html.EditorFor(model => model.ArchivePath, new { htmlAttributes = new { @class = "form-control" } })
+</div>
+
+<h4>
+    Hours to perform Archive:
+</h4>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    @Html.LabelFor(model => model.StartTime, htmlAttributes: new { @class = "control-label" })
+    <div class="input-group-custom">
+        @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
+    </div>
+    @Html.LabelFor(model => model.EndTime, htmlAttributes: new { @class = "control-label" })
+    <div class="input-group-custom">
+        @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
+    </div>
+</div>
+
+
+<div class="panel panel-signal">
+    <div class="panel-heading">
+        <h5 class="panel-title">
+            <a id="Signals" data-toggle="collapse" href="#collapseSignals">
+                Signal Exclusion List
+            </a>
+        </h5>
+    </div>
+    <div id="collapseSignals" class="panel-body panel-collapse collapse in">
+                
+        <div id="Routes" class="col-md-12">
+            <div id="RouteSignals">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/Scripts/ArchiveSettings.js"></script>
+    <script type="text/javascript">
+        var urlpathGetRouteSignals = '@Url.Action("CreateMetric", "ArchiveSettings")';
+    </script>
+}
