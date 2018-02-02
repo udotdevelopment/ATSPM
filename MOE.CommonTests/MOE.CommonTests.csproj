@@ -101,6 +101,7 @@
     <Compile Include="Business\Bins\BinFactoryTests.cs" />
     <Compile Include="Business\ChartFactoryTests.cs" />
     <Compile Include="Business\ColorFactoryTests.cs" />
+    <Compile Include="Business\DataAggregation\DataAggregationTests.cs" />
     <Compile Include="Business\DataAggregation\SplitFailAggregationBySignalTests.cs" />
     <Compile Include="Business\Export\ExporterTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\AggregationMetricOptionsTests.cs" />

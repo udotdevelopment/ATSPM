@@ -66,7 +66,7 @@ namespace MOE.Common.Business.ScriptGenerator
             //string Locations = string.Empty;
             string script = @"function AddRouteData() { 
             var pinColor =new Microsoft.Maps.Color(255, 238, 118, 35);
-            var iconURL = '/atspm/images/orangePin.png';
+            var iconURL = '../images/orangePin.png';
             var regionDdl = $('#Regions')[0];var regionFilter = 0; 
                 if (regionDdl.options[regionDdl.selectedIndex].value != '')
                 {regionFilter = regionDdl.options[regionDdl.selectedIndex].value;} 
