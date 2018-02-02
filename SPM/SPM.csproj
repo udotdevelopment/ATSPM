@@ -316,6 +316,7 @@
     <Content Include="Scripts\AddData.js" />
     <Content Include="Scripts\AddRouteData.js" />
     <Content Include="Scripts\AggregateDataExport.js" />
+    <Content Include="Scripts\ArchiveSettings.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Chart.min.js.map">
