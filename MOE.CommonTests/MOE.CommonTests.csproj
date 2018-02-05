@@ -104,6 +104,7 @@
     <Compile Include="Business\DataAggregation\DataAggregationTests.cs" />
     <Compile Include="Business\DataAggregation\SplitFailAggregationBySignalTests.cs" />
     <Compile Include="Business\Export\ExporterTests.cs" />
+    <Compile Include="Business\PlanFactoryTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\AggregationMetricOptionsTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsByDirectionTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsByRouteTests.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsByApproachTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsByTimeAggregationTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsByTimeTests.cs" />
+    <Compile Include="Models\InMemoryControllerEventLogRepository.cs" />
     <Compile Include="Models\InMemoryPreemptAggregationDatasRepository.cs" />
     <Compile Include="Models\InMemoryApplicationEventRepository.cs" />
     <Compile Include="Business\WCFServiceLibrary\MetricOptionsTests.cs" />

@@ -20,6 +20,8 @@ function SetCommonValues(signalId, startDateDay, startTime, startAmPmDdl, endDat
     $("#EndDateDay").val(endDateDay);
     $("#EndTime").val(endTime);
     $("#EndAMPMddl").val(endAmPmDdl);
+   
+
     if (yAxisMax != null) {
         $("#YAxisMax").val(yAxisMax);
     }

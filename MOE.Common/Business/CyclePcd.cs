@@ -23,7 +23,7 @@ namespace MOE.Common.Business
         public CyclePcd(DateTime firstRedEvent, DateTime greenEvent, DateTime yellowEvent, DateTime lastRedEvent):base(firstRedEvent, greenEvent, yellowEvent, lastRedEvent)
         {
             DetectorEvents = new List<DetectorDataPoint>();
-            //PreemptCollection = new List<DetectorDataPoint>();
+           
         }
 
         public void AddDetectorData(DetectorDataPoint ddp)
@@ -31,12 +31,6 @@ namespace MOE.Common.Business
             DetectorEvents.Add(ddp);
         }
 
-        //public void AddSecondsToEvents(int seconds)
-        //{
-        //    foreach (var detectorDataPoint in DetectorEvents)
-        //    {
-        //        detectorDataPoint.TimeStamp = detectorDataPoint.TimeStamp.AddSeconds(seconds);
-        //    }
-        //}
+  
     }
 }
