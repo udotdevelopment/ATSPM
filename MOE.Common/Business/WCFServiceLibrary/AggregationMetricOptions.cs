@@ -13,6 +13,7 @@ using MOE.Common.Models;
 using System.Runtime.Serialization;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.DataAggregation;
@@ -24,20 +25,28 @@ namespace MOE.Common.Business.WCFServiceLibrary
     public abstract class AggregationMetricOptions : MetricOptions
     {
         
-        public enum ChartTypes
-        {
-            Column,
-            StackedColumn,
-            Line,
-            StackedLine,
-            Pie
-        };
+        //public enum ChartTypes
+        //{
+        //    Column,
+        //    StackedColumn,
+        //    Line,
+        //    StackedLine,
+        //    Pie
+        //};
 
         public enum AggregationOperations
         {
             Sum,
             Average
         };
+
+        public enum SeriesType
+        {
+            Signal,
+            Approach,
+            Direction,
+            Route
+        }
 
         public enum XAxisAggregationSeriesOptions
         {
@@ -46,26 +55,28 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Direction,
             Approach,
             Signal,
-            SignalByDirection,
-            Route,
-            SignalByPhase,
-            RouteBySignal
+            //SignalByDirection,
+            //Route,
+            //SignalByPhase,
+            //RouteBySignal
         }
-
+        [DataMember]
+        public int SeriesWidth { get; set; }
         [DataMember]
         public Business.Bins.BinFactoryOptions TimeOptions { get; set; }
         [DataMember]
-        public ChartTypes ChartType { get; set; }
+        public SeriesChartType ChartType { get; set; }
         [DataMember]
         public AggregationOperations AggregationOperation { get; set; }
         [DataMember]
         public XAxisAggregationSeriesOptions XAxisAggregationSeriesOption { get; set; }
         [DataMember]
+        public SeriesType SelectedSeries { get; set; }
+        [DataMember]
         public List<string> SignalIds { get; set; } = new List<string>();
         public List<Models.Signal> Signals { get; set; } = new List<Models.Signal>();
         public List<Models.Approach> Approaches { get; set; } = new List<Models.Approach>();
         public List<Models.Detector> Detectors { get; set; } = new List<Models.Detector>();
-        public List<BinsContainer> BinsContainers { get; set; } = new List<BinsContainer>();
 
         public string ChartTitle
         {
@@ -73,12 +84,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 string chartTitle;
                 chartTitle = "AggregationChart\n";
-                foreach (var signal in Signals)
-                {
-                    chartTitle += signal.SignalDescription + " ";
-                }
-                chartTitle += "\n";
-                chartTitle += TimeOptions.Start.ToShortDateString() + " to " + TimeOptions.End.ToShortDateString() +"\n";
+                chartTitle += TimeOptions.Start.ToString();
+                if(TimeOptions.End > TimeOptions.Start)
+                    chartTitle += " to " + TimeOptions.End.ToString() +"\n";
                 if (TimeOptions.DaysOfWeek != null)
                 {
                     foreach (var dayOfWeek in TimeOptions.DaysOfWeek)
@@ -89,11 +97,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 if (TimeOptions.TimeOfDayStartHour != null && TimeOptions.TimeOfDayStartMinute != null &&
                     TimeOptions.TimeOfDayEndHour != null && TimeOptions.TimeOfDayEndMinute != null)
                 {
-                    chartTitle += new TimeSpan(0, TimeOptions.TimeOfDayStartHour.Value, TimeOptions.TimeOfDayStartMinute.Value, 0)
+                    chartTitle += "Limited to: " + new TimeSpan(0, TimeOptions.TimeOfDayStartHour.Value, TimeOptions.TimeOfDayStartMinute.Value, 0)
                         .ToString() + " to " + new TimeSpan(0, TimeOptions.TimeOfDayEndHour.Value,
                         TimeOptions.TimeOfDayEndMinute.Value, 0).ToString() +"\n";
                 }
-                chartTitle += TimeOptions.BinSize.ToString() + " bins ";
+                chartTitle += TimeOptions.SelectedBinSize.ToString() + " bins ";
                 chartTitle += XAxisAggregationSeriesOption.ToString() + " Aggregation ";
                 chartTitle += AggregationOperation.ToString();
                 return chartTitle;
@@ -105,14 +113,20 @@ namespace MOE.Common.Business.WCFServiceLibrary
             SetMetricType();
             base.CreateMetric();
             GetSignalObjects();
-            SetBins();
+            if (XAxisAggregationSeriesOption == XAxisAggregationSeriesOptions.TimeOfDay && TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
+            {
+                TimeOptions.TimeOption = BinFactoryOptions.TimeOptions.TimePeriod;
+                TimeOptions.TimeOfDayStartHour = 0;
+                TimeOptions.TimeOfDayStartMinute = 0;
+                TimeOptions.TimeOfDayEndHour = 23;
+                TimeOptions.TimeOfDayEndMinute = 59;
+                if (TimeOptions.DaysOfWeek == null)
+                {
+                    TimeOptions.DaysOfWeek = new List<DayOfWeek>{ DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday};
+                }
+            }
             GetChartByXAxisAggregation();
             return ReturnList;
-        }
-
-        private void SetBins()
-        {
-            BinsContainers = BinFactory.GetBins(TimeOptions);
         }
 
         public void GetSignalObjects()
@@ -183,21 +197,21 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 case XAxisAggregationSeriesOptions.Direction:
                     GetDirectionCharts();
                     break;
-                case XAxisAggregationSeriesOptions.Route:
-                    GetRouteCharts();
-                    break;
-                case XAxisAggregationSeriesOptions.RouteBySignal:
-                    GetRouteBySignalCharts();
-                    break;
+                //case XAxisAggregationSeriesOptions.Route:
+                //    GetRouteCharts();
+                //    break;
+                //case XAxisAggregationSeriesOptions.RouteBySignal:
+                //    GetRouteBySignalCharts();
+                //    break;
                 case XAxisAggregationSeriesOptions.Signal:
                     GetSignalCharts();
                     break;
-                case XAxisAggregationSeriesOptions.SignalByDirection:
-                    GetSignalByDirectionCharts();
-                    break;
-                case XAxisAggregationSeriesOptions.SignalByPhase:
-                    GetSignalByPhaseCharts();
-                    break;
+                //case XAxisAggregationSeriesOptions.SignalByDirection:
+                //    GetSignalByDirectionCharts();
+                //    break;
+                //case XAxisAggregationSeriesOptions.SignalByPhase:
+                //    GetSignalByPhaseCharts();
+                //    break;
                 default:
                     GetTimeCharts();
                     break;
@@ -225,15 +239,18 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void GetSignalByDirectionCharts()
         {
-            Chart chart = ChartFactory.CreateStringXIntYChart(this);
-            GetSignalByDirectionAggregateChart(Signals, chart);
-            SaveChartImage(chart);
+            foreach (var signal in Signals)
+            {
+                Chart chart = ChartFactory.CreateStringXIntYChart(this);
+                GetSignalByDirectionAggregateChart(signal, chart);
+                SaveChartImage(chart);
+            }
         }
 
 
         private  void GetRouteCharts()
         {
-            Chart chart = ChartFactory.CreateTimeXIntYChart(this);
+            Chart chart = ChartFactory.CreateTimeXIntYChart(this, null);
             GetTimeXAxisRouteChart(Signals, chart);
             SaveChartImage(chart);
         }
@@ -241,7 +258,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void GetRouteBySignalCharts()
         {
-            Chart chart = ChartFactory.CreateTimeXIntYChart(this);
+            Chart chart = ChartFactory.CreateTimeXIntYChart(this,null);
             GetTimeXAxisSignalSeriesChart(Signals, chart);
             SaveChartImage(chart);
         }
@@ -264,10 +281,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var directionsList = direcitonRepository.GetAllDirections();
             int columnCounter = 1;
             var colorCount = 1;
-            Series series = new Series();
-                series.Name = signal.SignalDescription;
-                series.ChartArea = "ChartArea1";
-                SetSeriestype(series);
+            Series series = CreateSeries(0, signal.SignalDescription);
             foreach (var direction in directionsList)
             {
                 DataPoint dataPoint = new DataPoint();
@@ -305,13 +319,81 @@ namespace MOE.Common.Business.WCFServiceLibrary
         private void GetTimeCharts()
         {
             Chart chart;
-            foreach (var signal in Signals)
+                switch (SelectedSeries)
+                {
+                    case SeriesType.Approach:
+                        foreach (var signal in Signals)
+                        {
+                            chart = ChartFactory.CreateTimeXIntYChart(this, new List<Models.Signal>{signal});
+                            GetTimeXAxisApproachSeriesChart(signal, chart);
+                            SaveChartImage(chart);
+                        }
+                    break;
+                    case SeriesType.Direction:
+                        foreach (var signal in Signals)
+                        {
+                            chart = ChartFactory.CreateTimeXIntYChart(this, new List<Models.Signal> { signal });
+                            GetTimeXAxisDirectionSeriesChart(signal, chart);
+                            SaveChartImage(chart);
+                        };
+                    break;
+                    case SeriesType.Signal:
+                        chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
+                        GetTimeXAxisSignalSeriesChart(Signals, chart);
+                        SaveChartImage(chart);
+                        break;
+                    case SeriesType.Route:
+                        chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
+                        GetTimeXAxisRouteSeriesChart(Signals, chart);
+                        SaveChartImage(chart);
+                    break;
+                }
+            
+        }
+
+        private void GetTimeXAxisRouteSeriesChart(List<Models.Signal> signals, Chart chart)
+        {
+            GetRouteCharts();
+        }
+
+        private void GetTimeXAxisDirectionSeriesChart(Models.Signal signal, Chart chart)
+        {
+            int i = 1;
+            foreach (var directionType in signal.GetAvailableDirections())
             {
-                chart = ChartFactory.CreateTimeXIntYChart(this);
-                GetTimeXAxisApproachSeriesChart(signal, chart);
-                SaveChartImage(chart);
+                GetDirectionSeries(chart, i, directionType, signal);
+                i++;
             }
         }
+
+        private void GetDirectionSeries(Chart chart, int colorCode, DirectionType directionType, Models.Signal signal)
+        {
+            Series series = CreateSeries(colorCode, directionType.Description);
+            List<BinsContainer> binsContainers = GetBinsContainersByDirection(directionType, signal);
+            foreach (var binsContainer in binsContainers)
+            {
+            //    if (TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)
+            //    {
+            //        DataPoint dataPoint = AggregationOperation == AggregationOperations.Sum
+            //                ? GetContainerDataPointForSum(binsContainer)
+            //                : GetContainerDataPointForAverage(binsContainer);
+            //            series.Points.Add(dataPoint);
+            //}
+            //    else
+            //    {
+                    foreach (var bin in binsContainer.Bins)
+                    {
+                        DataPoint dataPoint = AggregationOperation == AggregationOperations.Sum
+                                ? GetDataPointForSum(bin)
+                                : GetDataPointForAverage(bin);
+                                series.Points.Add(dataPoint);
+                    }
+                //}
+            }
+            chart.Series.Add(series);
+        }
+
+        protected abstract List<BinsContainer> GetBinsContainersByDirection(DirectionType directionType, Models.Signal signal);
 
 
         private void GetTimeOfDayCharts()
@@ -319,7 +401,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Chart chart;
             foreach (var signal in Signals)
             {
-                chart = ChartFactory.CreateTimeXIntYChart(this);
+                chart = ChartFactory.CreateTimeXIntYChart(this, new List<Models.Signal>{signal});
+
+                if (TimeOptions.TimeOfDayStartHour != null && TimeOptions.TimeOfDayStartMinute.Value != null)
+                {
+                    chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
+                        new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day,
+                                TimeOptions.TimeOfDayStartHour.Value, TimeOptions.TimeOfDayStartMinute.Value, 0)
+                            .AddHours(-1).ToOADate();
+                }
                 GetTimeOfDayAggregateXAxisApproachSeriesChart(signal, chart);
                 SaveChartImage(chart);
             }
@@ -329,13 +419,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected void GetSignalsXAxisSeriesChart(List<Models.Signal> signals, Chart chart)
         {
             int i = 1;
-            Series series = new Series();
+            string seriesName = string.Empty;
             foreach (var signal in signals)
             {
-                series.Name += signal.SignalDescription + " ";
+                seriesName += signal.SignalDescription + " ";
             }
-            series.ChartArea = "ChartArea1";
-            SetSeriestype(series);
+            Series series = CreateSeries(0, seriesName);
             foreach (var signal in signals)
             {
                 DataPoint dataPoint = new DataPoint();
@@ -359,10 +448,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void GetApproachXAxisChart(Models.Signal signal, Chart chart)
         {
-            Series series = new Series();
-            series.Name = signal.SignalDescription;
-            series.ChartArea = "ChartArea1";
-            SetSeriestype(series);
+            Series series = CreateSeries(0, signal.SignalDescription);
             int i = 1;
             foreach (var approach in signal.Approaches)
             {
@@ -405,10 +491,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void GetPhaseXAxisChart(Models.Signal signal, Chart chart)
         {
-            Series series = new Series();
-            series.Name = signal.SignalDescription;
-            series.ChartArea = "ChartArea1";
-            SetSeriestype(series);
+            Series series = CreateSeries(0, signal.SignalDescription);
             chart.Series.Add(series);
             int i = 1;
             List<int> phaseNumbers = signal.GetPhasesForSignal();
@@ -434,75 +517,60 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void GetTimeXAxisRouteChart(List<Models.Signal> signals, Chart chart)
         {
-            SetSumBinsContainersByRoute(signals);
-            if (XAxisAggregationSeriesOption == XAxisAggregationSeriesOptions.Route &&
+            throw new NotImplementedException();
+            List<BinsContainer> binsContainers = BinFactory.GetBins(TimeOptions);
+            SetSumBinsContainersByRoute(signals, binsContainers);
+            if (//XAxisAggregationSeriesOption == XAxisAggregationSeriesOptions.Route &&
                 TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod &&
-                new List<BinFactoryOptions.BinSizes>{ BinFactoryOptions.BinSizes.Month, BinFactoryOptions.BinSizes.Year}.Contains(TimeOptions.BinSize))
+                new List<BinFactoryOptions.BinSize>{ BinFactoryOptions.BinSize.Month, BinFactoryOptions.BinSize.Year}.Contains(TimeOptions.SelectedBinSize))
             {
-                Series series = new Series();
-                series.Name = BinsContainers.FirstOrDefault().Start.ToShortDateString() + "-" +
-                              BinsContainers.FirstOrDefault().End.ToShortDateString();
-                series.ChartArea = "ChartArea1";
-                SetSeriestype(series);
-                series.Color = GetSeriesColorByNumber(0);
-                foreach (var binContainer in BinsContainers)
+                Series series = CreateSeries(0, binsContainers.FirstOrDefault().Start.ToShortDateString() + "-" +
+                                                binsContainers.FirstOrDefault().End.ToShortDateString());
+                foreach (var binContainer in binsContainers)
                 {
                     if (AggregationOperation == AggregationOperations.Sum)
                     {
-                        series.Points.AddXY(binContainer.Start, binContainer.SumValue);
+                        series.Points.Add(GetContainerDataPointForSum(binContainer));
                     }
                     else
                     {
-                        series.Points.AddXY(binContainer.Start, binContainer.AverageValue);
+                        series.Points.Add(GetContainerDataPointForAverage(binContainer));
                     }
                 }
                 chart.Series.Add(series);
             }
             else
             {
-                for (var index = 0; index < BinsContainers.Count; index++)
+                for (var index = 0; index < binsContainers.Count; index++)
                 {
-                    var binsContainer = BinsContainers[index];
-                    Series series = new Series();
-                    series.Name = binsContainer.Start.ToShortDateString() + "-" + binsContainer.End.ToShortDateString();
-                    series.ChartArea = "ChartArea1";
-                    SetSeriestype(series);
-                    series.Color = GetSeriesColorByNumber(index);
+                    var binsContainer = binsContainers[index];
+                    Series series = CreateSeries(index,
+                        binsContainer.Start.ToShortDateString() + "-" + binsContainer.End.ToShortDateString()); 
                     foreach (var bin in binsContainer.Bins)
                     {
-                        if (AggregationOperation == AggregationOperations.Sum)
-                        {
-                            series.Points.AddXY(bin.Start, bin.Sum);
-                        }
-                        else
-                        {
-                            series.Points.AddXY(bin.Start, bin.Average);
-                        }
+                        series.Points.Add(AggregationOperation == AggregationOperations.Sum? GetDataPointForSum(bin): GetDataPointForAverage(bin));
                     }
                     chart.Series.Add(series);
                 }
             }
         }
 
-        protected abstract void SetSumBinsContainersByRoute(List<Models.Signal> signals);
+        protected abstract void SetSumBinsContainersByRoute(List<Models.Signal> signals, List<BinsContainer> binsContainers);
 
         protected void GetTimeXAxisSignalSeriesChart(List<Models.Signal> signals, Chart chart)
         {
             int i = 1;
             foreach (var signal in signals)
             {
-                Series series = new Series();
-                series.Color = GetSeriesColorByNumber(i);
-                series.Name = signal.SignalDescription;
-                series.ChartArea = "ChartArea1";
-                SetSeriestype(series);
-                List<BinsContainer> binsContainers = SetBinsContainersBySignal(signal);
+                Series series = CreateSeries(i, signal.SignalDescription);
+                List<BinsContainer> binsContainers = GetBinsContainersBySignal(signal);
                 BinsContainer container = binsContainers.FirstOrDefault();
                 if (container != null)
                 {
                     foreach (var bin in container.Bins)
                     {
-                        series.Points.AddXY(bin.Start, bin.Sum);
+                        DataPoint dataPoint = GetDataPointForSum(bin);
+                        series.Points.Add(dataPoint);
                     }
                     chart.Series.Add(series);
                     i++;
@@ -510,6 +578,37 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
+        private DataPoint GetDataPointForSum(Bin bin)
+        {
+            DataPoint dataPoint = new DataPoint(bin.Start.ToOADate(), bin.Sum);
+            if (bin.Start.Hour == 0 && bin.Start.Minute == 0)
+                dataPoint.AxisLabel = bin.Start.ToString("MM/dd/yyyy HH:mm");
+            return dataPoint;
+        }
+
+        private DataPoint GetDataPointForAverage(Bin bin)
+        {
+            DataPoint dataPoint = new DataPoint(bin.Start.ToOADate(), bin.Average);
+            if (bin.Start.Hour == 0 && bin.Start.Minute == 0)
+                dataPoint.AxisLabel = StartDate.ToString("MM/dd/yyyy HH:mm");
+            return dataPoint;
+        }
+
+        private DataPoint GetContainerDataPointForSum(BinsContainer bin)
+        {
+            DataPoint dataPoint = new DataPoint(bin.Start.ToOADate(), bin.SumValue);
+            if (bin.Start.Hour == 0 && bin.Start.Minute == 0)
+                dataPoint.AxisLabel = StartDate.ToString("MM/dd/yyyy HH:mm");
+            return dataPoint;
+        }
+
+        private DataPoint GetContainerDataPointForAverage(BinsContainer bin)
+        {
+            DataPoint dataPoint = new DataPoint(bin.Start.ToOADate(), bin.AverageValue);
+            if (bin.Start.Hour == 0 && bin.Start.Minute == 0)
+                dataPoint.AxisLabel = StartDate.ToString("MM/dd/yyyy HH:mm");
+            return dataPoint;
+        }
 
         private void GetTimeOfDayAggregateXAxisApproachSeriesChart(Models.Signal signal, Chart chart)
         {
@@ -533,7 +632,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var approach in signal.Approaches)
             {
                 GetApproachTimeSeriesByProtectedPermissive(chart, i, approach, true);
-                i++;
+                 i++;
                 if (approach.PermissivePhaseNumber != null)
                 {
                     GetApproachTimeSeriesByProtectedPermissive(chart, i, approach, false);
@@ -543,116 +642,115 @@ namespace MOE.Common.Business.WCFServiceLibrary
         }
 
 
-        private void GetApproachTimeAggregateSeriesByProtectedPermissive(Chart chart, int seriesColor, Approach approach, bool getPermissivePhase)
+        private void GetApproachTimeAggregateSeriesByProtectedPermissive(Chart chart, int seriesColor, Approach approach, bool getProtectedPhase)
         {
+            string phaseDescription = GetPhaseDescription(approach, getProtectedPhase);
+            List<BinsContainer> binsContainers = SetBinsContainersByApproach(approach, getProtectedPhase);
+            Series series = CreateSeries(seriesColor, approach.Description + phaseDescription);
+            DateTime endTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day,
+                TimeOptions.TimeOfDayEndHour ?? 0, TimeOptions.TimeOfDayEndMinute ?? 0, 0);
 
-            string phaseDescription = getPermissivePhase == true ? "Phase " + approach.PermissivePhaseNumber : "Phase " + approach.ProtectedPhaseNumber;
-            List<BinsContainer> binsContainers = SetBinsContainersByApproach(approach, getPermissivePhase);
-            Series series = new Series();
-            series.Color = GetSeriesColorByNumber(seriesColor);
-            series.Name = approach.Description + phaseDescription;
-            series.ChartArea = "ChartArea1";
-            SetSeriestype(series);
-            foreach (var binsContainer in binsContainers)
+            switch (TimeOptions.SelectedBinSize)
             {
-                foreach (var bin in binsContainer.Bins)
-                {
-                    if (AggregationOperation == AggregationOperations.Sum)
-                    {
-                        series.Points.AddXY(new DateTime(DateTime.Today.Year, bin.Start.Month, DateTime.Today.Day, bin.Start.Hour, bin.Start.Minute,0).ToOADate(), 
-                            bin.Sum);
-                    }
-                    else
-                    {
-                        series.Points.AddXY(new DateTime(DateTime.Today.Year, bin.Start.Month, DateTime.Today.Day, bin.Start.Hour, bin.Start.Minute, 0).ToOADate(),
-                            bin.Average);
-                    }
-                }
+                case BinFactoryOptions.BinSize.FifteenMinute:
+                    SetDataPointsForTimeAggregationSeries(binsContainers, series, endTime);
+                    break;
+                case BinFactoryOptions.BinSize.ThirtyMinute:
+                    SetDataPointsForTimeAggregationSeries(binsContainers, series, endTime);
+                    break;
+                case BinFactoryOptions.BinSize.Hour:
+                    SetDataPointsForTimeAggregationSeries(binsContainers, series, endTime);
+                    break;
+                //case BinFactoryOptions.BinSize.Day:
+                //    return GetDayBinsContainersForRange(timeOptions);
+                //    break;
+                //case BinFactoryOptions.BinSize.Week:
+                //    SetDataPointsForTimeAggregationSeries(binsContainers, series, endTime, 60 * 24 * 7);
+                //    break;
+                //case BinFactoryOptions.BinSize.Month:
+                //    return GetMonthBinsForRange(timeOptions);
+                //    break;
+                //case BinFactoryOptions.BinSize.Year:
+                //    return GetYearBinsForRange(timeOptions);
+                //    break;
+                default:
+                    SetDataPointsForTimeAggregationSeries(binsContainers, series, endTime);
+                    break;
+            }
+            switch (TimeOptions.SelectedBinSize)
+            {
+                case BinFactoryOptions.BinSize.FifteenMinute:
+                    SetDataPointsForTimeAggregationSeries(binsContainers, series, endTime);
+                    break;
             }
             chart.Series.Add(series);
         }
+
+        private static string GetPhaseDescription(Approach approach, bool getProtectedPhase)
+        {
+            return getProtectedPhase ? " Phase " + approach.ProtectedPhaseNumber : " Phase " + approach.PermissivePhaseNumber;
+        }
+
+        private void SetDataPointsForTimeAggregationSeries(List<BinsContainer> binsContainers, Series series, DateTime endTime)
+        {
+            for (DateTime startTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, TimeOptions.TimeOfDayStartHour ?? 0, TimeOptions.TimeOfDayStartMinute ?? 0, 0);
+                                                startTime < endTime;
+                                                startTime = startTime.AddMinutes(15))
+            {
+                if (AggregationOperation == AggregationOperations.Sum)
+                {
+                    int sumValue = binsContainers.FirstOrDefault().Bins.Where(b =>
+                        b.Start.Hour == startTime.Hour && b.Start.Minute == startTime.Minute).Sum(b => b.Sum);
+                    series.Points.AddXY(startTime, sumValue);
+                }
+                else
+                {
+                    double averageValue = 0;
+                    if (binsContainers.FirstOrDefault().Bins.Any(b =>
+                        b.Start.Hour == startTime.Hour && b.Start.Minute == startTime.Minute))
+                    {
+                        averageValue = binsContainers.FirstOrDefault().Bins.Where(b =>
+                            b.Start.Hour == startTime.Hour && b.Start.Minute == startTime.Minute).Average(b => b.Sum);
+                    }
+                    series.Points.AddXY(startTime, Convert.ToInt32(Math.Round(averageValue)));
+                }
+            }
+        }
+
         
-
-        private void GetApproachTimeSeriesTimeAggregateByProtectedPermissive(Chart chart, int i, Approach approach, bool getPermissivePhase)
+        private void GetApproachTimeSeriesByProtectedPermissive(Chart chart, int i, Approach approach, bool getProtectedPhase)
         {
-            string phaseDescription = getPermissivePhase == true ? "Phase " + approach.PermissivePhaseNumber : "Phase " + approach.ProtectedPhaseNumber;
-            List<BinsContainer> binsContainers = SetBinsContainersByApproach(approach, getPermissivePhase);
-            Series series = new Series();
-            series.Color = GetSeriesColorByNumber(i);
-            series.Name = approach.Description + phaseDescription;
-            series.ChartArea = "ChartArea1";
-            SetSeriestype(series);
-            if ((TimeOptions.BinSize == BinFactoryOptions.BinSizes.Month || TimeOptions.BinSize == BinFactoryOptions.BinSizes.Year) &&
+            string phaseDescription = GetPhaseDescription(approach, getProtectedPhase);
+            List<BinsContainer> binsContainers = SetBinsContainersByApproach(approach, getProtectedPhase);
+            Series series = CreateSeries(i, approach.Description + phaseDescription);
+            if ((TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Month || TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Year) &&
                 TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)
             {
                 foreach (var binsContainer in binsContainers)
                 {
-                    if (AggregationOperation == AggregationOperations.Sum)
-                    {
-                        series.Points.AddXY(binsContainer.Start, binsContainer.SumValue);
-                    }
-                    else
-                    {
-                        series.Points.AddXY(binsContainer.Start, binsContainer.AverageValue);
-                    }
+                    var dataPoint = AggregationOperation == AggregationOperations.Sum ? GetContainerDataPointForSum(binsContainer) : GetContainerDataPointForAverage(binsContainer);
+                    series.Points.Add(dataPoint);
                 }
             }
             else
             {
                 foreach (var bin in binsContainers.FirstOrDefault()?.Bins)
                 {
-                    if (AggregationOperation == AggregationOperations.Sum)
-                    {
-                        series.Points.AddXY(bin.Start, bin.Sum);
-                    }
-                    else
-                    {
-                        series.Points.AddXY(bin.Start, bin.Average);
-                    }
+                    var dataPoint = AggregationOperation == AggregationOperations.Sum ? GetDataPointForSum(bin) : GetDataPointForAverage(bin);
+                    series.Points.Add(dataPoint);
                 }
             }
             chart.Series.Add(series);
         }
 
-        private void GetApproachTimeSeriesByProtectedPermissive(Chart chart, int i, Approach approach, bool getPermissivePhase)
+        private Series CreateSeries(int seriesColorNumber, string seriesName)
         {
-            string phaseDescription = getPermissivePhase == true ? "Phase " + approach.PermissivePhaseNumber : "Phase " + approach.ProtectedPhaseNumber;
-            List<BinsContainer> binsContainers = SetBinsContainersByApproach(approach, getPermissivePhase);
-            Series series = new Series();
-            series.Color = GetSeriesColorByNumber(i);
-            series.Name = approach.Description + phaseDescription;
+            Series series = new Series(); series.BorderWidth = SeriesWidth;
+            series.Color = GetSeriesColorByNumber(seriesColorNumber);
+            series.Name = seriesName;
             series.ChartArea = "ChartArea1";
-            SetSeriestype(series);
-            if ((TimeOptions.BinSize == BinFactoryOptions.BinSizes.Month || TimeOptions.BinSize == BinFactoryOptions.BinSizes.Year) &&
-                TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)
-            {
-                foreach (var binsContainer in binsContainers)
-                {
-                    if (AggregationOperation == AggregationOperations.Sum)
-                    {
-                        series.Points.AddXY(binsContainer.Start, binsContainer.SumValue);
-                    }
-                    else
-                    {
-                        series.Points.AddXY(binsContainer.Start, binsContainer.AverageValue);
-                    }
-                }
-            }
-            else
-            {
-                foreach (var bin in binsContainers.FirstOrDefault()?.Bins)
-                {
-                    if (AggregationOperation == AggregationOperations.Sum)
-                    {
-                        series.Points.AddXY(bin.Start, bin.Sum);
-                    }
-                    else
-                    {
-                        series.Points.AddXY(bin.Start, bin.Average);
-                    }
-                }
-            }
-            chart.Series.Add(series);
+            series.ChartType = ChartType;
+            return series;
         }
 
         protected Color GetSeriesColorByNumber(int colorNumber)
@@ -701,42 +799,73 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        protected void SetSeriestype(Series series)
-        {
-            switch (ChartType)
-            {
-                case ChartTypes.StackedColumn:
-                    series.ChartType = SeriesChartType.StackedColumn;
-                    series.BorderWidth = 2;
-                    break;
-                case ChartTypes.Line:
-                    series.ChartType = SeriesChartType.Line;
-                    series.BorderWidth = 3;
-                    break;
-                case ChartTypes.Column:
-                    series.ChartType = SeriesChartType.Column;
-                    series.BorderWidth = 2;
-                    break;
-                case ChartTypes.StackedLine:
-                    series.ChartType = SeriesChartType.StackedArea;
-                    series.BorderWidth = 2;
-                    break;
-                case ChartTypes.Pie:
-                    series.ChartType = SeriesChartType.Pie;
-                    series.BorderWidth = 2;
-                    break;
-            }
-        }
+        //protected void SetSeriestype(Series series)
+        //{
+        //    switch (ChartType)
+        //    {
+        //        case ChartTypes.StackedColumn:
+        //            series.ChartType = SeriesChartType.StackedColumn;
+        //            series.BorderWidth = 2;
+        //            break;
+        //        case ChartTypes.Line:
+        //            series.ChartType = SeriesChartType.Line;
+        //            series.BorderWidth = 3;
+        //            break;
+        //        case ChartTypes.Column:
+        //            series.ChartType = SeriesChartType.Column;
+        //            series.BorderWidth = 2;
+        //            break;
+        //        case ChartTypes.StackedLine:
+        //            series.ChartType = SeriesChartType.StackedArea;
+        //            series.BorderWidth = 2;
+        //            break;
+        //        case ChartTypes.Pie:
+        //            series.ChartType = SeriesChartType.Pie;
+        //            series.BorderWidth = 2;
+        //            break;
+        //    }
+        //}
 
         protected abstract List<BinsContainer> SetBinsContainersByApproach(Approach approach, bool getprotectedPhase);
         protected abstract int GetSignalAverageDataPoint(Models.Signal signal);
-        protected abstract int GetSignalSumDataPoint(Models.Signal signal);
+        public abstract int GetSignalSumDataPoint(Models.Signal signal);
         protected abstract int GetAverageByPhaseNumber(Models.Signal signal, int phaseNumber);
         protected abstract int GetSumByPhaseNumber(Models.Signal signal, int phaseNumber);
         protected abstract int GetAverageByDirection(Models.Signal signal, DirectionType direction);
         protected abstract int GetSumByDirection(Models.Signal signal, DirectionType direction);
-        protected abstract List<BinsContainer> SetBinsContainersBySignal(Models.Signal signal);
-        protected abstract void GetSignalByDirectionAggregateChart(List<Models.Signal> signals, Chart chart);
+        protected abstract List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal);
+
+        protected void GetSignalByDirectionAggregateChart(Models.Signal signal, Chart chart)
+        {
+            int columnCounter = 1;
+            var colorCount = 1;
+            Series series = CreateSeries(0, signal.SignalDescription);
+            chart.Series.Add(series);
+            List<DirectionType> distinctDirectionTypesAvailable = signal.GetAvailableDirections();
+            foreach (var direction in distinctDirectionTypesAvailable)
+            {
+                DataPoint dataPoint = new DataPoint();
+                dataPoint.XValue = columnCounter;
+                dataPoint.SetValueY(AggregationOperation == AggregationOperations.Sum? GetSumByDirection(signal, direction)
+                    : GetAverageByDirection(signal, direction));
+                dataPoint.Color = GetSeriesColorByNumber(colorCount);
+                dataPoint.AxisLabel = direction.Description;
+                series.Points.Add(dataPoint);
+                columnCounter++;
+                colorCount++;
+            }
+        }
+            
+
+        private List<DirectionType> GetDistinctDirectionTypesAvailable(List<Models.Signal> signals)
+        {
+            List<DirectionType> directionTypes = new List<DirectionType>();
+            foreach (var signal in signals)
+            {
+                directionTypes.AddRange(signal.GetAvailableDirections());
+            }
+            return directionTypes.Distinct().ToList();
+        }
     }
 
 }

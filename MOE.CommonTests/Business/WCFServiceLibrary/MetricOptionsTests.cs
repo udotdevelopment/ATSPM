@@ -123,12 +123,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
 
             Assert.IsTrue(di.Exists);
         }
-
-        [TestMethod()]
-        public void DriveAvailableTest()
-        {
-            Assert.Fail();
-        }
+        
 
         private MetricOptions NewOptionsForTest()
         {
@@ -143,35 +138,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
 
         }
 
-        [TestMethod()]
-        public void MetricOptionsTest1()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateMetricTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void GetSignalLocationTest1()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateFileNameTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void DriveAvailableTest1()
-        {
-            Assert.Fail();
-        }
+       
 
 
     }

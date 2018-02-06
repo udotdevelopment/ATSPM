@@ -112,11 +112,11 @@ namespace MOE.Common.Business.Tests
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
-                BinFactoryOptions.BinSizes.Hour,
+                BinFactoryOptions.BinSize.Hour,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("7185");
             options.SignalIds.Add("5114");
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
 
             return options;
 

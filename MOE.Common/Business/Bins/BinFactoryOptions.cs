@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 namespace MOE.Common.Business.Bins
@@ -7,13 +9,20 @@ namespace MOE.Common.Business.Bins
     [DataContract]
     public class BinFactoryOptions
     {
-
-            public enum BinSizes
-            {
-                FifteenMinutes, ThirtyMinutes, Hour, Day, Month, Year,
-                Week
-            }
-            public enum TimeOptions { StartToEnd, TimePeriod }
+        [TypeConverter(typeof(EnumToStringUsingDescription))]
+        public enum BinSize
+        {
+            [Description("Fifteen Minute")]
+            FifteenMinute,
+            [Description("Thirty Minute")]
+            ThirtyMinute,
+            Hour,
+            Day,
+            Month,
+            Year,
+            Week
+        }
+        public enum TimeOptions { StartToEnd, TimePeriod }
         [DataMember]
             public DateTime Start { get; set; }
         [DataMember]
@@ -38,12 +47,12 @@ namespace MOE.Common.Business.Bins
         public TimeOptions TimeOption { get; set; }
 
         [DataMember]
-        public BinSizes BinSize { get; set; }
+        public BinSize SelectedBinSize { get; set; }
 
         [DataMember]
         public List<DateTime> DateList { get; set; }
 
-            public BinFactoryOptions(DateTime start, DateTime end, int? timeOfDayStartHour, int? timeOfDayStartMinute, int? timeOfDayEndHour, int? timeOfDayEndMinute, List<DayOfWeek> daysOfWeek, BinSizes binSize, TimeOptions timeOption)
+            public BinFactoryOptions(DateTime start, DateTime end, int? timeOfDayStartHour, int? timeOfDayStartMinute, int? timeOfDayEndHour, int? timeOfDayEndMinute, List<DayOfWeek> daysOfWeek, BinSize binSize, TimeOptions timeOption)
             {
                 Start = start;
                 End = end;
@@ -52,7 +61,7 @@ namespace MOE.Common.Business.Bins
                 TimeOfDayEndHour = timeOfDayEndHour;
                 TimeOfDayEndMinute = timeOfDayEndMinute;
                 DaysOfWeek = daysOfWeek;
-                BinSize = binSize;
+                SelectedBinSize = binSize;
                 TimeOption = timeOption;
                 if (daysOfWeek != null)
                 {
@@ -84,4 +93,53 @@ namespace MOE.Common.Business.Bins
             return dates;
         }
     }
+    public class EnumToStringUsingDescription : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            return (sourceType.Equals(typeof(Enum)));
+        }
+
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            return (destinationType.Equals(typeof(String)));
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        {
+            return base.ConvertFrom(context, culture, value);
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+        {
+            if (!destinationType.Equals(typeof(String)))
+            {
+                throw new ArgumentException("Can only convert to string.", "destinationType");
+            }
+
+            if (!value.GetType().BaseType.Equals(typeof(Enum)))
+            {
+                throw new ArgumentException("Can only convert an instance of enum.", "value");
+            }
+
+            string name = value.ToString();
+            object[] attrs =
+                value.GetType().GetField(name).GetCustomAttributes(typeof(DescriptionAttribute), false);
+            return (attrs.Length > 0) ? ((DescriptionAttribute)attrs[0]).Description : name;
+        }
     }
+
+    public static class EnumExtensions
+    {
+        public static string Description(this Enum value)
+        {
+            var enumType = value.GetType();
+            var field = enumType.GetField(value.ToString());
+            var attributes = field.GetCustomAttributes(typeof(DescriptionAttribute),
+                false);
+            return attributes.Length == 0
+                ? value.ToString()
+                : ((DescriptionAttribute)attributes[0]).Description;
+        }
+    }
+}

@@ -23,65 +23,82 @@ namespace MOE.Common.Business.WCFServiceLibrary
             MetricTypeID = 20;
         }
 
-        protected override int GetSignalSumDataPoint(Models.Signal signal)
+        
+
+        public override int GetSignalSumDataPoint(Models.Signal signal)
         {
+            var binsContainers = BinFactory.GetBins(TimeOptions);
             SplitFailAggregationBySignal splitFailAggregationBySignal =
-                new SplitFailAggregationBySignal(this, signal, BinsContainers);
+                new SplitFailAggregationBySignal(this, signal);
             return splitFailAggregationBySignal.TotalSplitFailures;
         }
 
         protected override int GetAverageByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
+            var binsContainers = BinFactory.GetBins(TimeOptions);
             SplitFailAggregationBySignal splitFailAggregationBySignal =
-                new SplitFailAggregationBySignal(this, signal, BinsContainers, phaseNumber);
+                new SplitFailAggregationBySignal(this, signal);
             return splitFailAggregationBySignal.AverageSplitFailures;
         }
 
         protected override int GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
+            var binsContainers = BinFactory.GetBins(TimeOptions);
             SplitFailAggregationBySignal splitFailAggregationBySignal =
-                new SplitFailAggregationBySignal(this, signal, BinsContainers, phaseNumber);
+                new SplitFailAggregationBySignal(this, signal);
             return splitFailAggregationBySignal.TotalSplitFailures;
         }
 
         protected override int GetAverageByDirection(Models.Signal signal, DirectionType direction)
         {
+            var binsContainers = BinFactory.GetBins(TimeOptions);
             SplitFailAggregationBySignal splitFailAggregationBySignal =
-                new SplitFailAggregationBySignal(this, signal, BinsContainers, direction);
+                new SplitFailAggregationBySignal(this, signal, direction);
             return splitFailAggregationBySignal.AverageSplitFailures;
         }
 
         protected override int GetSumByDirection(Models.Signal signal, DirectionType direction)
         {
+            var binsContainers = BinFactory.GetBins(TimeOptions);
             SplitFailAggregationBySignal splitFailAggregationBySignal =
-                new SplitFailAggregationBySignal(this, signal, BinsContainers, direction);
+                new SplitFailAggregationBySignal(this, signal, direction);
             return splitFailAggregationBySignal.TotalSplitFailures;
         }
         
         protected override int GetSignalAverageDataPoint(Models.Signal signal)
         {
+            var binsContainers = BinFactory.GetBins(TimeOptions);
             SplitFailAggregationBySignal splitFailAggregationBySignal =
-                new SplitFailAggregationBySignal(this, signal, BinsContainers);
+                new SplitFailAggregationBySignal(this, signal);
             return splitFailAggregationBySignal.AverageSplitFailures;
         }
 
 
-        protected override List<BinsContainer> SetBinsContainersBySignal(Models.Signal signal)
+        protected override List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal)
         {
-            SplitFailAggregationBySignal splitFailAggregationBySignal = new SplitFailAggregationBySignal(this, signal, BinsContainers);
+            var binsContainers = BinFactory.GetBins(TimeOptions);
+            SplitFailAggregationBySignal splitFailAggregationBySignal = new SplitFailAggregationBySignal(this, signal);
             return splitFailAggregationBySignal.BinsContainers;
         }
 
-        protected override void SetSumBinsContainersByRoute(List<Models.Signal> signals)
+        protected override List<BinsContainer> GetBinsContainersByDirection(DirectionType directionType, Models.Signal signal)
+        {
+            var binsContainers = BinFactory.GetBins(TimeOptions);
+            SplitFailAggregationBySignal splitFailAggregationBySignal =
+                new SplitFailAggregationBySignal(this, signal, directionType);
+            return splitFailAggregationBySignal.BinsContainers;
+        }
+
+        protected override void SetSumBinsContainersByRoute(List<Models.Signal> signals, List<BinsContainer> binsContainers)
         {
             foreach (var signal in signals)
             {
-                SplitFailAggregationBySignal splitFail = new SplitFailAggregationBySignal(this, signal, BinsContainers);
-                for (int i = 0; i < BinsContainers.Count; i++)
+                SplitFailAggregationBySignal splitFail = new SplitFailAggregationBySignal(this, signal);
+                for (int i = 0; i < binsContainers.Count; i++)
                 {
-                    for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
+                    for (var binIndex = 0; binIndex < binsContainers[i].Bins.Count; binIndex++)
                     {
-                        var bin = BinsContainers[i].Bins[binIndex];
+                        var bin = binsContainers[i].Bins[binIndex];
                         bin.Sum += splitFail.BinsContainers[i].Bins[binIndex].Sum;
                         bin.Average = Convert.ToInt32(Math.Round((double) (bin.Sum / signals.Count)));
                     }
@@ -89,12 +106,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             }
         }
-
         
         protected override List<BinsContainer> SetBinsContainersByApproach(Models.Approach approach, bool getprotectedPhase)
         {
-            ApproachSplitFailAggregationContainer approachSplitFailAggregationContainer = new ApproachSplitFailAggregationContainer(approach, BinsContainers, StartDate,
-                EndDate, getprotectedPhase);
+            ApproachSplitFailAggregationContainer approachSplitFailAggregationContainer = new ApproachSplitFailAggregationContainer(approach, TimeOptions, StartDate, EndDate,
+                getprotectedPhase);
             return approachSplitFailAggregationContainer.BinsContainers;
         }
 
@@ -109,8 +125,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         //        series.Color = GetSeriesColorByNumber(i);
         //        series.Name = approachSplitFails.Approach.Description;
         //        series.ChartArea = "ChartArea1";
-        //        SetSeriestype(series);
-        //        if ((TimeOptions.BinSize == BinFactoryOptions.BinSizes.Month || TimeOptions.BinSize == BinFactoryOptions.BinSizes.Year) &&
+        //        series.ChartType = ChartType;
+        //        if ((TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Month || TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Year) &&
         //            TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)
         //        {
         //            foreach (var binsContainer in approachSplitFails.BinsContainers)
@@ -155,7 +171,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         //    SeriesCount++;
         //    series.Name = signal.SignalDescription;
         //    series.ChartArea = "ChartArea1";
-        //    SetSeriestype(series);
+        //    series.ChartType = ChartType;
         //    int i = 1;
         //    foreach (var approachSplitFails in spliFailAggregationBySignal.ApproachSplitFailures)
         //    {
@@ -189,7 +205,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         //    series.Color = GetSeriesColorByNumber(1);
         //    series.Name = signal.SignalDescription;
         //    series.ChartArea = "ChartArea1";
-        //    SetSeriestype(series);
+        //    series.ChartType = ChartType;
         //    chart.Series.Add(series);
         //    int i = 1;
         //    List<int> phaseNumbers = signal.GetPhasesForSignal();
@@ -227,7 +243,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         //        series.Color = GetSeriesColorByNumber(i);
         //        series.Name = spliFailAggregationBySignal.Signal.SignalDescription;
         //        series.ChartArea = "ChartArea1";
-        //        SetSeriestype(series);
+        //        series.ChartType = ChartType;
         //        spliFailAggregationBySignal.GetSumSplitFailuresByBin(BinsContainers);
         //        var container = BinsContainers.FirstOrDefault();
         //        if (container != null)
@@ -253,7 +269,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         //        series.Name += signal.SignalDescription + " ";
         //    }
         //    series.ChartArea = "ChartArea1";
-        //    SetSeriestype(series);
+        //    series.ChartType = ChartType;
         //    foreach (var signal in signals)
         //    {
         //        List<SpliFailAggregationBySignal> spliFailAggregationBySignals = new List<SpliFailAggregationBySignal>
@@ -282,44 +298,44 @@ namespace MOE.Common.Business.WCFServiceLibrary
         //    chart.Series.Add(series);
         //}
 
-        protected override void GetSignalByDirectionAggregateChart(List<Models.Signal> signals, Chart chart)
-        {
-            var direcitonRepository = Models.Repositories.DirectionTypeRepositoryFactory.Create();
-            var directionsList = direcitonRepository.GetAllDirections();
-            int columnCounter = 1;
-            var colorCount = 1;
-            foreach (var direction in directionsList)
-            {
-                Series series = new Series();
-                series.Color = GetSeriesColorByNumber(colorCount);
-                series.Name = direction.Description;
-                series.ChartArea = "ChartArea1";
-                SetSeriestype(series);
-                chart.Series.Add(series);
-                colorCount++;
-            }
-            foreach (var signal in signals)
-            {
-                SplitFailAggregationBySignal splitFailAggregationBySignal 
-                    = new SplitFailAggregationBySignal(this, signal, BinsContainers);
-                foreach (var direction in directionsList)
-                {
-                    DataPoint dataPoint = new DataPoint();
-                    dataPoint.XValue = columnCounter;
-                    if (AggregationOperation == AggregationOperations.Sum)
-                    {
-                        dataPoint.SetValueY(splitFailAggregationBySignal.GetSplitFailsByDirection(direction));
-                    }
-                    else
-                    {
-                        dataPoint.SetValueY(splitFailAggregationBySignal.GetAverageSplitFailsByDirection(direction));
-                    }
-                    dataPoint.AxisLabel = signal.SignalID;
-                    chart.Series[direction.Description].Points.Add(dataPoint);
-                }
-                columnCounter++;
-            }
-        }
+        //protected override void GetSignalByDirectionAggregateChart(List<Models.Signal> signals, Chart chart)
+        //{
+        //    var direcitonRepository = Models.Repositories.DirectionTypeRepositoryFactory.Create();
+        //    var directionsList = direcitonRepository.GetAllDirections();
+        //    int columnCounter = 1;
+        //    var colorCount = 1;
+        //    foreach (var direction in directionsList)
+        //    {
+        //        Series series = new Series();
+        //        series.Color = GetSeriesColorByNumber(colorCount);
+        //        series.Name = direction.Description;
+        //        series.ChartArea = "ChartArea1";
+        //        series.ChartType = ChartType;
+        //        chart.Series.Add(series);
+        //        colorCount++;
+        //    }
+        //    foreach (var signal in signals)
+        //    {
+        //        SplitFailAggregationBySignal splitFailAggregationBySignal 
+        //            = new SplitFailAggregationBySignal(this, signal);
+        //        foreach (var direction in directionsList)
+        //        {
+        //            DataPoint dataPoint = new DataPoint();
+        //            dataPoint.XValue = columnCounter;
+        //            if (AggregationOperation == AggregationOperations.Sum)
+        //            {
+        //                dataPoint.SetValueY(splitFailAggregationBySignal.GetSplitFailsByDirection(direction));
+        //            }
+        //            else
+        //            {
+        //                dataPoint.SetValueY(splitFailAggregationBySignal.GetAverageSplitFailsByDirection(direction));
+        //            }
+        //            dataPoint.AxisLabel = signal.SignalID;
+        //            chart.Series[direction.Description].Points.Add(dataPoint);
+        //        }
+        //        columnCounter++;
+        //    }
+        //}
 
         //protected override void GetDirectionAggregateChart(Models.Signal signal, Chart chart)
         //{
@@ -329,7 +345,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         //    series.Color = GetSeriesColorByNumber(1);
         //    series.Name = signal.SignalDescription;
         //    series.ChartArea = "ChartArea1";
-        //    SetSeriestype(series);
+        //    series.ChartType = ChartType;
         //    chart.Series.Add(series);
 
         //    int i = 1;

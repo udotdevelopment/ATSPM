@@ -14,9 +14,10 @@ namespace MOE.Common.Business.Bins.Tests
         [TestMethod()]
         public void GetBins15MinutesTest()
         {
-            BinFactoryOptions binFactoryOptions = new BinFactoryOptions(Convert.ToDateTime("10/17/2017 12:00 AM"), Convert.ToDateTime("10/17/2017 1:00 AM"), null, null, null, null, null, BinFactoryOptions.BinSizes.FifteenMinutes, BinFactoryOptions.TimeOptions.StartToEnd);
-            var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.FirstOrDefault().Bins.Count == 4);
+            BinFactoryOptions binFactoryOptions = new BinFactoryOptions(Convert.ToDateTime("10/17/2017 12:00 AM"), Convert.ToDateTime("10/17/2017 1:00 AM"), null, null, null, null, null, BinFactoryOptions.BinSize.FifteenMinute, BinFactoryOptions.TimeOptions.StartToEnd);
+            var binsContainers = BinFactory.GetBins(binFactoryOptions);
+            Assert.IsTrue(binsContainers.Count == 1);
+            Assert.IsTrue(binsContainers[0].Bins.Count == 4);
         }
 
         [TestMethod()]
@@ -33,10 +34,11 @@ namespace MOE.Common.Business.Bins.Tests
                 Convert.ToDateTime("10/19/2017 12:00 AM"),
                 Convert.ToDateTime("10/24/2017 1:00 AM"), 
                 0,0,1,0, days, 
-                BinFactoryOptions.BinSizes.FifteenMinutes, 
+                BinFactoryOptions.BinSize.FifteenMinute, 
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.First().Bins.Count == 16);
+            var binsContainers = BinFactory.GetBins(binFactoryOptions);
+            Assert.IsTrue(binsContainers.Count == 1);
+            Assert.IsTrue(binsContainers[0].Bins.Count == 16);
         }
 
         [TestMethod()]
@@ -53,7 +55,7 @@ namespace MOE.Common.Business.Bins.Tests
                 Convert.ToDateTime("10/19/2017 12:00 AM"),
                 Convert.ToDateTime("10/24/2017 1:00 AM"),
                 0, 0, 1, 0, days,
-                BinFactoryOptions.BinSizes.ThirtyMinutes,
+                BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             var bins = BinFactory.GetBins(binFactoryOptions);
             Assert.IsTrue(bins.First().Bins.Count == 8);
@@ -73,7 +75,7 @@ namespace MOE.Common.Business.Bins.Tests
                 Convert.ToDateTime("10/19/2017 12:00 AM"),
                 Convert.ToDateTime("10/24/2017 1:00 AM"),
                 0, 0, 1, 0, days,
-                BinFactoryOptions.BinSizes.Hour,
+                BinFactoryOptions.BinSize.Hour,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             var bins = BinFactory.GetBins(binFactoryOptions);
             Assert.IsTrue(bins.First().Bins.Count == 4);
@@ -86,7 +88,7 @@ namespace MOE.Common.Business.Bins.Tests
                 Convert.ToDateTime("10/17/2017 12:00 AM"),
                 Convert.ToDateTime("10/17/2017 1:00 AM"),
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.ThirtyMinutes,
+                BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             var bins = BinFactory.GetBins(binFactoryOptions);
             Assert.IsTrue(bins.First().Bins.Count == 2);
@@ -99,7 +101,7 @@ namespace MOE.Common.Business.Bins.Tests
                 Convert.ToDateTime("10/17/2017 12:00 AM"),
                 Convert.ToDateTime("10/17/2017 5:00 AM"),
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.Hour,
+                BinFactoryOptions.BinSize.Hour,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             var bins = BinFactory.GetBins(binFactoryOptions);
             Assert.IsTrue(bins.First().Bins.Count == 5);
@@ -109,13 +111,14 @@ namespace MOE.Common.Business.Bins.Tests
         public void GetBinsDayTest()
         {
             BinFactoryOptions binFactoryOptions = new BinFactoryOptions(
-                Convert.ToDateTime("10/17/2017 12:00 AM"),
-                Convert.ToDateTime("10/27/2017 5:00 AM"),
+                Convert.ToDateTime("10/1/2017 12:00 AM"),
+                Convert.ToDateTime("10/5/2017 5:00 AM"),
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.Day,
+                BinFactoryOptions.BinSize.Day,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.First().Bins.Count == 11);
+            var binsContainers = BinFactory.GetBins(binFactoryOptions);
+            Assert.IsTrue(binsContainers.Count == 1);
+            Assert.IsTrue(binsContainers.First().Bins.Count == 4);
         }
 
         [TestMethod()]
@@ -125,7 +128,7 @@ namespace MOE.Common.Business.Bins.Tests
                 Convert.ToDateTime("10/17/2017 12:00 AM"),
                 Convert.ToDateTime("10/27/2017 5:00 AM"),
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.Week,
+                BinFactoryOptions.BinSize.Week,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             var bins = BinFactory.GetBins(binFactoryOptions);
             Assert.IsTrue(bins.First().Bins.Count == 2);
@@ -138,7 +141,7 @@ namespace MOE.Common.Business.Bins.Tests
                 Convert.ToDateTime("10/1/2017 12:00 AM"),
                 Convert.ToDateTime("12/27/2017 5:00 AM"),
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.Month,
+                BinFactoryOptions.BinSize.Month,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             var bins = BinFactory.GetBins(binFactoryOptions);
             Assert.IsTrue(bins.First().Bins.Count == 3);
@@ -148,13 +151,14 @@ namespace MOE.Common.Business.Bins.Tests
         public void GetBinsYearTest()
         {
             BinFactoryOptions binFactoryOptions = new BinFactoryOptions(
-                Convert.ToDateTime("10/1/2017 12:00 AM"),
+                Convert.ToDateTime("10/1/2016 12:00 AM"),
                 Convert.ToDateTime("12/27/2018 5:00 AM"),
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.Year,
+                BinFactoryOptions.BinSize.Year,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.Count == 2);
+            var binsContainers = BinFactory.GetBins(binFactoryOptions);
+            Assert.IsTrue(binsContainers.Count == 1);
+            Assert.IsTrue(binsContainers.First().Bins.Count == 2);
         }
 
         [TestMethod()]
@@ -167,7 +171,7 @@ namespace MOE.Common.Business.Bins.Tests
                 Convert.ToDateTime("1/1/2017 12:00 AM"),
                 Convert.ToDateTime("12/31/2017 11:59 PM"),
                 0, 1, 23, 59, weekdays,
-                BinFactoryOptions.BinSizes.Year,
+                BinFactoryOptions.BinSize.Year,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             var bins = BinFactory.GetBins(binFactoryOptions);
             Assert.IsTrue(bins.First().Bins.Count == 52);

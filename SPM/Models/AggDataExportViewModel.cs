@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Eventing.Reader;
@@ -8,6 +9,7 @@ using System.Runtime.Serialization;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
@@ -31,11 +33,18 @@ namespace SPM.Models
         public virtual List<int> MovementTypeIDs { get; set; }
         public virtual ICollection<MovementType> AllMovementTypes { get; set; }
         public List<MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.XAxisAggregationSeriesOptions> AggSeriesOptions { get; set; }
+        [Display(Name = "X -Axis")]
         public  AggregationMetricOptions.XAxisAggregationSeriesOptions SelectedAggregationSeriesOptions { get; set; }
         public List<AggregationMetricOptions.AggregationOperations> AggregationOperationsList { get; set; }
+        [Display(Name = "Aggregation Type")]
         public AggregationMetricOptions.AggregationOperations SelectedAggregationOperation { get; set; }
-        public List<AggregationMetricOptions.ChartTypes>  ChartTypesList { get; set; }
-        public AggregationMetricOptions.ChartTypes SelectedChartType  { get; set; }
+
+        public List<string> ChartTypesList { get; set; } = new List<string>();
+        [Display(Name="Chart Types")]
+        public string SelectedChartType  { get; set; }
+        //public List<AggregationMetricOptions.ChartTypes> ChartTypesList { get; set; }
+        //[Display(Name = "Chart Types")]
+        //public AggregationMetricOptions.ChartTypes SelectedChartType { get; set; }
         public virtual List<int> LaneTypeIDs { get; set; }
         public virtual ICollection<LaneType> AllLaneTypes { get; set; }
         ////public List<SelectListItem> AggregateMetricsList { get; set; }
@@ -45,7 +54,6 @@ namespace SPM.Models
         public bool IsSum { get; set; }
         //public List<string> WeekdayWeekendIDs { get; set; }
         //public ICollection<string> SelectedWeekdayWeekend { get; set; }
-        public MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.ChartTypes AggChartTypes { get; set; }
         //public string ColorSelection { get; set; }
         //public List<Route> Routes { get; set; }
         //public int SelectedRouteId { get; set; }
@@ -75,20 +83,14 @@ namespace SPM.Models
         public string EndTime { get; set; }
         [Display(Name = "End AM/PM")]
         public string SelectedEndAMPM { get; set; }
-
         public List<SelectListItem> StartAMPMList { get; set; }
         public List<SelectListItem> EndAMPMList { get; set; }
-
-        //[Required]
-        //[DataMember]
-        //[Display(Name = "Volume Bin Size")]
-        public List<MOE.Common.Business.Bins.BinFactoryOptions.BinSizes> BinSizeList { get; set; }
+        public List<MOE.Common.Business.Bins.BinFactoryOptions.BinSize> BinSizeList { get; set; }
         [Display(Name = "Bin Size")]
-        public BinFactoryOptions.BinSizes SelectedBinSize { get; set; }
-        //[DataMember]
-        //public List<string> BinSizeList { get; set; }
+        public BinFactoryOptions.BinSize SelectedBinSize { get; set; }
 
-        //public int? Count { get; set; }
+        public int SeriesWidth { get; set; }
+        public List<int> SeriesWidthList { get; set; } = new List<int>();
 
         private IMetricTypeRepository _metricRepository;
         public AggDataExportViewModel()
@@ -103,11 +105,34 @@ namespace SPM.Models
             SetXAxisAggregationOptions();
             SetAggregationOperations();
             SetChartTypes();
+            SetSeriesWidth();
+        }
+
+        private void SetSeriesWidth()
+        {
+            for (int i = 1; i < 6; i++)
+            {
+                SeriesWidthList.Add(i);
+            }
         }
 
         private void SetChartTypes()
         {
-            ChartTypesList = new List<AggregationMetricOptions.ChartTypes>{AggregationMetricOptions.ChartTypes.Column, AggregationMetricOptions.ChartTypes.Line, AggregationMetricOptions.ChartTypes.StackedColumn, AggregationMetricOptions.ChartTypes.StackedLine, AggregationMetricOptions.ChartTypes.Pie};
+            List<SeriesChartType> chartTypes = Enum.GetValues(typeof(SeriesChartType)).Cast<SeriesChartType>().ToList();
+            var chartsToExclude = new List<SeriesChartType>
+            {
+                SeriesChartType.Kagi,
+                SeriesChartType.Renko,
+                SeriesChartType.Stock,
+                SeriesChartType.Pyramid,
+                SeriesChartType.PointAndFigure
+            };
+            foreach (var chartType in chartTypes)
+            {
+                if(!chartsToExclude.Contains(chartType) )
+                    ChartTypesList.Add(chartType.ToString());
+            }
+            ChartTypesList.Sort();
         }
 
         private void SetAggregationOperations()
@@ -117,20 +142,16 @@ namespace SPM.Models
 
         private void SetXAxisAggregationOptions()
         {
-            AggSeriesOptions = new List<AggregationMetricOptions.XAxisAggregationSeriesOptions>();
-            AggSeriesOptions.AddRange(new List<AggregationMetricOptions.XAxisAggregationSeriesOptions>{AggregationMetricOptions.XAxisAggregationSeriesOptions.Time, AggregationMetricOptions.XAxisAggregationSeriesOptions.Approach, AggregationMetricOptions.XAxisAggregationSeriesOptions.Direction, AggregationMetricOptions.XAxisAggregationSeriesOptions.Route, AggregationMetricOptions.XAxisAggregationSeriesOptions.Signal, AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByDirection, AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase});
+            AggSeriesOptions = Enum.GetValues(typeof(AggregationMetricOptions.XAxisAggregationSeriesOptions)).Cast<AggregationMetricOptions.XAxisAggregationSeriesOptions>().ToList();
         }
 
         protected void SetBinSizeList()
         {
-            BinSizeList = new List<BinFactoryOptions.BinSizes>();
-            BinSizeList.AddRange(new List<BinFactoryOptions.BinSizes>{BinFactoryOptions.BinSizes.FifteenMinutes, BinFactoryOptions.BinSizes.ThirtyMinutes, BinFactoryOptions.BinSizes.Hour, BinFactoryOptions.BinSizes.Day, BinFactoryOptions.BinSizes.Month, BinFactoryOptions.BinSizes.Year});
+            BinSizeList = Enum.GetValues(typeof(BinFactoryOptions.BinSize)).Cast<BinFactoryOptions.BinSize>().ToList();
         }
 
         protected void SetDefaultDates()
         {
-            StartDateDay = Convert.ToDateTime("10/17/2017");
-            EndDateDay = Convert.ToDateTime("10/18/2017");
             StartAMPMList = new List<SelectListItem>();
             StartAMPMList.Add(new SelectListItem { Value = "AM", Text = "AM", Selected = true });
             StartAMPMList.Add(new SelectListItem { Value = "PM", Text = "PM" });

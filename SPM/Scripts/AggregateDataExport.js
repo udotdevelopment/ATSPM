@@ -1,12 +1,12 @@
 ﻿$(function (ready) {
-    SetDateTextBoxes
+    SetDateTextBoxes();
 
 });
 
 function SetDateTextBoxes (){
     $(".datepicker").attr('type', 'text');
-    $("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
-    $("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
+    //$("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
+    //$("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
     $("#StartEndDaySelector").datepicker({
         onSelect: function (dateText) {
             $("#StartDateDay").val(dateText);
@@ -27,7 +27,6 @@ function LoadRoute() {
         success: function (data) {
             $('#RouteSignals').html(data);
             $.validator.unobtrusive.parse($("#RouteSignals"));
-            SetDateTextBoxes();
         },
         onerror: function () { alert("Error"); }
     });

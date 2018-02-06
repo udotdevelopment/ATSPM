@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
@@ -53,7 +54,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.FifteenMinutes,
+                BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
@@ -61,9 +62,9 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
             options.SignalIds.Add("104");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
 
             //Test Approach level stats
@@ -97,8 +98,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 1152);
-                Assert.IsTrue(binsContainer.AverageValue == 12);
+                Assert.IsTrue(signalBinsContainer.SumValue == 1152);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 12);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -124,7 +125,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
-                BinFactoryOptions.BinSizes.FifteenMinutes,
+                BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
@@ -132,9 +133,9 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
             options.SignalIds.Add("104");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
 
             //Test Approach level stats
@@ -168,8 +169,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 48);
-                Assert.IsTrue(binsContainer.AverageValue == 12);
+                Assert.IsTrue(signalBinsContainer.SumValue == 48);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 12);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -196,7 +197,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.ThirtyMinutes,
+                BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
@@ -204,9 +205,9 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
             options.SignalIds.Add("104");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
 
             //Test Approach level stats
@@ -240,8 +241,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 1152);
-                Assert.IsTrue(binsContainer.AverageValue == 24);
+                Assert.IsTrue(signalBinsContainer.SumValue == 1152);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 24);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -267,7 +268,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
-                BinFactoryOptions.BinSizes.ThirtyMinutes,
+                BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
@@ -275,9 +276,9 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
             options.SignalIds.Add("104");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
 
             //Test Approach level stats
@@ -311,8 +312,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 48);
-                Assert.IsTrue(binsContainer.AverageValue == 24);
+                Assert.IsTrue(signalBinsContainer.SumValue == 48);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 24);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -338,7 +339,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.Hour,
+                BinFactoryOptions.BinSize.Hour,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
@@ -346,9 +347,9 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
             options.SignalIds.Add("104");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
 
             //Test Approach level stats
@@ -382,8 +383,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 1152);
-                Assert.IsTrue(binsContainer.AverageValue == 48);
+                Assert.IsTrue(signalBinsContainer.SumValue == 1152);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 48);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -409,7 +410,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 6, 0, 10, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
-                BinFactoryOptions.BinSizes.Hour,
+                BinFactoryOptions.BinSize.Hour,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
@@ -417,9 +418,9 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
             options.SignalIds.Add("104");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
 
             //Test Approach level stats
@@ -453,8 +454,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 192);
-                Assert.IsTrue(binsContainer.AverageValue == 48);
+                Assert.IsTrue(signalBinsContainer.SumValue == 192);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 48);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -480,7 +481,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("11/1/2017"),
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.Day,
+                BinFactoryOptions.BinSize.Day,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
@@ -488,9 +489,9 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
             options.SignalIds.Add("104");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
 
             //Test Approach level stats
@@ -525,8 +526,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 35712);
-                Assert.IsTrue(binsContainer.AverageValue == 1152);
+                Assert.IsTrue(signalBinsContainer.SumValue == 35712);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 1152);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -552,7 +553,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("11/1/2017"),
                 6, 0, 10, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
-                BinFactoryOptions.BinSizes.Day,
+                BinFactoryOptions.BinSize.Day,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
@@ -560,9 +561,9 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
             options.SignalIds.Add("104");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
 
             //Test Approach level stats
@@ -596,8 +597,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 5952);
-                Assert.IsTrue(binsContainer.AverageValue == 192);
+                Assert.IsTrue(signalBinsContainer.SumValue == 5952);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 192);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -623,7 +624,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.Month,
+                BinFactoryOptions.BinSize.Month,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
@@ -631,9 +632,9 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
             options.SignalIds.Add("104");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
 
             //Test Approach level stats
@@ -668,8 +669,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 420480);
-                Assert.IsTrue(binsContainer.AverageValue == 35040);
+                Assert.IsTrue(signalBinsContainer.SumValue == 420480);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 35040);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -695,7 +696,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
                 7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
-                BinFactoryOptions.BinSizes.Month,
+                BinFactoryOptions.BinSize.Month,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
@@ -703,9 +704,9 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
             options.SignalIds.Add("104");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
 
             //Test Approach level stats
@@ -739,8 +740,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 48 * DateTime.DaysInMonth(binsContainers[i].Start.Year, binsContainers[i].Start.Month));
-                Assert.IsTrue(binsContainer.AverageValue == 48);
+                Assert.IsTrue(signalBinsContainer.SumValue == 48 * DateTime.DaysInMonth(binsContainers[i].Start.Year, binsContainers[i].Start.Month));
+                Assert.IsTrue(signalBinsContainer.AverageValue == 48);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -766,7 +767,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"),
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.Year,
+                BinFactoryOptions.BinSize.Year,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
@@ -774,9 +775,9 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
             options.SignalIds.Add("104");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
 
             //Test Approach level stats
@@ -817,8 +818,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 842112);
-                Assert.IsTrue(binsContainer.AverageValue == 421056);
+                Assert.IsTrue(signalBinsContainer.SumValue == 842112);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 421056);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -851,7 +852,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"),
                 7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
-                BinFactoryOptions.BinSizes.Year,
+                BinFactoryOptions.BinSize.Year,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
@@ -859,9 +860,9 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
             options.SignalIds.Add("104");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
 
             //Test Approach level stats
@@ -905,13 +906,13 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
                 if (DateTime.IsLeapYear(binsContainer.Start.Year))
                 {
-                    Assert.IsTrue(binsContainer.SumValue == 17568);
+                    Assert.IsTrue(signalBinsContainer.SumValue == 17568);
                 }
                 else
                 {
-                    Assert.IsTrue(binsContainer.SumValue == 17520);
+                    Assert.IsTrue(signalBinsContainer.SumValue == 17520);
                 }
-                Assert.IsTrue(binsContainer.AverageValue == 48);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 48);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -932,17 +933,17 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
+            //options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
-                null, null, null, null, null, BinFactoryOptions.BinSizes.FifteenMinutes,
+                null, null, null, null, null, BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers, 2);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], 2);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 1);
 
             //Test Approach level stats
@@ -976,8 +977,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 288);
-                Assert.IsTrue(binsContainer.AverageValue == 3);
+                Assert.IsTrue(signalBinsContainer.SumValue == 288);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 3);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -998,18 +999,18 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
+            //options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
-                7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday }, BinFactoryOptions.BinSizes.FifteenMinutes,
+                7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday }, BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers, 2);
-            Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 1);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
+            Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
 
             //Test Approach level stats
             foreach (var approachSplitFailAggregationContainer in splitAggregationBySignal.ApproachSplitFailures)
@@ -1042,19 +1043,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 12);
-                Assert.IsTrue(binsContainer.AverageValue == 3);
+                Assert.IsTrue(signalBinsContainer.SumValue == 48);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 12);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
                     var signalBin = signalBinsContainer.Bins[binIndex];
                     Assert.IsTrue(bin.Start == signalBin.Start);
                     Assert.IsTrue(bin.End == signalBin.End);
-                    Assert.IsTrue(signalBin.Sum == 3);
+                    Assert.IsTrue(signalBin.Sum == 12);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 12);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 3);
+            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 48);
+            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 12);
         }
 
         [TestMethod()]
@@ -1064,17 +1065,17 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
+            //options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
-                null, null, null, null, null, BinFactoryOptions.BinSizes.FifteenMinutes,
+                null, null, null, null, null, BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers, options.Signals.FirstOrDefault().Approaches.FirstOrDefault().DirectionType);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], options.Signals.FirstOrDefault().Approaches.FirstOrDefault().DirectionType);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 1);
 
             //Test Approach level stats
@@ -1108,8 +1109,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 288);
-                Assert.IsTrue(binsContainer.AverageValue == 3);
+                Assert.IsTrue(signalBinsContainer.SumValue == 288);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 3);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -1130,17 +1131,17 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
-            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
+            //options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
-                7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday }, BinFactoryOptions.BinSizes.FifteenMinutes,
+                7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday }, BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers, options.Signals.FirstOrDefault().Approaches.FirstOrDefault().DirectionType);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], options.Signals.FirstOrDefault().Approaches.FirstOrDefault().DirectionType);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 1);
 
             //Test Approach level stats
@@ -1174,8 +1175,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                 Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                 Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                Assert.IsTrue(binsContainer.SumValue == 12);
-                Assert.IsTrue(binsContainer.AverageValue == 3);
+                Assert.IsTrue(signalBinsContainer.SumValue == 12);
+                Assert.IsTrue(signalBinsContainer.AverageValue == 3);
                 for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                 {
                     var bin = binsContainer.Bins[binIndex];
@@ -1201,7 +1202,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.FifteenMinutes,
+                BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
@@ -1209,9 +1210,9 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
             options.SignalIds.Add("104");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.GetSplitFailsByDirection(options.Signals.FirstOrDefault().Approaches.FirstOrDefault().DirectionType) == 288);
 
         }
@@ -1228,7 +1229,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null,
-                BinFactoryOptions.BinSizes.FifteenMinutes,
+                BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("102");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
@@ -1236,10 +1237,137 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
             options.SignalIds.Add("104");
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
-            options.ChartType = AggregationMetricOptions.ChartTypes.Column;
+            options.ChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], binsContainers);
+            SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.GetAverageSplitFailsByDirection(options.Signals.FirstOrDefault().Approaches.FirstOrDefault().DirectionType) == 288);
         }
+
+        [TestMethod()]
+        public void TestSumValuesOnDifferentBinSizesTest()
+        {
+            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+            options.StartDate = Convert.ToDateTime("1/1/2017");
+            options.EndDate = Convert.ToDateTime("1/1/2018");
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.TimeOptions = new BinFactoryOptions(
+                Convert.ToDateTime("1/1/2017"),
+                Convert.ToDateTime("1/1/2018"),
+                null, null, null, null, null,
+                BinFactoryOptions.BinSize.FifteenMinute,
+                BinFactoryOptions.TimeOptions.StartToEnd);
+            options.SignalIds.Add("102");
+            options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
+            options.ChartType = SeriesChartType.Column;
+            List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
+            SplitFailAggregationBySignal splitAggregationBySignal15Minute = new SplitFailAggregationBySignal(options, options.Signals[0]);
+            int fifteenMinuteSum = 0;
+            foreach (var binsContainer in splitAggregationBySignal15Minute.BinsContainers)
+            {
+                fifteenMinuteSum += binsContainer.SumValue;
+            }
+            splitAggregationBySignal15Minute = null;
+            options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.ThirtyMinute;
+            binsContainers = BinFactory.GetBins(options.TimeOptions);
+            SplitFailAggregationBySignal splitAggregationBySignal30Minute = new SplitFailAggregationBySignal(options, options.Signals[0]);
+            int thirtyMinuteSum = 0;
+            foreach (var binsContainer in splitAggregationBySignal30Minute.BinsContainers)
+            {
+                thirtyMinuteSum += binsContainer.SumValue;
+            }
+            splitAggregationBySignal30Minute = null;
+            Assert.IsTrue(fifteenMinuteSum == thirtyMinuteSum);
+            options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.Hour;
+            binsContainers = BinFactory.GetBins(options.TimeOptions);
+            SplitFailAggregationBySignal splitAggregationBySignalHour = new SplitFailAggregationBySignal(options, options.Signals[0]);
+            int hourSum = 0;
+            foreach (var binsContainer in splitAggregationBySignalHour.BinsContainers)
+            {
+                hourSum += binsContainer.SumValue;
+            }
+            splitAggregationBySignalHour = null;
+            Assert.IsTrue(fifteenMinuteSum == hourSum);
+            options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.Day;
+            binsContainers = BinFactory.GetBins(options.TimeOptions);
+            SplitFailAggregationBySignal splitAggregationBySignalDay = new SplitFailAggregationBySignal(options, options.Signals[0]);
+            int daySum = 0;
+            foreach (var binsContainer in splitAggregationBySignalDay.BinsContainers)
+            {
+                daySum += binsContainer.SumValue;
+            }
+            splitAggregationBySignalDay = null;
+            Assert.IsTrue(fifteenMinuteSum == daySum);
+            options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.Month;
+            binsContainers = BinFactory.GetBins(options.TimeOptions);
+            SplitFailAggregationBySignal splitAggregationBySignalMonth = new SplitFailAggregationBySignal(options, options.Signals[0]);
+            int monthSum = 0;
+            foreach (var binsContainer in splitAggregationBySignalMonth.BinsContainers)
+            {
+                monthSum += binsContainer.SumValue;
+            }
+            splitAggregationBySignalMonth = null;
+            Assert.IsTrue(fifteenMinuteSum == monthSum);
+            options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.Year;
+            binsContainers = BinFactory.GetBins(options.TimeOptions);
+            SplitFailAggregationBySignal splitAggregationBySignalYear = new SplitFailAggregationBySignal(options, options.Signals[0]);
+            int yearSum = 0;
+            foreach (var binsContainer in splitAggregationBySignalYear.BinsContainers)
+            {
+                yearSum += binsContainer.SumValue;
+            }
+            splitAggregationBySignalYear = null;
+        }
+
+        [TestMethod()]
+        public void TimeSumToSignalSumTest()
+        {
+            var signalsRepository = SignalsRepositoryFactory.Create();
+            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+            options.StartDate = Convert.ToDateTime("1/1/2017");
+            options.EndDate = Convert.ToDateTime("1/2/2017");
+            options.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
+            options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Time;
+            options.TimeOptions = new BinFactoryOptions(
+                Convert.ToDateTime("1/1/2017"),
+            Convert.ToDateTime("1/2/2017"),
+            null, null, null, null, null,
+            BinFactoryOptions.BinSize.FifteenMinute,
+            BinFactoryOptions.TimeOptions.StartToEnd);
+            options.SignalIds.Add("102");
+            foreach (var signal in options.SignalIds)
+            {
+                options.Signals.Add(signalsRepository.GetLatestVersionOfSignalBySignalID(signal));
+            }
+            options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
+            options.ChartType = SeriesChartType.Column;
+            List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
+            SplitFailAggregationBySignal splitAggregationBySignal15Minute =
+                new SplitFailAggregationBySignal(options, options.Signals[0]);
+
+
+            ApproachSplitFailAggregationOptions options2 = new ApproachSplitFailAggregationOptions();
+            options2.StartDate = Convert.ToDateTime("1/1/2017");
+            options2.EndDate = Convert.ToDateTime("1/2/2017");
+            options2.AggregationOperation = AggregationMetricOptions.AggregationOperations.Sum;
+            options2.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.Signal;
+            options2.TimeOptions = new BinFactoryOptions(
+                Convert.ToDateTime("1/1/2017"),
+                Convert.ToDateTime("1/2/2017"),
+                null, null, null, null, null,
+                BinFactoryOptions.BinSize.FifteenMinute,
+                BinFactoryOptions.TimeOptions.StartToEnd);
+            options2.SignalIds.Add("102");
+            foreach (var signal in options2.SignalIds)
+            {
+                options2.Signals.Add(signalsRepository.GetLatestVersionOfSignalBySignalID(signal));
+            }
+            options2.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
+            options2.ChartType = SeriesChartType.Column;
+            Assert.IsTrue(splitAggregationBySignal15Minute.BinsContainers.FirstOrDefault().SumValue == options2.GetSignalSumDataPoint(options.Signals.FirstOrDefault()));
+
+        }
+
     }
+
 }

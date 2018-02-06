@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
 using SPM.Models;
@@ -40,18 +41,18 @@ namespace SPM.Controllers
             {
                 aggDataExportViewModel.Signals.Add(signalRepository.GetLatestVersionOfSignalBySignalID(routeignal.SignalId));
             }
-            List<MetricType> allMetricTypes = metricTyperepository.GetAllToAggregateMetrics();
-            foreach (var metricType in allMetricTypes)
-            {
-                aggDataExportViewModel.MetricItems.Add(metricType.MetricID, metricType.ChartName);
-            }
-            List<DirectionType> allDirectionTypes = directionTypeRepository.GetAllDirections();
-            List<MovementType> allMovementTypes = movementTypeRepository.GetAllMovementTypes();
-            List<LaneType> allLaneTypes = laneTypeRepository.GetAllLaneTypes();
-            aggDataExportViewModel.AllMetricTypes = allMetricTypes;
-            aggDataExportViewModel.AllApproachTypes = allDirectionTypes;
-            aggDataExportViewModel.AllMovementTypes = allMovementTypes;
-            aggDataExportViewModel.AllLaneTypes = allLaneTypes;
+            //List<MetricType> allMetricTypes = metricTyperepository.GetAllToAggregateMetrics();
+            //foreach (var metricType in allMetricTypes)
+            //{
+            //    aggDataExportViewModel.MetricItems.Add(metricType.MetricID, metricType.ChartName);
+            //}
+            //List<DirectionType> allDirectionTypes = directionTypeRepository.GetAllDirections();
+            //List<MovementType> allMovementTypes = movementTypeRepository.GetAllMovementTypes();
+            //List<LaneType> allLaneTypes = laneTypeRepository.GetAllLaneTypes();
+            //aggDataExportViewModel.AllMetricTypes = allMetricTypes;
+            //aggDataExportViewModel.AllApproachTypes = allDirectionTypes;
+            //aggDataExportViewModel.AllMovementTypes = allMovementTypes;
+            //aggDataExportViewModel.AllLaneTypes = allLaneTypes;
             return PartialView(aggDataExportViewModel);
         }
 
@@ -65,6 +66,7 @@ namespace SPM.Controllers
             options.EndDate = aggDataExportViewModel.EndDateDay;
             options.AggregationOperation = aggDataExportViewModel.SelectedAggregationOperation;
             options.XAxisAggregationSeriesOption = aggDataExportViewModel.SelectedAggregationSeriesOptions;
+            options.SeriesWidth = aggDataExportViewModel.SeriesWidth;
             string[] startTime;
             string[] endTime;
             int? startHour = null;
@@ -124,7 +126,9 @@ namespace SPM.Controllers
             {
                 options.SignalIds.Add(signal.SignalID);
             }
-            options.ChartType = aggDataExportViewModel.SelectedChartType;
+            SeriesChartType tempSeriesChartType;
+            Enum.TryParse(aggDataExportViewModel.SelectedChartType, out tempSeriesChartType);
+            options.ChartType = tempSeriesChartType;
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             MetricGeneratorService.MetricGeneratorClient client =
                     new MetricGeneratorService.MetricGeneratorClient();
@@ -145,11 +149,26 @@ namespace SPM.Controllers
         // GET: DataExportViewModels
         public ActionResult Index()
         {
-            AggDataExportViewModel viewModel = new AggDataExportViewModel();
             var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
-            viewModel.Routes = routeRepository.GetAllRoutes();
+            AggDataExportViewModel aggDataExportViewModel = new AggDataExportViewModel();
+            aggDataExportViewModel.Routes = routeRepository.GetAllRoutes();
+            List<MetricType> allMetricTypes = metricTyperepository.GetAllToAggregateMetrics();
+            foreach (var metricType in allMetricTypes)
+            {
+                aggDataExportViewModel.MetricItems.Add(metricType.MetricID, metricType.ChartName);
+            }
+            List<DirectionType> allDirectionTypes = directionTypeRepository.GetAllDirections();
+            List<MovementType> allMovementTypes = movementTypeRepository.GetAllMovementTypes();
+            List<LaneType> allLaneTypes = laneTypeRepository.GetAllLaneTypes();
+            aggDataExportViewModel.AllMetricTypes = allMetricTypes;
+            aggDataExportViewModel.AllApproachTypes = allDirectionTypes;
+            aggDataExportViewModel.AllMovementTypes = allMovementTypes;
+            aggDataExportViewModel.AllLaneTypes = allLaneTypes;
+            aggDataExportViewModel.SelectedMetric = 4;
 
-            return View(viewModel);
+            aggDataExportViewModel.StartDateDay = Convert.ToDateTime("10/17/2017");
+            aggDataExportViewModel.EndDateDay = Convert.ToDateTime("10/18/2017");
+            return View(aggDataExportViewModel);
         }
 
         private int[] SplitHourMinute(String timeFromFrontEnd)

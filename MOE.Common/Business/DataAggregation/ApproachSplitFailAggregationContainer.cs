@@ -15,8 +15,9 @@ namespace MOE.Common.Business.DataAggregation
         public Approach Approach { get; }
         public List<BinsContainer> BinsContainers { get; set; } = new List<BinsContainer>();
 
-        public ApproachSplitFailAggregationContainer(Approach approach, List<BinsContainer> binsContainers, DateTime startDate, DateTime endDate, bool getProtectedPhase)
+        public ApproachSplitFailAggregationContainer(Approach approach, BinFactoryOptions TimeOptions, DateTime startDate, DateTime endDate, bool getProtectedPhase)
         {
+            BinsContainers = BinFactory.GetBins(TimeOptions);
             Approach = approach;
             var splitFailAggregationRepository =
                 Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.Create();
@@ -27,7 +28,7 @@ namespace MOE.Common.Business.DataAggregation
             {
                 ConcurrentBag<BinsContainer> concurrentBinContainers = new ConcurrentBag<BinsContainer>();
                 //foreach (var binsContainer in binsContainers)
-                Parallel.ForEach(binsContainers, binsContainer =>
+                Parallel.ForEach(BinsContainers, binsContainer =>
                 {
                     BinsContainer tempBinsContainer =
                         new BinsContainer(binsContainer.Start, binsContainer.End);
