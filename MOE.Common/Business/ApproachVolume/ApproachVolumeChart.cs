@@ -169,7 +169,7 @@ namespace MOE.Common.Business.ApproachVolume
             chartArea.Name = "ChartArea1";
             chartArea.AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
 
-            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Minimum = options.YAxisMin;
             if (options.YAxisMax != null)
             {
                 chartArea.AxisY.Maximum = options.YAxisMax ?? 0;

@@ -42,6 +42,7 @@ namespace MOE.CommonTests.Models
         public List<Common.Models.Route> Routes = new List<Route>();
         public List<Common.Models.RouteSignal> RouteSignals = new List<RouteSignal>();
         public List<Common.Models.RoutePhaseDirection> RoutePhaseDirection = new List<RoutePhaseDirection>();
+        public List<Common.Models.Controller_Event_Log> Controller_Event_Log = new List<Controller_Event_Log>();
 
 
         public void ClearTables()
