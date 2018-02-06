@@ -353,7 +353,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void GetTimeXAxisRouteSeriesChart(List<Models.Signal> signals, Chart chart)
         {
-            List<BinsContainer> binsContainers =  SetSumBinsContainersByRoute(signals, binsContainers);
+            Series series = CreateSeries(0, "Route");
+            List<BinsContainer> binsContainers =  GetSumBinsContainersByRoute(signals);
+            foreach (var binsContainer in binsContainers)
+            {
+                foreach (var bin in binsContainer.Bins)
+                {
+                    series.Points.Add(AggregationOperation == AggregationOperations.Sum ? GetDataPointForSum(bin) : GetDataPointForAverage(bin));
+                }
+            }
+            chart.Series.Add(series);
         }
 
         private void GetTimeXAxisDirectionSeriesChart(Models.Signal signal, Chart chart)
@@ -517,8 +526,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void GetTimeXAxisRouteChart(List<Models.Signal> signals, Chart chart)
         {
+            throw new NotImplementedException();
             List<BinsContainer> binsContainers = BinFactory.GetBins(TimeOptions);
-            SetSumBinsContainersByRoute(signals, binsContainers);
+            //GetSumBinsContainersByRoute(signals, binsContainers);
             if (
                 TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod &&
                 new List<BinFactoryOptions.BinSize>{ BinFactoryOptions.BinSize.Month, BinFactoryOptions.BinSize.Year}.Contains(TimeOptions.SelectedBinSize))
@@ -554,7 +564,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        protected abstract void SetSumBinsContainersByRoute(List<Models.Signal> signals, List<BinsContainer> binsContainers);
+        protected abstract List<BinsContainer> GetSumBinsContainersByRoute(List<Models.Signal> signals);
 
         protected void GetTimeXAxisSignalSeriesChart(List<Models.Signal> signals, Chart chart)
         {

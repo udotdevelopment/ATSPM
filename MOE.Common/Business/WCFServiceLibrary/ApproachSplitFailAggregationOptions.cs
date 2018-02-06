@@ -59,7 +59,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override int GetSumByDirection(Models.Signal signal, DirectionType direction)
         {
-            var binsContainers = BinFactory.GetBins(TimeOptions);
             SplitFailAggregationBySignal splitFailAggregationBySignal =
                 new SplitFailAggregationBySignal(this, signal, direction);
             return splitFailAggregationBySignal.TotalSplitFailures;
@@ -67,7 +66,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
         
         protected override int GetSignalAverageDataPoint(Models.Signal signal)
         {
-            var binsContainers = BinFactory.GetBins(TimeOptions);
             SplitFailAggregationBySignal splitFailAggregationBySignal =
                 new SplitFailAggregationBySignal(this, signal);
             return splitFailAggregationBySignal.AverageSplitFailures;
@@ -76,21 +74,20 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal)
         {
-            var binsContainers = BinFactory.GetBins(TimeOptions);
             SplitFailAggregationBySignal splitFailAggregationBySignal = new SplitFailAggregationBySignal(this, signal);
             return splitFailAggregationBySignal.BinsContainers;
         }
 
         protected override List<BinsContainer> GetBinsContainersByDirection(DirectionType directionType, Models.Signal signal)
         {
-            var binsContainers = BinFactory.GetBins(TimeOptions);
             SplitFailAggregationBySignal splitFailAggregationBySignal =
                 new SplitFailAggregationBySignal(this, signal, directionType);
             return splitFailAggregationBySignal.BinsContainers;
         }
 
-        protected override void SetSumBinsContainersByRoute(List<Models.Signal> signals, List<BinsContainer> binsContainers)
+        protected override List<BinsContainer> GetSumBinsContainersByRoute(List<Models.Signal> signals)
         {
+            var binsContainers = BinFactory.GetBins(TimeOptions);
             foreach (var signal in signals)
             {
                 SplitFailAggregationBySignal splitFail = new SplitFailAggregationBySignal(this, signal);
@@ -103,8 +100,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         bin.Average = Convert.ToInt32(Math.Round((double) (bin.Sum / signals.Count)));
                     }
                 }
-
             }
+            return binsContainers;
         }
         
         protected override List<BinsContainer> SetBinsContainersByApproach(Models.Approach approach, bool getprotectedPhase)
