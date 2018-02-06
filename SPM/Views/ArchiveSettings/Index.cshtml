@@ -1,60 +1,61 @@
-﻿@using MvcCheckBoxList.Model;
+﻿@using MOE.Common.Models
+@using MvcCheckBoxList.Model;
 @using SPM.Models
-@model SPM.Models.ArchiveSettingsViewModel
+@model global::SPM.Models.ArchiveSettingsViewModel
 
 
 <div class="col-md-12 col-sm-12 col-xs-12">
-    @Html.LabelFor(model => model.TablePartitionsList, new { @class = "control-label" })
+    @Html.LabelFor(model => model.DbArchiveSettings.TablePartitionsList, new { @class = "control-label" })
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12">
-    @Html.RadioButtonFor(model => model.TablePartitionsList, ArchiveSettingsViewModel.TablePartition.Off, htmlAttributes: new { @id = "IsOff", @name = "IsOff", @onclick = "OffOptions()" })
+    @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, TablePartition.Off, htmlAttributes: new { @id = "IsOff", @name = "IsOff", @onclick = "OffOptions()" })
     <label>Off</label>
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12">
-    @Html.RadioButtonFor(model => model.TablePartitionsList, ArchiveSettingsViewModel.TablePartition.PartitionTables, htmlAttributes: new { @id = "IsPartitionTables", @name = "IsPartitionTables", @onclick = "PartitionTablesOptions()" })
+    @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, TablePartition.PartitionTables, htmlAttributes: new { @id = "IsPartitionTables", @name = "IsPartitionTables", @onclick = "PartitionTablesOptions()" })
     <label>Partition Tables</label>
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12">
-    @Html.RadioButtonFor(model => model.TablePartitionsList, ArchiveSettingsViewModel.TablePartition.NonPartitionTables, htmlAttributes: new { @id = "IsNonPartitionTables", @name = "IsNonPartitionTables", @onclick = "NonPartitionTablesOptions()" })
+    @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, TablePartition.NonPartitionTables, htmlAttributes: new { @id = "IsNonPartitionTables", @name = "IsNonPartitionTables", @onclick = "NonPartitionTablesOptions()" })
     <label>Non Partition Tables</label>
 </div>
 
 <div id="DivOff" class="hidden">
     <div id="DivMonthsToRemoveIndex" class="hidden">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            @Html.LabelFor(model => model.MonthsToRemoveIndex, new { @class = "control-label" })
-            @Html.EditorFor(model => model.MonthsToRemoveIndex, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.LabelFor(model => model.DbArchiveSettings.MonthsToRemoveIndex, new { @class = "control-label" })
+            @Html.EditorFor(model => model.DbArchiveSettings.MonthsToRemoveIndex, new { htmlAttributes = new { @class = "form-control" } })
         </div>
     </div>
 
     <div cclass="col-md-12 col-sm-12 col-xs-12">
-        @Html.LabelFor(model => model.MonthsToRemoveData, new { @class = "control-label" })
-        @Html.EditorFor(model => model.MonthsToRemoveData, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.LabelFor(model => model.DbArchiveSettings.MonthsToRemoveData, new { @class = "control-label" })
+        @Html.EditorFor(model => model.DbArchiveSettings.MonthsToRemoveData, new { htmlAttributes = new { @class = "form-control" } })
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12">
         @*@Html.DropDownListFor(model => model.SelecteDeleteOrMove, new SelectList(Model.DeleteOrMoveOptionList), new { @class = "form-control" })*@
-        @Html.RadioButtonFor(model => model.DeleteOrMoveOptionList, ArchiveSettingsViewModel.DeleteOrMove.Delete, htmlAttributes: new { @id = "IsDelete", @name = "IsDelete", @onclick = "DeleteOptions()" })
+        @Html.RadioButtonFor(model => model.DbArchiveSettings.DeleteOrMoveOptionList, DeleteOrMove.Delete, htmlAttributes: new { @id = "IsDelete", @name = "IsDelete", @onclick = "DeleteOptions()" })
         <label>Delete</label>
-        @Html.RadioButtonFor(model => model.DeleteOrMoveOptionList, ArchiveSettingsViewModel.DeleteOrMove.Move, htmlAttributes: new { @id = "IsMove", @name = "IsMove", @onclick = "MoveOptions()" })
+        @Html.RadioButtonFor(model => model.DbArchiveSettings.DeleteOrMoveOptionList, DeleteOrMove.Move, htmlAttributes: new { @id = "IsMove", @name = "IsMove", @onclick = "MoveOptions()" })
         <label>Move</label>
         <div id="DivMovePath" class="hidden">
-            @Html.LabelFor(model => model.ArchivePath, new { @class = "control-label" })
-            @Html.EditorFor(model => model.ArchivePath, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.LabelFor(model => model.DbArchiveSettings.ArchivePath, new { @class = "control-label" })
+            @Html.EditorFor(model => model.DbArchiveSettings.ArchivePath, new { htmlAttributes = new { @class = "form-control" } })
         </div>
     </div>
     <h4>
         Hours to perform Archive:
     </h4>
     <div class="col-md-6 col-sm-6 col-xs-6">
-        @Html.LabelFor(model => model.StartTime, htmlAttributes: new { @class = "control-label" })
+        @Html.LabelFor(model => model.DbArchiveSettings.StartTime, htmlAttributes: new { @class = "control-label" })
         <div class="input-group-custom">
-            @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
+            @Html.EditorFor(model => model.DbArchiveSettings.StartTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
         </div>
     </div>
     <div class="col-md-6 col-sm-6 col-xs-6">
         <div id="DivEndTime" class="hidden" class="input-group-custom">
-            @Html.LabelFor(model => model.EndTime, htmlAttributes: new { @class = "control-label" })
-            @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
+            @Html.LabelFor(model => model.DbArchiveSettings.EndTime, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.DbArchiveSettings.EndTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
         </div>
     </div>
 

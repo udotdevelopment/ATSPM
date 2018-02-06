@@ -51,6 +51,8 @@ namespace MOE.Common.Models
         public virtual DbSet<Application> Applications { get; set; }
         public virtual DbSet<ApplicationSettings> ApplicationSettings { get; set; }
         public virtual DbSet<WatchDogApplicationSettings> WatchdogApplicationSettings { get; set; }
+        public virtual DbSet<DatabaseArchiveSettings> DatabaseArchiveSettings { get; set; }
+        public  virtual DbSet<DatabaseArchiveExcludedSignals> DatabaseArchiveExcludedSignals { get; set; }
         public virtual DbSet<DetectionHardware> DetectionHardwares { get; set; }
         public virtual DbSet<VersionAction> VersionActions { get; set; }
         public virtual DbSet<PreemptionAggregation> PreemptionAggregations { get; set; }
