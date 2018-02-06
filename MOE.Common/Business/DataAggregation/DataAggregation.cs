@@ -43,19 +43,17 @@ namespace MOE.Common.Business.DataAggregation
 
         public void StartAggregation(string[] args)
         {
+            MOE.Common.Models.Repositories.ISignalsRepository signalRep =
+            MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             int binSize = Convert.ToInt32(appSettings["BinSize"]);
             SetStartEndDate(args);
             Console.WriteLine("Starting " + _startDate.ToShortDateString());
             SPM db = new SPM();
             db.Configuration.LazyLoadingEnabled = false;
-            var signals = db.Signals
-                .Where(signal => signal.Enabled == true && signal.SignalID == "5114")
-                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
-                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes.Select(dt => dt.MetricTypes))))
-                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
-                .Include(signal => signal.Approaches.Select(a => a.DirectionType))
-                .ToList();
+            var signals = signalRep.GetLatestVersionOfAllSignals();
+
             var options = new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"]) };
             for (DateTime dt = _startDate; dt < _endDate.AddDays(1); dt = dt.AddMinutes(binSize))
             {
@@ -462,7 +460,7 @@ namespace MOE.Common.Business.DataAggregation
         }
         
 
-        private void SetStartEndDate(string[] args)
+        public void SetStartEndDate(string[] args)
         {
             _startDate = DateTime.Today;
             if (args.Length == 1)
@@ -500,26 +498,26 @@ namespace MOE.Common.Business.DataAggregation
             List<int> preemptCodes = new List<int> { 102, 105 };
             List<int> priorityCodes = new List<int> { 112, 113, 114 };
             Parallel.Invoke(
-            //    () =>
-            //{
-            //    if (records.Count(r => preemptCodes.Contains(r.EventCode)) > 0)
-            //    {
-            //        //Console.Write("\n-Aggregate Preempt data ");
-            //        //dt = DateTime.Now;
-            //        AggregatePreemptCodes(startTime, records, signal, preemptCodes);
-            //        //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
-            //    }
-            //},
-            //()=>
-            //{
-            //    if (records.Count(r => priorityCodes.Contains(r.EventCode)) > 0)
-            //    {
-            //        //Console.Write("\n-Aggregate Priority data ");
-            //        //dt = DateTime.Now;
-            //        AggregatePriorityCodes(startTime, records, signal, priorityCodes);
-            //        //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
-            //    }
-            //},
+                () =>
+            {
+                if (records.Count(r => preemptCodes.Contains(r.EventCode)) > 0)
+                {
+                    //Console.Write("\n-Aggregate Preempt data ");
+                    //dt = DateTime.Now;
+                    AggregatePreemptCodes(startTime, records, signal, preemptCodes);
+                    //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
+                }
+            },
+            () =>
+            {
+                if (records.Count(r => priorityCodes.Contains(r.EventCode)) > 0)
+                {
+                    //Console.Write("\n-Aggregate Priority data ");
+                    //dt = DateTime.Now;
+                    AggregatePriorityCodes(startTime, records, signal, priorityCodes);
+                    //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
+                }
+            },
             () =>
             {
                 if (signal.Approaches != null)
@@ -540,9 +538,9 @@ namespace MOE.Common.Business.DataAggregation
                     if (signalApproach.Detectors != null && signalApproach.Detectors.Count > 0)
                     {
                         Parallel.Invoke(
-                           // () =>{SetApproachSpeedAggregationData(startTime, endTime, signalApproach);},
-                            () =>{SetApproachAggregationData(startTime, endTime, records, signalApproach);}
-                          //  () =>{SetDetectorAggregationData(startTime, endTime, signalApproach);}
+                            () =>{SetApproachSpeedAggregationData(startTime, endTime, signalApproach);},
+                            () =>{SetApproachAggregationData(startTime, endTime, records, signalApproach);},
+                            () =>{SetDetectorAggregationData(startTime, endTime, signalApproach);}
                         );
                     }
                 });
@@ -574,20 +572,20 @@ namespace MOE.Common.Business.DataAggregation
         private void SetApproachAggregationData(DateTime startTime, DateTime endTime, List<Controller_Event_Log> records, Approach approach)
         {
             SetSplitFailData(startTime, endTime, approach, false);
-            //SignalPhase signalPhase = new SignalPhase(startTime, endTime, approach, false, 15, 6, false);
-            //Parallel.Invoke(() =>{SetApproachCycleData(signalPhase, startTime, approach, records, false);},
-            //    () => {SetApproachPcdData(signalPhase, startTime, approach);},
-            //    () => { SetSplitFailData(startTime, endTime, approach, false);},
-            //    () => { SetYellowRedActivationData(startTime, endTime, approach, false);});
+            SignalPhase signalPhase = new SignalPhase(startTime, endTime, approach, false, 15, 6, false);
+            Parallel.Invoke(() => { SetApproachCycleData(signalPhase, startTime, approach, records, false); },
+                () => { SetApproachPcdData(signalPhase, startTime, approach); },
+                () => { SetSplitFailData(startTime, endTime, approach, false); },
+                () => { SetYellowRedActivationData(startTime, endTime, approach, false); });
             if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
             {
                 SetSplitFailData(startTime, endTime, approach, true);
-                //SignalPhase permissiveSignalPhase = new SignalPhase(startTime, endTime, approach, false, 15, 6, true);
-                //Parallel.Invoke(
-                //    () =>{SetApproachCycleData(permissiveSignalPhase, startTime, approach, records, true);},
-                //    () => { SetApproachPcdData(permissiveSignalPhase, startTime, approach); },
-                //    () => { SetSplitFailData(startTime, endTime, approach, true); },
-                //    () => { SetYellowRedActivationData(startTime, endTime, approach, true); });
+                SignalPhase permissiveSignalPhase = new SignalPhase(startTime, endTime, approach, false, 15, 6, true);
+                Parallel.Invoke(
+                    () => { SetApproachCycleData(permissiveSignalPhase, startTime, approach, records, true); },
+                    () => { SetApproachPcdData(permissiveSignalPhase, startTime, approach); },
+                    () => { SetSplitFailData(startTime, endTime, approach, true); },
+                    () => { SetYellowRedActivationData(startTime, endTime, approach, true); });
             }
         }
 
@@ -652,7 +650,8 @@ namespace MOE.Common.Business.DataAggregation
                 pedActuations = records.Count(r => r.EventCode == 45 && r.EventParam == approach.ProtectedPhaseNumber);
                 totalCycles = records.Count(r => r.EventCode == 1 && r.EventParam == approach.ProtectedPhaseNumber);
             }
-            ApproachCycleAggregation approachAggregation = new ApproachCycleAggregation {
+            ApproachCycleAggregation approachAggregation = new ApproachCycleAggregation
+            {
                 BinStartTime = startTime,
                 ApproachId = approach.ApproachID,
                 GreenTime = signalPhase.TotalGreenTime,
@@ -666,7 +665,7 @@ namespace MOE.Common.Business.DataAggregation
 
             //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
         }
-        
+
         private void SetSplitFailData(DateTime startTime, DateTime endTime, Approach approach, bool getPermissivePhase)
         {
             if (!approach.GetDetectorsForMetricType(12).Any()) return;

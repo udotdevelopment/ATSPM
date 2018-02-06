@@ -43,7 +43,8 @@ namespace MOE.Common.Business
             List<int> speedsForBucket = new List<int>();
             foreach (CycleSpeed cycle in cycles)
             {
-                speedsForBucket.AddRange(cycle.SpeedEvents.Select(s => s.MPH));
+                if(cycle.StartTime >= startTime && cycle.EndTime <= endTime)
+                    speedsForBucket.AddRange(cycle.SpeedEvents.Select(s => s.MPH));
             }
             if (speedsForBucket.Count > 0)
             {

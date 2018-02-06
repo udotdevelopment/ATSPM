@@ -19,7 +19,7 @@ namespace MOE.Common.Models.Repositories
             return new ControllerEventLogRepository();
         }
 
-        public static void SetDetectorCommentRepository(IControllerEventLogRepository newRepository)
+        public static void SetRepository(IControllerEventLogRepository newRepository)
         {
             controllerEventLogRepository = newRepository;
         }

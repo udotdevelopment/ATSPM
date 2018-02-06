@@ -17,7 +17,7 @@ namespace MOE.Common.Business
 
         public void FindSpeedEventsForCycle(List<Models.Speed_Events> speeds)
         {
-            SpeedEvents = speeds.Where(s => s.timestamp >= StartTime && s.timestamp < EndTime).ToList();
+            SpeedEvents = speeds.Where(s => s.timestamp >= this.GreenEvent.AddSeconds(15) && s.timestamp < this.YellowEvent && s.MPH >= 5).ToList();
         }
     }
 }

@@ -42,7 +42,7 @@ namespace MOE.Common.Business
             return plans;
         }
 
-        private static List<Controller_Event_Log> GetPlanEvents(DateTime startDate, DateTime endDate, string signalId)
+        public static List<Controller_Event_Log> GetPlanEvents(DateTime startDate, DateTime endDate, string signalId)
         {
             var celRepository = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
             List<Controller_Event_Log> planEvents = new List<Controller_Event_Log>();
@@ -54,20 +54,37 @@ namespace MOE.Common.Business
             }
             else
             {
-                firstPlanEvent = new Controller_Event_Log { Timestamp = startDate };
+                firstPlanEvent = new Controller_Event_Log { Timestamp = startDate, EventCode = 131,EventParam = 0, SignalID = signalId};
                 planEvents.Add(firstPlanEvent);
             }
             List< Controller_Event_Log>tempPlanEvents = celRepository.GetSignalEventsByEventCode(signalId, startDate, endDate, 131).OrderBy((e => e.Timestamp)).ToList();
 
-            for (int x = 1; x < tempPlanEvents.Count(); x++)
+            for (int x = 0; x < tempPlanEvents.Count(); x++)
             {
-                if (tempPlanEvents[x].EventParam == tempPlanEvents[x - 1].EventParam)
+                if (x + 1 < tempPlanEvents.Count())
                 {
-                    
+                    if (tempPlanEvents[x].EventParam == tempPlanEvents[x + 1].EventParam)
+                    {
+      
+
+                    }
+                    else
+                    {
+                        planEvents.Add(tempPlanEvents[x]);
+                    }
                 }
                 else
                 {
-                    planEvents.Add(tempPlanEvents[x]);
+                    if (tempPlanEvents.Count >= 2 && (tempPlanEvents.Last().EventCode ==
+                                                      tempPlanEvents[tempPlanEvents.Count() - 2].EventCode))
+                    {
+                        planEvents.Add(tempPlanEvents[tempPlanEvents.Count() - 2]);
+                    }
+                    else
+                    {
+                        planEvents.Add(tempPlanEvents.Last());
+                    }
+
                 }
             }
 

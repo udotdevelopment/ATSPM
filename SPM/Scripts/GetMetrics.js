@@ -78,6 +78,8 @@ function GetCommonValues()
     tosend.EndDate = $("#EndDateDay").val() + " " + $("#EndTime").val() + " " + $("#EndAMPMddl").val();    
     tosend.YAxisMax = $("#YAxisMax").val();
     tosend.Y2AxisMax = $("#Y2AxisMax").val();
+    tosend.YAxisMin = $("#YAxisMin").val();
+    tosend.Y2AxisMin = $("#Y2AxisMin").val();
     
     
     return tosend;

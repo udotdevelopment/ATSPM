@@ -110,17 +110,7 @@ namespace MOE.Common.Business
             }
         }
 
-        //private void GetPreemptEvents()
-        //{
-        //    var celRepository = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-        //    List<Controller_Event_Log> preemptEvents = celRepository.GetSignalEventsByEventCodes(Approach.SignalID, StartDate,
-        //                    EndDate, new List<int>() { 102 });
-        //    foreach (var preemptEvent in preemptEvents)
-        //    {
-        //        var cycle = Cycles.FirstOrDefault(c => c.StartTime <= preemptEvent.Timestamp && c.EndTime > preemptEvent.Timestamp);
-        //        cycle?.AddPreempt(new DetectorDataPoint(cycle.StartTime, preemptEvent.Timestamp, cycle.GreenEvent, cycle.YellowEvent));
-        //    }
-        //}
+ 
 
         
 

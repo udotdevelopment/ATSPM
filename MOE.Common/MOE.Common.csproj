@@ -385,12 +385,8 @@
     <Compile Include="Business\SplitFail\SplitFailPhase.cs" />
     <Compile Include="Business\TMC\TMCData.cs" />
     <Compile Include="Business\TMC\TMCInfo.cs" />
-    <Compile Include="Business\PCD\Cycle.cs" />
-    <Compile Include="Business\PCD\PCDMetric.cs" />
     <Compile Include="Business\PCD\Phase.cs" />
-    <Compile Include="Business\PCD\PhaseFactory.cs" />
     <Compile Include="Business\PCD\Plan.cs" />
-    <Compile Include="Business\PCD\PlanFactory.cs" />
     <Compile Include="Business\TMC\TMCViewModel.cs" />
     <Compile Include="Business\WatchDog\WatchDogScan.cs" />
     <Compile Include="Business\WCFServiceLibrary\AggregationMetricOptions.cs" />
@@ -444,6 +440,10 @@
     <Compile Include="Migrations\201801231846598_PermissivePhasesCanBeOverlaps.Designer.cs">
       <DependentUpon>201801231846598_PermissivePhasesCanBeOverlaps.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802061547086_DataArchive.cs" />
+    <Compile Include="Migrations\201802061547086_DataArchive.Designer.cs">
+      <DependentUpon>201802061547086_DataArchive.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\ApproachPcdAggregation.cs" />
@@ -453,6 +453,7 @@
     <Compile Include="Models\ApproachCycleAggregation.cs" />
     <Compile Include="Models\Custom\ActionLog.cs" />
     <Compile Include="Models\Custom\Aggregation.cs" />
+    <Compile Include="Models\DatabaseArchiveExcludedSignals.cs" />
     <Compile Include="Models\DatabaseInitializer.cs" />
     <Compile Include="Models\DetectionHardware.cs" />
     <Compile Include="Models\DetectorAggregation.cs" />
@@ -769,6 +770,7 @@
     <Compile Include="Models\ViewModel\RouteEdit\RouteMapViewModel.cs" />
     <Compile Include="Models\ViewModel\WebConfigTool\WebConfigToolViewModel.cs" />
     <Compile Include="Models\ViewModel\_MainMenu\MenuItem.cs" />
+    <Compile Include="Models\DatabaseArchiveSettings.cs" />
     <Compile Include="Models\WatchDogApplicationSettings.cs" />
     <Compile Include="Business\CycleFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -864,6 +866,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801231846598_PermissivePhasesCanBeOverlaps.resx">
       <DependentUpon>201801231846598_PermissivePhasesCanBeOverlaps.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802061547086_DataArchive.resx">
+      <DependentUpon>201802061547086_DataArchive.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
