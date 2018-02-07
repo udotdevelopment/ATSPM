@@ -159,6 +159,7 @@ namespace MOE.Common.Business.ApproachVolume
             //whether there is data or not
             Chart.Series["Posts"].Points.AddXY(graphStartDate, 0);
             Chart.Series["Posts"].Points.AddXY(graphEndDate, 0);
+            SetLegend();
         }
 
         private void AddChartArea(System.Web.UI.DataVisualization.Charting.Chart Chart, ApproachVolumeOptions options, TimeSpan reportTimespan)
@@ -211,8 +212,21 @@ namespace MOE.Common.Business.ApproachVolume
                     chartArea.AxisX.LabelStyle.Format = "HH:mm";
                 }
             }
+            
             chartArea.AxisX2.Enabled = AxisEnabled.True;
             Chart.ChartAreas.Add(chartArea);
+        }
+
+        public void SetLegend()
+        {
+            if (!Options.ShowNBWBVolume)
+            {
+                Chart.Series[0].IsVisibleInLegend = false;
+            }
+            if (!Options.ShowSBEBVolume)
+            {
+                Chart.Series[1].IsVisibleInLegend = false;
+            }
         }
 
         protected void AddDataToChart(Chart chart, List<MOE.Common.Business.ApproachVolume.Approach> approachDirectionCollection, DateTime startDate,
@@ -308,7 +322,7 @@ DateTime endDate, string signalId, string direction1, string direction2, Approac
 
                 }
 
-                if (options.ShowSBEBVolume)
+                if (options.ShowNBWBVolume)
                 {
                     foreach (KeyValuePair<DateTime, int> vol in D1volumes)
                     {
@@ -320,17 +334,17 @@ DateTime endDate, string signalId, string direction1, string direction2, Approac
                 }
                 
 
-                if (options.ShowNBWBVolume)
+                if (options.ShowSBEBVolume)
                 {
                     foreach (KeyValuePair<DateTime, int> vol in D2volumes)
                     {
                         //This is the Thicker Solid Blue line
                         chart.Series[1].Points.AddXY(vol.Key, vol.Value);
-                        CheckAndCorrectConsecutiveXValues(chart.Series[1].Points);
+                       
                     }
                 }
 
-                //add ratios
+            
 
 
                 //Match the times in the dir1 colleciton to the dir2 collection so we can get a ratio
@@ -359,7 +373,7 @@ DateTime endDate, string signalId, string direction1, string direction2, Approac
 
                 }
 
-                CheckAndCorrectConsecutiveXValues(chart.Series[2].Points);
+                
 
                 //Match the times in the dir2 colleciton to the dir1 collection so we can get a ratio
                 //of the values collected at the same point in time.

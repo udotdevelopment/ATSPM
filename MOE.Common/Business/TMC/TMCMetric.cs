@@ -255,7 +255,7 @@ namespace MOE.Common.Business.TMC
                                     tmcd.MovementType = detector.MovementType.Abbreviation;
                                 }
                                 //tmcd.DetectorID = detector.DetectorID;
-                                tmcd.Timestamp = volume.XAxis.AddMinutes(options.SelectedBinSize *-1);
+                                tmcd.Timestamp = volume.XAxis;//.AddMinutes(options.SelectedBinSize *-1);
                                 tmcd.Count = volume.YAxis / binSizeMultiplier;
                                 tmcInfo.tmcData.Add(tmcd);
                             }
@@ -321,7 +321,7 @@ namespace MOE.Common.Business.TMC
                                             tmcd.MovementType = detector.MovementType.Abbreviation;
                                         }
                                         //tmcd.DetectorID = detector.DetectorID;
-                                        tmcd.Timestamp = volume.XAxis.AddMinutes(options.SelectedBinSize * -1);
+                                        tmcd.Timestamp = volume.XAxis;//.AddMinutes(options.SelectedBinSize * -1);
                                         tmcd.Count = volume.YAxis / binSizeMultiplier;
                                         tmcInfo.tmcData.Add(tmcd);
                                     }
@@ -357,7 +357,7 @@ namespace MOE.Common.Business.TMC
                                         tmcd.MovementType = detector.MovementType.Abbreviation;
                                     }
                                     //tmcd.DetectorID = detector.DetectorID;
-                                    tmcd.Timestamp = volume.XAxis.AddMinutes(options.SelectedBinSize * -1);
+                                    tmcd.Timestamp = volume.XAxis;//.AddMinutes(options.SelectedBinSize * -1);
                                     tmcd.Count = volume.YAxis / binSizeMultiplier;
                                     tmcInfo.tmcData.Add(tmcd);
                                 }

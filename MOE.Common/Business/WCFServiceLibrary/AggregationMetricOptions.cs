@@ -353,6 +353,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void GetTimeXAxisRouteSeriesChart(List<Models.Signal> signals, Chart chart)
         {
+
             Series series = CreateSeries(0, "Route");
             List<BinsContainer> binsContainers =  GetSumBinsContainersByRoute(signals);
             foreach (var binsContainer in binsContainers)
@@ -363,6 +364,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 }
             }
             chart.Series.Add(series);
+
         }
 
         private void GetTimeXAxisDirectionSeriesChart(Models.Signal signal, Chart chart)
