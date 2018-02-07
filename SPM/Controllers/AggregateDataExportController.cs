@@ -64,8 +64,8 @@ namespace SPM.Controllers
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = aggDataExportViewModel.StartDateDay;
             options.EndDate = aggDataExportViewModel.EndDateDay;
-            options.AggregationOperation = aggDataExportViewModel.SelectedAggregationOperation;
-            options.XAxisAggregationSeriesOption = aggDataExportViewModel.SelectedAggregationSeriesOptions;
+            options.SelectedAggregationType = aggDataExportViewModel.SelectedAggregationType;
+            options.SelectedXAxisType = aggDataExportViewModel.SelectedAggregationSeriesOptions;
             options.SeriesWidth = aggDataExportViewModel.SeriesWidth;
             string[] startTime;
             string[] endTime;
@@ -128,7 +128,7 @@ namespace SPM.Controllers
             }
             SeriesChartType tempSeriesChartType;
             Enum.TryParse(aggDataExportViewModel.SelectedChartType, out tempSeriesChartType);
-            options.ChartType = tempSeriesChartType;
+            options.SelectedChartType = tempSeriesChartType;
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             MetricGeneratorService.MetricGeneratorClient client =
                     new MetricGeneratorService.MetricGeneratorClient();

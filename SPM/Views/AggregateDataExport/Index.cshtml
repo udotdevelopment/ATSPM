@@ -111,11 +111,15 @@
                 <div id="collapseDataAggregation" class="panel-body panel-collapse collapse in">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         @Html.LabelFor(model => model.SelectedAggregationSeriesOptions, htmlAttributes: new { @class = "control-label" })
-                        @Html.DropDownListFor(model => model.SelectedAggregationSeriesOptions, new SelectList(Model.AggSeriesOptions), new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.SelectedAggregationSeriesOptions, new SelectList(Model.AllXAxisTypes), new { @class = "form-control" })
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        @Html.LabelFor(model => model.SelectedAggregationOperation, htmlAttributes: new { @class = "control-label" })
-                        @Html.DropDownListFor(model => model.SelectedAggregationOperation, new SelectList(Model.AggregationOperationsList), new { @class = "form-control" })
+                        @Html.LabelFor(model => model.SelectedSeriesTypes, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.SelectedSeriesTypes, new SelectList(Model.AllSeriesTypes), new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        @Html.LabelFor(model => model.SelectedAggregationType, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.SelectedAggregationType, new SelectList(Model.AggregationOperationsList), new { @class = "form-control" })
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         @Html.LabelFor(model => model.SelectedChartType, htmlAttributes: new { @class = "control-label" })

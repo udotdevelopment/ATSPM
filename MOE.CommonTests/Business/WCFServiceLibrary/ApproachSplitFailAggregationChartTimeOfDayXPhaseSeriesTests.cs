@@ -13,7 +13,7 @@ using MOE.CommonTests.Models;
 namespace MOE.Common.Business.WCFServiceLibrary.Tests
 {
     [TestClass()]
-    public class ApproachSplitFailAggregationChartTimeXDirectionSeriesTests
+    public class ApproachSplitFailAggregationChartTimeOfDayPhaseSeriesTests
     {
         public InMemoryMOEDatabase Db = new InMemoryMOEDatabase();
         public ISignalsRepository SignalsRepository;
@@ -49,18 +49,17 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetric15MinuteBinStartToFinishTest()
         {
-            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
+            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3; 
             options.StartDate = Convert.ToDateTime("10/17/2017");
-            options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.Direction;
+            options.EndDate = Convert.ToDateTime("10/28/2017");
+            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
+            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
-                Convert.ToDateTime("10/18/2017"),
+                Convert.ToDateTime("10/28/2017"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SeriesWidth = 3;
             options.SignalIds.Add("102");
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
@@ -94,17 +93,16 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         public void CreateTimeMetric15MinuteBinTimePeriodTest()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
-            options.StartDate = Convert.ToDateTime("10/17/2017");
-            options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.Direction;
+            options.StartDate = Convert.ToDateTime("10/1/2017");
+            options.EndDate = Convert.ToDateTime("10/31/2017");
+            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
+            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
-                Convert.ToDateTime("10/17/2017"),
-                Convert.ToDateTime("10/18/2017"),
+                Convert.ToDateTime("10/1/2017"),
+                Convert.ToDateTime("10/31/2017"),
                 6, 0, 10, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SeriesWidth = 3;
             options.SignalIds.Add("102");
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
@@ -140,15 +138,14 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.Direction;
+            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
+            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SeriesWidth = 3;
             options.SignalIds.Add("102");
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
@@ -184,15 +181,14 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.Direction;
+            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
+            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 6, 0, 10, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SeriesWidth = 3;
             options.SignalIds.Add("102");
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
@@ -228,15 +224,14 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.Direction;
+            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
+            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.Hour,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SeriesWidth = 3;
             options.SignalIds.Add("102");
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
@@ -272,15 +267,14 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.Direction;
+            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
+            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 6, 0, 10, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SeriesWidth = 3;
             options.SignalIds.Add("102");
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
@@ -317,8 +311,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("11/1/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.Direction;
+            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
+            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("11/1/2017"),
@@ -326,7 +320,6 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.BinSize.Day,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.SignalIds.Add("102");
-            options.SeriesWidth = 3;
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -361,15 +354,14 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("11/1/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time
-                ;options.SelectedSeries = AggregationMetricOptions.SeriesType.Direction;
+            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
+            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("11/1/2017"),
                 6, 0, 10, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.Day,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SeriesWidth = 3;
             options.SignalIds.Add("102");
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
@@ -405,15 +397,14 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.Direction;
+            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
+            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.Month,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SeriesWidth = 3;
             options.SignalIds.Add("102");
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
@@ -449,15 +440,14 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.Direction;
+            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
+            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
                 6, 0, 10, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday },
                 BinFactoryOptions.BinSize.Month,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SeriesWidth = 3;
             options.SignalIds.Add("102");
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
@@ -493,15 +483,14 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.Direction;
+            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
+            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.Year,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SeriesWidth = 3;
             options.SignalIds.Add("102");
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
@@ -537,15 +526,14 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.Direction;
+            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
+            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"),
                 6, 0, 10, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.Year,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SeriesWidth = 3;
             options.SignalIds.Add("102");
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;

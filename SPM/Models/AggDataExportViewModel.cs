@@ -32,12 +32,14 @@ namespace SPM.Models
         public virtual ICollection<DirectionType> AllApproachTypes { get; set; }
         public virtual List<int> MovementTypeIDs { get; set; }
         public virtual ICollection<MovementType> AllMovementTypes { get; set; }
-        public List<MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.XAxisAggregationSeriesOptions> AggSeriesOptions { get; set; }
+        public virtual ICollection<AggregationMetricOptions.SeriesType> AllSeriesTypes { get; set; }
+        public AggregationMetricOptions.SeriesType SelectedSeriesTypes { get; set; }
+        public List<MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions.XAxisType> AllXAxisTypes { get; set; }
         [Display(Name = "X -Axis")]
-        public  AggregationMetricOptions.XAxisAggregationSeriesOptions SelectedAggregationSeriesOptions { get; set; }
-        public List<AggregationMetricOptions.AggregationOperations> AggregationOperationsList { get; set; }
+        public  AggregationMetricOptions.XAxisType SelectedAggregationSeriesOptions { get; set; }
+        public List<AggregationMetricOptions.AggregationType> AggregationOperationsList { get; set; }
         [Display(Name = "Aggregation Type")]
-        public AggregationMetricOptions.AggregationOperations SelectedAggregationOperation { get; set; }
+        public AggregationMetricOptions.AggregationType SelectedAggregationType { get; set; }
 
         public List<string> ChartTypesList { get; set; } = new List<string>();
         [Display(Name="Chart Types")]
@@ -102,10 +104,11 @@ namespace SPM.Models
             //SignalSearchViewModel = new MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel(regionRepositry, _metricRepository);
             SetDefaultDates();
             SetBinSizeList();
-            SetXAxisAggregationOptions();
-            SetAggregationOperations();
+            SetXAxisTypes();
+            SetAggregationTypes();
             SetChartTypes();
             SetSeriesWidth();
+            SetSeriesTypes();
         }
 
         private void SetSeriesWidth()
@@ -135,14 +138,19 @@ namespace SPM.Models
             ChartTypesList.Sort();
         }
 
-        private void SetAggregationOperations()
+        private void SetSeriesTypes()
         {
-            AggregationOperationsList = new List<AggregationMetricOptions.AggregationOperations>{ AggregationMetricOptions.AggregationOperations.Sum, AggregationMetricOptions.AggregationOperations.Average};
+            AllSeriesTypes = Enum.GetValues(typeof(AggregationMetricOptions.SeriesType)).Cast<AggregationMetricOptions.SeriesType>().ToList();
         }
 
-        private void SetXAxisAggregationOptions()
+        private void SetAggregationTypes()
         {
-            AggSeriesOptions = Enum.GetValues(typeof(AggregationMetricOptions.XAxisAggregationSeriesOptions)).Cast<AggregationMetricOptions.XAxisAggregationSeriesOptions>().ToList();
+            AggregationOperationsList = new List<AggregationMetricOptions.AggregationType>{ AggregationMetricOptions.AggregationType.Sum, AggregationMetricOptions.AggregationType.Average};
+        }
+
+        private void SetXAxisTypes()
+        {
+            AllXAxisTypes = Enum.GetValues(typeof(AggregationMetricOptions.XAxisType)).Cast<AggregationMetricOptions.XAxisType>().ToList();
         }
 
         protected void SetBinSizeList()

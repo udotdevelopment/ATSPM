@@ -346,11 +346,11 @@ namespace MOE.Common.Business
             {
                 chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
             }
-            if (options.AggregationOperation == AggregationMetricOptions.AggregationOperations.Sum)
+            if (options.SelectedAggregationType == AggregationMetricOptions.AggregationType.Sum)
             {
                 chartArea.AxisY.Title = "Sum of SplitFailures " + options.TimeOptions.SelectedBinSize.Description() + " bins";
             }
-            else if (options.AggregationOperation == AggregationMetricOptions.AggregationOperations.Average)
+            else if (options.SelectedAggregationType == AggregationMetricOptions.AggregationType.Average)
             {
                 chartArea.AxisY.Title = "Average of SplitFailures";
             }
@@ -366,8 +366,8 @@ namespace MOE.Common.Business
             chartArea.AxisX.Title = "Time (Hour of Day)";
             chartArea.AxisX.LabelStyle.IsEndLabelVisible = false;
             chartArea.AxisX.LabelStyle.Angle = 45;
-            if (options.XAxisAggregationSeriesOption ==
-                AggregationMetricOptions.XAxisAggregationSeriesOptions.TimeOfDay)
+            if (options.SelectedXAxisType ==
+                AggregationMetricOptions.XAxisType.TimeOfDay)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
                 chartArea.AxisX.LabelStyle.Format = "HH:mm";
