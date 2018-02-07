@@ -25,7 +25,7 @@ namespace MOE.Common.Models
     }
     public class DatabaseArchiveSettings : ApplicationSettings
     {
-        [Display(Name = "Archive")]
+        [Display(Name = "Archive?")]
         public bool? SelectedUseArchive { get; set; }
 
         [Display(Name= "Use Table Partition Or Not")]
