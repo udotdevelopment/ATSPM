@@ -18,6 +18,9 @@
 
 <div id="DivOff" class="hidden">
     <div class="col-md-12 col-sm-12 col-xs-12">
+        @Html.LabelFor(model => model.DbArchiveSettings.TablePartitionsList, new { @class = "control-label" })
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
         @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, TablePartition.PartitionTables, htmlAttributes: new { @id = "IsPartitionTables", @name = "IsPartitionTables", @onclick = "PartitionTablesOptions()" })
         <label>Partition Tables</label>
     </div>
@@ -63,30 +66,13 @@
         </div>
     </div>
 
-
-    @*<div class="panel panel-signal">
-            <div class="panel-heading">
-                <h5 class="panel-title">
-                    <a id="Signals" data-toggle="collapse" href="#collapseSignals">
-                        Signal Exclusion List
-                    </a>
-                </h5>
-            </div>
-            <div id="collapseSignals" class="panel-body panel-collapse collapse in">
-
-                <div id="Routes" class="col-md-12">
-                    <div id="RouteSignals">
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
     <div class="form-horizontal">
-        <h5 class="panel-title">
+        <h4 class="panel-title">
             <a id="Signals" data-toggle="collapse">
                 Signal Exclusion List
             </a>
-        </h5>   <div class="row">
+        </h4>
+        <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <div id="SignalSearchContainer" class="panel-min-width">
