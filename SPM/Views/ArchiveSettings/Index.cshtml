@@ -5,26 +5,26 @@
 
 
 <div class="col-md-12 col-sm-12 col-xs-12">
-    @Html.LabelFor(model => model.DbArchiveSettings.TablePartitionsList, new { @class = "control-label" })
+    @Html.LabelFor(model => model.DbArchiveSettings.SelectedUseArchive, new { @class = "control-label" })
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12">
-    @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, UseArchive.Yes, htmlAttributes: new { @id = "UseArchiveYes", @name = "UseArchiveYes", @onclick = "UseArchiveYesOptions()" })
+    @Html.RadioButtonFor(model => model.DbArchiveSettings.SelectedUseArchive, true, htmlAttributes: new { @id = "UseArchiveYes", @name = "UseArchiveYes", @onclick = "UseArchiveYesOptions()" })
     <label>Yes</label>
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12">
-    @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, UseArchive.No, htmlAttributes: new { @id = "UseArchiveNo", @name = "UseArchiveNo", @onclick = "UseArchiveNoOptions()" })
-    <label>Yes</label>
-</div>
-<div class="col-md-12 col-sm-12 col-xs-12">
-    @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, TablePartition.PartitionTables, htmlAttributes: new { @id = "IsPartitionTables", @name = "IsPartitionTables", @onclick = "PartitionTablesOptions()" })
-    <label>Partition Tables</label>
-</div>
-<div class="col-md-12 col-sm-12 col-xs-12">
-    @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, TablePartition.NonPartitionTables, htmlAttributes: new { @id = "IsNonPartitionTables", @name = "IsNonPartitionTables", @onclick = "NonPartitionTablesOptions()" })
-    <label>Non Partition Tables</label>
+    @Html.RadioButtonFor(model => model.DbArchiveSettings.SelectedUseArchive, false, htmlAttributes: new { @id = "UseArchiveNo", @name = "UseArchiveNo", @onclick = "UseArchiveNoOptions()" })
+    <label>No</label>
 </div>
 
 <div id="DivOff" class="hidden">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, TablePartition.PartitionTables, htmlAttributes: new { @id = "IsPartitionTables", @name = "IsPartitionTables", @onclick = "PartitionTablesOptions()" })
+        <label>Partition Tables</label>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, TablePartition.NonPartitionTables, htmlAttributes: new { @id = "IsNonPartitionTables", @name = "IsNonPartitionTables", @onclick = "NonPartitionTablesOptions()" })
+        <label>Non Partition Tables</label>
+    </div>
     <div id="DivMonthsToRemoveIndex" class="hidden">
         <div class="col-md-12 col-sm-12 col-xs-12">
             @Html.LabelFor(model => model.DbArchiveSettings.MonthsToRemoveIndex, new { @class = "control-label" })
@@ -50,54 +50,54 @@
     <h4>
         Hours to perform Archive:
     </h4>
-    <div class="col-md-6 col-sm-6 col-xs-6">
+    <div class="col-md-12 col-sm-12 col-xs-12">
         @Html.LabelFor(model => model.DbArchiveSettings.StartTime, htmlAttributes: new { @class = "control-label" })
         <div class="input-group-custom">
             @Html.EditorFor(model => model.DbArchiveSettings.StartTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
         </div>
     </div>
-    <div class="col-md-6 col-sm-6 col-xs-6">
+    <div class="col-md-12 col-sm-12 col-xs-12">
         <div id="DivEndTime" class="hidden" class="input-group-custom">
-            @Html.LabelFor(model => model.DbArchiveSettings.EndTime, htmlAttributes: new { @class = "control-label" })
-            @Html.EditorFor(model => model.DbArchiveSettings.EndTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
+            @Html.LabelFor(model => model.DbArchiveSettings.TimeDuration, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.DbArchiveSettings.TimeDuration, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
+        </div>
+    </div>
+
+
+    @*<div class="panel panel-signal">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a id="Signals" data-toggle="collapse" href="#collapseSignals">
+                        Signal Exclusion List
+                    </a>
+                </h5>
+            </div>
+            <div id="collapseSignals" class="panel-body panel-collapse collapse in">
+
+                <div id="Routes" class="col-md-12">
+                    <div id="RouteSignals">
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+    <div class="form-horizontal">
+        <h5 class="panel-title">
+            <a id="Signals" data-toggle="collapse">
+                Signal Exclusion List
+            </a>
+        </h5>   <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div id="SignalSearchContainer" class="panel-min-width">
+                        @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
 </div>
-
-@*<div class="panel panel-signal">
-        <div class="panel-heading">
-            <h5 class="panel-title">
-                <a id="Signals" data-toggle="collapse" href="#collapseSignals">
-                    Signal Exclusion List
-                </a>
-            </h5>
-        </div>
-        <div id="collapseSignals" class="panel-body panel-collapse collapse in">
-
-            <div id="Routes" class="col-md-12">
-                <div id="RouteSignals">
-                </div>
-            </div>
-        </div>
-    </div>*@
-
-<div class="form-horizontal">
-    <h5 class="panel-title">
-        <a id="Signals" data-toggle="collapse">
-            Signal Exclusion List
-        </a>
-    </h5>   <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <div id="SignalSearchContainer" class="panel-min-width">
-                    @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 @section Scripts
 {
     <script type="text/javascript" src="~/Scripts/ArchiveSettings.js"></script>

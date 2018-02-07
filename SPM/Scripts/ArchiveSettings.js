@@ -1,12 +1,20 @@
-﻿function OffOptions() {
-    var thisIsOff = document.getElementById("IsOff").checked;
-    if (thisIsOff == true) {
-        $('#DivOff').addClass("hidden");
+﻿function UseArchiveYesOptions() {
+    var YesUseArchive = document.getElementById("UseArchiveYes").checked;
+    if (YesUseArchive == true) {
+        $('#DivOff').removeClass("hidden");
     }
     //else {
     //    $('#DivOff').removeClass("hidden");
     //}
 }
+
+function UseArchiveNoOptions() {
+    var NoUseArchive = document.getElementById("UseArchiveNo").checked;
+    if (NoUseArchive == true) {
+        $('#DivOff').addClass("hidden");
+    }
+}
+
 
 function PartitionTablesOptions() {
     var thisIsPartitionTable = document.getElementById("IsPartitionTables").checked;

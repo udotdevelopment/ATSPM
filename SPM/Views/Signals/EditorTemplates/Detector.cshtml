@@ -75,7 +75,7 @@
                         @Html.ValidationMessageFor(model => model.LaneTypeID, "", new { id = "LaneTypeID-error", @class = "text-danger" })
                     </div>
                 </div>
-                @{
+                @*@{
                     bool shouldBeHidden = true;
 
                     foreach (var detTypeId in Model.DetectionTypeIDs)
@@ -89,10 +89,10 @@
                             shouldBeHidden = false;
                         }
                     }
-                }
+                }*@
 
-                @*<div id="MPHDiv_@Model.ID" class="@(Model.DetectionTypeIDs.Contains(2) ? "" : "hidden"), @(Model.DetectionTypeIDs.Contains(3) ? "" : "hidden")">*@
-                <div id="MPHDiv_@Model.ID" class="@(shouldBeHidden ? "" : "hidden"), )">
+                <div id="MPHDiv_@Model.ID" class="@(Model.DetectionTypeIDs.Contains(2) ? "" : "hidden"), @(Model.DetectionTypeIDs.Contains(3) ? "" : "hidden")">
+                @*<div id="MPHDiv_@Model.ID" class="@(shouldBeHidden ? "" : "hidden"), )">*@
                     <label for="mph_@Model.ID" class="control-label mph">MPH (Advanced Count, Advanced Speed)</label>
                     <input id="mph_@Model.ID" class="form-control mph_@Model.ApproachID" onkeyup="SyncText(this, @Model.ApproachID)" type="text" value="@Model.Approach.MPH" />
                 </div>
