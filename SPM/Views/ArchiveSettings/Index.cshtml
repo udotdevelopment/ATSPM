@@ -8,8 +8,12 @@
     @Html.LabelFor(model => model.DbArchiveSettings.TablePartitionsList, new { @class = "control-label" })
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12">
-    @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, TablePartition.Off, htmlAttributes: new { @id = "IsOff", @name = "IsOff", @onclick = "OffOptions()" })
-    <label>Off</label>
+    @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, UseArchive.Yes, htmlAttributes: new { @id = "UseArchiveYes", @name = "UseArchiveYes", @onclick = "UseArchiveYesOptions()" })
+    <label>Yes</label>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, UseArchive.No, htmlAttributes: new { @id = "UseArchiveNo", @name = "UseArchiveNo", @onclick = "UseArchiveNoOptions()" })
+    <label>Yes</label>
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12">
     @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, TablePartition.PartitionTables, htmlAttributes: new { @id = "IsPartitionTables", @name = "IsPartitionTables", @onclick = "PartitionTablesOptions()" })
@@ -77,6 +81,22 @@
             </div>
         </div>
     </div>*@
+
+<div class="form-horizontal">
+    <h5 class="panel-title">
+        <a id="Signals" data-toggle="collapse">
+            Signal Exclusion List
+        </a>
+    </h5>   <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <div id="SignalSearchContainer" class="panel-min-width">
+                    @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts
 {

@@ -8,12 +8,16 @@ using System.Threading.Tasks;
 
 namespace MOE.Common.Models
 {
+    //public enum UseArchive
+    //{
+    //    Yes,
+    //    No
+    //}
     public enum TablePartition
-        {
-            Off,
-            PartitionTables,
-            NonPartitionTables
-        };
+    {
+        PartitionTables,
+        NonPartitionTables
+    }
     public enum DeleteOrMove
     {
         Delete,
@@ -21,7 +25,10 @@ namespace MOE.Common.Models
     }
     public class DatabaseArchiveSettings : ApplicationSettings
     {
-       
+        [Display(Name = "Archive Or Not")]
+        //[NotMapped]
+        //public List<UseArchive> UseArchiveList { get; set; }
+        public bool SelectedUseArchive { get; set; }
         [Display(Name= "Use Table Partition Or Not")]
         [NotMapped ]
         public List<TablePartition> TablePartitionsList { get; set; }
@@ -35,10 +42,12 @@ namespace MOE.Common.Models
         [NotMapped]
         public List<DeleteOrMove> DeleteOrMoveOptionList { get; set; }
         public DeleteOrMove SelectedDeleteOrMove { get; set; }
-        [Display(Name = "Start Time")]
+        [Display(Name = "Number Of Rows To Delete/Move At A Time")]
+        public int NumberOfRows { get; set; }
+        [Display(Name = "Start Hour (0-23)")]
         public int StartTime { get; set; }
-        [Display(Name = "End Time")]
-        public int EndTime { get; set; }
+        [Display(Name = "Hour Duration(1-24)")]
+        public int TimeDuration { get; set; }
 
     }
 }
