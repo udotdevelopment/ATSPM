@@ -348,7 +348,7 @@ While each agency should consult with their IT department for specific guideline
 
             context.DatabaseArchiveSettings.AddOrUpdate(
                 c => c.ApplicationID,
-                new Models.DatabaseArchiveSettings() { ApplicationID = 3, SelectedUseArchive = UseArchive.Yes, SelectedTablePartition  = TablePartition.PartitionTables, MonthsToRemoveIndex = 6, MonthsToRemoveData = 6, SelectedDeleteOrMove = DeleteOrMove.Move, StartTime = 22, TimeDuration = 8, NumberOfRows = 10000}
+                new Models.DatabaseArchiveSettings() { ApplicationID = 3, SelectedUseArchive = true, SelectedTablePartition = TablePartition.PartitionTables, MonthsToRemoveIndex = 6, MonthsToRemoveData = 6, SelectedDeleteOrMove = DeleteOrMove.Move, StartTime = 22, TimeDuration = 8, NumberOfRows = 10000 }
                 );
 
             context.WatchdogApplicationSettings.AddOrUpdate(

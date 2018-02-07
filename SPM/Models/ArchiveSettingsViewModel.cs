@@ -38,8 +38,8 @@ namespace SPM.Models
 
         private void SetUseArchiveList()
         {
-            DbArchiveSettings.UseArchiveList = new List<UseArchive>();
-            DbArchiveSettings.UseArchiveList.AddRange(new List<UseArchive> { UseArchive.Yes, UseArchive.No});
+            //DbArchiveSettings.UseArchiveList = new List<UseArchive>();
+            //DbArchiveSettings.UseArchiveList.AddRange(new List<UseArchive> { UseArchive.Yes, UseArchive.No});
         }
 
         private void SetDeletOrMoveList()
