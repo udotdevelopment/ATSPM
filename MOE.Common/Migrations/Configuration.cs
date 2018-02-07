@@ -16,7 +16,7 @@ namespace MOE.Common.Migrations
         private readonly bool _pendingMigrations;
         public Configuration()
         {
-            
+
             //AutomaticMigrationsEnabled = true;
             //AutomaticMigrationDataLossAllowed = true;
             //var migrator = new DbMigrator(this);
@@ -346,15 +346,26 @@ While each agency should consult with their IT department for specific guideline
                 new Models.Application { ID = 3, Name = "DatabaseArchive" }
                 );
 
-            context.DatabaseArchiveSettings.AddOrUpdate(
-                c => c.ApplicationID,
-                new Models.DatabaseArchiveSettings() { ApplicationID = 3, SelectedUseArchive = true, SelectedTablePartition = TablePartition.PartitionTables, MonthsToRemoveIndex = 6, MonthsToRemoveData = 6, SelectedDeleteOrMove = DeleteOrMove.Move, StartTime = 22, TimeDuration = 8, NumberOfRows = 10000 }
-                );
-
             context.WatchdogApplicationSettings.AddOrUpdate(
                 c => c.ApplicationID,
                 new Models.WatchDogApplicationSettings { ApplicationID = 2, ConsecutiveCount = 3, DefaultEmailAddress = "dlowe@utah.gov", EmailServer = "send.state.ut.us", FromEmailAddress = "SPMWatchdog@utah.gov", LowHitThreshold = 50, MaxDegreeOfParallelism = 4, MinimumRecords = 500, MinPhaseTerminations = 50, PercentThreshold = .9, PreviousDayPMPeakEnd = 18, PreviousDayPMPeakStart = 17, ScanDayEndHour = 5, ScanDayStartHour = 1, WeekdayOnly = true, MaximumPedestrianEvents = 200 }
             );
+
+            context.DatabaseArchiveSettings.AddOrUpdate(
+                c => c.ApplicationID,
+                new Models.DatabaseArchiveSettings{ ApplicationID = 3,
+                    SelectedUseArchive = true,
+                    SelectedTablePartition = TablePartition.PartitionTables,
+                    MonthsToRemoveIndex = 6,
+                    MonthsToRemoveData = 6,
+                    SelectedDeleteOrMove = DeleteOrMove.Move,
+                    StartTime = 22,
+                    TimeDuration = 8,
+                    NumberOfRows = 10000
+                }
+            );
+
+
 
             context.LaneTypes.AddOrUpdate(
             new Models.LaneType { LaneTypeID = 1, Description = "Vehicle", Abbreviation = "V" },

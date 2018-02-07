@@ -6,7 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using MOE.Common.Migrations;
 using MOE.CommonTests.Models;
+using System.Data.Entity.Migrations;
 
 namespace SPM.Controllers.Tests
 {
@@ -30,5 +32,15 @@ namespace SPM.Controllers.Tests
 
             Assert.IsNotNull(ar);
         }
+
+        //[TestMethod()]
+        //public void SeedMethodTest()
+        //{
+        //    var configuration = new Configuration();
+        //    var migrator = new System.Data.Entity.Migrations.DbMigrator(configuration);
+        //    migrator.Update();
+
+        //    Assert.IsTrue(1 == 1);
+        //}
     }
 }
