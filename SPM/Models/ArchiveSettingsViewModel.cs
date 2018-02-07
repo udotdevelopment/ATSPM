@@ -23,14 +23,23 @@ namespace SPM.Models
          //public DeleteOrMove SelecteDeleteOrMove { get; set; }
 
         public  MOE.Common.Models.DatabaseArchiveSettings DbArchiveSettings { get; set; }
+        public SignalSearchViewModel SignalSearch { get; set; }
 
         public List<DatabaseArchiveExcludedSignals> ExcludedSignals { get; set; }
 
         public ArchiveSettingsViewModel()
         {
             DbArchiveSettings = new DatabaseArchiveSettings();
+            SetUseArchiveList();
             SetTablePartitionList();
             SetDeletOrMoveList();
+            SignalSearch = new SignalSearchViewModel();
+        }
+
+        private void SetUseArchiveList()
+        {
+            DbArchiveSettings.UseArchiveList = new List<UseArchive>();
+            DbArchiveSettings.UseArchiveList.AddRange(new List<UseArchive> { UseArchive.Yes, UseArchive.No});
         }
 
         private void SetDeletOrMoveList()
@@ -42,7 +51,7 @@ namespace SPM.Models
         private void SetTablePartitionList()
         {
             DbArchiveSettings.TablePartitionsList = new List<TablePartition>();
-            DbArchiveSettings.TablePartitionsList.AddRange(new List<TablePartition> { TablePartition.Off, TablePartition.PartitionTables, TablePartition.NonPartitionTables});
+            DbArchiveSettings.TablePartitionsList.AddRange(new List<TablePartition> { TablePartition.PartitionTables, TablePartition.NonPartitionTables});
         }
 
 
