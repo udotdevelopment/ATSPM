@@ -36,6 +36,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Signal,
         }
 
+        public enum Dimension
+        {
+            TwoDimensional,
+            ThreeDimensional
+        }
+
         [DataMember]
         public int SeriesWidth { get; set; }
         [DataMember]
@@ -48,6 +54,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public XAxisType SelectedXAxisType { get; set; }
         [DataMember]
         public SeriesType SelectedSeries { get; set; }
+        [DataMember]
+        public Dimension SelectedDimension { get; set; }
         [DataMember]
         public List<string> SignalIds { get; set; } = new List<string>();
         public List<Models.Signal> Signals { get; set; } = new List<Models.Signal>();

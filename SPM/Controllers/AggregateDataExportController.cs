@@ -65,8 +65,10 @@ namespace SPM.Controllers
             options.StartDate = aggDataExportViewModel.StartDateDay;
             options.EndDate = aggDataExportViewModel.EndDateDay;
             options.SelectedAggregationType = aggDataExportViewModel.SelectedAggregationType;
-            options.SelectedXAxisType = aggDataExportViewModel.SelectedAggregationSeriesOptions;
-            options.SeriesWidth = aggDataExportViewModel.SeriesWidth;
+            options.SelectedXAxisType = aggDataExportViewModel.SelectedXAxisType;
+            options.SeriesWidth = aggDataExportViewModel.SelectedSeriesWidth;
+            options.SelectedSeries = aggDataExportViewModel.SelectedSeriesType;
+            options.SelectedDimension = aggDataExportViewModel.SelectedDimension;
             string[] startTime;
             string[] endTime;
             int? startHour = null;
@@ -151,21 +153,16 @@ namespace SPM.Controllers
         {
             var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
             AggDataExportViewModel aggDataExportViewModel = new AggDataExportViewModel();
+            var metricRepository = MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
             aggDataExportViewModel.Routes = routeRepository.GetAllRoutes();
             List<MetricType> allMetricTypes = metricTyperepository.GetAllToAggregateMetrics();
             foreach (var metricType in allMetricTypes)
             {
                 aggDataExportViewModel.MetricItems.Add(metricType.MetricID, metricType.ChartName);
             }
-            List<DirectionType> allDirectionTypes = directionTypeRepository.GetAllDirections();
-            List<MovementType> allMovementTypes = movementTypeRepository.GetAllMovementTypes();
-            List<LaneType> allLaneTypes = laneTypeRepository.GetAllLaneTypes();
-            aggDataExportViewModel.AllMetricTypes = allMetricTypes;
-            aggDataExportViewModel.AllApproachTypes = allDirectionTypes;
-            aggDataExportViewModel.AllMovementTypes = allMovementTypes;
-            aggDataExportViewModel.AllLaneTypes = allLaneTypes;
-            aggDataExportViewModel.SelectedMetric = 4;
-
+            aggDataExportViewModel.MetricTypes = allMetricTypes;
+            aggDataExportViewModel.SelectedMetricType = metricRepository.GetMetricsByID(20);
+            aggDataExportViewModel.SelectedChartType = SeriesChartType.StackedColumn.ToString();
             aggDataExportViewModel.StartDateDay = Convert.ToDateTime("10/17/2017");
             aggDataExportViewModel.EndDateDay = Convert.ToDateTime("10/18/2017");
             return View(aggDataExportViewModel);
