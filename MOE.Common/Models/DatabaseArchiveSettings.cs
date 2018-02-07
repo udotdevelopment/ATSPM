@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace MOE.Common.Models
 {
-    public enum UseArchive
-    {
-        Yes,
-        No
-    }
+    //public enum UseArchive
+    //{
+    //    Yes,
+    //    No
+    //}
     public enum TablePartition
     {
         PartitionTables,
@@ -26,9 +26,9 @@ namespace MOE.Common.Models
     public class DatabaseArchiveSettings : ApplicationSettings
     {
         [Display(Name = "Archive Or Not")]
-        [NotMapped]
-        public List<UseArchive> UseArchiveList { get; set; }
-        public UseArchive SelectedUseArchive { get; set; }
+        //[NotMapped]
+        //public List<UseArchive> UseArchiveList { get; set; }
+        public bool SelectedUseArchive { get; set; }
         [Display(Name= "Use Table Partition Or Not")]
         [NotMapped ]
         public List<TablePartition> TablePartitionsList { get; set; }

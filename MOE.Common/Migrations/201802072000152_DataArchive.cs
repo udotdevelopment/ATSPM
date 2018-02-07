@@ -16,7 +16,7 @@ namespace MOE.Common.Migrations
                     })
                 .PrimaryKey(t => t.Id);
             
-            AddColumn("dbo.ApplicationSettings", "SelectedUseArchive", c => c.Int());
+            AddColumn("dbo.ApplicationSettings", "SelectedUseArchive", c => c.Boolean());
             AddColumn("dbo.ApplicationSettings", "SelectedTablePartition", c => c.Int());
             AddColumn("dbo.ApplicationSettings", "MonthsToRemoveIndex", c => c.Int());
             AddColumn("dbo.ApplicationSettings", "MonthsToRemoveData", c => c.Int());
