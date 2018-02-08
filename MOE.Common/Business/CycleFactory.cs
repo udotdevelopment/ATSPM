@@ -28,7 +28,7 @@ namespace MOE.Common.Business
                     && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToRed)
                 {
                     cycles.Add(new RedToRedCycle(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp, cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp));
-                    i = i + 3;
+                    //i = i + 3;
                 }
             }
             return cycles;
@@ -51,7 +51,7 @@ namespace MOE.Common.Business
                     && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToRed)
                 {
                     cycles.Add(new CyclePcd(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp, cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp));
-                    i = i + 3;
+                    //i = i + 3;
                 }
             }
             if (cycles.Any())
@@ -65,6 +65,7 @@ namespace MOE.Common.Business
                     }
                 }
             }
+            //var totalSortedEvents = cycles.Sum(d => d.DetectorEvents.Count);
             return cycles;
         }
 
@@ -109,7 +110,7 @@ namespace MOE.Common.Business
                     && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToRed)
                 {
                     cycles.Add(new CycleSpeed(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp, cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp));
-                    i = i + 3;
+                    //i = i + 3;
                 }
             }
             if (cycles.Any())
@@ -159,12 +160,6 @@ namespace MOE.Common.Business
                     cycleEvents.AddRange(eventsAfterEndDate);
                 }
 
-                //var eventsAfterEndDate = celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
-                //    endDate, new List<int>() {1, 8, 10}, approach.PermissivePhaseNumber.Value, 3);
-                //if (eventsAfterEndDate != null)
-                //{
-                //    cycleEvents.AddRange(eventsAfterEndDate);
-                //}
             }
             else
             {
@@ -197,7 +192,7 @@ namespace MOE.Common.Business
                 {
                     var termEvent = GetTerminationEventBetweenStartAndEnd(cycleEvents[i].Timestamp, cycleEvents[i + 3].Timestamp, terminationEvents);
                     cycles.Add(new CycleSplitFail(cycleEvents[i].Timestamp, cycleEvents[i + 2].Timestamp, cycleEvents[i + 1].Timestamp, cycleEvents[i + 3].Timestamp, termEvent, options.FirstSecondsOfRed));
-                    i = i + 2;
+                    //i = i + 2;
                 }
             }
             return cycles;

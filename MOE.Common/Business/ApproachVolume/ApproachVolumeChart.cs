@@ -422,9 +422,50 @@ DateTime endDate, string signalId, string direction1, string direction2, Approac
                 Table = CreateVolumeMetricsTable(direction1, direction2, D1TotalVolume, D2TotalVolume, D1volumes, D2volumes, options);
 
             }
+
+            if (options.ShowTotalVolume)
+            {
+                AddTotalVolumeSeries(chart);
+            }
         }
 
+        private void AddTotalVolumeSeries(Chart chart)
+        {
+            Series totals = new Series();
+            totals.ChartType = SeriesChartType.Line;
+            totals.Color = Color.Black;
+            totals.Name = "Total Volume";
+            totals.BorderWidth = 2;
+            //NBSeries.Name = "NB, Ph " + key.ToString() + " Hourly Volume";
+            totals.XValueType = ChartValueType.DateTime;
 
+            Chart.Series.Add(totals);
+
+            AddTotalValuestoSeries(chart);
+        }
+
+        private void AddTotalValuestoSeries(Chart chart)
+        {
+
+            foreach (DataPoint dp in chart.Series[0].Points)
+            {
+                DataPoint dp2 = (from p in chart.Series[1].Points
+                    where p.XValue == dp.XValue
+                    select p).FirstOrDefault();
+
+                double totalVolforBin = 0;
+                if (dp2 != null)
+                {
+                    totalVolforBin = dp.YValues[0] + dp2.YValues[0];
+                }
+                else
+                {
+                    totalVolforBin = dp.YValues[0];
+                }
+
+                chart.Series["Total Volume"].Points.AddXY(dp.XValue, totalVolforBin);
+            }
+        }
 
         public DataTable CreateVolumeMetricsTable(string direction1, string direction2, int D1TV, int D2TV, SortedDictionary<DateTime, int> D1Volumes, SortedDictionary<DateTime, int> D2Volumes, ApproachVolumeOptions options)
         {

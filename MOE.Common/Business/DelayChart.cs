@@ -74,6 +74,7 @@ namespace MOE.Common.Business
                 chartArea.AxisY2.TitleForeColor = Color.Red;
                 
             }
+
             chartArea.AxisX.Title = "Time (Hour of Day)";
             chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
             chartArea.AxisX.LabelStyle.Format = "HH";
@@ -139,7 +140,10 @@ namespace MOE.Common.Business
             chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
 
             AddDataToChart(chart, signalPhase, Options.SelectedBinSize, Options.ShowTotalDelayPerHour, Options.ShowDelayPerVehicle);
-            SetPlanStrips(signalPhase.Plans, chart, Options.StartDate, Options.ShowPlanStatistics);
+            if (Options.ShowPlanStatistics)
+            {
+                SetPlanStrips(signalPhase.Plans, chart, Options.StartDate, Options.ShowPlanStatistics);
+            }
         }
 
         private void SetChartTitles(SignalPhase signalPhase, Dictionary<string, string> statistics)
@@ -168,24 +172,38 @@ namespace MOE.Common.Business
             DateTime dt = signalPhase.StartDate;
             while (dt < signalPhase.EndDate)
             {
-                var pcds = from item in signalPhase.Cycles
-                            where item.StartTime > dt && item.EndTime  < dt.AddMinutes(binSize)
+                var pcdsInBin = from item in signalPhase.Cycles
+                            where item.StartTime >= dt && item.EndTime  < dt.AddMinutes(binSize)
                             select item;
+
+                double binDelay = pcdsInBin.Sum(d => d.TotalDelay);
+                double binVolume = pcdsInBin.Sum(d => d.TotalVolume);
+                double bindDelaypervehicle = 0;
+                double bindDelayperhour = 0;
+
+                if (binVolume > 0 && pcdsInBin.Any())
+                {
+                    bindDelaypervehicle = binDelay / binVolume;
+                }
+                else
+                {
+                    bindDelaypervehicle = 0;
+                }
+
+                bindDelayperhour = binDelay / (60 / binSize);
+
                 if (showDelayPerVehicle)
                 {
-                    if (pcds.Count() > 0)
-                    {
-                        chart.Series["Approach Delay Per Vehicle"].Points.AddXY(dt, pcds.Sum(d => d.TotalDelay) / pcds.Sum(d=> d.TotalVolume));
-                    }
-                    else
-                    {
-                        chart.Series["Approach Delay Per Vehicle"].Points.AddXY(dt, 0);
-                    }
+                   
+                        chart.Series["Approach Delay Per Vehicle"].Points.AddXY(dt, bindDelaypervehicle);
+             
+
                 }
                 if (showDelayPerHour)
                 {
-                    chart.Series["Approach Delay"].Points.AddXY(dt, (pcds.Sum(d => d.TotalDelay) * (60 / binSize)));
+                    chart.Series["Approach Delay"].Points.AddXY(dt, bindDelayperhour);
                 }
+
                 dt = dt.AddMinutes(binSize);
             }
             Dictionary<string, string> statistics = new Dictionary<string, string>();

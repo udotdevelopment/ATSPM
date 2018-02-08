@@ -504,7 +504,6 @@
     <Compile Include="Business\ApproachSpeed\AvgSpeedBucketCollection.cs" />
     <Compile Include="Business\ControllerEvent.cs" />
     <Compile Include="Business\ArriveOnRedChart.cs" />
-    <Compile Include="Business\CycleEngine.cs" />
     <Compile Include="Business\ListToTableConverter.cs" />
     <Compile Include="Business\LogDecoder\ASC3Decoder.cs" />
     <Compile Include="Business\PEDDelay\PedHourlyTotal.cs" />

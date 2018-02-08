@@ -138,7 +138,7 @@ namespace MOE.Common.Business
 
             }
             else 
-            {
+            { 
                 PhaseNumber = Approach.PermissivePhaseNumber??0;
             }
             TotalVolume = controllerRepository.GetTmcVolume(startDate, endDate, Approach.SignalID, PhaseNumber);

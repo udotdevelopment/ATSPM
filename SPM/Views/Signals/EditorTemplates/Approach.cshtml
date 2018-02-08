@@ -13,7 +13,7 @@
                 <a class="pull-right" href="javascript:CopyApproach(@Model.ApproachID)">Copy &nbsp;<span class="glyphicon glyphicon-copy" aria-hidden="true"></span></a>                &nbsp;                
             </h5>
         </div>
-        <div id="ApproachConfigurationCollapse_@(Model.ApproachID)" class="panel-collapse in collapse panel-body" role="tabpanel">
+        <div id="ApproachConfigurationCollapse_@(Model.ApproachID)" class="panel-collapse collapse panel-body" role="tabpanel">
             @Html.HiddenFor(model => model.ApproachID)
             @Html.HiddenFor(model => model.SignalID)
             @Html.HiddenFor(model => model.VersionID)

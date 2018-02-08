@@ -271,8 +271,8 @@ namespace MOE.Common.Models.Repositories
                               s.Timestamp <= endTime &&
                               s.EventParam == param &&
                               eventCodes.Contains(s.EventCode)
-                              select s).ToList();
-                events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
+                              select s).OrderBy(t => t.Timestamp).ToList();
+                
                 return events;
             }
             catch (Exception ex)
