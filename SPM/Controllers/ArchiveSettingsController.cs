@@ -21,7 +21,9 @@ namespace SPM.Controllers
             var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
             ArchiveSettingsViewModel archiveSettingsViewModel = new ArchiveSettingsViewModel();
             archiveSettingsViewModel.Signals.Add(signalRepository.GetLatestVersionOfSignalBySignalID(id));
-            //var excludedSignalRepository 
+            var excludedSignalRepository =
+                MOE.Common.Models.Repositories.DatabaseArchiveExcludedSignalsRepositoryFactory.Create();
+
             return View(archiveSettingsViewModel);
         }
 

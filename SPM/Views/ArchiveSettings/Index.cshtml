@@ -85,6 +85,20 @@
             </a>
         </h5>
     </div>
+    <div id="collapseSignal" class="panel-body panel-collapse collapse in">
+        <Table class="table-striped" >
+            <tbody id="ExcludedSignals"></tbody>
+            @if (Model.ExcludedSignals != null)
+            {
+                foreach (var s in Model.ExcludedSignals)
+                 {
+                     <row>
+                         <td>@s.SignalId</td>
+                     </row>
+                 }
+            }
+        </Table>
+    </div>
 </div>
 </div>
 @section Scripts

@@ -57,8 +57,8 @@ function LoadSignal() {
         async: true,
         contentType: "application/json; charset=utf-8",
         success: function (data) {
-            $('#RouteSignals').append(data);
-            $.validator.unobtrusive.parse($("#RouteSignals"));
+            $('#ExcludedSignals').append(data);
+            $.validator.unobtrusive.parse($("#ExcludedSignals"));
         },
         onerror: function () { alert("Error"); }
     });
