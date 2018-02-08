@@ -16,6 +16,15 @@ namespace SPM.Controllers
             return View(viewModel);
         }
 
+        public ActionResult GetSignal(string id)
+        {
+            var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            ArchiveSettingsViewModel archiveSettingsViewModel = new ArchiveSettingsViewModel();
+            archiveSettingsViewModel.Signals.Add(signalRepository.GetLatestVersionOfSignalBySignalID(id));
+            //var excludedSignalRepository 
+            return View(archiveSettingsViewModel);
+        }
+
 
         // GET: ArchiveSettings/Edit/5
         public ActionResult Edit(int id)
