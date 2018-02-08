@@ -19,12 +19,12 @@
                     @foreach (var metricItem in Model.MetricItems)
                     {
                         <div>
-                            @Html.RadioButtonFor(m => m.SelectedMetric, metricItem.Key)
+                            @Html.RadioButtonFor(m => m.SelectedMetricType, metricItem.Key)
                             @Html.Label(metricItem.Value)
                         </div>
                     }
                 </div>
-                @Html.ValidationMessageFor(model => model.SelectedMetric, "", new { id = "SelectedMetric-error", @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.SelectedMetricType, "", new { id = "SelectedMetric-error", @class = "text-danger" })
             </div>
         </div>
     </div>
@@ -69,7 +69,7 @@
                 </div>
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     @Html.LabelFor(model => model.SelectedBinSize, htmlAttributes: new { @class = "control-label" })
-                    @Html.DropDownListFor(model => model.SelectedBinSize, new SelectList(Model.BinSizeList), new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.SelectedBinSize, new SelectList(Model.BinSizes), new { @class = "form-control" })
                 </div>
             </div>
         </div>
@@ -87,10 +87,10 @@
             <div id="collapseDataAggregation" class="panel-body panel-collapse collapse in">
                 <label>Aggregation (X-axis)</label>
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    @Html.DropDownListFor(model => model.SelectedAggregationSeriesOptions, new SelectList(Model.AggSeriesOptions), new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.SelectedXAxisType, new SelectList(Model.XAxisTypes), new { @class = "form-control" })
                 </div>
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    @Html.DropDownListFor(model => model.SelectedAggregationOperation, new SelectList(Model.AggregationOperationsList),  new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.SelectedAggregationType, new SelectList(Model.AggregationTypes),  new { @class = "form-control" })
                 </div>
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     @Html.DropDownListFor(model => model.SelectedChartType, new SelectList(Model.ChartTypesList), new { @class = "form-control" })

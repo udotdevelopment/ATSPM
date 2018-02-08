@@ -305,7 +305,7 @@ namespace SPM.Controllers.Tests
 
 
         [TestMethod()]
-        public void CreateExistingSgnalIdShouldReturnErrorMessage()
+        public void CreateExistingSignalIdShouldReturnErrorMessage()
         {
 
             var sc = new SignalsController(_controllerTypeRepository, _regionRepository, _directionTypeRepository,
@@ -339,7 +339,38 @@ namespace SPM.Controllers.Tests
                 _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
                 _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
 
-            sc.Create("1001"); 
+            var createResults = sc.Create("1001");
+
+            var origversion = createResults;
+
+            var newVersionResults = sc.AddNewVersion("1001"); 
+
+            
+
+            //if (results != null)
+            //{
+            //        Assert.IsTrue(results.Count == 2);
+            //        Assert.AreEqual(results.First().SignalID, results.Last().SignalID);
+            //    Assert.AreNotEqual(results.First().VersionID, results.Last().VersionID);
+            //}
+            //else
+            //{
+
+            //    Assert.Fail();
+            //}
+
+
+        }
+
+        [TestMethod()]
+        public void AddNewVersionOfExistingSignalShouldCopyDetectionTypes()
+        {
+            Db.ClearTables();
+            var sc = new SignalsController(_controllerTypeRepository, _regionRepository, _directionTypeRepository,
+                _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
+                _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
+
+            sc.Create("1001");
 
             sc.AddNewVersion("1001");
 
@@ -347,8 +378,8 @@ namespace SPM.Controllers.Tests
 
             if (results != null)
             {
-                    Assert.IsTrue(results.Count == 2);
-                    Assert.AreEqual(results.First().SignalID, results.Last().SignalID);
+                Assert.IsTrue(results.Count == 2);
+                Assert.AreEqual(results.First().SignalID, results.Last().SignalID);
                 Assert.AreNotEqual(results.First().VersionID, results.Last().VersionID);
             }
             else

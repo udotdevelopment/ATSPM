@@ -817,3 +817,5 @@ RepositoryTests/obj/Debug/
 *.cache
 
 *.ide
+
+MOEWcfServiceLibrary/MOEWcfServiceLibrary\.Publish\.xml

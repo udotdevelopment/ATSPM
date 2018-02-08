@@ -46,8 +46,6 @@ namespace MOE.Common.Models.Repositories
         public List<MetricType> GetBasicMetrics()
         {
             Models.DetectionType dt = (from d in db.DetectionTypes where d.DetectionTypeID == 1 select d).FirstOrDefault();
-
-
             return dt.MetricTypes.ToList();
         }
 

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MOE.Common.Business.Bins;
-using MOE.Common.Business.SplitFail;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 
@@ -32,7 +28,7 @@ namespace MOE.Common.Business.DataAggregation
                     {
                         numberOfBins += binsContainer.Bins.Count;
                     }
-                    return Convert.ToInt32(Math.Round(TotalSplitFailures / numberOfBins));
+                    return numberOfBins > 0 ? Convert.ToInt32(Math.Round(TotalSplitFailures / numberOfBins)) : 0;
                 }
             }
         }
@@ -122,7 +118,7 @@ namespace MOE.Common.Business.DataAggregation
                     {
                         bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
                     }
-                    bin.Average = bin.Sum / ApproachSplitFailures.Count;
+                    bin.Average = ApproachSplitFailures.Count > 0 ? (bin.Sum / ApproachSplitFailures.Count) :  0;
                 }
             }
         }

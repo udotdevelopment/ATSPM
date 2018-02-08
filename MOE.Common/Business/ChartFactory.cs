@@ -271,6 +271,7 @@ namespace MOE.Common.Business
         private static ChartArea CreateTimeXIntYChartArea(AggregationMetricOptions options)
         {
             ChartArea chartArea = new ChartArea();
+            SetDimension(options, chartArea);
             chartArea.Name = "ChartArea1";
             SetIntYAxis(chartArea, options);
             SetTimeXAxis(chartArea, options);
@@ -346,11 +347,11 @@ namespace MOE.Common.Business
             {
                 chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
             }
-            if (options.AggregationOperation == AggregationMetricOptions.AggregationOperations.Sum)
+            if (options.SelectedAggregationType == AggregationMetricOptions.AggregationType.Sum)
             {
                 chartArea.AxisY.Title = "Sum of SplitFailures " + options.TimeOptions.SelectedBinSize.Description() + " bins";
             }
-            else if (options.AggregationOperation == AggregationMetricOptions.AggregationOperations.Average)
+            else if (options.SelectedAggregationType == AggregationMetricOptions.AggregationType.Average)
             {
                 chartArea.AxisY.Title = "Average of SplitFailures";
             }
@@ -366,8 +367,8 @@ namespace MOE.Common.Business
             chartArea.AxisX.Title = "Time (Hour of Day)";
             chartArea.AxisX.LabelStyle.IsEndLabelVisible = false;
             chartArea.AxisX.LabelStyle.Angle = 45;
-            if (options.XAxisAggregationSeriesOption ==
-                AggregationMetricOptions.XAxisAggregationSeriesOptions.TimeOfDay)
+            if (options.SelectedXAxisType ==
+                AggregationMetricOptions.XAxisType.TimeOfDay)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
                 chartArea.AxisX.LabelStyle.Format = "HH:mm";
@@ -572,9 +573,18 @@ namespace MOE.Common.Business
         {
             ChartArea chartArea = new ChartArea();
             chartArea.Name = "ChartArea1";
+            SetDimension(options, chartArea);
             SetIntYAxis(chartArea, options);
             SetStringXAxis(chartArea, options);
             return chartArea;
+        }
+
+        private static void SetDimension(AggregationMetricOptions options, ChartArea chartArea)
+        {
+            if (options.SelectedDimension == AggregationMetricOptions.Dimension.ThreeDimensional)
+            {
+                chartArea.Area3DStyle = new ChartArea3DStyle { Enable3D = true, WallWidth = 0 };
+            }
         }
 
         private static void SetStringXAxis(ChartArea chartArea, AggregationMetricOptions options)

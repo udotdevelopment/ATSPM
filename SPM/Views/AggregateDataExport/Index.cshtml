@@ -6,100 +6,8 @@
 
     @Html.AntiForgeryToken()
 
-    <div class="col-md-6">
-        <div class="panel panel-signal">
-            <div class="panel-heading">
-                <h5 class="panel-title">
-                    <a id="Metric" data-toggle="collapse" href="#collapseMetric">
-                        Metric
-                    </a>
-                </h5>
-            </div>
-            <div id="collapseMetric" class="panel-body panel-collapse collapse in">
-                <div class="form-group">
-                    @foreach (var metricItem in Model.MetricItems)
-                    {
-                        <div>
-                            @Html.RadioButtonFor(m => m.SelectedMetric, metricItem.Key)
-                            @Html.Label(metricItem.Value)
-                        </div>
-                    }
-                </div>
-                @Html.ValidationMessageFor(model => model.SelectedMetric, "", new {id = "SelectedMetric-error", @class = "text-danger"})
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-6">
-        <div class="panel panel-signal">
-            <div class="panel-heading">
-                <h5 class="panel-title">
-                    <a id="DateTime" data-toggle="collapse" href="#collapseDateTime">
-                        Date/Time
-                    </a>
-                </h5>
-            </div>
-        </div>
-        <div id="collapseDateTime" class="panel-body panel-collapse collapse in">
-            <div class="col-md-6 col-sm-6 col-xs-6">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    @Html.LabelFor(model => model.StartDateDay, htmlAttributes: new { @class = "control-label" })
-                    <div class="input-group-custom">
-                        @Html.EditorFor(model => model.StartDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
-                        @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of start date" } })
-                        @Html.DropDownListFor(model => model.SelectedStartAMPM, Model.StartAMPMList,
-                            new { @class = "form-control AMPMWidth", title = "AM PM component of start date" })
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    @Html.LabelFor(model => model.EndDateDay, htmlAttributes: new { @class = "control-label" })
-                    <div class="input-group-custom">
-                        @Html.EditorFor(model => model.EndDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
-                        @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
-                        @Html.DropDownListFor(model => model.SelectedEndAMPM, Model.EndAMPMList,
-                            new { @class = "form-control AMPMWidth", title = "AM PM component of end date" })
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-6">
-                    @Html.CheckBoxFor(model => model.Weekdays, false)
-                    @Html.LabelFor(model => model.Weekdays, new { @class = "control-label" })
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-6">
-                    @Html.CheckBoxFor(model => model.Weekends, false)
-                    @Html.LabelFor(model => model.Weekends, new { @class = "control-label" })
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    @Html.LabelFor(model => model.SelectedBinSize, htmlAttributes: new { @class = "control-label" })
-                    @Html.DropDownListFor(model => model.SelectedBinSize, new SelectList(Model.BinSizeList), new { @class = "form-control" })
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
-    <div class="col-md-6">
-        <div class="panel panel-signal">
-            <div class="panel-heading">
-                <h5 class="panel-title">
-                    <a id="Signals" data-toggle="collapse" href="#collapseSignals">
-                        Signals
-                    </a>
-                </h5>
-            </div>
-            <div id="collapseSignals" class="panel-body panel-collapse collapse in">
-
-                <div id="Routes" class="col-md-12">
-                    Load Route: @Html.DropDownListFor(m => m.SelectedRouteId, new SelectList(Model.Routes, "Id", "RouteName"), "Select A Route",
-                                    new { @onchange = "LoadRoute()", @class = "form-control" })
-                    <div id="RouteSignals">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-        <div class="col-md-6">
+    <div class="row">
+        <div class="col-md-7">
             <div class="panel panel-signal">
                 <div class="panel-heading">
                     <h5 class="panel-title">
@@ -109,30 +17,98 @@
                     </h5>
                 </div>
                 <div id="collapseDataAggregation" class="panel-body panel-collapse collapse in">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        @Html.LabelFor(model => model.SelectedAggregationSeriesOptions, htmlAttributes: new { @class = "control-label" })
-                        @Html.DropDownListFor(model => model.SelectedAggregationSeriesOptions, new SelectList(Model.AggSeriesOptions), new { @class = "form-control" })
+                    <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        @Html.LabelFor(model => model.SelectedMetricType, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.SelectedMetricType, new SelectList(Model.MetricTypes, "MetricId", "ChartName"), new { @class = "form-control" })
                     </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        @Html.LabelFor(model => model.SelectedAggregationOperation, htmlAttributes: new { @class = "control-label" })
-                        @Html.DropDownListFor(model => model.SelectedAggregationOperation, new SelectList(Model.AggregationOperationsList), new { @class = "form-control" })
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        @Html.LabelFor(model => model.SelectedXAxisType, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.SelectedXAxisType, new SelectList(Model.XAxisTypes), new { @class = "form-control" })
                     </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        @Html.LabelFor(model => model.SelectedSeriesType, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.SelectedSeriesType, new SelectList(Model.SeriesTypes), new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        @Html.LabelFor(model => model.SelectedAggregationType, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.SelectedAggregationType, new SelectList(Model.AggregationTypes), new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
                         @Html.LabelFor(model => model.SelectedChartType, htmlAttributes: new { @class = "control-label" })
                         @Html.DropDownListFor(model => model.SelectedChartType, new SelectList(Model.ChartTypesList), new { @class = "form-control" })
                     </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            @Html.LabelFor(model => model.SelectedSeriesWidth, htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.SelectedSeriesWidth, new SelectList(Model.SeriesWidths), new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            @Html.LabelFor(model => model.SelectedBinSize, htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.SelectedBinSize, new SelectList(Model.BinSizes, "Item1", "Item2"), new { @class = "form-control" })
+                        </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        @Html.LabelFor(model => model.SelectedDimension, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.SelectedDimension, new SelectList(Model.Dimensions), new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        @Html.LabelFor(model => model.StartDateDay, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group-custom">
+                            @Html.EditorFor(model => model.StartDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
+                            @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of start date" } })
+                            @Html.DropDownListFor(model => model.SelectedStartAMPM, Model.StartAMPMList,
+                                new { @class = "form-control AMPMWidth", title = "AM PM component of start date" })
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        @Html.LabelFor(model => model.EndDateDay, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group-custom">
+                            @Html.EditorFor(model => model.EndDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
+                            @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
+                            @Html.DropDownListFor(model => model.SelectedEndAMPM, Model.EndAMPMList,
+                                new { @class = "form-control AMPMWidth", title = "AM PM component of end date" })
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3">
+                        @Html.CheckBoxFor(model => model.Weekdays, false)
+                        @Html.LabelFor(model => model.Weekdays, new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3">
+                        @Html.CheckBoxFor(model => model.Weekends, false)
+                        @Html.LabelFor(model => model.Weekends, new { @class = "control-label" })
+                    </div>
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        @Html.LabelFor(model => model.SeriesWidth, htmlAttributes: new { @class = "control-label" })
-                        @Html.DropDownListFor(model => model.SeriesWidth, new SelectList(Model.SeriesWidthList), new { @class = "form-control" })
+                        <button id="CreateMetric" type="submit" class="btn btn-primary">Create Chart &nbsp;<span id='RunReportSpinner' class="glyphicon"></span></button>
                     </div>
                 </div>
             </div>
-
+            </div>
         </div>
 
 
-        <button id="CreateMetric" type="submit" class="btn btn-primary">Create Chart &nbsp;<span id='RunReportSpinner' class="glyphicon"></span></button>
-        }
+    
+    <div class="col-md-5">
+        <div class="panel panel-signal">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a id="Signals" data-toggle="collapse" href="#collapseSignals">
+                        Route
+                    </a>
+                </h5>
+            </div>
+            <div id="collapseSignals" class="panel-body panel-collapse collapse in">
+
+                <div id="Routes" class="col-md-12">
+                    @Html.DropDownListFor(m => m.SelectedRouteId, new SelectList(Model.Routes, "Id", "RouteName"), "Select A Route",
+                        new { @onchange = "LoadRoute()", @class = "form-control" })
+                </div>
+                <Table class="table-striped" id="RouteSignals"></Table>
+            </div>
+        </div>
+    </div>
+    </div>
+}
         <div id="Results"></div>
 
         @section Scripts

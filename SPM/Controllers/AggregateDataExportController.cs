@@ -20,16 +20,6 @@ namespace SPM.Controllers
         MOE.Common.Models.Repositories.IMetricTypeRepository metricTyperepository =
             MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
 
-        MOE.Common.Models.Repositories.IDirectionTypeRepository directionTypeRepository =
-            MOE.Common.Models.Repositories.DirectionTypeRepositoryFactory.Create();
-
-        MOE.Common.Models.Repositories.IMovementTypeRepository movementTypeRepository =
-            MOE.Common.Models.Repositories.MovementTypeRepositoryFactory.Create();
-
-        MOE.Common.Models.Repositories.ILaneTypeRepository laneTypeRepository =
-            MOE.Common.Models.Repositories.LaneTypeRepositoryFactory.Create();
-
-
         // GET: DataExportViewModels
         public ActionResult CreateMetric(int id)
         {
@@ -41,18 +31,6 @@ namespace SPM.Controllers
             {
                 aggDataExportViewModel.Signals.Add(signalRepository.GetLatestVersionOfSignalBySignalID(routeignal.SignalId));
             }
-            //List<MetricType> allMetricTypes = metricTyperepository.GetAllToAggregateMetrics();
-            //foreach (var metricType in allMetricTypes)
-            //{
-            //    aggDataExportViewModel.MetricItems.Add(metricType.MetricID, metricType.ChartName);
-            //}
-            //List<DirectionType> allDirectionTypes = directionTypeRepository.GetAllDirections();
-            //List<MovementType> allMovementTypes = movementTypeRepository.GetAllMovementTypes();
-            //List<LaneType> allLaneTypes = laneTypeRepository.GetAllLaneTypes();
-            //aggDataExportViewModel.AllMetricTypes = allMetricTypes;
-            //aggDataExportViewModel.AllApproachTypes = allDirectionTypes;
-            //aggDataExportViewModel.AllMovementTypes = allMovementTypes;
-            //aggDataExportViewModel.AllLaneTypes = allLaneTypes;
             return PartialView(aggDataExportViewModel);
         }
 
@@ -64,9 +42,11 @@ namespace SPM.Controllers
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = aggDataExportViewModel.StartDateDay;
             options.EndDate = aggDataExportViewModel.EndDateDay;
-            options.AggregationOperation = aggDataExportViewModel.SelectedAggregationOperation;
-            options.XAxisAggregationSeriesOption = aggDataExportViewModel.SelectedAggregationSeriesOptions;
-            options.SeriesWidth = aggDataExportViewModel.SeriesWidth;
+            options.SelectedAggregationType = aggDataExportViewModel.SelectedAggregationType;
+            options.SelectedXAxisType = aggDataExportViewModel.SelectedXAxisType;
+            options.SeriesWidth = aggDataExportViewModel.SelectedSeriesWidth;
+            options.SelectedSeries = aggDataExportViewModel.SelectedSeriesType;
+            options.SelectedDimension = aggDataExportViewModel.SelectedDimension;
             string[] startTime;
             string[] endTime;
             int? startHour = null;
@@ -116,11 +96,13 @@ namespace SPM.Controllers
             {
                 daysOfWeek.AddRange(new List<DayOfWeek>{ DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
             }
+            BinFactoryOptions.BinSize binSize = (BinFactoryOptions.BinSize) aggDataExportViewModel.SelectedBinSize;
+
             options.TimeOptions = new BinFactoryOptions(
                 aggDataExportViewModel.StartDateDay,
                 aggDataExportViewModel.EndDateDay,
                 startHour, startMinute, endHour, endMinute, daysOfWeek,
-                aggDataExportViewModel.SelectedBinSize,
+                binSize,
                 timeOptions);
             foreach (var signal in aggDataExportViewModel.Signals)
             {
@@ -128,7 +110,7 @@ namespace SPM.Controllers
             }
             SeriesChartType tempSeriesChartType;
             Enum.TryParse(aggDataExportViewModel.SelectedChartType, out tempSeriesChartType);
-            options.ChartType = tempSeriesChartType;
+            options.SelectedChartType = tempSeriesChartType;
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             MetricGeneratorService.MetricGeneratorClient client =
                     new MetricGeneratorService.MetricGeneratorClient();
@@ -151,21 +133,20 @@ namespace SPM.Controllers
         {
             var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
             AggDataExportViewModel aggDataExportViewModel = new AggDataExportViewModel();
+            var metricRepository = MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
+            aggDataExportViewModel.SetSeriesTypes();
+            aggDataExportViewModel.SetAggregationTypes();
+            aggDataExportViewModel.SetBinSizeList();
+            aggDataExportViewModel.SetChartTypes();
+            aggDataExportViewModel.SetDefaultDates();
+            aggDataExportViewModel.SetDimensions();
+            aggDataExportViewModel.SetSeriesWidth();
+            aggDataExportViewModel.SetXAxisTypes();
             aggDataExportViewModel.Routes = routeRepository.GetAllRoutes();
-            List<MetricType> allMetricTypes = metricTyperepository.GetAllToAggregateMetrics();
-            foreach (var metricType in allMetricTypes)
-            {
-                aggDataExportViewModel.MetricItems.Add(metricType.MetricID, metricType.ChartName);
-            }
-            List<DirectionType> allDirectionTypes = directionTypeRepository.GetAllDirections();
-            List<MovementType> allMovementTypes = movementTypeRepository.GetAllMovementTypes();
-            List<LaneType> allLaneTypes = laneTypeRepository.GetAllLaneTypes();
-            aggDataExportViewModel.AllMetricTypes = allMetricTypes;
-            aggDataExportViewModel.AllApproachTypes = allDirectionTypes;
-            aggDataExportViewModel.AllMovementTypes = allMovementTypes;
-            aggDataExportViewModel.AllLaneTypes = allLaneTypes;
-            aggDataExportViewModel.SelectedMetric = 4;
-
+            aggDataExportViewModel.MetricTypes = metricTyperepository.GetAllToAggregateMetrics(); 
+            aggDataExportViewModel.SelectedMetricType = metricRepository.GetMetricsByID(20);
+            aggDataExportViewModel.SelectedChartType = SeriesChartType.StackedColumn.ToString();
+            aggDataExportViewModel.SelectedBinSize = 0;
             aggDataExportViewModel.StartDateDay = Convert.ToDateTime("10/17/2017");
             aggDataExportViewModel.EndDateDay = Convert.ToDateTime("10/18/2017");
             return View(aggDataExportViewModel);
