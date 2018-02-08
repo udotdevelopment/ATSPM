@@ -1,6 +1,6 @@
 ﻿
 @model SPM.Models.AggDataExportViewModel
-@using (Ajax.BeginForm("CreateMetric", "AggregateDataExport", new AjaxOptions { InsertionMode = System.Web.Mvc.Ajax.InsertionMode.Replace, UpdateTargetId = "Results", HttpMethod = "POST", OnBegin = "StartReportSpinner()", OnSuccess = "StopReportSpinner()", OnFailure = "StopReportSpinner()" }))
+@using (Ajax.BeginForm("GetRouteSignals", "AggregateDataExport", new AjaxOptions { InsertionMode = System.Web.Mvc.Ajax.InsertionMode.Replace, UpdateTargetId = "Results", HttpMethod = "POST", OnBegin = "StartReportSpinner()", OnSuccess = "StopReportSpinner()", OnFailure = "StopReportSpinner()" }))
 {
     @Html.AntiForgeryToken()
     @Html.DisplayFor(m => m.Signals)

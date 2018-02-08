@@ -21,7 +21,7 @@ namespace SPM.Controllers
             MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
 
         // GET: DataExportViewModels
-        public ActionResult CreateMetric(int id)
+        public ActionResult GetRouteSignals(int id)
         {
             AggDataExportViewModel aggDataExportViewModel = new AggDataExportViewModel();
             var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
@@ -32,6 +32,14 @@ namespace SPM.Controllers
                 aggDataExportViewModel.Signals.Add(signalRepository.GetLatestVersionOfSignalBySignalID(routeignal.SignalId));
             }
             return PartialView(aggDataExportViewModel);
+        }
+
+        public ActionResult GetSignal(string id)
+        {
+            var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            AggDataExportViewModel aggDataExportViewModel = new AggDataExportViewModel();
+            aggDataExportViewModel.Signals.Add(signalRepository.GetLatestVersionOfSignalBySignalID(id));
+            return PartialView("GetRouteSignals",aggDataExportViewModel);
         }
 
         // POST: AggDataExportViewModel
@@ -132,24 +140,26 @@ namespace SPM.Controllers
         public ActionResult Index()
         {
             var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
-            AggDataExportViewModel aggDataExportViewModel = new AggDataExportViewModel();
+            AggDataExportViewModel viewModel = new AggDataExportViewModel();
             var metricRepository = MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
-            aggDataExportViewModel.SetSeriesTypes();
-            aggDataExportViewModel.SetAggregationTypes();
-            aggDataExportViewModel.SetBinSizeList();
-            aggDataExportViewModel.SetChartTypes();
-            aggDataExportViewModel.SetDefaultDates();
-            aggDataExportViewModel.SetDimensions();
-            aggDataExportViewModel.SetSeriesWidth();
-            aggDataExportViewModel.SetXAxisTypes();
-            aggDataExportViewModel.Routes = routeRepository.GetAllRoutes();
-            aggDataExportViewModel.MetricTypes = metricTyperepository.GetAllToAggregateMetrics(); 
-            aggDataExportViewModel.SelectedMetricType = metricRepository.GetMetricsByID(20);
-            aggDataExportViewModel.SelectedChartType = SeriesChartType.StackedColumn.ToString();
-            aggDataExportViewModel.SelectedBinSize = 0;
-            aggDataExportViewModel.StartDateDay = Convert.ToDateTime("10/17/2017");
-            aggDataExportViewModel.EndDateDay = Convert.ToDateTime("10/18/2017");
-            return View(aggDataExportViewModel);
+            viewModel.SetSeriesTypes();
+            viewModel.SetAggregationTypes();
+            viewModel.SetBinSizeList();
+            viewModel.SetChartTypes();
+            viewModel.SetDefaultDates();
+            viewModel.SetDimensions();
+            viewModel.SetSeriesWidth();
+            viewModel.SetXAxisTypes();
+            viewModel.Routes = routeRepository.GetAllRoutes();
+            viewModel.MetricTypes = metricTyperepository.GetAllToAggregateMetrics(); 
+            viewModel.SelectedMetricType = metricRepository.GetMetricsByID(20);
+            viewModel.SelectedChartType = SeriesChartType.StackedColumn.ToString();
+            viewModel.SelectedBinSize = 0;
+            viewModel.StartDateDay = Convert.ToDateTime("10/17/2017");
+            viewModel.EndDateDay = Convert.ToDateTime("10/18/2017");
+            viewModel.Weekdays = true;
+            viewModel.Weekends = true;
+            return View(viewModel);
         }
 
         private int[] SplitHourMinute(String timeFromFrontEnd)
