@@ -52,7 +52,7 @@ namespace SPM.Controllers.Tests
             //Assert.IsTrue(a==0);
             int id = 1; //RouteID
             var TestController = new AggregateDataExportController();
-            var TestActionResult = TestController.CreateMetric(id);
+            var TestActionResult = TestController.GetRouteSignals(id);
             Assert.IsNotNull(TestActionResult);
         }
     }

@@ -8,6 +8,7 @@ using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
+using MOE.Common.Models.ViewModel.Chart;
 
 namespace SPM.Models
 {
@@ -85,6 +86,9 @@ namespace SPM.Models
         [Required]
         [Display(Name = "Series Width")]
         public int SelectedSeriesWidth { get; set; }
+
+
+        public MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel SignalSearch { get; set; } = new SignalSearchViewModel();
 
         private IMetricTypeRepository _metricRepository;
         public AggDataExportViewModel()
