@@ -47,3 +47,45 @@ function MoveOptions() {
         $('#DivMovePath').removeClass("hidden");
     }
 }
+
+function LoadSignal() {
+    var signalId = $("#SignalID").val();
+    $.ajax({
+        url: urlpathGetSignal + "/" + signalId,
+        type: "GET",
+        cache: false,
+        async: true,
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            $('#ExcludedSignals').append(data);
+            $.validator.unobtrusive.parse($("#ExcludedSignals"));
+        },
+        onerror: function () { alert("Error"); }
+    });
+}
+
+
+function SetControlValues(signalID, selectedMetricID) {
+    $("#SignalID").val(signalID);
+    GetSignalLocation(selectedMetricID);
+}
+
+function GetSignalLocation(selectedMetricID) {
+    if (selectedMetricID == null) {
+        var metricsList = $("#MetricsList");
+        if (metricsList != null) {
+            selectedMetricID = metricsList.val();
+        }
+    }
+    var signalID = $("#SignalID").val();
+    var tosend = {};
+    tosend.signalID = signalID;
+    $.get(urlpathGetSignalLocation, tosend, function (data) {
+        $('#SignalLocation').text(data);
+        if (data != "Signal Not Found") {
+            LoadSignal();
+        }
+    });
+}
+
+

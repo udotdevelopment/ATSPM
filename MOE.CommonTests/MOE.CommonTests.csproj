@@ -105,7 +105,6 @@
     <Compile Include="Business\DataAggregation\SplitFailAggregationBySignalTests.cs" />
     <Compile Include="Business\Export\ExporterTests.cs" />
     <Compile Include="Business\PlanFactoryTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\AggregationMetricOptionsTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChartPhaseXPhaseSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChartSignalXSignalSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChartSignalXDirectionSeriesTests.cs" />
@@ -116,9 +115,6 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChartTimeXDirectionSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChartTimeXRouteSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChartTimeXSignalSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsByDirectionTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsBySignalByPhaseTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptionsBySignalByDirectionTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChartSignalXPhaseSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChartTimeOfDayXPhaseSeriesTests.cs" />

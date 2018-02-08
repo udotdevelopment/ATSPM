@@ -18,42 +18,41 @@
                 </div>
                 <div id="collapseDataAggregation" class="panel-body panel-collapse collapse in">
                     <div class="row">
-                    <div class="col-md-6 col-sm-6 col-xs-6">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
                         @Html.LabelFor(model => model.SelectedMetricType, htmlAttributes: new { @class = "control-label" })
                         @Html.DropDownListFor(model => model.SelectedMetricType, new SelectList(Model.MetricTypes, "MetricId", "ChartName"), new { @class = "form-control" })
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
                         @Html.LabelFor(model => model.SelectedXAxisType, htmlAttributes: new { @class = "control-label" })
                         @Html.DropDownListFor(model => model.SelectedXAxisType, new SelectList(Model.XAxisTypes), new { @class = "form-control" })
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
                         @Html.LabelFor(model => model.SelectedSeriesType, htmlAttributes: new { @class = "control-label" })
                         @Html.DropDownListFor(model => model.SelectedSeriesType, new SelectList(Model.SeriesTypes), new { @class = "form-control" })
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
                         @Html.LabelFor(model => model.SelectedAggregationType, htmlAttributes: new { @class = "control-label" })
                         @Html.DropDownListFor(model => model.SelectedAggregationType, new SelectList(Model.AggregationTypes), new { @class = "form-control" })
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
                         @Html.LabelFor(model => model.SelectedChartType, htmlAttributes: new { @class = "control-label" })
                         @Html.DropDownListFor(model => model.SelectedChartType, new SelectList(Model.ChartTypesList), new { @class = "form-control" })
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6">
-                        @Html.LabelFor(model => model.SelectedSeriesWidth, htmlAttributes: new { @class = "control-label" })
-                        @Html.DropDownListFor(model => model.SelectedSeriesWidth, new SelectList(Model.SeriesWidths), new { @class = "form-control" })
-                    </div>
-
-                        <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            @Html.LabelFor(model => model.SelectedSeriesWidth, htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.SelectedSeriesWidth, new SelectList(Model.SeriesWidths), new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
                             @Html.LabelFor(model => model.SelectedBinSize, htmlAttributes: new { @class = "control-label" })
-                            @Html.DropDownListFor(model => model.SelectedBinSize, new SelectList(Model.BinSizes), new { @class = "form-control" })
+                            @Html.DropDownListFor(model => model.SelectedBinSize, new SelectList(Model.BinSizes, "Item1", "Item2"), new { @class = "form-control" })
                         </div>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            @Html.LabelFor(model => model.SelectedDimension, htmlAttributes: new { @class = "control-label" })
-                            @Html.DropDownListFor(model => model.SelectedDimension, new SelectList(Model.Dimensions), new { @class = "form-control" })
-                        </div>
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        @Html.LabelFor(model => model.SelectedDimension, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.SelectedDimension, new SelectList(Model.Dimensions), new { @class = "form-control" })
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 col-sm-6 col-xs-6">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
                         @Html.LabelFor(model => model.StartDateDay, htmlAttributes: new { @class = "control-label" })
                         <div class="input-group-custom">
                             @Html.EditorFor(model => model.StartDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
@@ -62,7 +61,7 @@
                                 new { @class = "form-control AMPMWidth", title = "AM PM component of start date" })
                         </div>
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
                         @Html.LabelFor(model => model.EndDateDay, htmlAttributes: new { @class = "control-label" })
                         <div class="input-group-custom">
                             @Html.EditorFor(model => model.EndDateDay, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
@@ -93,18 +92,42 @@
         <div class="panel panel-signal">
             <div class="panel-heading">
                 <h5 class="panel-title">
-                    <a id="Signals" data-toggle="collapse" href="#collapseSignals">
-                        Route
+                    <a id="Signals" data-toggle="collapse" href="#collapseRoutes">
+                        Load Signals From Route
                     </a>
                 </h5>
             </div>
-            <div id="collapseSignals" class="panel-body panel-collapse collapse in">
-
+            <div id="collapseRoutes" class="panel-body panel-collapse collapse in">
                 <div id="Routes" class="col-md-12">
                     @Html.DropDownListFor(m => m.SelectedRouteId, new SelectList(Model.Routes, "Id", "RouteName"), "Select A Route",
                         new { @onchange = "LoadRoute()", @class = "form-control" })
                 </div>
-                <Table class="table-striped" id="RouteSignals"></Table>
+            </div>
+        </div>
+        <div class="panel panel-signal">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a id="Signals" data-toggle="collapse" href="#collapseMap">
+                        Load Signals From Map
+                    </a>
+                </h5>
+            </div>
+            <div id="collapseMap" class="panel-body panel-collapse collapse">
+                @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
+            </div>
+        </div>
+        <div class="panel panel-signal">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a id="Signals" data-toggle="collapse" href="#collapseSignal">
+                        Signals
+                    </a>
+                </h5>
+            </div>
+            <div id="collapseSignal" class="panel-body panel-collapse collapse in">
+                <Table class="table-striped" >
+                    <tbody id="RouteSignals"></tbody>
+                </Table>
             </div>
         </div>
     </div>
@@ -115,7 +138,14 @@
         @section Scripts
 {
             <script type="text/javascript" src="~/Scripts/AggregateDataExport.js"></script>
+            <script type="text/javascript" src="~/Scripts/Map.js"></script>
+            <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
             <script type="text/javascript">
-        var urlpathGetRouteSignals = '@Url.Action("CreateMetric", "AggregateDataExport")';
+                var urlpathGetRouteSignals = '@Url.Action("GetRouteSignals", "AggregateDataExport")';
+                var urlpathGetSignal = '@Url.Action("GetSignal", "AggregateDataExport")';
+                var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';
+                var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';
+                var urlpathGetMetricsList = '@Url.Action("GetMetricsList", "DefaultCharts")';
+                var urlpathFillSignals = '@Url.Action("FillSignals", "DefaultCharts")';
             </script>
         }
