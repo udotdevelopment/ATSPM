@@ -49,8 +49,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -120,8 +120,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -192,8 +192,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -263,8 +263,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -334,8 +334,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -405,8 +405,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -476,8 +476,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("11/1/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("11/1/2017"),
@@ -548,8 +548,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("11/1/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("11/1/2017"),
@@ -619,8 +619,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
@@ -691,8 +691,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
@@ -762,8 +762,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"),
@@ -847,8 +847,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"),
@@ -933,8 +933,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            //options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
+            options.SelectedAggregationType =AggregationType.Sum;
+            //options.XAxisAggregationSeriesOption = ApproachAggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -999,8 +999,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            //options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
+            options.SelectedAggregationType =AggregationType.Sum;
+            //options.XAxisAggregationSeriesOption = ApproachAggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1065,8 +1065,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            //options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
+            options.SelectedAggregationType =AggregationType.Sum;
+            //options.XAxisAggregationSeriesOption = ApproachAggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1131,8 +1131,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            //options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
+            options.SelectedAggregationType =AggregationType.Sum;
+            //options.XAxisAggregationSeriesOption = ApproachAggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1197,8 +1197,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1224,8 +1224,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -1250,8 +1250,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
@@ -1327,8 +1327,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/2/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
             Convert.ToDateTime("1/2/2017"),
@@ -1350,8 +1350,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options2 = new ApproachSplitFailAggregationOptions();
             options2.StartDate = Convert.ToDateTime("1/1/2017");
             options2.EndDate = Convert.ToDateTime("1/2/2017");
-            options2.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options2.SelectedXAxisType = AggregationMetricOptions.XAxisType.Signal;
+            options2.SelectedAggregationType =AggregationType.Sum;
+            options2.SelectedXAxisType = XAxisType.Signal;
             options2.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/2/2017"),

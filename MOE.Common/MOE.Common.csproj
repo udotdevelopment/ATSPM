@@ -393,7 +393,8 @@
     <Compile Include="Business\PCD\Plan.cs" />
     <Compile Include="Business\TMC\TMCViewModel.cs" />
     <Compile Include="Business\WatchDog\WatchDogScan.cs" />
-    <Compile Include="Business\WCFServiceLibrary\AggregationMetricOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\SignalAggregationMetricOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachAggregationMetricOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptions.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>

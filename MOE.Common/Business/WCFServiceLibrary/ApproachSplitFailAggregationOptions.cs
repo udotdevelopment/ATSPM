@@ -10,7 +10,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 {
 
     [DataContract]
-    public class ApproachSplitFailAggregationOptions: AggregationMetricOptions
+    public class ApproachSplitFailAggregationOptions: ApproachAggregationMetricOptions
     {
         public  ApproachSplitFailAggregationOptions()
         {

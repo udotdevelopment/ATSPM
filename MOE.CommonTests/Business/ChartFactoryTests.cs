@@ -107,8 +107,8 @@ namespace MOE.Common.Business.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Phase;
+            options.SelectedAggregationType = AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Phase;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),

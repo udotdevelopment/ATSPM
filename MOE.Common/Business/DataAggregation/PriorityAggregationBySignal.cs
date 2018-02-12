@@ -36,7 +36,7 @@ namespace MOE.Common.Business.DataAggregation
 
         public double Order { get; set; }
 
-        public PriorityAggregationBySignal(AggregationMetricOptions options, Models.Signal signal, List<BinsContainer> binsContainers)
+        public PriorityAggregationBySignal(ApproachAggregationMetricOptions options, Models.Signal signal, List<BinsContainer> binsContainers)
         {
             Signal = signal;
             PriorityTotals = new List<SignalPriorityAggregationContainer>();

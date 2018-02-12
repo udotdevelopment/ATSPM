@@ -53,8 +53,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3; 
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/28/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
+            options.SelectedXAxisType = XAxisType.TimeOfDay;
+            options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/28/2017"),
@@ -63,29 +63,29 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Line;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Pie;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedColumn;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedArea;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             Assert.IsTrue(options.ReturnList.Count == 10);
         }
@@ -96,8 +96,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("10/31/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
+            options.SelectedXAxisType = XAxisType.TimeOfDay;
+            options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("10/31/2017"),
@@ -106,29 +106,29 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Line;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Pie;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedColumn;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedArea;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             Assert.IsTrue(options.ReturnList.Count == 10);
         }
@@ -139,8 +139,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
+            options.SelectedXAxisType = XAxisType.TimeOfDay;
+            options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -149,29 +149,29 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Line;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Pie;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedColumn;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedArea;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             Assert.IsTrue(options.ReturnList.Count == 10);
         }
@@ -182,8 +182,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
+            options.SelectedXAxisType = XAxisType.TimeOfDay;
+            options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -192,29 +192,29 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Line;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Pie;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedColumn;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedArea;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             Assert.IsTrue(options.ReturnList.Count == 10);
         }
@@ -225,8 +225,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
+            options.SelectedXAxisType = XAxisType.TimeOfDay;
+            options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -235,29 +235,29 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Line;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Pie;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedColumn;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedArea;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             Assert.IsTrue(options.ReturnList.Count == 10);
         }
@@ -268,8 +268,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
+            options.SelectedXAxisType = XAxisType.TimeOfDay;
+            options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -278,29 +278,29 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Line;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Pie;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedColumn;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedArea;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             Assert.IsTrue(options.ReturnList.Count == 10);
         }
@@ -312,8 +312,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("11/1/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
+            options.SelectedXAxisType = XAxisType.TimeOfDay;
+            options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("11/1/2017"),
@@ -322,29 +322,29 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Line;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Pie;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedColumn;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedArea;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             Assert.IsTrue(options.ReturnList.Count == 10);
         }
@@ -355,8 +355,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("11/1/2017");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
+            options.SelectedXAxisType = XAxisType.TimeOfDay;
+            options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("11/1/2017"),
@@ -365,29 +365,29 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Line;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Pie;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedColumn;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedArea;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             Assert.IsTrue(options.ReturnList.Count == 10);
         }
@@ -398,8 +398,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
+            options.SelectedXAxisType = XAxisType.TimeOfDay;
+            options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
@@ -408,29 +408,29 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Line;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Pie;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedColumn;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedArea;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             Assert.IsTrue(options.ReturnList.Count == 10);
         }
@@ -441,8 +441,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
+            options.SelectedXAxisType = XAxisType.TimeOfDay;
+            options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
@@ -451,29 +451,29 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Line;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Pie;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedColumn;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedArea;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             Assert.IsTrue(options.ReturnList.Count == 10);
         }
@@ -484,8 +484,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
+            options.SelectedXAxisType = XAxisType.TimeOfDay;
+            options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"),
@@ -494,29 +494,29 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Line;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Pie;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedColumn;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedArea;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             Assert.IsTrue(options.ReturnList.Count == 10);
         }
@@ -527,8 +527,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.TimeOfDay;
-            options.SelectedSeries = AggregationMetricOptions.SeriesType.PhaseNumber;
+            options.SelectedXAxisType = XAxisType.TimeOfDay;
+            options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"),
@@ -537,29 +537,29 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.TimeOptions.TimePeriod);
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Line;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Pie;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedColumn;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedArea;
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
+            options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Average;
+            options.SelectedAggregationType =AggregationType.Average;
             options.CreateMetric();
             Assert.IsTrue(options.ReturnList.Count == 10);
         }

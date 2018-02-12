@@ -39,7 +39,7 @@ namespace MOE.Common.Business.DataAggregation
 
         public double Order { get; set; }
 
-        public ApproachSpeedAggregationBySignal(AggregationMetricOptions options, Models.Signal signal, List<BinsContainer> binsContainers)
+        public ApproachSpeedAggregationBySignal(ApproachAggregationMetricOptions options, Models.Signal signal, List<BinsContainer> binsContainers)
         {
             Signal = signal;
             ApproachSpeeds = new List<ApproachSpeedAggregationContainer>();

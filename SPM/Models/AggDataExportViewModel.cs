@@ -23,10 +23,10 @@ namespace SPM.Models
         public List<FilterSignal> FilterSignals { get; set; } = new List<FilterSignal>();
 
         public virtual ICollection<MetricType> MetricTypes { get; set; }
-        public virtual ICollection<AggregationMetricOptions.Dimension> Dimensions { get; set; }
-        public virtual ICollection<AggregationMetricOptions.SeriesType> SeriesTypes { get; set; }
-        public List<AggregationMetricOptions.XAxisType> XAxisTypes { get; set; }
-        public List<AggregationMetricOptions.AggregationType> AggregationTypes { get; set; }
+        public virtual ICollection<Dimension> Dimensions { get; set; }
+        public virtual ICollection<SeriesType> SeriesTypes { get; set; }
+        public List<XAxisType> XAxisTypes { get; set; }
+        public List<AggregationType> AggregationTypes { get; set; }
         public List<string> ChartTypesList { get; set; } = new List<string>();
         public List<Tuple<int, String>> BinSizes { get; set; } = new List<Tuple<int, string>>();
         public List<int> SeriesWidths { get; set; } = new List<int>();
@@ -38,18 +38,18 @@ namespace SPM.Models
 
         [Required]
         [Display(Name = "Dimesion")]
-        public AggregationMetricOptions.Dimension SelectedDimension { get; set; }
+        public Dimension SelectedDimension { get; set; }
         [Required]
         [Display(Name = "Series Type")]
-        public AggregationMetricOptions.SeriesType SelectedSeriesType { get; set; }
+        public SeriesType SelectedSeriesType { get; set; }
 
         [Required]
         [Display(Name = "X-Axis")]
-        public  AggregationMetricOptions.XAxisType SelectedXAxisType { get; set; }
+        public  XAxisType SelectedXAxisType { get; set; }
 
         [Required]
         [Display(Name = "Aggregation Type")]
-        public AggregationMetricOptions.AggregationType SelectedAggregationType { get; set; }
+        public AggregationType SelectedAggregationType { get; set; }
 
         [Required]
         [Display(Name = "Metric Type")]
@@ -113,7 +113,7 @@ namespace SPM.Models
 
         public void SetDimensions()
         {
-            Dimensions = Enum.GetValues(typeof(AggregationMetricOptions.Dimension)).Cast<AggregationMetricOptions.Dimension>().ToList();
+            Dimensions = Enum.GetValues(typeof(Dimension)).Cast<Dimension>().ToList();
         }
 
         public void SetSeriesWidth()
@@ -145,17 +145,17 @@ namespace SPM.Models
 
         public void SetSeriesTypes()
         {
-            SeriesTypes = Enum.GetValues(typeof(AggregationMetricOptions.SeriesType)).Cast<AggregationMetricOptions.SeriesType>().ToList();
+            SeriesTypes = Enum.GetValues(typeof(SeriesType)).Cast<SeriesType>().ToList();
         }
 
         public void SetAggregationTypes()
         {
-            AggregationTypes = new List<AggregationMetricOptions.AggregationType>{ AggregationMetricOptions.AggregationType.Sum, AggregationMetricOptions.AggregationType.Average};
+            AggregationTypes = new List<AggregationType>{ AggregationType.Sum, AggregationType.Average};
         }
 
         public void SetXAxisTypes()
         {
-            XAxisTypes = Enum.GetValues(typeof(AggregationMetricOptions.XAxisType)).Cast<AggregationMetricOptions.XAxisType>().ToList();
+            XAxisTypes = Enum.GetValues(typeof(XAxisType)).Cast<XAxisType>().ToList();
         }
 
         public void SetBinSizeList()
