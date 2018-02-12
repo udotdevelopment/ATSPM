@@ -6,7 +6,10 @@ using System.Linq;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Models;
 using System.Runtime.Serialization;
+using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Business.Bins;
+using MOE.Common.Business.FilterExtensions;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
@@ -41,7 +44,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             TwoDimensional,
             ThreeDimensional
         }
-
+        [DataMember]
+        public List<FilterDirection> FilterDirections { get; set; }
         [DataMember]
         public int SeriesWidth { get; set; }
         [DataMember]
@@ -57,7 +61,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public Dimension SelectedDimension { get; set; }
         [DataMember]
-        public List<string> SignalIds { get; set; } = new List<string>();
+        public List<FilterExtensions.FilterSignal> FilterSignals { get; set; } = new List<FilterSignal>();
         public List<Models.Signal> Signals { get; set; } = new List<Models.Signal>();
         public List<Models.Approach> Approaches { get; set; } = new List<Models.Approach>();
         public List<Models.Detector> Detectors { get; set; } = new List<Models.Detector>();
@@ -138,6 +142,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public void GetSignalObjects()
         {
+            try
+            {
+
             if (Signals == null)
             {
                 Signals = new List<Models.Signal>();
@@ -145,9 +152,97 @@ namespace MOE.Common.Business.WCFServiceLibrary
             if (Signals.Count == 0)
             {
                 var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-                foreach (string signalId in SignalIds)
+                foreach (FilterSignal filterSignal in FilterSignals)
                 {
-                    Signals.AddRange(signalRepository.GetSignalsBetweenDates(signalId, StartDate, EndDate));
+                    if (!filterSignal.Exclude)
+                    {
+                        var signals = signalRepository.GetSignalsBetweenDates(filterSignal.SignalId, StartDate, EndDate);
+                        foreach (var signal in signals)
+                        {
+                            RemoveApproachesByFilter(filterSignal, signal);
+                            signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ToList();
+                        }
+                        Signals.AddRange(signals);
+                    }
+                }
+            }
+
+            }
+            catch (Exception e)
+            {
+                var errorLog = ApplicationEventRepositoryFactory.Create();
+                errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                    this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                throw new Exception("Unable to apply signal filter");
+            }
+        }
+
+        private void RemoveApproachesByFilter(FilterSignal filterSignal, Models.Signal signal)
+        {
+            RemoveApproachesFromSignalByDirection(signal);
+            var approachRepository = Models.Repositories.ApproachRepositoryFactory.Create();
+            var excludedApproachIds = filterSignal.FilterApproaches.Where(f => f.Exclude).Select(f => f.ApproachId).ToList();
+            var excludedApproaches = approachRepository.GetApproachesByIds(excludedApproachIds);
+            foreach (var excludedApproach in excludedApproaches)
+            {
+                var approachesToExclude = signal.Approaches.Where(a =>
+                    a.DirectionTypeID == excludedApproach.DirectionTypeID
+                    && a.ProtectedPhaseNumber == excludedApproach.ProtectedPhaseNumber
+                    && a.PermissivePhaseNumber == excludedApproach.PermissivePhaseNumber
+                    && a.IsPermissivePhaseOverlap ==
+                    excludedApproach.IsPermissivePhaseOverlap
+                    && a.IsProtectedPhaseOverlap ==
+                    excludedApproach.IsProtectedPhaseOverlap)
+                .ToList();
+                foreach (var approachToExclude in approachesToExclude)
+                {
+                    signal.Approaches.Remove(approachToExclude);
+                }
+                foreach (var approach in signal.Approaches)
+                {
+                    foreach (var filterApproach in filterSignal.FilterApproaches.Where(f => !f.Exclude))
+                    {
+                        RemoveDetectorsFromApproachByFilter(filterApproach, approach);
+                    }
+                }
+
+            }
+        }
+
+        private void RemoveApproachesFromSignalByDirection(Models.Signal signal)
+        {
+            List<Models.Approach> approachesToRemove = new List<Approach>();
+            foreach (var approach in signal.Approaches)
+            {
+                if(FilterDirections.Where(f => !f.Include).Select(f => f.DirectionTypeId).ToList().Contains(approach.DirectionTypeID))
+                {
+                    approachesToRemove.Add(approach);
+                }
+            }
+            foreach (var approach in approachesToRemove)
+            {
+                signal.Approaches.Remove(approach);
+            }
+        }
+
+        private static void RemoveDetectorsFromApproachByFilter(FilterApproach filterApproach, Approach approach)
+        {
+            var detectorRepository = Models.Repositories.DetectorRepositoryFactory.Create();
+            var excludedDetectorIds =
+                filterApproach.FilterDetectors.Where(f => f.Exclude).Select(f => f.Id).ToList();
+            var excludedDetectors = detectorRepository.GetDetectorsByIds(excludedDetectorIds);
+            foreach (var excludedDetector in excludedDetectors)
+            {
+                var detectorsToExclude = approach.Detectors.Where(d =>
+                    d.LaneNumber == excludedDetector.LaneNumber
+                    && d.LaneTypeID == excludedDetector.LaneTypeID
+                    && d.MovementTypeID == excludedDetector.MovementTypeID
+                    && d.DetectionHardwareID == excludedDetector.DetectionHardwareID
+                    && d.DetChannel == excludedDetector.DetChannel
+                ).ToList();
+                foreach (var detectorToExclude in detectorsToExclude)
+                {
+                    approach.Detectors.Remove(detectorToExclude);
                 }
             }
         }
@@ -210,8 +305,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void GetDirectionXAxisDirectionSeriesChart(Models.Signal signal, Chart chart)
         {
-            var direcitonRepository = Models.Repositories.DirectionTypeRepositoryFactory.Create();
-            var directionsList = direcitonRepository.GetAllDirections();
+            List<DirectionType> directionsList = GetFilteredDirections();
             int columnCounter = 1;
             var colorCount = 1;
             Series series = CreateSeries(0, signal.SignalDescription);
@@ -236,6 +330,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chart.Series.Add(series);
         }
 
+        private List<DirectionType> GetFilteredDirections()
+        {
+            var direcitonRepository = Models.Repositories.DirectionTypeRepositoryFactory.Create();
+            var includedDirections = FilterDirections.Where(f => f.Include).Select(f => f.DirectionTypeId).ToList();
+            var directionsList = direcitonRepository.GetDirectionsByIDs(includedDirections);
+            return directionsList;
+        }
 
         private void GetApproachCharts()
         {

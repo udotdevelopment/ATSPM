@@ -16,5 +16,6 @@ namespace MOE.Common.Models.Repositories
             int directionTypeId);
          void Remove(MOE.Common.Models.Approach approach);
          void Remove(int approachID);
+        List<Approach> GetApproachesByIds(List<int> excludedApproachIds);
     }
 }

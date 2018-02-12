@@ -4,19 +4,23 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business;
 using MOE.Common.Business.Bins;
+using MOE.Common.Business.FilterExtensions;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using MOE.Common.Models.ViewModel.Chart;
+using Signal = MOE.Common.Models.Signal;
 
 namespace SPM.Models
 {
     public class AggDataExportViewModel
     {
         public List<Route> Routes { get; set; }
-        public int SelectedRouteId { get; set; }
-        public List<Signal> Signals { get; set; } = new List<Signal>();
+        public int? SelectedRouteId { get; set; }
+        [Required]
+        public List<FilterSignal> FilterSignals { get; set; } = new List<FilterSignal>();
 
         public virtual ICollection<MetricType> MetricTypes { get; set; }
         public virtual ICollection<AggregationMetricOptions.Dimension> Dimensions { get; set; }
@@ -28,7 +32,8 @@ namespace SPM.Models
         public List<int> SeriesWidths { get; set; } = new List<int>();
         public List<SelectListItem> StartAMPMList { get; set; }
         public List<SelectListItem> EndAMPMList { get; set; }
-        
+        public List<FilterDirection> FilterDirections { get; set; } = new List<FilterDirection>();
+
 
 
         [Required]
@@ -48,7 +53,7 @@ namespace SPM.Models
 
         [Required]
         [Display(Name = "Metric Type")]
-        public MetricType SelectedMetricType { get; set; }
+        public int SelectedMetricTypeId { get; set; }
 
         [Required]
         [Display(Name="Chart Type")]
@@ -94,6 +99,16 @@ namespace SPM.Models
         public AggDataExportViewModel()
         {
             
+        }
+
+        public void SetDirectionTypes()
+        {
+            var directionTypeRepository = MOE.Common.Models.Repositories.DirectionTypeRepositoryFactory.Create();
+            var directionTypes = directionTypeRepository.GetAllDirections();
+            foreach (var direction in directionTypes)
+            {
+                FilterDirections.Add(new FilterDirection(direction.DirectionTypeID, direction.Description, true));
+            }
         }
 
         public void SetDimensions()

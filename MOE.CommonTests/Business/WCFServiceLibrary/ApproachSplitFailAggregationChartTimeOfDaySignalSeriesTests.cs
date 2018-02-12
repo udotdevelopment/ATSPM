@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.Bins;
+using MOE.Common.Business.FilterExtensions;
 using MOE.Common.Models.Repositories;
 using MOE.CommonTests.Models;
 
@@ -56,7 +57,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("101"); options.SignalIds.Add("102"); options.SignalIds.Add("103"); options.SignalIds.Add("104"); options.SignalIds.Add("105");   
+            options.FilterSignals.Add(new FilterSignal{SignalId = "101", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "105", Exclude = false});   
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -94,7 +95,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 6, 0, 10, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("101"); options.SignalIds.Add("102"); options.SignalIds.Add("103"); options.SignalIds.Add("104"); options.SignalIds.Add("105"); 
+            options.FilterSignals.Add(new FilterSignal{SignalId = "101", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "105", Exclude = false}); 
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -132,7 +133,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("101"); options.SignalIds.Add("102"); options.SignalIds.Add("103"); options.SignalIds.Add("104"); options.SignalIds.Add("105"); 
+            options.FilterSignals.Add(new FilterSignal{SignalId = "101", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "105", Exclude = false}); 
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -170,7 +171,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 6, 0, 10, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("101"); options.SignalIds.Add("102"); options.SignalIds.Add("103"); options.SignalIds.Add("104"); options.SignalIds.Add("105"); 
+            options.FilterSignals.Add(new FilterSignal{SignalId = "101", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "105", Exclude = false}); 
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -208,7 +209,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.Hour,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("101"); options.SignalIds.Add("102"); options.SignalIds.Add("103"); options.SignalIds.Add("104"); options.SignalIds.Add("105"); 
+            options.FilterSignals.Add(new FilterSignal{SignalId = "101", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "105", Exclude = false}); 
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -246,7 +247,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 6, 0, 10, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("101"); options.SignalIds.Add("102"); options.SignalIds.Add("103"); options.SignalIds.Add("104"); options.SignalIds.Add("105"); 
+            options.FilterSignals.Add(new FilterSignal{SignalId = "101", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "105", Exclude = false}); 
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();

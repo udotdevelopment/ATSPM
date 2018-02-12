@@ -371,6 +371,10 @@
     <Compile Include="Business\DataAggregation\SplitFailAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\SplitFailAggregationByRoute.cs" />
     <Compile Include="Business\Export\Exporter.cs" />
+    <Compile Include="Business\FilterExtensions\FilterDirection.cs" />
+    <Compile Include="Business\FilterExtensions\FilterDetector.cs" />
+    <Compile Include="Business\FilterExtensions\FilterApproach.cs" />
+    <Compile Include="Business\FilterExtensions\FilterSignal.cs" />
     <Compile Include="Business\Helpers\ApproachVolumeTable.cs" />
     <Compile Include="Business\Helpers\ConfigurationRecord.cs" />
     <Compile Include="Business\PlanPCD.cs" />

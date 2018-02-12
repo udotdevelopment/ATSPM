@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.Bins;
+using MOE.Common.Business.FilterExtensions;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.CommonTests.Models;
 
@@ -114,8 +115,8 @@ namespace MOE.Common.Business.Tests
                 7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.Hour,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("7185");
-            options.SignalIds.Add("5114");
+            options.FilterSignals.Add(new FilterSignal { SignalId = "7185", Exclude = false });
+            options.FilterSignals.Add(new FilterSignal { SignalId = "5114", Exclude = false });
             options.SelectedChartType = SeriesChartType.Column;
 
             return options;

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.Bins;
+using MOE.Common.Business.FilterExtensions;
 using MOE.Common.Models.Repositories;
 using MOE.CommonTests.Models;
 
@@ -63,7 +64,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -115,7 +116,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 },
                 BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -157,7 +158,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -209,7 +210,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 },
                 BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -251,7 +252,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.Hour,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -303,7 +304,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 },
                 BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -346,7 +347,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.Day,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -398,7 +399,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 },
                 BinFactoryOptions.BinSize.Day,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -440,7 +441,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.Month,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -492,7 +493,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 },
                 BinFactoryOptions.BinSize.Month,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -534,7 +535,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.Year,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();
@@ -586,7 +587,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 },
                 BinFactoryOptions.BinSize.Year,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
             options.CreateMetric();

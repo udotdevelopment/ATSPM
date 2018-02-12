@@ -207,6 +207,11 @@ namespace MOE.Common.Models.Repositories
             }
         }
 
+        public List<Approach> GetApproachesByIds(List<int> excludedApproachIds)
+        {
+            return _db.Approaches.Where(a => excludedApproachIds.Contains(a.ApproachID)).ToList();
+        }
+
         public Approach Add(MOE.Common.Models.Approach approach)
         {
             MOE.Common.Models.Approach g = (from r in _db.Approaches

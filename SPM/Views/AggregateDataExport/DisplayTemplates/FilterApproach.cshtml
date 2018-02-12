@@ -1,0 +1,20 @@
+﻿@model MOE.Common.Business.FilterExtensions.FilterApproach
+
+<div class="panel panel-signal">
+    <div class="panel-heading">
+        <h5 class="panel-title">
+            <a id="Signals" data-toggle="collapse" href="#collapseSignal_@Model.ApproachId">
+               @Html.DisplayFor(m => m.Description)
+            </a>
+            
+            <a class="pull-right">
+            <span>
+                @Html.LabelFor(m => m.Exclude)
+                @Html.CheckBoxFor(m => m.Exclude)
+                </span></a>
+        </h5>
+    </div>
+    <div id="collapseSignal_@Model.ApproachId" class="panel-body panel-collapse collapse">
+                @Html.HiddenFor(m => m.ApproachId)
+                @Html.DisplayFor(m => m.FilterDetectors)
+        </div></div>

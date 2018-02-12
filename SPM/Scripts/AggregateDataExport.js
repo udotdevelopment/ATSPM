@@ -5,8 +5,8 @@
 
 function SetDateTextBoxes (){
     $(".datepicker").attr('type', 'text');
-    //$("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
-    //$("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
+    $("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date("10/17/2017")));
+    $("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date("10/18/2017")));
     $("#StartEndDaySelector").datepicker({
         onSelect: function (dateText) {
             $("#StartDateDay").val(dateText);
@@ -114,8 +114,6 @@ function ResetDates() {
         + d.getFullYear();
     $("#StartDateDay").val(output);
     $("#EndDateDay").val(output);
-    $("#StartTime").val("12:00");
-    $("#EndTime").val("11:59");
     $("#StartAMPMddl").val("AM");
     $("#EndAMPMddl").val("PM");
     $("#StartEndDaySelector").datepicker("setDate", d);
