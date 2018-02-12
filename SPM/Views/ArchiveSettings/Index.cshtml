@@ -87,8 +87,8 @@
     </div>
     <div id="collapseSignal" class="panel-body panel-collapse collapse in">
         <Table class="table-striped" >
-            <tbody id="ExcludedSignals"></tbody>
-            @if (Model.ExcludedSignals != null)
+            <tbody id="RouteSignals"></tbody>
+            @*@if (Model.ExcludedSignals != null)
             {
                 foreach (var s in Model.ExcludedSignals)
                  {
@@ -96,7 +96,7 @@
                          <td>@s.SignalId</td>
                      </row>
                  }
-            }
+            }*@
         </Table>
     </div>
 </div>
@@ -106,7 +106,7 @@
     <script type="text/javascript" src="~/Scripts/ArchiveSettings.js"></script>
     <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
     <script type="text/javascript">
-        var urlpathGetRouteSignals = '@Url.Action("CreateMetric", "ArchiveSettings")';
+        var urlpathGetRouteSignals = '@Url.Action("GetSignal", "ArchiveSettings")';
         var urlpathGetSignal = '@Url.Action("GetSignal", "ArchiveSettings")';
         var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';
         var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';

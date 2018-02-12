@@ -23,8 +23,8 @@ namespace SPM.Controllers
             archiveSettingsViewModel.Signals.Add(signalRepository.GetLatestVersionOfSignalBySignalID(id));
             var excludedSignalRepository =
                 MOE.Common.Models.Repositories.DatabaseArchiveExcludedSignalsRepositoryFactory.Create();
-
-            return View(archiveSettingsViewModel);
+            excludedSignalRepository.AddToExcludedList(id);
+            return PartialView(archiveSettingsViewModel);
         }
 
 
