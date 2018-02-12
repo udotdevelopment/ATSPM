@@ -11,6 +11,7 @@ using MOE.Common.Business.Export;
 using MOE.Common.Models;
 using SPM.Filters;
 using SPM.Models;
+using System.Configuration;
 
 namespace SPM.Controllers
 {
@@ -79,7 +80,8 @@ namespace SPM.Controllers
                 }
                 int recordCount = controllerEventLogRepository.GetRecordCountByParameterAndEvent(dataExportViewModel.SignalId,
                     dataExportViewModel.StartDate, dataExportViewModel.EndDate, eventParams, eventCodes);
-                if (recordCount > 1048576)
+                int recordCountLimit = Convert.ToInt32(ConfigurationManager.AppSettings["RawDataCountLimit"]);
+                if (recordCount > recordCountLimit)
                 {
                     return Content("The data set you have selected is too large. Your current request will generate " + recordCount.ToString() +
                         " records. Please reduces the number of records you have selected.");
