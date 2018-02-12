@@ -1206,7 +1206,26 @@ namespace MOE.CommonTests.Models
 
         }
 
-        
 
+        public void PopulatePreemptionAggregationsWithValue3(DateTime start, DateTime end, Signal signal)
+        {
+            int id = 1;
+            for (DateTime startTime = start; startTime <= end; startTime = startTime.AddMinutes(15))
+            {
+                PreemptionAggregation r = new PreemptionAggregation
+                {
+                    BinStartTime = startTime,
+                    Signal = signal,
+                    SignalId = signal.SignalID,
+                    VersionId = signal.VersionID,
+                    PreemptRequests = 3,
+                    PreemptNumber = 3,
+                    PreemptServices = 3,
+                    Id = id
+                };
+                PreemptionAggregations.Add(r);
+                id++;
+            }
+        }
     }
 }
