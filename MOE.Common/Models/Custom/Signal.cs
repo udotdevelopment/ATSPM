@@ -108,6 +108,7 @@ namespace MOE.Common.Models
             {
                 foreach(Detector d in a.Detectors)
                 {
+                    
                     detectors.Add(d);
                 }
             }

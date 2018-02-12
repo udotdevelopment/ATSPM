@@ -515,7 +515,9 @@ namespace MOE.Common.Models.Repositories
         public Common.Models.Signal GetLatestVersionOfSignalBySignalID(string signalId)
         {
             var returnSignal = _db.Signals
-                .Include(signal => signal.Approaches.Select(a => a.Detectors))
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes.Select(dt => dt.MetricTypes))))
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
                 .Include(signal => signal.Approaches.Select(a => a.DirectionType))
                 .Where(signal => signal.SignalID == signalId)
                 .Where(signal => signal.VersionActionId != 3)

@@ -471,6 +471,7 @@
     <Compile Include="Models\Repositories\IDetectorAggregationsRepository.cs" />
     <Compile Include="Models\Repositories\IRoutePhaseDirectionRepository.cs" />
     <Compile Include="Models\Repositories\IApproachSplitFailAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\IDatabaseArchiveExcludedSignalsRepository.cs" />
     <Compile Include="Models\Repositories\RoutePhaseDirectionRepository.cs" />
     <Compile Include="Models\Repositories\RoutePhaseDirectionRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\RouteSignalRepository.cs" />
@@ -483,6 +484,8 @@
     <Compile Include="Models\Repositories\IRouteRepository.cs" />
     <Compile Include="Models\Repositories\IApproachSpeedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\ISpeedEventRepository.cs" />
+    <Compile Include="Models\Repositories\DatabaseArchiveExcludedSignalsRepository.cs" />
+    <Compile Include="Models\Repositories\DatabaseArchiveExcludedSignalsRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\SpeedEventRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\SpeedEventRepository.cs" />
     <Compile Include="Models\Repositories\ApplicationSettingsRepository.cs" />
@@ -508,7 +511,6 @@
     <Compile Include="Business\ApproachSpeed\AvgSpeedBucketCollection.cs" />
     <Compile Include="Business\ControllerEvent.cs" />
     <Compile Include="Business\ArriveOnRedChart.cs" />
-    <Compile Include="Business\CycleEngine.cs" />
     <Compile Include="Business\ListToTableConverter.cs" />
     <Compile Include="Business\LogDecoder\ASC3Decoder.cs" />
     <Compile Include="Business\PEDDelay\PedHourlyTotal.cs" />

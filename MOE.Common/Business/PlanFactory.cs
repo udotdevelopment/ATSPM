@@ -61,11 +61,13 @@ namespace MOE.Common.Business
 
             for (int x = 0; x < tempPlanEvents.Count(); x++)
             {
-                if (x + 1 < tempPlanEvents.Count())
+                if (x + 2 < tempPlanEvents.Count())
                 {
                     if (tempPlanEvents[x].EventParam == tempPlanEvents[x + 1].EventParam)
                     {
-      
+                        planEvents.Add(tempPlanEvents[x]);
+                        x++;
+
 
                     }
                     else

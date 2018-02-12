@@ -18,6 +18,9 @@
 
 <div id="DivOff" class="hidden">
     <div class="col-md-12 col-sm-12 col-xs-12">
+        @Html.LabelFor(model => model.DbArchiveSettings.TablePartitionsList, new { @class = "control-label" })
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
         @Html.RadioButtonFor(model => model.DbArchiveSettings.TablePartitionsList, TablePartition.PartitionTables, htmlAttributes: new { @id = "IsPartitionTables", @name = "IsPartitionTables", @onclick = "PartitionTablesOptions()" })
         <label>Partition Tables</label>
     </div>
@@ -37,7 +40,6 @@
         @Html.EditorFor(model => model.DbArchiveSettings.MonthsToRemoveData, new { htmlAttributes = new { @class = "form-control" } })
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12">
-        @*@Html.DropDownListFor(model => model.SelecteDeleteOrMove, new SelectList(Model.DeleteOrMoveOptionList), new { @class = "form-control" })*@
         @Html.RadioButtonFor(model => model.DbArchiveSettings.DeleteOrMoveOptionList, DeleteOrMove.Delete, htmlAttributes: new { @id = "IsDelete", @name = "IsDelete", @onclick = "DeleteOptions()" })
         <label>Delete</label>
         @Html.RadioButtonFor(model => model.DbArchiveSettings.DeleteOrMoveOptionList, DeleteOrMove.Move, htmlAttributes: new { @id = "IsMove", @name = "IsMove", @onclick = "MoveOptions()" })
@@ -57,51 +59,57 @@
         </div>
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <div id="DivEndTime" class="hidden" class="input-group-custom">
+        <div id="DivEndTime" class="hidden input-group-custom">
             @Html.LabelFor(model => model.DbArchiveSettings.TimeDuration, htmlAttributes: new { @class = "control-label" })
             @Html.EditorFor(model => model.DbArchiveSettings.TimeDuration, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
         </div>
     </div>
 
-
-    @*<div class="panel panel-signal">
-            <div class="panel-heading">
-                <h5 class="panel-title">
-                    <a id="Signals" data-toggle="collapse" href="#collapseSignals">
-                        Signal Exclusion List
-                    </a>
-                </h5>
-            </div>
-            <div id="collapseSignals" class="panel-body panel-collapse collapse in">
-
-                <div id="Routes" class="col-md-12">
-                    <div id="RouteSignals">
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
-    <div class="form-horizontal">
+<div class="panel panel-signal">
+    <div class="panel-heading">
         <h5 class="panel-title">
-            <a id="Signals" data-toggle="collapse">
-                Signal Exclusion List
+            <a id="Signals" data-toggle="collapse" href="#collapseMap">
+                Load Signals From Map
             </a>
-        </h5>   <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <div id="SignalSearchContainer" class="panel-min-width">
-                        @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
-                    </div>
-                </div>
-            </div>
-        </div>
+        </h5>
     </div>
-
+    <div id="collapseMap" class="panel-body panel-collapse collapse">
+        @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
+    </div>
+</div>
+<div class="panel panel-signal">
+    <div class="panel-heading">
+        <h5 class="panel-title">
+            <a id="Signals" data-toggle="collapse" href="#collapseSignal">
+                Signals
+            </a>
+        </h5>
+    </div>
+    <div id="collapseSignal" class="panel-body panel-collapse collapse in">
+        <Table class="table-striped" >
+            <tbody id="ExcludedSignals"></tbody>
+            @if (Model.ExcludedSignals != null)
+            {
+                foreach (var s in Model.ExcludedSignals)
+                 {
+                     <row>
+                         <td>@s.SignalId</td>
+                     </row>
+                 }
+            }
+        </Table>
+    </div>
+</div>
 </div>
 @section Scripts
 {
     <script type="text/javascript" src="~/Scripts/ArchiveSettings.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
     <script type="text/javascript">
         var urlpathGetRouteSignals = '@Url.Action("CreateMetric", "ArchiveSettings")';
+        var urlpathGetSignal = '@Url.Action("GetSignal", "ArchiveSettings")';
+        var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';
+        var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';
+        var urlpathFillSignals = '@Url.Action("FillSignals", "DefaultCharts")';
     </script>
 }

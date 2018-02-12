@@ -131,6 +131,7 @@ function GetApproachVolumeMetric(metricTypeID) {
     var tosend = GetCommonValues();
     tosend.MetricTypeID = metricTypeID;
     tosend.SelectedBinSize = $("#SelectedBinSize").val();
+    tosend.ShowTotalVolume = $("#ShowTotalVolume").is(":checked");
     tosend.ShowDirectionalSplits = $("#ShowDirectionalSplits").is(":checked");
     tosend.ShowNBWBVolume = $("#ShowNBWBVolume").is(":checked");
     tosend.ShowSBEBVolume = $("#ShowSBEBVolume").is(":checked");
