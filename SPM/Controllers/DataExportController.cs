@@ -80,8 +80,7 @@ namespace SPM.Controllers
                 }
                 int recordCount = controllerEventLogRepository.GetRecordCountByParameterAndEvent(dataExportViewModel.SignalId,
                     dataExportViewModel.StartDate, dataExportViewModel.EndDate, eventParams, eventCodes);
-                int recordCountLimit = Convert.ToInt32(ConfigurationManager.AppSettings["RawDataCountLimit"]);
-                if (recordCount > recordCountLimit)
+                if (recordCount > dataExportViewModel.RecordCountLimit)
                 {
                     return Content("The data set you have selected is too large. Your current request will generate " + recordCount.ToString() +
                         " records. Please reduces the number of records you have selected.");
