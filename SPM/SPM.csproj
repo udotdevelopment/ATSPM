@@ -530,7 +530,6 @@
     <Content Include="Views\DetectorComments\Create.cshtml" />
     <Content Include="Views\Signals\SignalDetail.cshtml" />
     <Content Include="Views\Signals\SignalDetailResult.cshtml" />
-    <Content Include="Views\Signals\_SignalPartial.cshtml" />
     <Content Include="Views\Account\Users.cshtml" />
     <Content Include="Views\SPMUsers\Delete.cshtml" />
     <Content Include="Views\SPMUsers\Details.cshtml" />
