@@ -46,43 +46,43 @@ namespace MOE.Common.Business.SplitFail
         //    return result;
         //}
 
-        public double FindModifiedActivationDuration(DateTime startTime, DateTime endTime, SplitFailDetectorActivation a)
-        {
-            double d = 0;
-            //After start, before end
-            if ((a.DetectorOn >= startTime && a.DetectorOn <= endTime) && (a.DetectorOff >= startTime && a.DetectorOff <= endTime))
-            {
-                d = a.Duration;
-            }
-            //Before start, before end
-            else if ((a.DetectorOn <= startTime && a.DetectorOn <= endTime) && (a.DetectorOff <= endTime && a.DetectorOff >= startTime))
-            {
-                d = (a.DetectorOff - startTime).TotalMilliseconds;
-            }
-            //After start, After end
-            else if ((a.DetectorOn >= startTime && a.DetectorOn <= endTime) && (a.DetectorOff >= endTime && a.DetectorOff >= startTime))
-            {
-                d = (endTime - a.DetectorOn).TotalMilliseconds;
-            }
-            //Before Start, After end
-            else if ((a.DetectorOn <= startTime && a.DetectorOn <= endTime) && (a.DetectorOff >= endTime && a.DetectorOff >= startTime))
-            {
-                d = (endTime - startTime).TotalMilliseconds;
-            }
-            // 
-            else { d = 0; }
-            return d;
-        }
+        //public double FindModifiedActivationDuration(DateTime startTime, DateTime endTime, SplitFailDetectorActivation a)
+        //{
+        //    double d = 0;
+        //    //After start, before end
+        //    if ((a.DetectorOn >= startTime && a.DetectorOn <= endTime) && (a.DetectorOff >= startTime && a.DetectorOff <= endTime))
+        //    {
+        //        d = a.Duration;
+        //    }
+        //    //Before start, before end
+        //    else if ((a.DetectorOn <= startTime && a.DetectorOn <= endTime) && (a.DetectorOff <= endTime && a.DetectorOff >= startTime))
+        //    {
+        //        d = (a.DetectorOff - startTime).TotalMilliseconds;
+        //    }
+        //    //After start, After end
+        //    else if ((a.DetectorOn >= startTime && a.DetectorOn <= endTime) && (a.DetectorOff >= endTime && a.DetectorOff >= startTime))
+        //    {
+        //        d = (endTime - a.DetectorOn).TotalMilliseconds;
+        //    }
+        //    //Before Start, After end
+        //    else if ((a.DetectorOn <= startTime && a.DetectorOn <= endTime) && (a.DetectorOff >= endTime && a.DetectorOff >= startTime))
+        //    {
+        //        d = (endTime - startTime).TotalMilliseconds;
+        //    }
+        //    // 
+        //    else { d = 0; }
+        //    return d;
+        //}
 
-        private double division(double first, double second)
-        {
-            if (first > 0 && second > 0)
-            {
-                double i =  first / second;
-                return i;
-            }
-            return 0;
-        }
+        //private double division(double first, double second)
+        //{
+        //    if (first > 0 && second > 0)
+        //    {
+        //        double i =  first / second;
+        //        return i;
+        //    }
+        //    return 0;
+        //}
 
     }
 }

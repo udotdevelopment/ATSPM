@@ -124,6 +124,7 @@
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationChart\SignalPreemptionAggregationChartTimeOfDaySignalSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationChart\SignalPreemptionAggregationChartTimeXRouteSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationChart\SignalPreemptionAggregationChartTimeXSignalSeriesTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\SplitFailOptionsTests.cs" />
     <Compile Include="Models\InMemoryControllerEventLogRepository.cs" />
     <Compile Include="Models\InMemoryPreemptAggregationDatasRepository.cs" />
     <Compile Include="Models\InMemoryApplicationEventRepository.cs" />

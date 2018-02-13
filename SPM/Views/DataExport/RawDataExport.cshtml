@@ -64,7 +64,7 @@
                 </div>
                 <input type="submit" value="Download" class="btn btn-default"/>
                 <button id="CheckRecordCount" type="button" onclick="GetRecordCount()" class="btn btn-primary" >Check Record Count<span id='RunReportSpinner' class="glyphicon"></span></button>
-                <label>Limit of allowed record count: 1048576</label>
+                <label>Limit of allowed record count: @Html.DisplayFor(model => model.RecordCountLimit)</label>
                 <div id="GenerateData"></div>
             </div>
         </div>

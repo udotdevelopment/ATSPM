@@ -83,7 +83,7 @@ namespace MOE.Common.Business
                 // overlap yellow
                 case 63:
                     return RedToRedCycle.EventType.ChangeToYellow;
-                case 10:
+                case 9:
                     return RedToRedCycle.EventType.ChangeToRed;
                 // overlap red
                 case 64:
@@ -130,16 +130,16 @@ namespace MOE.Common.Business
             List<Controller_Event_Log> cycleEvents;
             if (getPermissivePhase)
             {
-                var cycleEventNumbers = approach.IsPermissivePhaseOverlap ? new List<int> { 61, 63, 64 } : new List<int>() { 1, 8, 10 };
+                var cycleEventNumbers = approach.IsPermissivePhaseOverlap ? new List<int> { 61, 63, 64 } : new List<int>() {1, 8, 9};
                 cycleEvents = celRepository.GetEventsByEventCodesParam(approach.SignalID, startDate,
                     endDate, cycleEventNumbers, approach.PermissivePhaseNumber.Value);
 
                 //cycleEvents = celRepository.GetEventsByEventCodesParam(approach.SignalID, startDate,
-                //    endDate, new List<int>() { 1, 8, 10 }, approach.PermissivePhaseNumber.Value);
+                //    endDate, new List<int>() {1, 8, 9}, approach.PermissivePhaseNumber.Value);
             }
             else
             {
-                var cycleEventNumbers = approach.IsProtectedPhaseOverlap ? new List<int> { 61, 63, 64 } : new List<int>() { 1, 8, 10 };
+                var cycleEventNumbers = approach.IsProtectedPhaseOverlap ? new List<int> { 61, 63, 64 } : new List<int>() {1, 8, 9};
                 cycleEvents = celRepository.GetEventsByEventCodesParam(approach.SignalID, startDate,
                     endDate, cycleEventNumbers, approach.ProtectedPhaseNumber);
             }
@@ -151,7 +151,7 @@ namespace MOE.Common.Business
             var celRepository = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
             if (getPermissivePhase)
             {
-                var cycleEventNumbers = approach.IsPermissivePhaseOverlap ? new List<int> { 61, 63, 64 } : new List<int>() { 1, 8, 10 };
+                var cycleEventNumbers = approach.IsPermissivePhaseOverlap ? new List<int> { 61, 63, 64 } : new List<int>() {1, 8, 9};
                 var eventsAfterEndDate = celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
                     endDate, cycleEventNumbers, approach.PermissivePhaseNumber.Value, 3);
                 if (eventsAfterEndDate != null)
@@ -163,7 +163,7 @@ namespace MOE.Common.Business
             }
             else
             {
-                var cycleEventNumbers = approach.IsProtectedPhaseOverlap ? new List<int> { 61, 63, 64 } : new List<int>() { 1, 8, 10 };
+                var cycleEventNumbers = approach.IsProtectedPhaseOverlap ? new List<int> { 61, 63, 64 } : new List<int>() {1, 8, 9};
                 var eventsAfterEndDate = celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
                     endDate, cycleEventNumbers, approach.ProtectedPhaseNumber, 3);
                 if (eventsAfterEndDate != null)

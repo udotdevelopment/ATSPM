@@ -37,32 +37,7 @@ namespace MOEWcfServiceLibrary
             return result;
         }
 
-        //public List<MOE.Common.Business.ApproachVolume.MetricInfo> CreateMetricWithDataTable(MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions options)
-        //{
-        //    List<string> result = new List<string>();
 
-
-        //    try
-        //    {
-        //        options.CreateMetric();
-        //        return options.TmcInfo;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MOE.Common.Models.Repositories.IApplicationEventRepository logRepository =
-        //            MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-        //        MOE.Common.Models.ApplicationEvent e = new MOE.Common.Models.ApplicationEvent();
-        //        e.ApplicationName = "MOEWCFServicLibrary";
-        //        e.Class = this.GetType().ToString();
-        //        e.Function = "CreateMetric";
-        //        e.SeverityLevel = MOE.Common.Models.ApplicationEvent.SeverityLevels.High;
-        //        e.Description = ex.Message;
-        //        e.Timestamp = DateTime.Now;
-        //        logRepository.Add(e);
-        //        throw;
-        //    }
-        //    return options.MetricInfoList;
-        //}
 
         public List<MOE.Common.Business.ApproachVolume.MetricInfo> CreateMetricWithDataTable(MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions options)
         {

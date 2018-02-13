@@ -21,25 +21,7 @@ namespace MOE.Common.Business
         public DateTime RedEvent { get; private set; }
         public DateTime YellowEvent { get; private set; }
 
-        //public double TotalDelay
-        //{
-        //    get
-        //    {
-        //        return DetectorEvents.Sum(d => d.Delay);
-        //    }
-        //}
 
-        //private double _totalVolume = -1;
-        //public double TotalVolume
-        //{
-        //    get
-        //    {
-        //        if (_totalVolume == -1)
-        //            _totalVolume = DetectorEvents.Count;
-        //        return _totalVolume;
-        //    }
-
-        //}
         
         public double TotalGreenTime => (YellowEvent - StartTime).TotalSeconds;
         public double TotalYellowTime => (RedEvent - YellowEvent).TotalSeconds;
@@ -63,18 +45,6 @@ namespace MOE.Common.Business
         }
 
 
-        //public void AddPreempt(DetectorDataPoint ddp)
-        //{
-        //    PreemptCollection.Add(ddp);
-        //}
 
-        //public void ClearDetectorData()
-        //{
-        //    _totalArrivalOnRed = -1;
-        //    _totalGreenTime = -1;
-        //    _totalArrivalOnGreen = -1;
-        //    _totalVolume = -1;
-        //    DetectorEvents.Clear();
-        //}
     }
 }
