@@ -27,28 +27,5 @@ namespace SPM.Controllers
             return PartialView(archiveSettingsViewModel);
         }
 
-
-        // GET: ArchiveSettings/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ArchiveSettings/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
     }
 }
