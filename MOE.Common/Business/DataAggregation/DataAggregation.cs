@@ -52,11 +52,22 @@ namespace MOE.Common.Business.DataAggregation
             Console.WriteLine("Starting " + _startDate.ToShortDateString());
             SPM db = new SPM();
             db.Configuration.LazyLoadingEnabled = false;
-            var signals = signalRep.GetLatestVersionOfAllSignals();
 
             var options = new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"]) };
             for (DateTime dt = _startDate; dt < _endDate.AddDays(1); dt = dt.AddMinutes(binSize))
             {
+                Console.WriteLine("Getting correct version of signals for time period");
+                var versionIds = db.Signals.Where(r => r.VersionActionId != 3 && r.Start < dt)
+                    .GroupBy(r => r.SignalID)
+                    .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).Select(s => s.VersionID).ToList();
+                var signals = db.Signals
+                    .Where(signal => versionIds.Contains(signal.VersionID))
+                    .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
+                    .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes.Select(det => det.MetricTypes))))
+                    .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
+                    .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                    .ToList();
+                Console.WriteLine("Begin Aggregating Signals");
                 Parallel.ForEach(signals, options, signal =>
                 //foreach (var signal in signals)
                 {
@@ -471,7 +482,7 @@ namespace MOE.Common.Business.DataAggregation
             else if (args.Length == 2)
             {
                 _startDate = Convert.ToDateTime(args[0]);
-                _endDate = Convert.ToDateTime(args[1]).AddDays(1);
+                _endDate = Convert.ToDateTime(args[1]);
             }
             else
             {

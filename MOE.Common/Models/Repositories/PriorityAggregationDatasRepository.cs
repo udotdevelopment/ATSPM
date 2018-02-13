@@ -26,7 +26,8 @@ namespace MOE.Common.Models.Repositories
         }
         public PriorityAggregation Add(PriorityAggregation priorityAggregation)
         {
-            throw new NotImplementedException();
+            _db.PriorityAggregations.Add(priorityAggregation);
+            return priorityAggregation;
         }
 
 

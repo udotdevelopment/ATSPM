@@ -94,6 +94,7 @@ namespace SPM.Models
 
 
         public MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel SignalSearch { get; set; } = new SignalSearchViewModel();
+        public SignalPreemptionAggregationOptions.PreemptionData SelectedPreemptionData { get; set; }
 
         private IMetricTypeRepository _metricRepository;
         public AggDataExportViewModel()

@@ -16,7 +16,7 @@ namespace MOE.Common.Models.Repositories
             DateTime end, int preemptNumber);
 
 
-        DetectorAggregation Add(PreemptionAggregation preemptionAggregation);
+        PreemptionAggregation Add(PreemptionAggregation preemptionAggregation);
         void Update(PreemptionAggregation preemptionAggregation);
         void Remove(PreemptionAggregation preemptionAggregation);
         List<PreemptionAggregation> GetPreemptionsBySignalIdAndDateRange(string signalId, DateTime startDate, DateTime endDate);

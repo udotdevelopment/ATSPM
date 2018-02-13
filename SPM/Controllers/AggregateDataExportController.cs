@@ -85,10 +85,24 @@ namespace SPM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateMetric(AggDataExportViewModel aggDataExportViewModel)
         {
-            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+            switch (aggDataExportViewModel.SelectedMetricTypeId)
+            {
+                case 20:
+                    return GetSplitFailChart(aggDataExportViewModel);
+                    break;
+                case 22:
+                    return GetPreemptionChart(aggDataExportViewModel);
+                    default:
+                        return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
+            }
+        }
+
+        private ActionResult GetPreemptionChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             Enum.TryParse(aggDataExportViewModel.SelectedChartType, out SeriesChartType tempSeriesChartType);
             options.SelectedChartType = tempSeriesChartType;
-            if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count>0)
+            if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count > 0)
             {
                 options.StartDate = aggDataExportViewModel.StartDateDay;
                 options.EndDate = aggDataExportViewModel.EndDateDay;
@@ -97,14 +111,39 @@ namespace SPM.Controllers
                 options.SeriesWidth = aggDataExportViewModel.SelectedSeriesWidth;
                 options.SelectedSeries = aggDataExportViewModel.SelectedSeriesType;
                 options.SelectedDimension = aggDataExportViewModel.SelectedDimension;
-                options.FilterDirections = aggDataExportViewModel.FilterDirections;
                 SetTimeOptionsFromViewModel(aggDataExportViewModel, options);
                 options.FilterSignals = aggDataExportViewModel.FilterSignals;
+                options.SelectedPreemptionData = aggDataExportViewModel.SelectedPreemptionData;
                 return GetChartFromService(options);
             }
             else
             {
-                return Content("<h1 class='text-danger'>Missing Parameters<h1>");
+                return Content("<h1 class='text-danger'>Missing Parameters</h1>");
+            }
+        }
+
+        private ActionResult GetSplitFailChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+            Enum.TryParse(aggDataExportViewModel.SelectedChartType, out SeriesChartType tempSeriesChartType);
+            options.SelectedChartType = tempSeriesChartType;
+            if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count > 0)
+            {
+                options.StartDate = aggDataExportViewModel.StartDateDay;
+                options.EndDate = aggDataExportViewModel.EndDateDay;
+                options.SelectedAggregationType = aggDataExportViewModel.SelectedAggregationType;
+                options.SelectedXAxisType = aggDataExportViewModel.SelectedXAxisType;
+                options.SeriesWidth = aggDataExportViewModel.SelectedSeriesWidth;
+                options.SelectedSeries = aggDataExportViewModel.SelectedSeriesType;
+                options.SelectedDimension = aggDataExportViewModel.SelectedDimension;
+                SetTimeOptionsFromViewModel(aggDataExportViewModel, options);
+                options.FilterSignals = aggDataExportViewModel.FilterSignals;
+                options.FilterDirections = aggDataExportViewModel.FilterDirections;
+                return GetChartFromService(options);
+            }
+            else
+            {
+                return Content("<h1 class='text-danger'>Missing Parameters</h1>");
             }
         }
 
@@ -127,7 +166,7 @@ namespace SPM.Controllers
             return PartialView("~/Views/DefaultCharts/MetricResult.cshtml", result);
         }
 
-        private static void SetTimeOptionsFromViewModel(AggDataExportViewModel aggDataExportViewModel, ApproachSplitFailAggregationOptions options)
+        private static void SetTimeOptionsFromViewModel(AggDataExportViewModel aggDataExportViewModel, SignalAggregationMetricOptions options)
         {
             string[] startTime;
             string[] endTime;

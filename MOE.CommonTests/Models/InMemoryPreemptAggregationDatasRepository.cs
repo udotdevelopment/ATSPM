@@ -47,7 +47,7 @@ namespace MOE.CommonTests.Models
             this._db = db;
         }
 
-        public DetectorAggregation Add(PreemptionAggregation preemptionAggregation)
+        public PreemptionAggregation Add(PreemptionAggregation preemptionAggregation)
         {
             throw new NotImplementedException();
         }
