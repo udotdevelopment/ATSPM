@@ -59,23 +59,39 @@ namespace MOE.Common.Business.SplitFail
         private void CombineDetectorActivations()
         {
             List<SplitFailDetectorActivation> tempDetectorActivations = new List<SplitFailDetectorActivation>();
+
+            //look at every item in the original list
             foreach (var current in _detectorActivations)
             {
+
                 if (!current.ReviewedForOverlap)
                 {
                     var overlapingActivations = _detectorActivations.Where(d => d.ReviewedForOverlap == false &&
-                        ((d.DetectorOn >= current.DetectorOn && d.DetectorOn <= current.DetectorOff && d.DetectorOff >= current.DetectorOff)
+                           (
+                            //   if it starts after current starts  and    starts before current ends      and    end after current ends   
+                            (d.DetectorOn >= current.DetectorOn && d.DetectorOn <= current.DetectorOff && d.DetectorOff >= current.DetectorOff)
+                         //OR if it starts BEFORE curent starts  and ends AFTER current starts           and ends BEFORE current ends
                          || (d.DetectorOn <= current.DetectorOn && d.DetectorOff >= current.DetectorOn && d.DetectorOff <= current.DetectorOff)
+                         //OR if it starts AFTER current starts   and it ends BEFORE current ends
                          || (d.DetectorOn >= current.DetectorOn && d.DetectorOff <= current.DetectorOff)
-                         || (d.DetectorOn <= current.DetectorOn && d.DetectorOff >= current.DetectorOff))).ToList();
+                         //OR if it starts BEFORE current starts  and it ens AFTER current ends 
+                         || (d.DetectorOn <= current.DetectorOn && d.DetectorOff >= current.DetectorOff))
+                            //then add it to the overlap list
+                            ).ToList();
+
+                    //if there are any in the list (and here should be at least one that matches current)
                     if (overlapingActivations.Any())
                     {
+                        //Then make a new activation that starts witht eh earliest start and ends with the latest end
                         var tempDetectorActivation = new SplitFailDetectorActivation
                         {
                             DetectorOn = overlapingActivations.Min(o => o.DetectorOn),
                             DetectorOff = overlapingActivations.Max(o => o.DetectorOff)
                         };
+                        //and add the new one to a temp list
                         tempDetectorActivations.Add(tempDetectorActivation);
+
+                        //mark everything in the  overlap list as Reviewed
                         foreach (var splitFailDetectorActivation in overlapingActivations)
                         {
                             splitFailDetectorActivation.ReviewedForOverlap = true;
@@ -83,8 +99,11 @@ namespace MOE.Common.Business.SplitFail
                     }
                 }
             }
+
+            //since we went through every item in the original list, if there were no overlaps, it shoudl equal the temp list
             if (_detectorActivations.Count != tempDetectorActivations.Count)
             {
+                //if the counts do not match, we have to set the original list to the temp list and try the combinaitons again
                 _detectorActivations = tempDetectorActivations;
                 CombineDetectorActivations();
             }

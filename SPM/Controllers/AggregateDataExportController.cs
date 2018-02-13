@@ -155,8 +155,8 @@ namespace SPM.Controllers
             viewModel.SelectedMetricType = metricRepository.GetMetricsByID(20);
             viewModel.SelectedChartType = SeriesChartType.StackedColumn.ToString();
             viewModel.SelectedBinSize = 0;
-            viewModel.StartDateDay = Convert.ToDateTime("10/17/2017");
-            viewModel.EndDateDay = Convert.ToDateTime("10/18/2017");
+            //viewModel.StartDateDay = Convert.ToDateTime("10/17/2017");
+            //viewModel.EndDateDay = Convert.ToDateTime("10/18/2017");
             viewModel.Weekdays = true;
             viewModel.Weekends = true;
             return View(viewModel);

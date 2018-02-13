@@ -220,21 +220,33 @@ namespace MOE.Common.Models
 
         public List<MetricType> GetAvailableMetricsVisibleToWebsite()
         {
-            IMetricTypeRepository repository =
+//TODO: The list really should be filtered by active timestamp.  We Will do it if we have time. 
+            IMetricTypeRepository metRep =
                 MetricTypeRepositoryFactory.Create();
 
-            List<MetricType> availableMetrics = repository.GetBasicMetrics();
-            foreach (var d in GetDetectorsForSignal())
+            ISignalsRepository sigRep = SignalsRepositoryFactory.Create();
+
+            List<Signal> versions = sigRep.GetAllVersionsOfSignalBySignalID(signalID);
+
+            List<MetricType> availableMetrics = metRep.GetBasicMetrics();
+            foreach (var version in versions)
             {
-                foreach (var dt in d.DetectionTypes)
+
+                if (version.VersionActionId != 3)
                 {
-                    if (dt.DetectionTypeID != 1)
+                    foreach (var d in GetDetectorsForSignal())
                     {
-                        foreach (var m in dt.MetricTypes)
+                        foreach (var dt in d.DetectionTypes)
                         {
-                            if (m.ShowOnWebsite)
+                            if (dt.DetectionTypeID != 1)
                             {
-                                availableMetrics.Add(m);
+                                foreach (var m in dt.MetricTypes)
+                                {
+                                    if (m.ShowOnWebsite)
+                                    {
+                                        availableMetrics.Add(m);
+                                    }
+                                }
                             }
                         }
                     }

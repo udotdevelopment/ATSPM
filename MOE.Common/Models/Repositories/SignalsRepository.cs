@@ -538,13 +538,14 @@ namespace MOE.Common.Models.Repositories
 
         public List<Signal> GetAllVersionsOfSignalBySignalID(string signalId)
         {
-            var signals = (from r in _db.Signals
-                    where r.SignalID == signalId &&
-                    r.VersionActionId != 3
-                           select r)
-                .Include(r => r.Approaches.Select(a => a.Detectors))
-                .Include(r => r.Approaches.Select(a => a.DirectionType))
-                .OrderByDescending(x => x.Start)
+            var signals = _db.Signals
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes.Select(dt => dt.MetricTypes))))
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
+                .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                .Where(signal => signal.SignalID == signalId)
+                .Where(signal => signal.VersionActionId != 3)
+                .OrderByDescending(signal => signal.Start)
                 .ToList();
 
             if (signals.Count > 0)

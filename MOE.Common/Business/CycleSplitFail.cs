@@ -36,7 +36,16 @@ namespace MOE.Common.Business
         public void SetDetectorActivations(List<SplitFailDetectorActivation> detectorActivations)
         {
             var redPeriodToAnalyze = RedEvent.AddSeconds(_firstSecondsOfRed);
-            var activationsDuringRed = detectorActivations.Where(d => (d.DetectorOn >= RedEvent && d.DetectorOn < redPeriodToAnalyze) || (d.DetectorOff >= RedEvent && d.DetectorOff < redPeriodToAnalyze) || (d.DetectorOn <= RedEvent && d.DetectorOff >= EndTime)).ToList();
+            
+            var activationsDuringRed = detectorActivations.Where
+                //detStart AFTER redStart and Before red+AnalaysTime
+                (d => (d.DetectorOn >= RedEvent && d.DetectorOn < redPeriodToAnalyze)
+
+            //detOff After redStart and Before red+AnalaysTime
+            || (d.DetectorOff >= RedEvent && d.DetectorOff < redPeriodToAnalyze) 
+            
+            //DetStart BEFORE redStart and detOff after cycleEnd
+            || (d.DetectorOn <= RedEvent && d.DetectorOff >= EndTime)).ToList();
             //if (activationsDuringRed.Count == 0)
             //{
             //    RedOccupancyTime = CheckForDetectorActivationBiggerThanPeriod(RedEvent, redPeriodToAnalyze, detectorActivations);

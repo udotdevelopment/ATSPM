@@ -118,6 +118,7 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChartSignalXPhaseSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChartTimeOfDayXPhaseSeriesTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\SplitFailOptionsTests.cs" />
     <Compile Include="Models\InMemoryControllerEventLogRepository.cs" />
     <Compile Include="Models\InMemoryPreemptAggregationDatasRepository.cs" />
     <Compile Include="Models\InMemoryApplicationEventRepository.cs" />
