@@ -1,6 +1,6 @@
 ﻿$(function (ready) {
     SetDateTextBoxes();
-
+    LoadDataAggregateTypes();
 });
 
 function SetDateTextBoxes (){
@@ -29,6 +29,22 @@ function LoadRoute() {
             $.validator.unobtrusive.parse($("#RouteSignals"));
         },
         onerror: function () { alert("Error"); }
+    });
+}
+
+function LoadDataAggregateTypes() {
+    var metricId = $("#SelectedMetricTypeId").val();
+    $.ajax({
+        url: urlpathGetAggregateDataTypesSignals + "/" + metricId,
+        type: "GET",
+        cache: false,
+        async: true,
+        contentType: "application/json; charset=utf-8",
+        success: function(data) {
+            $('#AggregatedDataType').html(data);
+            $.validator.unobtrusive.parse($("#AggregatedDataType"));
+        },
+        onerror: function() { alert("Error"); }
     });
 }
 

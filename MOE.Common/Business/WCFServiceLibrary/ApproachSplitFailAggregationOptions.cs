@@ -12,6 +12,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [DataContract]
     public class ApproachSplitFailAggregationOptions: ApproachAggregationMetricOptions
     {
+        
+        public enum AggregatedDataTypes { SplitFails }
+        [DataMember]
+        public AggregatedDataTypes SelectedAggregatedDataType { get; set; }    
         public  ApproachSplitFailAggregationOptions()
         {
             MetricTypeID = 20;

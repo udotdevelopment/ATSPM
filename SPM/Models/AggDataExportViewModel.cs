@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business;
@@ -23,6 +24,7 @@ namespace SPM.Models
         public List<FilterSignal> FilterSignals { get; set; } = new List<FilterSignal>();
 
         public virtual ICollection<MetricType> MetricTypes { get; set; }
+        public List<Tuple<int, String>> AggregatedData { get; set; } = new List<Tuple<int, string>>();
         public virtual ICollection<Dimension> Dimensions { get; set; }
         public virtual ICollection<SeriesType> SeriesTypes { get; set; }
         public List<XAxisType> XAxisTypes { get; set; }
@@ -61,6 +63,9 @@ namespace SPM.Models
 
         [Display(Name = "Bin Size")]
         public int SelectedBinSize { get; set; }
+
+        [Display(Name = "Aggregated Data")]
+        public int SelectedAggregatedData { get; set; }
 
         public bool Weekdays { get; set; }
         public bool Weekends { get; set; }
@@ -186,6 +191,33 @@ namespace SPM.Models
                         break;
                 }
             }
+        }
+
+        public void SetAggregateData()
+        {
+            switch (SelectedMetricTypeId)
+                {
+                    case 22:
+                        List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas =
+                            Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+                        foreach (var preemptionData in preemptionDatas)
+                        {
+                            AggregatedData.Add(new Tuple<int, string>((int)preemptionData, Regex.Replace(preemptionData.ToString(), @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1")));
+                        }
+                        break;
+                    case 20:
+                        List<ApproachSplitFailAggregationOptions.AggregatedDataTypes> splitFailDataTypes =
+                            Enum.GetValues(typeof(ApproachSplitFailAggregationOptions.AggregatedDataTypes)).Cast<ApproachSplitFailAggregationOptions.AggregatedDataTypes>().ToList();
+                        foreach (var aggregatedDataTypes in splitFailDataTypes)
+                        {
+                            AggregatedData.Add(new Tuple<int, string>((int)aggregatedDataTypes, Regex.Replace(aggregatedDataTypes.ToString(), @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1")));
+                        }
+                        break;
+                default:
+                        throw new Exception("Invalid Metric Type");
+                        break;
+                }
+            
         }
 
         public void SetDefaultDates()

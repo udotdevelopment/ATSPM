@@ -88,6 +88,7 @@ namespace MOE.Common.Models.Repositories
         PreemptionAggregation IPreemptAggregationDatasRepository.Add(PreemptionAggregation preemptionAggregation)
         {
             db.PreemptionAggregations.Add(preemptionAggregation);
+            db.SaveChanges();
             return preemptionAggregation;
         }
     }

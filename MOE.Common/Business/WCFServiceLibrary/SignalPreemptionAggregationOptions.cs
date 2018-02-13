@@ -13,7 +13,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     public class SignalPreemptionAggregationOptions: SignalAggregationMetricOptions
     {
         public enum PreemptionData {PreemptNumber, PreemptRequests, PreemptServices }
-
+        [DataMember]
         public PreemptionData SelectedPreemptionData { get; set; }
         public SignalPreemptionAggregationOptions()
         {

@@ -1,0 +1,4 @@
+﻿@model System.Collections.Generic.List<System.Tuple<int,string>>
+
+
+@Html.DropDownList("SelectedAggregatedData", new SelectList(Model, "Item1", "Item2"), new { @id= "SelectedAggregatedData", @class = "form-control" })

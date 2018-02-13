@@ -68,7 +68,7 @@ namespace MOE.Common.Business.DataAggregation
                     .Include(signal => signal.Approaches.Select(a => a.DirectionType))
                     .ToList();
                 Console.WriteLine("Begin Aggregating Signals");
-                Parallel.ForEach(signals, options, signal =>
+                Parallel.ForEach(signals, signal =>
                 //foreach (var signal in signals)
                 {
                     Console.WriteLine(signal.SignalID + " " + dt.ToString());
@@ -753,8 +753,7 @@ namespace MOE.Common.Business.DataAggregation
                         PriorityServiceEarlyGreen = records.Count(r => r.EventCode == 113),
                         PriorityServiceExtendedGreen = records.Count(r => r.EventCode == 114)
                     };
-                    var priorityAggregationDataRepository = PriorityAggregationDatasRepositoryFactory.Create();
-                    priorityAggregationDataRepository.Add(priorityAggregation);
+                    _priorityAggregationConcurrentQueue.Enqueue(priorityAggregation);
                 }
             }
         }
@@ -774,8 +773,7 @@ namespace MOE.Common.Business.DataAggregation
                         PreemptRequests = records.Count(r => r.EventCode == 102),
                         PreemptServices = records.Count(r => r.EventCode == 105)
                     };
-                    var priorityAggregationDataRepository = PreemptAggregationDatasRepositoryFactory.Create();
-                    priorityAggregationDataRepository.Add(preemptionAggregationData);
+                    _preemptAggregationConcurrentQueue.Enqueue(preemptionAggregationData);
                 }
             }
         }

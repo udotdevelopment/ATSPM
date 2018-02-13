@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.DataVisualization.Charting;
@@ -139,6 +140,9 @@ namespace SPM.Controllers
                 SetTimeOptionsFromViewModel(aggDataExportViewModel, options);
                 options.FilterSignals = aggDataExportViewModel.FilterSignals;
                 options.FilterDirections = aggDataExportViewModel.FilterDirections;
+                options.SelectedAggregatedDataType =
+                    (ApproachSplitFailAggregationOptions.AggregatedDataTypes) aggDataExportViewModel
+                        .SelectedAggregatedData;
                 return GetChartFromService(options);
             }
             else
@@ -147,7 +151,7 @@ namespace SPM.Controllers
             }
         }
 
-        private ActionResult GetChartFromService(ApproachSplitFailAggregationOptions options)
+        private ActionResult GetChartFromService(SignalAggregationMetricOptions options)
         {
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             MetricGeneratorService.MetricGeneratorClient client =
@@ -216,10 +220,9 @@ namespace SPM.Controllers
         // GET: DataExportViewModels
         public ActionResult Index()
         {
-            var metricRepository = MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
             AggDataExportViewModel viewModel = new AggDataExportViewModel();
-             SetAggregateDataViewModelLists(viewModel);
             viewModel.SelectedMetricTypeId =20;
+             SetAggregateDataViewModelLists(viewModel);
             viewModel.SelectedChartType = SeriesChartType.StackedColumn.ToString();
             viewModel.SelectedBinSize = 0;
             viewModel.StartDateDay = Convert.ToDateTime("10/17/2017");
@@ -241,6 +244,7 @@ namespace SPM.Controllers
             viewModel.SetSeriesWidth();
             viewModel.SetXAxisTypes();
             viewModel.SetDirectionTypes();
+            viewModel.SetAggregateData();
             viewModel.Routes = routeRepository.GetAllRoutes();
             viewModel.MetricTypes = metricTyperepository.GetAllToAggregateMetrics();
         }
@@ -267,6 +271,34 @@ namespace SPM.Controllers
                 //db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult GetAggregateDataTypes(int id)
+        {
+            List<Tuple<int, String>> aggregatedData  = new List<Tuple<int, string>>();
+            switch (id)
+            {
+                case 22:
+                    List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas =
+                        Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+                    foreach (var preemptionData in preemptionDatas)
+                    {
+                        aggregatedData.Add(new Tuple<int, string>((int)preemptionData, Regex.Replace(preemptionData.ToString(), @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1")));
+                    }
+                    break;
+                case 20:
+                    List<ApproachSplitFailAggregationOptions.AggregatedDataTypes> splitFailDataTypes =
+                        Enum.GetValues(typeof(ApproachSplitFailAggregationOptions.AggregatedDataTypes)).Cast<ApproachSplitFailAggregationOptions.AggregatedDataTypes>().ToList();
+                    foreach (var aggregatedDataTypes in splitFailDataTypes)
+                    {
+                        aggregatedData.Add(new Tuple<int, string>((int)aggregatedDataTypes, Regex.Replace(aggregatedDataTypes.ToString(), @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1")));
+                    }
+                    break;
+                default:
+                    throw new Exception("Invalid Metric Type");
+                    break;
+            }
+            return PartialView(aggregatedData);
         }
     }
 }

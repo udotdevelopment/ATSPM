@@ -18,10 +18,16 @@
                     </h5>
                 </div>
                 <div id="collapseDataAggregation" class="panel-body panel-collapse collapse in">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            @Html.LabelFor(model => model.SelectedMetricTypeId, htmlAttributes: new { @class = "control-label" })
-                            @Html.DropDownListFor(model => model.SelectedMetricTypeId, new SelectList(Model.MetricTypes, "MetricId", "ChartName"), new { @class = "form-control" })
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        @Html.LabelFor(model => model.SelectedMetricTypeId, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.SelectedMetricTypeId, new SelectList(Model.MetricTypes, "MetricId", "ChartName"), new { @onchange = "LoadDataAggregateTypes()", @class = "form-control" })
+                    </div>
+                    
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        @Html.LabelFor(model => model.SelectedAggregatedData, htmlAttributes: new { @class = "control-label" })
+                        <div id="AggregatedDataType">
                         </div>
+                    </div>
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             @Html.LabelFor(model => model.SelectedXAxisType, htmlAttributes: new { @class = "control-label" })
                             @Html.DropDownListFor(model => model.SelectedXAxisType, new SelectList(Model.XAxisTypes), new { @class = "form-control" })
@@ -173,6 +179,7 @@
             <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
             <script type="text/javascript">
                 var urlpathGetRouteSignals = '@Url.Action("GetRouteSignals", "AggregateDataExport")';
+                var urlpathGetAggregateDataTypesSignals = '@Url.Action("GetAggregateDataTypes", "AggregateDataExport")';
                 var urlpathGetSignal = '@Url.Action("GetSignal", "AggregateDataExport")';
                 var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';
                 var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';
