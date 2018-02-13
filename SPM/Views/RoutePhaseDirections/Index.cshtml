@@ -18,13 +18,13 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ApproachRouteDetailId)
+                @Html.DisplayNameFor(model => model.RouteSignalId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Phase)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsPhaseDirection1Overlap)
+                @Html.DisplayNameFor(model => model.IsOverlap)
             </th>
             <th></th>
         </tr>
@@ -32,13 +32,13 @@
     @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ApproachRouteDetailId)
+                @Html.DisplayFor(modelItem => item.RouteSignalId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Phase)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsPhaseDirection1Overlap)
+                @Html.DisplayFor(modelItem => item.IsOverlap)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

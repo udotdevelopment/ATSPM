@@ -538,10 +538,6 @@
     <Content Include="Views\SPMUsers\Index.cshtml" />
     <Content Include="Views\DefaultCharts\GetTMCMetric.cshtml" />
     <Content Include="Views\WatchDogApplicationSettings\Edit.cshtml" />
-    <Content Include="Views\DataExport\Create.cshtml" />
-    <Content Include="Views\DataExport\Delete.cshtml" />
-    <Content Include="Views\DataExport\Details.cshtml" />
-    <Content Include="Views\DataExport\Edit.cshtml" />
     <Content Include="Views\DataExport\RawDataExport.cshtml" />
     <Content Include="Views\RouteSignals\RouteMap.cshtml" />
     <Content Include="Views\RouteSignals\RouteInfoBox.cshtml" />
@@ -568,8 +564,6 @@
     <Content Include="Views\AggregateDataExport\Index.cshtml" />
     <Content Include="Views\AggregateDataExport\GetRouteSignals.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterSignal.cshtml" />
-    <Content Include="Views\ArchiveSettings\ArchiveSettings.cshtml" />
-    <Content Include="Views\ArchiveSettings\CreateMetric.cshtml" />
     <Content Include="Views\ArchiveSettings\DisplayTemplates\Signal.cshtml" />
     <Content Include="Views\ArchiveSettings\Index.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterApproach.cshtml" />
