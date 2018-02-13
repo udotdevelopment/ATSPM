@@ -191,9 +191,7 @@
     <Compile Include="Controllers\ActionLogsController.cs" />
     <Compile Include="Controllers\AggregateDataExportController.cs" />
     <Compile Include="Controllers\ApproachesController.cs" />
-    <Compile Include="Controllers\ApproachRouteDetailsController.cs" />
     <Compile Include="Controllers\ArchiveSettingsController.cs" />
-    <Compile Include="Controllers\RouteOldController.cs" />
     <Compile Include="Controllers\ConfigurationTableController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\DefaultChartsController.cs" />
@@ -509,11 +507,6 @@
     <Content Include="Views\FAQs\Edit.cshtml" />
     <Content Include="Views\FAQs\Index.cshtml" />
     <Content Include="Views\FAQs\Display.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Create.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Delete.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Details.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Edit.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Index.cshtml" />
     <Content Include="Views\ActionLogs\Usage.cshtml" />
     <Content Include="Views\DefaultCharts\GetApproachVolumeMetric.cshtml" />
     <Content Include="Views\ActionLogs\Chart.cshtml" />
