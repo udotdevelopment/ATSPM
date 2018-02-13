@@ -48,5 +48,10 @@ namespace MOE.CommonTests.Models
             }
             return list;
         }
+
+        public List<DirectionType> GetDirectionsByIDs(List<int> includedDirections)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

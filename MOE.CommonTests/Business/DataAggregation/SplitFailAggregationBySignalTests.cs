@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.Bins;
+using MOE.Common.Business.FilterExtensions;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
@@ -48,19 +49,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.SignalIds.Add("103");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
-            options.SignalIds.Add("104");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -119,19 +120,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.SignalIds.Add("103");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
-            options.SignalIds.Add("104");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -191,19 +192,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.SignalIds.Add("103");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
-            options.SignalIds.Add("104");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -262,19 +263,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.SignalIds.Add("103");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
-            options.SignalIds.Add("104");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -333,19 +334,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.Hour,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.SignalIds.Add("103");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
-            options.SignalIds.Add("104");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -404,19 +405,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 6, 0, 10, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.Hour,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.SignalIds.Add("103");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
-            options.SignalIds.Add("104");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -475,19 +476,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("11/1/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("11/1/2017"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.Day,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.SignalIds.Add("103");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
-            options.SignalIds.Add("104");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -547,19 +548,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("11/1/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("11/1/2017"),
                 6, 0, 10, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.Day,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.SignalIds.Add("103");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
-            options.SignalIds.Add("104");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -618,19 +619,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.Month,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.SignalIds.Add("103");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
-            options.SignalIds.Add("104");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -690,19 +691,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
                 7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.Month,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.SignalIds.Add("103");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
-            options.SignalIds.Add("104");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -761,19 +762,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.Year,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.SignalIds.Add("103");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
-            options.SignalIds.Add("104");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -846,19 +847,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"),
                 7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 BinFactoryOptions.BinSize.Year,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.SignalIds.Add("103");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
-            options.SignalIds.Add("104");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -932,14 +933,14 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            //options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
+            options.SelectedAggregationType =AggregationType.Sum;
+            //options.XAxisAggregationSeriesOption = ApproachAggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null, BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -998,14 +999,14 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            //options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
+            options.SelectedAggregationType =AggregationType.Sum;
+            //options.XAxisAggregationSeriesOption = ApproachAggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday }, BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -1064,14 +1065,14 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            //options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
+            options.SelectedAggregationType =AggregationType.Sum;
+            //options.XAxisAggregationSeriesOption = ApproachAggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null, BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -1130,14 +1131,14 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            //options.XAxisAggregationSeriesOption = AggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
+            options.SelectedAggregationType =AggregationType.Sum;
+            //options.XAxisAggregationSeriesOption = ApproachAggregationMetricOptions.XAxisAggregationSeriesOptions.SignalByPhase;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 7, 0, 8, 0, new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday }, BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -1196,19 +1197,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.SignalIds.Add("103");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
-            options.SignalIds.Add("104");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -1223,19 +1224,19 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
-            options.SignalIds.Add("103");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("103"));
-            options.SignalIds.Add("104");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -1249,15 +1250,15 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
@@ -1326,18 +1327,18 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/2/2017");
-            options.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options.SelectedXAxisType = AggregationMetricOptions.XAxisType.Time;
+            options.SelectedAggregationType =AggregationType.Sum;
+            options.SelectedXAxisType = XAxisType.Time;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
             Convert.ToDateTime("1/2/2017"),
             null, null, null, null, null,
             BinFactoryOptions.BinSize.FifteenMinute,
             BinFactoryOptions.TimeOptions.StartToEnd);
-            options.SignalIds.Add("102");
-            foreach (var signal in options.SignalIds)
+            options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
+            foreach (var signal in options.FilterSignals)
             {
-                options.Signals.Add(signalsRepository.GetLatestVersionOfSignalBySignalID(signal));
+                options.Signals.Add(signalsRepository.GetLatestVersionOfSignalBySignalID(signal.SignalId));
             }
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
@@ -1349,18 +1350,18 @@ namespace MOE.Common.Business.DataAggregation.Tests
             ApproachSplitFailAggregationOptions options2 = new ApproachSplitFailAggregationOptions();
             options2.StartDate = Convert.ToDateTime("1/1/2017");
             options2.EndDate = Convert.ToDateTime("1/2/2017");
-            options2.SelectedAggregationType = AggregationMetricOptions.AggregationType.Sum;
-            options2.SelectedXAxisType = AggregationMetricOptions.XAxisType.Signal;
+            options2.SelectedAggregationType =AggregationType.Sum;
+            options2.SelectedXAxisType = XAxisType.Signal;
             options2.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/2/2017"),
                 null, null, null, null, null,
                 BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
-            options2.SignalIds.Add("102");
-            foreach (var signal in options2.SignalIds)
+            options2.FilterSignals.Add(new FilterSignal { SignalId = "102", Exclude = false });
+            foreach (var signal in options2.FilterSignals)
             {
-                options2.Signals.Add(signalsRepository.GetLatestVersionOfSignalBySignalID(signal));
+                options2.Signals.Add(signalsRepository.GetLatestVersionOfSignalBySignalID(signal.SignalId));
             }
             options2.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options2.SelectedChartType = SeriesChartType.Column;

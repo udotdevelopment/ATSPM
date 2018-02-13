@@ -10,7 +10,7 @@ namespace MOE.Common.Business.DataAggregation
 {
     class SplitFailAggregationByRoute
     {
-        public SplitFailAggregationByRoute(AggregationMetricOptions options)
+        public SplitFailAggregationByRoute(ApproachAggregationMetricOptions options)
         {
             Container = new List<SplitFailAggregationBySignal>();
 
@@ -38,7 +38,7 @@ namespace MOE.Common.Business.DataAggregation
         public Route Route { get; set; }
         public List<ApproachSplitFailAggregation> SplitFails { get; }
 
-        public RouteSplitFailAggregationContainer(AggregationMetricOptions options)
+        public RouteSplitFailAggregationContainer(ApproachAggregationMetricOptions options)
         {
             //Approach = approach;
             //var splitFailAggregationRepository =

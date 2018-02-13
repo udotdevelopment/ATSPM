@@ -4,51 +4,56 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business;
 using MOE.Common.Business.Bins;
+using MOE.Common.Business.FilterExtensions;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using MOE.Common.Models.ViewModel.Chart;
+using Signal = MOE.Common.Models.Signal;
 
 namespace SPM.Models
 {
     public class AggDataExportViewModel
     {
         public List<Route> Routes { get; set; }
-        public int SelectedRouteId { get; set; }
-        public List<Signal> Signals { get; set; } = new List<Signal>();
+        public int? SelectedRouteId { get; set; }
+        [Required]
+        public List<FilterSignal> FilterSignals { get; set; } = new List<FilterSignal>();
 
         public virtual ICollection<MetricType> MetricTypes { get; set; }
-        public virtual ICollection<AggregationMetricOptions.Dimension> Dimensions { get; set; }
-        public virtual ICollection<AggregationMetricOptions.SeriesType> SeriesTypes { get; set; }
-        public List<AggregationMetricOptions.XAxisType> XAxisTypes { get; set; }
-        public List<AggregationMetricOptions.AggregationType> AggregationTypes { get; set; }
+        public virtual ICollection<Dimension> Dimensions { get; set; }
+        public virtual ICollection<SeriesType> SeriesTypes { get; set; }
+        public List<XAxisType> XAxisTypes { get; set; }
+        public List<AggregationType> AggregationTypes { get; set; }
         public List<string> ChartTypesList { get; set; } = new List<string>();
         public List<Tuple<int, String>> BinSizes { get; set; } = new List<Tuple<int, string>>();
         public List<int> SeriesWidths { get; set; } = new List<int>();
         public List<SelectListItem> StartAMPMList { get; set; }
         public List<SelectListItem> EndAMPMList { get; set; }
-        
+        public List<FilterDirection> FilterDirections { get; set; } = new List<FilterDirection>();
+
 
 
         [Required]
         [Display(Name = "Dimesion")]
-        public AggregationMetricOptions.Dimension SelectedDimension { get; set; }
+        public Dimension SelectedDimension { get; set; }
         [Required]
         [Display(Name = "Series Type")]
-        public AggregationMetricOptions.SeriesType SelectedSeriesType { get; set; }
+        public SeriesType SelectedSeriesType { get; set; }
 
         [Required]
         [Display(Name = "X-Axis")]
-        public  AggregationMetricOptions.XAxisType SelectedXAxisType { get; set; }
+        public  XAxisType SelectedXAxisType { get; set; }
 
         [Required]
         [Display(Name = "Aggregation Type")]
-        public AggregationMetricOptions.AggregationType SelectedAggregationType { get; set; }
+        public AggregationType SelectedAggregationType { get; set; }
 
         [Required]
         [Display(Name = "Metric Type")]
-        public MetricType SelectedMetricType { get; set; }
+        public int SelectedMetricTypeId { get; set; }
 
         [Required]
         [Display(Name="Chart Type")]
@@ -96,9 +101,19 @@ namespace SPM.Models
             
         }
 
+        public void SetDirectionTypes()
+        {
+            var directionTypeRepository = MOE.Common.Models.Repositories.DirectionTypeRepositoryFactory.Create();
+            var directionTypes = directionTypeRepository.GetAllDirections();
+            foreach (var direction in directionTypes)
+            {
+                FilterDirections.Add(new FilterDirection(direction.DirectionTypeID, direction.Description, true));
+            }
+        }
+
         public void SetDimensions()
         {
-            Dimensions = Enum.GetValues(typeof(AggregationMetricOptions.Dimension)).Cast<AggregationMetricOptions.Dimension>().ToList();
+            Dimensions = Enum.GetValues(typeof(Dimension)).Cast<Dimension>().ToList();
         }
 
         public void SetSeriesWidth()
@@ -130,17 +145,17 @@ namespace SPM.Models
 
         public void SetSeriesTypes()
         {
-            SeriesTypes = Enum.GetValues(typeof(AggregationMetricOptions.SeriesType)).Cast<AggregationMetricOptions.SeriesType>().ToList();
+            SeriesTypes = Enum.GetValues(typeof(SeriesType)).Cast<SeriesType>().ToList();
         }
 
         public void SetAggregationTypes()
         {
-            AggregationTypes = new List<AggregationMetricOptions.AggregationType>{ AggregationMetricOptions.AggregationType.Sum, AggregationMetricOptions.AggregationType.Average};
+            AggregationTypes = new List<AggregationType>{ AggregationType.Sum, AggregationType.Average};
         }
 
         public void SetXAxisTypes()
         {
-            XAxisTypes = Enum.GetValues(typeof(AggregationMetricOptions.XAxisType)).Cast<AggregationMetricOptions.XAxisType>().ToList();
+            XAxisTypes = Enum.GetValues(typeof(XAxisType)).Cast<XAxisType>().ToList();
         }
 
         public void SetBinSizeList()

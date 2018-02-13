@@ -4,18 +4,20 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.DataAggregation;
+using MOE.Common.Business.FilterExtensions;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
 
     [DataContract]
-    public class ApproachSplitFailAggregationOptions: AggregationMetricOptions
+    public class ApproachSplitFailAggregationOptions: ApproachAggregationMetricOptions
     {
         public  ApproachSplitFailAggregationOptions()
         {
             MetricTypeID = 20;
         }
-        
+
+
 
         protected override int GetAverageByPhaseNumber(Models.Signal signal, int phaseNumber)
         {

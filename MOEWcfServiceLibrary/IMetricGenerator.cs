@@ -23,7 +23,7 @@ namespace MOEWcfServiceLibrary
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.SplitFailOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.SplitMonitorOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions))]
-    [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.AggregationMetricOptions))]
+    [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachAggregationMetricOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachSplitFailAggregationOptions))]
 
     public interface IMetricGenerator

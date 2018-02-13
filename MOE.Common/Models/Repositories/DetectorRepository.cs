@@ -85,6 +85,11 @@ namespace MOE.Common.Models.Repositories
             return max;
         }
 
+        public List<Detector> GetDetectorsByIds(List<int> excludedDetectorIds)
+        {
+            return _db.Detectors.Where(a => excludedDetectorIds.Contains(a.ID)).ToList();
+        }
+
         public Detector Add(Models.Detector detector)
         {
             Models.Detector g = (from r in _db.Detectors

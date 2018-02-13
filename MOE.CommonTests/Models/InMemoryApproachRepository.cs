@@ -92,5 +92,10 @@ namespace MOE.CommonTests.Models
         {
             throw new NotImplementedException();
         }
+
+        public List<Approach> GetApproachesByIds(List<int> excludedApproachIds)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

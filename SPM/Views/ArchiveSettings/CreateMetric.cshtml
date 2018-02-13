@@ -3,7 +3,7 @@
 @using (Ajax.BeginForm("GetRouteSignals", "AggregateDataExport", new AjaxOptions { InsertionMode = System.Web.Mvc.Ajax.InsertionMode.Replace, UpdateTargetId = "Results", HttpMethod = "POST", OnBegin = "StartReportSpinner()", OnSuccess = "StopReportSpinner()", OnFailure = "StopReportSpinner()" }))
 {
     @Html.AntiForgeryToken()
-    @Html.DisplayFor(m => m.Signals)
+    @Html.DisplayFor(m => m.FilterSignals)
 
    <div class="col-md-6">
         <div class="panel panel-signal">

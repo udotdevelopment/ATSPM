@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace MOE.Common.Models
 {
     using System;
@@ -6,6 +8,7 @@ namespace MOE.Common.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+    [DataContract]
     public partial class MetricComment:Comment
     {
         public MetricComment()
@@ -15,13 +18,18 @@ namespace MOE.Common.Models
 
 
         [Required]
-       public int VersionID { get; set; }
+        [DataMember]
+        public int VersionID { get; set; }
+        [DataMember]
         public virtual Models.Signal Signal { get; set; }
 
+        [DataMember]
         public string SignalID { get; set; }
 
 
+        [DataMember]
         public List<int> MetricTypeIDs { get; set; }
+        [DataMember]
         public virtual ICollection<MetricType> MetricTypes { get; set; }
 
     }

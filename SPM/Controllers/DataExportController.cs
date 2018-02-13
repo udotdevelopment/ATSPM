@@ -11,6 +11,7 @@ using MOE.Common.Business.Export;
 using MOE.Common.Models;
 using SPM.Filters;
 using SPM.Models;
+using System.Configuration;
 
 namespace SPM.Controllers
 {
@@ -63,38 +64,23 @@ namespace SPM.Controllers
                 List<int> eventCodes = new List<int>();
                 if (!String.IsNullOrEmpty(dataExportViewModel.EventParams))
                 {
-                    try
-                    {
-                        string[] parameters = dataExportViewModel.EventParams.Split(',');
-                        foreach (string parameter in parameters)
-                        {
-                            eventParams.Add(Convert.ToInt32(parameter));
-                        }
-                    }
-                    catch (Exception)
+                    eventParams = CommaDashSeparated(dataExportViewModel.EventParams);
+                    if (eventParams.Count == 0)
                     {
                         return Content("Unable to process Event Parameters");
                     }
-                
                 }
                 if (!String.IsNullOrEmpty(dataExportViewModel.EventCodes))
                 {
-                    try
-                    {
-                        string[] codes = dataExportViewModel.EventCodes.Split(',');
-                        foreach (string code in codes)
-                        {
-                            eventCodes.Add(Convert.ToInt32(code));
-                        }
-                    }
-                    catch (Exception)
-                    {
+                    eventCodes = CommaDashSeparated(dataExportViewModel.EventCodes);
+                    if (eventCodes.Count == 0)
+                    { 
                         return Content("Unable to process Event Codes");
                     }
                 }
                 int recordCount = controllerEventLogRepository.GetRecordCountByParameterAndEvent(dataExportViewModel.SignalId,
                     dataExportViewModel.StartDate, dataExportViewModel.EndDate, eventParams, eventCodes);
-                if (recordCount > 1048576)
+                if (recordCount > dataExportViewModel.RecordCountLimit)
                 {
                     return Content("The data set you have selected is too large. Your current request will generate " + recordCount.ToString() +
                         " records. Please reduces the number of records you have selected.");
@@ -108,6 +94,44 @@ namespace SPM.Controllers
                 }
             }
             return Content("This request cannot be processed. You may be missing parameters");
+        }
+
+        private List<int> CommaDashSeparated(string userInput)
+        {
+            List<int> processedCodes = new List<int>();
+            string[] codes = userInput.Split(',');
+            try
+            {
+                foreach (string code in codes)
+                {
+                    if (code.Contains('-'))
+                    {
+                        string[] withDash = code.Split('-');
+                        int minNum = Convert.ToInt32(withDash[0]);
+                        int maxNum = Convert.ToInt32(withDash[1]);
+                        if (minNum > maxNum)
+                        {
+                            int temp = minNum;
+                            minNum = maxNum;
+                            maxNum = temp;
+                        }
+                        for(int ii=minNum; ii<=maxNum; ii++)
+                        {
+                            processedCodes.Add(ii);
+                        }
+                    }
+                    else
+                    {
+                        processedCodes.Add(Convert.ToInt32(code));
+                    }
+                }
+                processedCodes = processedCodes.Distinct().ToList();
+
+            }
+            catch (Exception e)
+            {
+            }
+           return processedCodes;
         }
 
         public ActionResult GetRecordCount(DataExportViewModel dataExportViewModel)

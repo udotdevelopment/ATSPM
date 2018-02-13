@@ -64,6 +64,12 @@ namespace MOE.CommonTests.Models
             throw new NotImplementedException();
         }
 
+        public List<PreemptionAggregation> GetPreemptionsBySignalIdAndDateRange(string signalId, DateTime startDate, DateTime endDate)
+        {
+            return _db.PreemptionAggregations
+                .Where(p => p.SignalId == signalId && p.BinStartTime >= startDate && p.BinStartTime < endDate).ToList();
+        }
+
         public void Update(PreemptionAggregation preemptionAggregation)
         {
             throw new NotImplementedException();

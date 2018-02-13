@@ -38,7 +38,7 @@ namespace MOE.Common.Business.DataAggregation
 
         public double Order { get; set; }
 
-        public PreemptAggregationBySignal(AggregationMetricOptions options, Models.Signal signal, List<BinsContainer> binsContainers)
+        public PreemptAggregationBySignal(ApproachAggregationMetricOptions options, Models.Signal signal, List<BinsContainer> binsContainers)
         {
             Signal = signal;
             PreemptionTotals = new List<SignalPreemptAggregationContainer>();

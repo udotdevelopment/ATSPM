@@ -7,11 +7,14 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business;
 using MOE.Common.Business.Bins;
+using MOE.Common.Business.FilterExtensions;
 using MOE.Common.Business.WCFServiceLibrary;
 using SPM.Models;
 using MOE.Common.Models;
 using MOE.Common.Models.ViewModel.Chart;
+using MOE.Common.Business.FilterExtensions;
 
 namespace SPM.Controllers
 {
@@ -29,7 +32,8 @@ namespace SPM.Controllers
             Route route = routeRepository.GetRouteByID(id);
             foreach (var routeignal in route.RouteSignals)
             {
-                aggDataExportViewModel.Signals.Add(signalRepository.GetLatestVersionOfSignalBySignalID(routeignal.SignalId));
+                var signal = signalRepository.GetLatestVersionOfSignalBySignalID(routeignal.SignalId);
+                aggDataExportViewModel.FilterSignals.Add(GetFilterSignal(signal));
             }
             return PartialView(aggDataExportViewModel);
         }
@@ -38,8 +42,42 @@ namespace SPM.Controllers
         {
             var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
             AggDataExportViewModel aggDataExportViewModel = new AggDataExportViewModel();
-            aggDataExportViewModel.Signals.Add(signalRepository.GetLatestVersionOfSignalBySignalID(id));
-            return PartialView("GetRouteSignals",aggDataExportViewModel);
+            var signal = signalRepository.GetLatestVersionOfSignalBySignalID(id);
+            aggDataExportViewModel.FilterSignals.Add(GetFilterSignal(signal));
+            return PartialView("GetRouteSignals", aggDataExportViewModel);
+        }
+
+        private static FilterSignal GetFilterSignal(MOE.Common.Models.Signal signal)
+        {
+            var filterSignal = new FilterSignal
+            {
+                Exclude = false,
+                SignalId = signal.SignalID,
+                VersionId = signal.VersionID,
+                Description = signal.SignalDescription
+            };
+            foreach (var approach in signal.Approaches)
+            {
+                var filterApproach = new FilterApproach
+                {
+                    ApproachId = approach.ApproachID,
+                    Exclude = false,
+                    Description = approach.Description
+                };
+                foreach (var detector in approach.Detectors)
+                {
+                    var filterDetector = new FilterDetector
+                    {
+                        Id = detector.ID,
+                        Exclude = false,
+                        Description = detector.Description
+                    };
+                    filterApproach.FilterDetectors.Add(filterDetector);
+                }
+                filterSignal.FilterApproaches.Add(filterApproach);
+            }
+
+            return filterSignal;
         }
 
         // POST: AggDataExportViewModel
@@ -48,18 +86,54 @@ namespace SPM.Controllers
         public ActionResult CreateMetric(AggDataExportViewModel aggDataExportViewModel)
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
-            options.StartDate = aggDataExportViewModel.StartDateDay;
-            options.EndDate = aggDataExportViewModel.EndDateDay;
-            options.SelectedAggregationType = aggDataExportViewModel.SelectedAggregationType;
-            options.SelectedXAxisType = aggDataExportViewModel.SelectedXAxisType;
-            options.SeriesWidth = aggDataExportViewModel.SelectedSeriesWidth;
-            options.SelectedSeries = aggDataExportViewModel.SelectedSeriesType;
-            options.SelectedDimension = aggDataExportViewModel.SelectedDimension;
+            Enum.TryParse(aggDataExportViewModel.SelectedChartType, out SeriesChartType tempSeriesChartType);
+            options.SelectedChartType = tempSeriesChartType;
+            if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count>0)
+            {
+                options.StartDate = aggDataExportViewModel.StartDateDay;
+                options.EndDate = aggDataExportViewModel.EndDateDay;
+                options.SelectedAggregationType = aggDataExportViewModel.SelectedAggregationType;
+                options.SelectedXAxisType = aggDataExportViewModel.SelectedXAxisType;
+                options.SeriesWidth = aggDataExportViewModel.SelectedSeriesWidth;
+                options.SelectedSeries = aggDataExportViewModel.SelectedSeriesType;
+                options.SelectedDimension = aggDataExportViewModel.SelectedDimension;
+                options.FilterDirections = aggDataExportViewModel.FilterDirections;
+                SetTimeOptionsFromViewModel(aggDataExportViewModel, options);
+                options.FilterSignals = aggDataExportViewModel.FilterSignals;
+                return GetChartFromService(options);
+            }
+            else
+            {
+                return Content("<h1 class='text-danger'>Missing Parameters<h1>");
+            }
+        }
+
+        private ActionResult GetChartFromService(ApproachSplitFailAggregationOptions options)
+        {
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
+            MetricGeneratorService.MetricGeneratorClient client =
+                    new MetricGeneratorService.MetricGeneratorClient();
+            try
+            {
+                client.Open();
+                result.ChartPaths = client.CreateMetric(options);
+                client.Close();
+            }
+            catch (Exception ex)
+            {
+                client.Close();
+                return Content("<h1>" + ex.Message + "</h1>");
+            }
+            return PartialView("~/Views/DefaultCharts/MetricResult.cshtml", result);
+        }
+
+        private static void SetTimeOptionsFromViewModel(AggDataExportViewModel aggDataExportViewModel, ApproachSplitFailAggregationOptions options)
+        {
             string[] startTime;
             string[] endTime;
             int? startHour = null;
             int? startMinute = null;
-            int? endHour= null;
+            int? endHour = null;
             int? endMinute = null;
             BinFactoryOptions.TimeOptions timeOptions = BinFactoryOptions.TimeOptions.StartToEnd;
             if (!String.IsNullOrEmpty(aggDataExportViewModel.StartTime) &&
@@ -71,40 +145,26 @@ namespace SPM.Controllers
                 {
                     startHour += 12;
                 }
-                if (startTime.Length > 1)
-                {
-                    startMinute = Convert.ToInt32(startTime[1]);
-                }
-                else
-                {
-                    startMinute = 0;
-                }
+                startMinute = startTime.Length > 1 ? Convert.ToInt32(startTime[1]) : 0;
                 endTime = aggDataExportViewModel.EndTime.Split(':');
                 endHour = Convert.ToInt32(endTime[0]);
                 if (aggDataExportViewModel.SelectedEndAMPM.Contains("PM"))
                 {
                     endHour += 12;
                 }
-                if (endTime.Length > 1)
-                {
-                    endMinute = Convert.ToInt32(endTime[1]);
-                }
-                else
-                {
-                    endMinute = 0;
-                }
+                endMinute = endTime.Length > 1 ? Convert.ToInt32(endTime[1]) : 0;
                 timeOptions = BinFactoryOptions.TimeOptions.TimePeriod;
             }
             List<DayOfWeek> daysOfWeek = new List<DayOfWeek>();
             if (aggDataExportViewModel.Weekends)
             {
-                daysOfWeek.AddRange(new List<DayOfWeek>{DayOfWeek.Sunday, DayOfWeek.Saturday});
+                daysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday, DayOfWeek.Saturday });
             }
             if (aggDataExportViewModel.Weekdays)
             {
-                daysOfWeek.AddRange(new List<DayOfWeek>{ DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                daysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
             }
-            BinFactoryOptions.BinSize binSize = (BinFactoryOptions.BinSize) aggDataExportViewModel.SelectedBinSize;
+            BinFactoryOptions.BinSize binSize = (BinFactoryOptions.BinSize)aggDataExportViewModel.SelectedBinSize;
 
             options.TimeOptions = new BinFactoryOptions(
                 aggDataExportViewModel.StartDateDay,
@@ -112,36 +172,27 @@ namespace SPM.Controllers
                 startHour, startMinute, endHour, endMinute, daysOfWeek,
                 binSize,
                 timeOptions);
-            foreach (var signal in aggDataExportViewModel.Signals)
-            {
-                options.SignalIds.Add(signal.SignalID);
-            }
-            SeriesChartType tempSeriesChartType;
-            Enum.TryParse(aggDataExportViewModel.SelectedChartType, out tempSeriesChartType);
-            options.SelectedChartType = tempSeriesChartType;
-            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
-            MetricGeneratorService.MetricGeneratorClient client =
-                    new MetricGeneratorService.MetricGeneratorClient();
-                try
-                {
-                    client.Open();
-                    result.ChartPaths = client.CreateMetric(options);
-                    client.Close();
-                }
-                catch (Exception ex)
-                {
-                    client.Close();
-                    return Content("<h1>" + ex.Message + "</h1>");
-                }
-            return PartialView("~/Views/DefaultCharts/MetricResult.cshtml", result);
         }
 
         // GET: DataExportViewModels
         public ActionResult Index()
         {
-            var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
-            AggDataExportViewModel viewModel = new AggDataExportViewModel();
             var metricRepository = MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
+            AggDataExportViewModel viewModel = new AggDataExportViewModel();
+             SetAggregateDataViewModelLists(viewModel);
+            viewModel.SelectedMetricTypeId =20;
+            viewModel.SelectedChartType = SeriesChartType.StackedColumn.ToString();
+            viewModel.SelectedBinSize = 0;
+            viewModel.StartDateDay = Convert.ToDateTime("10/17/2017");
+            viewModel.EndDateDay = Convert.ToDateTime("10/18/2017");
+            viewModel.Weekdays = true;
+            viewModel.Weekends = true;
+            return View(viewModel);
+        }
+
+        private void SetAggregateDataViewModelLists(AggDataExportViewModel viewModel)
+        {
+            var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
             viewModel.SetSeriesTypes();
             viewModel.SetAggregationTypes();
             viewModel.SetBinSizeList();
@@ -150,16 +201,9 @@ namespace SPM.Controllers
             viewModel.SetDimensions();
             viewModel.SetSeriesWidth();
             viewModel.SetXAxisTypes();
+            viewModel.SetDirectionTypes();
             viewModel.Routes = routeRepository.GetAllRoutes();
-            viewModel.MetricTypes = metricTyperepository.GetAllToAggregateMetrics(); 
-            viewModel.SelectedMetricType = metricRepository.GetMetricsByID(20);
-            viewModel.SelectedChartType = SeriesChartType.StackedColumn.ToString();
-            viewModel.SelectedBinSize = 0;
-            //viewModel.StartDateDay = Convert.ToDateTime("10/17/2017");
-            //viewModel.EndDateDay = Convert.ToDateTime("10/18/2017");
-            viewModel.Weekdays = true;
-            viewModel.Weekends = true;
-            return View(viewModel);
+            viewModel.MetricTypes = metricTyperepository.GetAllToAggregateMetrics();
         }
 
         private int[] SplitHourMinute(String timeFromFrontEnd)
@@ -170,11 +214,7 @@ namespace SPM.Controllers
             int.TryParse(splitted[1], out HourMinute[1]);
             return HourMinute;
         }
-
-        public ActionResult AggregateDataExport()
-        {
-            return View();
-        }
+        
 
         public static List<int> StringToIntList(string str)
         {

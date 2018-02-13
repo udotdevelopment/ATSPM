@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using MOE.Common.Models.ViewModel.Chart;
@@ -27,10 +28,12 @@ namespace SPM.Models
         public DateTime EndDate { get; set; }
         [Display(Name = "Count")]
         public int? Count { get; set; }
+        public int? RecordCountLimit { get; set; }
         public SignalSearchViewModel SignalSearch { get; set; }
 
         public DataExportViewModel()
         {
+            RecordCountLimit = Convert.ToInt32(ConfigurationManager.AppSettings["RawDataCountLimit"]);
             SignalSearch = new SignalSearchViewModel();
         }
     }

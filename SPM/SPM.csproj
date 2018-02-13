@@ -342,6 +342,8 @@
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery-migrate-3.0.0.js" />
+    <Content Include="Scripts\jquery-migrate-3.0.0.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -578,11 +580,14 @@
     <Content Include="Views\RouteSignals\SignalsList.cshtml" />
     <Content Include="Views\AggregateDataExport\Index.cshtml" />
     <Content Include="Views\AggregateDataExport\GetRouteSignals.cshtml" />
-    <Content Include="Views\AggregateDataExport\DisplayTemplates\Signal.cshtml" />
+    <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterSignal.cshtml" />
     <Content Include="Views\ArchiveSettings\ArchiveSettings.cshtml" />
     <Content Include="Views\ArchiveSettings\CreateMetric.cshtml" />
     <Content Include="Views\ArchiveSettings\DisplayTemplates\Signal.cshtml" />
     <Content Include="Views\ArchiveSettings\Index.cshtml" />
+    <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterApproach.cshtml" />
+    <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDetector.cshtml" />
+    <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDirection.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

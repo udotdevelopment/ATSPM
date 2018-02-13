@@ -14,5 +14,6 @@ namespace MOE.Common.Models.Repositories
 
         List<System.Web.Mvc.SelectListItem> GetSelectList();
 
+        List<DirectionType> GetDirectionsByIDs(List<int> includedDirections);
     }
 }

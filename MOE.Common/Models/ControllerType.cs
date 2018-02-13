@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace MOE.Common.Models
 {
     using System;
@@ -6,37 +8,42 @@ namespace MOE.Common.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+    [DataContract]
     public partial class ControllerType
     {
         
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]       
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DataMember]
         public int ControllerTypeID { get; set; }
 
        
         [StringLength(50)]
+        [DataMember]
         public string Description { get; set; }
 
        
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-
+        [DataMember]
         public long SNMPPort { get; set; }
 
-       
+
+        [DataMember]
         public string FTPDirectory { get; set; }
 
-   
+
+        [DataMember]
         public bool ActiveFTP { get; set; }
 
      
         [StringLength(50)]
+        [DataMember]
         public string UserName { get; set; }
 
      
         [StringLength(50)]
+        [DataMember]
         public string Password { get; set; }
-
-   
-
+        
     }
 }

@@ -71,6 +71,11 @@ namespace MOE.CommonTests.Models
             return max;
         }
 
+        public List<Detector> GetDetectorsByIds(List<int> excludedDetectorIds)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Remove(Detector Detector)
         {
             throw new NotImplementedException();
