@@ -69,8 +69,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             List<Approach> metricApproaches = signal.GetApproachesForSignalThatSupportMetric(MetricTypeID);
             if (metricApproaches.Count > 0)
             {
-                //Parallel.ForEach(metricApproaches, approach =>
-                foreach (Approach approach in metricApproaches)
+                Parallel.ForEach(metricApproaches, approach =>
+                //foreach (Approach approach in metricApproaches)
                 {
                     if (approach.ProtectedPhaseNumber > 0)
                     {
@@ -85,7 +85,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         GetChart(splitFailPermissivePhase, permChartName, returnString, true, approach);
                     }
                 }
-                //);
+                );
             }
             return returnString;
         }
