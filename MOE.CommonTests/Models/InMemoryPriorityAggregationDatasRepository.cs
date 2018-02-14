@@ -43,6 +43,11 @@ namespace MOE.CommonTests.Models
             throw new NotImplementedException();
         }
 
+        public List<PriorityAggregation> GetPriorityBySignalIdAndDateRange(string signalId, DateTime start, DateTime end)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(PriorityAggregation priorityAggregation)
         {
             throw new NotImplementedException();

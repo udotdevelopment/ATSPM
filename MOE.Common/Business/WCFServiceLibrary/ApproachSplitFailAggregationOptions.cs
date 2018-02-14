@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.DataAggregation;
 using MOE.Common.Business.FilterExtensions;
+using System.Text.RegularExpressions;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
@@ -13,9 +14,42 @@ namespace MOE.Common.Business.WCFServiceLibrary
     public class ApproachSplitFailAggregationOptions: ApproachAggregationMetricOptions
     {
         
-        public enum AggregatedDataTypes { SplitFails }
+        public enum AggregatedDataTypes { SplitFails, GapOuts, ForceOffs, MaxOuts }
         [DataMember]
-        public AggregatedDataTypes SelectedAggregatedDataType { get; set; }    
+        public AggregatedDataTypes SelectedAggregatedDataType { get; set; }
+
+        public override string ChartTitle
+        {
+            get
+            {
+                string chartTitle;
+                chartTitle = "AggregationChart\n";
+                chartTitle += TimeOptions.Start.ToString();
+                if (TimeOptions.End > TimeOptions.Start)
+                    chartTitle += " to " + TimeOptions.End.ToString() + "\n";
+                if (TimeOptions.DaysOfWeek != null)
+                {
+                    foreach (var dayOfWeek in TimeOptions.DaysOfWeek)
+                    {
+                        chartTitle += dayOfWeek.ToString() + " ";
+                    }
+                }
+                if (TimeOptions.TimeOfDayStartHour != null && TimeOptions.TimeOfDayStartMinute != null &&
+                    TimeOptions.TimeOfDayEndHour != null && TimeOptions.TimeOfDayEndMinute != null)
+                {
+                    chartTitle += "Limited to: " + new TimeSpan(0, TimeOptions.TimeOfDayStartHour.Value, TimeOptions.TimeOfDayStartMinute.Value, 0)
+                                      .ToString() + " to " + new TimeSpan(0, TimeOptions.TimeOfDayEndHour.Value,
+                                      TimeOptions.TimeOfDayEndMinute.Value, 0).ToString() + "\n";
+                }
+                chartTitle += TimeOptions.SelectedBinSize.ToString() + " bins ";
+                chartTitle += SelectedXAxisType.ToString() + " Aggregation ";
+                chartTitle += SelectedAggregationType.ToString();
+                return chartTitle;
+            }
+        }
+        
+
+
         public  ApproachSplitFailAggregationOptions()
         {
             MetricTypeID = 20;
@@ -89,11 +123,20 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
             return binsContainers;
         }
-        
+
+        public override string YAxisTitle
+        {
+            get
+            {
+                return SelectedAggregationType.ToString() + " of Split Fail " + Regex.Replace(SelectedAggregatedDataType.ToString(),
+                               @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1").ToString() + " " + TimeOptions.SelectedBinSize.ToString() + " bins";
+            }
+        }
+
         protected override List<BinsContainer> GetBinsContainersByApproach(Models.Approach approach, bool getprotectedPhase)
         {
             ApproachSplitFailAggregationContainer approachSplitFailAggregationContainer = new ApproachSplitFailAggregationContainer(approach, TimeOptions, StartDate, EndDate,
-                getprotectedPhase);
+                getprotectedPhase, SelectedAggregatedDataType);
             return approachSplitFailAggregationContainer.BinsContainers;
         }
         

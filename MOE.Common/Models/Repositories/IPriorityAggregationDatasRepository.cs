@@ -10,5 +10,6 @@ namespace MOE.Common.Models.Repositories
         PriorityAggregation Add(PriorityAggregation priorityAggregation);
         void Update(PriorityAggregation priorityAggregation);
         void Remove(PriorityAggregation priorityAggregation);
+        List<PriorityAggregation> GetPriorityBySignalIdAndDateRange(string signalId, DateTime start, DateTime end);
     }
 }

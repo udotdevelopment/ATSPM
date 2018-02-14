@@ -27,6 +27,7 @@ namespace MOEWcfServiceLibrary
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachAggregationMetricOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachSplitFailAggregationOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.SignalPreemptionAggregationOptions))]
+    [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.SignalPriorityAggregationOptions))]
 
     public interface IMetricGenerator
     {

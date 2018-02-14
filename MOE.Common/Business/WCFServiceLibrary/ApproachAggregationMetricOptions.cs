@@ -48,7 +48,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public List<FilterDirection> FilterDirections { get; set; }
        
         public List<Models.Approach> Approaches { get; set; } = new List<Models.Approach>();
-       
+
+
+        public override string YAxisTitle { get; }
 
         public override List<string> CreateMetric()
         {

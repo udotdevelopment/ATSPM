@@ -93,8 +93,37 @@ namespace SPM.Controllers
                     break;
                 case 22:
                     return GetPreemptionChart(aggDataExportViewModel);
-                    default:
+                case 24:
+                    return GetPriorityChart(aggDataExportViewModel);
+                default:
                         return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
+            }
+        }
+
+        private ActionResult GetPriorityChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            SignalPriorityAggregationOptions options = new SignalPriorityAggregationOptions();
+            Enum.TryParse(aggDataExportViewModel.SelectedChartType, out SeriesChartType tempSeriesChartType);
+            options.SelectedChartType = tempSeriesChartType;
+            if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count > 0)
+            {
+                options.StartDate = aggDataExportViewModel.StartDateDay;
+                options.EndDate = aggDataExportViewModel.EndDateDay;
+                options.SelectedAggregationType = aggDataExportViewModel.SelectedAggregationType;
+                options.SelectedXAxisType = aggDataExportViewModel.SelectedXAxisType;
+                options.SeriesWidth = aggDataExportViewModel.SelectedSeriesWidth;
+                options.SelectedSeries = aggDataExportViewModel.SelectedSeriesType;
+                options.SelectedDimension = aggDataExportViewModel.SelectedDimension;
+                SetTimeOptionsFromViewModel(aggDataExportViewModel, options);
+                options.FilterSignals = aggDataExportViewModel.FilterSignals;
+                options.SelectedAggregatedDataType =
+                    (SignalPriorityAggregationOptions.AggregatedDataTypes)aggDataExportViewModel
+                        .SelectedAggregatedData;
+                return GetChartFromService(options);
+            }
+            else
+            {
+                return Content("<h1 class='text-danger'>Missing Parameters</h1>");
             }
         }
 
@@ -114,7 +143,9 @@ namespace SPM.Controllers
                 options.SelectedDimension = aggDataExportViewModel.SelectedDimension;
                 SetTimeOptionsFromViewModel(aggDataExportViewModel, options);
                 options.FilterSignals = aggDataExportViewModel.FilterSignals;
-                options.SelectedPreemptionData = aggDataExportViewModel.SelectedPreemptionData;
+                options.SelectedAggregatedDataType = options.SelectedAggregatedDataType =
+                    (SignalPreemptionAggregationOptions.AggregatedDataTypes)aggDataExportViewModel
+                        .SelectedAggregatedData;
                 return GetChartFromService(options);
             }
             else
@@ -279,8 +310,8 @@ namespace SPM.Controllers
             switch (id)
             {
                 case 22:
-                    List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas =
-                        Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+                    List<SignalPreemptionAggregationOptions.AggregatedDataTypes> preemptionDatas =
+                        Enum.GetValues(typeof(SignalPreemptionAggregationOptions.AggregatedDataTypes)).Cast<SignalPreemptionAggregationOptions.AggregatedDataTypes>().ToList();
                     foreach (var preemptionData in preemptionDatas)
                     {
                         aggregatedData.Add(new Tuple<int, string>((int)preemptionData, Regex.Replace(preemptionData.ToString(), @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1")));
@@ -292,6 +323,14 @@ namespace SPM.Controllers
                     foreach (var aggregatedDataTypes in splitFailDataTypes)
                     {
                         aggregatedData.Add(new Tuple<int, string>((int)aggregatedDataTypes, Regex.Replace(aggregatedDataTypes.ToString(), @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1")));
+                    }
+                    break;
+                case 24:
+                    List<SignalPriorityAggregationOptions.AggregatedDataTypes> priorityDataTypes =
+                        Enum.GetValues(typeof(SignalPriorityAggregationOptions.AggregatedDataTypes)).Cast<SignalPriorityAggregationOptions.AggregatedDataTypes>().ToList();
+                    foreach (var priorityDataType in priorityDataTypes)
+                    {
+                        aggregatedData.Add(new Tuple<int, string>((int)priorityDataType, Regex.Replace(priorityDataType.ToString(), @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1")));
                     }
                     break;
                 default:

@@ -11,29 +11,34 @@ namespace MOE.Common.Business.WCFServiceLibrary
 {
 
     [DataContract]
-    public class SignalPreemptionAggregationOptions: SignalAggregationMetricOptions
+    public class SignalPriorityAggregationOptions: SignalAggregationMetricOptions
     {
-        public enum AggregatedDataTypes {PreemptNumber, PreemptRequests, PreemptServices }
+        public enum AggregatedDataTypes {
+            PriorityNumber
+            , TotalCycles
+            , PriorityRequests
+            , PriorityServiceEarlyGreen
+            , PriorityServiceExtendedGreen }
         [DataMember]
         public AggregatedDataTypes SelectedAggregatedDataType { get; set; }
-        public SignalPreemptionAggregationOptions()
+        public SignalPriorityAggregationOptions()
         {
-            MetricTypeID = 22;
+            MetricTypeID = 24;
         }
 
         public override string YAxisTitle
         {
             get
             {
-                return SelectedAggregationType.ToString() + " of Preemption " + Regex.Replace(SelectedAggregatedDataType.ToString(),
+                return SelectedAggregationType.ToString() + " of Priority " + Regex.Replace(SelectedAggregatedDataType.ToString(),
                            @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1").ToString() + " " + TimeOptions.SelectedBinSize.ToString() + " bins";
             }
         }
 
         protected override List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal)
         {
-            PreemptionAggregationBySignal splitFailAggregationBySignal = new PreemptionAggregationBySignal(this, signal);
-            return splitFailAggregationBySignal.BinsContainers;
+            PriorityAggregationBySignal priorityAggregationBySignal = new PriorityAggregationBySignal(this, signal);
+            return priorityAggregationBySignal.BinsContainers;
         }
 
         protected override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
@@ -41,14 +46,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var binsContainers = BinFactory.GetBins(TimeOptions);
             foreach (var signal in signals)
             {
-                PreemptionAggregationBySignal preemptionAggregationBySignal = new PreemptionAggregationBySignal(this, signal);
+                PriorityAggregationBySignal priorityAggregationBySignal = new PriorityAggregationBySignal(this, signal);
                 for (int i = 0; i < binsContainers.Count; i++)
                 {
                     for (var binIndex = 0; binIndex < binsContainers[i].Bins.Count; binIndex++)
                     {
-
                         var bin = binsContainers[i].Bins[binIndex];
-                        bin.Sum += preemptionAggregationBySignal.BinsContainers[i].Bins[binIndex].Sum;
+                        bin.Sum += priorityAggregationBySignal.BinsContainers[i].Bins[binIndex].Sum;
                         bin.Average = Convert.ToInt32(Math.Round((double) (bin.Sum / signals.Count)));
                     }
                 }

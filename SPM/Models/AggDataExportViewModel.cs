@@ -99,7 +99,7 @@ namespace SPM.Models
 
 
         public MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel SignalSearch { get; set; } = new SignalSearchViewModel();
-        public SignalPreemptionAggregationOptions.PreemptionData SelectedPreemptionData { get; set; }
+        public SignalPreemptionAggregationOptions.AggregatedDataTypes SelectedPreemptionData { get; set; }
 
         private IMetricTypeRepository _metricRepository;
         public AggDataExportViewModel()
@@ -198,8 +198,8 @@ namespace SPM.Models
             switch (SelectedMetricTypeId)
                 {
                     case 22:
-                        List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas =
-                            Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+                        List<SignalPreemptionAggregationOptions.AggregatedDataTypes> preemptionDatas =
+                            Enum.GetValues(typeof(SignalPreemptionAggregationOptions.AggregatedDataTypes)).Cast<SignalPreemptionAggregationOptions.AggregatedDataTypes>().ToList();
                         foreach (var preemptionData in preemptionDatas)
                         {
                             AggregatedData.Add(new Tuple<int, string>((int)preemptionData, Regex.Replace(preemptionData.ToString(), @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1")));

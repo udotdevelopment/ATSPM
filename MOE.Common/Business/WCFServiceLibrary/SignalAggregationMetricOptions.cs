@@ -62,7 +62,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public List<FilterExtensions.FilterSignal> FilterSignals { get; set; } = new List<FilterSignal>();
         public List<Models.Signal> Signals { get; set; } = new List<Models.Signal>();
-        public string ChartTitle
+        public virtual string ChartTitle
         {
             get
             {
@@ -91,6 +91,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 return chartTitle;
             }
         }
+
 
         public override List<string> CreateMetric()
         {
@@ -493,7 +494,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
        
         protected abstract List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal);
         protected abstract List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals);
-       
+        public abstract string YAxisTitle { get; }
+
 
     }
 

@@ -347,18 +347,7 @@ namespace MOE.Common.Business
             {
                 chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
             }
-            if (options.SelectedAggregationType == AggregationType.Sum)
-            {
-                chartArea.AxisY.Title = "Sum of SplitFailures " + options.TimeOptions.SelectedBinSize.Description() + " bins";
-            }
-            else if (options.SelectedAggregationType == AggregationType.Average)
-            {
-                chartArea.AxisY.Title = "Average of SplitFailures";
-            }
-            else
-            {
-                chartArea.AxisY.Title = "";
-            }
+            chartArea.AxisY.Title = options.YAxisTitle;
             chartArea.AxisY.Minimum = 0;
         }
         private static void SetTimeXAxis(ChartArea chartArea, SignalAggregationMetricOptions options)

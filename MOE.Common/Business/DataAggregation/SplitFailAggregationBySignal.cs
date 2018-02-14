@@ -51,12 +51,12 @@ namespace MOE.Common.Business.DataAggregation
             {
                 ApproachSplitFailures.Add(
                        new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
-                           true));
+                           true, options.SelectedAggregatedDataType));
                 if (approach.PermissivePhaseNumber != null)
                 {
                     ApproachSplitFailures.Add(
                         new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
-                            false));
+                            false, options.SelectedAggregatedDataType));
                 }
             }
         }
@@ -72,12 +72,12 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     ApproachSplitFailures.Add(
                         new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
-                            true));
+                            true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber == phaseNumber)
                     {
                         ApproachSplitFailures.Add(
                             new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
-                                false));
+                                false, options.SelectedAggregatedDataType));
                     }
                 }
             }
@@ -95,12 +95,12 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     ApproachSplitFailures.Add(
                         new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
-                            true));
+                            true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null)
                     {
                         ApproachSplitFailures.Add(
                             new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
-                                false));
+                                false, options.SelectedAggregatedDataType));
                     }
                 }
             }

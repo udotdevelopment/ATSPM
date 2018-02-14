@@ -15,6 +15,8 @@ namespace MOE.Common.Business.DataAggregation
         public int TotalPreemptions { get { return BinsContainers.Sum(c => c.SumValue); } }
         public List<BinsContainer> BinsContainers { get; private set; }
 
+
+
         public int AveragePreemptions
         {
             get
@@ -62,17 +64,17 @@ namespace MOE.Common.Business.DataAggregation
                         {
                             int preemptionSum = 0;
                                 
-                            switch (options.SelectedPreemptionData)
+                            switch (options.SelectedAggregatedDataType)
                             {
-                                case SignalPreemptionAggregationOptions.PreemptionData.PreemptNumber:
+                                case SignalPreemptionAggregationOptions.AggregatedDataTypes.PreemptNumber:
                                     preemptionSum = preemptions.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                         .Sum(s => s.PreemptNumber);
                                     break;
-                                case SignalPreemptionAggregationOptions.PreemptionData.PreemptRequests:
+                                case SignalPreemptionAggregationOptions.AggregatedDataTypes.PreemptRequests:
                                     preemptionSum = preemptions.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                         .Sum(s => s.PreemptRequests);
                                     break;
-                                case SignalPreemptionAggregationOptions.PreemptionData.PreemptServices:
+                                case SignalPreemptionAggregationOptions.AggregatedDataTypes.PreemptServices:
                                     preemptionSum = preemptions.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                         .Sum(s => s.PreemptServices);
                                     break;

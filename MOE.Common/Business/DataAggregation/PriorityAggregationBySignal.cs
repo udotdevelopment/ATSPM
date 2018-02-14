@@ -1,126 +1,121 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
+using MOE.Common.Models;
 
 namespace MOE.Common.Business.DataAggregation
 {
     public class PriorityAggregationBySignal
     {
         public Models.Signal Signal { get; }
-        public List<SignalPriorityAggregationContainer> PriorityTotals { get; }
-        public int TotalPriorityRequests { get { return PriorityTotals.Sum(c => c.BinsContainer.SumValue); } }
-        public int AveragePriorityRequests{ get { return Convert.ToInt32(Math.Round(PriorityTotals.Average(c => c.BinsContainer.SumValue))); } }
+        public int TotalPriorities { get { return BinsContainers.Sum(c => c.SumValue); } }
+        public List<BinsContainer> BinsContainers { get; private set; }
 
-        public void GetPriorityByBin(BinsContainer binsContainer)
+
+
+        public int AveragePriorities
         {
-
-
-
-            foreach (var bin in binsContainer.Bins)
+            get
             {
-                int summedServicedPriority = 0;
-                foreach (var preempt in PriorityTotals)
+                if (BinsContainers.Count > 1)
                 {
-                    summedServicedPriority += preempt.BinsContainer.Bins.Where(a => a.Start == bin.Start)
-                        .Sum(a => a.Sum);
+                    return Convert.ToInt32(Math.Round(BinsContainers.Average(b => b.SumValue)));
                 }
-                bin.Sum = summedServicedPriority;
+                else
+                {
+                    double numberOfBins = 0;
+                    foreach (var binsContainer in BinsContainers)
+                    {
+                        numberOfBins += binsContainer.Bins.Count;
+                    }
+                    return numberOfBins > 0 ? Convert.ToInt32(Math.Round(TotalPriorities / numberOfBins)) : 0;
+                }
             }
-
         }
 
+        
 
-
-
-        public double Order { get; set; }
-
-        public PriorityAggregationBySignal(ApproachAggregationMetricOptions options, Models.Signal signal, List<BinsContainer> binsContainers)
+        public PriorityAggregationBySignal(SignalPriorityAggregationOptions options, Models.Signal signal)
         {
+            BinsContainers = BinFactory.GetBins(options.TimeOptions); 
             Signal = signal;
-            PriorityTotals = new List<SignalPriorityAggregationContainer>();
-
-            PriorityTotals.Add(
-                new SignalPriorityAggregationContainer(Signal, binsContainers));
-
-
-        }
-
-        public void GetPriorityTotalsBySignalByPriorityNumber(BinsContainer binsContainer, int priorityNumber)
-        {
-
-            PriorityTotals.Clear();
-
-            PriorityTotals.Add(
-                new SignalPriorityAggregationContainer(Signal, binsContainer, priorityNumber));
-
-
-        }
-
-
-
-    }
-
-    public class SignalPriorityAggregationContainer
-    {
-        public Models.Signal Signal { get; }
-        public BinsContainer BinsContainer { get; set; }
-
-        public SignalPriorityAggregationContainer(Models.Signal signal, List<BinsContainer> binsContainers) //, AggregationMetricOptions.XAxisTimeTypes aggregationType)
-        {
-            Signal = signal;
-
-
-
             var priorityAggregationRepository =
-                MOE.Common.Models.Repositories.PriorityAggregationDatasRepositoryFactory.Create();
-
-            var container = binsContainers.FirstOrDefault();
-            //if (container != null)
-            //{
-            //    foreach (var bin in container.Bins)
-            //    {
-
-            //        var records = priorityAggregationRepository
-            //            .GetPriorityAggregationByVersionIdAndDateRange(
-            //                Signal.VersionID, bin.Start, bin.End);
-
-            //        var totalRequests = records.Sum(s => s.PriorityRequests);
-
-            //        BinsContainer.Bins.Add(new Bin (bin.Start, bin.End){ Sum = totalRequests});
-
-            //    }
-            //}
-        }
-
-
-
-        public SignalPriorityAggregationContainer(Models.Signal signal, BinsContainer binsContainer, int priorityNumber)
-        {
-
-            Signal = signal;
-
-            var priorityAggregationRepository =
-                MOE.Common.Models.Repositories.PriorityAggregationDatasRepositoryFactory.Create();
-
-
-            foreach (var bin in binsContainer.Bins)
+                Models.Repositories.PriorityAggregationDatasRepositoryFactory.Create();
+            List<PriorityAggregation> priorityAggregations =
+                priorityAggregationRepository.GetPriorityBySignalIdAndDateRange(
+                    signal.SignalID, BinsContainers.Min(b => b.Start), BinsContainers.Max(b => b.End));
+            if (priorityAggregations != null)
             {
+                ConcurrentBag<BinsContainer> concurrentBinContainers = new ConcurrentBag<BinsContainer>();
+                //foreach (var binsContainer in binsContainers)
+                Parallel.ForEach(BinsContainers, binsContainer =>
+                {
+                    BinsContainer tempBinsContainer =
+                        new BinsContainer(binsContainer.Start, binsContainer.End);
+                    ConcurrentBag<Bin> concurrentBins = new ConcurrentBag<Bin>();
+                    //foreach (var bin in binsContainer.Bins)
+                    Parallel.ForEach(binsContainer.Bins, bin =>
+                    {
+                        if (priorityAggregations.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
+                        {
+                            int preemptionSum = 0;
+                                
+                            switch (options.SelectedAggregatedDataType)
+                            {
+                                case SignalPriorityAggregationOptions.AggregatedDataTypes.PriorityNumber:
+                                    preemptionSum = priorityAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                        .Sum(s => s.PriorityNumber);
+                                    break;
+                                case SignalPriorityAggregationOptions.AggregatedDataTypes.PriorityRequests:
+                                    preemptionSum = priorityAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                        .Sum(s => s.PriorityRequests);
+                                    break;
+                                case SignalPriorityAggregationOptions.AggregatedDataTypes.PriorityServiceEarlyGreen:
+                                    preemptionSum = priorityAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                        .Sum(s => s.PriorityServiceEarlyGreen);
+                                    break;
+                                case SignalPriorityAggregationOptions.AggregatedDataTypes.PriorityServiceExtendedGreen:
+                                    preemptionSum = priorityAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                        .Sum(s => s.PriorityServiceEarlyGreen);
+                                    break;
+                                default:
+                                        throw new Exception("Invalid Aggregate Data Type");
+                            }
+                            concurrentBins.Add(new Bin
+                            {
+                                Start = bin.Start,
+                                End = bin.End,
+                                Sum = preemptionSum,
+                                Average = preemptionSum
+                            });
+                        }
+                        else
+                        {
+                            concurrentBins.Add(new Bin
+                            {
+                                Start = bin.Start,
+                                End = bin.End,
+                                Sum = 0,
+                                Average = 0
+                            });
+                        }
 
-                var records = priorityAggregationRepository
-                    .GetPriorityAggregationByVersionIdAndDateRange(
-                        Signal.VersionID, bin.Start, bin.End).Where(e => e.PriorityNumber == priorityNumber);
-
-                var totalRequests = records.Sum(s => s.PriorityRequests);
-
-                BinsContainer.Bins.Add(new Bin { Start = bin.Start, End = bin.End, Sum = totalRequests });
-
-            } 
+                    });
+                    tempBinsContainer.Bins = concurrentBins.OrderBy(c => c.Start).ToList();
+                    concurrentBinContainers.Add(tempBinsContainer);
+                });
+                BinsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
+            }
         }
-
-
-
-
+        
+        
     }
+    
+        
+    
+        
 }
