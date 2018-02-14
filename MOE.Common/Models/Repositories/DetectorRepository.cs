@@ -220,19 +220,18 @@ namespace MOE.Common.Models.Repositories
 
         public bool CheckReportAvialbility(string detectorID, int metricID)
         {
-            MOE.Common.Models.Detector gd = _db.Detectors
-                .Where(g => g.DetectorID == detectorID)                
-                .FirstOrDefault();    
+            MOE.Common.Models.Detector gd = _db.Detectors                
+                .FirstOrDefault(g => g.DetectorID == detectorID);    
             bool result = false;
             if(gd != null)
             {
-                foreach (DetectionType dt in gd.DetectionTypes)
+                foreach (var dt in gd.DetectionTypes)
                 {
-                    foreach (Models.MetricType m in dt.MetricTypes)
+                    foreach(var m in dt.MetricTypes)
                     {
                         if (m.MetricID == metricID)
                         {
-                            result = true;
+                            return true;
                         }
                     }
                 }
@@ -240,7 +239,25 @@ namespace MOE.Common.Models.Repositories
             return result;
         }
 
-        
+        public bool CheckReportAvialbilityByDetector(Detector gd, int metricID)
+        {
+            bool result = false;
+            if (gd != null)
+            {
+                foreach (var dt in gd.DetectionTypes)
+                {
+                    foreach (var m in dt.MetricTypes)
+                    {
+                        if (m.MetricID == metricID)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
 
         public List<MOE.Common.Models.Detector> GetDetectorsBySignalIDAndMetricType(string SignalID, int MetricID)
         {

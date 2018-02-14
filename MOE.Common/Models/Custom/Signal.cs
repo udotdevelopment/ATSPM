@@ -196,7 +196,7 @@ namespace MOE.Common.Models
             List<Detector> detectors = new List<Detector>();
             foreach (Detector d in GetDetectorsForSignal())
             {
-                if (gdr.CheckReportAvialbility(d.DetectorID, metricTypeId) && 
+                if (gdr.CheckReportAvialbilityByDetector(d, metricTypeId) && 
                     (d.Approach.ProtectedPhaseNumber == phaseNumber || d.Approach.PermissivePhaseNumber == phaseNumber))
                 {
                     detectors.Add(d);

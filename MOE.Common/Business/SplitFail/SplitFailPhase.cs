@@ -114,7 +114,8 @@ namespace MOE.Common.Business.SplitFail
             var controllerEventsRepository = ControllerEventLogRepositoryFactory.Create();
             int phaseNumber = GetPermissivePhase ? Approach.PermissivePhaseNumber.Value : Approach.ProtectedPhaseNumber;
             var detectors = Approach.Signal.GetDetectorsForSignalThatSupportAMetricByPhaseNumber(12, phaseNumber);
-            foreach (var detector in detectors)
+          
+            foreach(var detector in detectors)
             {
                 var lastCycle = Cycles.LastOrDefault();
                 options.EndDate = lastCycle?.EndTime ?? options.EndDate;
