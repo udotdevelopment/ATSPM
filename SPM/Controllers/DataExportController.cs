@@ -187,53 +187,6 @@ namespace SPM.Controllers
             return Content("This request cannot be processed. You may be missing parameters");
         }
 
-        // POST: DataExportViewModels/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "Id,StartDateDate,EndDateDate,StartDateHour,StartDateMinute,EndDateHour,EndDateMinute,Count")] DataExportViewModel dataExportViewModel)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        //db.DataExportViewModels.Add(dataExportViewModel);
-        //        //db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    return View(dataExportViewModel);
-        //}
-
-        //// GET: DataExportViewModels/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    DataExportViewModel dataExportViewModel = db.DataExportViewModels.Find(id);
-        //    if (dataExportViewModel == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(dataExportViewModel);
-        //}
-
-        // POST: DataExportViewModels/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "SignalId,StartDateDate,EndDateDate,StartDateHour,StartDateMinute,EndDateHour,EndDateMinute,Count")] DataExportViewModel vm)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        vm.Count = cr.GetEventCountByEventCodesParamDateTimeRange(vm.SignalId, vm.StartDateDate, vm.EndDateDate,
-        //            vm.StartDateHour, vm.StartDateMinute, vm.EndDateHour, vm.EndDateMinute, eventCodes, param);
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(dataExportViewModel);
-        //}
 
         //protected override void Dispose(bool disposing)
         //{

@@ -451,11 +451,6 @@ namespace SPM.Controllers
             return PartialView("Edit",signal);
         }
 
-        public ActionResult _SignalPartial(Signal signal)
-        {
-            return PartialView(signal);
-        }
-
         [AllowAnonymous]
         public ActionResult SignalDetailResult(string id)
         {

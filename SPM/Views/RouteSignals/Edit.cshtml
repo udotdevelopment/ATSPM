@@ -20,13 +20,13 @@
             <h4>RouteSignal</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.RouteDetailId)
+            @Html.HiddenFor(model => model.Id)
     
             <div class="form-group">
-                @Html.LabelFor(model => model.ApproachRouteId, "ApproachRouteId", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.RouteId, "ApproachRouteId", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.DropDownList("ApproachRouteId", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.ApproachRouteId, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.RouteId, "", new { @class = "text-danger" })
                 </div>
             </div>
     
