@@ -270,16 +270,16 @@ While each agency should consult with their IT department for specific guideline
                 new Models.MetricType { MetricID = 13, ChartName = "Purdue Link Pivot", Abbreviation = "LP", ShowOnWebsite = false, ShowOnAggregationSite = false },
                 new Models.MetricType { MetricID = 14, ChartName = "Preempt Service Request", Abbreviation = "PSR", ShowOnWebsite = false, ShowOnAggregationSite = false },
                 new Models.MetricType { MetricID = 15, ChartName = "Preempt Service", Abbreviation = "PS", ShowOnWebsite = false, ShowOnAggregationSite = false },
-                new Models.MetricType { MetricID = 16, ChartName = "Lane by lane Aggregation", Abbreviation = "LLA", ShowOnWebsite = false, ShowOnAggregationSite = true },
-                new Models.MetricType { MetricID = 17, ChartName = "Advanced Counts Aggregation", Abbreviation = "ACA", ShowOnWebsite = false, ShowOnAggregationSite = true },
-                new Models.MetricType { MetricID = 18, ChartName = "Arrival on Green Aggregation", Abbreviation = "AoGA", ShowOnWebsite = false, ShowOnAggregationSite = true },
-                new Models.MetricType { MetricID = 19, ChartName = "Platoon Ratio Aggregation", Abbreviation = "PRA", ShowOnWebsite = false, ShowOnAggregationSite = true },
-                new Models.MetricType { MetricID = 20, ChartName = "Purdue Split Failure Aggregation", Abbreviation = "SFA", ShowOnWebsite = false, ShowOnAggregationSite = true },
-                new Models.MetricType { MetricID = 21, ChartName = "Pedestrian Actuations Aggregation", Abbreviation = "PedA", ShowOnWebsite = false, ShowOnAggregationSite = true },
-                new Models.MetricType { MetricID = 22, ChartName = "Preemption Aggregation", Abbreviation = "PreemptA", ShowOnWebsite = false, ShowOnAggregationSite = true },
-                new Models.MetricType { MetricID = 23, ChartName = "Approach Delay Aggregation", Abbreviation = "ADA", ShowOnWebsite = false, ShowOnAggregationSite = true },
-                new Models.MetricType { MetricID = 24, ChartName = "Transit Signal Priority Aggregation", Abbreviation = "TSPA", ShowOnWebsite = false, ShowOnAggregationSite = true },
-                new Models.MetricType { MetricID = 25, ChartName = "Approach Speed Aggregation", Abbreviation = "ASA", ShowOnWebsite = false, ShowOnAggregationSite = true }
+                new Models.MetricType { MetricID = 16, ChartName = "Lane by lane", Abbreviation = "LLA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 17, ChartName = "Advanced Counts", Abbreviation = "ACA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 18, ChartName = "Arrival on Green", Abbreviation = "AoGA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 19, ChartName = "Platoon Ratio", Abbreviation = "PRA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 20, ChartName = "Purdue Split Failure", Abbreviation = "SFA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 21, ChartName = "Pedestrian Actuations", Abbreviation = "PedA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 22, ChartName = "Preemption", Abbreviation = "PreemptA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 23, ChartName = "Approach Delay", Abbreviation = "ADA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 24, ChartName = "Transit Signal Priority", Abbreviation = "TSPA", ShowOnWebsite = false, ShowOnAggregationSite = true },
+                new Models.MetricType { MetricID = 25, ChartName = "Approach Speed", Abbreviation = "ASA", ShowOnWebsite = false, ShowOnAggregationSite = true }
 
                 );
             context.SaveChanges();

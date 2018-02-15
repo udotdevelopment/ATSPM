@@ -17,7 +17,7 @@ namespace MOE.Common.Business.DataAggregation
         public List<BinsContainer> BinsContainers { get; set; } = new List<BinsContainer>();
 
         public ApproachSplitFailAggregationContainer(Approach approach, BinFactoryOptions TimeOptions, DateTime startDate, DateTime endDate, 
-            bool getProtectedPhase, ApproachSplitFailAggregationOptions.AggregatedDataTypes dataType)
+            bool getProtectedPhase, AggregatedDataType dataType)
         {
             BinsContainers = BinFactory.GetBins(TimeOptions);
             Approach = approach;
@@ -41,24 +41,24 @@ namespace MOE.Common.Business.DataAggregation
                         if (splitFails.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
                         {
                             int splitFailCount = 0;
-                            switch (dataType)
+                            switch (dataType.DataName)
                             {
-                                case ApproachSplitFailAggregationOptions.AggregatedDataTypes.SplitFails:
+                                case "SplitFails":
                                      splitFailCount =
                                         splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.SplitFailures);
                                     break;
-                                case ApproachSplitFailAggregationOptions.AggregatedDataTypes.ForceOffs:
+                                case "ForceOffs":
                                     splitFailCount =
                                         splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.ForceOffs);
                                     break;
-                                case ApproachSplitFailAggregationOptions.AggregatedDataTypes.GapOuts:
+                                case "GapOuts":
                                     splitFailCount =
                                         splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.GapOuts);
                                     break;
-                                case ApproachSplitFailAggregationOptions.AggregatedDataTypes.MaxOuts:
+                                case "MaxOuts":
                                     splitFailCount =
                                         splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.MaxOuts);

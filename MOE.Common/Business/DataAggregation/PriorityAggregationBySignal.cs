@@ -9,40 +9,10 @@ using MOE.Common.Models;
 
 namespace MOE.Common.Business.DataAggregation
 {
-    public class PriorityAggregationBySignal
+    public class PriorityAggregationBySignal:AggregationBySignal
     {
-        public Models.Signal Signal { get; }
-        public int TotalPriorities { get { return BinsContainers.Sum(c => c.SumValue); } }
-        public List<BinsContainer> BinsContainers { get; private set; }
-
-
-
-        public int AveragePriorities
+        protected override void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal)
         {
-            get
-            {
-                if (BinsContainers.Count > 1)
-                {
-                    return Convert.ToInt32(Math.Round(BinsContainers.Average(b => b.SumValue)));
-                }
-                else
-                {
-                    double numberOfBins = 0;
-                    foreach (var binsContainer in BinsContainers)
-                    {
-                        numberOfBins += binsContainer.Bins.Count;
-                    }
-                    return numberOfBins > 0 ? Convert.ToInt32(Math.Round(TotalPriorities / numberOfBins)) : 0;
-                }
-            }
-        }
-
-        
-
-        public PriorityAggregationBySignal(SignalPriorityAggregationOptions options, Models.Signal signal)
-        {
-            BinsContainers = BinFactory.GetBins(options.TimeOptions); 
-            Signal = signal;
             var priorityAggregationRepository =
                 Models.Repositories.PriorityAggregationDatasRepositoryFactory.Create();
             List<PriorityAggregation> priorityAggregations =
@@ -63,27 +33,27 @@ namespace MOE.Common.Business.DataAggregation
                         if (priorityAggregations.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
                         {
                             int preemptionSum = 0;
-                                
-                            switch (options.SelectedAggregatedDataType)
+
+                            switch (options.SelectedAggregatedDataType.DataName)
                             {
-                                case SignalPriorityAggregationOptions.AggregatedDataTypes.PriorityNumber:
+                                case "PriorityNumber":
                                     preemptionSum = priorityAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                         .Sum(s => s.PriorityNumber);
                                     break;
-                                case SignalPriorityAggregationOptions.AggregatedDataTypes.PriorityRequests:
+                                case "PriorityRequests":
                                     preemptionSum = priorityAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                         .Sum(s => s.PriorityRequests);
                                     break;
-                                case SignalPriorityAggregationOptions.AggregatedDataTypes.PriorityServiceEarlyGreen:
+                                case "PriorityServiceEarlyGreen":
                                     preemptionSum = priorityAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                         .Sum(s => s.PriorityServiceEarlyGreen);
                                     break;
-                                case SignalPriorityAggregationOptions.AggregatedDataTypes.PriorityServiceExtendedGreen:
+                                case "PriorityServiceExtendedGreen":
                                     preemptionSum = priorityAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                         .Sum(s => s.PriorityServiceEarlyGreen);
                                     break;
                                 default:
-                                        throw new Exception("Invalid Aggregate Data Type");
+                                    throw new Exception("Invalid Aggregate Data Type");
                             }
                             concurrentBins.Add(new Bin
                             {
@@ -110,6 +80,11 @@ namespace MOE.Common.Business.DataAggregation
                 });
                 BinsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
             }
+        }
+
+        public PriorityAggregationBySignal(SignalAggregationMetricOptions options, Models.Signal signal) :base(options, signal)
+        {
+            LoadBins(options, signal);
         }
         
         

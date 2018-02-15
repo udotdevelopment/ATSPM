@@ -13,12 +13,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [DataContract]
     public class SignalPreemptionAggregationOptions: SignalAggregationMetricOptions
     {
-        public enum AggregatedDataTypes {PreemptNumber, PreemptRequests, PreemptServices }
-        [DataMember]
-        public AggregatedDataTypes SelectedAggregatedDataType { get; set; }
         public SignalPreemptionAggregationOptions()
         {
             MetricTypeID = 22;
+            AggregatedDataTypes = new List<AggregatedDataType>();
+            AggregatedDataTypes.Add(new AggregatedDataType{ Id = 0, DataName = "PreemptNumber"});
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 1, DataName = "PreemptRequests" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 2, DataName = "PreemptServices" });
         }
 
         public override string YAxisTitle

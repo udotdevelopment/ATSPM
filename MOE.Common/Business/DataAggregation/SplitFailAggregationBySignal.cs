@@ -7,42 +7,32 @@ using MOE.Common.Models;
 
 namespace MOE.Common.Business.DataAggregation
 {
-    public class SplitFailAggregationBySignal
+    public class SplitFailAggregationBySignal:AggregationBySignal
     {
-        public Models.Signal Signal { get; }
         public List<ApproachSplitFailAggregationContainer> ApproachSplitFailures { get;}
-        public int TotalSplitFailures { get { return BinsContainers.Sum(c => c.SumValue); } }
-
-        public int AverageSplitFailures
+        
+        protected override void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal)
         {
-            get
+            for (int i = 0; i < BinsContainers.Count; i++)
             {
-                if (BinsContainers.Count > 1)
+                for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
                 {
-                    return Convert.ToInt32(Math.Round(BinsContainers.Average(b => b.SumValue)));
-                }
-                else
-                {
-                    double numberOfBins = 0;
-                    foreach (var binsContainer in BinsContainers)
+                    var bin = BinsContainers[i].Bins[binIndex];
+                    foreach (var approachSplitFailAggregationContainer in ApproachSplitFailures)
                     {
-                        numberOfBins += binsContainer.Bins.Count;
+                        bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
                     }
-                    return numberOfBins > 0 ? Convert.ToInt32(Math.Round(TotalSplitFailures / numberOfBins)) : 0;
+                    bin.Average = ApproachSplitFailures.Count > 0 ? (bin.Sum / ApproachSplitFailures.Count) : 0;
                 }
             }
         }
 
-        public List<BinsContainer> BinsContainers{get; private set;}
-        
 
-        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal)
+        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal):base(options, signal)
         {
-            BinsContainers = BinFactory.GetBins(options.TimeOptions); 
-            Signal = signal;
             ApproachSplitFailures = new List<ApproachSplitFailAggregationContainer>();
             GetApproachSplitFailAggregationContainersForAllApporaches(options, signal);
-            SetSumSplitFailuresByBin();
+            LoadBins(null, null);
         }
 
         private void GetApproachSplitFailAggregationContainersForAllApporaches(ApproachSplitFailAggregationOptions options, Models.Signal signal)
@@ -61,10 +51,8 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
-        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal, int phaseNumber)
+        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal, int phaseNumber):base(options, signal)
         {
-            BinsContainers =  BinFactory.GetBins(options.TimeOptions); 
-            Signal = signal;
             ApproachSplitFailures = new List<ApproachSplitFailAggregationContainer>();
             foreach (var approach in signal.Approaches)
             {
@@ -81,13 +69,11 @@ namespace MOE.Common.Business.DataAggregation
                     }
                 }
             }
-            SetSumSplitFailuresByBin();
+            LoadBins(null, null);
         }
 
-        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal, DirectionType direction)
+        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal, DirectionType direction):base(options, signal)
         {
-            BinsContainers = BinFactory.GetBins(options.TimeOptions); 
-            Signal = signal;
             ApproachSplitFailures = new List<ApproachSplitFailAggregationContainer>();
             foreach (var approach in signal.Approaches)
             {
@@ -104,24 +90,9 @@ namespace MOE.Common.Business.DataAggregation
                     }
                 }
             }
-            SetSumSplitFailuresByBin();
+            LoadBins(null, null);
         }
-
-        private void SetSumSplitFailuresByBin()
-        {
-            for (int i = 0; i < BinsContainers.Count; i++)
-            {
-                for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
-                {
-                    var bin = BinsContainers[i].Bins[binIndex];
-                    foreach (var approachSplitFailAggregationContainer in ApproachSplitFailures)
-                    {
-                        bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
-                    }
-                    bin.Average = ApproachSplitFailures.Count > 0 ? (bin.Sum / ApproachSplitFailures.Count) :  0;
-                }
-            }
-        }
+        
 
         public int GetSplitFailsByDirection(DirectionType direction)
         {

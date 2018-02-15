@@ -13,17 +13,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [DataContract]
     public class SignalPriorityAggregationOptions: SignalAggregationMetricOptions
     {
-        public enum AggregatedDataTypes {
-            PriorityNumber
-            , TotalCycles
-            , PriorityRequests
-            , PriorityServiceEarlyGreen
-            , PriorityServiceExtendedGreen }
-        [DataMember]
-        public AggregatedDataTypes SelectedAggregatedDataType { get; set; }
         public SignalPriorityAggregationOptions()
         {
             MetricTypeID = 24;
+            AggregatedDataTypes = new List<AggregatedDataType>();
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 0, DataName = "TotalCycles" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 1, DataName = "PriorityRequests" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 2, DataName = "PriorityServiceEarlyGreen" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 3, DataName = "PriorityServiceExtendedGreen" });
         }
 
         public override string YAxisTitle

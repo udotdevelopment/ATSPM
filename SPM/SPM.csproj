@@ -568,6 +568,7 @@
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDetector.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDirection.cshtml" />
     <Content Include="Views\AggregateDataExport\GetAggregateDataTypes.cshtml" />
+    <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterMovement.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

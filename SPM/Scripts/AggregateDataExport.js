@@ -6,7 +6,7 @@
 function SetDateTextBoxes (){
     $(".datepicker").attr('type', 'text');
     $("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date("2/1/2018")));
-    $("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date("2/2/2018")));
+    $("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date("2/1/2018")));
     $("#StartEndDaySelector").datepicker({
         onSelect: function (dateText) {
             $("#StartDateDay").val(dateText);
@@ -121,6 +121,7 @@ function GetSignalLocation(selectedMetricID) {
 }
 
 function ClearSignals() {
+    $('#SelectedRouteId').val('');
     $('#RouteSignals').html('');
 }
 
@@ -144,12 +145,17 @@ function ResetDates() {
     $("#StartEndDaySelector").datepicker("setDate", d);
 }
 
+function CloseSignalList() {
+    $("#RouteSignals").removeClass("in");
+}
+
 function StartReportSpinner() {
     $("#RunReportSpinner").addClass("glyphicon-refresh spinning");
 }
 
 function StopReportSpinner() {
     $("#RunReportSpinner").removeClass("glyphicon-refresh spinning");
+    CloseSignalList();
 }
 
 

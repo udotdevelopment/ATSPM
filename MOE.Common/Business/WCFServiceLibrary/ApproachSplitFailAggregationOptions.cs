@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using MOE.Common.Models;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -6,6 +7,7 @@ using MOE.Common.Business.Bins;
 using MOE.Common.Business.DataAggregation;
 using MOE.Common.Business.FilterExtensions;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
@@ -13,11 +15,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [DataContract]
     public class ApproachSplitFailAggregationOptions: ApproachAggregationMetricOptions
     {
-        
-        public enum AggregatedDataTypes { SplitFails, GapOuts, ForceOffs, MaxOuts }
-        [DataMember]
-        public AggregatedDataTypes SelectedAggregatedDataType { get; set; }
-
         public override string ChartTitle
         {
             get
@@ -53,6 +50,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public  ApproachSplitFailAggregationOptions()
         {
             MetricTypeID = 20;
+            AggregatedDataTypes = new List<AggregatedDataType>();
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 0, DataName = "SplitFails" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 1, DataName = "GapOuts" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 2, DataName = "ForceOffs" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 3, DataName = "MaxOuts" });
+
         }
 
 
@@ -61,28 +64,28 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             SplitFailAggregationBySignal splitFailAggregationBySignal =
                 new SplitFailAggregationBySignal(this, signal);
-            return splitFailAggregationBySignal.AverageSplitFailures;
+            return splitFailAggregationBySignal.Average;
         }
 
         protected override int GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
             SplitFailAggregationBySignal splitFailAggregationBySignal =
                 new SplitFailAggregationBySignal(this, signal);
-            return splitFailAggregationBySignal.TotalSplitFailures;
+            return splitFailAggregationBySignal.Total;
         }
 
         protected override int GetAverageByDirection(Models.Signal signal, DirectionType direction)
         {
             SplitFailAggregationBySignal splitFailAggregationBySignal =
                 new SplitFailAggregationBySignal(this, signal, direction);
-            return splitFailAggregationBySignal.AverageSplitFailures;
+            return splitFailAggregationBySignal.Average;
         }
 
         protected override int GetSumByDirection(Models.Signal signal, DirectionType direction)
         {
             SplitFailAggregationBySignal splitFailAggregationBySignal =
                 new SplitFailAggregationBySignal(this, signal, direction);
-            return splitFailAggregationBySignal.TotalSplitFailures;
+            return splitFailAggregationBySignal.Total;
         }
 
         protected override List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal)
@@ -107,17 +110,21 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
         {
-            var binsContainers = BinFactory.GetBins(TimeOptions);
-            foreach (var signal in signals)
+            ConcurrentBag<SplitFailAggregationBySignal> aggregations = new ConcurrentBag<SplitFailAggregationBySignal>();
+            Parallel.ForEach(signals, signal =>
             {
-                SplitFailAggregationBySignal splitFail = new SplitFailAggregationBySignal(this, signal);
+                aggregations.Add(new SplitFailAggregationBySignal(this, signal));
+            });
+            var binsContainers = BinFactory.GetBins(TimeOptions);
+            foreach (var splitFailAggregationBySignal in aggregations)
+            {
                 for (int i = 0; i < binsContainers.Count; i++)
                 {
                     for (var binIndex = 0; binIndex < binsContainers[i].Bins.Count; binIndex++)
                     {
                         var bin = binsContainers[i].Bins[binIndex];
-                        bin.Sum += splitFail.BinsContainers[i].Bins[binIndex].Sum;
-                        bin.Average = Convert.ToInt32(Math.Round((double) (bin.Sum / signals.Count)));
+                        bin.Sum += splitFailAggregationBySignal.BinsContainers[i].Bins[binIndex].Sum;
+                        bin.Average = Convert.ToInt32(Math.Round((double)(bin.Sum / signals.Count)));
                     }
                 }
             }
@@ -132,6 +139,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                                @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1").ToString() + " " + TimeOptions.SelectedBinSize.ToString() + " bins";
             }
         }
+
 
         protected override List<BinsContainer> GetBinsContainersByApproach(Models.Approach approach, bool getprotectedPhase)
         {

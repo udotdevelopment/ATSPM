@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 namespace MOE.Common.Business.FilterExtensions
 {
     [DataContract]
-    public class FilterDirection
+    public class FilterMovement
     {
-        public FilterDirection()
+        public FilterMovement()
         { }
-        public FilterDirection(int directionDirectionTypeId,  string description,bool include)
+        public FilterMovement(int movementTypeId,  string description, bool include)
         {
-            DirectionTypeId = directionDirectionTypeId;
+            MovementTypeId = movementTypeId;
             Include = include;
             Description = description;
         }
 
         [DataMember]
-        public int DirectionTypeId { get; set; }
+        public int MovementTypeId { get; set; }
 
         public string Description { get; set; }
         [DataMember]

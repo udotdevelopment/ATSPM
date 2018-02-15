@@ -8,22 +8,15 @@ using System.Threading.Tasks;
 namespace MOE.Common.Business.FilterExtensions
 {
     [DataContract]
-    public class FilterDirection
+    public class FilterApproach
     {
-        public FilterDirection()
-        { }
-        public FilterDirection(int directionDirectionTypeId,  string description,bool include)
-        {
-            DirectionTypeId = directionDirectionTypeId;
-            Include = include;
-            Description = description;
-        }
-
         [DataMember]
-        public int DirectionTypeId { get; set; }
+        public int ApproachId { get; set; }
 
         public string Description { get; set; }
         [DataMember]
-        public bool Include { get; set; }
+        public bool Exclude { get; set; }
+        [DataMember]
+        public List<FilterDetector> FilterDetectors { get; set; } = new List<FilterDetector>();
     }
 }
