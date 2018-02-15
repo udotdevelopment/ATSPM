@@ -4,7 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Linq;
 using System.Web;
+using MOE.Common.Models;
 using MOE.Common.Models.ViewModel.Chart;
+using SPM = MOE.Common.Models.SPM;
 
 namespace SPM.Models
 {
@@ -29,12 +31,28 @@ namespace SPM.Models
         [Display(Name = "Count")]
         public int? Count { get; set; }
         public int? RecordCountLimit { get; set; }
+        public string EnumerationsName { get; set; }
+        public string EnumerationsUrl { get; set; }
         public SignalSearchViewModel SignalSearch { get; set; }
 
         public DataExportViewModel()
         {
             RecordCountLimit = Convert.ToInt32(ConfigurationManager.AppSettings["RawDataCountLimit"]);
             SignalSearch = new SignalSearchViewModel();
+            MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
+            EnumerationsName = "";
+            EnumerationsUrl = "";
+            List <ExternalLink> ExternalLinks = new List<ExternalLink>();
+            ExternalLinks = db.ExternalLinks.ToList();
+            foreach (ExternalLink e in ExternalLinks)
+            {
+                if (e.Name.ToUpper().Contains("ENUMERATIONS"))
+                {
+                    EnumerationsName = e.Name;
+                    EnumerationsUrl = e.Url;
+                    break;
+                }
+            }
         }
     }
 
