@@ -452,6 +452,10 @@
     <Compile Include="Migrations\201802072056202_DataArchive.Designer.cs">
       <DependentUpon>201802072056202_DataArchive.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802152102132_GeneralSettings.cs" />
+    <Compile Include="Migrations\201802152102132_GeneralSettings.Designer.cs">
+      <DependentUpon>201802152102132_GeneralSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\ApproachPcdAggregation.cs" />
@@ -462,6 +466,7 @@
     <Compile Include="Models\Custom\ActionLog.cs" />
     <Compile Include="Models\Custom\Aggregation.cs" />
     <Compile Include="Models\DatabaseArchiveExcludedSignals.cs" />
+    <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Models\DatabaseInitializer.cs" />
     <Compile Include="Models\DetectionHardware.cs" />
     <Compile Include="Models\DetectorAggregation.cs" />
@@ -878,6 +883,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802072056202_DataArchive.resx">
       <DependentUpon>201802072056202_DataArchive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802152102132_GeneralSettings.resx">
+      <DependentUpon>201802152102132_GeneralSettings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

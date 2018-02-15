@@ -344,7 +344,8 @@ While each agency should consult with their IT department for specific guideline
                 c => c.ID,
                 new Models.Application { ID = 1, Name = "ATSPM"  },
                 new Models.Application { ID = 2, Name = "SPMWatchDog"},
-                new Models.Application { ID = 3, Name = "DatabaseArchive" }
+                new Models.Application { ID = 3, Name = "DatabaseArchive" },
+                new Models.Application { ID = 4, Name = "GeneralSetting" }
                 );
 
             context.WatchdogApplicationSettings.AddOrUpdate(
@@ -366,7 +367,15 @@ While each agency should consult with their IT department for specific guideline
                 }
             );
 
-
+            context.GeneralSettings.AddOrUpdate(
+                c => c.ApplicationID,
+                new Models.GeneralSettings
+                {
+                    ApplicationID = 4,
+                    ImageUrl  = "http://udottraffic.utah.gov/spmimages/",
+                    ImagePath = @"\\UTSTSRTCNS53\C-LinkDynamicContent\SPMImages\"
+                }
+            );
 
             context.LaneTypes.AddOrUpdate(
             new Models.LaneType { LaneTypeID = 1, Description = "Vehicle", Abbreviation = "V" },

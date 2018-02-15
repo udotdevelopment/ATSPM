@@ -33,6 +33,11 @@ namespace MOE.CommonTests.Models
             throw new NotImplementedException();
         }
 
+        public bool CheckReportAvialbilityByDetector(Detector gd, int metricID)
+        {
+            throw new NotImplementedException();
+        }
+
         public Detector GetDetectorByDetectorID(string DetectorID)
         {
             var det = _db.Detectors.Where(d => d.DetectorID == DetectorID).FirstOrDefault();
