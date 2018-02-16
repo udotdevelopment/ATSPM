@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MOE.CommonTests.Helpers;
+using MOE.CommonTests.Models;
 
 namespace MOE.Common.Business.WCFServiceLibrary.Tests
 {
@@ -23,5 +25,32 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
 
             Assert.IsTrue(path.Count > 0);
         }
+
+        [TestMethod()]
+        public void GetRecordsFromXMLTest()
+        {
+            InMemoryMOEDatabase _db = new InMemoryMOEDatabase();
+
+            XMLToListImporter.LoadConterollerEventLog("7185_10_17_2017.xml", _db);
+
+            Assert.IsTrue(_db.Controller_Event_Log.Count > 1000);
+        }
+
+        [TestMethod()]
+        public void SomeSpliTFailTest()
+        {
+            InMemoryMOEDatabase _db = new InMemoryMOEDatabase();
+
+            XMLToListImporter.LoadConterollerEventLog("7185_10_17_2017.xml", _db);
+
+
+
+
+        }
+
+
+
+
+
     }
 }
