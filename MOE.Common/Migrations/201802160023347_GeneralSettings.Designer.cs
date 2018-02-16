@@ -13,7 +13,7 @@ namespace MOE.Common.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201802152102132_GeneralSettings"; }
+            get { return "201802160023347_GeneralSettings"; }
         }
         
         string IMigrationMetadata.Source

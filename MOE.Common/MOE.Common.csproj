@@ -452,9 +452,9 @@
     <Compile Include="Migrations\201802072056202_DataArchive.Designer.cs">
       <DependentUpon>201802072056202_DataArchive.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201802152102132_GeneralSettings.cs" />
-    <Compile Include="Migrations\201802152102132_GeneralSettings.Designer.cs">
-      <DependentUpon>201802152102132_GeneralSettings.cs</DependentUpon>
+    <Compile Include="Migrations\201802160023347_GeneralSettings.cs" />
+    <Compile Include="Migrations\201802160023347_GeneralSettings.Designer.cs">
+      <DependentUpon>201802160023347_GeneralSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
@@ -884,8 +884,8 @@
     <EmbeddedResource Include="Migrations\201802072056202_DataArchive.resx">
       <DependentUpon>201802072056202_DataArchive.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201802152102132_GeneralSettings.resx">
-      <DependentUpon>201802152102132_GeneralSettings.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201802160023347_GeneralSettings.resx">
+      <DependentUpon>201802160023347_GeneralSettings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

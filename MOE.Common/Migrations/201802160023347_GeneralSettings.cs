@@ -9,7 +9,7 @@ namespace MOE.Common.Migrations
         {
             AddColumn("dbo.ApplicationSettings", "ImageUrl", c => c.String());
             AddColumn("dbo.ApplicationSettings", "ImagePath", c => c.String());
-            AddColumn("dbo.ApplicationSettings", "RawDataCountLimit", c => c.String());
+            AddColumn("dbo.ApplicationSettings", "RawDataCountLimit", c => c.Int());
         }
         
         public override void Down()

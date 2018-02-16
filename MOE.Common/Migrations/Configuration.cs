@@ -372,6 +372,7 @@ While each agency should consult with their IT department for specific guideline
                 new Models.GeneralSettings
                 {
                     ApplicationID = 4,
+                    RawDataCountLimit = 1048576,
                     ImageUrl  = "http://udottraffic.utah.gov/spmimages/",
                     ImagePath = @"\\UTSTSRTCNS53\C-LinkDynamicContent\SPMImages\"
                 }

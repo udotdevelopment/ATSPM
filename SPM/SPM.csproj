@@ -208,6 +208,7 @@
     <Compile Include="Controllers\RouteSignalsController.cs" />
     <Compile Include="Controllers\SignalsController.cs" />
     <Compile Include="Controllers\SPMUsersController.cs" />
+    <Compile Include="Controllers\GeneralSettingsController.cs" />
     <Compile Include="Controllers\WatchDogApplicationSettingsController.cs" />
     <Compile Include="Filters\ValidateJsonAntiForgeryTokenAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -569,6 +570,7 @@
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDirection.cshtml" />
     <Content Include="Views\AggregateDataExport\GetAggregateDataTypes.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterMovement.cshtml" />
+    <Content Include="Views\GeneralSettings\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

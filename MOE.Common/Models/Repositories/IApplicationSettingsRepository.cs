@@ -9,6 +9,8 @@ namespace MOE.Common.Models.Repositories
     public interface IApplicationSettingsRepository 
     {
         Models.WatchDogApplicationSettings GetWatchDogSettings();
+        Models.GeneralSettings  GetGeneralSettings();
         void Save(Models.WatchDogApplicationSettings watchDogApplicationSettings);
+        void Save(Models.GeneralSettings generalSettings);
     }
 }
