@@ -1,0 +1,4 @@
+﻿@model List<MOE.Common.Business.WCFServiceLibrary.AggregatedDataType>
+
+
+@Html.DropDownList("SelectedAggregatedData", new SelectList(Model, "Id", "DataName"), new { @id= "SelectedAggregatedData", @class = "form-control" })

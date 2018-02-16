@@ -17,11 +17,11 @@
         <hr />
         <dl class="dl-horizontal">
             <dt>
-                @Html.DisplayNameFor(model => model.ApproachRoute.RouteName)
+                @Html.DisplayNameFor(model => model.Route.RouteName)
             </dt>
     
             <dd>
-                @Html.DisplayFor(model => model.ApproachRoute.RouteName)
+                @Html.DisplayFor(model => model.Route.RouteName)
             </dd>
     
             <dt>
@@ -43,7 +43,7 @@
         </dl>
     </div>
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.RouteDetailId }) |
+        @*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |*@
         @Html.ActionLink("Back to List", "Index")
     </p>
 </body>

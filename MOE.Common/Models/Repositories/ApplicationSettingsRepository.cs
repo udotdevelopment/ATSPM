@@ -26,12 +26,20 @@ namespace MOE.Common.Models.Repositories
         {
             return db.WatchdogApplicationSettings.First();
         }
+        public Models.GeneralSettings GetGeneralSettings()
+        {
+            return db.GeneralSettings.First();
+        }
         public void Save(Models.WatchDogApplicationSettings watchDogApplicationSettings)
         {
             db.Entry(watchDogApplicationSettings).State = EntityState.Modified;
                 db.SaveChanges();
         }
-        
 
+        public void Save(Models.GeneralSettings generalSettings)
+        {
+            db.Entry(generalSettings).State = EntityState.Modified;
+            db.SaveChanges();
+        }
     }
 }

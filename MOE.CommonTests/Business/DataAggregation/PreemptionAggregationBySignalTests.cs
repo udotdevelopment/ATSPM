@@ -60,10 +60,11 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            
+            var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal preemptionAggregationBySignal =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 
@@ -85,8 +86,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         Assert.IsTrue(signalBin.Sum == 3);
                     }
                 }
-                Assert.IsTrue(preemptionAggregationBySignal.TotalPreemptions == 288);
-                Assert.IsTrue(preemptionAggregationBySignal.AveragePreemptions == 3);
+                Assert.IsTrue(preemptionAggregationBySignal.Total == 288);
+                Assert.IsTrue(preemptionAggregationBySignal.Average == 3);
             }
         }
 
@@ -111,10 +112,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
-            List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions); List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions); var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal preemptionAggregationBySignal =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 
@@ -136,8 +137,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         Assert.IsTrue(signalBin.Sum == 3);
                     }
                 }
-                Assert.IsTrue(preemptionAggregationBySignal.TotalPreemptions == 12);
-                Assert.IsTrue(preemptionAggregationBySignal.AveragePreemptions == 3);
+                Assert.IsTrue(preemptionAggregationBySignal.Total == 12);
+                Assert.IsTrue(preemptionAggregationBySignal.Average == 3);
             }
         }
 
@@ -164,10 +165,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal preemptionAggregationBySignal =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 
@@ -189,8 +190,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         Assert.IsTrue(signalBin.Sum == 6);
                     }
                 }
-                Assert.IsTrue(preemptionAggregationBySignal.TotalPreemptions == 288);
-                Assert.IsTrue(preemptionAggregationBySignal.AveragePreemptions == 6);
+                Assert.IsTrue(preemptionAggregationBySignal.Total == 288);
+                Assert.IsTrue(preemptionAggregationBySignal.Average == 6);
             }
         }
 
@@ -216,10 +217,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal splitAggregationBySignal =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 
@@ -241,8 +242,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         Assert.IsTrue(signalBin.Sum == 24);
                     }
                 }
-                Assert.IsTrue(splitAggregationBySignal.TotalPreemptions == 12);
-                Assert.IsTrue(splitAggregationBySignal.AveragePreemptions == 24);
+                Assert.IsTrue(splitAggregationBySignal.Total == 12);
+                Assert.IsTrue(splitAggregationBySignal.Average == 24);
             }
         }
 
@@ -268,10 +269,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal splitAggregationBySignal =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 
@@ -293,8 +294,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         Assert.IsTrue(signalBin.Sum == 12);
                     }
                 }
-                Assert.IsTrue(splitAggregationBySignal.TotalPreemptions == 288);
-                Assert.IsTrue(splitAggregationBySignal.AveragePreemptions == 12);
+                Assert.IsTrue(splitAggregationBySignal.Total == 288);
+                Assert.IsTrue(splitAggregationBySignal.Average == 12);
             }
         }
 
@@ -320,10 +321,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal splitAggregationBySignal =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 
@@ -345,8 +346,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         Assert.IsTrue(signalBin.Sum == 12);
                     }
                 }
-                Assert.IsTrue(splitAggregationBySignal.TotalPreemptions == 48);
-                Assert.IsTrue(splitAggregationBySignal.AveragePreemptions == 12);
+                Assert.IsTrue(splitAggregationBySignal.Total == 48);
+                Assert.IsTrue(splitAggregationBySignal.Average == 12);
             }
         }
 
@@ -372,10 +373,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal splitAggregationBySignal =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 
@@ -397,8 +398,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         Assert.IsTrue(signalBin.Sum == 288);
                     }
                 }
-                Assert.IsTrue(splitAggregationBySignal.TotalPreemptions == 8928);
-                Assert.IsTrue(splitAggregationBySignal.AveragePreemptions == 288);
+                Assert.IsTrue(splitAggregationBySignal.Total == 8928);
+                Assert.IsTrue(splitAggregationBySignal.Average == 288);
             }
         }
 
@@ -424,10 +425,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal splitAggregationBySignal =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 
@@ -449,8 +450,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         Assert.IsTrue(signalBin.Sum == 48);
                     }
                 }
-                Assert.IsTrue(splitAggregationBySignal.TotalPreemptions == 1488);
-                Assert.IsTrue(splitAggregationBySignal.AveragePreemptions == 48);
+                Assert.IsTrue(splitAggregationBySignal.Total == 1488);
+                Assert.IsTrue(splitAggregationBySignal.Average == 48);
             }
         }
 
@@ -476,10 +477,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal splitAggregationBySignal =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 
@@ -501,8 +502,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         Assert.IsTrue(signalBin.Sum == 288 * DateTime.DaysInMonth(bin.Start.Year, bin.Start.Month));
                     }
                 }
-                Assert.IsTrue(splitAggregationBySignal.TotalPreemptions == 105120);
-                Assert.IsTrue(splitAggregationBySignal.AveragePreemptions == 8760);
+                Assert.IsTrue(splitAggregationBySignal.Total == 105120);
+                Assert.IsTrue(splitAggregationBySignal.Average == 8760);
             }
         }
 
@@ -528,10 +529,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal splitAggregationBySignal =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 
@@ -555,8 +556,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         Assert.IsTrue(signalBin.Sum == 12);
                     }
                 }
-                Assert.IsTrue(splitAggregationBySignal.TotalPreemptions == 4380);
-                Assert.IsTrue(splitAggregationBySignal.AveragePreemptions == 365);
+                Assert.IsTrue(splitAggregationBySignal.Total == 4380);
+                Assert.IsTrue(splitAggregationBySignal.Average == 365);
             }
         }
 
@@ -582,10 +583,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal splitAggregationBySignal =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 
@@ -614,8 +615,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         }
                     }
                 }
-                Assert.IsTrue(splitAggregationBySignal.TotalPreemptions == 210528);
-                Assert.IsTrue(splitAggregationBySignal.AveragePreemptions == 105264);
+                Assert.IsTrue(splitAggregationBySignal.Total == 210528);
+                Assert.IsTrue(splitAggregationBySignal.Average == 105264);
             }
         }
 
@@ -641,10 +642,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal splitAggregationBySignal =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 
@@ -673,8 +674,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         Assert.IsTrue(signalBin.Sum == 12);
                     }
                 }
-                Assert.IsTrue(splitAggregationBySignal.TotalPreemptions == 8772);
-                Assert.IsTrue(splitAggregationBySignal.AveragePreemptions == 4386);
+                Assert.IsTrue(splitAggregationBySignal.Total == 8772);
+                Assert.IsTrue(splitAggregationBySignal.Average == 4386);
             }
         }
 
@@ -697,10 +698,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal splitAggregationBySignal =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 
@@ -722,8 +723,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         Assert.IsTrue(signalBin.Sum == 3);
                     }
                 }
-                Assert.IsTrue(splitAggregationBySignal.TotalPreemptions == 12);
-                Assert.IsTrue(splitAggregationBySignal.AveragePreemptions == 3);
+                Assert.IsTrue(splitAggregationBySignal.Total == 12);
+                Assert.IsTrue(splitAggregationBySignal.Average == 3);
             }
         }
 
@@ -752,10 +753,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal splitAggregationBySignal15Minute =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
                 int fifteenMinuteSum = 0;
@@ -844,10 +845,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
-            List<SignalPreemptionAggregationOptions.PreemptionData> preemptionDatas = Enum.GetValues(typeof(SignalPreemptionAggregationOptions.PreemptionData)).Cast<SignalPreemptionAggregationOptions.PreemptionData>().ToList();
+            var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
-                options.SelectedPreemptionData = preemptionData;
+                options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal splitAggregationBySignal15Minute =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 

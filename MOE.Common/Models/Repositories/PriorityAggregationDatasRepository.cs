@@ -26,7 +26,8 @@ namespace MOE.Common.Models.Repositories
         }
         public PriorityAggregation Add(PriorityAggregation priorityAggregation)
         {
-            throw new NotImplementedException();
+            _db.PriorityAggregations.Add(priorityAggregation);
+            return priorityAggregation;
         }
 
 
@@ -46,6 +47,12 @@ namespace MOE.Common.Models.Repositories
         public void Remove(PriorityAggregation priorityAggregation)
         {
             throw new NotImplementedException();
+        }
+
+        public List<PriorityAggregation> GetPriorityBySignalIdAndDateRange(string signalId, DateTime start, DateTime end)
+        {
+            return db.PriorityAggregations
+                .Where(p => p.SignalID == signalId && p.BinStartTime >= start && p.BinStartTime < end).ToList();
         }
 
 

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.DataVisualization.Charting;
@@ -14,7 +15,6 @@ using MOE.Common.Business.WCFServiceLibrary;
 using SPM.Models;
 using MOE.Common.Models;
 using MOE.Common.Models.ViewModel.Chart;
-using MOE.Common.Business.FilterExtensions;
 
 namespace SPM.Controllers
 {
@@ -85,30 +85,87 @@ namespace SPM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateMetric(AggDataExportViewModel aggDataExportViewModel)
         {
-            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+            switch (aggDataExportViewModel.SelectedMetricTypeId)
+            {
+                case 20:
+                    return GetSplitFailChart(aggDataExportViewModel);
+                    break;
+                case 22:
+                    return GetPreemptionChart(aggDataExportViewModel);
+                case 24:
+                    return GetPriorityChart(aggDataExportViewModel);
+                default:
+                        return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
+            }
+        }
+
+        private ActionResult GetPriorityChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            SignalPriorityAggregationOptions options = new SignalPriorityAggregationOptions();
             Enum.TryParse(aggDataExportViewModel.SelectedChartType, out SeriesChartType tempSeriesChartType);
             options.SelectedChartType = tempSeriesChartType;
-            if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count>0)
+            if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count > 0)
             {
-                options.StartDate = aggDataExportViewModel.StartDateDay;
-                options.EndDate = aggDataExportViewModel.EndDateDay;
-                options.SelectedAggregationType = aggDataExportViewModel.SelectedAggregationType;
-                options.SelectedXAxisType = aggDataExportViewModel.SelectedXAxisType;
-                options.SeriesWidth = aggDataExportViewModel.SelectedSeriesWidth;
-                options.SelectedSeries = aggDataExportViewModel.SelectedSeriesType;
-                options.SelectedDimension = aggDataExportViewModel.SelectedDimension;
-                options.FilterDirections = aggDataExportViewModel.FilterDirections;
-                SetTimeOptionsFromViewModel(aggDataExportViewModel, options);
-                options.FilterSignals = aggDataExportViewModel.FilterSignals;
+               SetCommonValues(aggDataExportViewModel, options);
                 return GetChartFromService(options);
             }
             else
             {
-                return Content("<h1 class='text-danger'>Missing Parameters<h1>");
+                return Content("<h1 class='text-danger'>Missing Parameters</h1>");
             }
         }
 
-        private ActionResult GetChartFromService(ApproachSplitFailAggregationOptions options)
+        private ActionResult GetPreemptionChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
+            Enum.TryParse(aggDataExportViewModel.SelectedChartType, out SeriesChartType tempSeriesChartType);
+            options.SelectedChartType = tempSeriesChartType;
+            if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count > 0)
+            {
+                SetCommonValues(aggDataExportViewModel, options);
+                return GetChartFromService(options);
+            }
+            else
+            {
+                return Content("<h1 class='text-danger'>Missing Parameters</h1>");
+            }
+        }
+
+        private ActionResult GetSplitFailChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
+            Enum.TryParse(aggDataExportViewModel.SelectedChartType, out SeriesChartType tempSeriesChartType);
+            options.SelectedChartType = tempSeriesChartType;
+            if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count > 0)
+            {
+                options.FilterMovements = aggDataExportViewModel.FilterMovements;
+                options.FilterDirections = aggDataExportViewModel.FilterDirections;
+                SetCommonValues(aggDataExportViewModel, options);
+                return GetChartFromService(options);
+            }
+            else
+            {
+                return Content("<h1 class='text-danger'>Missing Parameters</h1>");
+            }
+        }
+
+        private static void SetCommonValues(AggDataExportViewModel aggDataExportViewModel, SignalAggregationMetricOptions options)
+        {
+            options.StartDate = aggDataExportViewModel.StartDateDay;
+            options.EndDate = aggDataExportViewModel.EndDateDay.AddDays(1);
+            options.SelectedAggregationType = aggDataExportViewModel.SelectedAggregationType;
+            options.SelectedXAxisType = aggDataExportViewModel.SelectedXAxisType;
+            options.SeriesWidth = aggDataExportViewModel.SelectedSeriesWidth;
+            options.SelectedSeries = aggDataExportViewModel.SelectedSeriesType;
+            options.SelectedDimension = aggDataExportViewModel.SelectedDimension;
+            SetTimeOptionsFromViewModel(aggDataExportViewModel, options);
+            options.FilterSignals = aggDataExportViewModel.FilterSignals;
+            options.SelectedAggregatedDataType =
+                options.AggregatedDataTypes.FirstOrDefault(a =>
+                    a.Id == aggDataExportViewModel.SelectedAggregatedData);
+        }
+
+        private ActionResult GetChartFromService(SignalAggregationMetricOptions options)
         {
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             MetricGeneratorService.MetricGeneratorClient client =
@@ -127,7 +184,7 @@ namespace SPM.Controllers
             return PartialView("~/Views/DefaultCharts/MetricResult.cshtml", result);
         }
 
-        private static void SetTimeOptionsFromViewModel(AggDataExportViewModel aggDataExportViewModel, ApproachSplitFailAggregationOptions options)
+        private static void SetTimeOptionsFromViewModel(AggDataExportViewModel aggDataExportViewModel, SignalAggregationMetricOptions options)
         {
             string[] startTime;
             string[] endTime;
@@ -177,10 +234,9 @@ namespace SPM.Controllers
         // GET: DataExportViewModels
         public ActionResult Index()
         {
-            var metricRepository = MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
             AggDataExportViewModel viewModel = new AggDataExportViewModel();
-             SetAggregateDataViewModelLists(viewModel);
             viewModel.SelectedMetricTypeId =20;
+            SetAggregateDataViewModelLists(viewModel);
             viewModel.SelectedChartType = SeriesChartType.StackedColumn.ToString();
             viewModel.SelectedBinSize = 0;
             viewModel.StartDateDay = Convert.ToDateTime("10/17/2017");
@@ -202,6 +258,8 @@ namespace SPM.Controllers
             viewModel.SetSeriesWidth();
             viewModel.SetXAxisTypes();
             viewModel.SetDirectionTypes();
+            viewModel.SetMovementTypes();
+            viewModel.SetAggregateData();
             viewModel.Routes = routeRepository.GetAllRoutes();
             viewModel.MetricTypes = metricTyperepository.GetAllToAggregateMetrics();
         }
@@ -228,6 +286,27 @@ namespace SPM.Controllers
                 //db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult GetAggregateDataTypes(int id)
+        {
+            List<AggregatedDataType> AggregatedDataTypes;
+            switch (id)
+            {
+                case 20:
+                    AggregatedDataTypes = new ApproachSplitFailAggregationOptions().AggregatedDataTypes;
+                    break;
+                case 22:
+                    AggregatedDataTypes = new SignalPreemptionAggregationOptions().AggregatedDataTypes;
+                    break;
+                case 24:
+                    AggregatedDataTypes = new SignalPriorityAggregationOptions().AggregatedDataTypes;
+                    break;
+                default:
+                    throw new Exception("Invalid Metric Type");
+                    break;
+            }
+            return PartialView(AggregatedDataTypes);
         }
     }
 }

@@ -191,16 +191,13 @@
     <Compile Include="Controllers\ActionLogsController.cs" />
     <Compile Include="Controllers\AggregateDataExportController.cs" />
     <Compile Include="Controllers\ApproachesController.cs" />
-    <Compile Include="Controllers\ApproachRouteDetailsController.cs" />
     <Compile Include="Controllers\ArchiveSettingsController.cs" />
-    <Compile Include="Controllers\RouteOldController.cs" />
     <Compile Include="Controllers\ConfigurationTableController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\DefaultChartsController.cs" />
     <Compile Include="Controllers\DetectorCommentsController.cs" />
     <Compile Include="Controllers\DetectorsController.cs" />
     <Compile Include="Controllers\FAQsController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LinkPivotController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MenusController.cs" />
@@ -211,6 +208,7 @@
     <Compile Include="Controllers\RouteSignalsController.cs" />
     <Compile Include="Controllers\SignalsController.cs" />
     <Compile Include="Controllers\SPMUsersController.cs" />
+    <Compile Include="Controllers\GeneralSettingsController.cs" />
     <Compile Include="Controllers\WatchDogApplicationSettingsController.cs" />
     <Compile Include="Filters\ValidateJsonAntiForgeryTokenAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -510,16 +508,6 @@
     <Content Include="Views\FAQs\Edit.cshtml" />
     <Content Include="Views\FAQs\Index.cshtml" />
     <Content Include="Views\FAQs\Display.cshtml" />
-    <Content Include="Views\RouteOld\Create.cshtml" />
-    <Content Include="Views\RouteOld\Delete.cshtml" />
-    <Content Include="Views\RouteOld\Details.cshtml" />
-    <Content Include="Views\RouteOld\Edit.cshtml" />
-    <Content Include="Views\RouteOld\Index.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Create.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Delete.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Details.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Edit.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Index.cshtml" />
     <Content Include="Views\ActionLogs\Usage.cshtml" />
     <Content Include="Views\DefaultCharts\GetApproachVolumeMetric.cshtml" />
     <Content Include="Views\ActionLogs\Chart.cshtml" />
@@ -543,18 +531,12 @@
     <Content Include="Views\DetectorComments\Create.cshtml" />
     <Content Include="Views\Signals\SignalDetail.cshtml" />
     <Content Include="Views\Signals\SignalDetailResult.cshtml" />
-    <Content Include="Views\Signals\_SignalPartial.cshtml" />
-    <Content Include="Views\Account\Users.cshtml" />
     <Content Include="Views\SPMUsers\Delete.cshtml" />
     <Content Include="Views\SPMUsers\Details.cshtml" />
     <Content Include="Views\SPMUsers\Edit.cshtml" />
     <Content Include="Views\SPMUsers\Index.cshtml" />
     <Content Include="Views\DefaultCharts\GetTMCMetric.cshtml" />
     <Content Include="Views\WatchDogApplicationSettings\Edit.cshtml" />
-    <Content Include="Views\DataExport\Create.cshtml" />
-    <Content Include="Views\DataExport\Delete.cshtml" />
-    <Content Include="Views\DataExport\Details.cshtml" />
-    <Content Include="Views\DataExport\Edit.cshtml" />
     <Content Include="Views\DataExport\RawDataExport.cshtml" />
     <Content Include="Views\RouteSignals\RouteMap.cshtml" />
     <Content Include="Views\RouteSignals\RouteInfoBox.cshtml" />
@@ -581,13 +563,14 @@
     <Content Include="Views\AggregateDataExport\Index.cshtml" />
     <Content Include="Views\AggregateDataExport\GetRouteSignals.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterSignal.cshtml" />
-    <Content Include="Views\ArchiveSettings\ArchiveSettings.cshtml" />
-    <Content Include="Views\ArchiveSettings\CreateMetric.cshtml" />
     <Content Include="Views\ArchiveSettings\DisplayTemplates\Signal.cshtml" />
     <Content Include="Views\ArchiveSettings\Index.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterApproach.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDetector.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDirection.cshtml" />
+    <Content Include="Views\AggregateDataExport\GetAggregateDataTypes.cshtml" />
+    <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterMovement.cshtml" />
+    <Content Include="Views\GeneralSettings\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

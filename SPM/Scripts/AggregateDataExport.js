@@ -1,12 +1,12 @@
 ﻿$(function (ready) {
     SetDateTextBoxes();
-
+    LoadDataAggregateTypes();
 });
 
 function SetDateTextBoxes (){
     $(".datepicker").attr('type', 'text');
-    $("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date("10/17/2017")));
-    $("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date("10/18/2017")));
+    $("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date("2/1/2018")));
+    $("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date("2/1/2018")));
     $("#StartEndDaySelector").datepicker({
         onSelect: function (dateText) {
             $("#StartDateDay").val(dateText);
@@ -29,6 +29,22 @@ function LoadRoute() {
             $.validator.unobtrusive.parse($("#RouteSignals"));
         },
         onerror: function () { alert("Error"); }
+    });
+}
+
+function LoadDataAggregateTypes() {
+    var metricId = $("#SelectedMetricTypeId").val();
+    $.ajax({
+        url: urlpathGetAggregateDataTypesSignals + "/" + metricId,
+        type: "GET",
+        cache: false,
+        async: true,
+        contentType: "application/json; charset=utf-8",
+        success: function(data) {
+            $('#AggregatedDataType').html(data);
+            $.validator.unobtrusive.parse($("#AggregatedDataType"));
+        },
+        onerror: function() { alert("Error"); }
     });
 }
 
@@ -104,19 +120,33 @@ function GetSignalLocation(selectedMetricID) {
     });
 }
 
+function ClearSignals() {
+    $('#SelectedRouteId').val('');
+    $('#RouteSignals').html('');
+}
+
 function ResetDates() {
     var d = new Date();
     var month = d.getMonth() + 1;
     var day = d.getDate();
+    var endDay = d.getDate().addDays(1);
 
     var output = month + '/' +
         + day + '/' +
         + d.getFullYear();
+    var endOutput = month + '/' +
+        + endDay + '/' +
+        + d.getFullYear();
+
     $("#StartDateDay").val(output);
-    $("#EndDateDay").val(output);
+    $("#EndDateDay").val(endOutput);
     $("#StartAMPMddl").val("AM");
     $("#EndAMPMddl").val("PM");
     $("#StartEndDaySelector").datepicker("setDate", d);
+}
+
+function CloseSignalList() {
+    $("#RouteSignals").removeClass("in");
 }
 
 function StartReportSpinner() {
@@ -125,6 +155,7 @@ function StartReportSpinner() {
 
 function StopReportSpinner() {
     $("#RunReportSpinner").removeClass("glyphicon-refresh spinning");
+    CloseSignalList();
 }
 
 

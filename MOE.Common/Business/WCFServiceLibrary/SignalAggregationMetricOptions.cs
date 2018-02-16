@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Models;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.FilterExtensions;
@@ -43,8 +45,18 @@ namespace MOE.Common.Business.WCFServiceLibrary
     }
 
     [DataContract]
+    public class AggregatedDataType
+    {
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public string DataName { get; set; }
+    }
+
+    [DataContract]
     public abstract class SignalAggregationMetricOptions : MetricOptions
     {
+        
         [DataMember]
         public int SeriesWidth { get; set; }
         [DataMember]
@@ -61,8 +73,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public Dimension SelectedDimension { get; set; }
         [DataMember]
         public List<FilterExtensions.FilterSignal> FilterSignals { get; set; } = new List<FilterSignal>();
+        [DataMember]
+        public List<AggregatedDataType> AggregatedDataTypes;
+        [DataMember]
+        public List<FilterDirection> FilterDirections { get; set; }
+        [DataMember]
+        public List<FilterMovement> FilterMovements { get; set; }
+        [DataMember]
+        public AggregatedDataType SelectedAggregatedDataType { get; set; }
         public List<Models.Signal> Signals { get; set; } = new List<Models.Signal>();
-        public string ChartTitle
+        public virtual string ChartTitle
         {
             get
             {
@@ -92,9 +112,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
+
         public override List<string> CreateMetric()
         {
-            SetMetricType();
             base.CreateMetric();
             GetSignalObjects();
             if (SelectedXAxisType == XAxisType.TimeOfDay && TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
@@ -131,31 +151,33 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        virtual protected void GetSignalObjects()
+
+        protected void GetSignalObjects()
         {
             try
             {
 
-            if (Signals == null)
-            {
-                Signals = new List<Models.Signal>();
-            }
-            if (Signals.Count == 0)
-            {
-                var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-                foreach (FilterSignal filterSignal in FilterSignals)
+                if (Signals == null)
                 {
-                    if (!filterSignal.Exclude)
+                    Signals = new List<Models.Signal>();
+                }
+                if (Signals.Count == 0)
+                {
+                    var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+                    foreach (FilterSignal filterSignal in FilterSignals)
                     {
-                        var signals = signalRepository.GetSignalsBetweenDates(filterSignal.SignalId, StartDate, EndDate);
-                        foreach (var signal in signals)
+                        if (!filterSignal.Exclude)
                         {
-                            signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ToList();
+                            var signals = signalRepository.GetSignalsBetweenDates(filterSignal.SignalId, StartDate, EndDate);
+                            foreach (var signal in signals)
+                            {
+                                RemoveApproachesByFilter(filterSignal, signal);
+                                signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ToList();
+                            }
+                            Signals.AddRange(signals);
                         }
-                        Signals.AddRange(signals);
                     }
                 }
-            }
 
             }
             catch (Exception e)
@@ -302,19 +324,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
             SetTimeOfDayXAxisMinimum(chart);
             List<BinsContainer> binsContainers = GetBinsContainersByRoute(signals);
             Series series = CreateSeries(0, "Route");
-            SetTimeAggregateSeries(chart, series, binsContainers);
+            chart.Series.Add(GetTimeAggregateSeries(series, binsContainers));
         }
 
         protected void GetTimeOfDayXAxisSignalSeriesChart(List<Models.Signal> signals, Chart chart)
         {
             SetTimeOfDayXAxisMinimum(chart);
-            int colorCode = 1;
+            ConcurrentBag<Series> seriesList = new ConcurrentBag<Series>();
+            Parallel.For(0, signals.Count, i => // foreach (var signal in signals)
+            {
+                List<BinsContainer> binsContainers = GetBinsContainersBySignal(signals[i]);
+                Series series = CreateSeries(i, signals[i].SignalDescription);
+                seriesList.Add(GetTimeAggregateSeries(series, binsContainers));
+            });
             foreach (var signal in signals)
             {
-                List<BinsContainer> binsContainers = GetBinsContainersBySignal(signal);
-                Series series = CreateSeries(colorCode, signal.SignalDescription);
-                SetTimeAggregateSeries(chart, series, binsContainers);
-                colorCode++;
+                chart.Series.Add(seriesList.FirstOrDefault(s => s.Name == signal.SignalDescription));
             }
         }
 
@@ -346,6 +371,98 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     }
                     chart.Series.Add(series);
                     i++;
+                }
+            }
+        }
+
+
+        private void RemoveApproachesByFilter(FilterSignal filterSignal, Models.Signal signal)
+        {
+            RemoveApproachesFromSignalByDirection(signal);
+            RemoveDetectorsFromSignalByMovement(signal);
+            var approachRepository = Models.Repositories.ApproachRepositoryFactory.Create();
+            var excludedApproachIds = filterSignal.FilterApproaches.Where(f => f.Exclude).Select(f => f.ApproachId).ToList();
+            var excludedApproaches = approachRepository.GetApproachesByIds(excludedApproachIds);
+            foreach (var excludedApproach in excludedApproaches)
+            {
+                var approachesToExclude = signal.Approaches.Where(a =>
+                    a.DirectionTypeID == excludedApproach.DirectionTypeID
+                    && a.ProtectedPhaseNumber == excludedApproach.ProtectedPhaseNumber
+                    && a.PermissivePhaseNumber == excludedApproach.PermissivePhaseNumber
+                    && a.IsPermissivePhaseOverlap ==
+                    excludedApproach.IsPermissivePhaseOverlap
+                    && a.IsProtectedPhaseOverlap ==
+                    excludedApproach.IsProtectedPhaseOverlap)
+                .ToList();
+                foreach (var approachToExclude in approachesToExclude)
+                {
+                    signal.Approaches.Remove(approachToExclude);
+                }
+                foreach (var approach in signal.Approaches)
+                {
+                    foreach (var filterApproach in filterSignal.FilterApproaches.Where(f => !f.Exclude))
+                    {
+                        RemoveDetectorsFromApproachByFilter(filterApproach, approach);
+                    }
+                }
+
+            }
+        }
+
+        private void RemoveApproachesFromSignalByDirection(Models.Signal signal)
+        {
+            List<Models.Approach> approachesToRemove = new List<Approach>();
+            foreach (var approach in signal.Approaches)
+            {
+                if (FilterDirections.Where(f => !f.Include).Select(f => f.DirectionTypeId).ToList().Contains(approach.DirectionTypeID))
+                {
+                    approachesToRemove.Add(approach);
+                }
+            }
+            foreach (var approach in approachesToRemove)
+            {
+                signal.Approaches.Remove(approach);
+            }
+        }
+
+        private void RemoveDetectorsFromSignalByMovement(Models.Signal signal)
+        {
+            List<Models.Detector> detectorsToRemove = new List<Models.Detector>();
+            foreach (var approach in signal.Approaches)
+            {
+                foreach (var detector in approach.Detectors)
+                {
+                    if (FilterMovements.Where(f => !f.Include).Select(f => f.MovementTypeId).ToList()
+                        .Contains(detector.MovementTypeID ?? -1))
+                    {
+                        detectorsToRemove.Add(detector);
+                    }
+                }
+                foreach (var detectorToRemove in detectorsToRemove)
+                {
+                    approach.Detectors.Remove(detectorToRemove);
+                }
+            }
+        }
+
+        private static void RemoveDetectorsFromApproachByFilter(FilterApproach filterApproach, Approach approach)
+        {
+            var detectorRepository = Models.Repositories.DetectorRepositoryFactory.Create();
+            var excludedDetectorIds =
+                filterApproach.FilterDetectors.Where(f => f.Exclude).Select(f => f.Id).ToList();
+            var excludedDetectors = detectorRepository.GetDetectorsByIds(excludedDetectorIds);
+            foreach (var excludedDetector in excludedDetectors)
+            {
+                var detectorsToExclude = approach.Detectors.Where(d =>
+                    d.LaneNumber == excludedDetector.LaneNumber
+                    && d.LaneTypeID == excludedDetector.LaneTypeID
+                    && d.MovementTypeID == excludedDetector.MovementTypeID
+                    && d.DetectionHardwareID == excludedDetector.DetectionHardwareID
+                    && d.DetChannel == excludedDetector.DetChannel
+                ).ToList();
+                foreach (var detectorToExclude in detectorsToExclude)
+                {
+                    approach.Detectors.Remove(detectorToExclude);
                 }
             }
         }
@@ -383,7 +500,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         }
 
 
-        protected void SetTimeAggregateSeries(Chart chart, Series series, List<BinsContainer> binsContainers)
+        protected Series GetTimeAggregateSeries(Series series, List<BinsContainer> binsContainers)
         {
             DateTime endTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day,
                 TimeOptions.TimeOfDayEndHour ?? 0, TimeOptions.TimeOfDayEndMinute ?? 0, 0);
@@ -404,7 +521,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     throw new Exception("Invalid bin size for time aggregation");
             }
             SetDataPointsForTimeAggregationSeries(binsContainers, series, endTime, minutes);
-            chart.Series.Add(series);
+            return series;
         }
         
         private void SetDataPointsForTimeAggregationSeries(List<BinsContainer> binsContainers, Series series, DateTime endTime, int minutes)
@@ -493,7 +610,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
        
         protected abstract List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal);
         protected abstract List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals);
-       
+        public abstract string YAxisTitle { get; }
+
 
     }
 

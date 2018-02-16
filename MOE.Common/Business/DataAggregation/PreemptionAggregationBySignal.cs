@@ -9,40 +9,12 @@ using MOE.Common.Models;
 
 namespace MOE.Common.Business.DataAggregation
 {
-    public class PreemptionAggregationBySignal
+    public class PreemptionAggregationBySignal:AggregationBySignal
     {
-        public Models.Signal Signal { get; }
-        public int TotalPreemptions { get { return BinsContainers.Sum(c => c.SumValue); } }
-        public List<BinsContainer> BinsContainers { get; private set; }
-
-        public int AveragePreemptions
+        protected override void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal)
         {
-            get
-            {
-                if (BinsContainers.Count > 1)
-                {
-                    return Convert.ToInt32(Math.Round(BinsContainers.Average(b => b.SumValue)));
-                }
-                else
-                {
-                    double numberOfBins = 0;
-                    foreach (var binsContainer in BinsContainers)
-                    {
-                        numberOfBins += binsContainer.Bins.Count;
-                    }
-                    return numberOfBins > 0 ? Convert.ToInt32(Math.Round(TotalPreemptions / numberOfBins)) : 0;
-                }
-            }
-        }
-
-        
-
-        public PreemptionAggregationBySignal(SignalPreemptionAggregationOptions options, Models.Signal signal)
-        {
-            BinsContainers = BinFactory.GetBins(options.TimeOptions); 
-            Signal = signal;
             var preemptionAggregationRepository =
-                Models.Repositories.PreemptAggregationDatasRepositoryFactory.Create();
+               Models.Repositories.PreemptAggregationDatasRepositoryFactory.Create();
             List<PreemptionAggregation> preemptions =
                 preemptionAggregationRepository.GetPreemptionsBySignalIdAndDateRange(
                     signal.SignalID, BinsContainers.Min(b => b.Start), BinsContainers.Max(b => b.End));
@@ -61,18 +33,18 @@ namespace MOE.Common.Business.DataAggregation
                         if (preemptions.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
                         {
                             int preemptionSum = 0;
-                                
-                            switch (options.SelectedPreemptionData)
+
+                            switch (options.SelectedAggregatedDataType.DataName)
                             {
-                                case SignalPreemptionAggregationOptions.PreemptionData.PreemptNumber:
+                                case "PreemptNumber":
                                     preemptionSum = preemptions.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                         .Sum(s => s.PreemptNumber);
                                     break;
-                                case SignalPreemptionAggregationOptions.PreemptionData.PreemptRequests:
+                                case "PreemptRequests":
                                     preemptionSum = preemptions.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                         .Sum(s => s.PreemptRequests);
                                     break;
-                                case SignalPreemptionAggregationOptions.PreemptionData.PreemptServices:
+                                case "PreemptServices":
                                     preemptionSum = preemptions.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                         .Sum(s => s.PreemptServices);
                                     break;
@@ -105,17 +77,11 @@ namespace MOE.Common.Business.DataAggregation
         }
         
 
-        //private void SetSumSplitFailuresByBin()
-        //{
-        //    for (int i = 0; i < BinsContainers.Count; i++)
-        //    {
-        //        for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
-        //        {
-        //            var bin = BinsContainers[i].Bins[binIndex];
-        //            bin.Average = ApproachSplitFailures.Count > 0 ? (bin.Sum / ApproachSplitFailures.Count) :  0;
-        //        }
-        //    }
-        //}
+        public PreemptionAggregationBySignal(SignalPreemptionAggregationOptions options, Models.Signal signal) : base(options, signal)
+        {
+            LoadBins(options, signal);
+        }
+        
         
     }
     

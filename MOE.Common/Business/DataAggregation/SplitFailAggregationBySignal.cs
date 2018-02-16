@@ -7,107 +7,11 @@ using MOE.Common.Models;
 
 namespace MOE.Common.Business.DataAggregation
 {
-    public class SplitFailAggregationBySignal
+    public class SplitFailAggregationBySignal:AggregationBySignal
     {
-        public Models.Signal Signal { get; }
         public List<ApproachSplitFailAggregationContainer> ApproachSplitFailures { get;}
-        public int TotalSplitFailures { get { return BinsContainers.Sum(c => c.SumValue); } }
-
-        public int AverageSplitFailures
-        {
-            get
-            {
-                if (BinsContainers.Count > 1)
-                {
-                    return Convert.ToInt32(Math.Round(BinsContainers.Average(b => b.SumValue)));
-                }
-                else
-                {
-                    double numberOfBins = 0;
-                    foreach (var binsContainer in BinsContainers)
-                    {
-                        numberOfBins += binsContainer.Bins.Count;
-                    }
-                    return numberOfBins > 0 ? Convert.ToInt32(Math.Round(TotalSplitFailures / numberOfBins)) : 0;
-                }
-            }
-        }
-
-        public List<BinsContainer> BinsContainers{get; private set;}
         
-
-        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal)
-        {
-            BinsContainers = BinFactory.GetBins(options.TimeOptions); 
-            Signal = signal;
-            ApproachSplitFailures = new List<ApproachSplitFailAggregationContainer>();
-            GetApproachSplitFailAggregationContainersForAllApporaches(options, signal);
-            SetSumSplitFailuresByBin();
-        }
-
-        private void GetApproachSplitFailAggregationContainersForAllApporaches(ApproachSplitFailAggregationOptions options, Models.Signal signal)
-        {
-            foreach (var approach in signal.Approaches)
-            {
-                ApproachSplitFailures.Add(
-                       new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
-                           true));
-                if (approach.PermissivePhaseNumber != null)
-                {
-                    ApproachSplitFailures.Add(
-                        new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
-                            false));
-                }
-            }
-        }
-
-        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal, int phaseNumber)
-        {
-            BinsContainers =  BinFactory.GetBins(options.TimeOptions); 
-            Signal = signal;
-            ApproachSplitFailures = new List<ApproachSplitFailAggregationContainer>();
-            foreach (var approach in signal.Approaches)
-            {
-                if (approach.ProtectedPhaseNumber == phaseNumber)
-                {
-                    ApproachSplitFailures.Add(
-                        new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
-                            true));
-                    if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber == phaseNumber)
-                    {
-                        ApproachSplitFailures.Add(
-                            new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
-                                false));
-                    }
-                }
-            }
-            SetSumSplitFailuresByBin();
-        }
-
-        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal, DirectionType direction)
-        {
-            BinsContainers = BinFactory.GetBins(options.TimeOptions); 
-            Signal = signal;
-            ApproachSplitFailures = new List<ApproachSplitFailAggregationContainer>();
-            foreach (var approach in signal.Approaches)
-            {
-                if (approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
-                {
-                    ApproachSplitFailures.Add(
-                        new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
-                            true));
-                    if (approach.PermissivePhaseNumber != null)
-                    {
-                        ApproachSplitFailures.Add(
-                            new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
-                                false));
-                    }
-                }
-            }
-            SetSumSplitFailuresByBin();
-        }
-
-        private void SetSumSplitFailuresByBin()
+        protected override void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal)
         {
             for (int i = 0; i < BinsContainers.Count; i++)
             {
@@ -118,10 +22,77 @@ namespace MOE.Common.Business.DataAggregation
                     {
                         bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
                     }
-                    bin.Average = ApproachSplitFailures.Count > 0 ? (bin.Sum / ApproachSplitFailures.Count) :  0;
+                    bin.Average = ApproachSplitFailures.Count > 0 ? (bin.Sum / ApproachSplitFailures.Count) : 0;
                 }
             }
         }
+
+
+        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal):base(options, signal)
+        {
+            ApproachSplitFailures = new List<ApproachSplitFailAggregationContainer>();
+            GetApproachSplitFailAggregationContainersForAllApporaches(options, signal);
+            LoadBins(null, null);
+        }
+
+        private void GetApproachSplitFailAggregationContainersForAllApporaches(ApproachSplitFailAggregationOptions options, Models.Signal signal)
+        {
+            foreach (var approach in signal.Approaches)
+            {
+                ApproachSplitFailures.Add(
+                       new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
+                           true, options.SelectedAggregatedDataType));
+                if (approach.PermissivePhaseNumber != null)
+                {
+                    ApproachSplitFailures.Add(
+                        new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
+                            false, options.SelectedAggregatedDataType));
+                }
+            }
+        }
+
+        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal, int phaseNumber):base(options, signal)
+        {
+            ApproachSplitFailures = new List<ApproachSplitFailAggregationContainer>();
+            foreach (var approach in signal.Approaches)
+            {
+                if (approach.ProtectedPhaseNumber == phaseNumber)
+                {
+                    ApproachSplitFailures.Add(
+                        new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
+                            true, options.SelectedAggregatedDataType));
+                    if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber == phaseNumber)
+                    {
+                        ApproachSplitFailures.Add(
+                            new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
+                                false, options.SelectedAggregatedDataType));
+                    }
+                }
+            }
+            LoadBins(null, null);
+        }
+
+        public SplitFailAggregationBySignal(ApproachSplitFailAggregationOptions options, Models.Signal signal, DirectionType direction):base(options, signal)
+        {
+            ApproachSplitFailures = new List<ApproachSplitFailAggregationContainer>();
+            foreach (var approach in signal.Approaches)
+            {
+                if (approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
+                {
+                    ApproachSplitFailures.Add(
+                        new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
+                            true, options.SelectedAggregatedDataType));
+                    if (approach.PermissivePhaseNumber != null)
+                    {
+                        ApproachSplitFailures.Add(
+                            new ApproachSplitFailAggregationContainer(approach, options.TimeOptions, options.StartDate, options.EndDate,
+                                false, options.SelectedAggregatedDataType));
+                    }
+                }
+            }
+            LoadBins(null, null);
+        }
+        
 
         public int GetSplitFailsByDirection(DirectionType direction)
         {

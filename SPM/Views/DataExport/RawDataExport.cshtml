@@ -62,9 +62,18 @@
                         @Html.ValidationMessageFor(model => model.EndDate, "", new {@class = "text-danger"})
                     </div>
                 </div>
-                <input type="submit" value="Download" class="btn btn-default"/>
-                <button id="CheckRecordCount" type="button" onclick="GetRecordCount()" class="btn btn-primary" >Check Record Count<span id='RunReportSpinner' class="glyphicon"></span></button>
-                <label>Limit of allowed record count: 1048576</label>
+                <div class="form-group">
+                    <input type="submit" value="Download" class="btn btn-default"/>
+                    <button id="CheckRecordCount" type="button" onclick="GetRecordCount()" class="btn btn-primary" >Check Record Count<span id='RunReportSpinner' class="glyphicon"></span></button>
+                    <label>Limit of allowed record count: @Html.DisplayFor(model => model.RecordCountLimit)</label>
+                </div>
+                <div class="form-group">
+                    <ul>
+                        <li>Leave blank for all Event Codes/Event Parameters</li>
+                        <li>To filter on a list of codes/params, use comma and/or dash. E.g.:  1, 3, 6-8, 10</li>
+                        <li><a href=@Model.EnumerationsUrl>@Model.EnumerationsName</a></li>
+                    </ul>
+                </div>
                 <div id="GenerateData"></div>
             </div>
         </div>

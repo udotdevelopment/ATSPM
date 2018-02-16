@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business;
@@ -23,6 +24,7 @@ namespace SPM.Models
         public List<FilterSignal> FilterSignals { get; set; } = new List<FilterSignal>();
 
         public virtual ICollection<MetricType> MetricTypes { get; set; }
+        public List<AggregatedDataType> AggregatedDataTypes { get; set; } = new List<AggregatedDataType>();
         public virtual ICollection<Dimension> Dimensions { get; set; }
         public virtual ICollection<SeriesType> SeriesTypes { get; set; }
         public List<XAxisType> XAxisTypes { get; set; }
@@ -33,6 +35,7 @@ namespace SPM.Models
         public List<SelectListItem> StartAMPMList { get; set; }
         public List<SelectListItem> EndAMPMList { get; set; }
         public List<FilterDirection> FilterDirections { get; set; } = new List<FilterDirection>();
+        public List<FilterMovement> FilterMovements { get; set; } = new List<FilterMovement>();
 
 
 
@@ -61,6 +64,9 @@ namespace SPM.Models
 
         [Display(Name = "Bin Size")]
         public int SelectedBinSize { get; set; }
+
+        [Display(Name = "Aggregated Data")]
+        public int SelectedAggregatedData { get; set; }
 
         public bool Weekdays { get; set; }
         public bool Weekends { get; set; }
@@ -108,6 +114,16 @@ namespace SPM.Models
             foreach (var direction in directionTypes)
             {
                 FilterDirections.Add(new FilterDirection(direction.DirectionTypeID, direction.Description, true));
+            }
+        }
+
+        public void SetMovementTypes()
+        {
+            var movementTypeRepository = MOE.Common.Models.Repositories.MovementTypeRepositoryFactory.Create();
+            var movementTypes = movementTypeRepository.GetAllMovementTypes();
+            foreach (var movement in movementTypes)
+            {
+                FilterMovements.Add(new FilterMovement(movement.MovementTypeID, movement.Description, true));
             }
         }
 
@@ -185,6 +201,26 @@ namespace SPM.Models
                         break;
                 }
             }
+        }
+
+        public void SetAggregateData()
+        {
+            switch (SelectedMetricTypeId)
+                {
+                    case 20:
+                        AggregatedDataTypes = new ApproachSplitFailAggregationOptions().AggregatedDataTypes;
+                        break;
+                    case 22:
+                        AggregatedDataTypes = new SignalPreemptionAggregationOptions().AggregatedDataTypes;
+                        break;
+                    case 24:
+                        AggregatedDataTypes = new SignalPriorityAggregationOptions().AggregatedDataTypes;
+                        break;
+                    default:
+                        throw new Exception("Invalid Metric Type");
+                        break;
+                }
+            
         }
 
         public void SetDefaultDates()

@@ -49,8 +49,8 @@ namespace MOE.Common.Business.Bins
         [DataMember]
         public BinSize SelectedBinSize { get; set; }
 
-        [DataMember]
-        public List<DateTime> DateList { get; set; }
+        
+       
 
             public BinFactoryOptions(DateTime start, DateTime end, int? timeOfDayStartHour, int? timeOfDayStartMinute, int? timeOfDayEndHour, int? timeOfDayEndMinute, List<DayOfWeek> daysOfWeek, BinSize binSize, TimeOptions timeOption)
             {
@@ -63,19 +63,23 @@ namespace MOE.Common.Business.Bins
                 DaysOfWeek = daysOfWeek;
                 SelectedBinSize = binSize;
                 TimeOption = timeOption;
-                if (daysOfWeek != null)
-                {
-                    DateList = GetDateList(Start, End, DaysOfWeek);
-                }
-                else
-                {
-                    DateList = new List<DateTime>();
-                    for (DateTime counterDate = start; counterDate <= end; counterDate = counterDate.AddDays(1))
-                    {
-                        DateList.Add(counterDate.Date);
-                    }
-                }
             }
+        public List<DateTime> GetDateList()
+        {
+            if (DaysOfWeek != null)
+            {
+                return GetDateList(Start, End, DaysOfWeek);
+            }
+            else
+            {
+                List<DateTime> tempDateList = new List<DateTime>();
+                for (DateTime counterDate = Start; counterDate <= End; counterDate = counterDate.AddDays(1))
+                {
+                    tempDateList.Add(counterDate.Date);
+                }
+                return tempDateList;
+            }
+        }
 
         private List<DateTime> GetDateList(DateTime startDate, DateTime endDate, List<DayOfWeek> daysOfWeek)
         {
