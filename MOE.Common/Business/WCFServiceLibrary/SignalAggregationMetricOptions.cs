@@ -26,7 +26,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         Signal,
         PhaseNumber,
         Direction,
-        Route
+        Route,
+        Detector
     }
 
     public enum XAxisType
@@ -36,6 +37,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         Direction,
         Phase,
         Signal,
+        Detector
     }
 
     public enum Dimension
