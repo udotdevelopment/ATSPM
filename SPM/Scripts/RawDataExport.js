@@ -1,4 +1,7 @@
-﻿
+﻿var recaptchaResponse;
+function SetRecapchaResponse(response) {
+    recaptchaResponse = response;
+}
 function GetRecordCount() {
     var toSend = GetValuesToSend();
     $.ajax({
@@ -32,6 +35,7 @@ function GetValuesToSend() {
     toSend.EndDate = $('#EndDate').val();
     toSend.EventParams = $('#EventParams').val();
     toSend.EventCodes = $('#EventCodes').val();
+    toSend.RecaptchaMessage = $('#g-recaptcha-response');
     return toSend;
 }
 

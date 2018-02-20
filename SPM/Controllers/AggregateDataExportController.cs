@@ -151,8 +151,9 @@ namespace SPM.Controllers
 
         private static void SetCommonValues(AggDataExportViewModel aggDataExportViewModel, SignalAggregationMetricOptions options)
         {
+            aggDataExportViewModel.EndDateDay =aggDataExportViewModel.EndDateDay.AddDays(1);
             options.StartDate = aggDataExportViewModel.StartDateDay;
-            options.EndDate = aggDataExportViewModel.EndDateDay.AddDays(1);
+            options.EndDate = aggDataExportViewModel.EndDateDay;
             options.SelectedAggregationType = aggDataExportViewModel.SelectedAggregationType;
             options.SelectedXAxisType = aggDataExportViewModel.SelectedXAxisType;
             options.SeriesWidth = aggDataExportViewModel.SelectedSeriesWidth;

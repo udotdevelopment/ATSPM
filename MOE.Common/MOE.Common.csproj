@@ -363,8 +363,11 @@
     </Compile>
     <Compile Include="Business\CycleSplitFail.cs" />
     <Compile Include="Business\CycleSpeed.cs" />
+    <Compile Include="Business\DataAggregation\AggregationByDetector.cs" />
     <Compile Include="Business\DataAggregation\ApproachSpeedAggregationBySignal.cs" />
-    <Compile Include="Business\DataAggregation\ApproachSplitFailAggregationContainer.cs" />
+    <Compile Include="Business\DataAggregation\AggregationByApproach.cs" />
+    <Compile Include="Business\DataAggregation\DetectorAggregationByDetector.cs" />
+    <Compile Include="Business\DataAggregation\SplitFailAggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\DataAggregation.cs" />
     <Compile Include="Business\DataAggregation\AggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\PriorityAggregationBySignal.cs" />

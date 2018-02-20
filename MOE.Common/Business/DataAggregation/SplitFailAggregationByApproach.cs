@@ -11,18 +11,14 @@ using MOE.Common.Models;
 namespace MOE.Common.Business.DataAggregation
 {
 
-    public class ApproachSplitFailAggregationContainer
+    public class SplitFailAggregationByApproach:AggregationByApproach
     {
-        public Approach Approach { get; }
-        public List<BinsContainer> BinsContainers { get; set; } = new List<BinsContainer>();
 
-        public ApproachSplitFailAggregationContainer(Approach approach, BinFactoryOptions TimeOptions, DateTime startDate, DateTime endDate, 
-            bool getProtectedPhase, AggregatedDataType dataType)
+        protected override void LoadBins(Approach approach, DateTime startDate, DateTime endDate, bool getProtectedPhase,
+            AggregatedDataType dataType)
         {
-            BinsContainers = BinFactory.GetBins(TimeOptions);
-            Approach = approach;
             var splitFailAggregationRepository =
-                Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.Create();
+               Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.Create();
             List<ApproachSplitFailAggregation> splitFails =
                 splitFailAggregationRepository.GetApproachSplitFailsAggregationByApproachIdAndDateRange(
                     approach.ApproachID, startDate, endDate, getProtectedPhase);
@@ -44,9 +40,9 @@ namespace MOE.Common.Business.DataAggregation
                             switch (dataType.DataName)
                             {
                                 case "SplitFails":
-                                     splitFailCount =
-                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.SplitFailures);
+                                    splitFailCount =
+                                       splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                           .Sum(s => s.SplitFailures);
                                     break;
                                 case "ForceOffs":
                                     splitFailCount =
@@ -63,9 +59,9 @@ namespace MOE.Common.Business.DataAggregation
                                         splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.MaxOuts);
                                     break;
-                                    default:
-                                    
-                                        throw new Exception("Unknown Aggregate Data Type for Split Failure");
+                                default:
+
+                                    throw new Exception("Unknown Aggregate Data Type for Split Failure");
                             }
 
                             concurrentBins.Add(new Bin
@@ -93,6 +89,11 @@ namespace MOE.Common.Business.DataAggregation
                 });
                 BinsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
             }
+        }
+
+        public SplitFailAggregationByApproach(Approach approach, BinFactoryOptions timeOptions, DateTime startDate, DateTime endDate, 
+            bool getProtectedPhase, AggregatedDataType dataType) :base(approach, timeOptions,startDate, endDate, getProtectedPhase, dataType)
+        {
         }
     }
 }

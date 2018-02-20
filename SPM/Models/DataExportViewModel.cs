@@ -34,6 +34,7 @@ namespace SPM.Models
         public string EnumerationsName { get; set; }
         public string EnumerationsUrl { get; set; }
         public SignalSearchViewModel SignalSearch { get; set; }
+        public string RecaptchaMessage { get; set; }
 
         public DataExportViewModel()
         {
