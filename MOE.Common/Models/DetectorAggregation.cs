@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Spatial;
+using System.Web.UI.DataVisualization.Charting;
 using CsvHelper.Configuration;
 
 namespace MOE.Common.Models
@@ -20,6 +21,8 @@ namespace MOE.Common.Models
         public virtual Detector Detector { get; set; }
         [Required]
         public int Volume { get; set; }
+        [Required]
+        public int DataPoints { get; set; }
 
         public sealed class DetectorAggregationClassMap : ClassMap<DetectorAggregation>
         {

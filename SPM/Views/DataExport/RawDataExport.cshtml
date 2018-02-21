@@ -66,6 +66,7 @@
                     <input type="submit" value="Download" class="btn btn-default"/>
                     <button id="CheckRecordCount" type="button" onclick="GetRecordCount()" class="btn btn-primary" >Check Record Count<span id='RunReportSpinner' class="glyphicon"></span></button>
                     <label>Limit of allowed record count: @Html.DisplayFor(model => model.RecordCountLimit)</label>
+                    <div id="GenerateData"></div>
                 </div>
                 <div class="form-group">
                     <ul>
@@ -74,7 +75,12 @@
                         <li><a href=@Model.EnumerationsUrl>@Model.EnumerationsName</a></li>
                     </ul>
                 </div>
-                <div id="GenerateData"></div>
+                @if (!String.IsNullOrEmpty(Model.RecaptchaMessage))
+                {
+                    <h1 class="text-danger">@Model.RecaptchaMessage</h1>
+                }
+                <div class="g-recaptcha" data-sitekey="6LdvpkYUAAAAABvqjQWJqqUIAIZQRGPWi-VB47xX" data-callback="recaptchaResponse"></div>
+                
             </div>
         </div>
     </div>

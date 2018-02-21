@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Spatial;
+using System.Web.UI.DataVisualization.Charting;
 using CsvHelper.Configuration;
 
 namespace MOE.Common.Models
@@ -38,6 +39,8 @@ namespace MOE.Common.Models
 
         [Required]
         public int PriorityServiceExtendedGreen { get; set; }
+        [Required]
+        public int DataPoints { get; set; }
 
         public sealed class PriorityAggregationClassMap : ClassMap<PriorityAggregation>
         {

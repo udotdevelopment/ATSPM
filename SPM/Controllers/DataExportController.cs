@@ -12,6 +12,7 @@ using MOE.Common.Models;
 using SPM.Filters;
 using SPM.Models;
 using System.Configuration;
+using Newtonsoft.Json.Linq;
 
 namespace SPM.Controllers
 {
@@ -58,26 +59,17 @@ namespace SPM.Controllers
         [HttpPost]
         public ActionResult RawDataExport(DataExportViewModel dataExportViewModel)
         {
+            string response = Request["g-recaptcha-response"];
+            bool status = GetReCaptchaStatus(response);
+            if (!status)
+            {
+                dataExportViewModel.RecaptchaMessage = "Google reCaptcha validation failed";
+                return View(dataExportViewModel);
+            }
             if (ModelState.IsValid)
             {
-                List<int> eventParams = new List<int>();
-                List<int> eventCodes = new List<int>();
-                if (!String.IsNullOrEmpty(dataExportViewModel.EventParams))
-                {
-                    eventParams = CommaDashSeparated(dataExportViewModel.EventParams);
-                    if (eventParams.Count == 0)
-                    {
-                        return Content("Unable to process Event Parameters");
-                    }
-                }
-                if (!String.IsNullOrEmpty(dataExportViewModel.EventCodes))
-                {
-                    eventCodes = CommaDashSeparated(dataExportViewModel.EventCodes);
-                    if (eventCodes.Count == 0)
-                    { 
-                        return Content("Unable to process Event Codes");
-                    }
-                }
+                List<int> eventParams, eventCodes;
+                GetEventCodesAndEventParameters(dataExportViewModel, out eventParams, out eventCodes);
                 int recordCount = controllerEventLogRepository.GetRecordCountByParameterAndEvent(dataExportViewModel.SignalId,
                     dataExportViewModel.StartDate, dataExportViewModel.EndDate, eventParams, eventCodes);
                 if (recordCount > dataExportViewModel.RecordCountLimit)
@@ -94,6 +86,43 @@ namespace SPM.Controllers
                 }
             }
             return Content("This request cannot be processed. You may be missing parameters");
+        }
+
+        private void GetEventCodesAndEventParameters(DataExportViewModel dataExportViewModel, out List<int> eventParams, out List<int> eventCodes)
+        {
+            eventParams = new List<int>();
+            eventCodes = new List<int>();
+            if (!String.IsNullOrEmpty(dataExportViewModel.EventParams))
+            {
+                eventParams = CommaDashSeparated(dataExportViewModel.EventParams);
+                if (eventParams.Count == 0)
+                {
+                    throw new Exception("Unable to process Event Parameters");
+                }
+            }
+            if (!String.IsNullOrEmpty(dataExportViewModel.EventCodes))
+            {
+                eventCodes = CommaDashSeparated(dataExportViewModel.EventCodes);
+                if (eventCodes.Count == 0)
+                {
+                    throw new Exception("Unable to process Event Codes");
+                }
+            }
+        }
+
+        private bool GetReCaptchaStatus(string response)
+        {
+            var userIp = Request.UserHostAddress;
+#if DEBUG
+            userIp = "172.20.20.20";
+#endif
+            string secretKey = "6LdvpkYUAAAAAOni2rKME1gtxqzMKTvHxXJoZa4r";
+            var client = new WebClient();
+            var result = client.DownloadString(
+                $"https://www.google.com/recaptcha/api/siteverify?secret={secretKey}&response={response}&remoteip={userIp}");
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            return status;
         }
 
         private List<int> CommaDashSeparated(string userInput)
@@ -136,53 +165,32 @@ namespace SPM.Controllers
 
         public ActionResult GetRecordCount(DataExportViewModel dataExportViewModel)
         {
+            bool status = GetReCaptchaStatus(dataExportViewModel.RecaptchaMessage);
             if (ModelState.IsValid)
             {
-                List<int> eventParams = new List<int>();
-                List<int> eventCodes = new List<int>();
-                if (!String.IsNullOrEmpty(dataExportViewModel.EventParams))
+                try
                 {
-                    try
+                    List<int> eventParams, eventCodes;
+                    GetEventCodesAndEventParameters(dataExportViewModel, out eventParams, out eventCodes);
+                    int recordCount = controllerEventLogRepository.GetRecordCountByParameterAndEvent(dataExportViewModel.SignalId,
+                            dataExportViewModel.StartDate, dataExportViewModel.EndDate, eventParams, eventCodes);
+                    dataExportViewModel.RecordCountLimit = Convert.ToInt32(ConfigurationManager.AppSettings["RawDataCountLimit"]);
+                    if (recordCount > dataExportViewModel.RecordCountLimit)
                     {
-                        string[] parameters = dataExportViewModel.EventParams.Split(',');
-                        foreach (string parameter in parameters)
-                        {
-                            eventParams.Add(Convert.ToInt32(parameter));
-                        }
+                        return Content("The data set you have selected is too large. Your current request will generate " + recordCount.ToString() +
+                            " records. Please reduces the number of records you have selected.");
                     }
-                    catch (Exception)
+                    else
                     {
-                        return Content("Unable to process Event Parameters");
-                    }
-
-                }
-                if (!String.IsNullOrEmpty(dataExportViewModel.EventCodes))
-                {
-                    try
-                    {
-                        string[] codes = dataExportViewModel.EventCodes.Split(',');
-                        foreach (string code in codes)
-                        {
-                            eventCodes.Add(Convert.ToInt32(code));
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        return Content("Unable to process Event Codes");
+                        return Content("Your current request will generate " + recordCount.ToString() + " records.");
                     }
                 }
-                int recordCount = controllerEventLogRepository.GetRecordCountByParameterAndEvent(dataExportViewModel.SignalId,
-                    dataExportViewModel.StartDate, dataExportViewModel.EndDate, eventParams, eventCodes);
-                dataExportViewModel.RecordCountLimit = Convert.ToInt32(ConfigurationManager.AppSettings["RawDataCountLimit"]);
-                if (recordCount > dataExportViewModel.RecordCountLimit)
+                catch (Exception e)
                 {
-                    return Content("The data set you have selected is too large. Your current request will generate " + recordCount.ToString() +
-                        " records. Please reduces the number of records you have selected.");
+                    return Content(e.Message);
                 }
-                else
-                {
-                    return Content("Your current request will generate " + recordCount.ToString() + " records.");
-                }
+               
+               
             }
             return Content("This request cannot be processed. You may be missing parameters");
         }

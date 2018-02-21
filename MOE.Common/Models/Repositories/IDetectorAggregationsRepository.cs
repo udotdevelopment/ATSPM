@@ -9,5 +9,6 @@ namespace MOE.Common.Models.Repositories
         DetectorAggregation Add(Models.DetectorAggregation DetectorAggregation);
         void Update(Models.DetectorAggregation DetectorAggregation);
         void Remove(Models.DetectorAggregation DetectorAggregation);
+        List<DetectorAggregation> GetDetectorAggregationByApproachIdAndDateRange(int detectorId, DateTime startDate, DateTime endDate);
     }
 }

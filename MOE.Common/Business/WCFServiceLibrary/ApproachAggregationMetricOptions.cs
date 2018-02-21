@@ -66,9 +66,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         }
 
 
-
-
-        private void GetDirectionCharts()
+        protected void GetDirectionCharts()
         {
             Chart chart;
             switch (SelectedSeries)
@@ -121,7 +119,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return directionsList;
         }
 
-        private void GetApproachCharts()
+        protected void GetApproachCharts()
         {
             Chart chart;
             switch (SelectedSeries)
@@ -197,9 +195,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
             SaveChartImage(chart);
         }
-        
 
-        private void GetSignalsXAxisDirectionSeriesChart(List<Models.Signal> signals, Chart chart)
+
+        protected void GetSignalsXAxisDirectionSeriesChart(List<Models.Signal> signals, Chart chart)
         {
             List<DirectionType> availableDirections = new List<DirectionType>();
             foreach (var signal in signals)
@@ -226,9 +224,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 chart.Series.Add(series);
             }
         }
-        
 
-        private void GetTimeXAxisDirectionSeriesChart(Models.Signal signal, Chart chart)
+
+        protected void GetTimeXAxisDirectionSeriesChart(Models.Signal signal, Chart chart)
         {
             int i = 1;
             foreach (var directionType in signal.GetAvailableDirections())
@@ -291,10 +289,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     throw new Exception("Invalid X-Axis Series Combination");
             }
         }
-        
-        
 
-        private void GetTimeOfDayXAxisDirectionSeriesChart(Models.Signal signal, Chart chart)
+
+        protected void GetTimeOfDayXAxisDirectionSeriesChart(Models.Signal signal, Chart chart)
         {
             SetTimeOfDayXAxisMinimum(chart);
             var availableDirections = signal.GetAvailableDirections();
@@ -310,9 +307,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 chart.Series.Add(seriesList.FirstOrDefault(s => s.Name == direction.Description));
             }
         }
-        
 
-        private void GetTimeOfDayXAxisApproachSeriesChart(Models.Signal signal, Chart chart)
+
+        protected void GetTimeOfDayXAxisApproachSeriesChart(Models.Signal signal, Chart chart)
         {
             if (TimeOptions.TimeOfDayStartHour != null && TimeOptions.TimeOfDayStartMinute.Value != null)
             {

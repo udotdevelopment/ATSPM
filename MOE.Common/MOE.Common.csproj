@@ -363,12 +363,17 @@
     </Compile>
     <Compile Include="Business\CycleSplitFail.cs" />
     <Compile Include="Business\CycleSpeed.cs" />
+    <Compile Include="Business\DataAggregation\AggregationByDetector.cs" />
     <Compile Include="Business\DataAggregation\ApproachSpeedAggregationBySignal.cs" />
-    <Compile Include="Business\DataAggregation\ApproachSplitFailAggregationContainer.cs" />
+    <Compile Include="Business\DataAggregation\AggregationByApproach.cs" />
+    <Compile Include="Business\DataAggregation\DetectorAggregationByDetector.cs" />
+    <Compile Include="Business\DataAggregation\DetectorAggregationByApproach.cs" />
+    <Compile Include="Business\DataAggregation\SplitFailAggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\DataAggregation.cs" />
     <Compile Include="Business\DataAggregation\AggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\PriorityAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\PreemptionAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\DetectorAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\SplitFailAggregationBySignal.cs" />
     <Compile Include="Business\Export\Exporter.cs" />
     <Compile Include="Business\FilterExtensions\FilterApproach.cs" />
@@ -394,6 +399,8 @@
     <Compile Include="Business\PCD\Plan.cs" />
     <Compile Include="Business\TMC\TMCViewModel.cs" />
     <Compile Include="Business\WatchDog\WatchDogScan.cs" />
+    <Compile Include="Business\WCFServiceLibrary\DetectorVolumeAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\DetectorAggregationMetricOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPrirorityAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalAggregationMetricOptions.cs" />
@@ -455,6 +462,10 @@
     <Compile Include="Migrations\201802160023347_GeneralSettings.cs" />
     <Compile Include="Migrations\201802160023347_GeneralSettings.Designer.cs">
       <DependentUpon>201802160023347_GeneralSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802210029380_DataPointsForAggregations.cs" />
+    <Compile Include="Migrations\201802210029380_DataPointsForAggregations.Designer.cs">
+      <DependentUpon>201802210029380_DataPointsForAggregations.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
@@ -886,6 +897,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802160023347_GeneralSettings.resx">
       <DependentUpon>201802160023347_GeneralSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802210029380_DataPointsForAggregations.resx">
+      <DependentUpon>201802210029380_DataPointsForAggregations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

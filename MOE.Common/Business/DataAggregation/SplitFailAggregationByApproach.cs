@@ -1,50 +1,51 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.DataAggregation
 {
-
-    public class ApproachSplitFailAggregationContainer
+    public class SplitFailAggregationByApproach : AggregationByApproach
     {
-        public Approach Approach { get; }
-        public List<BinsContainer> BinsContainers { get; set; } = new List<BinsContainer>();
-
-        public ApproachSplitFailAggregationContainer(Approach approach, BinFactoryOptions TimeOptions, DateTime startDate, DateTime endDate, 
-            bool getProtectedPhase, AggregatedDataType dataType)
+        public SplitFailAggregationByApproach(Approach approach, BinFactoryOptions timeOptions, DateTime startDate,
+            DateTime endDate,
+            bool getProtectedPhase, AggregatedDataType dataType) : base(approach, timeOptions, startDate, endDate,
+            getProtectedPhase, dataType)
         {
-            BinsContainers = BinFactory.GetBins(TimeOptions);
-            Approach = approach;
+        }
+
+        protected override void LoadBins(Approach approach, DateTime startDate, DateTime endDate,
+            bool getProtectedPhase,
+            AggregatedDataType dataType)
+        {
             var splitFailAggregationRepository =
-                Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.Create();
-            List<ApproachSplitFailAggregation> splitFails =
+                ApproachSplitFailAggregationRepositoryFactory.Create();
+            var splitFails =
                 splitFailAggregationRepository.GetApproachSplitFailsAggregationByApproachIdAndDateRange(
                     approach.ApproachID, startDate, endDate, getProtectedPhase);
             if (splitFails != null)
             {
-                ConcurrentBag<BinsContainer> concurrentBinContainers = new ConcurrentBag<BinsContainer>();
+                var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
                 //foreach (var binsContainer in binsContainers)
                 Parallel.ForEach(BinsContainers, binsContainer =>
                 {
-                    BinsContainer tempBinsContainer =
+                    var tempBinsContainer =
                         new BinsContainer(binsContainer.Start, binsContainer.End);
-                    ConcurrentBag<Bin> concurrentBins = new ConcurrentBag<Bin>();
+                    var concurrentBins = new ConcurrentBag<Bin>();
                     //foreach (var bin in binsContainer.Bins)
                     Parallel.ForEach(binsContainer.Bins, bin =>
                     {
                         if (splitFails.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
                         {
-                            int splitFailCount = 0;
+                            var splitFailCount = 0;
                             switch (dataType.DataName)
                             {
                                 case "SplitFails":
-                                     splitFailCount =
+                                    splitFailCount =
                                         splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.SplitFailures);
                                     break;
@@ -63,9 +64,9 @@ namespace MOE.Common.Business.DataAggregation
                                         splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.MaxOuts);
                                     break;
-                                    default:
-                                    
-                                        throw new Exception("Unknown Aggregate Data Type for Split Failure");
+                                default:
+
+                                    throw new Exception("Unknown Aggregate Data Type for Split Failure");
                             }
 
                             concurrentBins.Add(new Bin
@@ -86,7 +87,6 @@ namespace MOE.Common.Business.DataAggregation
                                 Average = 0
                             });
                         }
-
                     });
                     tempBinsContainer.Bins = concurrentBins.OrderBy(c => c.Start).ToList();
                     concurrentBinContainers.Add(tempBinsContainer);

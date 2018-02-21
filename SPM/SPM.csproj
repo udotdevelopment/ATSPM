@@ -198,6 +198,7 @@
     <Compile Include="Controllers\DetectorCommentsController.cs" />
     <Compile Include="Controllers\DetectorsController.cs" />
     <Compile Include="Controllers\FAQsController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LinkPivotController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MenusController.cs" />
