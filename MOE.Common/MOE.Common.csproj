@@ -370,6 +370,7 @@
     <Compile Include="Business\DataAggregation\CycleAggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\DetectorAggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\PcdAggregationByApproach.cs" />
+    <Compile Include="Business\DataAggregation\PcdAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\YellowRedActivationsAggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\SplitFailAggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\DataAggregation.cs" />
@@ -402,6 +403,7 @@
     <Compile Include="Business\PCD\Plan.cs" />
     <Compile Include="Business\TMC\TMCViewModel.cs" />
     <Compile Include="Business\WatchDog\WatchDogScan.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachPcdAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\DetectorVolumeAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\DetectorAggregationMetricOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPrirorityAggregationOptions.cs" />
