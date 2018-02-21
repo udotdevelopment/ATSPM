@@ -683,7 +683,7 @@ namespace MOE.Common.Business.DataAggregation
                 pedActuations = records.Count(r => r.EventCode == 45 && r.EventParam == approach.ProtectedPhaseNumber);
                 totalCycles = records.Count(r => r.EventCode == 1 && r.EventParam == approach.ProtectedPhaseNumber);
             }
-            var approachAggregation = new ApproachCycleAggregation
+            var approachAggregation = new ApproachCycleAggregation()
             {
                 BinStartTime = startTime,
                 ApproachId = approach.ApproachID,
