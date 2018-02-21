@@ -36,13 +36,13 @@ namespace MOE.Common.Business.DataAggregation
         private readonly ConcurrentQueue<DetectorAggregation> _detectorAggregationConcurrentQueue =
             new ConcurrentQueue<DetectorAggregation>();
 
-        private DateTime _endDate;
-
         private readonly ConcurrentQueue<PreemptionAggregation> _preemptAggregationConcurrentQueue =
             new ConcurrentQueue<PreemptionAggregation>();
 
         private readonly ConcurrentQueue<PriorityAggregation> _priorityAggregationConcurrentQueue =
             new ConcurrentQueue<PriorityAggregation>();
+
+        private DateTime _endDate;
 
         private DateTime _startDate;
 
@@ -85,9 +85,10 @@ namespace MOE.Common.Business.DataAggregation
                     "7193",
                     "6418"
                 };
-            
-            Console.WriteLine("Getting correct version of signals for time period");
-                var versionIds = db.Signals.Where(r => r.VersionActionId != 3 && r.Start < dt && tempSignalIds.Contains(r.SignalID))
+
+                Console.WriteLine("Getting correct version of signals for time period");
+                var versionIds = db.Signals.Where(r =>
+                        r.VersionActionId != 3 && r.Start < dt && tempSignalIds.Contains(r.SignalID))
                     .GroupBy(r => r.SignalID)
                     .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).Select(s => s.VersionID).ToList();
                 var signals = db.Signals
