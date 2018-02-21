@@ -1,51 +1,58 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
-using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.DataAggregation
 {
-    public class PreemptionAggregationBySignal:AggregationBySignal
+    public class PreemptionAggregationBySignal : AggregationBySignal
     {
+        public PreemptionAggregationBySignal(SignalPreemptionAggregationOptions options, Models.Signal signal) : base(
+            options, signal)
+        {
+            LoadBins(options, signal);
+        }
+
         protected override void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal)
         {
             var preemptionAggregationRepository =
-               Models.Repositories.PreemptAggregationDatasRepositoryFactory.Create();
-            List<PreemptionAggregation> preemptions =
+                PreemptAggregationDatasRepositoryFactory.Create();
+            var preemptions =
                 preemptionAggregationRepository.GetPreemptionsBySignalIdAndDateRange(
                     signal.SignalID, BinsContainers.Min(b => b.Start), BinsContainers.Max(b => b.End));
             if (preemptions != null)
             {
-                ConcurrentBag<BinsContainer> concurrentBinContainers = new ConcurrentBag<BinsContainer>();
+                var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
                 //foreach (var binsContainer in binsContainers)
                 Parallel.ForEach(BinsContainers, binsContainer =>
                 {
-                    BinsContainer tempBinsContainer =
+                    var tempBinsContainer =
                         new BinsContainer(binsContainer.Start, binsContainer.End);
-                    ConcurrentBag<Bin> concurrentBins = new ConcurrentBag<Bin>();
+                    var concurrentBins = new ConcurrentBag<Bin>();
                     //foreach (var bin in binsContainer.Bins)
                     Parallel.ForEach(binsContainer.Bins, bin =>
                     {
                         if (preemptions.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
                         {
-                            int preemptionSum = 0;
+                            var preemptionSum = 0;
 
                             switch (options.SelectedAggregatedDataType.DataName)
                             {
                                 case "PreemptNumber":
-                                    preemptionSum = preemptions.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                    preemptionSum = preemptions.Where(s =>
+                                            s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                         .Sum(s => s.PreemptNumber);
                                     break;
                                 case "PreemptRequests":
-                                    preemptionSum = preemptions.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                    preemptionSum = preemptions.Where(s =>
+                                            s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                         .Sum(s => s.PreemptRequests);
                                     break;
                                 case "PreemptServices":
-                                    preemptionSum = preemptions.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                    preemptionSum = preemptions.Where(s =>
+                                            s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                         .Sum(s => s.PreemptServices);
                                     break;
                             }
@@ -67,7 +74,6 @@ namespace MOE.Common.Business.DataAggregation
                                 Average = 0
                             });
                         }
-
                     });
                     tempBinsContainer.Bins = concurrentBins.OrderBy(c => c.Start).ToList();
                     concurrentBinContainers.Add(tempBinsContainer);
@@ -75,17 +81,5 @@ namespace MOE.Common.Business.DataAggregation
                 BinsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
             }
         }
-        
-
-        public PreemptionAggregationBySignal(SignalPreemptionAggregationOptions options, Models.Signal signal) : base(options, signal)
-        {
-            LoadBins(options, signal);
-        }
-        
-        
     }
-    
-        
-    
-        
 }

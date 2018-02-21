@@ -1,48 +1,49 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
-using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.DataAggregation
 {
-
-    public class DetectorAggregationByDetector:AggregationByDetector
+    public class DetectorAggregationByDetector : AggregationByDetector
     {
+        public DetectorAggregationByDetector(Models.Detector detector, DetectorVolumeAggregationOptions options) : base(
+            detector, options)
+        {
+        }
 
-        protected override void LoadBins(Models.Detector detector, DateTime startDate, DateTime endDate, 
-            AggregatedDataType dataType)
+        protected override void LoadBins(Models.Detector detector, DetectorAggregationMetricOptions options)
         {
             var detectorAggregationRepository =
-               Models.Repositories.DetectorAggregationsRepositoryFactory.Create();
-            List<DetectorAggregation> detectorAggregations =
+                DetectorAggregationsRepositoryFactory.Create();
+            var detectorAggregations =
                 detectorAggregationRepository.GetDetectorAggregationByApproachIdAndDateRange(
-                    detector.ID, startDate, endDate);
+                    detector.ID, options.StartDate, options.EndDate);
             if (detectorAggregations != null)
             {
-                ConcurrentBag<BinsContainer> concurrentBinContainers = new ConcurrentBag<BinsContainer>();
+                var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
                 //foreach (var binsContainer in binsContainers)
                 Parallel.ForEach(BinsContainers, binsContainer =>
                 {
-                    BinsContainer tempBinsContainer =
+                    var tempBinsContainer =
                         new BinsContainer(binsContainer.Start, binsContainer.End);
-                    ConcurrentBag<Bin> concurrentBins = new ConcurrentBag<Bin>();
+                    var concurrentBins = new ConcurrentBag<Bin>();
                     //foreach (var bin in binsContainer.Bins)
                     Parallel.ForEach(binsContainer.Bins, bin =>
                     {
                         if (detectorAggregations.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
                         {
-                            int volume = 0;
-                            switch (dataType.DataName)
+                            var volume = 0;
+                            switch (options.SelectedAggregatedDataType.DataName)
                             {
                                 case "Volume":
                                     volume =
-                                       detectorAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                           .Sum(s => s.Volume);
+                                        detectorAggregations.Where(s =>
+                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.Volume);
                                     break;
                                 default:
                                     throw new Exception("Unknown Aggregate Data Type for Split Failure");
@@ -66,18 +67,12 @@ namespace MOE.Common.Business.DataAggregation
                                 Average = 0
                             });
                         }
-
                     });
                     tempBinsContainer.Bins = concurrentBins.OrderBy(c => c.Start).ToList();
                     concurrentBinContainers.Add(tempBinsContainer);
                 });
                 BinsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
             }
-        }
-
-        public DetectorAggregationByDetector(Models.Detector detector, BinFactoryOptions timeOptions, DateTime startDate, DateTime endDate, 
-             AggregatedDataType dataType) :base(detector, timeOptions,startDate, endDate, dataType)
-        {
         }
     }
 }
