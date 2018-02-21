@@ -460,6 +460,10 @@
     <Compile Include="Migrations\201802160023347_GeneralSettings.Designer.cs">
       <DependentUpon>201802160023347_GeneralSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802210029380_DataPointsForAggregations.cs" />
+    <Compile Include="Migrations\201802210029380_DataPointsForAggregations.Designer.cs">
+      <DependentUpon>201802210029380_DataPointsForAggregations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\ApproachPcdAggregation.cs" />
@@ -890,6 +894,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802160023347_GeneralSettings.resx">
       <DependentUpon>201802160023347_GeneralSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802210029380_DataPointsForAggregations.resx">
+      <DependentUpon>201802210029380_DataPointsForAggregations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
