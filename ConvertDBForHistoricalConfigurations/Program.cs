@@ -123,7 +123,7 @@ namespace ConvertDBForHistoricalConfigurations
 
             if (!reader.HasRows)
             {
-                throw new Exception("No routes found");
+                throw new Exception("No Migraitons found");
             }
 
             while (reader.Read())
@@ -190,23 +190,13 @@ namespace ConvertDBForHistoricalConfigurations
 
         private static SqlConnection GetDataBaseConnection()
         {
-            //SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
 
-            //builder.DataSource = "SRWTCNS54";
-            //builder.UserID = "SPM";
-            //builder.Password = "SPM";
-            //builder.InitialCatalog = "MOE1";
-
-
-
-            //builder.ConnectionString = ApplicationSettings.Connectionstring;
 
             SqlConnection sqlconn = new SqlConnection
             {
                 ConnectionString = ConfigurationManager.ConnectionStrings["SPM"].ToString()
             };
 
-            //sqlconn.ConnectionString = builder.ConnectionString;
 
             return sqlconn;
 

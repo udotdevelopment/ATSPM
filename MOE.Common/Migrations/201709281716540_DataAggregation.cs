@@ -19,8 +19,8 @@ namespace MOE.Common.Migrations
             DropIndex("dbo.ApproachRouteDetail", new[] { "ApproachID" });
             DropIndex("dbo.Detectors", "IX_DetectorIDUnique");
             DropIndex("dbo.SPMWatchDogErrorEvents", new[] { "SignalID" });
-            DropPrimaryKey("Signals", "PK_dbo.Signals");
-
+            Sql("USE master\r\nIF EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE  CONSTRAINT_TYPE = \'PRIMARY KEY\'\r\n    AND TABLE_NAME = \'[Signals]\' \r\n    AND TABLE_SCHEMA =\'dbo\' \r\n\tAND CONSTRAINT_NAME = \'PK_dbo.Signals\')\r\n\r\n\tALTER TABLE [Signals] DROP CONSTRAINT [PK_dbo.Signals]\r\nGO");
+            Sql("USE master\r\nIF EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE  CONSTRAINT_TYPE = \'PRIMARY KEY\'\r\n    AND TABLE_NAME = \'[Signals]\' \r\n    AND TABLE_SCHEMA =\'dbo\' \r\n\tAND CONSTRAINT_NAME = \'PK_Signals\')\r\n\r\n\tALTER TABLE [Signals] DROP CONSTRAINT [PK_Signals]\r\nGO");
             CreateTable(
                 "dbo.VersionActions",
                 c => new
