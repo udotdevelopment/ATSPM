@@ -290,7 +290,9 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             DetectorVolumeAggregationOptions options = new DetectorVolumeAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("11/1/2017");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Time;
+            options.SelectedSeries = SeriesType.Detector;
+            options.SelectedAggregatedDataType = new AggregatedDataType { Id = 0, DataName = "Volume" };
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("11/1/2017"),
@@ -322,7 +324,9 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             DetectorVolumeAggregationOptions options = new DetectorVolumeAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Time;
+            options.SelectedSeries = SeriesType.Detector;
+            options.SelectedAggregatedDataType = new AggregatedDataType { Id = 0, DataName = "Volume" };
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
@@ -341,10 +345,13 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetricMonthBinTimePeriodTest()
         {
-            DetectorVolumeAggregationOptions options = new DetectorVolumeAggregationOptions(); options.SeriesWidth = 3;
+            DetectorVolumeAggregationOptions options = new DetectorVolumeAggregationOptions();
+            options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Time;
+            options.SelectedSeries = SeriesType.Detector;
+            options.SelectedAggregatedDataType = new AggregatedDataType { Id = 0, DataName = "Volume" };
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
@@ -373,10 +380,13 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetricYearBinStartToFinishTest()
         {
-            DetectorVolumeAggregationOptions options = new DetectorVolumeAggregationOptions(); options.SeriesWidth = 3;
+            DetectorVolumeAggregationOptions options = new DetectorVolumeAggregationOptions();
+            options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Time;
+            options.SelectedSeries = SeriesType.Detector;
+            options.SelectedAggregatedDataType = new AggregatedDataType { Id = 0, DataName = "Volume" };
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"),
@@ -398,7 +408,9 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             DetectorVolumeAggregationOptions options = new DetectorVolumeAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Time;
+            options.SelectedSeries = SeriesType.Detector;
+            options.SelectedAggregatedDataType = new AggregatedDataType { Id = 0, DataName = "Volume" };
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"),

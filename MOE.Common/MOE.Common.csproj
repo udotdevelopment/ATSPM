@@ -799,6 +799,8 @@
     <Compile Include="Models\ViewModel\Chart\MetricsListViewModel.cs" />
     <Compile Include="Models\ViewModel\Chart\PreemptViewModel.cs" />
     <Compile Include="Models\ViewModel\Chart\SignalInfoBoxViewModel.cs" />
+    <Compile Include="Models\ViewModel\DataExportViewModel.cs" />
+    <Compile Include="Models\ViewModel\DateTimePickerViewModel.cs" />
     <Compile Include="Models\ViewModel\Day.cs" />
     <Compile Include="Models\ViewModel\LinkPivotAdjustment.cs" />
     <Compile Include="Models\ViewModel\LinkPivotApproachLink.cs" />

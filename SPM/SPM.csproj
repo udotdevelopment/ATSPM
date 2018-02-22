@@ -219,7 +219,6 @@
     <Compile Include="Models\ArchiveSettingsViewModel.cs" />
     <Compile Include="Models\AggDataExportViewModel.cs" />
     <Compile Include="Models\MetricResultViewModel.cs" />
-    <Compile Include="Models\DataExportViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\SPMConfigurationTableViewModel.cs" />
@@ -572,6 +571,7 @@
     <Content Include="Views\AggregateDataExport\GetAggregateDataTypes.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterMovement.cshtml" />
     <Content Include="Views\GeneralSettings\Edit.cshtml" />
+    <Content Include="Views\Shared\_DateTimePicker.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

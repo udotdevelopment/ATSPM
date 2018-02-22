@@ -35,7 +35,6 @@ function GetValuesToSend() {
     toSend.EndDate = $('#EndDate').val();
     toSend.EventParams = $('#EventParams').val();
     toSend.EventCodes = $('#EventCodes').val();
-    toSend.RecaptchaMessage = $('#g-recaptcha-response');
     return toSend;
 }
 
