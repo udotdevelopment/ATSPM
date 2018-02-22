@@ -207,6 +207,9 @@ namespace SPM.Models
         {
             switch (SelectedMetricTypeId)
                 {
+                    case 18:
+                        AggregatedDataTypes = new ApproachPcdAggregationOptions().AggregatedDataTypes;
+                        break;
                     case 20:
                         AggregatedDataTypes = new ApproachSplitFailAggregationOptions().AggregatedDataTypes;
                         break;
