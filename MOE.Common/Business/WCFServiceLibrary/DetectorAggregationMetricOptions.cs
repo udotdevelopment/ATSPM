@@ -200,6 +200,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         }
                     }
                     chart.Series.Add(series);
+                    i++;
                 }
             }
         }
@@ -290,12 +291,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     List<BinsContainer> binsContainers = GetBinsContainersByDetector(detectors[i]);
                     Series series = CreateSeries(i, detectors[i].Description);
-                    seriesList.Add(GetTimeAggregateSeries(series, binsContainers));
+                    seriesList.Add(GetTimeAggregateSeries(series, binsContainers));;
                 });
             }
             List<Series> orderedSeries = seriesList.OrderBy(s => s.Name).ToList();
+            int colorCode = 1;
             foreach (var series in orderedSeries)
             {
+                series.Color = GetSeriesColorByNumber(colorCode);
                 chart.Series.Add(series);
             }
         }

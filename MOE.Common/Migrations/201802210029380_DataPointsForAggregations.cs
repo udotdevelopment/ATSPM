@@ -7,14 +7,14 @@ namespace MOE.Common.Migrations
     {
         public override void Up()
         {
-            AddColumn("dbo.ApproachCycleAggregations", "DataPoints", c => c.Int(nullable: false));
-            AddColumn("dbo.ApproachPcdAggregations", "DataPoints", c => c.Int(nullable: false));
-            AddColumn("dbo.ApproachSpeedAggregations", "DataPoints", c => c.Int(nullable: false));
-            AddColumn("dbo.ApproachSplitFailAggregations", "DataPoints", c => c.Int(nullable: false));
-            AddColumn("dbo.ApproachYellowRedActivationAggregations", "DataPoints", c => c.Int(nullable: false));
-            AddColumn("dbo.DetectorAggregations", "DataPoints", c => c.Int(nullable: false));
-            AddColumn("dbo.PreemptionAggregations", "DataPoints", c => c.Int(nullable: false));
-            AddColumn("dbo.PriorityAggregations", "DataPoints", c => c.Int(nullable: false));
+            AddColumn("dbo.ApproachCycleAggregations", "DataPoints", c => c.Int(nullable: false, defaultValue:5));
+            AddColumn("dbo.ApproachPcdAggregations", "DataPoints", c => c.Int(nullable: false, defaultValue: 5));
+            AddColumn("dbo.ApproachSpeedAggregations", "DataPoints", c => c.Int(nullable: false, defaultValue: 5));
+            AddColumn("dbo.ApproachSplitFailAggregations", "DataPoints", c => c.Int(nullable: false, defaultValue: 5));
+            AddColumn("dbo.ApproachYellowRedActivationAggregations", "DataPoints", c => c.Int(nullable: false, defaultValue: 5));
+            AddColumn("dbo.DetectorAggregations", "DataPoints", c => c.Int(nullable: false, defaultValue: 5));
+            AddColumn("dbo.PreemptionAggregations", "DataPoints", c => c.Int(nullable: false, defaultValue: 5));
+            AddColumn("dbo.PriorityAggregations", "DataPoints", c => c.Int(nullable: false, defaultValue: 5));
         }
         
         public override void Down()

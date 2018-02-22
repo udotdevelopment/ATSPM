@@ -21,6 +21,7 @@ namespace MOE.Common.Migrations
             //AutomaticMigrationDataLossAllowed = true;
             //var migrator = new DbMigrator(this);
             //_pendingMigrations = migrator.GetPendingMigrations().Any();
+            CommandTimeout = Int32.MaxValue;
 
         }
 

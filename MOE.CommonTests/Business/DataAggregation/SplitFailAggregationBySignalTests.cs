@@ -110,8 +110,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 12);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 1152);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 12);
+            Assert.IsTrue(splitAggregationBySignal.Total == 1152);
+            Assert.IsTrue(splitAggregationBySignal.Average == 12);
         }
 
         [TestMethod()]
@@ -181,8 +181,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 12);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 48);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 12);
+            Assert.IsTrue(splitAggregationBySignal.Total == 48);
+            Assert.IsTrue(splitAggregationBySignal.Average == 12);
         }
 
 
@@ -253,8 +253,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 24);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 1152);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 24);
+            Assert.IsTrue(splitAggregationBySignal.Total == 1152);
+            Assert.IsTrue(splitAggregationBySignal.Average == 24);
         }
 
         [TestMethod()]
@@ -324,8 +324,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 24);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 48);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 24);
+            Assert.IsTrue(splitAggregationBySignal.Total == 48);
+            Assert.IsTrue(splitAggregationBySignal.Average == 24);
         }
 
         [TestMethod()]
@@ -395,8 +395,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 48);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 1152);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 48);
+            Assert.IsTrue(splitAggregationBySignal.Total == 1152);
+            Assert.IsTrue(splitAggregationBySignal.Average == 48);
         }
 
         [TestMethod()]
@@ -466,8 +466,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 48);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 192);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 48);
+            Assert.IsTrue(splitAggregationBySignal.Total == 192);
+            Assert.IsTrue(splitAggregationBySignal.Average == 48);
         }
 
         [TestMethod()]
@@ -538,8 +538,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 1152);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 35712);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 1152);
+            Assert.IsTrue(splitAggregationBySignal.Total == 35712);
+            Assert.IsTrue(splitAggregationBySignal.Average == 1152);
         }
 
         [TestMethod()]
@@ -609,8 +609,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 192);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 5952);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 192);
+            Assert.IsTrue(splitAggregationBySignal.Total == 5952);
+            Assert.IsTrue(splitAggregationBySignal.Average == 192);
         }
 
         [TestMethod()]
@@ -681,8 +681,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 1152 * DateTime.DaysInMonth(bin.Start.Year, bin.Start.Month));
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 420480);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 35040);
+            Assert.IsTrue(splitAggregationBySignal.Total == 420480);
+            Assert.IsTrue(splitAggregationBySignal.Average == 35040);
         }
 
         [TestMethod()]
@@ -752,8 +752,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 48);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 17520);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 1460);
+            Assert.IsTrue(splitAggregationBySignal.Total == 17520);
+            Assert.IsTrue(splitAggregationBySignal.Average == 1460);
         }
 
         [TestMethod()]
@@ -837,8 +837,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     }
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 842112);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 421056);
+            Assert.IsTrue(splitAggregationBySignal.Total == 842112);
+            Assert.IsTrue(splitAggregationBySignal.Average == 421056);
         }
 
         [TestMethod()]
@@ -923,8 +923,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 48);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 35088);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 17544);
+            Assert.IsTrue(splitAggregationBySignal.Total == 35088);
+            Assert.IsTrue(splitAggregationBySignal.Average == 17544);
         }
 
         [TestMethod()]
@@ -989,8 +989,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 3);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 288);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 3);
+            Assert.IsTrue(splitAggregationBySignal.Total == 288);
+            Assert.IsTrue(splitAggregationBySignal.Average == 3);
         }
 
         [TestMethod()]
@@ -1055,8 +1055,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 12);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 48);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 12);
+            Assert.IsTrue(splitAggregationBySignal.Total == 48);
+            Assert.IsTrue(splitAggregationBySignal.Average == 12);
         }
 
         [TestMethod()]
@@ -1121,8 +1121,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 3);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 288);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 3);
+            Assert.IsTrue(splitAggregationBySignal.Total == 288);
+            Assert.IsTrue(splitAggregationBySignal.Average == 3);
         }
 
         [TestMethod()]
@@ -1187,8 +1187,8 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(signalBin.Sum == 3);
                 }
             }
-            Assert.IsTrue(splitAggregationBySignal.TotalSplitFailures == 12);
-            Assert.IsTrue(splitAggregationBySignal.AverageSplitFailures == 3);
+            Assert.IsTrue(splitAggregationBySignal.Total == 12);
+            Assert.IsTrue(splitAggregationBySignal.Average == 3);
         }
 
         [TestMethod()]
