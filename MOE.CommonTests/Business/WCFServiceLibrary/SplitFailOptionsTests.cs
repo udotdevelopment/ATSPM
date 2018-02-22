@@ -31,7 +31,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         {
             InMemoryMOEDatabase _db = new InMemoryMOEDatabase();
 
-            XMLToListImporter.LoadConterollerEventLog("7185_10_17_2017.xml", _db);
+            //XMLToListImporter.LoadConterollerEventLog("7185_10_17_2017.xml", _db);
 
             Assert.IsTrue(_db.Controller_Event_Log.Count > 1000);
         }
@@ -41,7 +41,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         {
             InMemoryMOEDatabase _db = new InMemoryMOEDatabase();
 
-            XMLToListImporter.LoadConterollerEventLog("7185_10_17_2017.xml", _db);
+            //XMLToListImporter.LoadConterollerEventLog("7185_10_17_2017.xml", _db);
 
 
 

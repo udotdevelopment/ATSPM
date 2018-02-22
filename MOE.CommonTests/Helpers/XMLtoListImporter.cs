@@ -141,7 +141,7 @@ namespace MOE.CommonTests.Helpers
 
             foreach (var e in incoming)
             {
-                e.DetectionTypeIDs
+                //e.DetectionTypeIDs
                 _db.Detectors.Add(e);
 
             }

@@ -13,7 +13,7 @@
             return new DetectorAggregationsRepository();
         }
 
-        public static void SetDetectorCommentRepository(IDetectorAggregationsRepository newRepository)
+        public static void SetDetectorAggregationRepository(IDetectorAggregationsRepository newRepository)
         {
             detectorAggregationsRepository = newRepository;
         }

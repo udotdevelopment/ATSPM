@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.DataAggregation;
@@ -14,7 +15,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     {
         public DetectorVolumeAggregationOptions()
         {
-            MetricTypeID = 20;
+            MetricTypeID = 16;
             AggregatedDataTypes = new List<AggregatedDataType>();
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "Volume"});
         }
@@ -42,6 +43,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 chartTitle += SelectedXAxisType + " Aggregation ";
                 chartTitle += SelectedAggregationType.ToString();
                 return chartTitle;
+            }
+        }
+        public override string YAxisTitle
+        {
+            get
+            {
+                return Regex.Replace(SelectedAggregationType.ToString()  + SelectedAggregatedDataType.DataName,
+                           @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1").ToString() + " " + TimeOptions.SelectedBinSize.ToString() + " bins";
             }
         }
 

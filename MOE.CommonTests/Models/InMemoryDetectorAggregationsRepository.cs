@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
+using MOE.CommonTests.Models;
 
 
-namespace MOE.Common.Models.Repositories
+namespace MOE.CommonTests.Models
 {
-    public class DetectorAggregationsRepository : IDetectorAggregationsRepository
+    public class InMemoryDetectorAggregationsRepository : IDetectorAggregationsRepository
     {
-        private Models.SPM _db;
+        private InMemoryMOEDatabase _db;
 
 
-        public DetectorAggregationsRepository()
+        public InMemoryDetectorAggregationsRepository()
         {
-            _db = new SPM();
+            _db = new InMemoryMOEDatabase();
         }
 
-        public DetectorAggregationsRepository(SPM context)
+        public InMemoryDetectorAggregationsRepository(InMemoryMOEDatabase context)
         {
             _db = context;
         }
