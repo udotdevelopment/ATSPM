@@ -163,6 +163,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             volumeSeries.Color = Color.Black;
             volumeSeries.Name = "Volume Per Hour";
             volumeSeries.XValueType = ChartValueType.DateTime;
+            
             volumeSeries.YAxisType = AxisType.Secondary;
             SetSeriesLineWidth(volumeSeries);
             chart.Series.Add(volumeSeries);

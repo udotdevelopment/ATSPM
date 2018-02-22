@@ -12,6 +12,8 @@ using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using MOE = MOE.Common.Data.MOE;
 using System.Configuration;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Migrations.Infrastructure;
 
 namespace ConvertDBForHistoricalConfigurations
 {
@@ -103,9 +105,15 @@ namespace ConvertDBForHistoricalConfigurations
         {
             UpdateMigrationsTable();
 
+           
 
             var config = new global::MOE.Common.Migrations.Configuration();
+            config.TargetDatabase = new DbConnectionInfo("SPM");
             var migrator = new DbMigrator(config);
+
+  
+
+
             migrator.Update();
 
         }
