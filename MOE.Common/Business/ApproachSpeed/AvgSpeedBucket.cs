@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
@@ -10,29 +10,9 @@ namespace MOE.Common.Business
 {
     public class AvgSpeedBucket
     {
-        public DateTime XAxis { get; set; }
-
-        public DateTime TotalMph { get; set; }
-
-        public DateTime StartTime { get; }
-
-        public DateTime EndTime { get; }
-
-        public int AvgSpeed { get; }
-
-        public int EightyFifth { get; }
-
-        public int FifteenthPercentile { get; }
-        
-
-        public int MovementDelay { get; }
-
-        public int SummedSpeed { get; }
-        public int SpeedVolume { get; }
-
         private int _binSizeMultiplier;
 
-        public AvgSpeedBucket(DateTime startTime, DateTime endTime, int binSize, int movementdelay, 
+        public AvgSpeedBucket(DateTime startTime, DateTime endTime, int binSize, int movementdelay,
             List<CycleSpeed> cycles)
         {
             StartTime = startTime;
@@ -40,12 +20,10 @@ namespace MOE.Common.Business
             XAxis = endTime;
             _binSizeMultiplier = 60 / binSize;
             MovementDelay = movementdelay;
-            List<int> speedsForBucket = new List<int>();
-            foreach (CycleSpeed cycle in cycles)
-            {
-                if(cycle.StartTime >= startTime && cycle.EndTime <= endTime)
+            var speedsForBucket = new List<int>();
+            foreach (var cycle in cycles)
+                if (cycle.StartTime >= startTime && cycle.EndTime <= endTime)
                     speedsForBucket.AddRange(cycle.SpeedEvents.Select(s => s.MPH));
-            }
             if (speedsForBucket.Count > 0)
             {
                 speedsForBucket.Sort();
@@ -65,17 +43,37 @@ namespace MOE.Common.Business
             }
         }
 
+        public DateTime XAxis { get; set; }
+
+        public DateTime TotalMph { get; set; }
+
+        public DateTime StartTime { get; }
+
+        public DateTime EndTime { get; }
+
+        public int AvgSpeed { get; }
+
+        public int EightyFifth { get; }
+
+        public int FifteenthPercentile { get; }
+
+
+        public int MovementDelay { get; }
+
+        public int SummedSpeed { get; }
+        public int SpeedVolume { get; }
+
         private int GetPercentile(List<int> speeds, double percentile)
         {
-            int percentileValue = 0;
+            var percentileValue = 0;
             try
             {
-                double tempPercentileIndex = (SpeedVolume * percentile)-1;
+                var tempPercentileIndex = SpeedVolume * percentile - 1;
 
                 if (SpeedVolume > 3)
                 {
                     var percentileIndex = 0;
-                    if ((tempPercentileIndex % 1) > 0)
+                    if (tempPercentileIndex % 1 > 0)
                     {
                         percentileIndex = Convert.ToInt32(Math.Round(tempPercentileIndex + .5));
                         percentileValue = speeds[percentileIndex];
@@ -83,8 +81,8 @@ namespace MOE.Common.Business
                     else
                     {
                         percentileIndex = Convert.ToInt32(tempPercentileIndex);
-                        int speed1 = speeds[percentileIndex];
-                        int speed2 = speeds[percentileIndex + 1];
+                        var speed1 = speeds[percentileIndex];
+                        var speed2 = speeds[percentileIndex + 1];
                         double rawEightyfifth = (speed1 + speed2) / 2;
                         percentileValue = Convert.ToInt32(Math.Round(rawEightyfifth));
                     }
@@ -93,17 +91,11 @@ namespace MOE.Common.Business
             catch (Exception e)
             {
                 var errorLog = ApplicationEventRepositoryFactory.Create();
-                errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                    this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                errorLog.QuickAdd(Assembly.GetExecutingAssembly().GetName().ToString(),
+                    GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
                 throw new Exception("Error creating Percentile");
             }
             return percentileValue;
         }
-
-        
-        
-
-            }
-
-
-        }
+    }
+}

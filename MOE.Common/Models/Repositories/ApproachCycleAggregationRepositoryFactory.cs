@@ -2,15 +2,12 @@
 {
     public class ApproachCycleAggregationRepositoryFactory
     {
-        
         private static IApproachCycleAggregationRepository _approachCycleAggregationRepository;
 
         public static IApproachCycleAggregationRepository Create()
         {
             if (_approachCycleAggregationRepository != null)
-            {
                 return _approachCycleAggregationRepository;
-            }
             return new ApproachCycleAggregationRepository();
         }
 

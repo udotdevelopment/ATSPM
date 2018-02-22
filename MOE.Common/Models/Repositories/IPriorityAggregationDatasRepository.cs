@@ -7,6 +7,7 @@ namespace MOE.Common.Models.Repositories
     {
         List<PriorityAggregation> GetPriorityAggregationByVersionIdAndDateRange(int versionId, DateTime start,
             DateTime end);
+
         PriorityAggregation Add(PriorityAggregation priorityAggregation);
         void Update(PriorityAggregation priorityAggregation);
         void Remove(PriorityAggregation priorityAggregation);

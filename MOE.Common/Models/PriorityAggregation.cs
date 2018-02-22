@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.Spatial;
-using System.Web.UI.DataVisualization.Charting;
 using CsvHelper.Configuration;
 
 namespace MOE.Common.Models
@@ -23,6 +20,7 @@ namespace MOE.Common.Models
 
         [ForeignKey("Signal")]
         public int VersionId { get; set; }
+
         public virtual Signal Signal { get; set; }
 
         [Required]
@@ -39,6 +37,7 @@ namespace MOE.Common.Models
 
         [Required]
         public int PriorityServiceExtendedGreen { get; set; }
+
         [Required]
         public int DataPoints { get; set; }
 
@@ -46,7 +45,6 @@ namespace MOE.Common.Models
         {
             public PriorityAggregationClassMap()
             {
-
                 Map(m => m.Signal).Ignore();
                 Map(m => m.Id).Name("Record Number");
                 Map(m => m.BinStartTime).Name("Bin Start Time");

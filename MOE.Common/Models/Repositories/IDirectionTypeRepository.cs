@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace MOE.Common.Models.Repositories
 {
     public interface IDirectionTypeRepository
     {
-        List<Models.DirectionType> GetAllDirections();
+        List<DirectionType> GetAllDirections();
 
         DirectionType GetDirectionByID(int directionID);
 
-        List<System.Web.Mvc.SelectListItem> GetSelectList();
+        List<SelectListItem> GetSelectList();
 
         List<DirectionType> GetDirectionsByIDs(List<int> includedDirections);
     }

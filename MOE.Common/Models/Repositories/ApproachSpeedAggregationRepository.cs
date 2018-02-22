@@ -1,16 +1,12 @@
-﻿using MOE.Common.Models;
-using MOE.Common.Models.Repositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Models.Repositories
 {
     public class ApproachSpeedAggregationRepository : IApproachSpeedAggregationRepository
     {
-        private Models.SPM _db;
+        private readonly SPM _db;
 
 
         public ApproachSpeedAggregationRepository()
@@ -23,9 +19,10 @@ namespace MOE.Common.Models.Repositories
             _db = context;
         }
 
-        public List<ApproachSpeedAggregation> GetSpeedsByApproachIDandDateRange(int approachId, DateTime start, DateTime end)
+        public List<ApproachSpeedAggregation> GetSpeedsByApproachIDandDateRange(int approachId, DateTime start,
+            DateTime end)
         {
-            var activationsList = (from r in this._db.ApproachSpeedAggregations
+            var activationsList = (from r in _db.ApproachSpeedAggregations
                 where r.ApproachId == approachId
                       && r.BinStartTime >= start && r.BinStartTime <= end
                 select r).ToList();
@@ -33,13 +30,12 @@ namespace MOE.Common.Models.Repositories
             return activationsList;
         }
 
-        public void Update(MOE.Common.Models.ApproachSpeedAggregation approachSpeedAggregation)
+        public void Update(ApproachSpeedAggregation approachSpeedAggregation)
         {
             throw new NotImplementedException();
-
         }
 
-        public void Remove(MOE.Common.Models.ApproachSpeedAggregation approachSpeedAggregation)
+        public void Remove(ApproachSpeedAggregation approachSpeedAggregation)
         {
             throw new NotImplementedException();
         }
@@ -48,11 +44,10 @@ namespace MOE.Common.Models.Repositories
         {
             throw new NotImplementedException();
         }
-        public void Add(MOE.Common.Models.ApproachSpeedAggregation approachSpeedAggregation)
+
+        public void Add(ApproachSpeedAggregation approachSpeedAggregation)
         {
             throw new NotImplementedException();
-
-
         }
     }
 }

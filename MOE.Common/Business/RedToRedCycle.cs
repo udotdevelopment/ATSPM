@@ -1,25 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using MOE.Common.Models;
 
 namespace MOE.Common.Business
 {
     /// <summary>
-    /// Data that represents a red to red cycle for a signal phase
+    ///     Data that represents a red to red cycle for a signal phase
     /// </summary>
     public class RedToRedCycle
     {
-        public DateTime StartTime { get; private set; }
-        public DateTime EndTime { get; private set; }
-        public enum EventType {ChangeToRed, ChangeToGreen, ChangeToYellow, GreenTermination, BeginYellowClearance, EndYellowClearance,Unknown };
-        public double GreenLineY { get; private set; }
-        public double YellowLineY { get; private set; }
-        public double RedLineY { get; private set; }
+        public enum EventType
+        {
+            ChangeToRed,
+            ChangeToGreen,
+            ChangeToYellow,
+            GreenTermination,
+            BeginYellowClearance,
+            EndYellowClearance,
+            Unknown
+        }
+
+        public RedToRedCycle(DateTime firstRedEvent, DateTime greenEvent, DateTime yellowEvent, DateTime lastRedEvent)
+        {
+            StartTime = firstRedEvent;
+            GreenEvent = greenEvent;
+            GreenLineY = (greenEvent - StartTime).TotalSeconds;
+            YellowEvent = yellowEvent;
+            YellowLineY = (yellowEvent - StartTime).TotalSeconds;
+            EndTime = lastRedEvent;
+            RedLineY = (lastRedEvent - StartTime).TotalSeconds;
+            //PreemptCollection = new List<DetectorDataPoint>();
+        }
+
+        public DateTime StartTime { get; }
+        public DateTime EndTime { get; }
+        public double GreenLineY { get; }
+        public double YellowLineY { get; }
+
+        public double RedLineY { get; }
+
         //public List<DetectorDataPoint> PreemptCollection { get; }
-        public DateTime GreenEvent { get; private set; }
-        public DateTime YellowEvent { get; private set; }
+        public DateTime GreenEvent { get; }
+
+        public DateTime YellowEvent { get; }
 
         //public double TotalDelay
         //{
@@ -40,7 +61,7 @@ namespace MOE.Common.Business
         //    }
 
         //}
-        
+
         public double TotalGreenTime => (YellowEvent - GreenEvent).TotalSeconds;
         public double TotalYellowTime => (EndTime - YellowEvent).TotalSeconds;
         public double TotalRedTime => (GreenEvent - StartTime).TotalSeconds;
@@ -49,18 +70,6 @@ namespace MOE.Common.Business
         public double TotalYellowTimeMilliseconds => (EndTime - YellowEvent).TotalMilliseconds;
         public double TotalRedTimeMilliseconds => (GreenEvent - StartTime).TotalMilliseconds;
         public double TotalTimeMilliseconds => (EndTime - StartTime).TotalMilliseconds;
-
-        public RedToRedCycle(DateTime firstRedEvent, DateTime greenEvent, DateTime yellowEvent, DateTime lastRedEvent)
-        {
-            StartTime = firstRedEvent;
-            GreenEvent = greenEvent;
-            GreenLineY = (greenEvent - StartTime).TotalSeconds;
-            YellowEvent = yellowEvent;
-            YellowLineY = (yellowEvent - StartTime).TotalSeconds;
-            EndTime = lastRedEvent;
-            RedLineY = (lastRedEvent - StartTime).TotalSeconds;
-            //PreemptCollection = new List<DetectorDataPoint>();
-        }
 
 
         //public void AddPreempt(DetectorDataPoint ddp)

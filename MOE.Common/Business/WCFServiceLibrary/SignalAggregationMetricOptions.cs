@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
 using System.Linq;
-using System.Web.UI.DataVisualization.Charting;
-using MOE.Common.Models;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using System.Web.UI.DataVisualization.Charting;
 using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.FilterExtensions;
+using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
@@ -19,7 +20,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     {
         Sum,
         Average
-    };
+    }
 
     public enum SeriesType
     {
@@ -51,6 +52,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     {
         [DataMember]
         public int Id { get; set; }
+
         [DataMember]
         public string DataName { get; set; }
     }
@@ -58,32 +60,43 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [DataContract]
     public abstract class SignalAggregationMetricOptions : MetricOptions
     {
-        
+        [DataMember] public List<AggregatedDataType> AggregatedDataTypes;
+
         [DataMember]
         public int SeriesWidth { get; set; }
+
         [DataMember]
-        public Business.Bins.BinFactoryOptions TimeOptions { get; set; }
+        public BinFactoryOptions TimeOptions { get; set; }
+
         [DataMember]
         public SeriesChartType SelectedChartType { get; set; }
+
         [DataMember]
         public AggregationType SelectedAggregationType { get; set; }
+
         [DataMember]
         public XAxisType SelectedXAxisType { get; set; }
+
         [DataMember]
         public SeriesType SelectedSeries { get; set; }
+
         [DataMember]
         public Dimension SelectedDimension { get; set; }
+
         [DataMember]
-        public List<FilterExtensions.FilterSignal> FilterSignals { get; set; } = new List<FilterSignal>();
-        [DataMember]
-        public List<AggregatedDataType> AggregatedDataTypes;
+        public List<FilterSignal> FilterSignals { get; set; } = new List<FilterSignal>();
+
         [DataMember]
         public List<FilterDirection> FilterDirections { get; set; }
+
         [DataMember]
         public List<FilterMovement> FilterMovements { get; set; }
+
         [DataMember]
         public AggregatedDataType SelectedAggregatedDataType { get; set; }
+
         public List<Models.Signal> Signals { get; set; } = new List<Models.Signal>();
+
         public virtual string ChartTitle
         {
             get
@@ -91,35 +104,34 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 string chartTitle;
                 chartTitle = "AggregationChart\n";
                 chartTitle += TimeOptions.Start.ToString();
-                if(TimeOptions.End > TimeOptions.Start)
-                    chartTitle += " to " + TimeOptions.End.ToString() +"\n";
+                if (TimeOptions.End > TimeOptions.Start)
+                    chartTitle += " to " + TimeOptions.End + "\n";
                 if (TimeOptions.DaysOfWeek != null)
-                {
                     foreach (var dayOfWeek in TimeOptions.DaysOfWeek)
-                    {
-                        chartTitle += dayOfWeek.ToString() + " ";
-                    }
-                }
+                        chartTitle += dayOfWeek + " ";
                 if (TimeOptions.TimeOfDayStartHour != null && TimeOptions.TimeOfDayStartMinute != null &&
                     TimeOptions.TimeOfDayEndHour != null && TimeOptions.TimeOfDayEndMinute != null)
-                {
-                    chartTitle += "Limited to: " + new TimeSpan(0, TimeOptions.TimeOfDayStartHour.Value, TimeOptions.TimeOfDayStartMinute.Value, 0)
-                        .ToString() + " to " + new TimeSpan(0, TimeOptions.TimeOfDayEndHour.Value,
-                        TimeOptions.TimeOfDayEndMinute.Value, 0).ToString() +"\n";
-                }
-                chartTitle += TimeOptions.SelectedBinSize.ToString() + " bins ";
-                chartTitle += SelectedXAxisType.ToString() + " Aggregation ";
+                    chartTitle += "Limited to: " +
+                                  new TimeSpan(0, TimeOptions.TimeOfDayStartHour.Value,
+                                      TimeOptions.TimeOfDayStartMinute.Value, 0) + " to " + new TimeSpan(0,
+                                      TimeOptions.TimeOfDayEndHour.Value,
+                                      TimeOptions.TimeOfDayEndMinute.Value, 0) + "\n";
+                chartTitle += TimeOptions.SelectedBinSize + " bins ";
+                chartTitle += SelectedXAxisType + " Aggregation ";
                 chartTitle += SelectedAggregationType.ToString();
                 return chartTitle;
             }
         }
+
+        public abstract string YAxisTitle { get; }
 
 
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
             GetSignalObjects();
-            if (SelectedXAxisType == XAxisType.TimeOfDay && TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
+            if (SelectedXAxisType == XAxisType.TimeOfDay &&
+                TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
             {
                 TimeOptions.TimeOption = BinFactoryOptions.TimeOptions.TimePeriod;
                 TimeOptions.TimeOfDayStartHour = 0;
@@ -127,15 +139,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 TimeOptions.TimeOfDayEndHour = 23;
                 TimeOptions.TimeOfDayEndMinute = 59;
                 if (TimeOptions.DaysOfWeek == null)
-                {
-                    TimeOptions.DaysOfWeek = new List<DayOfWeek>{ DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday};
-                }
+                    TimeOptions.DaysOfWeek = new List<DayOfWeek>
+                    {
+                        DayOfWeek.Sunday,
+                        DayOfWeek.Monday,
+                        DayOfWeek.Tuesday,
+                        DayOfWeek.Wednesday,
+                        DayOfWeek.Thursday,
+                        DayOfWeek.Friday,
+                        DayOfWeek.Saturday
+                    };
             }
             GetChartByXAxisAggregation();
             return ReturnList;
         }
 
-        virtual protected void GetChartByXAxisAggregation()
+        protected virtual void GetChartByXAxisAggregation()
         {
             switch (SelectedXAxisType)
             {
@@ -158,19 +177,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             try
             {
-
                 if (Signals == null)
-                {
                     Signals = new List<Models.Signal>();
-                }
                 if (Signals.Count == 0)
                 {
-                    var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-                    foreach (FilterSignal filterSignal in FilterSignals)
-                    {
+                    var signalRepository = SignalsRepositoryFactory.Create();
+                    foreach (var filterSignal in FilterSignals)
                         if (!filterSignal.Exclude)
                         {
-                            var signals = signalRepository.GetSignalsBetweenDates(filterSignal.SignalId, StartDate, EndDate);
+                            var signals =
+                                signalRepository.GetSignalsBetweenDates(filterSignal.SignalId, StartDate, EndDate);
                             foreach (var signal in signals)
                             {
                                 RemoveApproachesByFilter(filterSignal, signal);
@@ -178,78 +194,75 @@ namespace MOE.Common.Business.WCFServiceLibrary
                             }
                             Signals.AddRange(signals);
                         }
-                    }
                 }
-
             }
             catch (Exception e)
             {
                 var errorLog = ApplicationEventRepositoryFactory.Create();
-                errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                    this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                errorLog.QuickAdd(Assembly.GetExecutingAssembly().GetName().ToString(),
+                    GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
                 throw new Exception("Unable to apply signal filter");
             }
         }
 
         protected void SetMetricType()
         {
-            var metricTypeRepository = MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
+            var metricTypeRepository = MetricTypeRepositoryFactory.Create();
             MetricType = metricTypeRepository.GetMetricsByID(MetricTypeID);
         }
 
         protected void SaveChartImage(Chart chart)
         {
-            string chartName = CreateFileName(MetricType.Abbreviation);
+            var chartName = CreateFileName(MetricType.Abbreviation);
             MetricFileLocation = ConfigurationManager.AppSettings["ImageLocation"];
             MetricWebPath = ConfigurationManager.AppSettings["ImageWebLocation"];
-            chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
+            chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
             ReturnList.Add(MetricWebPath + chartName);
         }
 
         protected string CreateFileName(string MetricAbbreviation)
         {
-            string fileName = MetricAbbreviation +
-                              "-" +
-                              StartDate.Year.ToString() +
-                              StartDate.ToString("MM") +
-                              StartDate.ToString("dd") +
-                              StartDate.ToString("HH") +
-                              StartDate.ToString("mm") +
-                              "-" +
-                              EndDate.Year.ToString() +
-                              EndDate.ToString("MM") +
-                              EndDate.ToString("dd") +
-                              EndDate.ToString("HH") +
-                              EndDate.ToString("mm-");
-            Random r = new Random();
+            var fileName = MetricAbbreviation +
+                           "-" +
+                           StartDate.Year +
+                           StartDate.ToString("MM") +
+                           StartDate.ToString("dd") +
+                           StartDate.ToString("HH") +
+                           StartDate.ToString("mm") +
+                           "-" +
+                           EndDate.Year +
+                           EndDate.ToString("MM") +
+                           EndDate.ToString("dd") +
+                           EndDate.ToString("HH") +
+                           EndDate.ToString("mm-");
+            var r = new Random();
             fileName += r.Next().ToString();
             fileName += ".jpg";
             return fileName;
         }
 
-       
 
-        virtual protected void GetTimeCharts()
+        protected virtual void GetTimeCharts()
         {
             Chart chart;
-                switch (SelectedSeries)
-                {
-                    case SeriesType.Signal:
-                        chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
-                        GetTimeXAxisSignalSeriesChart(Signals, chart);
-                        SaveChartImage(chart);
-                        break;
-                    case SeriesType.Route:
-                        chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
-                        GetTimeXAxisRouteSeriesChart(Signals, chart);
-                        SaveChartImage(chart);
+            switch (SelectedSeries)
+            {
+                case SeriesType.Signal:
+                    chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
+                    GetTimeXAxisSignalSeriesChart(Signals, chart);
+                    SaveChartImage(chart);
                     break;
-                    default:
-                        throw new Exception("Invalid X-Axis Series Combination");
-                }
+                case SeriesType.Route:
+                    chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
+                    GetTimeXAxisRouteSeriesChart(Signals, chart);
+                    SaveChartImage(chart);
+                    break;
+                default:
+                    throw new Exception("Invalid X-Axis Series Combination");
+            }
         }
 
-        virtual protected void GetSignalCharts()
+        protected virtual void GetSignalCharts()
         {
             Chart chart;
             switch (SelectedSeries)
@@ -266,16 +279,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void GetSignalsXAxisSignalSeriesChart(List<Models.Signal> signals, Chart chart)
         {
-            int signalXAxisNumber = 1;
-            string seriesName = "Signals";
-            Series series = CreateSeries(0, seriesName);
+            var signalXAxisNumber = 1;
+            var seriesName = "Signals";
+            var series = CreateSeries(0, seriesName);
             foreach (var signal in signals)
             {
-                List<BinsContainer> binsContainers = GetBinsContainersBySignal(signal);
-                DataPoint dataPoint = new DataPoint();
+                var binsContainers = GetBinsContainersBySignal(signal);
+                var dataPoint = new DataPoint();
                 dataPoint.SetValueY(SelectedAggregationType == AggregationType.Sum
                     ? binsContainers.Sum(b => b.SumValue)
-                    : Convert.ToInt32(Math.Round(binsContainers.Sum(b => b.SumValue) / (double)signals.Count)));
+                    : Convert.ToInt32(Math.Round(binsContainers.Sum(b => b.SumValue) / (double) signals.Count)));
                 dataPoint.AxisLabel = signal.SignalDescription;
                 series.Points.Add(dataPoint);
                 signalXAxisNumber++;
@@ -286,22 +299,18 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void GetTimeXAxisRouteSeriesChart(List<Models.Signal> signals, Chart chart)
         {
-
-            Series series = CreateSeries(0, "Route");
-            List<BinsContainer> binsContainers =  GetBinsContainersByRoute(signals);
+            var series = CreateSeries(0, "Route");
+            var binsContainers = GetBinsContainersByRoute(signals);
             foreach (var binsContainer in binsContainers)
-            {
-                foreach (var bin in binsContainer.Bins)
-                {
-                    series.Points.Add(SelectedAggregationType == AggregationType.Sum ? GetDataPointForSum(bin) : GetDataPointForAverage(bin));
-                }
-            }
+            foreach (var bin in binsContainer.Bins)
+                series.Points.Add(SelectedAggregationType == AggregationType.Sum
+                    ? GetDataPointForSum(bin)
+                    : GetDataPointForAverage(bin));
             chart.Series.Add(series);
-
         }
-        
 
-        virtual protected void GetTimeOfDayCharts()
+
+        protected virtual void GetTimeOfDayCharts()
         {
             Chart chart;
             switch (SelectedSeries)
@@ -324,51 +333,47 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected void GetTimeOfDayXAxisRouteSeriesChart(List<Models.Signal> signals, Chart chart)
         {
             SetTimeOfDayXAxisMinimum(chart);
-            List<BinsContainer> binsContainers = GetBinsContainersByRoute(signals);
-            Series series = CreateSeries(0, "Route");
+            var binsContainers = GetBinsContainersByRoute(signals);
+            var series = CreateSeries(0, "Route");
             chart.Series.Add(GetTimeAggregateSeries(series, binsContainers));
         }
 
         protected void GetTimeOfDayXAxisSignalSeriesChart(List<Models.Signal> signals, Chart chart)
         {
             SetTimeOfDayXAxisMinimum(chart);
-            ConcurrentBag<Series> seriesList = new ConcurrentBag<Series>();
+            var seriesList = new ConcurrentBag<Series>();
             Parallel.For(0, signals.Count, i => // foreach (var signal in signals)
             {
-                List<BinsContainer> binsContainers = GetBinsContainersBySignal(signals[i]);
-                Series series = CreateSeries(i, signals[i].SignalDescription);
+                var binsContainers = GetBinsContainersBySignal(signals[i]);
+                var series = CreateSeries(i, signals[i].SignalDescription);
                 seriesList.Add(GetTimeAggregateSeries(series, binsContainers));
             });
             foreach (var signal in signals)
-            {
                 chart.Series.Add(seriesList.FirstOrDefault(s => s.Name == signal.SignalDescription));
-            }
         }
 
         protected void SetTimeOfDayXAxisMinimum(Chart chart)
         {
             if (TimeOptions.TimeOfDayStartHour != null && TimeOptions.TimeOfDayStartMinute.Value != null)
-            {
                 chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
                     new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day,
                             TimeOptions.TimeOfDayStartHour.Value, TimeOptions.TimeOfDayStartMinute.Value, 0)
                         .AddHours(-1).ToOADate();
-            }
         }
-        
+
         protected void GetTimeXAxisSignalSeriesChart(List<Models.Signal> signals, Chart chart)
         {
-            int i = 1;
+            var i = 1;
             foreach (var signal in signals)
             {
-                Series series = CreateSeries(i, signal.SignalDescription);
-                List<BinsContainer> binsContainers = GetBinsContainersBySignal(signal);
-                BinsContainer container = binsContainers.FirstOrDefault();
+                var series = CreateSeries(i, signal.SignalDescription);
+                var binsContainers = GetBinsContainersBySignal(signal);
+                var container = binsContainers.FirstOrDefault();
                 if (container != null)
                 {
                     foreach (var bin in container.Bins)
                     {
-                        DataPoint dataPoint = GetDataPointForSum(bin);
+                        var dataPoint = GetDataPointForSum(bin);
                         series.Points.Add(dataPoint);
                     }
                     chart.Series.Add(series);
@@ -382,74 +387,57 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             RemoveApproachesFromSignalByDirection(signal);
             RemoveDetectorsFromSignalByMovement(signal);
-            var approachRepository = Models.Repositories.ApproachRepositoryFactory.Create();
-            var excludedApproachIds = filterSignal.FilterApproaches.Where(f => f.Exclude).Select(f => f.ApproachId).ToList();
+            var approachRepository = ApproachRepositoryFactory.Create();
+            var excludedApproachIds =
+                filterSignal.FilterApproaches.Where(f => f.Exclude).Select(f => f.ApproachId).ToList();
             var excludedApproaches = approachRepository.GetApproachesByIds(excludedApproachIds);
             foreach (var excludedApproach in excludedApproaches)
             {
                 var approachesToExclude = signal.Approaches.Where(a =>
-                    a.DirectionTypeID == excludedApproach.DirectionTypeID
-                    && a.ProtectedPhaseNumber == excludedApproach.ProtectedPhaseNumber
-                    && a.PermissivePhaseNumber == excludedApproach.PermissivePhaseNumber
-                    && a.IsPermissivePhaseOverlap ==
-                    excludedApproach.IsPermissivePhaseOverlap
-                    && a.IsProtectedPhaseOverlap ==
-                    excludedApproach.IsProtectedPhaseOverlap)
-                .ToList();
+                        a.DirectionTypeID == excludedApproach.DirectionTypeID
+                        && a.ProtectedPhaseNumber == excludedApproach.ProtectedPhaseNumber
+                        && a.PermissivePhaseNumber == excludedApproach.PermissivePhaseNumber
+                        && a.IsPermissivePhaseOverlap ==
+                        excludedApproach.IsPermissivePhaseOverlap
+                        && a.IsProtectedPhaseOverlap ==
+                        excludedApproach.IsProtectedPhaseOverlap)
+                    .ToList();
                 foreach (var approachToExclude in approachesToExclude)
-                {
                     signal.Approaches.Remove(approachToExclude);
-                }
                 foreach (var approach in signal.Approaches)
-                {
-                    foreach (var filterApproach in filterSignal.FilterApproaches.Where(f => !f.Exclude))
-                    {
-                        RemoveDetectorsFromApproachByFilter(filterApproach, approach);
-                    }
-                }
-
+                foreach (var filterApproach in filterSignal.FilterApproaches.Where(f => !f.Exclude))
+                    RemoveDetectorsFromApproachByFilter(filterApproach, approach);
             }
         }
 
         private void RemoveApproachesFromSignalByDirection(Models.Signal signal)
         {
-            List<Models.Approach> approachesToRemove = new List<Approach>();
+            var approachesToRemove = new List<Approach>();
             foreach (var approach in signal.Approaches)
-            {
-                if (FilterDirections.Where(f => !f.Include).Select(f => f.DirectionTypeId).ToList().Contains(approach.DirectionTypeID))
-                {
+                if (FilterDirections.Where(f => !f.Include).Select(f => f.DirectionTypeId).ToList()
+                    .Contains(approach.DirectionTypeID))
                     approachesToRemove.Add(approach);
-                }
-            }
             foreach (var approach in approachesToRemove)
-            {
                 signal.Approaches.Remove(approach);
-            }
         }
 
         private void RemoveDetectorsFromSignalByMovement(Models.Signal signal)
         {
-            List<Models.Detector> detectorsToRemove = new List<Models.Detector>();
+            var detectorsToRemove = new List<Models.Detector>();
             foreach (var approach in signal.Approaches)
             {
                 foreach (var detector in approach.Detectors)
-                {
                     if (FilterMovements.Where(f => !f.Include).Select(f => f.MovementTypeId).ToList()
                         .Contains(detector.MovementTypeID ?? -1))
-                    {
                         detectorsToRemove.Add(detector);
-                    }
-                }
                 foreach (var detectorToRemove in detectorsToRemove)
-                {
                     approach.Detectors.Remove(detectorToRemove);
-                }
             }
         }
 
         private static void RemoveDetectorsFromApproachByFilter(FilterApproach filterApproach, Approach approach)
         {
-            var detectorRepository = Models.Repositories.DetectorRepositoryFactory.Create();
+            var detectorRepository = DetectorRepositoryFactory.Create();
             var excludedDetectorIds =
                 filterApproach.FilterDetectors.Where(f => f.Exclude).Select(f => f.Id).ToList();
             var excludedDetectors = detectorRepository.GetDetectorsByIds(excludedDetectorIds);
@@ -463,15 +451,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     && d.DetChannel == excludedDetector.DetChannel
                 ).ToList();
                 foreach (var detectorToExclude in detectorsToExclude)
-                {
                     approach.Detectors.Remove(detectorToExclude);
-                }
             }
         }
 
         protected DataPoint GetDataPointForSum(Bin bin)
         {
-            DataPoint dataPoint = new DataPoint(bin.Start.ToOADate(), bin.Sum);
+            var dataPoint = new DataPoint(bin.Start.ToOADate(), bin.Sum);
             if (bin.Start.Hour == 0 && bin.Start.Minute == 0)
                 dataPoint.AxisLabel = bin.Start.ToString("MM/dd/yyyy HH:mm");
             return dataPoint;
@@ -479,7 +465,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected DataPoint GetDataPointForAverage(Bin bin)
         {
-            DataPoint dataPoint = new DataPoint(bin.Start.ToOADate(), bin.Average);
+            var dataPoint = new DataPoint(bin.Start.ToOADate(), bin.Average);
             if (bin.Start.Hour == 0 && bin.Start.Minute == 0)
                 dataPoint.AxisLabel = StartDate.ToString("MM/dd/yyyy HH:mm");
             return dataPoint;
@@ -487,7 +473,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected DataPoint GetContainerDataPointForSum(BinsContainer bin)
         {
-            DataPoint dataPoint = new DataPoint(bin.Start.ToOADate(), bin.SumValue);
+            var dataPoint = new DataPoint(bin.Start.ToOADate(), bin.SumValue);
             if (bin.Start.Hour == 0 && bin.Start.Minute == 0)
                 dataPoint.AxisLabel = StartDate.ToString("MM/dd/yyyy HH:mm");
             return dataPoint;
@@ -495,7 +481,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected DataPoint GetContainerDataPointForAverage(BinsContainer bin)
         {
-            DataPoint dataPoint = new DataPoint(bin.Start.ToOADate(), bin.AverageValue);
+            var dataPoint = new DataPoint(bin.Start.ToOADate(), bin.AverageValue);
             if (bin.Start.Hour == 0 && bin.Start.Minute == 0)
                 dataPoint.AxisLabel = StartDate.ToString("MM/dd/yyyy HH:mm");
             return dataPoint;
@@ -504,7 +490,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected Series GetTimeAggregateSeries(Series series, List<BinsContainer> binsContainers)
         {
-            DateTime endTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day,
+            var endTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day,
                 TimeOptions.TimeOfDayEndHour ?? 0, TimeOptions.TimeOfDayEndMinute ?? 0, 0);
 
             int minutes;
@@ -525,16 +511,17 @@ namespace MOE.Common.Business.WCFServiceLibrary
             SetDataPointsForTimeAggregationSeries(binsContainers, series, endTime, minutes);
             return series;
         }
-        
-        private void SetDataPointsForTimeAggregationSeries(List<BinsContainer> binsContainers, Series series, DateTime endTime, int minutes)
+
+        private void SetDataPointsForTimeAggregationSeries(List<BinsContainer> binsContainers, Series series,
+            DateTime endTime, int minutes)
         {
-            for (DateTime startTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, TimeOptions.TimeOfDayStartHour ?? 0, TimeOptions.TimeOfDayStartMinute ?? 0, 0);
-                                                startTime < endTime;
-                                                startTime = startTime.AddMinutes(minutes))
-            {
+            for (var startTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day,
+                    TimeOptions.TimeOfDayStartHour ?? 0, TimeOptions.TimeOfDayStartMinute ?? 0, 0);
+                startTime < endTime;
+                startTime = startTime.AddMinutes(minutes))
                 if (SelectedAggregationType == AggregationType.Sum)
                 {
-                    int sumValue = binsContainers.FirstOrDefault().Bins.Where(b =>
+                    var sumValue = binsContainers.FirstOrDefault().Bins.Where(b =>
                         b.Start.Hour == startTime.Hour && b.Start.Minute == startTime.Minute).Sum(b => b.Sum);
                     series.Points.AddXY(startTime, sumValue);
                 }
@@ -543,18 +530,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     double averageValue = 0;
                     if (binsContainers.FirstOrDefault().Bins.Any(b =>
                         b.Start.Hour == startTime.Hour && b.Start.Minute == startTime.Minute))
-                    {
                         averageValue = binsContainers.FirstOrDefault().Bins.Where(b =>
                             b.Start.Hour == startTime.Hour && b.Start.Minute == startTime.Minute).Average(b => b.Sum);
-                    }
                     series.Points.AddXY(startTime, Convert.ToInt32(Math.Round(averageValue)));
                 }
-            }
         }
 
         protected Series CreateSeries(int seriesColorNumber, string seriesName)
         {
-            Series series = new Series(); series.BorderWidth = SeriesWidth;
+            var series = new Series();
+            series.BorderWidth = SeriesWidth;
             series.Color = GetSeriesColorByNumber(seriesColorNumber);
             series.Name = seriesName;
             series.ChartArea = "ChartArea1";
@@ -565,9 +550,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected Color GetSeriesColorByNumber(int colorNumber)
         {
             while (colorNumber > 10)
-            {
                 colorNumber = colorNumber - 10;
-            }
 
             switch (colorNumber)
             {
@@ -607,14 +590,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     return Color.Black;
             }
         }
-        
 
-       
+
         protected abstract List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal);
         protected abstract List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals);
-        public abstract string YAxisTitle { get; }
-
-
     }
-
 }

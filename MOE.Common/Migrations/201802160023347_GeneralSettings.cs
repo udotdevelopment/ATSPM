@@ -1,8 +1,7 @@
+using System.Data.Entity.Migrations;
+
 namespace MOE.Common.Migrations
 {
-    using System;
-    using System.Data.Entity.Migrations;
-    
     public partial class GeneralSettings : DbMigration
     {
         public override void Up()
@@ -11,7 +10,7 @@ namespace MOE.Common.Migrations
             AddColumn("dbo.ApplicationSettings", "ImagePath", c => c.String());
             AddColumn("dbo.ApplicationSettings", "RawDataCountLimit", c => c.Int());
         }
-        
+
         public override void Down()
         {
             DropColumn("dbo.ApplicationSettings", "RawDataCountLimit");

@@ -1,46 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Models.Repositories
 {
     public class DetectionTypeRepository : IDetectionTypeRepository
     {
-        Models.SPM db = new SPM();
+        private readonly SPM db = new SPM();
 
 
-        public List<Models.DetectionType> GetAllDetectionTypes()
+        public List<DetectionType> GetAllDetectionTypes()
         {
             db.Configuration.LazyLoadingEnabled = false;
-            List<Models.DetectionType> detectionTypes = (from r in db.DetectionTypes
-                                         select r).ToList();
+            var detectionTypes = (from r in db.DetectionTypes
+                select r).ToList();
 
             return detectionTypes;
         }
 
-        public List<Models.DetectionType> GetAllDetectionTypesNoBasic()
+        public List<DetectionType> GetAllDetectionTypesNoBasic()
         {
-            List<Models.DetectionType> detectionTypes = (from r in db.DetectionTypes
-                                                         where r.Description != "Basic"
-                                                         select r).ToList();
+            var detectionTypes = (from r in db.DetectionTypes
+                where r.Description != "Basic"
+                select r).ToList();
 
             return detectionTypes;
-        }
-
-        public class DetectetorWithMetricAbbreviation
-        {
-            public int DetectionTypeID { get; set; }
-            public string Description { get; set; }
-            public List<String> Abreviaiton { get; set; }
-
-            
         }
 
         //public List<Models.Repositories.DetectionTypeRepository.DetectetorWithMetricAbbreviation> GetAllDetectionTypesWithSupportedMetricAbbreviations()
         //{
-            
+
         //    db.Configuration.LazyLoadingEnabled = false;
         //    List<Models.Repositories.DetectionTypeRepository.DetectetorWithMetricAbbreviation> detectionTypes = (from d in db.DetectionTypes
         //                          join m in db.MetricTypes on d.DetectionTypeID equals m.DetectionTypeID into a
@@ -58,30 +46,20 @@ namespace MOE.Common.Models.Repositories
         //}
 
 
-
-        public Models.DetectionType GetDetectionTypeByDetectionTypeID(int detectionTypeID)
+        public DetectionType GetDetectionTypeByDetectionTypeID(int detectionTypeID)
         {
-            var detectionType = (from r in db.DetectionTypes
-                         where r.DetectionTypeID == detectionTypeID
-                         select r);
+            var detectionType = from r in db.DetectionTypes
+                where r.DetectionTypeID == detectionTypeID
+                select r;
 
             return detectionType.FirstOrDefault();
         }
 
-        public List<Models.DetectionType> GetDetectionTypeByDetectionTypeIDs(List<int> detectionTypeIDs)
+        public void Update(DetectionType detectionType)
         {
-           return (from r in db.DetectionTypes
-                                 where detectionTypeIDs.Contains(r.DetectionTypeID)
-                                 select r).ToList();
-        }
-
-        public void Update(MOE.Common.Models.DetectionType detectionType)
-        {
-
-
-            MOE.Common.Models.DetectionType g = (from r in db.DetectionTypes
-                                         where r.DetectionTypeID == detectionType.DetectionTypeID
-                                         select r).FirstOrDefault();
+            var g = (from r in db.DetectionTypes
+                where r.DetectionTypeID == detectionType.DetectionTypeID
+                select r).FirstOrDefault();
             if (g != null)
             {
                 db.Entry(g).CurrentValues.SetValues(detectionType);
@@ -91,19 +69,14 @@ namespace MOE.Common.Models.Repositories
             {
                 db.DetectionTypes.Add(detectionType);
                 db.SaveChanges();
-
             }
-
-
         }
 
-        public void Remove(MOE.Common.Models.DetectionType detectionType)
+        public void Remove(DetectionType detectionType)
         {
-
-
-            MOE.Common.Models.DetectionType g = (from r in db.DetectionTypes
-                                         where r.DetectionTypeID == detectionType.DetectionTypeID
-                                         select r).FirstOrDefault();
+            var g = (from r in db.DetectionTypes
+                where r.DetectionTypeID == detectionType.DetectionTypeID
+                select r).FirstOrDefault();
             if (g != null)
             {
                 db.DetectionTypes.Remove(g);
@@ -111,20 +84,30 @@ namespace MOE.Common.Models.Repositories
             }
         }
 
-        public void Add(MOE.Common.Models.DetectionType detectionType)
+        public void Add(DetectionType detectionType)
         {
-
-
-            MOE.Common.Models.DetectionType g = (from r in db.DetectionTypes
-                                         where r.DetectionTypeID == detectionType.DetectionTypeID
-                                         select r).FirstOrDefault();
+            var g = (from r in db.DetectionTypes
+                where r.DetectionTypeID == detectionType.DetectionTypeID
+                select r).FirstOrDefault();
             if (g == null)
             {
                 db.DetectionTypes.Add(g);
                 db.SaveChanges();
             }
-
         }
 
+        public List<DetectionType> GetDetectionTypeByDetectionTypeIDs(List<int> detectionTypeIDs)
+        {
+            return (from r in db.DetectionTypes
+                where detectionTypeIDs.Contains(r.DetectionTypeID)
+                select r).ToList();
+        }
+
+        public class DetectetorWithMetricAbbreviation
+        {
+            public int DetectionTypeID { get; set; }
+            public string Description { get; set; }
+            public List<string> Abreviaiton { get; set; }
+        }
     }
 }

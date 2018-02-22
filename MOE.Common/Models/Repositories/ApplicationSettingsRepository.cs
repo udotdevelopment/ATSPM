@@ -1,45 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Models.Repositories
 {
     public class ApplicationSettingsRepository : IApplicationSettingsRepository
     {
-        Models.SPM db = new Models.SPM();
+        private SPM db = new SPM();
 
         public ApplicationSettingsRepository()
         {
         }
-        public ApplicationSettingsRepository(Models.SPM context)
+
+        public ApplicationSettingsRepository(SPM context)
         {
             db = context;
         }
-        public void SetApplicationSettingsRepository(Models.SPM context)
-        {
-            db = context;
-        }
-        public Models.WatchDogApplicationSettings GetWatchDogSettings()
+
+        public WatchDogApplicationSettings GetWatchDogSettings()
         {
             return db.WatchdogApplicationSettings.First();
         }
-        public Models.GeneralSettings GetGeneralSettings()
+
+        public GeneralSettings GetGeneralSettings()
         {
             return db.GeneralSettings.First();
         }
-        public void Save(Models.WatchDogApplicationSettings watchDogApplicationSettings)
+
+        public void Save(WatchDogApplicationSettings watchDogApplicationSettings)
         {
             db.Entry(watchDogApplicationSettings).State = EntityState.Modified;
-                db.SaveChanges();
+            db.SaveChanges();
         }
 
-        public void Save(Models.GeneralSettings generalSettings)
+        public void Save(GeneralSettings generalSettings)
         {
             db.Entry(generalSettings).State = EntityState.Modified;
             db.SaveChanges();
+        }
+
+        public void SetApplicationSettingsRepository(SPM context)
+        {
+            db = context;
         }
     }
 }

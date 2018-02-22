@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Drawing;
-using System.Linq;
-using System.Threading;
-using System.Text;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Models;
 
@@ -15,36 +9,8 @@ namespace MOE.Common.Business
 {
     public class LinkPivotPair
     {
-        public double SecondsAdded { get; set; } = 0;
-        public double MaxArrivalOnGreen { get; set; } = 0;
-        public double MaxPercentAog { get; set; } = 0;
-        public List<SignalPhase> UpstreamPcd { get; } = new List<SignalPhase>();
-        public List<SignalPhase> DownstreamPcd { get; } = new List<SignalPhase>();
-        public double PaogUpstreamBefore { get; } = 0;
-        public double PaogDownstreamBefore { get; set; } = 0;
-        public double PaogDownstreamPredicted { get; set; } = 0;
-        public double PaogUpstreamPredicted { get; set; } = 0;
-        public double AogUpstreamBefore { get; set; } = 0;
-        public double AogDownstreamBefore { get; set; } = 0;
-        public double AogDownstreamPredicted { get; set; } = 0;
-        public double AogUpstreamPredicted { get; set; } = 0;
-        public double TotalVolumeUpstream { get; set; } = 0;
-        public double TotalVolumeDownstream { get; set; } = 0;
-        public string ResultChartLocation { get; private set; }
-        public Dictionary<int, double> ResultsGraph { get; } = new Dictionary<int, double>();
-        public Dictionary<int, double> UpstreamResultsGraph { get; } = new Dictionary<int, double>();
-        public Dictionary<int, double> DownstreamResultsGraph { get; } = new Dictionary<int, double>();
-        public List<LinkPivotPCDDisplay> Display { get; } = new List<LinkPivotPCDDisplay>();
-        public double AogTotalBefore { get; set; }
-        public double PaogTotalBefore { get; set; }
-        public double AogTotalPredicted { get; set; }
-        public double PaogTotalPredicted { get; set; }
-        public Approach SignalApproach { get; }
-        public Approach DownSignalApproach { get; }
-        public DateTime StartDate { get; }
-        public int LinkNumber { get; set; }
-
-        public LinkPivotPair(Approach signalApproach, Approach downSignalApproach, DateTime startDate, DateTime endDate, int cycleTime, 
+        public LinkPivotPair(Approach signalApproach, Approach downSignalApproach, DateTime startDate, DateTime endDate,
+            int cycleTime,
             string chartLocation, double bias, string biasDirection, List<DateTime> dates, int linkNumber)
         {
             SignalApproach = signalApproach;
@@ -54,52 +20,24 @@ namespace MOE.Common.Business
             SetPcds(downSignalApproach, endDate, dates);
             //Check to see if both directions have detection if so analyze both
             if (UpstreamPcd.Count > 0 && DownstreamPcd.Count > 0)
-            {
-                //if a bias was provided bias the results in the direction specified
                 if (bias != 0)
-                {
                     GetBiasedLinkPivot(cycleTime, bias, biasDirection, dates);
-                }
                 //If no bias is provided
                 else
-                {
                     GetUnbiasedLinkPivot(cycleTime, dates);
-                }
-
-                //remove the seconds from the pcd to produce the optimized pcd
-                //int secondsToRemove = Convert.ToInt32(cycleTime - secondsAdded);
-                //upstreamPCD.LinkPivotAddSeconds(secondsToRemove);
-                //downstreamPCD.LinkPivotAddSeconds(secondsToRemove * -1);
-
-                //pAOGUpstreamPredicted = upstreamPCD.PercentArrivalOnGreen;
-                //aOGUpstreamPredicted = upstreamPCD.TotalArrivalOnGreen;
-                //pAOGDownstreamPredicted = downstreamPCD.PercentArrivalOnGreen;
-                //aOGDownstreamPredicted = downstreamPCD.TotalArrivalOnGreen;
-
-                //upstreamAfterPCDPath = CreateChart(upstreamPCD, startDate, endDate, signalLocation,
-                //            "after", chartLocation);
-                //downstreamAfterPCDPath = CreateChart(downstreamPCD, startDate, endDate, downSignalLocation,
-                //            "after", chartLocation);
-            }
             //If only upstream has detection do analysis for upstream only
             else if (DownstreamPcd.Count == 0 && UpstreamPcd.Count > 0)
-            {
-                //if a bias was provided by the user apply it to the upstream results
                 if (bias != 0)
                 {
                     double upstreamBias = 1;
                     double downstreamBias = 1;
                     if (biasDirection == "Downstream")
-                    {
-                        downstreamBias = 1 + (bias / 100);
-                    }
+                        downstreamBias = 1 + bias / 100;
                     else
-                    {
-                        upstreamBias = 1 + (bias / 100);
-                    }
+                        upstreamBias = 1 + bias / 100;
                     //set the original values to compare against
-                    double maxBiasArrivalOnGreen = (AogDownstreamBefore * downstreamBias) +
-                        (AogUpstreamBefore * upstreamBias);
+                    var maxBiasArrivalOnGreen = AogDownstreamBefore * downstreamBias +
+                                                AogUpstreamBefore * upstreamBias;
                     MaxArrivalOnGreen = AogUpstreamBefore;
                     //Add the total to the results grid
                     ResultsGraph.Add(0, MaxArrivalOnGreen);
@@ -109,19 +47,19 @@ namespace MOE.Common.Business
                     PaogUpstreamPredicted = Math.Round(AogUpstreamBefore / TotalVolumeUpstream, 2) * 100;
                     SecondsAdded = 0;
 
-                    for (int i = 1; i <= cycleTime; i++)
+                    for (var i = 1; i <= cycleTime; i++)
                     {
                         double totalBiasArrivalOnGreen = 0;
                         double totalArrivalOnGreen = 0;
                         double totalUpstreamAog = 0;
 
 
-                        for (int index = 0; index < dates.Count; index++)
+                        for (var index = 0; index < dates.Count; index++)
                         {
                             UpstreamPcd[index].LinkPivotAddSeconds(-1);
 
-                            totalBiasArrivalOnGreen += (UpstreamPcd[index].TotalArrivalOnGreen * upstreamBias);
-                            totalArrivalOnGreen = +(UpstreamPcd[index].TotalArrivalOnGreen);
+                            totalBiasArrivalOnGreen += UpstreamPcd[index].TotalArrivalOnGreen * upstreamBias;
+                            totalArrivalOnGreen = +UpstreamPcd[index].TotalArrivalOnGreen;
                             totalUpstreamAog += UpstreamPcd[index].TotalArrivalOnGreen;
                         }
                         //Add the total aog to the dictionary
@@ -147,7 +85,8 @@ namespace MOE.Common.Business
                     //set the original values to compare against
                     AogTotalBefore = AogDownstreamBefore + AogUpstreamBefore;
                     MaxArrivalOnGreen = AogUpstreamBefore;
-                    PaogTotalBefore = Math.Round(AogTotalBefore / (TotalVolumeDownstream + TotalVolumeUpstream), 2) * 100;
+                    PaogTotalBefore = Math.Round(AogTotalBefore / (TotalVolumeDownstream + TotalVolumeUpstream), 2) *
+                                      100;
 
 
                     //Add the total aog to the dictionary
@@ -157,18 +96,16 @@ namespace MOE.Common.Business
                     AogUpstreamPredicted = AogUpstreamBefore;
                     PaogUpstreamPredicted = Math.Round(AogUpstreamBefore / TotalVolumeUpstream, 2) * 100;
                     SecondsAdded = 0;
-                    for (int i = 1; i <= cycleTime; i++)
+                    for (var i = 1; i <= cycleTime; i++)
                     {
-
                         double totalArrivalOnGreen = 0;
                         double totalUpstreamAog = 0;
 
-                        for (int index = 0; index < dates.Count; index++)
+                        for (var index = 0; index < dates.Count; index++)
                         {
                             UpstreamPcd[index].LinkPivotAddSeconds(-1);
-                            totalArrivalOnGreen = +(UpstreamPcd[index].TotalArrivalOnGreen);
+                            totalArrivalOnGreen = +UpstreamPcd[index].TotalArrivalOnGreen;
                             totalUpstreamAog += UpstreamPcd[index].TotalArrivalOnGreen;
-
                         }
                         //Add the total aog to the dictionary
                         ResultsGraph.Add(i, totalArrivalOnGreen);
@@ -186,25 +123,18 @@ namespace MOE.Common.Business
                         PaogTotalPredicted = PaogUpstreamPredicted;
                     }
                 }
-            }
             //If downsteam only has detection
             else if (UpstreamPcd.Count == 0 && DownstreamPcd.Count > 0)
-            {
-                //if a bias was provided bias the results in the direction specified
                 if (bias != 0)
                 {
                     double upstreamBias = 1;
                     double downstreamBias = 1;
                     if (biasDirection == "Downstream")
-                    {
-                        downstreamBias = 1 + (bias / 100);
-                    }
+                        downstreamBias = 1 + bias / 100;
                     else
-                    {
-                        upstreamBias = 1 + (bias / 100);
-                    }
+                        upstreamBias = 1 + bias / 100;
                     //set the original values to compare against
-                    double maxBiasArrivalOnGreen = (AogDownstreamBefore * downstreamBias);
+                    var maxBiasArrivalOnGreen = AogDownstreamBefore * downstreamBias;
                     MaxArrivalOnGreen = AogDownstreamBefore + AogUpstreamBefore;
                     //Add the total aog to the dictionary
                     ResultsGraph.Add(0, MaxArrivalOnGreen);
@@ -213,18 +143,17 @@ namespace MOE.Common.Business
                     PaogDownstreamPredicted = Math.Round(AogDownstreamBefore / TotalVolumeDownstream, 2) * 100;
                     SecondsAdded = 0;
 
-                    for (int i = 1; i <= cycleTime; i++)
+                    for (var i = 1; i <= cycleTime; i++)
                     {
                         double totalBiasArrivalOnGreen = 0;
                         double totalArrivalOnGreen = 0;
                         double totalDownstreamAog = 0;
 
-                        for (int index = 0; index < dates.Count; index++)
+                        for (var index = 0; index < dates.Count; index++)
                         {
-
                             DownstreamPcd[index].LinkPivotAddSeconds(1);
-                            totalBiasArrivalOnGreen += (DownstreamPcd[index].TotalArrivalOnGreen * downstreamBias);
-                            totalArrivalOnGreen = +(DownstreamPcd[index].TotalArrivalOnGreen);
+                            totalBiasArrivalOnGreen += DownstreamPcd[index].TotalArrivalOnGreen * downstreamBias;
+                            totalArrivalOnGreen = +DownstreamPcd[index].TotalArrivalOnGreen;
                             totalDownstreamAog += DownstreamPcd[index].TotalArrivalOnGreen;
                         }
                         //Add the total aog to the dictionary
@@ -255,16 +184,15 @@ namespace MOE.Common.Business
                     PaogDownstreamPredicted = Math.Round(AogDownstreamBefore / TotalVolumeDownstream, 2) * 100;
                     SecondsAdded = 0;
 
-                    for (int i = 1; i <= cycleTime; i++)
+                    for (var i = 1; i <= cycleTime; i++)
                     {
-
                         double totalArrivalOnGreen = 0;
                         double totalDownstreamAog = 0;
 
-                        for (int index = 0; index < dates.Count; index++)
+                        for (var index = 0; index < dates.Count; index++)
                         {
                             DownstreamPcd[index].LinkPivotAddSeconds(1);
-                            totalArrivalOnGreen = +(DownstreamPcd[index].TotalArrivalOnGreen);
+                            totalArrivalOnGreen = +DownstreamPcd[index].TotalArrivalOnGreen;
                             totalDownstreamAog += DownstreamPcd[index].TotalArrivalOnGreen;
                         }
                         //Add the total aog to the dictionary
@@ -282,17 +210,37 @@ namespace MOE.Common.Business
                     AogTotalPredicted = MaxArrivalOnGreen;
                     PaogTotalPredicted = PaogDownstreamPredicted;
                 }
-
-
-                //pAOGDownstreamPredicted = downstreamPCD.PercentArrivalOnGreen;
-                //aOGDownstreamPredicted = downstreamPCD.TotalArrivalOnGreen;
-
-                //downstreamAfterPCDPath = CreateChart(downstreamPCD, startDate, endDate, downSignalLocation,
-                //            "after", chartLocation);
-            }
             GetNewResultsChart(chartLocation);
-
         }
+
+        public double SecondsAdded { get; set; }
+        public double MaxArrivalOnGreen { get; set; }
+        public double MaxPercentAog { get; set; }
+        public List<SignalPhase> UpstreamPcd { get; } = new List<SignalPhase>();
+        public List<SignalPhase> DownstreamPcd { get; } = new List<SignalPhase>();
+        public double PaogUpstreamBefore { get; } = 0;
+        public double PaogDownstreamBefore { get; set; }
+        public double PaogDownstreamPredicted { get; set; }
+        public double PaogUpstreamPredicted { get; set; }
+        public double AogUpstreamBefore { get; set; }
+        public double AogDownstreamBefore { get; set; }
+        public double AogDownstreamPredicted { get; set; }
+        public double AogUpstreamPredicted { get; set; }
+        public double TotalVolumeUpstream { get; set; }
+        public double TotalVolumeDownstream { get; set; }
+        public string ResultChartLocation { get; private set; }
+        public Dictionary<int, double> ResultsGraph { get; } = new Dictionary<int, double>();
+        public Dictionary<int, double> UpstreamResultsGraph { get; } = new Dictionary<int, double>();
+        public Dictionary<int, double> DownstreamResultsGraph { get; } = new Dictionary<int, double>();
+        public List<LinkPivotPCDDisplay> Display { get; } = new List<LinkPivotPCDDisplay>();
+        public double AogTotalBefore { get; set; }
+        public double PaogTotalBefore { get; set; }
+        public double AogTotalPredicted { get; set; }
+        public double PaogTotalPredicted { get; set; }
+        public Approach SignalApproach { get; }
+        public Approach DownSignalApproach { get; }
+        public DateTime StartDate { get; }
+        public int LinkNumber { get; set; }
 
         private void GetUnbiasedLinkPivot(int cycleTime, List<DateTime> dates)
         {
@@ -311,19 +259,18 @@ namespace MOE.Common.Business
             PaogUpstreamPredicted = Math.Round(AogUpstreamBefore / TotalVolumeUpstream, 2) * 100;
             SecondsAdded = 0;
 
-            for (int i = 1; i <= cycleTime; i++)
+            for (var i = 1; i <= cycleTime; i++)
             {
-
                 double totalArrivalOnGreen = 0;
                 double totalUpstreamAog = 0;
                 double totalDownstreamAog = 0;
 
-                for (int index = 0; index < dates.Count; index++)
+                for (var index = 0; index < dates.Count; index++)
                 {
                     UpstreamPcd[index].LinkPivotAddSeconds(-1);
                     DownstreamPcd[index].LinkPivotAddSeconds(1);
-                    totalArrivalOnGreen += (UpstreamPcd[index].TotalArrivalOnGreen) +
-                        (DownstreamPcd[index].TotalArrivalOnGreen);
+                    totalArrivalOnGreen += UpstreamPcd[index].TotalArrivalOnGreen +
+                                           DownstreamPcd[index].TotalArrivalOnGreen;
                     totalUpstreamAog += UpstreamPcd[index].TotalArrivalOnGreen;
                     totalDownstreamAog += DownstreamPcd[index].TotalArrivalOnGreen;
                 }
@@ -352,18 +299,17 @@ namespace MOE.Common.Business
             double upstreamBias = 1;
             double downstreamBias = 1;
             if (biasDirection == "Downstream")
-            {
-                downstreamBias = 1 + (bias / 100);
-            }
+                downstreamBias = 1 + bias / 100;
             else
-            {
-                upstreamBias = 1 + (bias / 100);
-            }
+                upstreamBias = 1 + bias / 100;
             //set the original values to compare against
-            AogTotalBefore = (AogDownstreamBefore * downstreamBias) +
-                (AogUpstreamBefore * upstreamBias);
-            PaogTotalBefore = Math.Round(AogTotalBefore / ((TotalVolumeDownstream * downstreamBias) + (TotalVolumeUpstream * upstreamBias)), 2) * 100;
-            double maxBiasArrivalOnGreen = AogTotalBefore;
+            AogTotalBefore = AogDownstreamBefore * downstreamBias +
+                             AogUpstreamBefore * upstreamBias;
+            PaogTotalBefore =
+                Math.Round(
+                    AogTotalBefore / (TotalVolumeDownstream * downstreamBias + TotalVolumeUpstream * upstreamBias), 2) *
+                100;
+            var maxBiasArrivalOnGreen = AogTotalBefore;
             MaxArrivalOnGreen = AogDownstreamBefore + AogUpstreamBefore;
 
 
@@ -377,24 +323,23 @@ namespace MOE.Common.Business
             PaogUpstreamPredicted = Math.Round(AogUpstreamBefore / TotalVolumeUpstream, 2) * 100;
             SecondsAdded = 0;
 
-            for (int i = 1; i <= cycleTime; i++)
+            for (var i = 1; i <= cycleTime; i++)
             {
                 double totalBiasArrivalOnGreen = 0;
                 double totalArrivalOnGreen = 0;
                 double totalUpstreamAog = 0;
                 double totalDownstreamAog = 0;
 
-                for (int index = 0; index < dates.Count; index++)
+                for (var index = 0; index < dates.Count; index++)
                 {
                     UpstreamPcd[index].LinkPivotAddSeconds(-1);
                     DownstreamPcd[index].LinkPivotAddSeconds(1);
-                    totalBiasArrivalOnGreen += (UpstreamPcd[index].TotalArrivalOnGreen * upstreamBias) +
-                        (DownstreamPcd[index].TotalArrivalOnGreen * downstreamBias);
-                    totalArrivalOnGreen = +(UpstreamPcd[index].TotalArrivalOnGreen) +
-                        (DownstreamPcd[index].TotalArrivalOnGreen);
+                    totalBiasArrivalOnGreen += UpstreamPcd[index].TotalArrivalOnGreen * upstreamBias +
+                                               DownstreamPcd[index].TotalArrivalOnGreen * downstreamBias;
+                    totalArrivalOnGreen = +UpstreamPcd[index].TotalArrivalOnGreen +
+                                          DownstreamPcd[index].TotalArrivalOnGreen;
                     totalUpstreamAog += UpstreamPcd[index].TotalArrivalOnGreen;
                     totalDownstreamAog += DownstreamPcd[index].TotalArrivalOnGreen;
-
                 }
                 //Add the total aog to the dictionary
                 ResultsGraph.Add(i, totalBiasArrivalOnGreen);
@@ -410,7 +355,7 @@ namespace MOE.Common.Business
                     PaogDownstreamPredicted = Math.Round(totalDownstreamAog / TotalVolumeDownstream, 2) * 100;
                     PaogUpstreamPredicted = Math.Round(totalUpstreamAog / TotalVolumeUpstream, 2) * 100;
                     MaxPercentAog =
-                    SecondsAdded = i;
+                        SecondsAdded = i;
                 }
             }
             //Get the link totals
@@ -420,15 +365,15 @@ namespace MOE.Common.Business
 
         private void SetPcds(Approach downSignalApproach, DateTime endDate, List<DateTime> dates)
         {
-            foreach (DateTime dt in dates)
+            foreach (var dt in dates)
             {
-                DateTime tempStartDate = dt;
-                DateTime tempEndDate = new DateTime(dt.Year, dt.Month, dt.Day, endDate.Hour, endDate.Minute, endDate.Second);
-                SignalPhase upstreamPcd = new SignalPhase(tempStartDate, tempEndDate, SignalApproach, false, 15, 13, false);
+                var tempStartDate = dt;
+                var tempEndDate = new DateTime(dt.Year, dt.Month, dt.Day, endDate.Hour, endDate.Minute, endDate.Second);
+                var upstreamPcd = new SignalPhase(tempStartDate, tempEndDate, SignalApproach, false, 15, 13, false);
                 UpstreamPcd.Add(upstreamPcd);
                 AogUpstreamBefore += upstreamPcd.TotalArrivalOnGreen;
                 TotalVolumeUpstream += upstreamPcd.TotalVolume;
-                SignalPhase downstreamPcd = new SignalPhase(
+                var downstreamPcd = new SignalPhase(
                     tempStartDate, tempEndDate, downSignalApproach, false, 15, 13, false);
                 DownstreamPcd.Add(downstreamPcd);
                 AogDownstreamBefore += downstreamPcd.TotalArrivalOnGreen;
@@ -446,9 +391,8 @@ namespace MOE.Common.Business
 
         private void GetNewResultsChart(string chartLocation)
         {
-            
-            Chart chart = new Chart();
-           
+            var chart = new Chart();
+
             //Set the chart properties
             chart.ImageType = ChartImageType.Jpeg;
             chart.Height = 650;
@@ -456,13 +400,13 @@ namespace MOE.Common.Business
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
 
             //Set the chart title
-            Title title = new Title();
+            var title = new Title();
             title.Text = "Max Arrivals On Green By Second";
             title.Font = new Font(FontFamily.GenericSansSerif, 20);
             chart.Titles.Add(title);
 
             //Create the chart legend
-            Legend chartLegend = new Legend();
+            var chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
             //chartLegend.LegendStyle = LegendStyle.Table;
             chartLegend.Docking = Docking.Left;
@@ -477,7 +421,7 @@ namespace MOE.Common.Business
 
 
             //Create the chart area
-            ChartArea chartArea = new ChartArea();
+            var chartArea = new ChartArea();
             chartArea.Name = "ChartArea1";
             chartArea.AxisY.Minimum = 0;
             chartArea.AxisY.Title = "Arrivals On Green";
@@ -492,25 +436,25 @@ namespace MOE.Common.Business
             chartArea.AxisX.Interval = 10;
             chartArea.AxisX.LabelAutoFitStyle = LabelAutoFitStyles.None;
             chartArea.AxisX.LabelStyle.Font = new Font(FontFamily.GenericSansSerif, 20);
-            
+
             chart.ChartAreas.Add(chartArea);
 
             //Add the line series
-            Series lineSeries = new Series();
+            var lineSeries = new Series();
             lineSeries.ChartType = SeriesChartType.Line;
             lineSeries.Color = Color.Black;
             lineSeries.Name = "Total AOG";
             lineSeries.XValueType = ChartValueType.Int32;
             lineSeries.BorderWidth = 5;
             chart.Series.Add(lineSeries);
-            
-            foreach(KeyValuePair<int,double> d in ResultsGraph)
-            chart.Series["Total AOG"].Points.AddXY(
-                            d.Key,
-                            d.Value);
+
+            foreach (var d in ResultsGraph)
+                chart.Series["Total AOG"].Points.AddXY(
+                    d.Key,
+                    d.Value);
 
             //Add the line series
-            Series downstreamLineSeries = new Series();
+            var downstreamLineSeries = new Series();
             downstreamLineSeries.ChartType = SeriesChartType.Line;
             downstreamLineSeries.Color = Color.Blue;
             downstreamLineSeries.Name = "Downstream AOG";
@@ -518,13 +462,13 @@ namespace MOE.Common.Business
             downstreamLineSeries.BorderWidth = 3;
             chart.Series.Add(downstreamLineSeries);
 
-            foreach (KeyValuePair<int, double> d in DownstreamResultsGraph)
+            foreach (var d in DownstreamResultsGraph)
                 chart.Series["Downstream AOG"].Points.AddXY(
-                                d.Key,
-                                d.Value);
+                    d.Key,
+                    d.Value);
 
             //Add the line series
-            Series upstreamLineSeries = new Series();
+            var upstreamLineSeries = new Series();
             upstreamLineSeries.ChartType = SeriesChartType.Line;
             upstreamLineSeries.Color = Color.Green;
             upstreamLineSeries.Name = "Upstream AOG";
@@ -532,30 +476,29 @@ namespace MOE.Common.Business
             upstreamLineSeries.BorderWidth = 3;
             chart.Series.Add(upstreamLineSeries);
 
-            foreach (KeyValuePair<int, double> d in UpstreamResultsGraph)
+            foreach (var d in UpstreamResultsGraph)
                 chart.Series["Upstream AOG"].Points.AddXY(
-                                d.Key,
-                                d.Value);
-            
-                string chartName = "LinkPivot-" + SignalApproach.SignalID + SignalApproach.DirectionType.Abbreviation +
-                DownSignalApproach.SignalID + DownSignalApproach.DirectionType.Abbreviation + 
-                DateTime.Now.Day.ToString()+
-                DateTime.Now.Hour.ToString() +
-                DateTime.Now.Minute.ToString() +
-                DateTime.Now.Second.ToString() +
-                ".jpg";
-            
-                chart.SaveImage(chartLocation + @"LinkPivot\" + chartName,
+                    d.Key,
+                    d.Value);
+
+            var chartName = "LinkPivot-" + SignalApproach.SignalID + SignalApproach.DirectionType.Abbreviation +
+                            DownSignalApproach.SignalID + DownSignalApproach.DirectionType.Abbreviation +
+                            DateTime.Now.Day +
+                            DateTime.Now.Hour +
+                            DateTime.Now.Minute +
+                            DateTime.Now.Second +
+                            ".jpg";
+
+            chart.SaveImage(chartLocation + @"LinkPivot\" + chartName,
                 ChartImageFormat.Jpeg);
 
             ResultChartLocation = ConfigurationManager.AppSettings["ImageWebLocation"] +
-                    @"LinkPivot/" + chartName;
-            
+                                  @"LinkPivot/" + chartName;
         }
 
-       
+
         /// <summary>
-        /// Creates a pcd chart specific to the Link Pivot
+        ///     Creates a pcd chart specific to the Link Pivot
         /// </summary>
         /// <param name="sp"></param>
         /// <param name="startDate"></param>
@@ -567,34 +510,33 @@ namespace MOE.Common.Business
         private string CreateChart(SignalPhase sp, DateTime startDate, DateTime endDate, string location,
             string chartNameSuffix, string chartLocation)
         {
-            Chart chart = new Chart();
+            var chart = new Chart();
             //Display the PDC chart
-            chart = GetNewChart(startDate, endDate, sp.Approach.SignalID, sp.Approach.ProtectedPhaseNumber, 
+            chart = GetNewChart(startDate, endDate, sp.Approach.SignalID, sp.Approach.ProtectedPhaseNumber,
                 sp.Approach.DirectionType.Description,
-                    location, sp.Approach.IsProtectedPhaseOverlap, 150, 2000, false, 2);
+                location, sp.Approach.IsProtectedPhaseOverlap, 150, 2000, false, 2);
 
             AddDataToChart(chart, sp, startDate, false, true);
 
             //Create the File Name
-            string chartName = "LinkPivot-" +
-                sp.Approach.SignalID +
-                "-" +
-                sp.Approach.ProtectedPhaseNumber.ToString() +
-                "-" +
-                startDate.Year.ToString() +
-                startDate.ToString("MM") +
-                startDate.ToString("dd") +
-                startDate.ToString("HH") +
-                startDate.ToString("mm") +
-                "-" +
-                endDate.Year.ToString() +
-                endDate.ToString("MM") +
-                endDate.ToString("dd") +
-                endDate.ToString("HH") +
-                endDate.ToString("mm-") +
-                chartNameSuffix +
-                ".jpg";
-
+            var chartName = "LinkPivot-" +
+                            sp.Approach.SignalID +
+                            "-" +
+                            sp.Approach.ProtectedPhaseNumber +
+                            "-" +
+                            startDate.Year +
+                            startDate.ToString("MM") +
+                            startDate.ToString("dd") +
+                            startDate.ToString("HH") +
+                            startDate.ToString("mm") +
+                            "-" +
+                            endDate.Year +
+                            endDate.ToString("MM") +
+                            endDate.ToString("dd") +
+                            endDate.ToString("HH") +
+                            endDate.ToString("mm-") +
+                            chartNameSuffix +
+                            ".jpg";
 
 
             //Save an image of the chart
@@ -603,7 +545,7 @@ namespace MOE.Common.Business
         }
 
         /// <summary>
-        /// Gets a new chart for the pcd Diagram
+        ///     Gets a new chart for the pcd Diagram
         /// </summary>
         /// <param name="graphStartDate"></param>
         /// <param name="graphEndDate"></param>
@@ -616,13 +558,11 @@ namespace MOE.Common.Business
             int phase, string direction, string location, bool isOverlap, double y1AxisMaximum,
             double y2AxisMaximum, bool showVolume, int dotSize)
         {
-            Chart chart = new Chart();
-            string extendedDirection = string.Empty;
-            string movementType = "Phase";
+            var chart = new Chart();
+            var extendedDirection = string.Empty;
+            var movementType = "Phase";
             if (isOverlap)
-            {
                 movementType = "Overlap";
-            }
 
 
             //Gets direction for the title
@@ -646,11 +586,11 @@ namespace MOE.Common.Business
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
 
             //Set the chart title
-            Title title = new Title();
-            title.Text = location + "Signal " + signalId.ToString() + " "
-                + movementType + ": " + phase.ToString() +
-                " " + extendedDirection + "\n" + graphStartDate.ToString("f") +
-                " - " + graphEndDate.ToString("f");
+            var title = new Title();
+            title.Text = location + "Signal " + signalId + " "
+                         + movementType + ": " + phase +
+                         " " + extendedDirection + "\n" + graphStartDate.ToString("f") +
+                         " - " + graphEndDate.ToString("f");
             title.Font = new Font(FontFamily.GenericSansSerif, 20);
             chart.Titles.Add(title);
 
@@ -670,9 +610,9 @@ namespace MOE.Common.Business
 
 
             //Create the chart area
-            ChartArea chartArea = new ChartArea();
+            var chartArea = new ChartArea();
             chartArea.Name = "ChartArea1";
-            chartArea.AxisY.Maximum = y1AxisMaximum;           
+            chartArea.AxisY.Maximum = y1AxisMaximum;
             chartArea.AxisY.Minimum = 0;
             chartArea.AxisY.Title = "Cycle Time (Seconds) ";
             chartArea.AxisY.TitleFont = new Font(FontFamily.GenericSansSerif, 20);
@@ -697,7 +637,7 @@ namespace MOE.Common.Business
             chartArea.AxisX.LabelStyle.Format = "HH";
             chartArea.AxisX.LabelAutoFitStyle = LabelAutoFitStyles.None;
             chartArea.AxisX.LabelStyle.Font = new Font(FontFamily.GenericSansSerif, 20);
-            
+
             //chartArea.AxisX.Minimum = 0;
 
             chartArea.AxisX2.Enabled = AxisEnabled.True;
@@ -712,7 +652,7 @@ namespace MOE.Common.Business
             chart.ChartAreas.Add(chartArea);
 
             //Add the point series
-            Series pointSeries = new Series();
+            var pointSeries = new Series();
             pointSeries.ChartType = SeriesChartType.Point;
             pointSeries.Color = Color.Black;
             pointSeries.Name = "Detector Activation";
@@ -721,7 +661,7 @@ namespace MOE.Common.Business
             chart.Series.Add(pointSeries);
 
             //Add the green series
-            Series greenSeries = new Series();
+            var greenSeries = new Series();
             greenSeries.ChartType = SeriesChartType.Line;
             greenSeries.Color = Color.DarkGreen;
             greenSeries.Name = "Change to Green";
@@ -730,7 +670,7 @@ namespace MOE.Common.Business
             chart.Series.Add(greenSeries);
 
             //Add the yellow series
-            Series yellowSeries = new Series();
+            var yellowSeries = new Series();
             yellowSeries.ChartType = SeriesChartType.Line;
             yellowSeries.Color = Color.Yellow;
             yellowSeries.Name = "Change to Yellow";
@@ -738,7 +678,7 @@ namespace MOE.Common.Business
             chart.Series.Add(yellowSeries);
 
             //Add the red series
-            Series redSeries = new Series();
+            var redSeries = new Series();
             redSeries.ChartType = SeriesChartType.Line;
             redSeries.Color = Color.Red;
             redSeries.Name = "Change to Red";
@@ -746,14 +686,13 @@ namespace MOE.Common.Business
             chart.Series.Add(redSeries);
 
             //Add the red series
-            Series volumeSeries = new Series();
+            var volumeSeries = new Series();
             volumeSeries.ChartType = SeriesChartType.Line;
             volumeSeries.Color = Color.Black;
             volumeSeries.Name = "Volume Per Hour";
             volumeSeries.XValueType = ChartValueType.DateTime;
             volumeSeries.YAxisType = AxisType.Secondary;
             chart.Series.Add(volumeSeries);
-
 
 
             //Add points at the start and and of the x axis to ensure
@@ -765,18 +704,19 @@ namespace MOE.Common.Business
         }
 
         /// <summary>
-        /// Adds data points to a graph with the series GreenLine, YellowLine, Redline
-        /// and Points already added.
+        ///     Adds data points to a graph with the series GreenLine, YellowLine, Redline
+        ///     and Points already added.
         /// </summary>
         /// <param name="chart"></param>
         /// <param name="signalPhase"></param>
         /// <param name="startDate"></param>
-        private void AddDataToChart(Chart chart, SignalPhase signalPhase, DateTime startDate, bool showVolume, bool showArrivalOnGreen)
+        private void AddDataToChart(Chart chart, SignalPhase signalPhase, DateTime startDate, bool showVolume,
+            bool showArrivalOnGreen)
         {
             decimal totalDetectorHits = 0;
             decimal totalOnGreenArrivals = 0;
             decimal percentArrivalOnGreen = 0;
-            foreach (CyclePcd cycle in signalPhase.Cycles)
+            foreach (var cycle in signalPhase.Cycles)
             {
                 chart.Series["Change to Green"].Points.AddXY(
                     //pcd.StartTime,
@@ -791,81 +731,67 @@ namespace MOE.Common.Business
                     cycle.EndTime,
                     cycle.RedLineY);
                 totalDetectorHits += cycle.DetectorEvents.Count;
-                foreach (DetectorDataPoint detectorPoint in cycle.DetectorEvents)
+                foreach (var detectorPoint in cycle.DetectorEvents)
                 {
                     chart.Series["Detector Activation"].Points.AddXY(
                         //pcd.StartTime, 
                         detectorPoint.TimeStamp,
                         detectorPoint.YPoint);
                     if (detectorPoint.YPoint > cycle.GreenLineY && detectorPoint.YPoint < cycle.RedLineY)
-                    {
                         totalOnGreenArrivals++;
-                    }
                 }
             }
 
             if (showVolume)
-            {
-                foreach (Volume v in signalPhase.Volume.Items)
-                {
+                foreach (var v in signalPhase.Volume.Items)
                     chart.Series["Volume Per Hour"].Points.AddXY(v.XAxis, v.YAxis);
-                }
-            }
 
             //if arrivals on green is selected add the data to the chart
             if (showArrivalOnGreen)
             {
                 if (totalDetectorHits > 0)
-                {
-                    percentArrivalOnGreen = (totalOnGreenArrivals / totalDetectorHits) * 100;
-                }
+                    percentArrivalOnGreen = totalOnGreenArrivals / totalDetectorHits * 100;
                 else
-                {
                     percentArrivalOnGreen = 0;
-                }
-                Title title = new Title();
-                title.Text = Math.Round(percentArrivalOnGreen).ToString() + "% AoG";
-                 title.Font = new Font(FontFamily.GenericSansSerif, 20);
-                 chart.Titles.Add(title);
+                var title = new Title();
+                title.Text = Math.Round(percentArrivalOnGreen) + "% AoG";
+                title.Font = new Font(FontFamily.GenericSansSerif, 20);
+                chart.Titles.Add(title);
                 SetPlanStrips(signalPhase.Plans, chart, startDate);
             }
         }
 
 
         /// <summary>
-        /// Adds plan strips to the chart
+        ///     Adds plan strips to the chart
         /// </summary>
         /// <param name="planCollection"></param>
         /// <param name="chart"></param>
         /// <param name="graphStartDate"></param>
         protected void SetPlanStrips(List<PlanPcd> planCollection, Chart chart, DateTime graphStartDate)
         {
-            int backGroundColor = 1;
-            foreach (PlanPcd plan in planCollection)
+            var backGroundColor = 1;
+            foreach (var plan in planCollection)
             {
-                StripLine stripline = new StripLine();
+                var stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans
                 if (backGroundColor % 2 == 0)
-                {
                     stripline.BackColor = Color.FromArgb(120, Color.LightGray);
-                }
                 else
-                {
                     stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
-                }
 
                 //Set the stripline properties
                 stripline.IntervalOffset = (plan.StartTime - graphStartDate).TotalHours;
                 stripline.IntervalOffsetType = DateTimeIntervalType.Hours;
                 stripline.Interval = 1;
-                stripline.IntervalType = DateTimeIntervalType.Days;               
+                stripline.IntervalType = DateTimeIntervalType.Days;
                 stripline.StripWidth = (plan.EndTime - plan.StartTime).TotalHours;
                 stripline.StripWidthType = DateTimeIntervalType.Hours;
 
                 chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
 
                 //Add a corrisponding custom label for each strip
-                CustomLabel Plannumberlabel = new CustomLabel();
+                var Plannumberlabel = new CustomLabel();
                 Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
                 Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
                 switch (plan.PlanNumber)
@@ -880,7 +806,7 @@ namespace MOE.Common.Business
                         Plannumberlabel.Text = "Unknown";
                         break;
                     default:
-                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+                        Plannumberlabel.Text = "Plan " + plan.PlanNumber;
 
                         break;
                 }
@@ -889,22 +815,22 @@ namespace MOE.Common.Business
                 Plannumberlabel.RowIndex = 3;
                 chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(Plannumberlabel);
 
-                CustomLabel aogLabel = new CustomLabel();
+                var aogLabel = new CustomLabel();
                 aogLabel.FromPosition = plan.StartTime.ToOADate();
                 aogLabel.ToPosition = plan.EndTime.ToOADate();
-                aogLabel.Text = plan.PercentArrivalOnGreen.ToString() + "% AoG\n" +
-                    plan.PercentGreenTime.ToString() + "% GT";
+                aogLabel.Text = plan.PercentArrivalOnGreen + "% AoG\n" +
+                                plan.PercentGreenTime + "% GT";
 
                 aogLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 aogLabel.ForeColor = Color.Blue;
                 aogLabel.RowIndex = 2;
                 chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(aogLabel);
 
-                CustomLabel statisticlabel = new CustomLabel();
+                var statisticlabel = new CustomLabel();
                 statisticlabel.FromPosition = plan.StartTime.ToOADate();
                 statisticlabel.ToPosition = plan.EndTime.ToOADate();
                 statisticlabel.Text =
-                    plan.PlatoonRatio.ToString() + " PR";
+                    plan.PlatoonRatio + " PR";
                 statisticlabel.ForeColor = Color.Maroon;
                 statisticlabel.RowIndex = 1;
                 chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(statisticlabel);
@@ -919,10 +845,7 @@ namespace MOE.Common.Business
 
                 //Change the background color counter for alternating color
                 backGroundColor++;
-
             }
         }
-
-        
     }
 }

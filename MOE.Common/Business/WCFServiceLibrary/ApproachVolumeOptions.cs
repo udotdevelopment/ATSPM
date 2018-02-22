@@ -1,62 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.DataVisualization.Charting;
-using MOE.Common.Business;
-using MOE.Common.Models;
-using System.Runtime.Serialization;
-using System.Data;
-using System.Data.SqlClient;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business.ApproachVolume;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
     [DataContract]
-    public class ApproachVolumeOptions: MetricOptions
+    public class ApproachVolumeOptions : MetricOptions
     {
-        [Required]
-        [DataMember]
-        [Display(Name = "Volume Bin Size")]
-        public int SelectedBinSize { get; set; }
-        [DataMember]
-        public List<int> BinSizeList { get; set; }
-        [DataMember]
-        [Display(Name = "Show Directional Splits")]
-        public bool ShowDirectionalSplits { get; set; }
-        [DataMember]
-        [Display(Name = "Show Total Volume")]
-        public bool ShowTotalVolume { get; set; }
-        [DataMember]
-        [Display(Name = "Show NB/WB Volume")]
-        public bool ShowNBWBVolume { get; set; }
-        [DataMember]
-        [Display(Name = "Show SB/EB Volume")]
-        public bool ShowSBEBVolume { get; set; }
-        [DataMember]
-        [Display(Name = "Show TMC Detection")]
-        public bool ShowTMCDetection { get; set; }
-        [DataMember]
-        [Display(Name = "Show Advance Detection")]
-        public bool ShowAdvanceDetection { get; set; }
+        public List<MetricInfo> MetricInfoList;
 
-        public List<MOE.Common.Business.ApproachVolume.MetricInfo> MetricInfoList;  
 
-        
-
-        public ApproachVolumeOptions(string signalID, DateTime startDate, DateTime endDate, double? yAxisMax, int binSize, bool showDirectionalSplits,
-            bool showTotalVolume, bool showNBWBVolume, bool showSBEBVolume, bool showTMCDetection, bool showAdvanceDetection)
+        public ApproachVolumeOptions(string signalID, DateTime startDate, DateTime endDate, double? yAxisMax,
+            int binSize, bool showDirectionalSplits,
+            bool showTotalVolume, bool showNBWBVolume, bool showSBEBVolume, bool showTMCDetection,
+            bool showAdvanceDetection)
         {
             SignalID = signalID;
             //StartDate = startDate;
             //EndDate = endDate;
             YAxisMax = yAxisMax;
-            
+
             SelectedBinSize = binSize;
             ShowTotalVolume = showTotalVolume;
             ShowDirectionalSplits = showDirectionalSplits;
@@ -68,13 +35,44 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public ApproachVolumeOptions()
         {
-            
             BinSizeList = new List<int>();
             BinSizeList.Add(15);
             BinSizeList.Add(5);
             MetricTypeID = 7;
             SetDefaults();
         }
+
+        [Required]
+        [DataMember]
+        [Display(Name = "Volume Bin Size")]
+        public int SelectedBinSize { get; set; }
+
+        [DataMember]
+        public List<int> BinSizeList { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Directional Splits")]
+        public bool ShowDirectionalSplits { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Total Volume")]
+        public bool ShowTotalVolume { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show NB/WB Volume")]
+        public bool ShowNBWBVolume { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show SB/EB Volume")]
+        public bool ShowSBEBVolume { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show TMC Detection")]
+        public bool ShowTMCDetection { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Advance Detection")]
+        public bool ShowAdvanceDetection { get; set; }
 
         public void SetDefaults()
         {
@@ -91,157 +89,140 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
-            List<string> returnList = new List<string>();
-            MetricInfoList  = new List<ApproachVolume.MetricInfo>();
-            MOE.Common.Models.Repositories.ISignalsRepository signalsRepository = 
-                MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            var returnList = new List<string>();
+            MetricInfoList = new List<MetricInfo>();
+            var signalsRepository =
+                SignalsRepositoryFactory.Create();
             //var signal = signalsRepository.GetSignalBySignalID(this.SignalID);    
             var signal = signalsRepository.GetVersionOfSignalByDate(SignalID, StartDate);
-            var NSAdvanceVolumeApproaches = new List<MOE.Common.Business.ApproachVolume.Approach>();
-            var NSTMCVolumeApproaches = new List<MOE.Common.Business.ApproachVolume.Approach>();
-            var EWAdvanceVolumeApproaches = new List<MOE.Common.Business.ApproachVolume.Approach>();
-            var EWTMCVolumeApproaches = new List<MOE.Common.Business.ApproachVolume.Approach>(); 
-            
+            var NSAdvanceVolumeApproaches = new List<Approach>();
+            var NSTMCVolumeApproaches = new List<Approach>();
+            var EWAdvanceVolumeApproaches = new List<Approach>();
+            var EWTMCVolumeApproaches = new List<Approach>();
+
             //Sort the approaches by metric type and direction
 
-            foreach(MOE.Common.Models.Approach a in signal.Approaches)
+            foreach (var a in signal.Approaches)
             {
                 if (a.DirectionType.Description == "Northbound" && a.GetDetectorsForMetricType(6).Count > 0)
-               {
-                   MOE.Common.Business.ApproachVolume.Approach av = new MOE.Common.Business.ApproachVolume.Approach(a);
-                   NSAdvanceVolumeApproaches.Add(av);
-               }
+                {
+                    var av = new Approach(a);
+                    NSAdvanceVolumeApproaches.Add(av);
+                }
 
-               if (a.DirectionType.Description == "Northbound" && a.GetDetectorsForMetricType(5).Count > 0)
-               {
-                   MOE.Common.Business.ApproachVolume.Approach av = new MOE.Common.Business.ApproachVolume.Approach(a);
-                   NSTMCVolumeApproaches.Add(av);
-               }
-               if (a.DirectionType.Description == "Southbound" && a.GetDetectorsForMetricType(6).Count > 0)
-               {
-                   MOE.Common.Business.ApproachVolume.Approach av = new MOE.Common.Business.ApproachVolume.Approach(a);
-                   NSAdvanceVolumeApproaches.Add(av);
-               }
+                if (a.DirectionType.Description == "Northbound" && a.GetDetectorsForMetricType(5).Count > 0)
+                {
+                    var av = new Approach(a);
+                    NSTMCVolumeApproaches.Add(av);
+                }
+                if (a.DirectionType.Description == "Southbound" && a.GetDetectorsForMetricType(6).Count > 0)
+                {
+                    var av = new Approach(a);
+                    NSAdvanceVolumeApproaches.Add(av);
+                }
 
-               if (a.DirectionType.Description == "Southbound" && a.GetDetectorsForMetricType(5).Count > 0)
-               {
-                   MOE.Common.Business.ApproachVolume.Approach av = new MOE.Common.Business.ApproachVolume.Approach(a);
-                   NSTMCVolumeApproaches.Add(av);
-               }
-               if (a.DirectionType.Description == "Eastbound" && a.GetDetectorsForMetricType(6).Count > 0)
-               {
-                   MOE.Common.Business.ApproachVolume.Approach av = new MOE.Common.Business.ApproachVolume.Approach(a);
-                   EWAdvanceVolumeApproaches.Add(av);
-               }
+                if (a.DirectionType.Description == "Southbound" && a.GetDetectorsForMetricType(5).Count > 0)
+                {
+                    var av = new Approach(a);
+                    NSTMCVolumeApproaches.Add(av);
+                }
+                if (a.DirectionType.Description == "Eastbound" && a.GetDetectorsForMetricType(6).Count > 0)
+                {
+                    var av = new Approach(a);
+                    EWAdvanceVolumeApproaches.Add(av);
+                }
 
-               if (a.DirectionType.Description == "Eastbound" && a.GetDetectorsForMetricType(5).Count > 0)
-               {
-                   MOE.Common.Business.ApproachVolume.Approach av = new MOE.Common.Business.ApproachVolume.Approach(a);
-                   EWTMCVolumeApproaches.Add(av);
-               }
+                if (a.DirectionType.Description == "Eastbound" && a.GetDetectorsForMetricType(5).Count > 0)
+                {
+                    var av = new Approach(a);
+                    EWTMCVolumeApproaches.Add(av);
+                }
                 if (a.DirectionType.Description == "Westbound" && a.GetDetectorsForMetricType(6).Count > 0)
-               {
-                   MOE.Common.Business.ApproachVolume.Approach av = new MOE.Common.Business.ApproachVolume.Approach(a);
-                   EWAdvanceVolumeApproaches.Add(av);
-               }
+                {
+                    var av = new Approach(a);
+                    EWAdvanceVolumeApproaches.Add(av);
+                }
 
-               if (a.DirectionType.Description == "Westbound" && a.GetDetectorsForMetricType(5).Count > 0)
-               {
-                   MOE.Common.Business.ApproachVolume.Approach av = new MOE.Common.Business.ApproachVolume.Approach(a);
-                   EWTMCVolumeApproaches.Add(av);
-               }
+                if (a.DirectionType.Description == "Westbound" && a.GetDetectorsForMetricType(5).Count > 0)
+                {
+                    var av = new Approach(a);
+                    EWTMCVolumeApproaches.Add(av);
+                }
             }
 
 
-
-                string location = GetSignalLocation();
+            var location = GetSignalLocation();
 
             //create the charts for each metric type and direction
 
-                if (ShowAdvanceDetection && NSAdvanceVolumeApproaches.Count > 0)
-                {
+            if (ShowAdvanceDetection && NSAdvanceVolumeApproaches.Count > 0)
+            {
+                var AVC =
+                    new ApproachVolumeChart(
+                        StartDate, EndDate, SignalID, location, "Northbound", "Southbound", this,
+                        NSAdvanceVolumeApproaches, true);
 
-                        MOE.Common.Business.ApproachVolume.ApproachVolumeChart AVC = 
-                            new MOE.Common.Business.ApproachVolume.ApproachVolumeChart(
-                                StartDate, EndDate, SignalID, location, "Northbound", "Southbound", this,
-                                NSAdvanceVolumeApproaches, true);
-                        
-                        string chartName = CreateFileName();
-
-
-                        //Save an image of the chart
-                      AVC.Chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
-
-                      AVC.info.ImageLocation = (MetricWebPath + chartName);
-                      MetricInfoList.Add(AVC.info);
+                var chartName = CreateFileName();
 
 
-                       
-                    }
+                //Save an image of the chart
+                AVC.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
 
-                        if (ShowTMCDetection && NSTMCVolumeApproaches.Count > 0)
-                    {
-                        MOE.Common.Business.ApproachVolume.ApproachVolumeChart AVC = 
-                            new MOE.Common.Business.ApproachVolume.ApproachVolumeChart(StartDate, EndDate, SignalID,
-                                location, "Northbound", "Southbound", this, NSTMCVolumeApproaches, false);
+                AVC.info.ImageLocation = MetricWebPath + chartName;
+                MetricInfoList.Add(AVC.info);
+            }
 
-                        string chartName = CreateFileName();
+            if (ShowTMCDetection && NSTMCVolumeApproaches.Count > 0)
+            {
+                var AVC =
+                    new ApproachVolumeChart(StartDate, EndDate, SignalID,
+                        location, "Northbound", "Southbound", this, NSTMCVolumeApproaches, false);
 
-
-                        //Save an image of the chart
-                        AVC.Chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
-
-                        AVC.info.ImageLocation = (MetricWebPath + chartName);
-                        MetricInfoList.Add(AVC.info);
-
-                }
-
-                        if (ShowAdvanceDetection && EWAdvanceVolumeApproaches.Count > 0)
-                {
-                   
-                    
-                        MOE.Common.Business.ApproachVolume.ApproachVolumeChart AVC = 
-                            new MOE.Common.Business.ApproachVolume.ApproachVolumeChart(StartDate, EndDate,
-                                SignalID, location, "Eastbound", "Westbound", this, EWAdvanceVolumeApproaches, true);
-
-                        string chartName = CreateFileName();
+                var chartName = CreateFileName();
 
 
-                        //Save an image of the chart
-                        AVC.Chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
+                //Save an image of the chart
+                AVC.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
 
-                        AVC.info.ImageLocation = (MetricWebPath + chartName);
-                        MetricInfoList.Add(AVC.info);
+                AVC.info.ImageLocation = MetricWebPath + chartName;
+                MetricInfoList.Add(AVC.info);
+            }
 
-                       
-                    }
+            if (ShowAdvanceDetection && EWAdvanceVolumeApproaches.Count > 0)
+            {
+                var AVC =
+                    new ApproachVolumeChart(StartDate, EndDate,
+                        SignalID, location, "Eastbound", "Westbound", this, EWAdvanceVolumeApproaches, true);
 
-                    if (ShowTMCDetection && EWTMCVolumeApproaches.Count > 0)
-                    {
-                        MOE.Common.Business.ApproachVolume.ApproachVolumeChart AVC = 
-                            new MOE.Common.Business.ApproachVolume.ApproachVolumeChart(StartDate, EndDate,
-                                SignalID, location, "Eastbound", "Westbound", this, EWTMCVolumeApproaches, false);
-
-                        string chartName = CreateFileName();
+                var chartName = CreateFileName();
 
 
-                        //Save an image of the chart
-                        AVC.Chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
+                //Save an image of the chart
+                AVC.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
+
+                AVC.info.ImageLocation = MetricWebPath + chartName;
+                MetricInfoList.Add(AVC.info);
+            }
+
+            if (ShowTMCDetection && EWTMCVolumeApproaches.Count > 0)
+            {
+                var AVC =
+                    new ApproachVolumeChart(StartDate, EndDate,
+                        SignalID, location, "Eastbound", "Westbound", this, EWTMCVolumeApproaches, false);
+
+                var chartName = CreateFileName();
 
 
-                        AVC.info.ImageLocation = (MetricWebPath + chartName);
-                        MetricInfoList.Add(AVC.info);
+                //Save an image of the chart
+                AVC.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
 
-                     
-                    }
-                
 
-            
+                AVC.info.ImageLocation = MetricWebPath + chartName;
+                MetricInfoList.Add(AVC.info);
+            }
+
+
             return returnList;
         }
-
-
-
-       
     }
 }

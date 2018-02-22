@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using MOE.Common.Business.ActionLog;
 
 namespace MOE.Common.Models.ViewModel.MetricUsage
 {
     public class ChartViewModel
     {
-        public List<MOE.Common.Business.ActionLog.ChartData> ChartData { get; set; }
+        public List<ChartData> ChartData { get; set; }
         public string ReportTitle { get; set; }
         public string CanvasName { get; set; }
         public string YAxisDescription { get; set; }
@@ -16,7 +13,7 @@ namespace MOE.Common.Models.ViewModel.MetricUsage
 
         public List<string> GetColorList()
         {
-            List<string> colors = new List<string>();
+            var colors = new List<string>();
             colors.Add("rgba(178,4,0,1)");
             colors.Add("rgba(235,126,110,1)");
             colors.Add("rgba(239,160,43,1)");

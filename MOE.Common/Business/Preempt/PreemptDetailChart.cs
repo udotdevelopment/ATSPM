@@ -1,40 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
+﻿using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Web.UI.DataVisualization.Charting;
-
+using MOE.Common.Business.WCFServiceLibrary;
 
 namespace MOE.Common.Business.Preempt
 {
     public class PreemptDetailChart
-        {
+    {
         public Chart Chart = new Chart();
-        public WCFServiceLibrary.PreemptDetailOptions Options { get; set; }
 
-        public PreemptDetailChart(WCFServiceLibrary.PreemptDetailOptions options, 
+        public PreemptDetailChart(PreemptDetailOptions options,
             ControllerEventLogs dttb)
         {
             Options = options;
-            int preemptNumber = 0;
+            var preemptNumber = 0;
             if (dttb.Events.Count > 0)
             {
                 var r = (from e in dttb.Events where e.EventCode != 99 select e).FirstOrDefault();
                 preemptNumber = r.EventParam;
             }
-            TimeSpan reportTimespan = Options.EndDate - Options.StartDate;
+            var reportTimespan = Options.EndDate - Options.StartDate;
             AddTitleAndLegend(Chart, preemptNumber);
             AddChartArea(Chart);
             AddSeries(Chart);
             AddDataToChart(Chart, dttb);
-            List<Plan> plans = PlanFactory.GetBasicPlans(Options.StartDate, Options.EndDate, Options.SignalID);
+            var plans = PlanFactory.GetBasicPlans(Options.StartDate, Options.EndDate, Options.SignalID);
             //SetSimplePlanStrips(plans, Chart, Options.StartDate, Options.EndDate, dttb);
         }
+
+        public PreemptDetailOptions Options { get; set; }
 
         //public static void SetSimplePlanStrips(List<Plan> plans, Chart chart, DateTime startDate, ControllerEventLogs eventLog)
         //{
@@ -97,7 +91,6 @@ namespace MOE.Common.Business.Preempt
         //                select r;
 
 
-
         //        string premptCount = c.Count().ToString();
         //        planPreemptsLabel.Text = "Preempts Serviced During Plan: " + premptCount;
         //        planPreemptsLabel.LabelMark = LabelMarkStyle.LineSideMark;
@@ -123,15 +116,13 @@ namespace MOE.Common.Business.Preempt
 
             //Set the chart title
             chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
-            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(Options.SignalID, 
+            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(Options.SignalID,
                 Options.StartDate, Options.EndDate));
             if (preemptNumber > 0)
-            {
-                chart.Titles.Add(ChartTitleFactory.GetBoldTitle(" Preempt Number: " + preemptNumber.ToString()));                
-            }
+                chart.Titles.Add(ChartTitleFactory.GetBoldTitle(" Preempt Number: " + preemptNumber));
 
             //Create the chart legend
-            Legend chartLegend = new Legend();
+            var chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
             chartLegend.Docking = Docking.Left;
             chart.Legends.Add(chartLegend);
@@ -140,11 +131,11 @@ namespace MOE.Common.Business.Preempt
         private void AddChartArea(Chart chart)
         {
             //Create the chart area
-            ChartArea chartArea = new ChartArea();
+            var chartArea = new ChartArea();
             chartArea.Name = "ChartArea1";
 
             chartArea.AxisY.Title = "Seconds Since Request";
-            chartArea.AxisY.Minimum = 0;            
+            chartArea.AxisY.Minimum = 0;
             chartArea.AxisY.Interval = 10;
 
             chartArea.AxisX.Title = "Preempts";
@@ -156,31 +147,28 @@ namespace MOE.Common.Business.Preempt
 
         private void AddSeries(Chart chart)
         {
-           
-
-            Series delay = new Series();
+            var delay = new Series();
             delay.ChartType = SeriesChartType.StackedColumn;
             delay.Color = Color.FromArgb(255, 241, 113, 96);
             delay.Name = "Delay";
             delay.XValueType = ChartValueType.Int32;
 
 
-            Series timeToServiceSeries = new Series();
+            var timeToServiceSeries = new Series();
             timeToServiceSeries.ChartType = SeriesChartType.StackedColumn;
             timeToServiceSeries.Color = Color.FromArgb(255, 255, 193, 94);
             timeToServiceSeries.Name = "Time to Service";
             timeToServiceSeries.XValueType = ChartValueType.Int32;
 
-            
 
-            Series trackClearSeries = new Series();
+            var trackClearSeries = new Series();
             trackClearSeries.ChartType = SeriesChartType.StackedColumn;
             trackClearSeries.BorderDashStyle = ChartDashStyle.Dash;
             trackClearSeries.Color = Color.FromArgb(255, 151, 206, 245);
             trackClearSeries.Name = "Track Clear";
             trackClearSeries.XValueType = ChartValueType.Int32;
 
-            Series dwellTimeSeries = new Series();
+            var dwellTimeSeries = new Series();
             dwellTimeSeries.ChartType = SeriesChartType.StackedColumn;
             dwellTimeSeries.Color = Color.FromArgb(255, 164, 238, 140);
             dwellTimeSeries.Name = "Dwell Time";
@@ -194,8 +182,7 @@ namespace MOE.Common.Business.Preempt
             //EndCallSeries.XValueType = ChartValueType.Int32;
 
 
-
-            Series callMaxOutSeries = new Series();
+            var callMaxOutSeries = new Series();
             callMaxOutSeries.ChartType = SeriesChartType.Point;
             callMaxOutSeries.BorderDashStyle = ChartDashStyle.Dash;
             callMaxOutSeries.MarkerStyle = MarkerStyle.Cross;
@@ -203,7 +190,7 @@ namespace MOE.Common.Business.Preempt
             callMaxOutSeries.Name = "Call Max Out";
             callMaxOutSeries.XValueType = ChartValueType.Int32;
 
-            Series inputOnSeries = new Series();
+            var inputOnSeries = new Series();
             inputOnSeries.ChartType = SeriesChartType.Point;
             inputOnSeries.BorderDashStyle = ChartDashStyle.Dash;
             inputOnSeries.MarkerStyle = MarkerStyle.Circle;
@@ -211,7 +198,7 @@ namespace MOE.Common.Business.Preempt
             inputOnSeries.Name = "Input On";
             inputOnSeries.XValueType = ChartValueType.Int32;
 
-            Series inputOffSeries = new Series();
+            var inputOffSeries = new Series();
             inputOffSeries.ChartType = SeriesChartType.Point;
             inputOffSeries.BorderDashStyle = ChartDashStyle.Dash;
             inputOffSeries.MarkerStyle = MarkerStyle.Circle;
@@ -220,8 +207,7 @@ namespace MOE.Common.Business.Preempt
             inputOffSeries.XValueType = ChartValueType.Int32;
 
 
-
-            Series gateDownSeries = new Series();
+            var gateDownSeries = new Series();
             gateDownSeries.ChartType = SeriesChartType.Point;
             gateDownSeries.BorderDashStyle = ChartDashStyle.Dash;
             gateDownSeries.MarkerStyle = MarkerStyle.Triangle;
@@ -234,70 +220,54 @@ namespace MOE.Common.Business.Preempt
             chart.Series.Add(timeToServiceSeries);
             chart.Series.Add(trackClearSeries);
             chart.Series.Add(dwellTimeSeries);
-            
+
 
             //chart.Series.Add(EndCallSeries);
             chart.Series.Add(callMaxOutSeries);
             chart.Series.Add(inputOnSeries);
             chart.Series.Add(inputOffSeries);
             chart.Series.Add(gateDownSeries);
-
         }
 
         protected void AddDataToChart(Chart chart, ControllerEventLogs dttb)
         {
-            PreemptCycleEngine engine = new PreemptCycleEngine();
-            List<PreemptCycle> cycles = engine.CreatePreemptCycle(dttb);
-            int x = 1;
-            foreach(PreemptCycle cycle in cycles)
+            var engine = new PreemptCycleEngine();
+            var cycles = engine.CreatePreemptCycle(dttb);
+            var x = 1;
+            foreach (var cycle in cycles)
             {
                 if (cycle.HasDelay)
                 {
-                    DataPoint point = new DataPoint();
+                    var point = new DataPoint();
                     point.SetValueXY(x, cycle.Delay);
                     chart.Series["Delay"].Points.Add(point);
-                    chart.Series["Time to Service"].Points.AddXY(x,cycle.TimeToService);
+                    chart.Series["Time to Service"].Points.AddXY(x, cycle.TimeToService);
                     point.AxisLabel = cycle.CycleStart.ToShortTimeString();
                 }
                 else
                 {
-                    DataPoint point = new DataPoint();
+                    var point = new DataPoint();
                     point.SetValueXY(x, cycle.TimeToService);
-                    chart.Series["Delay"].Points.AddXY(x,0);
+                    chart.Series["Delay"].Points.AddXY(x, 0);
                     chart.Series["Time to Service"].Points.Add(point);
                     point.AxisLabel = cycle.CycleStart.ToShortTimeString();
                 }
                 chart.Series["Track Clear"].Points.AddXY(x, cycle.TimeToTrackClear);
                 chart.Series["Dwell Time"].Points.AddXY(x, cycle.DwellTime);
                 if (cycle.TimeToCallMaxOut > 0)
-                {
                     chart.Series["Call Max Out"].Points.AddXY(x, cycle.TimeToCallMaxOut);
-                }
                 if (cycle.TimeToGateDown > 0)
-                {
                     chart.Series["Gate Down"].Points.AddXY(x, cycle.TimeToGateDown);
-                }
-                foreach(DateTime d in cycle.InputOn)
-                {
-                    if(d >= cycle.CycleStart && d <= cycle.CycleEnd)
-                    {
-                        chart.Series["Input On"].Points.AddXY(x, (d - cycle.CycleStart).TotalSeconds);
-                    }
-                }
-                foreach (DateTime d in cycle.InputOff)
-                {
+                foreach (var d in cycle.InputOn)
                     if (d >= cycle.CycleStart && d <= cycle.CycleEnd)
-                    {
+                        chart.Series["Input On"].Points.AddXY(x, (d - cycle.CycleStart).TotalSeconds);
+                foreach (var d in cycle.InputOff)
+                    if (d >= cycle.CycleStart && d <= cycle.CycleEnd)
                         chart.Series["Input Off"].Points.AddXY(x, (d - cycle.CycleStart).TotalSeconds);
-                    }
-                }
                 x++;
             }
-            if(x <= 6)
-            {
+            if (x <= 6)
                 chart.ChartAreas[0].AxisX.Maximum = 8;
-            }
-
         }
 
         //protected void SetSimplePlanStrips(List<Plan> plans, Chart chart, DateTime graphStartDate, DateTime graphEndDate, ControllerEventLogs DTTB)
@@ -363,7 +333,6 @@ namespace MOE.Common.Business.Preempt
         //                    select r;
 
 
-
         //            string preemptCount = c.Count().ToString();
         //            planPreemptsLabel.Text = "Preempts Serviced During Plan: " + preemptCount;
         //            planPreemptsLabel.LabelMark = LabelMarkStyle.LineSideMark;
@@ -377,6 +346,5 @@ namespace MOE.Common.Business.Preempt
         //        }
         //    }
         //}
-
     }
 }

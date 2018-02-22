@@ -7,9 +7,7 @@
         public static IDetectorAggregationsRepository Create()
         {
             if (detectorAggregationsRepository != null)
-            {
                 return detectorAggregationsRepository;
-            }
             return new DetectorAggregationsRepository();
         }
 

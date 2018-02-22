@@ -1,22 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.Spatial;
 using System.Runtime.Serialization;
 
 namespace MOE.Common.Models
 {
     [DataContract]
-    public partial class DirectionType
+    public class DirectionType
     {
-        public DirectionType()
-        {
-
-        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [DataMember]
@@ -32,6 +22,5 @@ namespace MOE.Common.Models
 
         [DataMember]
         public int DisplayOrder { get; set; }
-        
     }
 }

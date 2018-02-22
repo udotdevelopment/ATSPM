@@ -1,24 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.DataVisualization.Charting;
-using MOE.Common.Business;
-using MOE.Common.Models;
 using System.Runtime.Serialization;
-using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
     [DataContract]
     public class SplitMonitorOptions : MetricOptions
     {
+        public SplitMonitorOptions(string signalID, double? yAxisMax, int metricTypeID,
+            DateTime startDate, DateTime endDate,
+            int percentileSplit, bool showPlanStripes, bool showPedActivity,
+            bool showAverageSplit, bool showPercentMaxOutForceOff, bool showPercentGapOuts, bool showPercentSkip)
+        {
+            SignalID = signalID;
+            YAxisMax = yAxisMax;
+            MetricTypeID = metricTypeID;
+            StartDate = startDate;
+            EndDate = endDate;
+            SelectedPercentileSplit = percentileSplit;
+            ShowPlanStripes = showPlanStripes;
+            ShowPedActivity = showPedActivity;
+            ShowAverageSplit = showAverageSplit;
+            ShowPercentMaxOutForceOff = showPercentMaxOutForceOff;
+            ShowPercentGapOuts = showPercentGapOuts;
+            ShowPercentSkip = showPercentSkip;
+            MetricType.ChartName = "SplitMonitor";
+        }
+
+        public SplitMonitorOptions()
+        {
+            SetDefaults();
+        }
+
         [DataMember]
         [Display(Name = "Percentile Split")]
         public int? SelectedPercentileSplit { get; set; }
@@ -52,31 +71,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [Display(Name = "Adjust Y Axis")]
         public bool AdjustYAxis { get; set; }
 
-        public SplitMonitorOptions(string signalID, double? yAxisMax, int metricTypeID,
-            DateTime startDate, DateTime endDate,
-            int percentileSplit, bool showPlanStripes, bool showPedActivity,
-            bool showAverageSplit, bool showPercentMaxOutForceOff, bool showPercentGapOuts, bool showPercentSkip)
-        {
-            SignalID = signalID;
-            YAxisMax = yAxisMax;
-            MetricTypeID = metricTypeID;
-            StartDate = startDate;
-            EndDate = endDate;
-            SelectedPercentileSplit = percentileSplit;
-            ShowPlanStripes = showPlanStripes;
-            ShowPedActivity = showPedActivity;
-            ShowAverageSplit = showAverageSplit;
-            ShowPercentMaxOutForceOff = showPercentMaxOutForceOff;
-            ShowPercentGapOuts = showPercentGapOuts;
-            ShowPercentSkip = showPercentSkip;
-            MetricType.ChartName = "SplitMonitor";
-        }
-
-        public SplitMonitorOptions()
-        {
-            SetDefaults();
-        }
-
         private void SetDefaults()
         {
             SetPercentSplitsList();
@@ -91,21 +85,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
         private void SetPercentSplitsList()
         {
             PercentSplitsSelectList = new List<SelectListItem>();
-            PercentSplitsSelectList.Add(new SelectListItem { Value = "", Text = "No Percentile Split" });
-            PercentSplitsSelectList.Add(new SelectListItem { Value = "50", Text = "50" });
-            PercentSplitsSelectList.Add(new SelectListItem { Value = "75", Text = "75" });
-            PercentSplitsSelectList.Add(new SelectListItem { Value = "85", Text = "85", Selected = true });
-            PercentSplitsSelectList.Add(new SelectListItem { Value = "90", Text = "90" });
-            PercentSplitsSelectList.Add(new SelectListItem { Value = "95", Text = "95" });
+            PercentSplitsSelectList.Add(new SelectListItem {Value = "", Text = "No Percentile Split"});
+            PercentSplitsSelectList.Add(new SelectListItem {Value = "50", Text = "50"});
+            PercentSplitsSelectList.Add(new SelectListItem {Value = "75", Text = "75"});
+            PercentSplitsSelectList.Add(new SelectListItem {Value = "85", Text = "85", Selected = true});
+            PercentSplitsSelectList.Add(new SelectListItem {Value = "90", Text = "90"});
+            PercentSplitsSelectList.Add(new SelectListItem {Value = "95", Text = "95"});
         }
+
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
-            AnalysisPhaseCollection analysisPhaseCollection = new AnalysisPhaseCollection(SignalID, StartDate, EndDate);
+            var analysisPhaseCollection = new AnalysisPhaseCollection(SignalID, StartDate, EndDate);
             //If there are phases in the collection add the charts
             if (analysisPhaseCollection.Items.Count > 0)
             {
-                foreach (PlanSplitMonitor plan in analysisPhaseCollection.Plans)
+                foreach (var plan in analysisPhaseCollection.Plans)
                 {
                     plan.SetProgrammedSplits(SignalID);
                     plan.SetHighCycleCount(analysisPhaseCollection);
@@ -115,8 +110,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
 
                 //dummy chart to create a legend for the entire split monitor page.
-                Chart dummychart = new Chart();
-                ChartArea chartarea1 = new ChartArea();
+                var dummychart = new Chart();
+                var chartarea1 = new ChartArea();
                 dummychart.ImageType = ChartImageType.Jpeg;
                 dummychart.Height = 200;
                 dummychart.Width = 800;
@@ -125,12 +120,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 dummychart.ImageStorageMode = ImageStorageMode.UseImageLocation;
                 dummychart.BorderlineDashStyle = ChartDashStyle.Dot;
 
-                Series PedActivity = new Series();
-                Series GapoutSeries = new Series();
-                Series MaxOutSeries = new Series();
-                Series ForceOffSeries = new Series();
-                Series ProgramedSplit = new Series();
-                Series UnknownSeries = new Series();
+                var PedActivity = new Series();
+                var GapoutSeries = new Series();
+                var MaxOutSeries = new Series();
+                var ForceOffSeries = new Series();
+                var ProgramedSplit = new Series();
+                var UnknownSeries = new Series();
 
                 PedActivity.Name = "Ped Activity";
                 GapoutSeries.Name = "Gap Out";
@@ -163,7 +158,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
                 dummychart.ChartAreas.Add(chartarea1);
 
-                Legend dummychartLegend = new Legend();
+                var dummychartLegend = new Legend();
                 dummychartLegend.Name = "DummyLegend";
 
                 dummychartLegend.IsDockedInsideChartArea = true;
@@ -172,52 +167,41 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 dummychartLegend.Docking = Docking.Bottom;
                 dummychartLegend.Alignment = StringAlignment.Center;
                 dummychart.Legends.Add(dummychartLegend);
-                List<Title> removethese = new List<Title>();
+                var removethese = new List<Title>();
 
-                foreach (Title t in dummychart.Titles)
-                {
+                foreach (var t in dummychart.Titles)
                     if (t.Text == "" || t.Text == null)
-                    {
                         removethese.Add(t);
-                    }
-                }
-                foreach (Title t in removethese)
-                {
+                foreach (var t in removethese)
                     dummychart.Titles.Remove(t);
-                }
 
 
-                string dummyChartFileName = CreateFileName();
+                var dummyChartFileName = CreateFileName();
                 dummychart.SaveImage(MetricFileLocation + dummyChartFileName);
                 ReturnList.Add(MetricWebPath + dummyChartFileName);
 
                 if (analysisPhaseCollection.Items.Count > 0)
                 {
                     var phasesInOrder = (from r in analysisPhaseCollection.Items
-                                         select r).OrderBy(r => r.PhaseNumber);
-                    foreach (AnalysisPhase Phase in phasesInOrder)
+                        select r).OrderBy(r => r.PhaseNumber);
+                    foreach (var Phase in phasesInOrder)
                     {
-                        Chart chart = GetNewSplitMonitorChart(StartDate, EndDate, SignalID, GetSignalLocation(), Phase.PhaseNumber);
+                        var chart = GetNewSplitMonitorChart(StartDate, EndDate, SignalID, GetSignalLocation(),
+                            Phase.PhaseNumber);
                         AddSplitMonitorDataToChart(chart, Phase, analysisPhaseCollection.Plans);
                         if (ShowPlanStripes)
                         {
                             SetSimplePlanStrips(analysisPhaseCollection.Plans, chart, StartDate);
                             SetSplitMonitorStatistics(analysisPhaseCollection.Plans, Phase, chart);
                         }
-                        string chartFileName = CreateFileName();
+                        var chartFileName = CreateFileName();
                         removethese = new List<Title>();
 
-                        foreach (Title t in chart.Titles)
-                        {
+                        foreach (var t in chart.Titles)
                             if (t.Text == "" || t.Text == null)
-                            {
                                 removethese.Add(t);
-                            }
-                        }
-                        foreach (Title t in removethese)
-                        {
+                        foreach (var t in removethese)
                             chart.Titles.Remove(t);
-                        }
                         chart.SaveImage(MetricFileLocation + chartFileName);
                         ReturnList.Add(MetricWebPath + chartFileName);
                     }
@@ -229,28 +213,25 @@ namespace MOE.Common.Business.WCFServiceLibrary
         private void SetSplitMonitorStatistics(List<PlanSplitMonitor> plans, AnalysisPhase phase, Chart chart)
         {
             //find the phase Cycles that occure during the plan.
-            foreach (PlanSplitMonitor plan in plans)
+            foreach (var plan in plans)
             {
                 var Cycles = from cycle in phase.Cycles.Items
-                             where cycle.StartTime > plan.StartTime && cycle.EndTime < plan.EndTime
-                             orderby cycle.Duration
-                             select cycle;
+                    where cycle.StartTime > plan.StartTime && cycle.EndTime < plan.EndTime
+                    orderby cycle.Duration
+                    select cycle;
 
                 // find % Skips
                 if (ShowPercentSkip)
-                {
                     if (plan.CycleCount > 0)
                     {
                         double CycleCount = plan.CycleCount;
-                        double SkippedPhases = (plan.CycleCount - Cycles.Count());
+                        double SkippedPhases = plan.CycleCount - Cycles.Count();
                         double SkipPercent = 0;
                         if (CycleCount > 0)
-                        {
                             SkipPercent = SkippedPhases / CycleCount;
-                        }
 
 
-                        CustomLabel skipLabel = new CustomLabel();
+                        var skipLabel = new CustomLabel();
                         skipLabel.FromPosition = plan.StartTime.ToOADate();
                         skipLabel.ToPosition = plan.EndTime.ToOADate();
                         skipLabel.Text = string.Format("{0:0.0%} Skips", SkipPercent);
@@ -259,25 +240,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         skipLabel.RowIndex = 1;
                         chart.ChartAreas[0].AxisX2.CustomLabels.Add(skipLabel);
                     }
-                }
 
                 // find % GapOuts
                 if (ShowPercentGapOuts)
                 {
                     var GapOuts = from cycle in Cycles
-                                  where cycle.TerminationEvent == 4
-                                  select cycle;
+                        where cycle.TerminationEvent == 4
+                        select cycle;
 
                     double CycleCount = plan.CycleCount;
                     double gapouts = GapOuts.Count();
                     double GapPercent = 0;
                     if (CycleCount > 0)
-                    {
                         GapPercent = gapouts / CycleCount;
-                    }
 
 
-                    CustomLabel gapLabel = new CustomLabel();
+                    var gapLabel = new CustomLabel();
                     gapLabel.FromPosition = plan.StartTime.ToOADate();
                     gapLabel.ToPosition = plan.EndTime.ToOADate();
                     gapLabel.Text = string.Format("{0:0.0%} GapOuts", GapPercent);
@@ -285,26 +263,23 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     gapLabel.ForeColor = Color.OliveDrab;
                     gapLabel.RowIndex = 2;
                     chart.ChartAreas[0].AxisX2.CustomLabels.Add(gapLabel);
-
                 }
 
                 //Set Max Out
                 if (ShowPercentMaxOutForceOff && plan.PlanNumber == 254)
                 {
                     var MaxOuts = from cycle in Cycles
-                                  where cycle.TerminationEvent == 5
-                                  select cycle;
+                        where cycle.TerminationEvent == 5
+                        select cycle;
 
                     double CycleCount = plan.CycleCount;
                     double maxouts = MaxOuts.Count();
                     double MaxPercent = 0;
                     if (CycleCount > 0)
-                    {
                         MaxPercent = maxouts / CycleCount;
-                    }
 
 
-                    CustomLabel maxLabel = new CustomLabel();
+                    var maxLabel = new CustomLabel();
                     maxLabel.FromPosition = plan.StartTime.ToOADate();
                     maxLabel.ToPosition = plan.EndTime.ToOADate();
                     maxLabel.Text = string.Format("{0:0.0%} MaxOuts", MaxPercent);
@@ -312,27 +287,24 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     maxLabel.ForeColor = Color.Red;
                     maxLabel.RowIndex = 3;
                     chart.ChartAreas[0].AxisX2.CustomLabels.Add(maxLabel);
-
                 }
 
                 // Set Force Off
                 if (ShowPercentMaxOutForceOff && plan.PlanNumber != 254
-                    )
+                )
                 {
                     var ForceOffs = from cycle in Cycles
-                                    where cycle.TerminationEvent == 6
-                                    select cycle;
+                        where cycle.TerminationEvent == 6
+                        select cycle;
 
                     double CycleCount = plan.CycleCount;
                     double forceoffs = ForceOffs.Count();
                     double ForcePercent = 0;
                     if (CycleCount > 0)
-                    {
                         ForcePercent = forceoffs / CycleCount;
-                    }
 
 
-                    CustomLabel forceLabel = new CustomLabel();
+                    var forceLabel = new CustomLabel();
                     forceLabel.FromPosition = plan.StartTime.ToOADate();
                     forceLabel.ToPosition = plan.EndTime.ToOADate();
                     forceLabel.Text = string.Format("{0:0.0%} ForceOffs", ForcePercent);
@@ -340,7 +312,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     forceLabel.ForeColor = Color.MediumBlue;
                     forceLabel.RowIndex = 3;
                     chart.ChartAreas[0].AxisX2.CustomLabels.Add(forceLabel);
-
                 }
 
                 //Average Split
@@ -348,19 +319,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     double runningTotal = 0;
                     double averageSplits = 0;
-                    foreach (AnalysisPhaseCycle Cycle in Cycles)
-                    {
+                    foreach (var Cycle in Cycles)
                         runningTotal = runningTotal + Cycle.Duration.TotalSeconds;
-                    }
 
                     if (Cycles.Count() > 0)
-                    {
                         averageSplits = runningTotal / Cycles.Count();
-                    }
 
 
-
-                    CustomLabel avgLabel = new CustomLabel();
+                    var avgLabel = new CustomLabel();
                     avgLabel.FromPosition = plan.StartTime.ToOADate();
                     avgLabel.ToPosition = plan.EndTime.ToOADate();
                     avgLabel.Text = string.Format("{0: 0.0} Avg. Split", averageSplits);
@@ -370,65 +336,58 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     chart.ChartAreas[0].AxisX2.CustomLabels.Add(avgLabel);
 
                     //Percentile Split
-                    if (SelectedPercentileSplit != null && (Cycles.Count() > 2))
+                    if (SelectedPercentileSplit != null && Cycles.Count() > 2)
                     {
-                        Double percentileResult = 0;
-                        Double Percentile = (Convert.ToDouble(SelectedPercentileSplit) / 100);
-                        int setCount = Cycles.Count();
+                        double percentileResult = 0;
+                        var Percentile = Convert.ToDouble(SelectedPercentileSplit) / 100;
+                        var setCount = Cycles.Count();
 
 
-
-                        Double PercentilIndex = Percentile * setCount;
+                        var PercentilIndex = Percentile * setCount;
                         if (PercentilIndex % 1 == 0)
                         {
-                            percentileResult = Cycles.ElementAt((Convert.ToInt16(PercentilIndex) - 1)).Duration.TotalSeconds;
-
+                            percentileResult = Cycles.ElementAt(Convert.ToInt16(PercentilIndex) - 1).Duration
+                                .TotalSeconds;
                         }
                         else
                         {
-                            double indexMod = (PercentilIndex % 1);
+                            var indexMod = PercentilIndex % 1;
                             //subtracting .5 leaves just the integer after the convert.
                             //There was probably another way to do that, but this is easy.
                             int indexInt = Convert.ToInt16(PercentilIndex - .5);
 
-                            Double step1 = Cycles.ElementAt((Convert.ToInt16(indexInt) - 1)).Duration.TotalSeconds;
-                            Double step2 = Cycles.ElementAt((Convert.ToInt16(indexInt))).Duration.TotalSeconds;
-                            Double stepDiff = (step2 - step1);
-                            Double step3 = (stepDiff * indexMod);
-                            percentileResult = (step1 + step3);
-
+                            var step1 = Cycles.ElementAt(Convert.ToInt16(indexInt) - 1).Duration.TotalSeconds;
+                            var step2 = Cycles.ElementAt(Convert.ToInt16(indexInt)).Duration.TotalSeconds;
+                            var stepDiff = step2 - step1;
+                            var step3 = stepDiff * indexMod;
+                            percentileResult = step1 + step3;
                         }
 
-                        CustomLabel percentileLabel = new CustomLabel();
+                        var percentileLabel = new CustomLabel();
                         percentileLabel.FromPosition = plan.StartTime.ToOADate();
                         percentileLabel.ToPosition = plan.EndTime.ToOADate();
-                        percentileLabel.Text = string.Format("{0: 0.0} - {1} Percentile Split", percentileResult, Convert.ToDouble(SelectedPercentileSplit));
+                        percentileLabel.Text = string.Format("{0: 0.0} - {1} Percentile Split", percentileResult,
+                            Convert.ToDouble(SelectedPercentileSplit));
                         percentileLabel.LabelMark = LabelMarkStyle.LineSideMark;
                         percentileLabel.ForeColor = Color.Purple;
                         percentileLabel.RowIndex = 5;
                         chart.ChartAreas[0].AxisX2.CustomLabels.Add(percentileLabel);
-
                     }
-
                 }
             }
         }
 
         private void SetSimplePlanStrips(List<PlanSplitMonitor> plans, Chart chart, DateTime graphStartDate)
         {
-            int backGroundColor = 1;
-            foreach (PlanSplitMonitor plan in plans)
+            var backGroundColor = 1;
+            foreach (var plan in plans)
             {
-                StripLine stripline = new StripLine();
+                var stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans
                 if (backGroundColor % 2 == 0)
-                {
                     stripline.BackColor = Color.FromArgb(120, Color.LightGray);
-                }
                 else
-                {
                     stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
-                }
 
                 //Set the stripline properties
                 stripline.IntervalOffsetType = DateTimeIntervalType.Hours;
@@ -440,7 +399,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
 
                 //Add a corrisponding custom label for each strip
-                CustomLabel Plannumberlabel = new CustomLabel();
+                var Plannumberlabel = new CustomLabel();
                 Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
                 Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
                 switch (plan.PlanNumber)
@@ -455,7 +414,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         Plannumberlabel.Text = "Unknown";
                         break;
                     default:
-                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+                        Plannumberlabel.Text = "Plan " + plan.PlanNumber;
 
                         break;
                 }
@@ -468,28 +427,24 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
 
                 backGroundColor++;
-
             }
         }
 
-        private Chart GetNewSplitMonitorChart(DateTime graphStartDate, DateTime graphEndDate, string signalId, string location, int phase)
+        private Chart GetNewSplitMonitorChart(DateTime graphStartDate, DateTime graphEndDate, string signalId,
+            string location, int phase)
         {
-            Models.Repositories.ISignalsRepository repository =
-                   Models.Repositories.SignalsRepositoryFactory.Create();
+            var repository =
+                SignalsRepositoryFactory.Create();
             var signal = repository.GetLatestVersionOfSignalBySignalID(signalId);
-            List<Models.Detector> detectors = signal.GetDetectorsForSignalByPhaseNumber(phase);
-            string detID = "";
+            var detectors = signal.GetDetectorsForSignalByPhaseNumber(phase);
+            var detID = "";
             if (detectors.Count() > 0)
-            {
                 detID = detectors.First().ToString();
-            }
             else
-            {
                 detID = "0";
-            }
-            Chart chart = new Chart();
-            string extendedDirection = string.Empty;
-            TimeSpan reportTimespan = graphEndDate - graphStartDate;
+            var chart = new Chart();
+            var extendedDirection = string.Empty;
+            var reportTimespan = graphEndDate - graphStartDate;
 
             //Set the chart properties
             chart.ImageType = ChartImageType.Jpeg;
@@ -499,10 +454,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chart.BorderlineDashStyle = ChartDashStyle.Dot;
 
             SetChartTitle(chart, phase);
-            
+
 
             //Create the chart area
-            ChartArea chartArea = new ChartArea();
+            var chartArea = new ChartArea();
             chartArea.Name = "ChartArea1";
 
             chartArea.AxisX.Title = "Time (Hour of Day)";
@@ -511,7 +466,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chartArea.AxisX2.LabelStyle.Format = "HH";
             chartArea.AxisX.LabelAutoFitStyle = LabelAutoFitStyles.None;
             if (reportTimespan.Days < 1)
-            {
                 if (reportTimespan.Hours > 1)
                 {
                     chartArea.AxisX2.Interval = 1;
@@ -522,7 +476,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     chartArea.AxisX.LabelStyle.Format = "HH:mm";
                     chartArea.AxisX2.LabelStyle.Format = "HH:mm";
                 }
-            }
             chartArea.AxisX2.Enabled = AxisEnabled.True;
             chartArea.AxisX2.MajorTickMark.Enabled = true;
             chartArea.AxisX2.IntervalType = DateTimeIntervalType.Hours;
@@ -530,15 +483,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
 
             chartArea.AxisY.Title = "Phase Duration (Seconds)";
-            if(YAxisMax != null)
-            {
+            if (YAxisMax != null)
                 chartArea.AxisY.Maximum = YAxisMax.Value;
-            }
             chartArea.AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
 
             chart.ChartAreas.Add(chartArea);
 
-            Series PedActivity = new Series();
+            var PedActivity = new Series();
             PedActivity.ChartType = SeriesChartType.Point;
             PedActivity.Color = Color.Transparent;
             PedActivity.Name = "PedActivity";
@@ -547,7 +498,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             PedActivity.MarkerBorderWidth = 1;
             PedActivity.MarkerSize = 3;
 
-            Series GapoutSeries = new Series();
+            var GapoutSeries = new Series();
             GapoutSeries.ChartType = SeriesChartType.Point;
             GapoutSeries.Color = Color.OliveDrab;
             GapoutSeries.Name = "GapOut";
@@ -555,7 +506,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             GapoutSeries.MarkerStyle = MarkerStyle.Circle;
             GapoutSeries.MarkerSize = 3;
 
-            Series MaxOutSeries = new Series();
+            var MaxOutSeries = new Series();
             MaxOutSeries.ChartType = SeriesChartType.Point;
             MaxOutSeries.Color = Color.Red;
             MaxOutSeries.Name = "MaxOut";
@@ -563,30 +514,29 @@ namespace MOE.Common.Business.WCFServiceLibrary
             MaxOutSeries.MarkerStyle = MarkerStyle.Circle;
             MaxOutSeries.MarkerSize = 3;
 
-            Series ForceOffSeries = new Series();
+            var ForceOffSeries = new Series();
             ForceOffSeries.ChartType = SeriesChartType.Point;
             ForceOffSeries.Color = Color.MediumBlue;
             ForceOffSeries.Name = "ForceOff";
             ForceOffSeries.MarkerStyle = MarkerStyle.Circle;
             ForceOffSeries.MarkerSize = 3;
 
-            Series UnknownSeries = new Series();
+            var UnknownSeries = new Series();
             UnknownSeries.ChartType = SeriesChartType.Point;
             UnknownSeries.Color = Color.Black;
             UnknownSeries.Name = "Unknown";
             UnknownSeries.MarkerStyle = MarkerStyle.Circle;
             UnknownSeries.MarkerSize = 3;
 
-            Series ProgramedSplit = new Series();
+            var ProgramedSplit = new Series();
             ProgramedSplit.ChartType = SeriesChartType.StepLine;
             ProgramedSplit.Color = Color.OrangeRed;
             ProgramedSplit.Name = "Programed Split";
             ProgramedSplit.BorderWidth = 1;
 
 
-
             //Add the Posts series to ensure the chart is the size of the selected timespan
-            Series testSeries = new Series();
+            var testSeries = new Series();
             testSeries.IsVisibleInLegend = false;
             testSeries.ChartType = SeriesChartType.Point;
             testSeries.Color = Color.White;
@@ -623,77 +573,53 @@ namespace MOE.Common.Business.WCFServiceLibrary
             //Table 
             if (phase.Cycles.Items.Count > 0)
             {
-                int maxSplitLength = 0;
-                foreach (PlanSplitMonitor plan in plans)
+                var maxSplitLength = 0;
+                foreach (var plan in plans)
                 {
-                    int highestSplit = plan.FindHighestRecordedSplitPhase();
+                    var highestSplit = plan.FindHighestRecordedSplitPhase();
                     plan.FillMissingSplits(highestSplit);
                     try
                     {
                         chart.Series["Programed Split"].Points.AddXY(plan.StartTime, plan.Splits[phase.PhaseNumber]);
                         chart.Series["Programed Split"].Points.AddXY(plan.EndTime, plan.Splits[phase.PhaseNumber]);
                         if (plan.Splits[phase.PhaseNumber] > maxSplitLength)
-                        {
                             maxSplitLength = plan.Splits[phase.PhaseNumber];
-                        }
                     }
-                    catch 
+                    catch
                     {
                         //System.Windows.MessageBox.Show(ex.ToString());
                     }
                 }
-                foreach (AnalysisPhaseCycle Cycle in phase.Cycles.Items)
+                foreach (var Cycle in phase.Cycles.Items)
                 {
                     if (Cycle.TerminationEvent == 4)
-                    {
                         chart.Series["GapOut"].Points.AddXY(Cycle.StartTime, Cycle.Duration.TotalSeconds);
-                    }
                     if (Cycle.TerminationEvent == 5)
-                    {
-
                         chart.Series["MaxOut"].Points.AddXY(Cycle.StartTime, Cycle.Duration.TotalSeconds);
-                    }
                     if (Cycle.TerminationEvent == 6)
-                    {
                         chart.Series["ForceOff"].Points.AddXY(Cycle.StartTime, Cycle.Duration.TotalSeconds);
-                    }
                     if (Cycle.TerminationEvent == 0)
-                    {
                         chart.Series["Unknown"].Points.AddXY(Cycle.StartTime, Cycle.Duration.TotalSeconds);
-                    }
                     if (Cycle.HasPed && ShowPedActivity)
                     {
                         if (Cycle.PedDuration == 0)
                         {
-                            if(Cycle.PedStartTime == DateTime.MinValue)
-                            {
+                            if (Cycle.PedStartTime == DateTime.MinValue)
                                 Cycle.SetPedStart(Cycle.StartTime);
-                            }
                             if (Cycle.PedEndTime == DateTime.MinValue)
-                            {
                                 Cycle.SetPedEnd(Cycle.YellowEvent);
-                            }
                         }
                         chart.Series["PedActivity"].Points.AddXY(Cycle.PedStartTime, Cycle.PedDuration);
                     }
                 }
                 if (maxSplitLength > 0)
-                {
                     if (maxSplitLength >= 50)
-                    {
-                        chart.ChartAreas[0].AxisY.Maximum = (1.5 * maxSplitLength);
-                    }
-                    else 
-                    {
-                        chart.ChartAreas[0].AxisY.Maximum = (2.5 * maxSplitLength);
-                    }
-                }
+                        chart.ChartAreas[0].AxisY.Maximum = 1.5 * maxSplitLength;
+                    else
+                        chart.ChartAreas[0].AxisY.Maximum = 2.5 * maxSplitLength;
                 if (YAxisMax != null)
-                {
                     chart.ChartAreas[0].AxisY.Maximum = YAxisMax.Value;
-                }
             }
         }
     }
 }
-

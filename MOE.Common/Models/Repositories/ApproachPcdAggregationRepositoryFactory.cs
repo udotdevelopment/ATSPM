@@ -2,15 +2,12 @@
 {
     public class ApproachPcdAggregationRepositoryFactory
     {
-        
         private static IApproachPcdAggregationRepository _approachPcdAggregationRepository;
 
         public static IApproachPcdAggregationRepository Create()
         {
             if (_approachPcdAggregationRepository != null)
-            {
                 return _approachPcdAggregationRepository;
-            }
             return new ApproachPcdAggregationRepository();
         }
 

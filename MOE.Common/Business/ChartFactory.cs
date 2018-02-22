@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.Bins;
-using MOE.Common.Business.DataAggregation;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
@@ -17,20 +14,20 @@ namespace MOE.Common.Business
     {
         private static Random _rnd = new Random();
 
-        private static List<Series> SeriesList = new List<Series>();
+        private static readonly List<Series> SeriesList = new List<Series>();
         private static List<Bin> Bins;
 
         public static List<Bin> GetBins(SignalAggregationMetricOptions options)
         {
-            List <Bin> bins = new List<Bin>();
+            var bins = new List<Bin>();
 
-            DateTime timeX = new DateTime();
+            var timeX = new DateTime();
 
             timeX = options.StartDate;
 
-            while(timeX <= options.EndDate)
+            while (timeX <= options.EndDate)
             {
-                Bin bin = new Bin();
+                var bin = new Bin();
 
                 bin.Start = timeX;
 
@@ -39,35 +36,27 @@ namespace MOE.Common.Business
                 bin.End = timeX;
 
                 bins.Add(bin);
-
-
             }
 
             return bins;
-
         }
 
         public static void AddSeriesToSeriesList(Series series)
         {
-            List<Series> checkSeries = (from r in SeriesList
+            var checkSeries = (from r in SeriesList
                 where series.ChartType != r.ChartType
                 select r).ToList();
 
             if (checkSeries == null || checkSeries.Count == 0)
-            {
                 SeriesList.Add(series);
-            }
-
         }
-
 
 
         public static Chart ChartInitialization(MetricOptions options)
         {
-            Chart chart = new Chart();
+            var chart = new Chart();
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateChartArea(options));
-
 
 
             return chart;
@@ -75,7 +64,7 @@ namespace MOE.Common.Business
 
         public static Chart ChartInitialization(SignalAggregationMetricOptions options)
         {
-            Chart chart = new Chart();
+            var chart = new Chart();
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateTimeXIntYChartArea(options));
             chart.Titles.Add(options.ChartTitle);
@@ -84,8 +73,7 @@ namespace MOE.Common.Business
 
         public static Chart CreateDefaultChart(MetricOptions options)
         {
-            
-            Chart chart = new Chart();
+            var chart = new Chart();
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateChartArea(options));
             return chart;
@@ -93,33 +81,31 @@ namespace MOE.Common.Business
 
         public static Chart CreateSplitFailureChart(SplitFailOptions options)
         {
-            Chart chart = new Chart();
+            var chart = new Chart();
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateSplitFailChartArea(options));
             SetLegend(chart);
             return chart;
         }
-        
+
         public static Chart CreateTimeXIntYChart(SignalAggregationMetricOptions options, List<Models.Signal> signals)
         {
-            Chart chart = new Chart();
+            var chart = new Chart();
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateTimeXIntYChartArea(options));
             SetLegend(chart);
-            string signalDescriptions = string.Empty;
+            var signalDescriptions = string.Empty;
             foreach (var signal in signals)
-            {
                 signalDescriptions += signal.SignalDescription + ",";
-            }
             signalDescriptions = signalDescriptions.TrimEnd(',');
-            chart.Titles.Add( signalDescriptions + "\n" + options.ChartTitle);
+            chart.Titles.Add(signalDescriptions + "\n" + options.ChartTitle);
             return chart;
         }
 
         public static Chart CreateLaneByLaneAggregationChart(SignalAggregationMetricOptions options)
         {
             options.MetricTypeID = 16;
-            Chart chart = ChartInitialization(options);
+            var chart = ChartInitialization(options);
             Bins = GetBins(options);
             return chart;
         }
@@ -127,16 +113,16 @@ namespace MOE.Common.Business
         public static Chart CreateAdvancedCountsAggregationChart(SignalAggregationMetricOptions options)
         {
             options.MetricTypeID = 17;
-            Chart chart = ChartInitialization(options);
+            var chart = ChartInitialization(options);
             Bins = GetBins(options);
-            
+
             return chart;
         }
 
         public static Chart CreateArrivalOnGreenAggregationChart(SignalAggregationMetricOptions options)
         {
             options.MetricTypeID = 18;
-            Chart chart = ChartInitialization(options);
+            var chart = ChartInitialization(options);
             Bins = GetBins(options);
             return chart;
         }
@@ -144,7 +130,7 @@ namespace MOE.Common.Business
         public static Chart CreatePlatoonRatioAggregationChart(SignalAggregationMetricOptions options)
         {
             options.MetricTypeID = 19;
-            Chart chart = ChartInitialization(options);
+            var chart = ChartInitialization(options);
             Bins = GetBins(options);
             return chart;
         }
@@ -189,15 +175,16 @@ namespace MOE.Common.Business
                     where r.BinStartTime >= bin.Start && r.BinStartTime < bin.End
                     select r;
 
-                bin.Sum = Convert.ToInt32( recordsForBins.Average(s => s.SplitFailures));
+                bin.Sum = Convert.ToInt32(recordsForBins.Average(s => s.SplitFailures));
             }
         }
 
-        public static List<ApproachSplitFailAggregation> GetApproachAggregationRecords(Approach approach, SignalAggregationMetricOptions options)
+        public static List<ApproachSplitFailAggregation> GetApproachAggregationRecords(Approach approach,
+            SignalAggregationMetricOptions options)
         {
-            IApproachSplitFailAggregationRepository Repo = ApproachSplitFailAggregationRepositoryFactory.Create();
+            var Repo = ApproachSplitFailAggregationRepositoryFactory.Create();
             if (approach != null)
-            { 
+            {
                 //List<ApproachSplitFailAggregation> aggregations =
                 //    Repo.GetApproachSplitFailAggregationByApproachIdAndDateRange(
                 //        approach.ApproachID, options.StartDate, options.EndDate);
@@ -209,7 +196,7 @@ namespace MOE.Common.Business
         public static Chart CreatePedestrianActuationAggregationChart(SignalAggregationMetricOptions options)
         {
             options.MetricTypeID = 21;
-            Chart chart = ChartInitialization(options);
+            var chart = ChartInitialization(options);
             Bins = GetBins(options);
             return chart;
         }
@@ -217,7 +204,7 @@ namespace MOE.Common.Business
         public static Chart PreemptionAggregationChart(SignalAggregationMetricOptions options)
         {
             options.MetricTypeID = 22;
-            Chart chart = ChartInitialization(options);
+            var chart = ChartInitialization(options);
             Bins = GetBins(options);
             return chart;
         }
@@ -225,34 +212,31 @@ namespace MOE.Common.Business
         public static Chart CreateApproachDelayAggregationChart(SignalAggregationMetricOptions options)
         {
             options.MetricTypeID = 23;
-            Chart chart = ChartInitialization(options);
+            var chart = ChartInitialization(options);
             Bins = GetBins(options);
             return chart;
         }
 
 
-
         public static Chart TransitSignalPriorityAggregationChart(SignalAggregationMetricOptions options)
         {
             options.MetricTypeID = 24;
-            Chart chart = ChartInitialization(options);
+            var chart = ChartInitialization(options);
             return chart;
         }
 
         public static Series GetSeriesFromBins()
         {
-            Series s = new Series();
-            foreach(Bin bin in Bins)
-            {
+            var s = new Series();
+            foreach (var bin in Bins)
                 s.Points.AddXY(bin.Start, bin.Sum);
-            }
 
             return s;
         }
 
         private static void SetLegend(Chart chart)
         {
-            Legend chartLegend = new Legend();
+            var chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
             chartLegend.Docking = Docking.Left;
             chart.Legends.Add(chartLegend);
@@ -260,7 +244,7 @@ namespace MOE.Common.Business
 
         private static ChartArea CreateSplitFailChartArea(SplitFailOptions options)
         {
-            ChartArea chartArea = new ChartArea();
+            var chartArea = new ChartArea();
             chartArea.Name = "ChartArea1";
             SetSplitFailYAxis(chartArea, options);
             SetSplitFailXAxis(chartArea, options);
@@ -270,7 +254,7 @@ namespace MOE.Common.Business
 
         private static ChartArea CreateTimeXIntYChartArea(SignalAggregationMetricOptions options)
         {
-            ChartArea chartArea = new ChartArea();
+            var chartArea = new ChartArea();
             SetDimension(options, chartArea);
             chartArea.Name = "ChartArea1";
             SetIntYAxis(chartArea, options);
@@ -283,16 +267,10 @@ namespace MOE.Common.Business
             var reportTimespan = options.EndDate - options.StartDate;
             chartArea.AxisX2.LabelStyle.Format = "HH";
             if (reportTimespan.Days < 1)
-            {
                 if (reportTimespan.Hours > 1)
-                {
                     chartArea.AxisX2.Interval = 1;
-                }
                 else
-                {
                     chartArea.AxisX2.LabelStyle.Format = "HH:mm";
-                }
-            }
             chartArea.AxisX2.Minimum = options.StartDate.ToOADate();
             chartArea.AxisX2.Maximum = options.EndDate.ToOADate();
             chartArea.AxisX2.Enabled = AxisEnabled.True;
@@ -310,28 +288,18 @@ namespace MOE.Common.Business
             chartArea.AxisX.Minimum = options.StartDate.ToOADate();
             chartArea.AxisX.Maximum = options.EndDate.ToOADate();
             if (reportTimespan.Days < 1)
-            {
                 if (reportTimespan.Hours > 1)
-                {
                     chartArea.AxisX.Interval = 1;
-                }
                 else
-                {
                     chartArea.AxisX.LabelStyle.Format = "HH:mm";
-                }
-            }
         }
 
         private static void SetSplitFailYAxis(ChartArea chartArea, SplitFailOptions options)
         {
             if (options.YAxisMax != null)
-            {
                 chartArea.AxisY.Maximum = options.YAxisMax.Value;
-            }
             else
-            {
                 chartArea.AxisY.Maximum = 100;
-            }
             chartArea.AxisY.Title = "Occupancy Ratio (percent)";
             chartArea.AxisY.Minimum = 0;
             chartArea.AxisY.Interval = 10;
@@ -340,16 +308,13 @@ namespace MOE.Common.Business
         private static void SetIntYAxis(ChartArea chartArea, SignalAggregationMetricOptions options)
         {
             if (options.YAxisMax != null)
-            {
                 chartArea.AxisY.Maximum = options.YAxisMax.Value;
-            }
             else
-            {
                 chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
-            }
             chartArea.AxisY.Title = options.YAxisTitle;
             chartArea.AxisY.Minimum = 0;
         }
+
         private static void SetTimeXAxis(ChartArea chartArea, SignalAggregationMetricOptions options)
         {
             //var reportTimespan = options.EndDate - options.StartDate;
@@ -441,7 +406,7 @@ namespace MOE.Common.Business
 
         private static ChartArea CreateChartArea(MetricOptions options)
         {
-            ChartArea chartArea = new ChartArea();
+            var chartArea = new ChartArea();
             chartArea.Name = "ChartArea1";
             SetUpYAxis(chartArea, options);
             SetUpY2Axis(chartArea, options);
@@ -457,18 +422,12 @@ namespace MOE.Common.Business
             chartArea.AxisX2.LabelStyle.Format = "HH";
             chartArea.AxisX2.Minimum = options.StartDate.ToOADate();
             chartArea.AxisX2.Maximum = options.EndDate.ToOADate();
-            TimeSpan reportTimespan = options.EndDate - options.StartDate;
+            var reportTimespan = options.EndDate - options.StartDate;
             if (reportTimespan.Days < 1)
-            {
                 if (reportTimespan.Hours > 1)
-                {
                     chartArea.AxisX2.Interval = 1;
-                }
                 else
-                {
                     chartArea.AxisX2.LabelStyle.Format = "HH:mm";
-                }
-            }
         }
 
         private static void SetUpXAxis(ChartArea chartArea, MetricOptions options)
@@ -478,26 +437,18 @@ namespace MOE.Common.Business
             chartArea.AxisX.LabelStyle.Format = "HH";
             chartArea.AxisX.Minimum = options.StartDate.ToOADate();
             chartArea.AxisX.Maximum = options.EndDate.ToOADate();
-            TimeSpan reportTimespan = options.EndDate - options.StartDate;
+            var reportTimespan = options.EndDate - options.StartDate;
             if (reportTimespan.Days < 1)
-            {
                 if (reportTimespan.Hours > 1)
-                {
                     chartArea.AxisX.Interval = 1;
-                }
                 else
-                {
                     chartArea.AxisX.LabelStyle.Format = "HH:mm";
-                }
-            }
         }
 
         private static void SetUpY2Axis(ChartArea chartArea, MetricOptions options)
         {
             if (options.Y2AxisMax != null)
-            {
                 chartArea.AxisY2.Maximum = options.Y2AxisMax.Value;
-            }
             chartArea.AxisY2.Enabled = AxisEnabled.True;
             chartArea.AxisY2.MajorTickMark.Enabled = true;
             chartArea.AxisY2.MajorGrid.Enabled = false;
@@ -508,16 +459,14 @@ namespace MOE.Common.Business
         private static void SetUpYAxis(ChartArea chartArea, MetricOptions options)
         {
             if (options.YAxisMax != null)
-            {
                 chartArea.AxisY.Maximum = options.YAxisMax.Value;
-            }
             chartArea.AxisY.Title = "Cycle Time (Seconds) ";
             chartArea.AxisY.Minimum = 0;
         }
 
         public static Series CreateLineSeries(string seriesName, Color seriesColor)
         {
-            Series s = new Series();
+            var s = new Series();
             s.ChartType = SeriesChartType.Line;
             s.Color = seriesColor;
             return s;
@@ -525,7 +474,7 @@ namespace MOE.Common.Business
 
         public static Series CreateStackedAreaSeries(string seriesName, Color seriesColor)
         {
-            Series s = new Series();
+            var s = new Series();
             s.ChartType = SeriesChartType.StackedArea;
             s.Color = seriesColor;
             return s;
@@ -533,7 +482,7 @@ namespace MOE.Common.Business
 
         public static Series CreateColumnSeries(string seriesName, Color seriesColor)
         {
-            Series s = new Series();
+            var s = new Series();
             s.ChartType = SeriesChartType.Column;
             s.Color = seriesColor;
             return s;
@@ -541,7 +490,7 @@ namespace MOE.Common.Business
 
         public static Series CreateStackedColumnSeries(string seriesName, Color seriesColor)
         {
-            Series s = new Series();
+            var s = new Series();
             s.ChartType = SeriesChartType.StackedColumn;
             s.Color = seriesColor;
             return s;
@@ -550,7 +499,7 @@ namespace MOE.Common.Business
 
         public static Chart CreateStringXIntYChart(SignalAggregationMetricOptions options)
         {
-            Chart chart = new Chart();
+            var chart = new Chart();
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateStringXIntYChartArea(options));
             SetLegend(chart);
@@ -560,7 +509,7 @@ namespace MOE.Common.Business
 
         private static ChartArea CreateStringXIntYChartArea(SignalAggregationMetricOptions options)
         {
-            ChartArea chartArea = new ChartArea();
+            var chartArea = new ChartArea();
             chartArea.Name = "ChartArea1";
             SetDimension(options, chartArea);
             SetIntYAxis(chartArea, options);
@@ -571,9 +520,7 @@ namespace MOE.Common.Business
         private static void SetDimension(SignalAggregationMetricOptions options, ChartArea chartArea)
         {
             if (options.SelectedDimension == Dimension.ThreeDimensional)
-            {
-                chartArea.Area3DStyle = new ChartArea3DStyle { Enable3D = true, WallWidth = 0 };
-            }
+                chartArea.Area3DStyle = new ChartArea3DStyle {Enable3D = true, WallWidth = 0};
         }
 
         private static void SetStringXAxis(ChartArea chartArea, SignalAggregationMetricOptions options)
@@ -581,7 +528,7 @@ namespace MOE.Common.Business
             chartArea.AxisX.Title = "Signals";
             chartArea.AxisX.Interval = 1;
             chartArea.AxisX.LabelAutoFitStyle = LabelAutoFitStyles.None;
-            chartArea.AxisX.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12);
+            chartArea.AxisX.LabelStyle.Font = new Font("Microsoft Sans Serif", 12);
             chartArea.AxisX.LabelStyle.Angle = 45;
         }
     }

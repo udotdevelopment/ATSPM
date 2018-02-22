@@ -3,111 +3,42 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business
 {
     /// <summary>
-    /// Creates PCDs based on a Link Pivot Analysis
+    ///     Creates PCDs based on a Link Pivot Analysis
     /// </summary>
     public class LinkPivotPCDDisplay
     {
-
-        private int MetricTypeID = 13;
-
-        //File location of the upstream before pcd
-        private string upstreamBeforePCDPath;
-        public string UpstreamBeforePCDPath
-        {
-            get { return upstreamBeforePCDPath; }
-            set { upstreamBeforePCDPath = value; }
-        }
+        //File location of the downstream after adjustment pcd
 
         //File location of the downstream before pcd
-        private string downstreamBeforePCDPath;
-        public string DownstreamBeforePCDPath
-        {
-            get { return downstreamBeforePCDPath; }
-            set { downstreamBeforePCDPath = value; }
-        }
-
-        //Create titles for the charts so that they can later be added for accesability
-        public string DownstreamBeforeTitle { get; set; }
-        public string UpstreamBeforeTitle { get; set; }
-        public string DownstreamAfterTitle { get; set; }
-        public string UpstreamAfterTitle { get; set; }
-
-        //File location of the upstream after adjustment pcd
-        private string upstreamAfterPCDPath;
-        public string UpstreamAfterPCDPath
-        {
-            get { return upstreamAfterPCDPath; }
-            set { upstreamAfterPCDPath = value; }
-        }
-
-        //File location of the downstream after adjustment pcd
-        private string downstreamAfterPCDPath;
-        public string DownstreamAfterPCDPath
-        {
-            get { return downstreamAfterPCDPath; }
-            set { downstreamAfterPCDPath = value; }
-        }
 
         //Total Arrival On Green before adjustments
-        private double existingTotalAOG=0;
-        public double ExistingTotalAOG
-        {
-            get { return existingTotalAOG; }
-            set { existingTotalAOG = value; }
-        }
 
         //Total Percent Arrival On Green before adjustments
-        private double existingTotalPAOG = 0;
-        public double ExistingTotalPAOG
-        {
-            get { return existingTotalPAOG; }
-            set { existingTotalPAOG = value; }
-        }
-
-        //Total arrival on green after adjustments
-        private double predictedTotalAOG = 0;
-        public double PredictedTotalAOG
-        {
-            get { return predictedTotalAOG; }
-            set { predictedTotalAOG = value; }
-        }
-
-        //Total percent arrival on green after adjustments
-        private double predictedTotalPAOG = 0;
-        public double PredictedTotalPAOG
-        {
-            get { return predictedTotalPAOG; }
-            set { predictedTotalPAOG = value; }
-        }
-
-        //Total volume after adjustments
-        private double predictedVolume;
-        public double PredictedVolume
-        {
-            get { return predictedVolume; }
-            set { predictedVolume = value; }
-        }
 
         //Total volume before adjustments
-        private double existingVolume = 0;
-        public double ExistingVolume
-        {
-            get { return existingVolume; }
-            set { existingVolume = value; }
-        }
+
+        private readonly int MetricTypeID = 13;
+
+        //Total arrival on green after adjustments
+
+        //Total percent arrival on green after adjustments
+
+        //Total volume after adjustments
+
+        //File location of the upstream after adjustment pcd
+
+        //File location of the upstream before pcd
 
         /// <summary>
-        /// Generates PCD charts for upstream and downstream detectors based on 
-        /// a Link Pivot Link
+        ///     Generates PCD charts for upstream and downstream detectors based on
+        ///     a Link Pivot Link
         /// </summary>
         /// <param name="upstreamSignalId"></param>
         /// <param name="upstreamDirection"></param>
@@ -118,187 +49,195 @@ namespace MOE.Common.Business
         /// <param name="endDate"></param>
         /// <param name="maxYAxis"></param>
         public LinkPivotPCDDisplay(string upstreamSignalId, string upstreamDirection,
-            string downstreamSignalId, string downstreamDirection, int delta, 
+            string downstreamSignalId, string downstreamDirection, int delta,
             DateTime startDate, DateTime endDate, int maxYAxis)
         {
-            Models.Repositories.ISignalsRepository signalRepository = Models.Repositories.SignalsRepositoryFactory.Create();
-            Models.Signal upstreamSignal = signalRepository.GetVersionOfSignalByDate(upstreamSignalId, startDate);
-            Models.Signal downstreamSignal = signalRepository.GetVersionOfSignalByDate(downstreamSignalId, startDate);
-            Models.Approach upApproachToAnalyze = GetApproachToAnalyze(upstreamSignal, upstreamDirection);
-            Models.Approach downApproachToAnalyze = GetApproachToAnalyze(downstreamSignal, downstreamDirection);
+            var signalRepository = SignalsRepositoryFactory.Create();
+            var upstreamSignal = signalRepository.GetVersionOfSignalByDate(upstreamSignalId, startDate);
+            var downstreamSignal = signalRepository.GetVersionOfSignalByDate(downstreamSignalId, startDate);
+            var upApproachToAnalyze = GetApproachToAnalyze(upstreamSignal, upstreamDirection);
+            var downApproachToAnalyze = GetApproachToAnalyze(downstreamSignal, downstreamDirection);
             if (upApproachToAnalyze != null)
-            {
                 GeneratePcd(upApproachToAnalyze, delta, startDate, endDate, true, maxYAxis);
-            }
             if (downApproachToAnalyze != null)
-            {
                 GeneratePcd(downApproachToAnalyze, delta, startDate, endDate, false, maxYAxis);
-            }
         }
 
-        private Models.Approach GetApproachToAnalyze(Models.Signal signal, string direction)
+        public string UpstreamBeforePCDPath { get; set; }
+
+        public string DownstreamBeforePCDPath { get; set; }
+
+        //Create titles for the charts so that they can later be added for accesability
+        public string DownstreamBeforeTitle { get; set; }
+
+        public string UpstreamBeforeTitle { get; set; }
+        public string DownstreamAfterTitle { get; set; }
+        public string UpstreamAfterTitle { get; set; }
+
+        public string UpstreamAfterPCDPath { get; set; }
+
+        public string DownstreamAfterPCDPath { get; set; }
+
+        public double ExistingTotalAOG { get; set; }
+
+        public double ExistingTotalPAOG { get; set; } = 0;
+
+        public double PredictedTotalAOG { get; set; }
+
+        public double PredictedTotalPAOG { get; set; } = 0;
+
+        public double PredictedVolume { get; set; }
+
+        public double ExistingVolume { get; set; }
+
+        private Approach GetApproachToAnalyze(Models.Signal signal, string direction)
         {
-            Models.Approach approachToAnalyze = null;
+            Approach approachToAnalyze = null;
             var approaches = signal.Approaches.Where(a => a.DirectionType.Description == direction).ToList();
             foreach (var approach in approaches)
-            {
                 if (approach.GetDetectorsForMetricType(6).Count > 0)
-                {
                     approachToAnalyze = approach;
-                }
-            }
             return approachToAnalyze;
         }
-        
-        private void GeneratePcd(Models.Approach approach, int delta, DateTime startDate, DateTime endDate, bool upstream, int maxYAxis)
+
+        private void GeneratePcd(Approach approach, int delta, DateTime startDate, DateTime endDate, bool upstream,
+            int maxYAxis)
         {
             //Create a location string to show the combined cross strees
-            string location = string.Empty;
-            if(approach.Signal != null)
-            {
+            var location = string.Empty;
+            if (approach.Signal != null)
                 location = approach.Signal.PrimaryName + " " + approach.Signal.SecondaryName;
-            }
-            string chartName = string.Empty;
+            var chartName = string.Empty;
             //find the upstream approach
-            if (!String.IsNullOrEmpty(approach.DirectionType.Description))
+            if (!string.IsNullOrEmpty(approach.DirectionType.Description))
             {
                 //Find PCD detector for this appraoch
-                 Models.Detector detector = approach.Signal.GetDetectorsForSignalThatSupportAMetricByApproachDirection(
-                     6, approach.DirectionType.Description).FirstOrDefault();
+                var detector = approach.Signal.GetDetectorsForSignalThatSupportAMetricByApproachDirection(
+                    6, approach.DirectionType.Description).FirstOrDefault();
                 //Check for null value
-                if(detector != null)
+                if (detector != null)
                 {
                     //Instantiate a signal phase object
-                    SignalPhase sp = new SignalPhase(startDate, endDate,approach, false, 15, 13, false);                    
-                    
+                    var sp = new SignalPhase(startDate, endDate, approach, false, 15, 13, false);
+
                     //Check the direction of the Link Pivot
                     if (upstream)
                     {
                         //Create a chart for the upstream detector before adjustments
-                        upstreamBeforePCDPath = CreateChart(sp, startDate, endDate, location, "before",
+                        UpstreamBeforePCDPath = CreateChart(sp, startDate, endDate, location, "before",
                             ConfigurationManager.AppSettings["ImageLocation"], maxYAxis, "UpstreamBefore");
 
                         //Add the total arrival on green before adjustments to the running total
-                        existingTotalAOG += sp.TotalArrivalOnGreen;
+                        ExistingTotalAOG += sp.TotalArrivalOnGreen;
 
                         //Add the volume from the signal phase to the running total
-                        existingVolume += sp.TotalVolume;
+                        ExistingVolume += sp.TotalVolume;
 
                         //Re run the signal phase by the optimized delta change to get the adjusted pcd
-                        sp.LinkPivotAddSeconds(delta*-1);                        
+                        sp.LinkPivotAddSeconds(delta * -1);
 
                         //Create a chart for the upstream detector after adjustments
-                        upstreamAfterPCDPath = CreateChart(sp, startDate, endDate, location, "after",
+                        UpstreamAfterPCDPath = CreateChart(sp, startDate, endDate, location, "after",
                             ConfigurationManager.AppSettings["ImageLocation"], maxYAxis, "UpstreamAfter");
 
                         //Add the total arrival on green after adjustments to the running total
-                        predictedTotalAOG += sp.TotalArrivalOnGreen;
+                        PredictedTotalAOG += sp.TotalArrivalOnGreen;
 
                         //Add the volume from the signal phase to the running total
-                        predictedVolume += sp.TotalVolume;
+                        PredictedVolume += sp.TotalVolume;
                     }
                     else
                     {
                         //Create a chart for downstream detector before adjustments
-                        downstreamBeforePCDPath = CreateChart(sp, startDate, endDate, location, "before",
+                        DownstreamBeforePCDPath = CreateChart(sp, startDate, endDate, location, "before",
                             ConfigurationManager.AppSettings["ImageLocation"], maxYAxis, "DownstreamBefore");
 
                         //Add the arrivals on green to the total arrivals on green running total
-                        existingTotalAOG += sp.TotalArrivalOnGreen;
+                        ExistingTotalAOG += sp.TotalArrivalOnGreen;
 
                         //Add the volume before adjustments to the running total volume
-                        existingVolume += sp.TotalVolume;
+                        ExistingVolume += sp.TotalVolume;
 
                         //Re run the signal phase by the optimized delta change to get the adjusted pcd
                         sp.LinkPivotAddSeconds(delta);
 
                         //Create a pcd chart for downstream after adjustments
-                        downstreamAfterPCDPath = CreateChart(sp, startDate, endDate, location, "after",
+                        DownstreamAfterPCDPath = CreateChart(sp, startDate, endDate, location, "after",
                             ConfigurationManager.AppSettings["ImageLocation"], maxYAxis, "DownstreamAfter");
 
                         //Add the total arrivals on green to the running total
-                        predictedTotalAOG += sp.TotalArrivalOnGreen;
+                        PredictedTotalAOG += sp.TotalArrivalOnGreen;
 
                         //Add the total volume to the running total after adjustments
-                        predictedVolume += sp.TotalVolume;
+                        PredictedVolume += sp.TotalVolume;
                     }
-
-                    
-
                 }
             }
         }
 
-        
+
         private string CreateChart(SignalPhase signalPhase, DateTime startDate, DateTime endDate, string location,
             string chartNameSuffix, string chartLocation, int maxYAxis, string directionBeforeAfter)
         {
             //Instantiate the chart object
-            Chart chart = new Chart();
+            var chart = new Chart();
 
             //Add formatting to the chart
-            chart = GetNewChart(startDate, endDate, signalPhase.Approach.SignalID, signalPhase.Approach.ProtectedPhaseNumber,
-                signalPhase.Approach.DirectionType.Description, location, signalPhase.Approach.IsProtectedPhaseOverlap, 
+            chart = GetNewChart(startDate, endDate, signalPhase.Approach.SignalID,
+                signalPhase.Approach.ProtectedPhaseNumber,
+                signalPhase.Approach.DirectionType.Description, location, signalPhase.Approach.IsProtectedPhaseOverlap,
                 maxYAxis, 2000, false, 2);
 
             //Add the data to the chart
             AddDataToChart(chart, signalPhase, startDate, false, true);
-            
+
             //Add info to the based on direction and before or after adjustments
-            if(directionBeforeAfter == "DownstreamBefore")
+            if (directionBeforeAfter == "DownstreamBefore")
             {
                 DownstreamBeforeTitle = chart.Titles[0].Text + " " + chart.Titles[1].Text;
-                foreach(var l in chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels)
-                {
+                foreach (var l in chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels)
                     DownstreamBeforeTitle += " " + l.Text;
-                }
             }
             else if (directionBeforeAfter == "UpstreamBefore")
             {
                 UpstreamBeforeTitle = chart.Titles[0].Text + " " + chart.Titles[1].Text;
                 foreach (var l in chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels)
-                {
                     UpstreamBeforeTitle += " " + l.Text;
-                }
             }
             else if (directionBeforeAfter == "DownstreamAfter")
             {
                 DownstreamAfterTitle = chart.Titles[0].Text + " " + chart.Titles[1].Text;
                 foreach (var l in chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels)
-                {
                     DownstreamAfterTitle += " " + l.Text;
-                }
             }
             else if (directionBeforeAfter == "UpstreamAfter")
             {
                 UpstreamAfterTitle = chart.Titles[0].Text + " " + chart.Titles[1].Text;
                 foreach (var l in chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels)
-                {
                     UpstreamAfterTitle += " " + l.Text;
-                }
             }
 
             //Create the File Name
-            string chartName = "LinkPivot-" +
-                signalPhase.Approach.SignalID +
-                "-" +
-                signalPhase.Approach.ProtectedPhaseNumber.ToString() +
-                "-" +
-                startDate.Year.ToString() +
-                startDate.ToString("MM") +
-                startDate.ToString("dd") +
-                startDate.ToString("HH") +
-                startDate.ToString("mm") +
-                "-" +
-                endDate.Year.ToString() +
-                endDate.ToString("MM") +
-                endDate.ToString("dd") +
-                endDate.ToString("HH") +
-                endDate.ToString("mm-") +
-                DateTime.Now.Minute.ToString()+
-                DateTime.Now.Second.ToString()+
-                chartNameSuffix +
-                ".jpg";
+            var chartName = "LinkPivot-" +
+                            signalPhase.Approach.SignalID +
+                            "-" +
+                            signalPhase.Approach.ProtectedPhaseNumber +
+                            "-" +
+                            startDate.Year +
+                            startDate.ToString("MM") +
+                            startDate.ToString("dd") +
+                            startDate.ToString("HH") +
+                            startDate.ToString("mm") +
+                            "-" +
+                            endDate.Year +
+                            endDate.ToString("MM") +
+                            endDate.ToString("dd") +
+                            endDate.ToString("HH") +
+                            endDate.ToString("mm-") +
+                            DateTime.Now.Minute +
+                            DateTime.Now.Second +
+                            chartNameSuffix +
+                            ".jpg";
 
             //Save an image of the chart
             chart.SaveImage(chartLocation + @"LinkPivot\" + chartName, ChartImageFormat.Jpeg);
@@ -310,15 +249,13 @@ namespace MOE.Common.Business
             double y2AxisMaximum, bool showVolume, int dotSize)
         {
             //Instantiate the chart object
-            Chart chart = new Chart();
+            var chart = new Chart();
 
             //used for Overlap
-            string extendedDirection = string.Empty;
-            string movementType = "Phase";
+            var extendedDirection = string.Empty;
+            var movementType = "Phase";
             if (isOverlap)
-            {
                 movementType = "Overlap";
-            }
 
 
             //Gets direction for the title
@@ -342,19 +279,19 @@ namespace MOE.Common.Business
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
 
             //Set the chart title
-            Title title = new Title();
-            title.Text = location + " Signal " + signalId.ToString() + " "
-                + movementType + ": " + phase.ToString() +
-                " " + extendedDirection + "\n" + graphStartDate.ToString("f") +
-                " - " + graphEndDate.ToString("f");
+            var title = new Title();
+            title.Text = location + " Signal " + signalId + " "
+                         + movementType + ": " + phase +
+                         " " + extendedDirection + "\n" + graphStartDate.ToString("f") +
+                         " - " + graphEndDate.ToString("f");
             title.Font = new Font(FontFamily.GenericSansSerif, 20);
             chart.Titles.Add(title);
             chart.AlternateText = title.Text;
 
             //Create the chart area
-            ChartArea chartArea = new ChartArea();
+            var chartArea = new ChartArea();
             chartArea.Name = "ChartArea1";
-            chartArea.AxisY.Maximum = y1AxisMaximum;           
+            chartArea.AxisY.Maximum = y1AxisMaximum;
             chartArea.AxisY.Minimum = 0;
             chartArea.AxisY.Title = "Cycle Time (Seconds) ";
             chartArea.AxisY.TitleFont = new Font(FontFamily.GenericSansSerif, 20);
@@ -381,7 +318,7 @@ namespace MOE.Common.Business
             chartArea.AxisX.LabelStyle.Format = "HH";
             chartArea.AxisX.LabelAutoFitStyle = LabelAutoFitStyles.None;
             chartArea.AxisX.LabelStyle.Font = new Font(FontFamily.GenericSansSerif, 20);
-            
+
             //Add the second x axis settings 
             chartArea.AxisX2.Enabled = AxisEnabled.True;
             chartArea.AxisX2.MajorTickMark.Enabled = true;
@@ -395,7 +332,7 @@ namespace MOE.Common.Business
             chart.ChartAreas.Add(chartArea);
 
             //Add the point series
-            Series pointSeries = new Series();
+            var pointSeries = new Series();
             pointSeries.ChartType = SeriesChartType.Point;
             pointSeries.Color = Color.Black;
             pointSeries.Name = "Detector Activation";
@@ -404,7 +341,7 @@ namespace MOE.Common.Business
             chart.Series.Add(pointSeries);
 
             //Add the green series
-            Series greenSeries = new Series();
+            var greenSeries = new Series();
             greenSeries.ChartType = SeriesChartType.Line;
             greenSeries.Color = Color.DarkGreen;
             greenSeries.Name = "Change to Green";
@@ -413,7 +350,7 @@ namespace MOE.Common.Business
             chart.Series.Add(greenSeries);
 
             //Add the yellow series
-            Series yellowSeries = new Series();
+            var yellowSeries = new Series();
             yellowSeries.ChartType = SeriesChartType.Line;
             yellowSeries.Color = Color.Yellow;
             yellowSeries.Name = "Change to Yellow";
@@ -422,7 +359,7 @@ namespace MOE.Common.Business
             chart.Series.Add(yellowSeries);
 
             //Add the red series
-            Series redSeries = new Series();
+            var redSeries = new Series();
             redSeries.ChartType = SeriesChartType.Line;
             redSeries.Color = Color.Red;
             redSeries.Name = "Change to Red";
@@ -431,14 +368,13 @@ namespace MOE.Common.Business
             chart.Series.Add(redSeries);
 
             //Add the red series
-            Series volumeSeries = new Series();
+            var volumeSeries = new Series();
             volumeSeries.ChartType = SeriesChartType.Line;
             volumeSeries.Color = Color.Black;
             volumeSeries.Name = "Volume Per Hour";
             volumeSeries.XValueType = ChartValueType.DateTime;
             volumeSeries.YAxisType = AxisType.Secondary;
             chart.Series.Add(volumeSeries);
-
 
 
             //Add points at the start and and of the x axis to ensure
@@ -449,13 +385,14 @@ namespace MOE.Common.Business
             return chart;
         }
 
-       
-        private void AddDataToChart(Chart chart, SignalPhase signalPhase, DateTime startDate, bool showVolume, bool showArrivalOnGreen)
+
+        private void AddDataToChart(Chart chart, SignalPhase signalPhase, DateTime startDate, bool showVolume,
+            bool showArrivalOnGreen)
         {
             decimal totalDetectorHits = 0;
             decimal totalOnGreenArrivals = 0;
             decimal percentArrivalOnGreen = 0;
-            foreach (CyclePcd cycle in signalPhase.Cycles)
+            foreach (var cycle in signalPhase.Cycles)
             {
                 //add the data for the green line
                 chart.Series["Change to Green"].Points.AddXY(
@@ -476,7 +413,7 @@ namespace MOE.Common.Business
                 totalDetectorHits += cycle.DetectorEvents.Count;
 
                 //add the detector hits to the detector activation series
-                foreach (DetectorDataPoint detectorPoint in cycle.DetectorEvents)
+                foreach (var detectorPoint in cycle.DetectorEvents)
                 {
                     chart.Series["Detector Activation"].Points.AddXY(
                         detectorPoint.TimeStamp,
@@ -484,48 +421,37 @@ namespace MOE.Common.Business
 
                     //if this is an arrival on green add it to the running total
                     if (detectorPoint.YPoint > cycle.GreenLineY && detectorPoint.YPoint < cycle.RedLineY)
-                    {
                         totalOnGreenArrivals++;
-                    }
                 }
             }
 
             //add the volume data to the volume series if true
             if (showVolume)
-            {
-                foreach (Volume v in signalPhase.Volume.Items)
-                {
+                foreach (var v in signalPhase.Volume.Items)
                     chart.Series["Volume Per Hour"].Points.AddXY(v.XAxis, v.YAxis);
-                }
-            }
 
             //if arrivals on green is selected add the data to the chart
             if (showArrivalOnGreen)
             {
                 if (totalDetectorHits > 0)
-                {
-                    percentArrivalOnGreen = (totalOnGreenArrivals / totalDetectorHits) * 100;
-                }
+                    percentArrivalOnGreen = totalOnGreenArrivals / totalDetectorHits * 100;
                 else
-                {
                     percentArrivalOnGreen = 0;
-                }
-                Title title = new Title();
-                title.Text = Math.Round(percentArrivalOnGreen).ToString() + "% AoG";
-                 title.Font = new Font(FontFamily.GenericSansSerif, 20);
-                 chart.Titles.Add(title);
+                var title = new Title();
+                title.Text = Math.Round(percentArrivalOnGreen) + "% AoG";
+                title.Font = new Font(FontFamily.GenericSansSerif, 20);
+                chart.Titles.Add(title);
 
 
                 SetPlanStrips(signalPhase.Plans, chart, startDate);
             }
 
-            var mcr = Models.Repositories.MetricCommentRepositoryFactory.Create();
+            var mcr = MetricCommentRepositoryFactory.Create();
 
-            Models.MetricComment comment = mcr.GetLatestCommentForReport(signalPhase.Approach.SignalID, MetricTypeID);
+            var comment = mcr.GetLatestCommentForReport(signalPhase.Approach.SignalID, MetricTypeID);
 
             if (comment != null)
             {
-
                 chart.Titles.Add(comment.CommentText);
                 chart.Titles[1].Docking = Docking.Bottom;
                 chart.Titles[1].ForeColor = Color.Red;
@@ -534,32 +460,28 @@ namespace MOE.Common.Business
 
 
         /// <summary>
-        /// Adds plan strips to the chart
+        ///     Adds plan strips to the chart
         /// </summary>
         /// <param name="planCollection"></param>
         /// <param name="chart"></param>
         /// <param name="graphStartDate"></param>
         protected void SetPlanStrips(List<PlanPcd> planCollection, Chart chart, DateTime graphStartDate)
         {
-            int backGroundColor = 1;
-            foreach (PlanPcd plan in planCollection)
+            var backGroundColor = 1;
+            foreach (var plan in planCollection)
             {
-                StripLine stripline = new StripLine();
+                var stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans
                 if (backGroundColor % 2 == 0)
-                {
                     stripline.BackColor = Color.FromArgb(120, Color.LightGray);
-                }
                 else
-                {
                     stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
-                }
 
                 //Set the stripline properties
                 stripline.IntervalOffset = (plan.StartTime - graphStartDate).TotalHours;
                 stripline.IntervalOffsetType = DateTimeIntervalType.Hours;
                 stripline.Interval = 1;
-                stripline.IntervalType = DateTimeIntervalType.Days;               
+                stripline.IntervalType = DateTimeIntervalType.Days;
                 stripline.StripWidth = (plan.EndTime - plan.StartTime).TotalHours;
                 stripline.StripWidthType = DateTimeIntervalType.Hours;
 
@@ -567,7 +489,7 @@ namespace MOE.Common.Business
                 chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
 
                 //Add a corrisponding custom label for each strip
-                CustomLabel Plannumberlabel = new CustomLabel();
+                var Plannumberlabel = new CustomLabel();
                 Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
                 Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
                 switch (plan.PlanNumber)
@@ -582,7 +504,7 @@ namespace MOE.Common.Business
                         Plannumberlabel.Text = "Unknown";
                         break;
                     default:
-                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+                        Plannumberlabel.Text = "Plan " + plan.PlanNumber;
 
                         break;
                 }
@@ -592,32 +514,29 @@ namespace MOE.Common.Business
                 chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(Plannumberlabel);
 
                 //add arrivals on gren to the plan strip
-                CustomLabel aogLabel = new CustomLabel();
+                var aogLabel = new CustomLabel();
                 aogLabel.FromPosition = plan.StartTime.ToOADate();
                 aogLabel.ToPosition = plan.EndTime.ToOADate();
-                aogLabel.Text = plan.PercentArrivalOnGreen.ToString() + "% AoG\n" +
-                    plan.PercentGreenTime.ToString() + "% GT";
+                aogLabel.Text = plan.PercentArrivalOnGreen + "% AoG\n" +
+                                plan.PercentGreenTime + "% GT";
                 aogLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 aogLabel.ForeColor = Color.Blue;
                 aogLabel.RowIndex = 2;
                 chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(aogLabel);
 
                 //add the platoon ratio to the plan strip
-                CustomLabel statisticlabel = new CustomLabel();
+                var statisticlabel = new CustomLabel();
                 statisticlabel.FromPosition = plan.StartTime.ToOADate();
                 statisticlabel.ToPosition = plan.EndTime.ToOADate();
                 statisticlabel.Text =
-                    plan.PlatoonRatio.ToString() + " PR";
+                    plan.PlatoonRatio + " PR";
                 statisticlabel.ForeColor = Color.Maroon;
                 statisticlabel.RowIndex = 1;
                 chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(statisticlabel);
 
                 //Change the background color counter for alternating color
                 backGroundColor++;
-
             }
         }
-
-        
     }
 }

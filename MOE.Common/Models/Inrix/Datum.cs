@@ -1,12 +1,9 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace MOE.Common.Models.Inrix
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
-
-    public partial class Datum
+    public class Datum
     {
         [StringLength(50)]
         public string tmc_code { get; set; }

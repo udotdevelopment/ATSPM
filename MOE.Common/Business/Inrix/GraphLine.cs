@@ -1,119 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Web.UI.DataVisualization.Charting;
-
 
 namespace MOE.Common.Business.Inrix
 {
     public class GraphLine
     {
-        protected   Color lineColor;
-        public Color LineColor
-        {
-            get
-            {
-                return lineColor;
-            }
-
-        }
-
-        protected ChartDashStyle lineStyle;
-        public ChartDashStyle LineStyle
-        {
-            get
-            {
-                return lineStyle;
-            }
-        }
-
-        protected int lineWidth;
-        public int LineWidth
-        {
-            get
-            {
-                return lineWidth;
-            }
-        }
-
         protected int confidenceScore;
-        public int Confidence
-        {
-            get
-            {
-                return confidenceScore;
-            }
-        }
-
-        protected int lineNumber;
-        public int LineNumber
-        {
-            get
-            {
-                return lineNumber;
-            }
-            set
-            {
-                lineNumber = value;
-            }
-        }
 
         protected List<DayOfWeek> dayTypes;
-        public List<DayOfWeek> DayTypes
-        {
-            get
-            {
-                return dayTypes;
-            }
-        }
 
         protected string dayTypesLetters;
-        public string DayTypesLetters
-        {
-            get
-            {
-                return dayTypesLetters;
-            }
-        }
-
-        protected string startHour;
-        public string StartHour
-        {
-            get
-            {
-                return startHour;
-            }
-        }
-
-        protected string endHour;
-        public string EndHour
-        {
-            get
-            {
-                return endHour;
-            }
-        }
-
-        protected DateTime startDay;
-        public DateTime StartDay
-        {
-            get
-            {
-                return startDay;
-            }
-        }
 
         protected DateTime endDay;
-        public DateTime EndDay
-        {
-            get
-            {
-                return endDay;
-            }
-        }
 
+        protected string endHour;
+        protected Color lineColor;
+
+        protected int lineNumber;
+
+        protected ChartDashStyle lineStyle;
+
+        protected int lineWidth;
+
+        protected DateTime startDay;
+
+        protected string startHour;
 
 
         public GraphLine(string color, string style, int width, List<DayOfWeek> daytypes,
@@ -126,25 +39,25 @@ namespace MOE.Common.Business.Inrix
             {
                 case "Red":
                     lineColor = Color.Red;
-                break;
+                    break;
                 case "Purple":
-                lineColor = Color.Purple;
-                break;
+                    lineColor = Color.Purple;
+                    break;
                 case "Green":
-                lineColor = Color.Green;
-                break;
+                    lineColor = Color.Green;
+                    break;
                 case "Blue":
-                lineColor = Color.Blue;
-                break;
+                    lineColor = Color.Blue;
+                    break;
                 case "Yellow":
-                lineColor = Color.Yellow;
-                break;
+                    lineColor = Color.Yellow;
+                    break;
                 case "Black":
-                lineColor = Color.Black;
-                break;
+                    lineColor = Color.Black;
+                    break;
                 case "Orange":
-                lineColor = Color.Orange;
-                break;
+                    lineColor = Color.Orange;
+                    break;
                 default:
                     lineColor = Color.Black;
                     break;
@@ -185,7 +98,32 @@ namespace MOE.Common.Business.Inrix
             endDay = endday;
             startHour = starthour;
             endHour = endhour;
-
         }
+
+        public Color LineColor => lineColor;
+
+        public ChartDashStyle LineStyle => lineStyle;
+
+        public int LineWidth => lineWidth;
+
+        public int Confidence => confidenceScore;
+
+        public int LineNumber
+        {
+            get => lineNumber;
+            set => lineNumber = value;
+        }
+
+        public List<DayOfWeek> DayTypes => dayTypes;
+
+        public string DayTypesLetters => dayTypesLetters;
+
+        public string StartHour => startHour;
+
+        public string EndHour => endHour;
+
+        public DateTime StartDay => startDay;
+
+        public DateTime EndDay => endDay;
     }
 }

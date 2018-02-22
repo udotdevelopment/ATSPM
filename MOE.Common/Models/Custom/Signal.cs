@@ -9,34 +9,34 @@ namespace MOE.Common.Models
     public partial class Signal
     {
         [NotMapped]
-        public String SignalDescription => SignalID + " - " + PrimaryName + " " + SecondaryName;
+        public string SignalDescription => SignalID + " - " + PrimaryName + " " + SecondaryName;
 
         [NotMapped]
-        public List<Controller_Event_Log> PlanEvents {get; set;}       
-        
-        public void SetPlanEvents(DateTime startTime, DateTime endTime)
+        public List<Controller_Event_Log> PlanEvents { get; set; }
+
+        [NotMapped]
+        public List<Signal> VersionList { get; set; }
+
+        [NotMapped]
+        public DateTime FirstDate => Convert.ToDateTime("1/1/2011");
+
+        [NotMapped]
+        public string SelectListName
         {
-                IControllerEventLogRepository repository =
-                    ControllerEventLogRepositoryFactory.Create();
-                PlanEvents = repository.GetSignalEventsByEventCode(SignalID, startTime, endTime, 131);
+            get
+            {
+                if (Start == DateTime.MaxValue || Start == Convert.ToDateTime("12/31/9999"))
+                    return "Current";
+                return Start.ToShortDateString() + " - " + Note;
+            }
         }
 
-        [NotMapped]
-        public List<Signal> VersionList {
-            get;
-
-            set; }
-
-        [NotMapped]
-        public DateTime FirstDate
+        public void SetPlanEvents(DateTime startTime, DateTime endTime)
         {
-
-            get { return Convert.ToDateTime("1/1/2011"); }
-                
-         }
-         
-
-
+            var repository =
+                ControllerEventLogRepositoryFactory.Create();
+            PlanEvents = repository.GetSignalEventsByEventCode(SignalID, startTime, endTime, 131);
+        }
 
 
         //public List<Models.Lane> GetLaneGroupsForSignal()
@@ -54,29 +54,23 @@ namespace MOE.Common.Models
 
         public string GetMetricTypesString()
         {
-            string metricTypesString = string.Empty;
+            var metricTypesString = string.Empty;
             foreach (var metric in GetAvailableMetrics())
-            {
                 metricTypesString += metric.MetricID + ",";
-            }
 
-            if (!String.IsNullOrEmpty(metricTypesString))
-            {
-                metricTypesString =  metricTypesString.TrimEnd(',');
-            }
+            if (!string.IsNullOrEmpty(metricTypesString))
+                metricTypesString = metricTypesString.TrimEnd(',');
             return metricTypesString;
         }
 
         public List<int> GetPhasesForSignal()
         {
-            List<int> phases = new List<int>();
-            foreach (Approach a in Approaches)
+            var phases = new List<int>();
+            foreach (var a in Approaches)
             {
                 if (a.PermissivePhaseNumber != null)
-                {
                     phases.Add(a.PermissivePhaseNumber.Value);
-                }
-                phases.Add(a.ProtectedPhaseNumber);                
+                phases.Add(a.ProtectedPhaseNumber);
             }
             return phases.Select(p => p).Distinct().ToList();
         }
@@ -86,48 +80,25 @@ namespace MOE.Common.Models
             return PrimaryName + " @ " + SecondaryName;
         }
 
-        [NotMapped]
-        public string SelectListName
-        {
-            get
-            {
-                if (Start == DateTime.MaxValue || Start == Convert.ToDateTime("12/31/9999"))
-                {
-                    return "Current";
-                }
-                return Start.ToShortDateString() + " - " + Note;
-            } 
-
-        }
-
 
         public List<Detector> GetDetectorsForSignal()
         {
-            List<Detector> detectors = new List<Detector>();
-            foreach(Approach a in Approaches.OrderBy(a => a.ProtectedPhaseNumber))
-            {
-                foreach(Detector d in a.Detectors)
-                {
-                    
-                    detectors.Add(d);
-                }
-            }
+            var detectors = new List<Detector>();
+            foreach (var a in Approaches.OrderBy(a => a.ProtectedPhaseNumber))
+            foreach (var d in a.Detectors)
+                detectors.Add(d);
             return detectors.OrderBy(d => d.DetectorID).ToList();
         }
 
 
         public List<Detector> GetDetectorsForSignalThatSupportAMetric(int MetricTypeID)
         {
-            IDetectorRepository gdr = 
+            var gdr =
                 DetectorRepositoryFactory.Create();
-            List<Detector> detectors = new List<Detector>();
-            foreach (Detector d in GetDetectorsForSignal())
-            {
+            var detectors = new List<Detector>();
+            foreach (var d in GetDetectorsForSignal())
                 if (gdr.CheckReportAvialbility(d.DetectorID, MetricTypeID))
-                {
                     detectors.Add(d);
-                }
-            }                
             return detectors;
         }
 
@@ -136,153 +107,104 @@ namespace MOE.Common.Models
             Detector returnDet = null;
 
 
-            foreach (Approach a in Approaches)
-            {
+            foreach (var a in Approaches)
                 if (a.Detectors.Count > 0)
-                {
-                    foreach (Detector det in a.Detectors)
-                    {
+                    foreach (var det in a.Detectors)
                         if (det.DetChannel == detectorChannel)
-                        {
                             returnDet = det;
 
-                        }
-                    }
-                }
-            }
-
             return returnDet;
-
-
         }
 
         public bool CheckReportAvailabilityForSignal(int MetricTypeID)
         {
-            IDetectorRepository gdr = 
+            var gdr =
                 DetectorRepositoryFactory.Create();
-            List<Detector> detectors = new List<Detector>();
-            foreach (Detector d in GetDetectorsForSignal())
-            {
+            var detectors = new List<Detector>();
+            foreach (var d in GetDetectorsForSignal())
                 if (gdr.CheckReportAvialbility(d.DetectorID, MetricTypeID))
-                {
                     detectors.Add(d);
-                }
-            }
-            if(detectors.Count>0)
-            {
+            if (detectors.Count > 0)
                 return true;
-            }
             return false;
         }
 
-        public List<Detector> GetDetectorsForSignalThatSupportAMetricByApproachDirection(int MetricTypeID, string Direction)
+        public List<Detector> GetDetectorsForSignalThatSupportAMetricByApproachDirection(int MetricTypeID,
+            string Direction)
         {
-            IDetectorRepository gdr = 
+            var gdr =
                 DetectorRepositoryFactory.Create();
-            List<Detector> detectors = new List<Detector>();
-            foreach (Detector d in GetDetectorsForSignal())
-            {
-                if (gdr.CheckReportAvialbility(d.DetectorID, MetricTypeID) && d.Approach.DirectionType.Description == Direction)
-                {
+            var detectors = new List<Detector>();
+            foreach (var d in GetDetectorsForSignal())
+                if (gdr.CheckReportAvialbility(d.DetectorID, MetricTypeID) &&
+                    d.Approach.DirectionType.Description == Direction)
                     detectors.Add(d);
-                }
-            }
             return detectors;
         }
 
         public List<Detector> GetDetectorsForSignalThatSupportAMetricByPhaseNumber(int metricTypeId, int phaseNumber)
         {
-            IDetectorRepository gdr = DetectorRepositoryFactory.Create();
-            List<Detector> detectors = new List<Detector>();
-            foreach (Detector d in GetDetectorsForSignal())
-            {
-                if (gdr.CheckReportAvialbilityByDetector(d, metricTypeId) && 
+            var gdr = DetectorRepositoryFactory.Create();
+            var detectors = new List<Detector>();
+            foreach (var d in GetDetectorsForSignal())
+                if (gdr.CheckReportAvialbilityByDetector(d, metricTypeId) &&
                     (d.Approach.ProtectedPhaseNumber == phaseNumber || d.Approach.PermissivePhaseNumber == phaseNumber))
-                {
                     detectors.Add(d);
-                }
-            }
             return detectors;
         }
 
-        public List<Detector> GetDetectorsForSignalByPhaseNumber( int phaseNumber)
+        public List<Detector> GetDetectorsForSignalByPhaseNumber(int phaseNumber)
         {
-            List<Detector> dets = new List<Detector>();
-            foreach (Detector d in GetDetectorsForSignal())
-            {
+            var dets = new List<Detector>();
+            foreach (var d in GetDetectorsForSignal())
                 if (d.Approach.ProtectedPhaseNumber == phaseNumber || d.Approach.PermissivePhaseNumber == phaseNumber)
-                {
                     dets.Add(d);
-                }
-            }
             return dets;
         }
 
         public List<MetricType> GetAvailableMetricsVisibleToWebsite()
         {
 //TODO: The list really should be filtered by active timestamp.  We Will do it if we have time. 
-            IMetricTypeRepository metRep =
+            var metRep =
                 MetricTypeRepositoryFactory.Create();
 
-            ISignalsRepository sigRep = SignalsRepositoryFactory.Create();
+            var sigRep = SignalsRepositoryFactory.Create();
 
-            List<Signal> versions = sigRep.GetAllVersionsOfSignalBySignalID(signalID);
+            var versions = sigRep.GetAllVersionsOfSignalBySignalID(signalID);
 
-            List<MetricType> availableMetrics = metRep.GetBasicMetrics();
+            var availableMetrics = metRep.GetBasicMetrics();
             foreach (var version in versions)
-            {
-
                 if (version.VersionActionId != 3)
-                {
                     foreach (var d in GetDetectorsForSignal())
-                    {
-                        foreach (var dt in d.DetectionTypes)
-                        {
-                            if (dt.DetectionTypeID != 1)
-                            {
-                                foreach (var m in dt.MetricTypes)
-                                {
-                                    if (m.ShowOnWebsite)
-                                    {
-                                        availableMetrics.Add(m);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+                    foreach (var dt in d.DetectionTypes)
+                        if (dt.DetectionTypeID != 1)
+                            foreach (var m in dt.MetricTypes)
+                                if (m.ShowOnWebsite)
+                                    availableMetrics.Add(m);
             return availableMetrics.Distinct().OrderBy(a => a.MetricID).ToList();
         }
 
         public List<MetricType> GetAvailableMetrics()
         {
-            IMetricTypeRepository repository =
+            var repository =
                 MetricTypeRepositoryFactory.Create();
 
-            List<MetricType> availableMetrics = repository.GetBasicMetrics();
-            foreach(var d in GetDetectorsForSignal())
-            {
-                foreach(var dt in d.DetectionTypes)
-                {
-                    if (dt.DetectionTypeID != 1)
-                    {
-                        foreach (var m in dt.MetricTypes)
-                        {
-                            availableMetrics.Add(m);
-                        }
-                    }
-                }
-            }
+            var availableMetrics = repository.GetBasicMetrics();
+            foreach (var d in GetDetectorsForSignal())
+            foreach (var dt in d.DetectionTypes)
+                if (dt.DetectionTypeID != 1)
+                    foreach (var m in dt.MetricTypes)
+                        availableMetrics.Add(m);
             return availableMetrics.Distinct().ToList();
         }
-            
+
         private List<MetricType> GetBasicMetrics()
         {
-            IMetricTypeRepository repository =
+            var repository =
                 MetricTypeRepositoryFactory.Create();
             return repository.GetBasicMetrics();
         }
+
         public bool Equals(Signal signalToCompare)
         {
             return CompareSignalProperties(signalToCompare);
@@ -290,7 +212,7 @@ namespace MOE.Common.Models
 
         private bool CompareSignalProperties(Signal signalToCompare)
         {
-            if(signalToCompare != null
+            if (signalToCompare != null
                 && SignalID == signalToCompare.SignalID
                 && PrimaryName == signalToCompare.PrimaryName
                 && SecondaryName == signalToCompare.SecondaryName
@@ -301,15 +223,14 @@ namespace MOE.Common.Models
                 && ControllerTypeID == signalToCompare.ControllerTypeID
                 && Enabled == signalToCompare.Enabled
                 && Approaches.Count() == signalToCompare.Approaches.Count()
-                )
-            {
+            )
                 return true;
-            }
             return false;
         }
+
         public static Signal CopyVersion(Signal origVersion)
         {
-            Signal newVersion = new Signal();
+            var newVersion = new Signal();
 
             CopyCommonSignalSettings(origVersion, newVersion);
 
@@ -331,20 +252,17 @@ namespace MOE.Common.Models
             newSignal.Approaches = new List<Approach>();
 
             if (origSignal.Approaches != null)
-            {
-                foreach (Approach a in origSignal.Approaches)
+                foreach (var a in origSignal.Approaches)
                 {
-                    Approach aForNewSignal =
+                    var aForNewSignal =
                         Approach.CopyApproachForSignal(a.ApproachID); //this does the db.Save inside.
                     newSignal.Approaches.Add(aForNewSignal);
-
                 }
-            }
         }
+
         public static Signal CopySignal(Signal origSignal, string newSignalID)
         {
-            
-            Signal newSignal = new Signal();
+            var newSignal = new Signal();
 
             CopyCommonSignalSettings(origSignal, newSignal);
 
@@ -355,24 +273,21 @@ namespace MOE.Common.Models
 
         public List<Approach> GetApproachesForSignalThatSupportMetric(int metricTypeID)
         {
-            List<Approach> approachesForMeticType = new List<Approach>();
-            foreach(Approach a in Approaches)
-            {
-                foreach(Detector d in a.Detectors)
+            var approachesForMeticType = new List<Approach>();
+            foreach (var a in Approaches)
+            foreach (var d in a.Detectors)
+                if (d.DetectorSupportsThisMetric(metricTypeID))
                 {
-                    if(d.DetectorSupportsThisMetric(metricTypeID))
-                    {
-                        approachesForMeticType.Add(a);
-                        break;
-                    }
+                    approachesForMeticType.Add(a);
+                    break;
                 }
-            }
-            return approachesForMeticType.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a =>a.DirectionType.Description).ToList();
+            return approachesForMeticType.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description)
+                .ToList();
         }
 
         public List<DirectionType> GetAvailableDirections()
         {
-            List<DirectionType> directions = Approaches.Select(a => a.DirectionType).Distinct().ToList();
+            var directions = Approaches.Select(a => a.DirectionType).Distinct().ToList();
             return directions;
         }
     }

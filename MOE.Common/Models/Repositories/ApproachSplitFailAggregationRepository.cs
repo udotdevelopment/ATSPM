@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace MOE.Common.Models.Repositories
 {
-    public class ApproachSplitFailAggregationRepository: IApproachSplitFailAggregationRepository
+    public class ApproachSplitFailAggregationRepository : IApproachSplitFailAggregationRepository
     {
-        private Models.SPM _db;
+        private readonly SPM _db;
+
         public ApproachSplitFailAggregationRepository()
         {
             _db = new SPM();
         }
+
         public ApproachSplitFailAggregationRepository(SPM context)
         {
             _db = context;
@@ -22,17 +23,16 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public int GetApproachSplitFailCountAggregationByApproachIdAndDateRange(int approachId, DateTime start, DateTime end)
+        public int GetApproachSplitFailCountAggregationByApproachIdAndDateRange(int approachId, DateTime start,
+            DateTime end)
         {
-            int splitFails = 0;
+            var splitFails = 0;
             if (_db.ApproachSplitFailAggregations.Any(r => r.ApproachId == approachId
                                                            && r.BinStartTime >= start && r.BinStartTime <= end))
-            {
                 splitFails = _db.ApproachSplitFailAggregations.Where(r => r.ApproachId == approachId
-                                                                              && r.BinStartTime >= start &&
-                                                                              r.BinStartTime <= end)
+                                                                          && r.BinStartTime >= start &&
+                                                                          r.BinStartTime <= end)
                     .Sum(r => r.SplitFailures);
-            }
             return splitFails;
         }
 
@@ -41,11 +41,12 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public List<ApproachSplitFailAggregation> GetApproachSplitFailsAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate, bool getProtectedPhase)
+        public List<ApproachSplitFailAggregation> GetApproachSplitFailsAggregationByApproachIdAndDateRange(
+            int approachId, DateTime startDate, DateTime endDate, bool getProtectedPhase)
         {
             return _db.ApproachSplitFailAggregations.Where(r => r.ApproachId == approachId
-                                                                          && r.BinStartTime >= startDate &&
-                                                                          r.BinStartTime <= endDate).ToList();
+                                                                && r.BinStartTime >= startDate &&
+                                                                r.BinStartTime <= endDate).ToList();
         }
 
 
@@ -53,7 +54,5 @@ namespace MOE.Common.Models.Repositories
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

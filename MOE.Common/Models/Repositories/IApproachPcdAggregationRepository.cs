@@ -7,9 +7,12 @@ namespace MOE.Common.Models.Repositories
     {
         int GetApproachPcdCountAggregationByApproachIdAndDateRange(int versionId, DateTime start,
             DateTime end);
+
         ApproachPcdAggregation Add(ApproachPcdAggregation priorityAggregation);
         void Update(ApproachPcdAggregation priorityAggregation);
         void Remove(ApproachPcdAggregation priorityAggregation);
-        List<ApproachPcdAggregation> GetApproachPcdsAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate, bool getProtectedPhase);
+
+        List<ApproachPcdAggregation> GetApproachPcdsAggregationByApproachIdAndDateRange(int approachId,
+            DateTime startDate, DateTime endDate, bool getProtectedPhase);
     }
 }

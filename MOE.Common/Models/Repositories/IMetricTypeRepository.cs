@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
     public interface IMetricTypeRepository
     {
-        List<Models.MetricType> GetAllMetrics();
+        List<MetricType> GetAllMetrics();
 
         List<MetricType> GetAllToDisplayMetrics();
 
@@ -19,7 +15,6 @@ namespace MOE.Common.Models.Repositories
 
         MetricType GetMetricsByID(int metricID);
 
-        List<Models.MetricType> GetMetricTypesByMetricComment(Models.MetricComment metricComment);
-
+        List<MetricType> GetMetricTypesByMetricComment(MetricComment metricComment);
     }
 }

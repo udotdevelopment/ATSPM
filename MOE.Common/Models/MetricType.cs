@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.Spatial;
 
 namespace MOE.Common.Models
 {
@@ -31,6 +28,5 @@ namespace MOE.Common.Models
         public virtual ICollection<DetectionType> DetectionTypes { get; set; }
         public virtual ICollection<MetricComment> Comments { get; set; }
         public virtual ICollection<ActionLog> ActionLogs { get; set; }
-      
     }
 }

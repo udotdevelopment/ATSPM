@@ -143,7 +143,7 @@
 
 //        public void AddOrUpdate(MOE.Common.Models.Signal signal)
 //    {
-        
+
 
 //        MOE.Common.Models.Signal g = (from r in db.Signals
 //                                      where r.SignalID == signal.SignalID
@@ -160,7 +160,7 @@
 
 //            }
 
-            
+
 //    }
 //        public List<MOE.Common.Business.Pin> GetPinInfo()
 //        {
@@ -196,7 +196,6 @@
 
 
 //            }
-
 
 
 //            return (distinctsignalinfo);
@@ -277,5 +276,6 @@
 //        }
 //    }
 
-    
+
 //}
+

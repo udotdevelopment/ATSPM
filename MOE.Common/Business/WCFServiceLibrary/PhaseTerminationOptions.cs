@@ -1,41 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.DataVisualization.Charting;
-using MOE.Common.Business;
-using MOE.Common.Models;
-using System.Runtime.Serialization;
-using System.Data;
-using System.Data.SqlClient;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
+using System.Runtime.Serialization;
+using System.Web.UI.DataVisualization.Charting;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
     [DataContract]
     public class PhaseTerminationOptions : MetricOptions
     {
-        [Required]
-        [DataMember]
-        [Display(Name = "Consecutive Count")]
-        public int SelectedConsecutiveCount { get; set; }
-        [DataMember]
-        public List<int> ConsecutiveCountList { get; set; }
-        [DataMember]
-        [Display(Name = "Show Ped Activity")]
-        public bool ShowPedActivity { get; set; }
-        [DataMember]
-        [Display(Name = "Show Plans")]
-        public bool ShowPlanStripes { get; set; }
-        [DataMember]
-        public bool ShowArrivalsOnGreen { get; set; }
-
-
         public PhaseTerminationOptions(DateTime startDate,
             double yAxisMax,
             DateTime endDate,
@@ -67,6 +41,26 @@ namespace MOE.Common.Business.WCFServiceLibrary
             ShowArrivalsOnGreen = true;
             SetDefaults();
         }
+
+        [Required]
+        [DataMember]
+        [Display(Name = "Consecutive Count")]
+        public int SelectedConsecutiveCount { get; set; }
+
+        [DataMember]
+        public List<int> ConsecutiveCountList { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Ped Activity")]
+        public bool ShowPedActivity { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Plans")]
+        public bool ShowPlanStripes { get; set; }
+
+        [DataMember]
+        public bool ShowArrivalsOnGreen { get; set; }
+
         public void SetDefaults()
         {
             ShowPlanStripes = true;
@@ -77,8 +71,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void CreateLegend()
         {
-            Chart dummychart = new Chart();
-            ChartArea chartarea1 = new ChartArea();
+            var dummychart = new Chart();
+            var chartarea1 = new ChartArea();
             dummychart.ImageType = ChartImageType.Jpeg;
             dummychart.Height = 200;
 
@@ -87,11 +81,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
             dummychart.ImageStorageMode = ImageStorageMode.UseImageLocation;
             dummychart.BorderlineDashStyle = ChartDashStyle.Dot;
 
-            Series PedActivity = new Series();
-            Series GapoutSeries = new Series();
-            Series MaxOutSeries = new Series();
-            Series ForceOffSeries = new Series();
-            Series UnknownSeries = new Series();
+            var PedActivity = new Series();
+            var GapoutSeries = new Series();
+            var MaxOutSeries = new Series();
+            var ForceOffSeries = new Series();
+            var UnknownSeries = new Series();
 
             PedActivity.Name = "Ped Activity";
             GapoutSeries.Name = "Gap Out";
@@ -109,10 +103,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
             GapoutSeries.Color = Color.OliveDrab;
             PedActivity.Color = Color.DarkGoldenrod;
             MaxOutSeries.Color = Color.Red;
-            ForceOffSeries.Color = Color.MediumBlue;           
-            UnknownSeries.Color = Color.FromArgb(255,255,0);
+            ForceOffSeries.Color = Color.MediumBlue;
+            UnknownSeries.Color = Color.FromArgb(255, 255, 0);
 
-        
+
             dummychart.Series.Add(GapoutSeries);
             dummychart.Series.Add(MaxOutSeries);
             dummychart.Series.Add(ForceOffSeries);
@@ -122,7 +116,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             dummychart.ChartAreas.Add(chartarea1);
 
-            Legend dummychartLegend = new Legend();
+            var dummychartLegend = new Legend();
             dummychartLegend.Name = "DummyLegend";
 
             dummychartLegend.IsDockedInsideChartArea = true;
@@ -133,23 +127,21 @@ namespace MOE.Common.Business.WCFServiceLibrary
             dummychart.Legends.Add(dummychartLegend);
 
 
-
-            dummychart.SaveImage(MetricFileLocation + "PPTLegend.jpeg", System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
+            dummychart.SaveImage(MetricFileLocation + "PPTLegend.jpeg", ChartImageFormat.Jpeg);
 
             ReturnList.Add(MetricWebPath + "PPTLegend.jpeg");
-
-      
         }
+
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
-            string location = GetSignalLocation();
-            Chart chart = new Chart();
+            var location = GetSignalLocation();
+            var chart = new Chart();
 
 
-            MOE.Common.Business.AnalysisPhaseCollection analysisPhaseCollection =
-                           new MOE.Common.Business.AnalysisPhaseCollection(SignalID, StartDate,
-                               EndDate, SelectedConsecutiveCount);
+            var analysisPhaseCollection =
+                new AnalysisPhaseCollection(SignalID, StartDate,
+                    EndDate, SelectedConsecutiveCount);
 
             //If there are phases in the collection add the charts
             if (analysisPhaseCollection.Items.Count > 0)
@@ -161,23 +153,17 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     ShowPedActivity, ShowPlanStripes);
             }
 
-            string chartName = CreateFileName();
-            List<Title> removethese = new List<Title>();
+            var chartName = CreateFileName();
+            var removethese = new List<Title>();
 
-            foreach (Title t in chart.Titles)
-            {
+            foreach (var t in chart.Titles)
                 if (t.Text == "" || t.Text == null)
-                {
                     removethese.Add(t);
-                }
-            }
-            foreach (Title t in removethese)
-            {
+            foreach (var t in removethese)
                 chart.Titles.Remove(t);
-            }
 
             //Save an image of the chart
-            chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
+            chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
 
             ReturnList.Add(MetricWebPath + chartName);
 
@@ -185,11 +171,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
         }
 
         protected Chart GetNewTermEventChart(DateTime graphStartDate, DateTime graphEndDate,
-       string signalId, string location, int consecutiveCount,
-       int maxPhaseInUse, bool showPedWalkStartTime)
+            string signalId, string location, int consecutiveCount,
+            int maxPhaseInUse, bool showPedWalkStartTime)
         {
-            Chart chart = new Chart();
-            string extendedDirection = string.Empty;
+            var chart = new Chart();
+            var extendedDirection = string.Empty;
 
             //Set the chart properties
             chart.ImageType = ChartImageType.Jpeg;
@@ -197,13 +183,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chart.Width = 1100;
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
             chart.BorderlineDashStyle = ChartDashStyle.Dot;
-            TimeSpan reportTimespan = EndDate - StartDate;
+            var reportTimespan = EndDate - StartDate;
 
             SetChartTitle(chart);
             //Create the chart area
-            ChartArea chartArea = new ChartArea();
+            var chartArea = new ChartArea();
             chartArea.Name = "ChartArea1";
-            chartArea.AxisY.Maximum = (maxPhaseInUse + .5);
+            chartArea.AxisY.Maximum = maxPhaseInUse + .5;
             chartArea.AxisY.Minimum = -.5;
 
             chartArea.AxisX.Title = "Time (Hour of Day)";
@@ -211,7 +197,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chartArea.AxisX.LabelStyle.Format = "HH";
             chartArea.AxisX2.LabelStyle.Format = "HH";
             if (reportTimespan.Days < 1)
-            {
                 if (reportTimespan.Hours > 1)
                 {
                     chartArea.AxisX2.Interval = 1;
@@ -222,7 +207,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     chartArea.AxisX.LabelStyle.Format = "HH:mm";
                     chartArea.AxisX2.LabelStyle.Format = "HH:mm";
                 }
-            }
             chartArea.AxisX2.Enabled = AxisEnabled.True;
             chartArea.AxisX2.MajorTickMark.Enabled = true;
             chartArea.AxisX2.IntervalType = DateTimeIntervalType.Hours;
@@ -236,7 +220,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             chart.ChartAreas.Add(chartArea);
 
-            Series GapoutSeries = new Series();
+            var GapoutSeries = new Series();
             GapoutSeries.ChartType = SeriesChartType.Point;
             GapoutSeries.Color = Color.OliveDrab;
             GapoutSeries.Name = "GapOut";
@@ -244,7 +228,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             GapoutSeries.MarkerStyle = MarkerStyle.Circle;
             GapoutSeries.MarkerSize = 3;
 
-            Series MaxOutSeries = new Series();
+            var MaxOutSeries = new Series();
             MaxOutSeries.ChartType = SeriesChartType.Point;
             MaxOutSeries.Color = Color.Red;
             MaxOutSeries.Name = "MaxOut";
@@ -252,23 +236,25 @@ namespace MOE.Common.Business.WCFServiceLibrary
             MaxOutSeries.MarkerStyle = MarkerStyle.Cross;
             MaxOutSeries.MarkerSize = 4;
 
-            Series ForceOffSeries = new Series();
+            var ForceOffSeries = new Series();
             ForceOffSeries.ChartType = SeriesChartType.Point;
             ForceOffSeries.Color = Color.MediumBlue;
             ForceOffSeries.Name = "ForceOff";
             ForceOffSeries.MarkerStyle = MarkerStyle.Circle;
             ForceOffSeries.MarkerSize = 4;
 
-            Series UnknownTermination = new Series();
+            var UnknownTermination = new Series();
             UnknownTermination.ChartType = SeriesChartType.Point;
-            UnknownTermination.Color = Color.FromArgb(255, 255, 0); ;
-            UnknownTermination.MarkerBorderColor = Color.FromArgb(255, 255, 0); ;
-           
+            UnknownTermination.Color = Color.FromArgb(255, 255, 0);
+            ;
+            UnknownTermination.MarkerBorderColor = Color.FromArgb(255, 255, 0);
+            ;
+
             UnknownTermination.Name = "Unknown";
             UnknownTermination.MarkerStyle = MarkerStyle.Circle;
             UnknownTermination.MarkerSize = 4;
 
-            Series PedSeries = new Series();
+            var PedSeries = new Series();
             PedSeries.ChartType = SeriesChartType.Point;
             PedSeries.Color = Color.OrangeRed;
             PedSeries.Name = "Ped Walk Begin";
@@ -277,27 +263,20 @@ namespace MOE.Common.Business.WCFServiceLibrary
             PedSeries.MarkerSize = 3;
 
             if (showPedWalkStartTime)
-            {
                 PedSeries.IsVisibleInLegend = true;
-            }
             else
-            {
                 PedSeries.IsVisibleInLegend = false;
-            }
 
 
-            
-
-            
             chart.Series.Add(GapoutSeries);
             chart.Series.Add(MaxOutSeries);
             chart.Series.Add(ForceOffSeries);
             chart.Series.Add(PedSeries);
             chart.Series.Add(UnknownTermination);
-            
+
 
             //Add the Posts series to ensure the chart is the size of the selected timespan
-            Series testSeries = new Series();
+            var testSeries = new Series();
             testSeries.IsVisibleInLegend = false;
             testSeries.ChartType = SeriesChartType.Point;
             testSeries.Color = Color.White;
@@ -316,82 +295,56 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void SetChartTitle(Chart chart)
         {
-            chart.Titles.Add(ChartTitleFactory.GetChartName(this.MetricTypeID));
-            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(this.SignalID, this.StartDate, this.EndDate));
-            chart.Titles.Add(ChartTitleFactory.GetTitle("Currently showing Force-Offs, Max-Outs and Gap-Outs with a consecutive occurrence of " +
-                this.SelectedConsecutiveCount.ToString() + " or more. \n  Pedestrian events are never filtered"));
+            chart.Titles.Add(ChartTitleFactory.GetChartName(MetricTypeID));
+            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(SignalID, StartDate, EndDate));
+            chart.Titles.Add(ChartTitleFactory.GetTitle(
+                "Currently showing Force-Offs, Max-Outs and Gap-Outs with a consecutive occurrence of " +
+                SelectedConsecutiveCount + " or more. \n  Pedestrian events are never filtered"));
         }
 
         protected void AddTermEventDataToChart(Chart chart, DateTime startDate,
-          DateTime endDate, MOE.Common.Business.AnalysisPhaseCollection analysisPhaseCollection,
+            DateTime endDate, AnalysisPhaseCollection analysisPhaseCollection,
             string signalId, bool showVolume, bool showPlanStripes)
         {
-            foreach (MOE.Common.Business.AnalysisPhase phase in analysisPhaseCollection.Items)
+            foreach (var phase in analysisPhaseCollection.Items)
             {
-
                 if (phase.TerminationEvents.Count > 0)
                 {
-
-                    foreach (MOE.Common.Models.Controller_Event_Log TermEvent in phase.ConsecutiveGapOuts)
-                    {
-
+                    foreach (var TermEvent in phase.ConsecutiveGapOuts)
                         chart.Series["GapOut"].Points.AddXY(TermEvent.Timestamp, phase.PhaseNumber);
-                    }
 
-                    foreach (MOE.Common.Models.Controller_Event_Log TermEvent in phase.ConsecutiveMaxOut)
-                    {
+                    foreach (var TermEvent in phase.ConsecutiveMaxOut)
                         chart.Series["MaxOut"].Points.AddXY(TermEvent.Timestamp, phase.PhaseNumber);
-                    }
 
-                    foreach (MOE.Common.Models.Controller_Event_Log TermEvent in phase.ConsecutiveForceOff)
-                    {
+                    foreach (var TermEvent in phase.ConsecutiveForceOff)
                         chart.Series["ForceOff"].Points.AddXY(TermEvent.Timestamp, phase.PhaseNumber);
-                    }
 
-                    foreach (MOE.Common.Models.Controller_Event_Log TermEvent in phase.UnknownTermination)
-                    {
+                    foreach (var TermEvent in phase.UnknownTermination)
                         chart.Series["Unknown"].Points.AddXY(TermEvent.Timestamp, phase.PhaseNumber);
-                    }
 
                     if (ShowPedActivity)
-                    {
-                        foreach (MOE.Common.Models.Controller_Event_Log PedEvent in phase.PedestrianEvents)
-                        {
+                        foreach (var PedEvent in phase.PedestrianEvents)
                             if (PedEvent.EventCode == 23)
-                            {
-                                chart.Series["Ped Walk Begin"].Points.AddXY(PedEvent.Timestamp, (phase.PhaseNumber + .3));
-                            }
-                        }
-                    }
-
+                                chart.Series["Ped Walk Begin"].Points.AddXY(PedEvent.Timestamp, phase.PhaseNumber + .3);
                 }
                 if (showPlanStripes)
-                {
                     SetSimplePlanStrips(analysisPhaseCollection.Plans, chart, startDate);
-                }
                 if (YAxisMax != null)
-                {
                     chart.ChartAreas[0].AxisY.Maximum = YAxisMax.Value + .5;
-                }
             }
-
         }
 
         public static void SetSimplePlanStrips(List<PlanSplitMonitor> plans, Chart chart, DateTime graphStartDate)
         {
-            int backGroundColor = 1;
-            foreach (MOE.Common.Business.Plan plan in plans)
+            var backGroundColor = 1;
+            foreach (Plan plan in plans)
             {
-                StripLine stripline = new StripLine();
+                var stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans
                 if (backGroundColor % 2 == 0)
-                {
                     stripline.BackColor = Color.FromArgb(120, Color.LightGray);
-                }
                 else
-                {
                     stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
-                }
 
                 //Set the stripline properties
                 stripline.IntervalOffsetType = DateTimeIntervalType.Hours;
@@ -403,7 +356,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
 
                 //Add a corrisponding custom label for each strip
-                CustomLabel Plannumberlabel = new CustomLabel();
+                var Plannumberlabel = new CustomLabel();
                 Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
                 Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
                 switch (plan.PlanNumber)
@@ -418,7 +371,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         Plannumberlabel.Text = "Unknown";
                         break;
                     default:
-                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+                        Plannumberlabel.Text = "Plan " + plan.PlanNumber;
 
                         break;
                 }
@@ -431,14 +384,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
 
                 backGroundColor++;
-
             }
-
-
         }
-
-
-
     }
-
 }

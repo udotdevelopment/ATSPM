@@ -2,15 +2,12 @@
 {
     public class ApproachSplitFailAggregationRepositoryFactory
     {
-        
         private static IApproachSplitFailAggregationRepository _approachSplitFailAggregationRepository;
 
         public static IApproachSplitFailAggregationRepository Create()
         {
             if (_approachSplitFailAggregationRepository != null)
-            {
                 return _approachSplitFailAggregationRepository;
-            }
             return new ApproachSplitFailAggregationRepository();
         }
 

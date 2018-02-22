@@ -1,14 +1,12 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 
 namespace MOE.Common.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
     [DataContract]
-    public partial class Comment
+    public class Comment
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -23,6 +21,5 @@ namespace MOE.Common.Models
         [Display(Name = "Comment Text")]
         [DataMember]
         public string CommentText { get; set; }
-
     }
 }

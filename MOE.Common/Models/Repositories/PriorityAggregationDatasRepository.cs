@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace MOE.Common.Models.Repositories
 {
     public class PriorityAggregationDatasRepository : IPriorityAggregationDatasRepository
     {
-        SPM db = new SPM();
-
-
-        private Models.SPM _db;
+        private readonly SPM _db;
+        private readonly SPM db = new SPM();
 
 
         public PriorityAggregationDatasRepository()
@@ -24,6 +19,7 @@ namespace MOE.Common.Models.Repositories
         {
             _db = context;
         }
+
         public PriorityAggregation Add(PriorityAggregation priorityAggregation)
         {
             _db.PriorityAggregations.Add(priorityAggregation);
@@ -31,13 +27,11 @@ namespace MOE.Common.Models.Repositories
         }
 
 
-
-
-
-        public List<PriorityAggregation> GetPriorityAggregationByVersionIdAndDateRange(int versionId, DateTime start, DateTime end)
+        public List<PriorityAggregation> GetPriorityAggregationByVersionIdAndDateRange(int versionId, DateTime start,
+            DateTime end)
         {
-            var records = (from r in this._db.PriorityAggregations
-                           where r.VersionId == versionId
+            var records = (from r in _db.PriorityAggregations
+                where r.VersionId == versionId
                       && r.BinStartTime >= start && r.BinStartTime <= end
                 select r).ToList();
 
@@ -49,7 +43,8 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public List<PriorityAggregation> GetPriorityBySignalIdAndDateRange(string signalId, DateTime start, DateTime end)
+        public List<PriorityAggregation> GetPriorityBySignalIdAndDateRange(string signalId, DateTime start,
+            DateTime end)
         {
             return db.PriorityAggregations
                 .Where(p => p.SignalID == signalId && p.BinStartTime >= start && p.BinStartTime < end).ToList();
@@ -60,7 +55,5 @@ namespace MOE.Common.Models.Repositories
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

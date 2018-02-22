@@ -1,37 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Business.SplitFail
 {
     public class SplitFailDetectorActivationCollection
     {
-        public SortedList<DateTime, SplitFail.SplitFailDetectorActivation> Activations = new SortedList<DateTime, SplitFailDetectorActivation>();
-        public SplitFailDetectorActivationCollection()
+        public SortedList<DateTime, SplitFailDetectorActivation> Activations =
+            new SortedList<DateTime, SplitFailDetectorActivation>();
+
+        public void AddActivation(SplitFailDetectorActivation Activation)
         {
-        }
-        public void AddActivation(SplitFail.SplitFailDetectorActivation Activation)
-        {
-            if (this.Activations.ContainsKey(Activation.DetectorOn))
+            if (Activations.ContainsKey(Activation.DetectorOn))
             {
                 do
                 {
                     Activation.DetectorOn = Activation.DetectorOn.AddSeconds(.01);
                     Activation.DetectorOff = Activation.DetectorOff.AddSeconds(.01);
-                } while (this.Activations.ContainsKey(Activation.DetectorOn));
+                } while (Activations.ContainsKey(Activation.DetectorOn));
 
                 Activations.Add(Activation.DetectorOn, Activation);
             }
             else
-                {
-                    Activations.Add(Activation.DetectorOn, Activation);
-                }
-
+            {
+                Activations.Add(Activation.DetectorOn, Activation);
+            }
         }
 
-        
 
         //public double StartOfRedOccupancy(CycleSplitFail cycle, int secondsToWatch)
         //{
@@ -83,6 +77,5 @@ namespace MOE.Common.Business.SplitFail
         //    }
         //    return 0;
         //}
-
     }
 }

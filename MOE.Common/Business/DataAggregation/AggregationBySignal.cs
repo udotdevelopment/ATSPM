@@ -28,9 +28,7 @@ namespace MOE.Common.Business.DataAggregation
             get
             {
                 if (BinsContainers.Count > 1)
-                {
                     return Convert.ToInt32(Math.Round(BinsContainers.Average(b => b.SumValue)));
-                }
                 double numberOfBins = 0;
                 foreach (var binsContainer in BinsContainers)
                     numberOfBins += binsContainer.Bins.Count;

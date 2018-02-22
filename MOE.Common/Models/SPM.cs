@@ -1,27 +1,22 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure.Annotations;
+using Microsoft.AspNet.Identity.EntityFramework;
+using MOE.Common.Business.SiteSecurity;
+
 namespace MOE.Common.Models
 {
-    using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using Microsoft.AspNet.Identity.EntityFramework;
-    using System.Data.Entity.Infrastructure.Annotations;
-
-    public partial class SPM : IdentityDbContext<MOE.Common.Business.SiteSecurity.SPMUser>
+    public class SPM : IdentityDbContext<SPMUser>
     {
-         public SPM()
+        public SPM()
             : base("name=SPM")
         {
-            Database.SetInitializer<SPM>(new CreateDatabaseIfNotExists<SPM>());
-        }
-
-        public static MOE.Common.Models.SPM Create()
-        {
-            return new MOE.Common.Models.SPM();
+            Database.SetInitializer(new CreateDatabaseIfNotExists<SPM>());
         }
 
 
-       
-        public System.Data.Entity.DbSet<MOE.Common.Business.SiteSecurity.SPMRole> IdentityRoles { get; set; }
-        
+        public DbSet<SPMRole> IdentityRoles { get; set; }
+
         public virtual DbSet<ApplicationEvent> ApplicationEvents { get; set; }
         public virtual DbSet<SPMWatchDogErrorEvent> SPMWatchDogErrorEvents { get; set; }
         public virtual DbSet<MetricComment> MetricComments { get; set; }
@@ -33,7 +28,7 @@ namespace MOE.Common.Models
         public virtual DbSet<DetectionType> DetectionTypes { get; set; }
         public virtual DbSet<MetricsFilterType> MetricsFilterTypes { get; set; }
         public virtual DbSet<MetricType> MetricTypes { get; set; }
-        public virtual DbSet<Controller_Event_Log> Controller_Event_Log { get; set; }        
+        public virtual DbSet<Controller_Event_Log> Controller_Event_Log { get; set; }
         public virtual DbSet<Agency> Agencies { get; set; }
         public virtual DbSet<Detector> Detectors { get; set; }
         public virtual DbSet<Menu> Menus { get; set; }
@@ -52,7 +47,7 @@ namespace MOE.Common.Models
         public virtual DbSet<ApplicationSettings> ApplicationSettings { get; set; }
         public virtual DbSet<WatchDogApplicationSettings> WatchdogApplicationSettings { get; set; }
         public virtual DbSet<DatabaseArchiveSettings> DatabaseArchiveSettings { get; set; }
-        public  virtual DbSet<DatabaseArchiveExcludedSignals> DatabaseArchiveExcludedSignals { get; set; }
+        public virtual DbSet<DatabaseArchiveExcludedSignals> DatabaseArchiveExcludedSignals { get; set; }
         public virtual DbSet<GeneralSettings> GeneralSettings { get; set; }
         public virtual DbSet<DetectionHardware> DetectionHardwares { get; set; }
         public virtual DbSet<VersionAction> VersionActions { get; set; }
@@ -61,18 +56,27 @@ namespace MOE.Common.Models
         public virtual DbSet<ApproachCycleAggregation> ApproachCycleAggregations { get; set; }
         public virtual DbSet<ApproachPcdAggregation> ApproachPcdAggregations { get; set; }
         public virtual DbSet<ApproachSplitFailAggregation> ApproachSplitFailAggregations { get; set; }
-        public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedActivationAggregations { get; set; }
+
+        public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedActivationAggregations
+        {
+            get;
+            set;
+        }
+
         public virtual DbSet<ApproachSpeedAggregation> ApproachSpeedAggregations { get; set; }
         public virtual DbSet<DetectorAggregation> DetectorAggregations { get; set; }
 
-
+        public static SPM Create()
+        {
+            return new SPM();
+        }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
             //modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-            base.OnModelCreating(modelBuilder);  
+            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Signal>()
                 .Property(e => e.PrimaryName)
@@ -111,8 +115,9 @@ namespace MOE.Common.Models
                 .Property(e => e.DetectorID)
                 .IsRequired()
                 .HasMaxLength(50)
-                .HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAnnotation(new IndexAttribute("IX_DetectorIDUnique") { IsUnique = true }));
-            
+                .HasColumnAnnotation(IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_DetectorIDUnique") {IsUnique = true}));
+
 
             modelBuilder.Entity<ControllerType>()
                 .Property(e => e.Description)
@@ -139,11 +144,11 @@ namespace MOE.Common.Models
                 .HasMany(g => g.DetectionTypes)
                 .WithMany(d => d.Detectors)
                 .Map(mc =>
-                {
-                    mc.ToTable("DetectionTypeDetector");
-                    mc.MapLeftKey("ID");
-                    mc.MapRightKey("DetectionTypeID");
-                }
+                    {
+                        mc.ToTable("DetectionTypeDetector");
+                        mc.MapLeftKey("ID");
+                        mc.MapRightKey("DetectionTypeID");
+                    }
                 );
 
             modelBuilder.Entity<ActionLog>()

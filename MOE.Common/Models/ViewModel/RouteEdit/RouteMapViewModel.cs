@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MOE.Common.Models.ViewModel.Chart;
 
 namespace MOE.Common.Models.ViewModel.RouteEdit
 {
-    public class RouteMapViewModel:Chart.SignalSearchViewModel
+    public class RouteMapViewModel : SignalSearchViewModel
     {
-        public RouteMapViewModel()
-        {
-
-        }
     }
 }

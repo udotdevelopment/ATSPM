@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
     public interface IDetectorRepository
     {
-        MOE.Common.Models.Detector GetDetectorByDetectorID(string DetectorID);
-        List<MOE.Common.Models.Detector> GetDetectorsBySignalID(string SignalID);
-        MOE.Common.Models.Detector GetDetectorByID(int ID);
+        Detector GetDetectorByDetectorID(string DetectorID);
+        List<Detector> GetDetectorsBySignalID(string SignalID);
+
+        Detector GetDetectorByID(int ID);
+
         //List<MOE.Common.Models.Detectors> GetDetectorsBySignalIDAndPhase(string SignalID, int PhaseNumber);
-        List<MOE.Common.Models.Detector> GetDetectorsBySignalIDAndMetricType(string SignalID, int MetricID);
-        Detector Add(Models.Detector Detector);
-        void Update(Models.Detector Detector);
-        void Remove(Models.Detector Detector);
+        List<Detector> GetDetectorsBySignalIDAndMetricType(string SignalID, int MetricID);
+
+        Detector Add(Detector Detector);
+        void Update(Detector Detector);
+        void Remove(Detector Detector);
         void Remove(int ID);
         bool CheckReportAvialbility(string detectorID, int metricID);
         bool CheckReportAvialbilityByDetector(Detector gd, int metricID);

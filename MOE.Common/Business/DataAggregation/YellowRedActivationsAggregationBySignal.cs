@@ -8,7 +8,8 @@ namespace MOE.Common.Business.DataAggregation
 {
     public class YellowRedActivationsAggregationBySignal : AggregationBySignal
     {
-        public YellowRedActivationsAggregationBySignal(ApproachYellowRedActivationsAggregationOptions options, Models.Signal signal) : base(
+        public YellowRedActivationsAggregationBySignal(ApproachYellowRedActivationsAggregationOptions options,
+            Models.Signal signal) : base(
             options, signal)
         {
             ApproachYellowRedActivationsures = new List<YellowRedActivationsAggregationByApproach>();
@@ -16,7 +17,8 @@ namespace MOE.Common.Business.DataAggregation
             LoadBins(null, null);
         }
 
-        public YellowRedActivationsAggregationBySignal(ApproachYellowRedActivationsAggregationOptions options, Models.Signal signal,
+        public YellowRedActivationsAggregationBySignal(ApproachYellowRedActivationsAggregationOptions options,
+            Models.Signal signal,
             int phaseNumber) : base(options, signal)
         {
             ApproachYellowRedActivationsures = new List<YellowRedActivationsAggregationByApproach>();
@@ -29,14 +31,16 @@ namespace MOE.Common.Business.DataAggregation
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber == phaseNumber)
                         ApproachYellowRedActivationsures.Add(
-                            new YellowRedActivationsAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                            new YellowRedActivationsAggregationByApproach(approach, options.TimeOptions,
+                                options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
                 }
             LoadBins(null, null);
         }
 
-        public YellowRedActivationsAggregationBySignal(ApproachYellowRedActivationsAggregationOptions options, Models.Signal signal,
+        public YellowRedActivationsAggregationBySignal(ApproachYellowRedActivationsAggregationOptions options,
+            Models.Signal signal,
             DirectionType direction) : base(options, signal)
         {
             ApproachYellowRedActivationsures = new List<YellowRedActivationsAggregationByApproach>();
@@ -49,7 +53,8 @@ namespace MOE.Common.Business.DataAggregation
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null)
                         ApproachYellowRedActivationsures.Add(
-                            new YellowRedActivationsAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                            new YellowRedActivationsAggregationByApproach(approach, options.TimeOptions,
+                                options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
                 }
@@ -66,7 +71,9 @@ namespace MOE.Common.Business.DataAggregation
                 var bin = BinsContainers[i].Bins[binIndex];
                 foreach (var approachYellowRedActivationsAggregationContainer in ApproachYellowRedActivationsures)
                     bin.Sum += approachYellowRedActivationsAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
-                bin.Average = ApproachYellowRedActivationsures.Count > 0 ? bin.Sum / ApproachYellowRedActivationsures.Count : 0;
+                bin.Average = ApproachYellowRedActivationsures.Count > 0
+                    ? bin.Sum / ApproachYellowRedActivationsures.Count
+                    : 0;
             }
         }
 

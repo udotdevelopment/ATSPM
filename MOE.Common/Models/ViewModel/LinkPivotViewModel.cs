@@ -1,68 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.Spatial;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
+using MOE.Common.Business;
 
 namespace MOE.Common.Models.ViewModel
 {
     public class LinkPivotViewModel
-    {        
-        private MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
+    {
+        private SPM db = new SPM();
 
-        public int LinkPivotViewModelId { get; set; }
-        public List<Models.Route> Routes { get; set; }
-        [Required(ErrorMessage="Starting Point is required")]
-        [Display(Name="Starting Point")]
-        public string StartingPoint { get; set; }
-        [Required(ErrorMessage="Route is required")]
-        public int SelectedRouteId { get; set; }
-        public int Bias { get; set; }
-        [Required(ErrorMessage="Bias Direction is required")]
-        public string BiasUpDownStream { get; set; }
-        [Required]
-        [Display(Name="Start Date")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime StartDate { get; set; }
-        [Required]
-        [Display(Name = "Start Date")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime EndDate { get; set; }
-        [Required]
-        [Display(Name="Start Time")]        
-        public string StartTime { get; set; }
-        [Required]
-        [Display(Name = "Start Time")]
-        public string EndTime { get; set; }
-        [Required]
-        [Display(Name = "Start AM/PM")]
-        public string StartAMPM { get; set; }
-        [Required]
-        [Display(Name = "Start AM/PM")]
-        public string EndAMPM { get; set; }
-
-        //These parameters are used when a user selects a row on the table
-        public string SelectedSignalId { get; set; }
-        public string SelectedDownSignalId { get; set; }
-        public string SelectedUpstreamDirection { get; set; }
-        public string SelectedDownstreamDirection { get; set; }
-        public int SelectedDelta { get; set; }
-
-        public List<Day> AvailableDays { get; set; }
-
-        public List<Day> SelectedDays { get; set; }
-        [Required]
-        public PostedDays PostedDays { get; set; }
-
-        [Required(ErrorMessage="Cycle Length is required")]
-        [Display(Name = "Cycle Length")]
-        public int CycleLength { get; set; }
-        
         public LinkPivotViewModel()
         {
             AvailableDays = new List<Day>();
@@ -82,40 +29,88 @@ namespace MOE.Common.Models.ViewModel
             SelectedDays.Add(new Day(5, "Friday"));
         }
 
+        public int LinkPivotViewModelId { get; set; }
+        public List<Route> Routes { get; set; }
+
+        [Required(ErrorMessage = "Starting Point is required")]
+        [Display(Name = "Starting Point")]
+        public string StartingPoint { get; set; }
+
+        [Required(ErrorMessage = "Route is required")]
+        public int SelectedRouteId { get; set; }
+
+        public int Bias { get; set; }
+
+        [Required(ErrorMessage = "Bias Direction is required")]
+        public string BiasUpDownStream { get; set; }
+
+        [Required]
+        [Display(Name = "Start Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime StartDate { get; set; }
+
+        [Required]
+        [Display(Name = "Start Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime EndDate { get; set; }
+
+        [Required]
+        [Display(Name = "Start Time")]
+        public string StartTime { get; set; }
+
+        [Required]
+        [Display(Name = "Start Time")]
+        public string EndTime { get; set; }
+
+        [Required]
+        [Display(Name = "Start AM/PM")]
+        public string StartAMPM { get; set; }
+
+        [Required]
+        [Display(Name = "Start AM/PM")]
+        public string EndAMPM { get; set; }
+
+        //These parameters are used when a user selects a row on the table
+        public string SelectedSignalId { get; set; }
+
+        public string SelectedDownSignalId { get; set; }
+        public string SelectedUpstreamDirection { get; set; }
+        public string SelectedDownstreamDirection { get; set; }
+        public int SelectedDelta { get; set; }
+
+        public List<Day> AvailableDays { get; set; }
+
+        public List<Day> SelectedDays { get; set; }
+
+        [Required]
+        public PostedDays PostedDays { get; set; }
+
+        [Required(ErrorMessage = "Cycle Length is required")]
+        [Display(Name = "Cycle Length")]
+        public int CycleLength { get; set; }
+
         public List<DateTime> GetDays()
         {
-            List<DayOfWeek> daysList = new List<DayOfWeek>();
+            var daysList = new List<DayOfWeek>();
 
             if (PostedDays.DayIDs.Contains("0"))
-            {
                 daysList.Add(DayOfWeek.Sunday);
-            }
             if (PostedDays.DayIDs.Contains("1"))
-            {
                 daysList.Add(DayOfWeek.Monday);
-            }
             if (PostedDays.DayIDs.Contains("2"))
-            {
                 daysList.Add(DayOfWeek.Tuesday);
-            }
             if (PostedDays.DayIDs.Contains("3"))
-            {
                 daysList.Add(DayOfWeek.Wednesday);
-            }
             if (PostedDays.DayIDs.Contains("4"))
-            {
                 daysList.Add(DayOfWeek.Thursday);
-            }
             if (PostedDays.DayIDs.Contains("5"))
-            {
                 daysList.Add(DayOfWeek.Friday);
-            }
             if (PostedDays.DayIDs.Contains("6"))
-            {
                 daysList.Add(DayOfWeek.Saturday);
-            }
 
-            List<DateTime> dates = MOE.Common.Business.LinkPivot.GetDates(StartDate, EndDate, daysList);
+            var dates = LinkPivot.GetDates(StartDate, EndDate, daysList);
             return dates;
         }
     }
@@ -126,10 +121,11 @@ namespace MOE.Common.Models.ViewModel
         {
         }
 
-        public PostedDays(String[] dayIds)
+        public PostedDays(string[] dayIds)
         {
             DayIDs = dayIds;
         }
-        public String[] DayIDs { get; set; }
+
+        public string[] DayIDs { get; set; }
     }
 }

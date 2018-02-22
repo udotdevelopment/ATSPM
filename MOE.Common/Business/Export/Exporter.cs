@@ -1,19 +1,12 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using CsvHelper;
-using CsvHelper.Configuration;
 using MOE.Common.Models;
 
 namespace MOE.Common.Business.Export
 {
     public class Exporter
     {
-        public Exporter()
-        {
-            
-        }
-
         public static byte[] GetCsvFile(IEnumerable records)
         {
             using (var memoryStream = new MemoryStream())
@@ -27,8 +20,11 @@ namespace MOE.Common.Business.Export
                     csv.Configuration.RegisterClassMap<ApproachCycleAggregation.ApproachCycleAggregationClassMap>();
                     csv.Configuration.RegisterClassMap<ApproachPcdAggregation.ApproachPcdAggregationClassMap>();
                     csv.Configuration.RegisterClassMap<ApproachSpeedAggregation.ApproachSpeedAggregationClassMap>();
-                    csv.Configuration.RegisterClassMap<ApproachSplitFailAggregation.ApproachSplitFailAggregationClassMap>();
-                    csv.Configuration.RegisterClassMap<ApproachYellowRedActivationAggregation.ApproachYellowRedActivationAggregationClassMap>();
+                    csv.Configuration
+                        .RegisterClassMap<ApproachSplitFailAggregation.ApproachSplitFailAggregationClassMap>();
+                    csv.Configuration
+                        .RegisterClassMap<ApproachYellowRedActivationAggregation.
+                            ApproachYellowRedActivationAggregationClassMap>();
                     csv.Configuration.RegisterClassMap<DetectorAggregation.DetectorAggregationClassMap>();
                     csv.Configuration.RegisterClassMap<PreemptionAggregation.PreemptionAggregationClassMap>();
                     csv.Configuration.RegisterClassMap<PriorityAggregation.PriorityAggregationClassMap>();

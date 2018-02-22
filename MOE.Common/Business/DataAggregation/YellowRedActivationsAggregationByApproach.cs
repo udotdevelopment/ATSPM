@@ -11,7 +11,8 @@ namespace MOE.Common.Business.DataAggregation
 {
     public class YellowRedActivationsAggregationByApproach : AggregationByApproach
     {
-        public YellowRedActivationsAggregationByApproach(Approach approach, BinFactoryOptions timeOptions, DateTime startDate,
+        public YellowRedActivationsAggregationByApproach(Approach approach, BinFactoryOptions timeOptions,
+            DateTime startDate,
             DateTime endDate,
             bool getProtectedPhase, AggregatedDataType dataType) : base(approach, timeOptions, startDate, endDate,
             getProtectedPhase, dataType)
@@ -25,8 +26,9 @@ namespace MOE.Common.Business.DataAggregation
             var yellowRedActivationAggregationRepository =
                 ApproachYellowRedActivationsAggregationRepositoryFactory.Create();
             var yellowRedActivations =
-                yellowRedActivationAggregationRepository.GetApproachYellowRedActivationssAggregationByApproachIdAndDateRange(
-                    approach.ApproachID, startDate, endDate, getProtectedPhase);
+                yellowRedActivationAggregationRepository
+                    .GetApproachYellowRedActivationssAggregationByApproachIdAndDateRange(
+                        approach.ApproachID, startDate, endDate, getProtectedPhase);
             if (yellowRedActivations != null)
             {
                 var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
@@ -46,12 +48,14 @@ namespace MOE.Common.Business.DataAggregation
                             {
                                 case "SevereRedLightViolations":
                                     yellowRedActivationCount =
-                                        yellowRedActivations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                        yellowRedActivations.Where(s =>
+                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.SevereRedLightViolations);
                                     break;
                                 case "TotalRedLightViolations":
                                     yellowRedActivationCount =
-                                        yellowRedActivations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                        yellowRedActivations.Where(s =>
+                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.TotalRedLightViolations);
                                     break;
                                 default:

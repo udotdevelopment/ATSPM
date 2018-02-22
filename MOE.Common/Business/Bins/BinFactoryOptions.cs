@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace MOE.Common.Business.Bins
@@ -12,19 +12,40 @@ namespace MOE.Common.Business.Bins
         [TypeConverter(typeof(EnumToStringUsingDescription))]
         public enum BinSize
         {
-            [Description("Fifteen Minute")]
-            FifteenMinute,
-            [Description("Thirty Minute")]
-            ThirtyMinute,
+            [Description("Fifteen Minute")] FifteenMinute,
+            [Description("Thirty Minute")] ThirtyMinute,
             Hour,
             Day,
             Month,
             Year,
             Week
         }
-        public enum TimeOptions { StartToEnd, TimePeriod }
+
+        public enum TimeOptions
+        {
+            StartToEnd,
+            TimePeriod
+        }
+
+
+        public BinFactoryOptions(DateTime start, DateTime end, int? timeOfDayStartHour, int? timeOfDayStartMinute,
+            int? timeOfDayEndHour, int? timeOfDayEndMinute, List<DayOfWeek> daysOfWeek, BinSize binSize,
+            TimeOptions timeOption)
+        {
+            Start = start;
+            End = end;
+            TimeOfDayStartHour = timeOfDayStartHour;
+            TimeOfDayStartMinute = timeOfDayStartMinute;
+            TimeOfDayEndHour = timeOfDayEndHour;
+            TimeOfDayEndMinute = timeOfDayEndMinute;
+            DaysOfWeek = daysOfWeek;
+            SelectedBinSize = binSize;
+            TimeOption = timeOption;
+        }
+
         [DataMember]
-            public DateTime Start { get; set; }
+        public DateTime Start { get; set; }
+
         [DataMember]
         public DateTime End { get; set; }
 
@@ -49,87 +70,58 @@ namespace MOE.Common.Business.Bins
         [DataMember]
         public BinSize SelectedBinSize { get; set; }
 
-        
-       
-
-            public BinFactoryOptions(DateTime start, DateTime end, int? timeOfDayStartHour, int? timeOfDayStartMinute, int? timeOfDayEndHour, int? timeOfDayEndMinute, List<DayOfWeek> daysOfWeek, BinSize binSize, TimeOptions timeOption)
-            {
-                Start = start;
-                End = end;
-                TimeOfDayStartHour = timeOfDayStartHour;
-                TimeOfDayStartMinute = timeOfDayStartMinute;
-                TimeOfDayEndHour = timeOfDayEndHour;
-                TimeOfDayEndMinute = timeOfDayEndMinute;
-                DaysOfWeek = daysOfWeek;
-                SelectedBinSize = binSize;
-                TimeOption = timeOption;
-            }
         public List<DateTime> GetDateList()
         {
             if (DaysOfWeek != null)
-            {
                 return GetDateList(Start, End, DaysOfWeek);
-            }
-            else
-            {
-                List<DateTime> tempDateList = new List<DateTime>();
-                for (DateTime counterDate = Start; counterDate <= End; counterDate = counterDate.AddDays(1))
-                {
-                    tempDateList.Add(counterDate.Date);
-                }
-                return tempDateList;
-            }
+            var tempDateList = new List<DateTime>();
+            for (var counterDate = Start; counterDate <= End; counterDate = counterDate.AddDays(1))
+                tempDateList.Add(counterDate.Date);
+            return tempDateList;
         }
 
         private List<DateTime> GetDateList(DateTime startDate, DateTime endDate, List<DayOfWeek> daysOfWeek)
         {
-            List<DateTime> dates = new List<DateTime>();
+            var dates = new List<DateTime>();
 
-            for (DateTime counterDate = startDate; counterDate <= endDate; counterDate = counterDate.AddDays(1))
-            {
+            for (var counterDate = startDate; counterDate <= endDate; counterDate = counterDate.AddDays(1))
                 if (daysOfWeek.Contains(counterDate.DayOfWeek))
-                {
-                   
                     dates.Add(counterDate);
-                }
-            }
 
             return dates;
         }
     }
+
     public class EnumToStringUsingDescription : TypeConverter
     {
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
-            return (sourceType.Equals(typeof(Enum)));
+            return sourceType.Equals(typeof(Enum));
         }
 
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
-            return (destinationType.Equals(typeof(String)));
+            return destinationType.Equals(typeof(string));
         }
 
-        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             return base.ConvertFrom(context, culture, value);
         }
 
-        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value,
+            Type destinationType)
         {
-            if (!destinationType.Equals(typeof(String)))
-            {
+            if (!destinationType.Equals(typeof(string)))
                 throw new ArgumentException("Can only convert to string.", "destinationType");
-            }
 
             if (!value.GetType().BaseType.Equals(typeof(Enum)))
-            {
                 throw new ArgumentException("Can only convert an instance of enum.", "value");
-            }
 
-            string name = value.ToString();
-            object[] attrs =
+            var name = value.ToString();
+            var attrs =
                 value.GetType().GetField(name).GetCustomAttributes(typeof(DescriptionAttribute), false);
-            return (attrs.Length > 0) ? ((DescriptionAttribute)attrs[0]).Description : name;
+            return attrs.Length > 0 ? ((DescriptionAttribute) attrs[0]).Description : name;
         }
     }
 
@@ -143,7 +135,7 @@ namespace MOE.Common.Business.Bins
                 false);
             return attributes.Length == 0
                 ? value.ToString()
-                : ((DescriptionAttribute)attributes[0]).Description;
+                : ((DescriptionAttribute) attributes[0]).Description;
         }
     }
 }

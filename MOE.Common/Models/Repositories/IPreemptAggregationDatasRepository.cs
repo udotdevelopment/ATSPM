@@ -19,6 +19,8 @@ namespace MOE.Common.Models.Repositories
         PreemptionAggregation Add(PreemptionAggregation preemptionAggregation);
         void Update(PreemptionAggregation preemptionAggregation);
         void Remove(PreemptionAggregation preemptionAggregation);
-        List<PreemptionAggregation> GetPreemptionsBySignalIdAndDateRange(string signalId, DateTime startDate, DateTime endDate);
+
+        List<PreemptionAggregation> GetPreemptionsBySignalIdAndDateRange(string signalId, DateTime startDate,
+            DateTime endDate);
     }
 }

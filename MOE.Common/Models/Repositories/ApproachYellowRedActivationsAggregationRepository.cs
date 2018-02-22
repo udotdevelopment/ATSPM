@@ -2,38 +2,41 @@
 using System.Collections.Generic;
 using System.Linq;
 using MOE.Common.Business.DataAggregation;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace MOE.Common.Models.Repositories
 {
-    public class ApproachYellowRedActivationsAggregationRepository: IApproachYellowRedActivationsAggregationRepository
+    public class ApproachYellowRedActivationsAggregationRepository : IApproachYellowRedActivationsAggregationRepository
     {
-        private Models.SPM _db;
+        private readonly SPM _db;
+
         public ApproachYellowRedActivationsAggregationRepository()
         {
             _db = new SPM();
         }
+
         public ApproachYellowRedActivationsAggregationRepository(SPM context)
         {
             _db = context;
         }
 
-        public YellowRedActivationsAggregationByApproach Add(YellowRedActivationsAggregationByApproach approachYellowRedActivationsAggregation)
+        public YellowRedActivationsAggregationByApproach Add(
+            YellowRedActivationsAggregationByApproach approachYellowRedActivationsAggregation)
         {
             throw new NotImplementedException();
         }
 
-        public int GetApproachYellowRedActivationsCountAggregationByApproachIdAndDateRange(int approachId, DateTime start, DateTime end)
+        public int GetApproachYellowRedActivationsCountAggregationByApproachIdAndDateRange(int approachId,
+            DateTime start, DateTime end)
         {
-            int yellowRedActivations = 0;
+            var yellowRedActivations = 0;
             if (_db.ApproachYellowRedActivationAggregations.Any(r => r.ApproachId == approachId
-                                                           && r.BinStartTime >= start && r.BinStartTime <= end))
-            {
+                                                                     && r.BinStartTime >= start &&
+                                                                     r.BinStartTime <= end))
                 yellowRedActivations = _db.ApproachYellowRedActivationAggregations.Where(r => r.ApproachId == approachId
-                                                                              && r.BinStartTime >= start &&
-                                                                              r.BinStartTime <= end)
+                                                                                              && r.BinStartTime >=
+                                                                                              start &&
+                                                                                              r.BinStartTime <= end)
                     .Sum(r => r.TotalRedLightViolations);
-            }
             return yellowRedActivations;
         }
 
@@ -42,7 +45,9 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public List<ApproachYellowRedActivationAggregation> GetApproachYellowRedActivationssAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate, bool getProtectedPhase)
+        public List<ApproachYellowRedActivationAggregation>
+            GetApproachYellowRedActivationssAggregationByApproachIdAndDateRange(int approachId, DateTime startDate,
+                DateTime endDate, bool getProtectedPhase)
         {
             return _db.ApproachYellowRedActivationAggregations.Where(r => r.ApproachId == approachId
                                                                           && r.BinStartTime >= startDate &&
@@ -54,7 +59,5 @@ namespace MOE.Common.Models.Repositories
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

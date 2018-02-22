@@ -1,67 +1,77 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.DataAggregation
 {
-
-    public class CycleAggregationByApproach:AggregationByApproach
+    public class CycleAggregationByApproach : AggregationByApproach
     {
+        public CycleAggregationByApproach(Approach approach, BinFactoryOptions timeOptions, DateTime startDate,
+            DateTime endDate,
+            bool getProtectedPhase, AggregatedDataType dataType) : base(approach, timeOptions, startDate, endDate,
+            getProtectedPhase, dataType)
+        {
+        }
 
-        protected override void LoadBins(Approach approach, DateTime startDate, DateTime endDate, bool getProtectedPhase,
+        protected override void LoadBins(Approach approach, DateTime startDate, DateTime endDate,
+            bool getProtectedPhase,
             AggregatedDataType dataType)
         {
             var approachCycleAggregationRepository =
-               Models.Repositories.ApproachCycleAggregationRepositoryFactory.Create();
-            List<Models.ApproachCycleAggregation> approachCycles =
+                ApproachCycleAggregationRepositoryFactory.Create();
+            var approachCycles =
                 approachCycleAggregationRepository.GetApproachCyclesAggregationByApproachIdAndDateRange(
                     approach.ApproachID, startDate, endDate, getProtectedPhase);
             if (approachCycles != null)
             {
-                ConcurrentBag<BinsContainer> concurrentBinContainers = new ConcurrentBag<BinsContainer>();
+                var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
                 //foreach (var binsContainer in binsContainers)
                 Parallel.ForEach(BinsContainers, binsContainer =>
                 {
-                    BinsContainer tempBinsContainer =
+                    var tempBinsContainer =
                         new BinsContainer(binsContainer.Start, binsContainer.End);
-                    ConcurrentBag<Bin> concurrentBins = new ConcurrentBag<Bin>();
+                    var concurrentBins = new ConcurrentBag<Bin>();
                     //foreach (var bin in binsContainer.Bins)
                     Parallel.ForEach(binsContainer.Bins, bin =>
                     {
                         if (approachCycles.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
                         {
-                            int approachCycleCount = 0;
+                            var approachCycleCount = 0;
                             switch (dataType.DataName)
                             {
                                 case "TotalCycles":
                                     approachCycleCount =
-                                       approachCycles.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                           .Sum(s => s.TotalCycles);
+                                        approachCycles.Where(s =>
+                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.TotalCycles);
                                     break;
                                 case "RedTime":
                                     approachCycleCount =
-                                        (int) approachCycles.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                        (int) approachCycles.Where(s =>
+                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.RedTime);
                                     break;
                                 case "YellowTime":
                                     approachCycleCount =
-                                        (int) approachCycles.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                        (int) approachCycles.Where(s =>
+                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.YellowTime);
                                     break;
                                 case "GreenTime":
                                     approachCycleCount =
-                                        (int) approachCycles.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                        (int) approachCycles.Where(s =>
+                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.GreenTime);
                                     break;
                                 case "PedActuations":
                                     approachCycleCount =
-                                        (int)approachCycles.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                        approachCycles.Where(s =>
+                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.PedActuations);
                                     break;
                                 default:
@@ -87,18 +97,12 @@ namespace MOE.Common.Business.DataAggregation
                                 Average = 0
                             });
                         }
-
                     });
                     tempBinsContainer.Bins = concurrentBins.OrderBy(c => c.Start).ToList();
                     concurrentBinContainers.Add(tempBinsContainer);
                 });
                 BinsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
             }
-        }
-
-        public CycleAggregationByApproach(Approach approach, BinFactoryOptions timeOptions, DateTime startDate, DateTime endDate, 
-            bool getProtectedPhase, AggregatedDataType dataType) :base(approach, timeOptions,startDate, endDate, getProtectedPhase, dataType)
-        {
         }
     }
 }

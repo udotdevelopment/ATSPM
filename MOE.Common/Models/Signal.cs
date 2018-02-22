@@ -1,25 +1,23 @@
-using System.Runtime.CompilerServices;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace MOE.Common.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
     [DataContract]
-    public partial class 
+    public partial class
         Signal
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage",
+        [NotMapped] private string signalID;
+
+        [SuppressMessage("Microsoft.Usage",
             "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Signal()
         {
-
         }
-
-        [NotMapped] private string signalID;
 
         [Key]
         [Display(Name = "Version")]
@@ -31,27 +29,21 @@ namespace MOE.Common.Models
         [DataMember]
         public string SignalID
         {
-            get { return signalID; }
+            get => signalID;
             set
             {
                 if (value != signalID)
                 {
                     signalID = value;
 
-                    if (this.Approaches != null)
-                    {
-                        foreach (Approach a in this.Approaches)
+                    if (Approaches != null)
+                        foreach (var a in Approaches)
                         {
                             a.SignalID = value;
                             if (a.Detectors != null)
-                            {
-                                foreach (Detector d in a.Detectors)
-                                {
+                                foreach (var d in a.Detectors)
                                     d.DetectorID = value + d.DetChannel;
-                                }
-                            }
                         }
-                    }
                 }
             }
         }
@@ -60,6 +52,7 @@ namespace MOE.Common.Models
         [Display(Name = "Version Action")]
         [DataMember]
         public int VersionActionId { get; set; }
+
         [DataMember]
         public virtual VersionAction VersionAction { get; set; }
 
@@ -74,7 +67,7 @@ namespace MOE.Common.Models
         public DateTime Start { get; set; }
 
         [Required]
-        [Display(Name="Primary Name")]
+        [Display(Name = "Primary Name")]
         [DataMember]
         [StringLength(100)]
         public string PrimaryName { get; set; }
@@ -90,6 +83,7 @@ namespace MOE.Common.Models
         [StringLength(50)]
         [DataMember]
         public string IPAddress { get; set; }
+
         [Required]
         [StringLength(30)]
         [DataMember]
@@ -104,6 +98,7 @@ namespace MOE.Common.Models
         [Display(Name = "Region")]
         [DataMember]
         public int RegionID { get; set; }
+
         [DataMember]
         public virtual Region Region { get; set; }
 
@@ -111,6 +106,7 @@ namespace MOE.Common.Models
         [Display(Name = "ControllerType Type")]
         [DataMember]
         public int ControllerTypeID { get; set; }
+
         [DataMember]
         public virtual ControllerType ControllerType { get; set; }
 
@@ -119,14 +115,12 @@ namespace MOE.Common.Models
         [DataMember]
         public bool Enabled { get; set; }
 
-         [Display(Name = "Chart Notes")]
+        [Display(Name = "Chart Notes")]
         public virtual ICollection<MetricComment> Comments { get; set; }
 
 
         [Display(Name = "Phase/Direction")]
         [DataMember]
         public virtual ICollection<Approach> Approaches { get; set; }
-
-
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Business.Bins
 {
@@ -14,15 +12,12 @@ namespace MOE.Common.Business.Bins
         {
             get
             {
-                int sum = 0;
+                var sum = 0;
 
                 foreach (var containter in BinsContainers)
-                {
                     sum = sum + containter.Bins.Sum(b => b.Sum);
-                }
 
                 return sum;
-
             }
         }
 
@@ -30,12 +25,10 @@ namespace MOE.Common.Business.Bins
         {
             get
             {
-                int count = 0;
+                var count = 0;
 
                 foreach (var containter in BinsContainers)
-                {
                     count = count + containter.Bins.Count;
-                }
 
                 return count;
             }
@@ -45,7 +38,6 @@ namespace MOE.Common.Business.Bins
         {
             get
             {
-                
                 {
                     double sum = 0;
                     double count = 0;
@@ -57,16 +49,10 @@ namespace MOE.Common.Business.Bins
                     }
 
                     if (sum > count && sum > 0 && count > 0)
-                    {
-                        return Convert.ToInt32(Math.Round(sum/count));
-                    }
+                        return Convert.ToInt32(Math.Round(sum / count));
 
                     return 0;
-                    
-                    
-
                 }
-                
             }
         }
 

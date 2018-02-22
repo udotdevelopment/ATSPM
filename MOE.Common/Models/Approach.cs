@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Models
 {
     [DataContract]
     public partial class Approach
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Approach()
         {
             //LaneGroups = new HashSet<LaneGroup>();
@@ -32,7 +29,7 @@ namespace MOE.Common.Models
         public virtual Signal Signal { get; set; }
 
         [Required]
-        [Display(Name="Direction")]
+        [Display(Name = "Direction")]
         [DataMember]
         public int DirectionTypeID { get; set; }
 
@@ -65,8 +62,5 @@ namespace MOE.Common.Models
 
         [DataMember]
         public virtual ICollection<Detector> Detectors { get; set; }
-
-     
-
     }
 }

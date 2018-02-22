@@ -1,60 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Data.Entity;
+using MOE.Common.Models;
 
 namespace MOE.Common.Business
 {
     public class SpeedExportApproachDirection
     {
-        public List<RedToRedCycle> Cycles = new List<RedToRedCycle>();
-
-        private string direction;
-        public string Direction
-        {
-            get { return direction; }
-        }
-
-
-        private int phase;
-        public int Phase
-        {
-            get { return phase; }
-        }
-
-        private int movementDelay;
-        public int MovementDelay
-        {
-            get { return movementDelay; }
-        }
-
-        private int distanceFromStopBar;
-        public int DistanceFromStopBar
-        {
-            get { return distanceFromStopBar; }
-        }
-
-        private int minSpeedFilter;
-        public int MinSpeedFilter
-        {
-            get { return minSpeedFilter; }
-        }
-
-        Models.SPM db = new Models.SPM();
-
-
-
-        List<MOE.Common.Models.Speed_Events> speedTable = new List<MOE.Common.Models.Speed_Events>();
-
-        
-
         //private Data.MOE.SpeedDataTable speedTable;
         public SpeedExportAvgSpeedCollection AvgSpeeds;
 
-        
+        public List<RedToRedCycle> Cycles = new List<RedToRedCycle>();
+
+        private readonly SPM db = new SPM();
+
+
+        private List<Speed_Events> speedTable = new List<Speed_Events>();
+
+
         /// <summary>
-        /// Constructor for Signal phase
+        ///     Constructor for Signal phase
         /// </summary>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
@@ -62,52 +27,55 @@ namespace MOE.Common.Business
         /// <param name="eventData1"></param>
         /// <param name="region"></param>
         /// <param name="detChannel"></param>
-        public SpeedExportApproachDirection(DateTime startDate, DateTime endDate, string signalId, int eventData1, 
-            string detID, string dir, int pMph, int movementdelay, int decisionpoint,  
+        public SpeedExportApproachDirection(DateTime startDate, DateTime endDate, string signalId, int eventData1,
+            string detID, string dir, int pMph, int movementdelay, int decisionpoint,
             int binSize, int minspeedfilter, int distancefromstopbar)
         {
-            
-            direction = dir;
+            Direction = dir;
 
-            phase = eventData1;
+            Phase = eventData1;
 
-            movementDelay = movementdelay;
+            MovementDelay = movementdelay;
 
-            minSpeedFilter = minspeedfilter;
+            MinSpeedFilter = minspeedfilter;
 
-            distanceFromStopBar = distancefromstopbar;
+            DistanceFromStopBar = distancefromstopbar;
 
             GetSpeedTable(detID, startDate, endDate);
 
-            GetAverageSpeeds(startDate, endDate, binSize, minspeedfilter, movementDelay, decisionpoint, signalId, 
+            GetAverageSpeeds(startDate, endDate, binSize, minspeedfilter, MovementDelay, decisionpoint, signalId,
                 eventData1);
-
         }
+
+        public string Direction { get; }
+
+        public int Phase { get; }
+
+        public int MovementDelay { get; }
+
+        public int DistanceFromStopBar { get; }
+
+        public int MinSpeedFilter { get; }
 
         private void GetSpeedTable(string detID, DateTime startDate, DateTime endDate)
         {
             //Data.MOETableAdapters.SpeedTableAdapter adapter = new Data.MOETableAdapters.SpeedTableAdapter();
 
             speedTable = (from r in db.Speed_Events
-                             where r.DetectorID == detID
-                             && r.timestamp > startDate && r.timestamp < endDate
-                          select r).ToList<MOE.Common.Models.Speed_Events>();
-
-            
+                where r.DetectorID == detID
+                      && r.timestamp > startDate && r.timestamp < endDate
+                select r).ToList();
         }
 
-        
+
         private void GetAverageSpeeds(DateTime startDate, DateTime endDate, int binSize, int minSpeedFilter,
             int movementDelay, int decisionPoint, string signalId, int eventData1)
         {
-
-
-            MOE.Common.Business.ControllerEventLogs signaltable = new ControllerEventLogs(signalId, startDate, endDate, eventData1,new List<int>{1,8,10});
+            var signaltable =
+                new ControllerEventLogs(signalId, startDate, endDate, eventData1, new List<int> {1, 8, 10});
 
             AvgSpeeds = new SpeedExportAvgSpeedCollection(startDate, endDate, binSize,
                 minSpeedFilter, Cycles);
-            
         }
-        
     }
 }

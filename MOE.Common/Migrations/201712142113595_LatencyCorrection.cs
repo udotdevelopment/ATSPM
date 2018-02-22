@@ -1,16 +1,15 @@
+using System.Data.Entity.Migrations;
+
 namespace MOE.Common.Migrations
 {
-    using System;
-    using System.Data.Entity.Migrations;
-    
     public partial class LatencyCorrection : DbMigration
     {
         public override void Up()
         {
-            AddColumn("dbo.MetricTypes", "ShowOnAggregationSite", c => c.Boolean(nullable: false));
-            AddColumn("dbo.Detectors", "LatencyCorrection", c => c.Double(nullable: false));
+            AddColumn("dbo.MetricTypes", "ShowOnAggregationSite", c => c.Boolean(false));
+            AddColumn("dbo.Detectors", "LatencyCorrection", c => c.Double(false));
         }
-        
+
         public override void Down()
         {
             DropColumn("dbo.Detectors", "LatencyCorrection");

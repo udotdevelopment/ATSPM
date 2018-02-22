@@ -1,136 +1,128 @@
 ﻿using System.Drawing;
-using System.Security.Cryptography.X509Certificates;
 
 namespace MOE.Common.Business
 {
     public class ColorFactory
     {
         private int counter;
+
         public ColorFactory()
         {
             counter = 0;
-            
-
         }
 
         public Color GetNextColor()
         {
             if (counter > 19)
-            {
                 counter = 0;
-            }
             if (counter < 0)
-            {
                 counter = 0;
-            }
 
-            Color color = Color.Black;
+            var color = Color.Black;
 
             switch (counter)
             {
                 case 0:
                 {
-                    
                     color = Color.Red;
                 }
-                    break;    
-                
+                    break;
+
                 case 1:
                 {
-                    color =  Color.Aqua;
+                    color = Color.Aqua;
                 }
                     break;
                 case 2:
                 {
-                    color =  Color.Blue;
+                    color = Color.Blue;
                 }
                     break;
                 case 3:
                 {
-                    color =  Color.Coral;
-                    }
+                    color = Color.Coral;
+                }
                     break;
                 case 4:
                 {
-                    color =  Color.BlueViolet;
-                    }
+                    color = Color.BlueViolet;
+                }
                     break;
                 case 5:
                 {
-                    color =  Color.Chartreuse;
+                    color = Color.Chartreuse;
                 }
                     break;
                 case 6:
                 {
-                    color =  Color.DarkCyan;
-                    }
+                    color = Color.DarkCyan;
+                }
                     break;
                 case 7:
                 {
-                    color =  Color.DarkOrange;
-                    }
+                    color = Color.DarkOrange;
+                }
                     break;
                 case 8:
                 {
-                    color =  Color.Indigo;
-                    }
+                    color = Color.Indigo;
+                }
                     break;
                 case 9:
                 {
-                    color =  Color.LightSkyBlue;
-                    }
+                    color = Color.LightSkyBlue;
+                }
                     break;
                 case 10:
                 {
-                    color =  Color.DarkRed;
-                    }
+                    color = Color.DarkRed;
+                }
                     break;
                 case 11:
                 {
-                    color =  Color.YellowGreen;
+                    color = Color.YellowGreen;
                 }
                     break;
                 case 12:
                 {
-                    color =  Color.Brown;
+                    color = Color.Brown;
                 }
                     break;
                 case 13:
                 {
-                   color =  Color.Indigo;
+                    color = Color.Indigo;
                 }
                     break;
                 case 14:
                 {
-                    color =  Color.DeepSkyBlue;
+                    color = Color.DeepSkyBlue;
                 }
                     break;
                 case 15:
                 {
-                    color =  Color.DarkOliveGreen;
+                    color = Color.DarkOliveGreen;
                 }
                     break;
                 case 16:
                 {
-                    color =  Color.LawnGreen;
+                    color = Color.LawnGreen;
                 }
                     break;
                 case 17:
                 {
-                    color =  Color.Magenta;
+                    color = Color.Magenta;
                 }
                     break;
                 case 18:
                 {
-                    color =  Color.MediumTurquoise;
+                    color = Color.MediumTurquoise;
                 }
                     break;
                 case 19:
                 {
-                    color =  Color.DarkSlateGray;
+                    color = Color.DarkSlateGray;
                 }
                     break;
-
             }
             counter++;
             return color;

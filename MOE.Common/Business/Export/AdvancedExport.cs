@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace MOE.Common.Business.Export
+﻿namespace MOE.Common.Business.Export
 {
     public class AdvancedExport
     {
@@ -70,7 +65,7 @@ namespace MOE.Common.Business.Export
         //            masterTable.Merge(tempTable);                    
         //        }
         //    }
-        
+
         //}
     }
 }

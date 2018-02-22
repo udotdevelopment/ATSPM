@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Web.UI.DataVisualization.Charting;
-using MOE.Common;
 using MOE.Common.Business.WCFServiceLibrary;
 
 namespace MOE.Common.Business.ApproachVolume
@@ -19,7 +11,20 @@ namespace MOE.Common.Business.ApproachVolume
     public class ApproachVolumeChart
     {
         public Chart Chart = new Chart();
-        public System.Data.DataTable Table = new System.Data.DataTable();
+        public DataTable Table = new DataTable();
+
+
+        public ApproachVolumeChart(DateTime startDate, DateTime endDate, string signalId,
+            string location, string direction1, string direction2, ApproachVolumeOptions options,
+            List<Approach> approachDirectioncollection, bool useAdvance)
+        {
+            info = new MetricInfo();
+            Options = options;
+            GetNewVolumeChart(startDate, endDate, signalId, location, direction1, direction2, options, useAdvance);
+            AddDataToChart(Chart, approachDirectioncollection, startDate, endDate, signalId,
+                direction1, direction2, options, useAdvance);
+        }
+
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string SignalId { get; set; }
@@ -31,31 +36,17 @@ namespace MOE.Common.Business.ApproachVolume
         public ApproachVolumeOptions Options { get; set; }
         public MetricInfo info { get; set; }
 
-
-
-        public ApproachVolumeChart(DateTime startDate, DateTime endDate, string signalId,
-            string location, string direction1, string direction2, ApproachVolumeOptions options, 
-            List<MOE.Common.Business.ApproachVolume.Approach> approachDirectioncollection, bool useAdvance)
-        {
-            info = new MetricInfo();
-            Options = options;
-            GetNewVolumeChart(startDate, endDate, signalId, location, direction1, direction2, options, useAdvance);
-            AddDataToChart(Chart, approachDirectioncollection, startDate, endDate, signalId,  
-                direction1, direction2, options, useAdvance);                   
-        }
-               
         public static double SetSigFigs(double d, int digits)
         {
-            double scale = Math.Pow(10, Math.Floor(Math.Log10(Math.Abs(d))) + 1);
+            var scale = Math.Pow(10, Math.Floor(Math.Log10(Math.Abs(d))) + 1);
             return scale * Math.Round(d / scale, digits);
         }
 
-        protected void GetNewVolumeChart(DateTime graphStartDate, DateTime graphEndDate, string signalId, 
+        protected void GetNewVolumeChart(DateTime graphStartDate, DateTime graphEndDate, string signalId,
             string location, string direction1, string direction2, ApproachVolumeOptions options, bool useAdvance)
         {
-
-            TimeSpan reportTimespan = graphEndDate - graphStartDate;
-            string extendedDirection = string.Empty;
+            var reportTimespan = graphEndDate - graphStartDate;
+            var extendedDirection = string.Empty;
             //Set the chart properties
             Chart.ImageType = ChartImageType.Jpeg;
             Chart.Height = 550;
@@ -64,7 +55,7 @@ namespace MOE.Common.Business.ApproachVolume
 
             SetChartTitle(direction1, direction2);
             //Create the chart legend
-            Legend chartLegend = new Legend();
+            var chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
             chartLegend.Docking = Docking.Left;
             Chart.Legends.Add(chartLegend);
@@ -73,26 +64,26 @@ namespace MOE.Common.Business.ApproachVolume
 
 
             AddSeries(Chart, graphStartDate, graphEndDate, direction1, direction2, options);
-            
+
 
             //return Chart;
         }
 
         private void SetChartTitle(string direction1, string direction2)
         {
-            
             Chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
             Chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
                 Options.SignalID, Options.StartDate, Options.EndDate));
             Chart.Titles.Add(ChartTitleFactory.GetBoldTitle(direction1 + " and " + direction2 + " Approaches"));
         }
 
-        private void AddSeries(System.Web.UI.DataVisualization.Charting.Chart Chart, DateTime graphStartDate, DateTime graphEndDate, string direction1, string direction2, ApproachVolumeOptions options)
+        private void AddSeries(Chart Chart, DateTime graphStartDate, DateTime graphEndDate, string direction1,
+            string direction2, ApproachVolumeOptions options)
         {
             //Add Direction1 Directional Volume Series
 
 
-            Series D1Series = new Series();
+            var D1Series = new Series();
             D1Series.ChartType = SeriesChartType.Line;
             D1Series.Color = Color.Blue;
             D1Series.Name = direction1;
@@ -106,8 +97,7 @@ namespace MOE.Common.Business.ApproachVolume
             //Add Direction2 Directional Volume Series
 
 
-
-            Series D2Series = new Series();
+            var D2Series = new Series();
             D2Series.ChartType = SeriesChartType.Line;
             D2Series.Color = Color.Red;
             D2Series.Name = direction2;
@@ -121,7 +111,7 @@ namespace MOE.Common.Business.ApproachVolume
 
             if (options.ShowDirectionalSplits)
             {
-                Series D1DfactorSeries = new Series();
+                var D1DfactorSeries = new Series();
                 D1DfactorSeries.ChartType = SeriesChartType.Line;
                 D1DfactorSeries.Name = direction1 + " D-Factor";
                 D1DfactorSeries.XValueType = ChartValueType.DateTime;
@@ -131,7 +121,7 @@ namespace MOE.Common.Business.ApproachVolume
                 D1DfactorSeries.Color = Color.Blue;
                 Chart.Series.Add(D1DfactorSeries);
 
-                Series D2DfactorSeries = new Series();
+                var D2DfactorSeries = new Series();
                 D2DfactorSeries.ChartType = SeriesChartType.Line;
                 D2DfactorSeries.Name = direction2 + " D-Factor";
                 D2DfactorSeries.XValueType = ChartValueType.DateTime;
@@ -143,7 +133,7 @@ namespace MOE.Common.Business.ApproachVolume
             }
 
             //Add the Posts series to ensure the chart is the size of the selected timespan
-            Series testSeries = new Series();
+            var testSeries = new Series();
             testSeries.IsVisibleInLegend = false;
             testSeries.ChartType = SeriesChartType.Point;
             testSeries.Color = Color.White;
@@ -151,7 +141,6 @@ namespace MOE.Common.Business.ApproachVolume
             testSeries.XValueType = ChartValueType.DateTime;
             testSeries.MarkerSize = 0;
             Chart.Series.Add(testSeries);
-
 
 
             //Add points at the start and and of the x axis to ensure
@@ -162,19 +151,17 @@ namespace MOE.Common.Business.ApproachVolume
             SetLegend();
         }
 
-        private void AddChartArea(System.Web.UI.DataVisualization.Charting.Chart Chart, ApproachVolumeOptions options, TimeSpan reportTimespan)
+        private void AddChartArea(Chart Chart, ApproachVolumeOptions options, TimeSpan reportTimespan)
         {
             //Create the chart area
-            
-            ChartArea chartArea = new ChartArea();
+
+            var chartArea = new ChartArea();
             chartArea.Name = "ChartArea1";
             chartArea.AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
 
             chartArea.AxisY.Minimum = options.YAxisMin;
             if (options.YAxisMax != null)
-            {
                 chartArea.AxisY.Maximum = options.YAxisMax ?? 0;
-            }
 
             chartArea.AxisY.Title = "Volume (Vehicles Per Hour)";
 
@@ -202,17 +189,11 @@ namespace MOE.Common.Business.ApproachVolume
             chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
             chartArea.AxisX.LabelStyle.Format = "HH";
             if (reportTimespan.Days < 1)
-            {
                 if (reportTimespan.Hours > 1)
-                {
                     chartArea.AxisX.Interval = 1;
-                }
                 else
-                {
                     chartArea.AxisX.LabelStyle.Format = "HH:mm";
-                }
-            }
-            
+
             chartArea.AxisX2.Enabled = AxisEnabled.True;
             Chart.ChartAreas.Add(chartArea);
         }
@@ -220,140 +201,97 @@ namespace MOE.Common.Business.ApproachVolume
         public void SetLegend()
         {
             if (!Options.ShowNBWBVolume)
-            {
                 Chart.Series[0].IsVisibleInLegend = false;
-            }
             if (!Options.ShowSBEBVolume)
-            {
                 Chart.Series[1].IsVisibleInLegend = false;
-            }
         }
 
-        protected void AddDataToChart(Chart chart, List<MOE.Common.Business.ApproachVolume.Approach> approachDirectionCollection, DateTime startDate,
-DateTime endDate, string signalId, string direction1, string direction2, ApproachVolumeOptions options, bool useAdvance)
+        protected void AddDataToChart(Chart chart, List<Approach> approachDirectionCollection, DateTime startDate,
+            DateTime endDate, string signalId, string direction1, string direction2, ApproachVolumeOptions options,
+            bool useAdvance)
         {
-            
-
-            int D1vol = 0;
-            int D2vol = 0;
-            DateTime D1time = new DateTime();
-            DateTime D2time = new DateTime();
-            SortedDictionary<DateTime, int> D1volumes = new SortedDictionary<DateTime, int>();
-            SortedDictionary<DateTime, int> D2volumes = new SortedDictionary<DateTime, int>();
+            var D1vol = 0;
+            var D2vol = 0;
+            var D1time = new DateTime();
+            var D2time = new DateTime();
+            var D1volumes = new SortedDictionary<DateTime, int>();
+            var D2volumes = new SortedDictionary<DateTime, int>();
 
 
-            List<MOE.Common.Business.ApproachVolume.Approach> FilteredApproaches = (from r in approachDirectionCollection
-                                                                                    where
-                                                                                        r.Direction == direction1 || r.Direction == direction2
-                                                                                    select r).ToList();
+            var FilteredApproaches = (from r in approachDirectionCollection
+                where
+                    r.Direction == direction1 || r.Direction == direction2
+                select r).ToList();
 
 
-            foreach (MOE.Common.Business.ApproachVolume.Approach approachDirection in FilteredApproaches)
+            foreach (var approachDirection in FilteredApproaches)
             {
-
                 if (useAdvance)
-                {
-                    approachDirection.SetDetectorEvents(approachDirection.ApproachModel, startDate, endDate, true, false);
-
-                }
+                    approachDirection.SetDetectorEvents(approachDirection.ApproachModel, startDate, endDate, true,
+                        false);
                 else
-                {
-                    approachDirection.SetDetectorEvents(approachDirection.ApproachModel, startDate, endDate, false, true);
-                }
+                    approachDirection.SetDetectorEvents(approachDirection.ApproachModel, startDate, endDate, false,
+                        true);
 
                 approachDirection.SetVolume(startDate, endDate, options.SelectedBinSize);
             }
 
             if (FilteredApproaches.Count > 0)
             {
-                MOE.Common.Models.Detector d = FilteredApproaches[0].Detectors.ApproachCountDetectors[0];
+                var d = FilteredApproaches[0].Detectors.ApproachCountDetectors[0];
 
 
-                        if(d.DistanceFromStopBar != null && d.DistanceFromStopBar > 0)
-                        {
-                            Chart.Titles.Add(ChartTitleFactory.GetTitle(d.DetectionHardware.Name + " located " + d.DistanceFromStopBar.ToString() + "ft. upstream of the stop bar"));
-                        }
-                        else
-                        {
-                            Chart.Titles.Add(ChartTitleFactory.GetTitle(d.DetectionHardware.Name + " at stop bar"));
-                        }
-                      
-                }
-                
-            
+                if (d.DistanceFromStopBar != null && d.DistanceFromStopBar > 0)
+                    Chart.Titles.Add(ChartTitleFactory.GetTitle(
+                        d.DetectionHardware.Name + " located " + d.DistanceFromStopBar +
+                        "ft. upstream of the stop bar"));
+                else
+                    Chart.Titles.Add(ChartTitleFactory.GetTitle(d.DetectionHardware.Name + " at stop bar"));
+            }
 
-            foreach (MOE.Common.Business.ApproachVolume.Approach approachDirection in FilteredApproaches)
+
+            foreach (var approachDirection in FilteredApproaches)
             {
                 if (approachDirection.Volume.Items.Count > 0)
-                {
-
-                    foreach (MOE.Common.Business.Volume v in approachDirection.Volume.Items)
+                    foreach (var v in approachDirection.Volume.Items)
                     {
                         //add Direction1 volumes
                         if (approachDirection.Direction == direction1)
-                        {
-                            //Add the volumes and times to a collection so we can use them later
                             if (!D1volumes.ContainsKey(v.XAxis))
                             {
                                 D1volumes.Add(v.XAxis, v.YAxis);
-                                D1TotalVolume = (D1TotalVolume + v.DetectorCount);
+                                D1TotalVolume = D1TotalVolume + v.DetectorCount;
                             }
-
-
-                        }
-
 
 
                         //add Direction2 volumes
                         if (approachDirection.Direction == direction2)
-                        {
-                            //Add the volumes and times to a collection so we can use them later
                             if (!D2volumes.ContainsKey(v.XAxis))
                             {
                                 D2volumes.Add(v.XAxis, v.YAxis);
-                                D2TotalVolume = (D2TotalVolume + v.DetectorCount);
+                                D2TotalVolume = D2TotalVolume + v.DetectorCount;
                             }
-
-
-                        }
-
-
                     }
-
-                }
 
                 if (options.ShowNBWBVolume)
-                {
-                    foreach (KeyValuePair<DateTime, int> vol in D1volumes)
-                    {
+                    foreach (var vol in D1volumes)
                         //This is the Thicker Solid Red line
-                        chart.Series[0].Points.AddXY(vol.Key, vol.Value);                        
-                    }
+                        chart.Series[0].Points.AddXY(vol.Key, vol.Value);
 
-                    
-                }
-                
 
                 if (options.ShowSBEBVolume)
-                {
-                    foreach (KeyValuePair<DateTime, int> vol in D2volumes)
-                    {
+                    foreach (var vol in D2volumes)
                         //This is the Thicker Solid Blue line
                         chart.Series[1].Points.AddXY(vol.Key, vol.Value);
-                       
-                    }
-                }
-
-            
 
 
                 //Match the times in the dir1 colleciton to the dir2 collection so we can get a ratio
                 //of the values collected at the same point in time.
-                foreach (KeyValuePair<DateTime, int> volRow in D1volumes)
+                foreach (var volRow in D1volumes)
                 {
                     D2vol = (from k in D2volumes
-                             where DateTime.Compare(k.Key, volRow.Key) == 0
-                             select k.Value).FirstOrDefault();
+                        where DateTime.Compare(k.Key, volRow.Key) == 0
+                        select k.Value).FirstOrDefault();
 
                     D1vol = volRow.Value;
                     D1time = volRow.Key;
@@ -361,27 +299,21 @@ DateTime endDate, string signalId, string direction1, string direction2, Approac
                     if (D1vol > 0 && D2vol > 0)
                     {
                         //ratio the values
-                        double D1DFactor = Convert.ToDouble(D1vol) / ((Convert.ToDouble(D2vol) + Convert.ToDouble(D1vol)));
+                        var D1DFactor = Convert.ToDouble(D1vol) / (Convert.ToDouble(D2vol) + Convert.ToDouble(D1vol));
 
                         if (options.ShowDirectionalSplits)
-                        {
-                            //plot the ratio and time on the secondary Y axis
-                            //This is the Thin Dashed Red line
                             chart.Series[2].Points.AddXY(D1time, D1DFactor);
-                        }
                     }
-
                 }
 
-                
 
                 //Match the times in the dir2 colleciton to the dir1 collection so we can get a ratio
                 //of the values collected at the same point in time.
-                foreach (KeyValuePair<DateTime, int> volRow in D2volumes)
+                foreach (var volRow in D2volumes)
                 {
                     D1vol = (from k in D1volumes
-                             where DateTime.Compare(k.Key, volRow.Key) == 0
-                             select k.Value).FirstOrDefault();
+                        where DateTime.Compare(k.Key, volRow.Key) == 0
+                        select k.Value).FirstOrDefault();
 
                     D2vol = volRow.Value;
                     D2time = volRow.Key;
@@ -389,49 +321,37 @@ DateTime endDate, string signalId, string direction1, string direction2, Approac
                     if (D2vol > 0 && D1vol > 0)
                     {
                         //ratio the values
-                        double D2DFactor = Convert.ToDouble(D2vol) / ((Convert.ToDouble(D2vol) + Convert.ToDouble(D1vol)));
+                        var D2DFactor = Convert.ToDouble(D2vol) / (Convert.ToDouble(D2vol) + Convert.ToDouble(D1vol));
 
                         //plot the ratio and time on the secondary Y axis
                         if (options.ShowDirectionalSplits)
-                        {
-                            //This is the Thin Dashed Blue line
                             chart.Series[3].Points.AddXY(D2time, D2DFactor);
-                        }
                     }
-
                 }
-                
             }
 
-            foreach(Series s in chart.Series)
+            foreach (var s in chart.Series)
             {
-                List<DataPoint> temppoints = CheckAndCorrectConsecutiveXValues(s.Points);
+                var temppoints = CheckAndCorrectConsecutiveXValues(s.Points);
 
                 s.Points.Clear();
 
-                foreach (DataPoint d in temppoints)
-                {
+                foreach (var d in temppoints)
                     s.Points.Add(d);
-                }
             }
-
 
 
             if (D1volumes.Count > 0 && D2volumes.Count > 0)
-            {
-                Table = CreateVolumeMetricsTable(direction1, direction2, D1TotalVolume, D2TotalVolume, D1volumes, D2volumes, options);
-
-            }
+                Table = CreateVolumeMetricsTable(direction1, direction2, D1TotalVolume, D2TotalVolume, D1volumes,
+                    D2volumes, options);
 
             if (options.ShowTotalVolume)
-            {
                 AddTotalVolumeSeries(chart);
-            }
         }
 
         private void AddTotalVolumeSeries(Chart chart)
         {
-            Series totals = new Series();
+            var totals = new Series();
             totals.ChartType = SeriesChartType.Line;
             totals.Color = Color.Black;
             totals.Name = "Total Volume";
@@ -446,33 +366,30 @@ DateTime endDate, string signalId, string direction1, string direction2, Approac
 
         private void AddTotalValuestoSeries(Chart chart)
         {
-
-            foreach (DataPoint dp in chart.Series[0].Points)
+            foreach (var dp in chart.Series[0].Points)
             {
-                DataPoint dp2 = (from p in chart.Series[1].Points
+                var dp2 = (from p in chart.Series[1].Points
                     where p.XValue == dp.XValue
                     select p).FirstOrDefault();
 
                 double totalVolforBin = 0;
                 if (dp2 != null)
-                {
                     totalVolforBin = dp.YValues[0] + dp2.YValues[0];
-                }
                 else
-                {
                     totalVolforBin = dp.YValues[0];
-                }
 
                 chart.Series["Total Volume"].Points.AddXY(dp.XValue, totalVolforBin);
             }
         }
 
-        public DataTable CreateVolumeMetricsTable(string direction1, string direction2, int D1TV, int D2TV, SortedDictionary<DateTime, int> D1Volumes, SortedDictionary<DateTime, int> D2Volumes, ApproachVolumeOptions options)
+        public DataTable CreateVolumeMetricsTable(string direction1, string direction2, int D1TV, int D2TV,
+            SortedDictionary<DateTime, int> D1Volumes, SortedDictionary<DateTime, int> D2Volumes,
+            ApproachVolumeOptions options)
         {
-            DateTime startTime = new DateTime();
-            DateTime endTime = new DateTime();
-            bool missingD1 = false;
-            bool missingD2 = false;
+            var startTime = new DateTime();
+            var endTime = new DateTime();
+            var missingD1 = false;
+            var missingD2 = false;
             //Create the Volume Metrics table
             if (D1Volumes.Count > 0)
             {
@@ -488,153 +405,134 @@ DateTime endDate, string signalId, string direction1, string direction2, Approac
             }
             else if (missingD1 || missingD2)
             {
-                DataTable emptytable = new DataTable();
+                var emptytable = new DataTable();
                 return emptytable;
             }
 
-            TimeSpan timeDiff = endTime.Subtract(startTime);
-            
-           
-            DataTable volMetrics = new DataTable();
-            int binSizeMultiplier = 60 / options.SelectedBinSize;
-            DataColumn volMetName = new DataColumn();
-            DataColumn volMetValue = new DataColumn();
+            var timeDiff = endTime.Subtract(startTime);
+
+
+            var volMetrics = new DataTable();
+            var binSizeMultiplier = 60 / options.SelectedBinSize;
+            var volMetName = new DataColumn();
+            var volMetValue = new DataColumn();
             volMetName.ColumnName = "Metric";
             volMetValue.ColumnName = "Values";
 
 
-            bool validKfactors = false;
+            var validKfactors = false;
             if (timeDiff.TotalHours >= 23 && timeDiff.TotalHours < 25)
-            {
                 validKfactors = true;
+            var biDirVolumes = new SortedDictionary<DateTime, int>();
+            var D1HourlyVolumes = new SortedDictionary<int, int>();
+            var D2HourlyVolumes = new SortedDictionary<int, int>();
+
+            // if (!missingD1 && !missingD2)
+            // {
+            //add the two volume dictionaries to get a total dictionary
+            foreach (var current in D1Volumes)
+                if (D2Volumes.ContainsKey(current.Key))
+                    biDirVolumes.Add(current.Key, D2Volumes[current.Key] + current.Value);
+
+            var biDirPeak = findPeakHour(biDirVolumes, binSizeMultiplier);
+            var biDirPeakHour = biDirPeak.Key;
+            var biDirPeakVolume = biDirPeak.Value;
+            var biDirPHvol = findPeakValueinHour(biDirPeakHour, biDirVolumes, binSizeMultiplier);
+            // Find Total PHF
+            double biDirPHF = 0;
+            if (biDirPHvol > 0)
+            {
+                biDirPHF = Convert.ToDouble(biDirPeakVolume) / Convert.ToDouble(biDirPHvol * binSizeMultiplier);
+                biDirPHF = SetSigFigs(biDirPHF, 3);
             }
-            SortedDictionary<DateTime, int> biDirVolumes = new SortedDictionary<DateTime, int>();
-            SortedDictionary<int, int> D1HourlyVolumes = new SortedDictionary<int, int>();
-            SortedDictionary<int, int> D2HourlyVolumes = new SortedDictionary<int, int>();
 
-           // if (!missingD1 && !missingD2)
-           // {
-                //add the two volume dictionaries to get a total dictionary
-                foreach (KeyValuePair<DateTime, int> current in D1Volumes)
-                {
-                    if (D2Volumes.ContainsKey(current.Key))
-                    {
-                        biDirVolumes.Add(current.Key, (D2Volumes[current.Key] + current.Value));
-                    }
+            var biDirPeakHourString =
+                biDirPeakHour.ToShortTimeString() + " - " + biDirPeakHour.AddHours(1).ToShortTimeString();
 
-                }
+            //   }
 
-                KeyValuePair<DateTime, int> biDirPeak = findPeakHour(biDirVolumes, binSizeMultiplier);
-                DateTime biDirPeakHour = biDirPeak.Key;
-                int biDirPeakVolume = biDirPeak.Value;
-                int biDirPHvol = findPeakValueinHour(biDirPeakHour, biDirVolumes, binSizeMultiplier);
-                // Find Total PHF
-                double biDirPHF = 0;
-                if (biDirPHvol > 0)
-                {
-                    biDirPHF = Convert.ToDouble(biDirPeakVolume) / Convert.ToDouble((biDirPHvol * binSizeMultiplier));
-                    biDirPHF = SetSigFigs(biDirPHF, 3);
-                }
+            //  if (!missingD1)
+            //  {
+            var D1Peak = findPeakHour(D1Volumes, binSizeMultiplier);
+            var D1PeakHour = D1Peak.Key;
+            var D1PeakHourVolume = D1Peak.Value / 4;
+            var D1PHvol = findPeakValueinHour(D1PeakHour, D1Volumes, binSizeMultiplier);
+            // Find the Peak hour factor for Direciton1
+            double D1PHF = 0;
+            if (D1PHvol > 0)
+            {
+                D1PHF = Convert.ToDouble(D1PeakHourVolume) / Convert.ToDouble(D1PHvol * binSizeMultiplier);
+                D1PHF = SetSigFigs(D1PHF, 3);
+            }
 
-                string biDirPeakHourString = biDirPeakHour.ToShortTimeString() + " - " + biDirPeakHour.AddHours(1).ToShortTimeString();
-            
-         //   }
+            // }
 
-          //  if (!missingD1)
-          //  {
-                KeyValuePair<DateTime, int> D1Peak = findPeakHour(D1Volumes, binSizeMultiplier);
-                DateTime D1PeakHour = D1Peak.Key;
-                int D1PeakHourVolume = D1Peak.Value/4;
-                int D1PHvol = findPeakValueinHour(D1PeakHour, D1Volumes, binSizeMultiplier);
-                // Find the Peak hour factor for Direciton1
-                double D1PHF = 0;
-                if (D1PHvol > 0)
-                {
-                    D1PHF = Convert.ToDouble(D1PeakHourVolume) / Convert.ToDouble((D1PHvol * binSizeMultiplier));
-                    D1PHF = SetSigFigs(D1PHF, 3);
-                }
+            // if (!missingD2)
+            // {
+            var D2Peak = findPeakHour(D2Volumes, binSizeMultiplier);
 
-           // }
+            var D2PeakHour = D2Peak.Key;
+            var D2PeakHourVolume = D2Peak.Value / 4;
+            var D2PHvol = findPeakValueinHour(D2PeakHour, D2Volumes, binSizeMultiplier);
+            // Find the Peak hour factor for Direciton2
+            double D2PHF = 0;
+            if (D2PHvol > 0)
+            {
+                D2PHF = Convert.ToDouble(D2PeakHourVolume) / Convert.ToDouble(D2PHvol * binSizeMultiplier);
+                D2PHF = SetSigFigs(D2PHF, 3);
+            }
+            // }
 
-           // if (!missingD2)
-           // {
-                KeyValuePair<DateTime, int> D2Peak = findPeakHour(D2Volumes, binSizeMultiplier);
-
-                DateTime D2PeakHour = D2Peak.Key;
-                int D2PeakHourVolume = D2Peak.Value/4;
-                int D2PHvol = findPeakValueinHour(D2PeakHour, D2Volumes, binSizeMultiplier);
-                // Find the Peak hour factor for Direciton2
-                double D2PHF = 0;
-                if (D2PHvol > 0)
-                {
-                    D2PHF = Convert.ToDouble(D2PeakHourVolume) / Convert.ToDouble((D2PHvol * binSizeMultiplier));
-                    D2PHF = SetSigFigs(D2PHF, 3);
-                }
-           // }
-
-            string D1PeakHourString = D1PeakHour.ToShortTimeString() + " - " + D1PeakHour.AddHours(1).ToShortTimeString();
-            string D2PeakHourString = D2PeakHour.ToShortTimeString() + " - " + D2PeakHour.AddHours(1).ToShortTimeString();
+            var D1PeakHourString = D1PeakHour.ToShortTimeString() + " - " + D1PeakHour.AddHours(1).ToShortTimeString();
+            var D2PeakHourString = D2PeakHour.ToShortTimeString() + " - " + D2PeakHour.AddHours(1).ToShortTimeString();
 
 
-            int totalVolume = D1TV + D2TV;
-            string PHKF = SetSigFigs((Convert.ToDouble(biDirPeakVolume) / Convert.ToDouble(totalVolume)), 3).ToString();
-            string D1PHKF = SetSigFigs((Convert.ToDouble(D1PeakHourVolume) / Convert.ToDouble(D1TV)), 3).ToString();
-            string D1PHDF = findPHDF(D1PeakHour, D1PeakHourVolume, D2Volumes, binSizeMultiplier).ToString();
-            string D2PHKF = SetSigFigs((Convert.ToDouble(D2PeakHourVolume) / Convert.ToDouble(D2TV)), 3).ToString();
-            string D2PHDF = findPHDF(D2PeakHour, D2PeakHourVolume, D1Volumes, binSizeMultiplier).ToString();
+            var totalVolume = D1TV + D2TV;
+            var PHKF = SetSigFigs(Convert.ToDouble(biDirPeakVolume) / Convert.ToDouble(totalVolume), 3).ToString();
+            var D1PHKF = SetSigFigs(Convert.ToDouble(D1PeakHourVolume) / Convert.ToDouble(D1TV), 3).ToString();
+            var D1PHDF = findPHDF(D1PeakHour, D1PeakHourVolume, D2Volumes, binSizeMultiplier).ToString();
+            var D2PHKF = SetSigFigs(Convert.ToDouble(D2PeakHourVolume) / Convert.ToDouble(D2TV), 3).ToString();
+            var D2PHDF = findPHDF(D2PeakHour, D2PeakHourVolume, D1Volumes, binSizeMultiplier).ToString();
 
             volMetrics.Columns.Add(volMetName);
             volMetrics.Columns.Add(volMetValue);
 
 
-            volMetrics.Rows.Add(new Object[] { "Total Volume", totalVolume.ToString("N0") });
-            volMetrics.Rows.Add(new Object[] { "Peak Hour", biDirPeakHourString });
-            volMetrics.Rows.Add(new Object[] { "Peak Hour Volume", string.Format("{0:#,0}", biDirPeakVolume) });
-            volMetrics.Rows.Add(new Object[] { "PHF", biDirPHF.ToString() });
+            volMetrics.Rows.Add("Total Volume", totalVolume.ToString("N0"));
+            volMetrics.Rows.Add("Peak Hour", biDirPeakHourString);
+            volMetrics.Rows.Add("Peak Hour Volume", string.Format("{0:#,0}", biDirPeakVolume));
+            volMetrics.Rows.Add("PHF", biDirPHF.ToString());
 
             if (validKfactors)
-            {
-                volMetrics.Rows.Add(new Object[] { "Peak-Hour K-factor", PHKF });
-            }
+                volMetrics.Rows.Add("Peak-Hour K-factor", PHKF);
             else
-            {
-                volMetrics.Rows.Add(new Object[] { "Peak-Hour K-factor", "NA" });
-            }
+                volMetrics.Rows.Add("Peak-Hour K-factor", "NA");
 
-            volMetrics.Rows.Add(new Object[] { "", "" });
-            volMetrics.Rows.Add(new Object[] { (direction1 + " Total Volume"), D1TV.ToString("N0") });
-            volMetrics.Rows.Add(new Object[] { (direction1 + " Peak Hour"), D1PeakHourString });
-            volMetrics.Rows.Add(new Object[] { (direction1 + " Peak Hour Volume"), string.Format("{0:#,0}", D1PeakHourVolume) });
-            volMetrics.Rows.Add(new Object[] { (direction1 + " PHF"), D1PHF.ToString() });
+            volMetrics.Rows.Add("", "");
+            volMetrics.Rows.Add(direction1 + " Total Volume", D1TV.ToString("N0"));
+            volMetrics.Rows.Add(direction1 + " Peak Hour", D1PeakHourString);
+            volMetrics.Rows.Add(direction1 + " Peak Hour Volume", string.Format("{0:#,0}", D1PeakHourVolume));
+            volMetrics.Rows.Add(direction1 + " PHF", D1PHF.ToString());
 
             if (validKfactors)
-            {
-                volMetrics.Rows.Add(new Object[] { (direction1 + " Peak-Hour K-factor"), D1PHKF });
-            }
+                volMetrics.Rows.Add(direction1 + " Peak-Hour K-factor", D1PHKF);
             else
-            {
-                volMetrics.Rows.Add(new Object[] { (direction1 + " Peak-Hour K-factor"), "NA" });
-            }
+                volMetrics.Rows.Add(direction1 + " Peak-Hour K-factor", "NA");
 
-            volMetrics.Rows.Add(new Object[] { (direction1 + " Peak-Hour D-factor"), D1PHDF });
-            volMetrics.Rows.Add(new Object[] { "", "" });
-            volMetrics.Rows.Add(new Object[] { (direction2 + " Total Volume"), D2TV.ToString("N0") });
-            volMetrics.Rows.Add(new Object[] { (direction2 + " Peak Hour"), D2PeakHourString });
-            volMetrics.Rows.Add(new Object[] { (direction2 + " Peak Hour Volume"), string.Format("{0:#,0}", D2PeakHourVolume) });
-            volMetrics.Rows.Add(new Object[] { (direction2 + " PHF"), D2PHF.ToString("N0") });
+            volMetrics.Rows.Add(direction1 + " Peak-Hour D-factor", D1PHDF);
+            volMetrics.Rows.Add("", "");
+            volMetrics.Rows.Add(direction2 + " Total Volume", D2TV.ToString("N0"));
+            volMetrics.Rows.Add(direction2 + " Peak Hour", D2PeakHourString);
+            volMetrics.Rows.Add(direction2 + " Peak Hour Volume", string.Format("{0:#,0}", D2PeakHourVolume));
+            volMetrics.Rows.Add(direction2 + " PHF", D2PHF.ToString("N0"));
 
             if (validKfactors)
-            {
-                volMetrics.Rows.Add(new Object[] { (direction2 + " Peak-Hour K-factor"), D2PHKF });
-            }
+                volMetrics.Rows.Add(direction2 + " Peak-Hour K-factor", D2PHKF);
             else
-            {
-                volMetrics.Rows.Add(new Object[] { (direction2 + " Peak-Hour K-factor"), "NA" });
-            }
+                volMetrics.Rows.Add(direction2 + " Peak-Hour K-factor", "NA");
 
-            volMetrics.Rows.Add(new Object[] { (direction2 + " Peak-Hour D-factor"), D2PHDF });
+            volMetrics.Rows.Add(direction2 + " Peak-Hour D-factor", D2PHDF);
 
-            
 
             info.Direction1 = direction1;
             info.Direction2 = direction2;
@@ -657,110 +555,88 @@ DateTime endDate, string signalId, string direction1, string direction2, Approac
             info.D2TotalVolume = D2TotalVolume.ToString();
 
 
-
-
-
             return volMetrics;
         }
 
-        protected KeyValuePair<DateTime, int> findPeakHour(SortedDictionary<DateTime, int> dirVolumes, int binMultiplier)
+        protected KeyValuePair<DateTime, int> findPeakHour(SortedDictionary<DateTime, int> dirVolumes,
+            int binMultiplier)
         {
-            int subTotal = 0;
-            KeyValuePair<DateTime, int> peakHourValue = new KeyValuePair<DateTime, int>();
+            var subTotal = 0;
+            var peakHourValue = new KeyValuePair<DateTime, int>();
 
-            DateTime startTime = new DateTime();
-            SortedDictionary<DateTime, int> iteratedVolumes = new SortedDictionary<DateTime, int>();
+            var startTime = new DateTime();
+            var iteratedVolumes = new SortedDictionary<DateTime, int>();
 
-            for (int i = 0; i < (dirVolumes.Count - (binMultiplier - 1)); i++)
+            for (var i = 0; i < dirVolumes.Count - (binMultiplier - 1); i++)
             {
                 startTime = dirVolumes.ElementAt(i).Key;
                 subTotal = 0;
-                for (int x = 0; x < binMultiplier; x++)
-                {
+                for (var x = 0; x < binMultiplier; x++)
                     subTotal = subTotal + dirVolumes.ElementAt(i + x).Value;
-                }
 
                 iteratedVolumes.Add(startTime, subTotal);
-
             }
 
             //Find the highest value in the iterated Volumes dictionary.
             //This should bee the peak hour.
-            foreach (KeyValuePair<DateTime, int> kvp in iteratedVolumes)
-            {
+            foreach (var kvp in iteratedVolumes)
                 if (kvp.Value > peakHourValue.Value)
-                {
-
                     peakHourValue = kvp;
-                }
-            }
 
             return peakHourValue;
         }
 
-        protected int findPeakValueinHour(DateTime StartofHour, SortedDictionary<DateTime, int> volDic, int binMultiplier)
+        protected int findPeakValueinHour(DateTime StartofHour, SortedDictionary<DateTime, int> volDic,
+            int binMultiplier)
         {
-            int maxVolume = 0;
+            var maxVolume = 0;
 
-            for (int i = 0; i < binMultiplier; i++)
+            for (var i = 0; i < binMultiplier; i++)
             {
                 if (volDic.ContainsKey(StartofHour))
-                {
                     if (maxVolume < volDic[StartofHour])
-                    {
                         maxVolume = volDic[StartofHour];
-                    }
-                }
 
                 StartofHour = StartofHour.AddMinutes(60 / binMultiplier);
-
             }
             return maxVolume;
         }
 
-        protected double findPHDF(DateTime StartofHour, int Peakhourvolume, SortedDictionary<DateTime, int> volDic, int binMultiplier)
+        protected double findPHDF(DateTime StartofHour, int Peakhourvolume, SortedDictionary<DateTime, int> volDic,
+            int binMultiplier)
         {
-            int totalVolume = 0;
+            var totalVolume = 0;
             double PHDF = 0;
 
-            for (int i = 0; i < binMultiplier; i++)
+            for (var i = 0; i < binMultiplier; i++)
             {
                 if (volDic.ContainsKey(StartofHour))
-                {
                     totalVolume = totalVolume + volDic[StartofHour];
-                }
 
                 StartofHour = StartofHour.AddMinutes(60 / binMultiplier);
-
             }
             if (Peakhourvolume > 0)
-            {
-                PHDF = SetSigFigs((Convert.ToDouble(totalVolume) / Convert.ToDouble(Peakhourvolume)), 3);
-            }
+                PHDF = SetSigFigs(Convert.ToDouble(totalVolume) / Convert.ToDouble(Peakhourvolume), 3);
             else
-            {
                 PHDF = 0;
-            }
             return PHDF;
-
         }
 
         public List<DataPoint> CheckAndCorrectConsecutiveXValues(DataPointCollection points)
         {
-            List<DataPoint> dcp = new List<DataPoint>();
+            var dcp = new List<DataPoint>();
 
-            int i = 0;
+            var i = 0;
             double currentmax = 0;
-            List<int> badPoints = new List<int>();
+            var badPoints = new List<int>();
 
 
-            foreach (DataPoint dp in points)
+            foreach (var dp in points)
             {
                 if (dp.XValue > currentmax)
                 {
                     currentmax = dp.XValue;
                     dcp.Add(dp);
-
                 }
                 else
                 {
@@ -771,11 +647,8 @@ DateTime endDate, string signalId, string direction1, string direction2, Approac
                     //{
                     //    if(points[x].XValue < )
                     //}
-
                 }
                 i++;
-
-
             }
 
             return dcp;
@@ -785,6 +658,5 @@ DateTime endDate, string signalId, string direction1, string direction2, Approac
             //    points.RemoveAt(I);
             //}
         }
-
     }
 }

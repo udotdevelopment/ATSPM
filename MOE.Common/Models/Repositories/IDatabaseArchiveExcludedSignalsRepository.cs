@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
     public interface IDatabaseArchiveExcludedSignalsRepository
     {
-        List<Models.DatabaseArchiveExcludedSignals> GetAllExcludedSignals();
+        List<DatabaseArchiveExcludedSignals> GetAllExcludedSignals();
         DatabaseArchiveExcludedSignals GetExcludedSignalBySignalId(string signalId);
         void DeleteFromExcludedList(string signalId);
         void AddToExcludedList(string signalId);
-
     }
 }

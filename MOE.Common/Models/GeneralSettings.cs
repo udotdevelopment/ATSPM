@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MOE.Common.Models
 {
@@ -14,6 +9,7 @@ namespace MOE.Common.Models
 
         [Display(Name = "Image Path")]
         public string ImagePath { get; set; }
+
         [Display(Name = "Raw Data Count Limit")]
         public int? RawDataCountLimit { get; set; }
     }

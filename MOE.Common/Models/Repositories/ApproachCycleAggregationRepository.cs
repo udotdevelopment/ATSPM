@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace MOE.Common.Models.Repositories
 {
-    public class ApproachCycleAggregationRepository: IApproachCycleAggregationRepository
+    public class ApproachCycleAggregationRepository : IApproachCycleAggregationRepository
     {
-        private Models.SPM _db;
+        private readonly SPM _db;
+
         public ApproachCycleAggregationRepository()
         {
             _db = new SPM();
         }
+
         public ApproachCycleAggregationRepository(SPM context)
         {
             _db = context;
@@ -22,17 +23,16 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public int GetApproachCycleCountAggregationByApproachIdAndDateRange(int approachId, DateTime start, DateTime end)
+        public int GetApproachCycleCountAggregationByApproachIdAndDateRange(int approachId, DateTime start,
+            DateTime end)
         {
-            int cycles = 0;
+            var cycles = 0;
             if (_db.ApproachCycleAggregations.Any(r => r.ApproachId == approachId
-                                                           && r.BinStartTime >= start && r.BinStartTime <= end))
-            {
+                                                       && r.BinStartTime >= start && r.BinStartTime <= end))
                 cycles = _db.ApproachCycleAggregations.Where(r => r.ApproachId == approachId
-                                                                              && r.BinStartTime >= start &&
-                                                                              r.BinStartTime <= end)
+                                                                  && r.BinStartTime >= start &&
+                                                                  r.BinStartTime <= end)
                     .Sum(r => r.TotalCycles);
-            }
             return cycles;
         }
 
@@ -41,11 +41,12 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public List<ApproachCycleAggregation> GetApproachCyclesAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate, bool getProtectedPhase)
+        public List<ApproachCycleAggregation> GetApproachCyclesAggregationByApproachIdAndDateRange(int approachId,
+            DateTime startDate, DateTime endDate, bool getProtectedPhase)
         {
             return _db.ApproachCycleAggregations.Where(r => r.ApproachId == approachId
-                                                                          && r.BinStartTime >= startDate &&
-                                                                          r.BinStartTime <= endDate).ToList();
+                                                            && r.BinStartTime >= startDate &&
+                                                            r.BinStartTime <= endDate).ToList();
         }
 
 
@@ -53,7 +54,5 @@ namespace MOE.Common.Models.Repositories
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

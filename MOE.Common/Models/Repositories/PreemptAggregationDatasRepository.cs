@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace MOE.Common.Models.Repositories
 {
     public class PreemptAggregationDatasRepository : IPreemptAggregationDatasRepository
     {
-        SPM db = new SPM();
-
-     
-        private Models.SPM _db;
+        private readonly SPM _db;
+        private readonly SPM db = new SPM();
 
 
         public PreemptAggregationDatasRepository()
@@ -27,7 +22,7 @@ namespace MOE.Common.Models.Repositories
 
         public int GetPreemptAggregationTotalByVersionIdAndDateRange(int versionId, DateTime start, DateTime end)
         {
-            int serviced = (from r in this._db.PreemptionAggregations
+            var serviced = (from r in _db.PreemptionAggregations
                 where r.VersionId == versionId
                       && r.BinStartTime >= start && r.BinStartTime <= end
                 select r.PreemptServices).Sum();
@@ -35,10 +30,11 @@ namespace MOE.Common.Models.Repositories
             return serviced;
         }
 
-        public int GetPreemptAggregationTotalByVersionIdPreemptNumberAndDateRange(int versionId, DateTime start, DateTime end,
+        public int GetPreemptAggregationTotalByVersionIdPreemptNumberAndDateRange(int versionId, DateTime start,
+            DateTime end,
             int preemptNumber)
         {
-            int serviced = (from r in this._db.PreemptionAggregations
+            var serviced = (from r in _db.PreemptionAggregations
                 where r.VersionId == versionId && r.PreemptNumber == preemptNumber
                       && r.BinStartTime >= start && r.BinStartTime <= end
                 select r.PreemptServices).Sum();
@@ -46,22 +42,11 @@ namespace MOE.Common.Models.Repositories
             return serviced;
         }
 
-        public PreemptionAggregation Add(PreemptionAggregation preemptionAggregation)
+        public List<PreemptionAggregation> GetPreemptAggregationByVersionIdAndDateRange(int versionId, DateTime start,
+            DateTime end)
         {
-            throw new NotImplementedException();
-        }
-
-
-
-        public List<DetectorAggregation> GetActivationsByDetectorIDandDateRange(string detectorId, DateTime Start, DateTime End)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<PreemptionAggregation> GetPreemptAggregationByVersionIdAndDateRange(int versionId, DateTime start, DateTime end)
-        {
-            var records = (from r in this._db.PreemptionAggregations
-                                                           where r.VersionId == versionId
+            var records = (from r in _db.PreemptionAggregations
+                where r.VersionId == versionId
                       && r.BinStartTime >= start && r.BinStartTime <= end
                 select r).ToList();
 
@@ -73,7 +58,8 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public List<PreemptionAggregation> GetPreemptionsBySignalIdAndDateRange(string signalId, DateTime startDate, DateTime endDate)
+        public List<PreemptionAggregation> GetPreemptionsBySignalIdAndDateRange(string signalId, DateTime startDate,
+            DateTime endDate)
         {
             return db.PreemptionAggregations
                 .Where(p => p.SignalId == signalId && p.BinStartTime >= startDate && p.BinStartTime < endDate).ToList();
@@ -90,6 +76,18 @@ namespace MOE.Common.Models.Repositories
             db.PreemptionAggregations.Add(preemptionAggregation);
             db.SaveChanges();
             return preemptionAggregation;
+        }
+
+        public PreemptionAggregation Add(PreemptionAggregation preemptionAggregation)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<DetectorAggregation> GetActivationsByDetectorIDandDateRange(string detectorId, DateTime Start,
+            DateTime End)
+        {
+            throw new NotImplementedException();
         }
     }
 }

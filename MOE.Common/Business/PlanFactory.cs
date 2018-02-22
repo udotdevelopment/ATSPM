@@ -1,32 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business
 {
     public static class PlanFactory
-    {      
+    {
         public static List<PlanPcd> GetPcdPlans(List<CyclePcd> cycles, DateTime startDate,
             DateTime endDate, Approach approach)
         {
-            List<Controller_Event_Log> planEvents = GetPlanEvents(startDate, endDate, approach.SignalID);
-            List<PlanPcd> plans = new List<PlanPcd>();
-            for (int i = 0; i < planEvents.Count; i++)
-            {
+            var planEvents = GetPlanEvents(startDate, endDate, approach.SignalID);
+            var plans = new List<PlanPcd>();
+            for (var i = 0; i < planEvents.Count; i++)
                 if (planEvents.Count - 1 == i)
                 {
                     if (planEvents[i].Timestamp != endDate)
                     {
-                        var planCycles = cycles.Where(c => c.StartTime >= planEvents[i].Timestamp && c.StartTime < endDate).ToList();
+                        var planCycles = cycles
+                            .Where(c => c.StartTime >= planEvents[i].Timestamp && c.StartTime < endDate).ToList();
                         plans.Add(new PlanPcd(planEvents[i].Timestamp, endDate, planEvents[i].EventParam, planCycles));
                     }
                 }
@@ -34,18 +28,20 @@ namespace MOE.Common.Business
                 {
                     if (planEvents[i].Timestamp != planEvents[i + 1].Timestamp)
                     {
-                        var planCycles = cycles.Where(c => c.StartTime >= planEvents[i].Timestamp && c.StartTime < planEvents[i + 1].Timestamp).ToList();
-                        plans.Add(new PlanPcd(planEvents[i].Timestamp, planEvents[i + 1].Timestamp, planEvents[i].EventParam, planCycles));
+                        var planCycles = cycles.Where(c =>
+                                c.StartTime >= planEvents[i].Timestamp && c.StartTime < planEvents[i + 1].Timestamp)
+                            .ToList();
+                        plans.Add(new PlanPcd(planEvents[i].Timestamp, planEvents[i + 1].Timestamp,
+                            planEvents[i].EventParam, planCycles));
                     }
                 }
-            }
             return plans;
         }
 
         public static List<Controller_Event_Log> GetPlanEvents(DateTime startDate, DateTime endDate, string signalId)
         {
-            var celRepository = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-            List<Controller_Event_Log> planEvents = new List<Controller_Event_Log>();
+            var celRepository = ControllerEventLogRepositoryFactory.Create();
+            var planEvents = new List<Controller_Event_Log>();
             var firstPlanEvent = celRepository.GetFirstEventBeforeDate(signalId, 131, startDate);
             if (firstPlanEvent != null)
             {
@@ -54,21 +50,25 @@ namespace MOE.Common.Business
             }
             else
             {
-                firstPlanEvent = new Controller_Event_Log { Timestamp = startDate, EventCode = 131,EventParam = 0, SignalID = signalId};
+                firstPlanEvent = new Controller_Event_Log
+                {
+                    Timestamp = startDate,
+                    EventCode = 131,
+                    EventParam = 0,
+                    SignalID = signalId
+                };
                 planEvents.Add(firstPlanEvent);
             }
-            List< Controller_Event_Log>tempPlanEvents = celRepository.GetSignalEventsByEventCode(signalId, startDate, endDate, 131).OrderBy((e => e.Timestamp)).ToList();
+            var tempPlanEvents = celRepository.GetSignalEventsByEventCode(signalId, startDate, endDate, 131)
+                .OrderBy(e => e.Timestamp).ToList();
 
-            for (int x = 0; x < tempPlanEvents.Count(); x++)
-            {
+            for (var x = 0; x < tempPlanEvents.Count(); x++)
                 if (x + 2 < tempPlanEvents.Count())
                 {
                     if (tempPlanEvents[x].EventParam == tempPlanEvents[x + 1].EventParam)
                     {
                         planEvents.Add(tempPlanEvents[x]);
                         x++;
-
-
                     }
                     else
                     {
@@ -77,99 +77,84 @@ namespace MOE.Common.Business
                 }
                 else
                 {
-                    if (tempPlanEvents.Count >= 2 && (tempPlanEvents.Last().EventCode ==
-                                                      tempPlanEvents[tempPlanEvents.Count() - 2].EventCode))
-                    {
+                    if (tempPlanEvents.Count >= 2 && tempPlanEvents.Last().EventCode ==
+                        tempPlanEvents[tempPlanEvents.Count() - 2].EventCode)
                         planEvents.Add(tempPlanEvents[tempPlanEvents.Count() - 2]);
-                    }
                     else
-                    {
                         planEvents.Add(tempPlanEvents.Last());
-                    }
-
                 }
-            }
 
             return planEvents;
         }
 
         public static List<Plan> GetBasicPlans(DateTime startDate, DateTime endDate, string signalId)
         {
-
-            List<Controller_Event_Log> planEvents = GetPlanEvents(startDate, endDate, signalId);
-            List<Plan> plans = new List<Plan>();
-            for (int i = 0; i < planEvents.Count; i++)
-            {
+            var planEvents = GetPlanEvents(startDate, endDate, signalId);
+            var plans = new List<Plan>();
+            for (var i = 0; i < planEvents.Count; i++)
                 if (planEvents.Count - 1 == i)
                 {
                     if (planEvents[i].Timestamp != endDate)
-                    {
                         plans.Add(new Plan(planEvents[i].Timestamp, endDate, planEvents[i].EventParam));
-                    }
                 }
                 else
                 {
                     if (planEvents[i].Timestamp != planEvents[i + 1].Timestamp)
-                    {
-                        plans.Add(new Plan(planEvents[i].Timestamp, planEvents[i + 1].Timestamp, planEvents[i].EventParam));
-                    }
+                        plans.Add(new Plan(planEvents[i].Timestamp, planEvents[i + 1].Timestamp,
+                            planEvents[i].EventParam));
                 }
-            }
             return plans;
         }
 
         public static List<PlanSplitMonitor> GetSplitMonitorPlans(DateTime startDate, DateTime endDate, string signalId)
         {
-            List<Controller_Event_Log> planEvents = GetPlanEvents(startDate, endDate, signalId);
-            List<PlanSplitMonitor> plans = new List<PlanSplitMonitor>();
-            for (int i = 0; i < planEvents.Count; i++)
-            {
+            var planEvents = GetPlanEvents(startDate, endDate, signalId);
+            var plans = new List<PlanSplitMonitor>();
+            for (var i = 0; i < planEvents.Count; i++)
                 if (planEvents.Count - 1 == i)
                 {
                     if (planEvents[i].Timestamp != endDate)
-                    {
                         plans.Add(new PlanSplitMonitor(planEvents[i].Timestamp, endDate, planEvents[i].EventParam));
-                    }
                 }
                 else
                 {
                     if (planEvents[i].Timestamp != planEvents[i + 1].Timestamp)
-                    {
-                        plans.Add(new PlanSplitMonitor(planEvents[i].Timestamp, planEvents[i + 1].Timestamp, planEvents[i].EventParam));
-                    }
+                        plans.Add(new PlanSplitMonitor(planEvents[i].Timestamp, planEvents[i + 1].Timestamp,
+                            planEvents[i].EventParam));
                 }
-            }
             return plans;
         }
 
         public static List<PlanSpeed> GetSpeedPlans(List<CycleSpeed> cycles, DateTime startDate,
             DateTime endDate, Approach approach)
         {
-            List<Controller_Event_Log> planEvents = GetPlanEvents(startDate, endDate, approach.SignalID);
-            List<PlanSpeed> plans = new List<PlanSpeed>();
-            for (int i = 0; i < planEvents.Count; i++)
-            {
+            var planEvents = GetPlanEvents(startDate, endDate, approach.SignalID);
+            var plans = new List<PlanSpeed>();
+            for (var i = 0; i < planEvents.Count; i++)
                 if (planEvents.Count - 1 == i)
                 {
                     if (planEvents[i].Timestamp != endDate)
                     {
-                        var planCycles = cycles.Where(c => c.StartTime >= planEvents[i].Timestamp && c.StartTime < endDate).ToList();
-                        plans.Add(new PlanSpeed(planEvents[i].Timestamp, endDate, planEvents[i].EventParam, planCycles));
+                        var planCycles = cycles
+                            .Where(c => c.StartTime >= planEvents[i].Timestamp && c.StartTime < endDate).ToList();
+                        plans.Add(new PlanSpeed(planEvents[i].Timestamp, endDate, planEvents[i].EventParam,
+                            planCycles));
                     }
                 }
                 else
                 {
                     if (planEvents[i].Timestamp != planEvents[i + 1].Timestamp)
                     {
-                        var planCycles = cycles.Where(c => c.StartTime >= planEvents[i].Timestamp && c.StartTime < planEvents[i + 1].Timestamp).ToList();
-                        plans.Add(new PlanSpeed(planEvents[i].Timestamp, planEvents[i + 1].Timestamp, planEvents[i].EventParam, planCycles));
+                        var planCycles = cycles.Where(c =>
+                                c.StartTime >= planEvents[i].Timestamp && c.StartTime < planEvents[i + 1].Timestamp)
+                            .ToList();
+                        plans.Add(new PlanSpeed(planEvents[i].Timestamp, planEvents[i + 1].Timestamp,
+                            planEvents[i].EventParam, planCycles));
                     }
                 }
-            }
             return plans;
         }
 
-        
 
         //public static List<Plan> GetSplitMonitorlans(List<Models.Controller_Event_Log> cycleEvents,
         //    List<Models.Controller_Event_Log> detectorEvents, DateTime startdate,
@@ -341,7 +326,6 @@ namespace MOE.Common.Business
         //                select r;
 
 
-
         //        string premptCount = c.Count().ToString();
         //        planPreemptsLabel.Text = "Preempts Serviced During Plan: " + premptCount;
         //        planPreemptsLabel.LabelMark = LabelMarkStyle.LineSideMark;
@@ -414,29 +398,33 @@ namespace MOE.Common.Business
 
 
         //}
-        public static List<PlanSplitFail> GetSplitFailPlans(List<CycleSplitFail> cycles, SplitFailOptions options, Approach approach)
+        public static List<PlanSplitFail> GetSplitFailPlans(List<CycleSplitFail> cycles, SplitFailOptions options,
+            Approach approach)
         {
-            List<Controller_Event_Log> planEvents = GetPlanEvents(options.StartDate, options.EndDate, approach.SignalID);
-            List<PlanSplitFail> plans = new List<PlanSplitFail>();
-            for (int i = 0; i < planEvents.Count; i++)
-            {
+            var planEvents = GetPlanEvents(options.StartDate, options.EndDate, approach.SignalID);
+            var plans = new List<PlanSplitFail>();
+            for (var i = 0; i < planEvents.Count; i++)
                 if (planEvents.Count - 1 == i)
                 {
                     if (planEvents[i].Timestamp != options.EndDate)
                     {
-                        var planCycles = cycles.Where(c => c.StartTime >= planEvents[i].Timestamp && c.StartTime < options.EndDate).ToList();
-                        plans.Add(new PlanSplitFail(planEvents[i].Timestamp, options.EndDate, planEvents[i].EventParam, planCycles));
+                        var planCycles = cycles.Where(c =>
+                            c.StartTime >= planEvents[i].Timestamp && c.StartTime < options.EndDate).ToList();
+                        plans.Add(new PlanSplitFail(planEvents[i].Timestamp, options.EndDate, planEvents[i].EventParam,
+                            planCycles));
                     }
                 }
                 else
                 {
                     if (planEvents[i].Timestamp != planEvents[i + 1].Timestamp)
                     {
-                        var planCycles = cycles.Where(c => c.StartTime >= planEvents[i].Timestamp && c.StartTime < planEvents[i + 1].Timestamp).ToList();
-                        plans.Add(new PlanSplitFail(planEvents[i].Timestamp, planEvents[i + 1].Timestamp, planEvents[i].EventParam, planCycles));
+                        var planCycles = cycles.Where(c =>
+                                c.StartTime >= planEvents[i].Timestamp && c.StartTime < planEvents[i + 1].Timestamp)
+                            .ToList();
+                        plans.Add(new PlanSplitFail(planEvents[i].Timestamp, planEvents[i + 1].Timestamp,
+                            planEvents[i].EventParam, planCycles));
                     }
                 }
-            }
             return plans;
         }
     }

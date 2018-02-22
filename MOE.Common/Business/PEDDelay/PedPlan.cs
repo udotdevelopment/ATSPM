@@ -1,57 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Business.PEDDelay
 {
     public class PedPlan
     {
-        private DateTime _StartDate;
-
-        public DateTime StartDate
+        public PedPlan(string signalID, int phaseNumber, DateTime startDate, DateTime endDate, int planNumber)
         {
-            get { return _StartDate; }
+            StartDate = startDate;
+            EndDate = endDate;
+            PlanNumber = planNumber;
         }
 
-        private DateTime _EndDate;
+        public DateTime StartDate { get; }
 
-        public DateTime EndDate
-        {
-            get { return _EndDate; }
-        }
+        public DateTime EndDate { get; }
 
-        private int _PlanNumber;
+        public int PlanNumber { get; }
 
-        public int PlanNumber
-        {
-            get { return _PlanNumber; }
-        }
+        public int PhaseNumber { get; }
 
-        private int _PhaseNumber;
-
-        public int PhaseNumber
-        {
-            get { return _PhaseNumber; }
-        }
-        
-        public double PedActuations
-        {
-            get { return _Cycles.Count; }
-        }
+        public double PedActuations => Cycles.Count;
 
         public double MinDelay
         {
             get
             {
-                if (PedActuations > 0) 
-                { 
-                    return _Cycles.Min(c => c.Delay); 
-                }
+                if (PedActuations > 0)
+                    return Cycles.Min(c => c.Delay);
                 return 0;
             }
-            
         }
 
         public double MaxDelay
@@ -59,9 +38,7 @@ namespace MOE.Common.Business.PEDDelay
             get
             {
                 if (PedActuations > 0)
-                {
-                    return _Cycles.Max(c => c.Delay);
-                }
+                    return Cycles.Max(c => c.Delay);
                 return 0;
             }
         }
@@ -71,33 +48,11 @@ namespace MOE.Common.Business.PEDDelay
             get
             {
                 if (PedActuations > 0)
-                {
-                    return _Cycles.Average(c => c.Delay);
-                }
+                    return Cycles.Average(c => c.Delay);
                 return 0;
             }
         }
 
-
-        private List<PedCycle> _Cycles = new List<PedCycle>();
-
-        public List<PedCycle> Cycles
-        {
-            get { return _Cycles; }
-            set { _Cycles = value; }
-        }
-        
-        
-        
-        
-        public PedPlan(string signalID, int phaseNumber, DateTime startDate, DateTime endDate, int planNumber)
-        {
-            _StartDate = startDate;
-            _EndDate = endDate;
-            _PlanNumber = planNumber;
-        }
-
-        
-
+        public List<PedCycle> Cycles { get; set; } = new List<PedCycle>();
     }
 }

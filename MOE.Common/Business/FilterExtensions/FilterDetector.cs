@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
 namespace MOE.Common.Business.FilterExtensions
 {
@@ -14,9 +9,8 @@ namespace MOE.Common.Business.FilterExtensions
         public int Id { get; set; }
 
         public string Description { get; set; }
+
         [DataMember]
-        public bool Exclude { get; set; } = false;
-
-
+        public bool Exclude { get; set; }
     }
 }

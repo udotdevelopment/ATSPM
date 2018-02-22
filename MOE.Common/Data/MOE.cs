@@ -1,47 +1,50 @@
 ﻿namespace MOE.Common.Data
 {
 }
+
 namespace MOE.Common.Data
 {
 }
-namespace MOE.Common.Data {
-    
-    
-    public partial class MOE {
+
+namespace MOE.Common.Data
+{
+    public partial class MOE
+    {
     }
 }
-namespace MOE.Common.Data {
-    
-    
-    public partial class MOE {
+
+namespace MOE.Common.Data
+{
+    public partial class MOE
+    {
     }
 }
 
 namespace MOE.Common.Data.MOETableAdapters
 {
-    partial class SignalOverlapEventsTableAdapter
+    internal class SignalOverlapEventsTableAdapter
     {
     }
 
-    partial class SignalPhaseEventsTableAdapter
+    internal class SignalPhaseEventsTableAdapter
     {
     }
 
-    partial class TMCDetectorsDataTable
+    internal class TMCDetectorsDataTable
     {
     }
-    
-    
-    public partial class Archived_MetricsTableAdapter {
+
+
+    public class Archived_MetricsTableAdapter
+    {
     }
 }
 
-namespace MOE.Common.Data {
-
-
+namespace MOE.Common.Data
+{
     public partial class MOE
     {
-        partial class Signals_DisabledDataTable
+        private class Signals_DisabledDataTable
         {
         }
     }
@@ -49,9 +52,7 @@ namespace MOE.Common.Data {
 
 namespace MOE.Common.Data.MOETableAdapters
 {
-
-
-    public partial class SignalPhaseEvents_DisabledTableAdapter
+    public class SignalPhaseEvents_DisabledTableAdapter
     {
     }
 }

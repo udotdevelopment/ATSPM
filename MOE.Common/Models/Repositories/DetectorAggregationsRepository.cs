@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace MOE.Common.Models.Repositories
 {
     public class DetectorAggregationsRepository : IDetectorAggregationsRepository
     {
-        private Models.SPM _db;
+        private readonly SPM _db;
 
 
         public DetectorAggregationsRepository()
@@ -20,22 +19,18 @@ namespace MOE.Common.Models.Repositories
             _db = context;
         }
 
-        public List<DetectorAggregation> GetActivationsByDetectorIDandDateRange(string detectorId, DateTime Start, DateTime End)
-        {
-            throw new NotImplementedException();
-        }
-
         public DetectorAggregation Add(DetectorAggregation DetectorAggregation)
         {
             throw new NotImplementedException();
         }
 
-        public List<DetectorAggregation> GetActivationsByDetectorIDandDateRange(int detectorPrimaryId, DateTime start, DateTime end)
+        public List<DetectorAggregation> GetActivationsByDetectorIDandDateRange(int detectorPrimaryId, DateTime start,
+            DateTime end)
         {
-            List<DetectorAggregation> activationsList = (from r in this._db.DetectorAggregations
+            var activationsList = (from r in _db.DetectorAggregations
                 where r.DetectorPrimaryId == detectorPrimaryId
                       && r.BinStartTime >= start && r.BinStartTime <= end
-                                                         select r).ToList();
+                select r).ToList();
 
             return activationsList;
         }
@@ -45,14 +40,21 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public List<DetectorAggregation> GetDetectorAggregationByApproachIdAndDateRange(int detectorId, DateTime startDate, DateTime endDate)
+        public List<DetectorAggregation> GetDetectorAggregationByApproachIdAndDateRange(int detectorId,
+            DateTime startDate, DateTime endDate)
         {
             return _db.DetectorAggregations.Where(r => r.DetectorPrimaryId == detectorId
-                                                                && r.BinStartTime >= startDate &&
-                                                                r.BinStartTime <= endDate).ToList();
+                                                       && r.BinStartTime >= startDate &&
+                                                       r.BinStartTime <= endDate).ToList();
         }
 
         public void Update(DetectorAggregation DetectorAggregation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<DetectorAggregation> GetActivationsByDetectorIDandDateRange(string detectorId, DateTime Start,
+            DateTime End)
         {
             throw new NotImplementedException();
         }

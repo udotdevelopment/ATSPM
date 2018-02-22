@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace MOE.Common.Models.Repositories
 {
-    public class ApproachPcdAggregationRepository: IApproachPcdAggregationRepository
+    public class ApproachPcdAggregationRepository : IApproachPcdAggregationRepository
     {
-        private Models.SPM _db;
+        private readonly SPM _db;
+
         public ApproachPcdAggregationRepository()
         {
             _db = new SPM();
         }
+
         public ApproachPcdAggregationRepository(SPM context)
         {
             _db = context;
@@ -24,15 +25,13 @@ namespace MOE.Common.Models.Repositories
 
         public int GetApproachPcdCountAggregationByApproachIdAndDateRange(int approachId, DateTime start, DateTime end)
         {
-            int pcd = 0;
+            var pcd = 0;
             if (_db.ApproachPcdAggregations.Any(r => r.ApproachId == approachId
-                                                           && r.BinStartTime >= start && r.BinStartTime <= end))
-            {
+                                                     && r.BinStartTime >= start && r.BinStartTime <= end))
                 pcd = _db.ApproachPcdAggregations.Where(r => r.ApproachId == approachId
-                                                                              && r.BinStartTime >= start &&
-                                                                              r.BinStartTime <= end)
+                                                             && r.BinStartTime >= start &&
+                                                             r.BinStartTime <= end)
                     .Sum(r => r.ArrivalsOnGreen);
-            }
             return pcd;
         }
 
@@ -41,11 +40,12 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public List<ApproachPcdAggregation> GetApproachPcdsAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate, bool getProtectedPhase)
+        public List<ApproachPcdAggregation> GetApproachPcdsAggregationByApproachIdAndDateRange(int approachId,
+            DateTime startDate, DateTime endDate, bool getProtectedPhase)
         {
             return _db.ApproachPcdAggregations.Where(r => r.ApproachId == approachId
-                                                                          && r.BinStartTime >= startDate &&
-                                                                          r.BinStartTime <= endDate).ToList();
+                                                          && r.BinStartTime >= startDate &&
+                                                          r.BinStartTime <= endDate).ToList();
         }
 
 
@@ -53,7 +53,5 @@ namespace MOE.Common.Models.Repositories
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

@@ -1,15 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 
 namespace MOE.Common.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
     [DataContract]
     public partial class Detector
     {
+        [NotMapped] [DataMember] private int detChannel;
+
         public Detector()
         {
             MovementTypeID = 1;
@@ -26,25 +27,19 @@ namespace MOE.Common.Models
         [DataMember]
         public string DetectorID { get; set; }
 
-        [NotMapped]
-        [DataMember]
-        private int detChannel;
-
         [Required]
         [Display(Name = "Det Channel")]
         [DataMember]
         public int DetChannel
         {
-            get { return detChannel; }
+            get => detChannel;
             set
             {
                 if (value != detChannel)
                 {
                     detChannel = value;
-                    if (this.Approach != null && this.Approach.SignalID != null)
-                    {
-                        DetectorID = this.Approach.SignalID + value;
-                    }
+                    if (Approach != null && Approach.SignalID != null)
+                        DetectorID = Approach.SignalID + value;
                 }
             }
         }
@@ -56,7 +51,7 @@ namespace MOE.Common.Models
         [Display(Name = "Min Speed Filter (Advanced Speed)")]
         [DataMember]
         public int? MinSpeedFilter { get; set; }
-        
+
         [Required]
         [Display(Name = "Date Added")]
         [DataMember]
@@ -64,10 +59,11 @@ namespace MOE.Common.Models
 
         [Display(Name = "Date Disabled")]
         [DataMember]
-        public DateTime? DateDisabled { get; set; }    
-        
+        public DateTime? DateDisabled { get; set; }
+
         public List<int> DetectionTypeIDs { get; set; }
-        [Display(Name="Detection Types")]
+
+        [Display(Name = "Detection Types")]
         [DataMember]
         public virtual ICollection<DetectionType> DetectionTypes { get; set; }
 
@@ -79,15 +75,17 @@ namespace MOE.Common.Models
         [Display(Name = "Movement Type (Lane-by-lane Count)")]
         [DataMember]
         public int? MovementTypeID { get; set; }
+
         [DataMember]
         public virtual MovementType MovementType { get; set; }
 
         [Display(Name = "Lane Type (Lane-by-lane Count)")]
         [DataMember]
         public int? LaneTypeID { get; set; }
+
         [DataMember]
-        public virtual LaneType LaneType { get; set; }     
-    
+        public virtual LaneType LaneType { get; set; }
+
         [Display(Name = "Decision Point (Advanced Count)")]
         [DataMember]
         public int? DecisionPoint { get; set; }
@@ -101,27 +99,31 @@ namespace MOE.Common.Models
         public double LatencyCorrection { get; set; }
 
         public List<int> DetectorCommentIDs { get; set; }
-        [Display(Name="Detector Comment")]
+
+        [Display(Name = "Detector Comment")]
         [DataMember]
         public virtual ICollection<DetectorComment> DetectorComments { get; set; }
 
         [DataMember]
         public int ApproachID { get; set; }
+
         [DataMember]
-        public virtual MOE.Common.Models.Approach Approach { get; set; }
+        public virtual Approach Approach { get; set; }
 
         [Display(Name = "Detection Hardware")]
         [DataMember]
         public int DetectionHardwareID { get; set; }
+
         [Display(Name = "Detection Hardware")]
         [DataMember]
-        public virtual MOE.Common.Models.DetectionHardware DetectionHardware { get; set; }
+        public virtual DetectionHardware DetectionHardware { get; set; }
 
         [NotMapped]
-        public string Description {
+        public string Description
+        {
             get
             {
-                string description = "Channel - " + DetChannel;
+                var description = "Channel - " + DetChannel;
                 if (LaneNumber != null)
                     description += " Lane Number - " + LaneNumber.Value;
                 if (LaneType != null)

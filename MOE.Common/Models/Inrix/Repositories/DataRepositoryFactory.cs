@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MOE.Common.Models.Inrix.Repositories
+﻿namespace MOE.Common.Models.Inrix.Repositories
 {
     public class DataRepositoryFactory
     {
@@ -13,9 +7,7 @@ namespace MOE.Common.Models.Inrix.Repositories
         public static IDataRepository CreatedataRepository()
         {
             if (dataRepository != null)
-            {
                 return dataRepository;
-            }
             return new DataRepository();
         }
 

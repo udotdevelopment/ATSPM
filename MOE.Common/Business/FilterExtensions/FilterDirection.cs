@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
 namespace MOE.Common.Business.FilterExtensions
 {
@@ -11,8 +6,10 @@ namespace MOE.Common.Business.FilterExtensions
     public class FilterDirection
     {
         public FilterDirection()
-        { }
-        public FilterDirection(int directionDirectionTypeId,  string description,bool include)
+        {
+        }
+
+        public FilterDirection(int directionDirectionTypeId, string description, bool include)
         {
             DirectionTypeId = directionDirectionTypeId;
             Include = include;
@@ -23,6 +20,7 @@ namespace MOE.Common.Business.FilterExtensions
         public int DirectionTypeId { get; set; }
 
         public string Description { get; set; }
+
         [DataMember]
         public bool Include { get; set; }
     }

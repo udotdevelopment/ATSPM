@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MOE.Common.Models.Repositories
+﻿namespace MOE.Common.Models.Repositories
 {
-    public interface IApplicationSettingsRepository 
+    public interface IApplicationSettingsRepository
     {
-        Models.WatchDogApplicationSettings GetWatchDogSettings();
-        Models.GeneralSettings  GetGeneralSettings();
-        void Save(Models.WatchDogApplicationSettings watchDogApplicationSettings);
-        void Save(Models.GeneralSettings generalSettings);
+        WatchDogApplicationSettings GetWatchDogSettings();
+        GeneralSettings GetGeneralSettings();
+        void Save(WatchDogApplicationSettings watchDogApplicationSettings);
+        void Save(GeneralSettings generalSettings);
     }
 }

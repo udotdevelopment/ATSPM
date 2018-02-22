@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using MOE.Common.Models;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using MOE.Common.Business.Bins;
-using MOE.Common.Business.DataAggregation;
-using MOE.Common.Business.FilterExtensions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using MOE.Common.Business.Bins;
+using MOE.Common.Business.DataAggregation;
+using MOE.Common.Models;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
-
     [DataContract]
-    public class ApproachPcdAggregationOptions: ApproachAggregationMetricOptions
+    public class ApproachPcdAggregationOptions : ApproachAggregationMetricOptions
     {
+        public ApproachPcdAggregationOptions()
+        {
+            MetricTypeID = 20;
+            AggregatedDataTypes = new List<AggregatedDataType>();
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "ArrivalsOnGreen"});
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = "ArrivalsOnRed"});
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 2, DataName = "ArrivalsOnYellow"});
+        }
+
         public override string ChartTitle
         {
             get
@@ -23,129 +30,102 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 chartTitle = "AggregationChart\n";
                 chartTitle += TimeOptions.Start.ToString();
                 if (TimeOptions.End > TimeOptions.Start)
-                    chartTitle += " to " + TimeOptions.End.ToString() + "\n";
+                    chartTitle += " to " + TimeOptions.End + "\n";
                 if (TimeOptions.DaysOfWeek != null)
-                {
                     foreach (var dayOfWeek in TimeOptions.DaysOfWeek)
-                    {
-                        chartTitle += dayOfWeek.ToString() + " ";
-                    }
-                }
+                        chartTitle += dayOfWeek + " ";
                 if (TimeOptions.TimeOfDayStartHour != null && TimeOptions.TimeOfDayStartMinute != null &&
                     TimeOptions.TimeOfDayEndHour != null && TimeOptions.TimeOfDayEndMinute != null)
-                {
-                    chartTitle += "Limited to: " + new TimeSpan(0, TimeOptions.TimeOfDayStartHour.Value, TimeOptions.TimeOfDayStartMinute.Value, 0)
-                                      .ToString() + " to " + new TimeSpan(0, TimeOptions.TimeOfDayEndHour.Value,
-                                      TimeOptions.TimeOfDayEndMinute.Value, 0).ToString() + "\n";
-                }
-                chartTitle += TimeOptions.SelectedBinSize.ToString() + " bins ";
-                chartTitle += SelectedXAxisType.ToString() + " Aggregation ";
+                    chartTitle += "Limited to: " +
+                                  new TimeSpan(0, TimeOptions.TimeOfDayStartHour.Value,
+                                      TimeOptions.TimeOfDayStartMinute.Value, 0) + " to " + new TimeSpan(0,
+                                      TimeOptions.TimeOfDayEndHour.Value,
+                                      TimeOptions.TimeOfDayEndMinute.Value, 0) + "\n";
+                chartTitle += TimeOptions.SelectedBinSize + " bins ";
+                chartTitle += SelectedXAxisType + " Aggregation ";
                 chartTitle += SelectedAggregationType.ToString();
                 return chartTitle;
             }
         }
-        
 
-
-        public  ApproachPcdAggregationOptions()
-        {
-            MetricTypeID = 20;
-            AggregatedDataTypes = new List<AggregatedDataType>();
-            AggregatedDataTypes.Add(new AggregatedDataType { Id = 0, DataName = "ArrivalsOnGreen" });
-            AggregatedDataTypes.Add(new AggregatedDataType { Id = 1, DataName = "ArrivalsOnRed" });
-            AggregatedDataTypes.Add(new AggregatedDataType { Id = 2, DataName = "ArrivalsOnYellow" });
-
-        }
-
+        public override string YAxisTitle => SelectedAggregationType + " of Split Fail " + Regex.Replace(
+                                                 SelectedAggregatedDataType.ToString(),
+                                                 @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1") + " " +
+                                             TimeOptions.SelectedBinSize + " bins";
 
 
         protected override int GetAverageByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
-            PcdAggregationBySignal splitFailAggregationBySignal =
+            var splitFailAggregationBySignal =
                 new PcdAggregationBySignal(this, signal);
             return splitFailAggregationBySignal.Average;
         }
 
         protected override int GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
-            PcdAggregationBySignal splitFailAggregationBySignal =
+            var splitFailAggregationBySignal =
                 new PcdAggregationBySignal(this, signal);
             return splitFailAggregationBySignal.Total;
         }
 
         protected override int GetAverageByDirection(Models.Signal signal, DirectionType direction)
         {
-            PcdAggregationBySignal splitFailAggregationBySignal =
+            var splitFailAggregationBySignal =
                 new PcdAggregationBySignal(this, signal, direction);
             return splitFailAggregationBySignal.Average;
         }
 
         protected override int GetSumByDirection(Models.Signal signal, DirectionType direction)
         {
-            PcdAggregationBySignal splitFailAggregationBySignal =
+            var splitFailAggregationBySignal =
                 new PcdAggregationBySignal(this, signal, direction);
             return splitFailAggregationBySignal.Total;
         }
 
         protected override List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal)
         {
-            PcdAggregationBySignal splitFailAggregationBySignal = new PcdAggregationBySignal(this, signal);
+            var splitFailAggregationBySignal = new PcdAggregationBySignal(this, signal);
             return splitFailAggregationBySignal.BinsContainers;
         }
 
-        protected override List<BinsContainer> GetBinsContainersByDirection(DirectionType directionType, Models.Signal signal)
+        protected override List<BinsContainer> GetBinsContainersByDirection(DirectionType directionType,
+            Models.Signal signal)
         {
-            PcdAggregationBySignal splitFailAggregationBySignal =
+            var splitFailAggregationBySignal =
                 new PcdAggregationBySignal(this, signal, directionType);
             return splitFailAggregationBySignal.BinsContainers;
         }
 
         protected override List<BinsContainer> GetBinsContainersByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
-            PcdAggregationBySignal splitFailAggregationBySignal =
+            var splitFailAggregationBySignal =
                 new PcdAggregationBySignal(this, signal, phaseNumber);
             return splitFailAggregationBySignal.BinsContainers;
         }
 
         protected override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
         {
-            ConcurrentBag<PcdAggregationBySignal> aggregations = new ConcurrentBag<PcdAggregationBySignal>();
-            Parallel.ForEach(signals, signal =>
-            {
-                aggregations.Add(new PcdAggregationBySignal(this, signal));
-            });
+            var aggregations = new ConcurrentBag<PcdAggregationBySignal>();
+            Parallel.ForEach(signals, signal => { aggregations.Add(new PcdAggregationBySignal(this, signal)); });
             var binsContainers = BinFactory.GetBins(TimeOptions);
             foreach (var splitFailAggregationBySignal in aggregations)
-            {
-                for (int i = 0; i < binsContainers.Count; i++)
+                for (var i = 0; i < binsContainers.Count; i++)
+                for (var binIndex = 0; binIndex < binsContainers[i].Bins.Count; binIndex++)
                 {
-                    for (var binIndex = 0; binIndex < binsContainers[i].Bins.Count; binIndex++)
-                    {
-                        var bin = binsContainers[i].Bins[binIndex];
-                        bin.Sum += splitFailAggregationBySignal.BinsContainers[i].Bins[binIndex].Sum;
-                        bin.Average = Convert.ToInt32(Math.Round((double)(bin.Sum / signals.Count)));
-                    }
+                    var bin = binsContainers[i].Bins[binIndex];
+                    bin.Sum += splitFailAggregationBySignal.BinsContainers[i].Bins[binIndex].Sum;
+                    bin.Average = Convert.ToInt32(Math.Round((double) (bin.Sum / signals.Count)));
                 }
-            }
             return binsContainers;
         }
 
-        public override string YAxisTitle
-        {
-            get
-            {
-                return SelectedAggregationType.ToString() + " of Split Fail " + Regex.Replace(SelectedAggregatedDataType.ToString(),
-                               @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1").ToString() + " " + TimeOptions.SelectedBinSize.ToString() + " bins";
-            }
-        }
 
-
-        protected override List<BinsContainer> GetBinsContainersByApproach(Models.Approach approach, bool getprotectedPhase)
+        protected override List<BinsContainer> GetBinsContainersByApproach(Approach approach, bool getprotectedPhase)
         {
-            PcdAggregationByApproach approachPcdAggregationContainer = new PcdAggregationByApproach(approach, TimeOptions, StartDate, EndDate,
+            var approachPcdAggregationContainer = new PcdAggregationByApproach(approach, TimeOptions, StartDate,
+                EndDate,
                 getprotectedPhase, SelectedAggregatedDataType);
             return approachPcdAggregationContainer.BinsContainers;
         }
-        
     }
 }

@@ -45,14 +45,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 return chartTitle;
             }
         }
-        public override string YAxisTitle
-        {
-            get
-            {
-                return Regex.Replace(SelectedAggregationType.ToString()  + SelectedAggregatedDataType.DataName,
-                           @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1").ToString() + " " + TimeOptions.SelectedBinSize.ToString() + " bins";
-            }
-        }
+
+        public override string YAxisTitle => Regex.Replace(
+                                                 SelectedAggregationType + SelectedAggregatedDataType.DataName,
+                                                 @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1") + " " +
+                                             TimeOptions.SelectedBinSize + " bins";
 
         protected override int GetAverageByPhaseNumber(Models.Signal signal, int phaseNumber)
         {

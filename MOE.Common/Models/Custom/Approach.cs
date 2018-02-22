@@ -1,38 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+using MOE.Common.Models.Repositories;
+
 namespace MOE.Common.Models
 {
     public partial class Approach
     {
         [NotMapped]
         public string Index { get; set; }
+
         [NotMapped]
-        public string ApproachRouteDescription { get{
-            return this.Signal.SignalDescription + " " +  
-            this.DirectionType.Description + " Phase " + this.ProtectedPhaseNumber.ToString();} }
+        public string ApproachRouteDescription => Signal.SignalDescription + " " +
+                                                  DirectionType.Description + " Phase " + ProtectedPhaseNumber;
+
         public List<Detector> GetAllDetectorsOfDetectionType(int detectionTypeID)
         {
             if (Detectors != null)
             {
-                foreach (Detector d in Detectors)
-                {
+                foreach (var d in Detectors)
                     if (d.DetectionTypeIDs == null)
                     {
                         d.DetectionTypeIDs = new List<int>();
-                        foreach (DetectionType dt in d.DetectionTypes)
-                        {
+                        foreach (var dt in d.DetectionTypes)
                             d.DetectionTypeIDs.Add(dt.DetectionTypeID);
-                        }
                     }
-                }
                 return Detectors
-                .Where(d => d.DetectionTypeIDs.Contains(detectionTypeID))
-                .ToList();
+                    .Where(d => d.DetectionTypeIDs.Contains(detectionTypeID))
+                    .ToList();
             }
             return new List<Detector>();
         }
@@ -45,25 +40,23 @@ namespace MOE.Common.Models
         private bool CompareApproachProperties(Approach approachToCompare)
         {
             if (approachToCompare != null
-                &&this.SignalID == approachToCompare.SignalID
-                && this.ApproachID == approachToCompare.ApproachID
-                && this.DirectionTypeID == approachToCompare.DirectionTypeID
-                && this.Description == approachToCompare.Description
-                && this.MPH == approachToCompare.MPH
-                && this.Detectors == approachToCompare.Detectors
-                && this.ProtectedPhaseNumber == approachToCompare.ProtectedPhaseNumber
-                && this.IsProtectedPhaseOverlap == approachToCompare.IsProtectedPhaseOverlap
-                && this.PermissivePhaseNumber == approachToCompare.PermissivePhaseNumber
-                )
-            {
+                && SignalID == approachToCompare.SignalID
+                && ApproachID == approachToCompare.ApproachID
+                && DirectionTypeID == approachToCompare.DirectionTypeID
+                && Description == approachToCompare.Description
+                && MPH == approachToCompare.MPH
+                && Detectors == approachToCompare.Detectors
+                && ProtectedPhaseNumber == approachToCompare.ProtectedPhaseNumber
+                && IsProtectedPhaseOverlap == approachToCompare.IsProtectedPhaseOverlap
+                && PermissivePhaseNumber == approachToCompare.PermissivePhaseNumber
+            )
                 return true;
-            }
             return false;
         }
 
-        public static Models.Approach CreateNewApproachWithDefaultValues(Models.Signal signal, Models.DirectionType dir, MOE.Common.Models.SPM db)
+        public static Approach CreateNewApproachWithDefaultValues(Signal signal, DirectionType dir, SPM db)
         {
-            Models.Approach appr = new Models.Approach();
+            var appr = new Approach();
             appr.Description = signal.SignalID + dir.Abbreviation;
             appr.DirectionTypeID = dir.DirectionTypeID;
             appr.SignalID = signal.SignalID;
@@ -71,13 +64,13 @@ namespace MOE.Common.Models
             return appr;
         }
 
-        public static void AddDefaultObjectsToApproach(Models.Approach appr, MOE.Common.Models.SPM db)
+        public static void AddDefaultObjectsToApproach(Approach appr, SPM db)
         {
-            Models.Detector D = new Models.Detector();
+            var D = new Detector();
 
-            Models.DetectionType basic = (from r in db.DetectionTypes
-                                          where r.DetectionTypeID == 1
-                                          select r).FirstOrDefault();
+            var basic = (from r in db.DetectionTypes
+                where r.DetectionTypeID == 1
+                select r).FirstOrDefault();
 
             D.LaneTypeID = 1;
             D.MovementTypeID = 1;
@@ -85,82 +78,75 @@ namespace MOE.Common.Models
             appr.Detectors.Add(D);
 
             //LeftTurn
-            Models.Detector D2 = new Models.Detector();
+            var D2 = new Detector();
             D2.LaneTypeID = 1;
             D2.MovementTypeID = 3;
             //LG2.Description = appr.Description + "Left (Phase Only)";      
             appr.Detectors.Add(D2);
-
         }
 
         public static Approach CopyApproachCommonProperties(Approach approachToCopy, bool isVersionOrSignalCopy)
         {
-            Models.Approach newApproach = new Models.Approach();
+            var newApproach = new Approach();
             newApproach.SignalID = approachToCopy.SignalID;
             newApproach.VersionID = approachToCopy.VersionID;
             newApproach.DirectionTypeID = approachToCopy.DirectionTypeID;
             if (!isVersionOrSignalCopy)
-            {
                 newApproach.Description = approachToCopy.Description + " Copy";
-            }
             else
-            {
                 newApproach.Description = approachToCopy.Description;
-            }
             newApproach.MPH = approachToCopy.MPH;
             newApproach.ProtectedPhaseNumber = approachToCopy.ProtectedPhaseNumber;
             newApproach.IsProtectedPhaseOverlap = approachToCopy.IsProtectedPhaseOverlap;
             newApproach.PermissivePhaseNumber = approachToCopy.PermissivePhaseNumber;
-            newApproach.Detectors = new List<MOE.Common.Models.Detector>();
+            newApproach.Detectors = new List<Detector>();
             return newApproach;
         }
 
         public static Approach CopyApproach(int approachIDToCopy)
         {
-            MOE.Common.Models.Repositories.IApproachRepository approachRepository =
-                MOE.Common.Models.Repositories.ApproachRepositoryFactory.Create();
-            Approach approachToCopy = approachRepository.GetApproachByApproachID(approachIDToCopy);
-            Approach newApproach = CopyApproachCommonProperties(approachToCopy, false);
+            var approachRepository =
+                ApproachRepositoryFactory.Create();
+            var approachToCopy = approachRepository.GetApproachByApproachID(approachIDToCopy);
+            var newApproach = CopyApproachCommonProperties(approachToCopy, false);
             if (approachToCopy.Detectors != null)
             {
-                foreach (Detector d in approachToCopy.Detectors)
+                foreach (var d in approachToCopy.Detectors)
                 {
-                    Detector
+                    var
                         dForNewApproach =
                             Detector.CopyDetector(d.ID,
                                 true); //need to increase DetChannel if not copying the whole signal.
                     newApproach.Detectors.Add(dForNewApproach);
                 }
                 if (newApproach.Detectors.Count > 1)
-                {
                     newApproach = SetDetChannelWhenMultipleDetectorsExist(newApproach);
-                }
             }
             return newApproach;
         }
 
         private static Approach SetDetChannelWhenMultipleDetectorsExist(Approach newApproach)
         {
-            int detChannel = newApproach.Detectors.ToList()[0].DetChannel + 1;
-            for (int i = 1; i < newApproach.Detectors.Count; i++)
+            var detChannel = newApproach.Detectors.ToList()[0].DetChannel + 1;
+            for (var i = 1; i < newApproach.Detectors.Count; i++)
             {
                 newApproach.Detectors.ToList()[i].DetChannel = detChannel;
                 newApproach.Detectors.ToList()[i].DetectorID = newApproach.SignalID +
-                    detChannel;
+                                                               detChannel;
                 detChannel++;
             }
             return newApproach;
         }
 
         public static Approach CopyApproachForSignal(int approachIDToCopy)
-         {
-            MOE.Common.Models.Repositories.IApproachRepository approachRepository =
-                MOE.Common.Models.Repositories.ApproachRepositoryFactory.Create();
-            Approach approachToCopy = approachRepository.GetApproachByApproachID(approachIDToCopy);
-            Approach newApproach = CopyApproachCommonProperties(approachToCopy, true);
-            foreach (Detector d in approachToCopy.Detectors)
+        {
+            var approachRepository =
+                ApproachRepositoryFactory.Create();
+            var approachToCopy = approachRepository.GetApproachByApproachID(approachIDToCopy);
+            var newApproach = CopyApproachCommonProperties(approachToCopy, true);
+            foreach (var d in approachToCopy.Detectors)
             {
-                Detector dForNewApproach = Detector.CopyDetector(d.ID, false);
+                var dForNewApproach = Detector.CopyDetector(d.ID, false);
                 newApproach.Detectors.Add(dForNewApproach);
             }
             return newApproach;
@@ -169,17 +155,11 @@ namespace MOE.Common.Models
 
         public List<Detector> GetDetectorsForMetricType(int metricTypeID)
         {
-            List<Detector> detectorsForMetricType = new List<Detector>();
+            var detectorsForMetricType = new List<Detector>();
             if (Detectors != null)
-            {
-                foreach (Detector d in Detectors)
-                {
+                foreach (var d in Detectors)
                     if (d.DetectorSupportsThisMetric(metricTypeID))
-                    {
                         detectorsForMetricType.Add(d);
-                    }
-                }
-            }
             return detectorsForMetricType;
         }
     }

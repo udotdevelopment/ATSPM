@@ -1,48 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.DataVisualization.Charting;
-using MOE.Common.Business;
-using MOE.Common.Models;
 using System.Runtime.Serialization;
-using System.ComponentModel.DataAnnotations;
+using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
     [DataContract]
-    
-    public class PCDOptions: MetricOptions
+    public class PCDOptions : MetricOptions
     {
-        [Required]
-        [Display(Name = "Volume Bin Size")]
-        [DataMember]
-        public int SelectedBinSize { get; set; }
-        public List<int> VolumeBinSizeList { get; set; }
-        [Required]
-        [Display(Name = "Dot Size")]
-        [DataMember]
-        public int SelectedDotSize { get; set; }
-        public List<DotSizeItem> DotSizeList { get; set; }
-        [DataMember]
-        [Display(Name = "Show Plans")]
-        public bool ShowPlanStatistics { get; set; }
-        [DataMember]
-        [Display(Name = "Show Volumes")]
-        public bool ShowVolumes { get; set; }
-        [DataMember]
-        public bool ShowArrivalsOnGreen { get; set; }
-        public Models.Signal Signal { get; set; }
-
         private int MetricTypeID = 6;
-        
+
         public PCDOptions(string signalID, DateTime startDate, DateTime endDate, double yAxisMax, double y2AxisMax,
-            int binSize, int dotSize, bool showPlanStatistics, bool showVolumes, int metricTypeID, bool showArrivalsOnGreen)
+            int binSize, int dotSize, bool showPlanStatistics, bool showVolumes, int metricTypeID,
+            bool showArrivalsOnGreen)
         {
             SignalID = signalID;
             YAxisMax = yAxisMax;
@@ -52,7 +27,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             ShowPlanStatistics = showPlanStatistics;
             ShowVolumes = showVolumes;
             MetricTypeID = metricTypeID;
-            ShowArrivalsOnGreen = showArrivalsOnGreen;            
+            ShowArrivalsOnGreen = showArrivalsOnGreen;
         }
 
         public PCDOptions()
@@ -68,6 +43,33 @@ namespace MOE.Common.Business.WCFServiceLibrary
             SetDefaults();
         }
 
+        [Required]
+        [Display(Name = "Volume Bin Size")]
+        [DataMember]
+        public int SelectedBinSize { get; set; }
+
+        public List<int> VolumeBinSizeList { get; set; }
+
+        [Required]
+        [Display(Name = "Dot Size")]
+        [DataMember]
+        public int SelectedDotSize { get; set; }
+
+        public List<DotSizeItem> DotSizeList { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Plans")]
+        public bool ShowPlanStatistics { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Volumes")]
+        public bool ShowVolumes { get; set; }
+
+        [DataMember]
+        public bool ShowArrivalsOnGreen { get; set; }
+
+        public Models.Signal Signal { get; set; }
+
         public void SetDefaults()
         {
             YAxisMax = 150;
@@ -79,45 +81,39 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
-            Models.Repositories.ISignalsRepository signalRepository =
-                Models.Repositories.SignalsRepositoryFactory.Create();
+            var signalRepository =
+                SignalsRepositoryFactory.Create();
             Signal = signalRepository.GetVersionOfSignalByDate(SignalID, StartDate);
             MetricTypeID = 6;
-            
-            Chart chart = new Chart();            
-            string location = GetSignalLocation();
-            List<Approach> metricApproaches = Signal.GetApproachesForSignalThatSupportMetric(MetricTypeID);
+
+            var chart = new Chart();
+            var location = GetSignalLocation();
+            var metricApproaches = Signal.GetApproachesForSignalThatSupportMetric(MetricTypeID);
 
             if (metricApproaches.Count > 0)
-            {
-                foreach (Approach approach in metricApproaches)
+                foreach (var approach in metricApproaches)
                 {
-                    SignalPhase signalPhase = new SignalPhase(StartDate, EndDate, approach,
+                    var signalPhase = new SignalPhase(StartDate, EndDate, approach,
                         ShowVolumes, SelectedBinSize, MetricTypeID, false);
                     chart = GetNewChart(approach);
                     AddDataToChart(chart, signalPhase);
-                    string chartName = CreateFileName();
+                    var chartName = CreateFileName();
                     chart.ImageLocation = MetricFileLocation + chartName;
                     chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
                     ReturnList.Add(MetricWebPath + chartName);
                 }
-            }
             return ReturnList;
         }
 
 
         private Chart GetNewChart(Approach approach)
         {
-            Chart chart = ChartFactory.CreateDefaultChart(this);
+            var chart = ChartFactory.CreateDefaultChart(this);
             CreateChartLegend(chart);
             if (ShowVolumes)
-            {
                 CreateVolumeSeries(chart);
-            }
             else
-            {
                 chart.ChartAreas[0].AxisY2.Enabled = AxisEnabled.False;
-            }
             CreateDetectorSeries(chart);
             CreateGreenSeries(chart);
             CreateYellowSeries(chart);
@@ -127,27 +123,24 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void SetSeriesLineWidth(Series series)
         {
-            if(SelectedDotSize == 2 )
-            {
+            if (SelectedDotSize == 2)
                 series.BorderWidth = 3;
-            }
         }
 
         private void CreateRedSeries(Chart chart)
         {
-            Series redSeries = new Series();
+            var redSeries = new Series();
             redSeries.ChartType = SeriesChartType.Line;
             redSeries.Color = Color.Red;
             redSeries.Name = "Change to Red";
             redSeries.XValueType = ChartValueType.DateTime;
             SetSeriesLineWidth(redSeries);
             chart.Series.Add(redSeries);
-            
         }
 
         private void CreateYellowSeries(Chart chart)
         {
-            Series yellowSeries = new Series();
+            var yellowSeries = new Series();
             yellowSeries.ChartType = SeriesChartType.Line;
             yellowSeries.Color = Color.Yellow;
             yellowSeries.Name = "Change to Yellow";
@@ -158,12 +151,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void CreateVolumeSeries(Chart chart)
         {
-            Series volumeSeries = new Series();
+            var volumeSeries = new Series();
             volumeSeries.ChartType = SeriesChartType.Line;
             volumeSeries.Color = Color.Black;
             volumeSeries.Name = "Volume Per Hour";
             volumeSeries.XValueType = ChartValueType.DateTime;
-            
+
             volumeSeries.YAxisType = AxisType.Secondary;
             SetSeriesLineWidth(volumeSeries);
             chart.Series.Add(volumeSeries);
@@ -171,7 +164,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void CreateGreenSeries(Chart chart)
         {
-            Series greenSeries = new Series();
+            var greenSeries = new Series();
             greenSeries.ChartType = SeriesChartType.Line;
             greenSeries.Color = Color.DarkGreen;
             greenSeries.Name = "Change to Green";
@@ -183,7 +176,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void CreateDetectorSeries(Chart chart)
         {
-            Series pointSeries = new Series();
+            var pointSeries = new Series();
             pointSeries.ChartType = SeriesChartType.Point;
             pointSeries.Color = Color.Black;
             pointSeries.Name = "Detector Activation";
@@ -194,7 +187,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void CreateChartLegend(Chart chart)
         {
-            Legend chartLegend = new Legend();
+            var chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
             chartLegend.Docking = Docking.Left;
             chartLegend.CustomItems.Add(Color.Blue, "AoG - Arrival On Green");
@@ -206,10 +199,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
         private void SetChartTitle(Chart chart, Approach approach, Dictionary<string, string> statistics)
         {
             var detectorsForMetric = approach.GetDetectorsForMetricType(MetricTypeID);
-            string message = "\n Advanced detector located " + detectorsForMetric.FirstOrDefault().DistanceFromStopBar.ToString() + " ft. upstream of stop bar";
+            var message = "\n Advanced detector located " + detectorsForMetric.FirstOrDefault().DistanceFromStopBar +
+                          " ft. upstream of stop bar";
             chart.Titles.Add(ChartTitleFactory.GetChartName(MetricTypeID));
-            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRangeAndMessage(approach.SignalID, StartDate, EndDate, message));
-            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(approach.ProtectedPhaseNumber, approach.DirectionType.Description));
+            chart.Titles.Add(
+                ChartTitleFactory.GetSignalLocationAndDateRangeAndMessage(approach.SignalID, StartDate, EndDate,
+                    message));
+            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(approach.ProtectedPhaseNumber,
+                approach.DirectionType.Description));
             chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
 
@@ -217,101 +214,85 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             double totalDetectorHits = 0;
             double totalOnGreenArrivals = 0;
-            foreach (CyclePcd cycle in signalPhase.Cycles)
+            foreach (var cycle in signalPhase.Cycles)
             {
                 totalOnGreenArrivals += AddCycleToChart(chart, cycle);
                 totalDetectorHits += cycle.DetectorEvents.Count;
             }
             if (ShowVolumes)
-            {
                 AddVolumeToChart(chart, signalPhase.Volume);
-            }
             if (ShowArrivalsOnGreen)
-            {
                 AddArrivalOnGreen(chart, totalOnGreenArrivals, totalDetectorHits, signalPhase.Approach);
-            }
             if (ShowPlanStatistics)
-            {
                 SetPlanStrips(signalPhase.Plans, chart);
-            }
         }
 
-        private void AddArrivalOnGreen(Chart chart, double totalOnGreenArrivals, double totalDetectorHits, Approach approach)
+        private void AddArrivalOnGreen(Chart chart, double totalOnGreenArrivals, double totalDetectorHits,
+            Approach approach)
         {
             double percentArrivalOnGreen = 0;
             if (totalDetectorHits > 0)
-            {
-                percentArrivalOnGreen = (totalOnGreenArrivals / totalDetectorHits) * 100;
-            }
-            Dictionary<string, string> statistics = new Dictionary<string,string>();
-            statistics.Add("AoG", Math.Round(percentArrivalOnGreen).ToString()+"%");
+                percentArrivalOnGreen = totalOnGreenArrivals / totalDetectorHits * 100;
+            var statistics = new Dictionary<string, string>();
+            statistics.Add("AoG", Math.Round(percentArrivalOnGreen) + "%");
             SetChartTitle(chart, approach, statistics);
         }
 
         private void AddVolumeToChart(Chart chart, VolumeCollection volumeCollection)
         {
-            foreach (Volume v in volumeCollection.Items)
-            {
+            foreach (var v in volumeCollection.Items)
                 chart.Series["Volume Per Hour"].Points.AddXY(v.XAxis, v.YAxis);
-            }
         }
 
         private double AddCycleToChart(Chart chart, CyclePcd cycle)
         {
-
             double totalOnGreenArrivals = 0;
             chart.Series["Change to Green"].Points.AddXY(cycle.GreenEvent, cycle.GreenLineY);
             chart.Series["Change to Yellow"].Points.AddXY(cycle.YellowEvent, cycle.YellowLineY);
             chart.Series["Change to Red"].Points.AddXY(cycle.EndTime, cycle.RedLineY);
-            foreach (DetectorDataPoint detectorPoint in cycle.DetectorEvents)
+            foreach (var detectorPoint in cycle.DetectorEvents)
             {
                 chart.Series["Detector Activation"].Points.AddXY(
                     //pcd.StartTime, 
                     detectorPoint.TimeStamp,
                     detectorPoint.YPoint);
                 if (detectorPoint.YPoint > cycle.GreenLineY && detectorPoint.YPoint < cycle.RedLineY)
-                {
                     totalOnGreenArrivals++;
-                }
             }
             return totalOnGreenArrivals;
         }
 
 
         /// <summary>
-        /// Adds plan strips to the chart
+        ///     Adds plan strips to the chart
         /// </summary>
         /// <param name="plans"></param>
         /// <param name="chart"></param>
         /// <param name="StartDate"></param>
         protected void SetPlanStrips(List<PlanPcd> plans, Chart chart)
         {
-            int backGroundColor = 1;
-            foreach (PlanPcd plan in plans)
+            var backGroundColor = 1;
+            foreach (var plan in plans)
             {
-                StripLine stripline = new StripLine();
+                var stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans
                 if (backGroundColor % 2 == 0)
-                {
                     stripline.BackColor = Color.FromArgb(120, Color.LightGray);
-                }
                 else
-                {
                     stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
-                }
 
                 //Set the stripline properties
                 stripline.IntervalOffset = (plan.StartTime - StartDate).TotalHours;
                 stripline.IntervalOffsetType = DateTimeIntervalType.Hours;
                 stripline.Interval = 1;
-                stripline.IntervalType = DateTimeIntervalType.Days;               
+                stripline.IntervalType = DateTimeIntervalType.Days;
                 stripline.StripWidth = (plan.EndTime - plan.StartTime).TotalHours;
                 stripline.StripWidthType = DateTimeIntervalType.Hours;
-       
+
                 chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
 
                 //Add a corrisponding custom label for each strip
-                CustomLabel Plannumberlabel = new CustomLabel();
+                var Plannumberlabel = new CustomLabel();
                 Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
                 Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
                 switch (plan.PlanNumber)
@@ -326,7 +307,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         Plannumberlabel.Text = "Unknown";
                         break;
                     default:
-                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+                        Plannumberlabel.Text = "Plan " + plan.PlanNumber;
 
                         break;
                 }
@@ -336,33 +317,30 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
                 chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(Plannumberlabel);
 
-                CustomLabel aogLabel = new CustomLabel();
+                var aogLabel = new CustomLabel();
                 aogLabel.FromPosition = plan.StartTime.ToOADate();
                 aogLabel.ToPosition = plan.EndTime.ToOADate();
-                aogLabel.Text = plan.PercentArrivalOnGreen.ToString() + "% AoG\n" +
-                    plan.PercentGreenTime.ToString() + "% GT";
+                aogLabel.Text = plan.PercentArrivalOnGreen + "% AoG\n" +
+                                plan.PercentGreenTime + "% GT";
 
                 aogLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 aogLabel.ForeColor = Color.Blue;
                 aogLabel.RowIndex = 2;
                 chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(aogLabel);
 
-                CustomLabel statisticlabel = new CustomLabel();
+                var statisticlabel = new CustomLabel();
                 statisticlabel.FromPosition = plan.StartTime.ToOADate();
                 statisticlabel.ToPosition = plan.EndTime.ToOADate();
                 statisticlabel.Text =
-                    plan.PlatoonRatio.ToString() + " PR";
+                    plan.PlatoonRatio + " PR";
                 statisticlabel.ForeColor = Color.Maroon;
                 statisticlabel.RowIndex = 1;
                 chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(statisticlabel);
 
-            
 
                 //Change the background color counter for alternating color
                 backGroundColor++;
-
             }
         }
     }
-    
 }
