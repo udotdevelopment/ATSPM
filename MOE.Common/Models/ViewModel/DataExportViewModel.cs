@@ -8,7 +8,7 @@ using MOE.Common.Models;
 using MOE.Common.Models.ViewModel.Chart;
 using SPM = MOE.Common.Models.SPM;
 
-namespace SPM.Models
+namespace MOE.Common.Models.ViewModel
 {
     public class DataExportViewModel
     {
@@ -22,11 +22,13 @@ namespace SPM.Models
         [Display(Name = "Event Parameters")]
         public string EventParams { get; set; }
         public IEnumerable<MOE.Common.Models.Controller_Event_Log> ControllerEventLogs { get; set; }
+        //[Required]
+        //[Display(Name = "Start Date")]
+        //public DateTime StartDate { get; set; }
+        //[Required]
+        //[Display(Name = "End Date")]
         [Required]
-        [Display(Name = "Start Date")]
-        public DateTime StartDate { get; set; }
-        [Required]
-        [Display(Name = "End Date")]
+        public DateTimePickerViewModel DateTimePickerViewModel { get; set; }
         public DateTime EndDate { get; set; }
         [Display(Name = "Count")]
         public int? Count { get; set; }

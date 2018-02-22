@@ -12,6 +12,7 @@ using MOE.Common.Models;
 using SPM.Filters;
 using SPM.Models;
 using System.Configuration;
+using MOE.Common.Models.ViewModel;
 using Newtonsoft.Json.Linq;
 
 namespace SPM.Controllers
@@ -114,7 +115,7 @@ namespace SPM.Controllers
         {
             var userIp = Request.UserHostAddress;
 #if DEBUG
-            userIp = "172.20.20.20";
+            userIp = "168.178.126.48";
 #endif
             string secretKey = "6LdvpkYUAAAAAOni2rKME1gtxqzMKTvHxXJoZa4r";
             var client = new WebClient();
@@ -165,7 +166,6 @@ namespace SPM.Controllers
 
         public ActionResult GetRecordCount(DataExportViewModel dataExportViewModel)
         {
-            bool status = GetReCaptchaStatus(dataExportViewModel.RecaptchaMessage);
             if (ModelState.IsValid)
             {
                 try
@@ -173,7 +173,7 @@ namespace SPM.Controllers
                     List<int> eventParams, eventCodes;
                     GetEventCodesAndEventParameters(dataExportViewModel, out eventParams, out eventCodes);
                     int recordCount = controllerEventLogRepository.GetRecordCountByParameterAndEvent(dataExportViewModel.SignalId,
-                            dataExportViewModel.StartDate, dataExportViewModel.EndDate, eventParams, eventCodes);
+                            dataExportViewModel.DateTimePickerViewModel.StartDate, dataExportViewModel.EndDate, eventParams, eventCodes);
                     dataExportViewModel.RecordCountLimit = Convert.ToInt32(ConfigurationManager.AppSettings["RawDataCountLimit"]);
                     if (recordCount > dataExportViewModel.RecordCountLimit)
                     {
