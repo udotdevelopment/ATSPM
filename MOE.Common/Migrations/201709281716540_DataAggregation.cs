@@ -19,7 +19,17 @@ namespace MOE.Common.Migrations
             DropIndex("dbo.ApproachRouteDetail", new[] { "ApproachID" });
             DropIndex("dbo.Detectors", "IX_DetectorIDUnique");
             DropIndex("dbo.SPMWatchDogErrorEvents", new[] { "SignalID" });
-            DropPrimaryKey("Signals", "PK_dbo.Signals");
+            try
+            {
+                DropPrimaryKey("dbo.Signals", "PK_Signals");
+            }
+            catch (Exception e)
+            {
+
+                DropPrimaryKey("dbo.Signals", "PK_dbo._Signals");
+
+            }
+
 
             CreateTable(
                 "dbo.VersionActions",
@@ -61,7 +71,7 @@ namespace MOE.Common.Migrations
             //DropTable("dbo.ApproachRoute");
             DropTable("dbo.ApproachRouteDetail");
            
-            //Original Data Aggragation Migration
+            //Original Data Aggregation Migration
             CreateTable(
                 "dbo.ApproachCycleAggregations",
                 c => new

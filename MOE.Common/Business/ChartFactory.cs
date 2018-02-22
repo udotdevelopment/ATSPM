@@ -453,10 +453,10 @@ namespace MOE.Common.Business
         private static void SetUpX2Axis(ChartArea chartArea, MetricOptions options)
         {
             chartArea.AxisX2.Enabled = AxisEnabled.True;
-            chartArea.AxisX2.MajorTickMark.Enabled = true;
             chartArea.AxisX2.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX2.LabelAutoFitStyle = LabelAutoFitStyles.None;
             chartArea.AxisX2.LabelStyle.Format = "HH";
+            chartArea.AxisX2.Minimum = options.StartDate.ToOADate();
+            chartArea.AxisX2.Maximum = options.EndDate.ToOADate();
             TimeSpan reportTimespan = options.EndDate - options.StartDate;
             if (reportTimespan.Days < 1)
             {
