@@ -410,7 +410,7 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachPcdAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\DetectorVolumeAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\DetectorAggregationMetricOptions.cs" />
-    <Compile Include="Business\WCFServiceLibrary\SignalPrirorityAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\SignalPriorityAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalAggregationMetricOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachAggregationMetricOptions.cs" />

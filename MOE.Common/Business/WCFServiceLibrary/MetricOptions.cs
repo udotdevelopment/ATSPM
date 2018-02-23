@@ -30,6 +30,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(ApproachSplitFailAggregationOptions))]
     [KnownType(typeof(SignalPreemptionAggregationOptions))]
     [KnownType(typeof(SignalPriorityAggregationOptions))]
+    [KnownType(typeof(ApproachPcdAggregationOptions))]
+    [KnownType(typeof(ApproachYellowRedActivationsAggregationOptions))]
     [KnownType(typeof(string[]))]
     public class MetricOptions
     {

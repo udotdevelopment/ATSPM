@@ -207,6 +207,9 @@ namespace SPM.Models
         {
             switch (SelectedMetricTypeId)
                 {
+                    case 18:
+                        AggregatedDataTypes = new ApproachPcdAggregationOptions().AggregatedDataTypes;
+                        break;
                     case 20:
                         AggregatedDataTypes = new ApproachSplitFailAggregationOptions().AggregatedDataTypes;
                         break;
@@ -215,6 +218,9 @@ namespace SPM.Models
                         break;
                     case 24:
                         AggregatedDataTypes = new SignalPriorityAggregationOptions().AggregatedDataTypes;
+                        break;
+                    case 16:
+                        AggregatedDataTypes = new ApproachYellowRedActivationsAggregationOptions().AggregatedDataTypes;
                         break;
                     default:
                         throw new Exception("Invalid Metric Type");

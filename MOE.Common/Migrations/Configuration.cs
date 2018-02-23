@@ -917,6 +917,14 @@ While each agency should consult with their IT department for specific guideline
                     Abbreviation = "ASA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
+                },
+            new MetricType
+                {
+                    MetricID = 26,
+                    ChartName = "YRA Aggregations",
+                    Abbreviation = "YRAA",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = true
                 }
             );
             context.SaveChanges();
