@@ -473,5 +473,14 @@ namespace MOE.Common.Models.Repositories
                 return null;
             }
         }
+
+        public int GetSignalEventsCountBetweenDates(string signalId, DateTime startTime, DateTime endTime)
+        {
+            var results = (from r in _db.Controller_Event_Log
+                where r.SignalID == signalId && r.Timestamp > startTime && r.Timestamp < endTime
+                      && r.EventCode > 130 && r.EventCode < 150
+                select r).Count();
+            return results;
+        }
     }
 }

@@ -56,5 +56,7 @@ namespace MOE.Common.Models.Repositories
 
         Controller_Event_Log GetFirstEventBeforeDateByEventCodeAndParameter(string signalId, int eventCode,
             int eventParam, DateTime date);
+
+        int GetSignalEventsCountBetweenDates(string signalId, DateTime startTime, DateTime endTime);
     }
 }

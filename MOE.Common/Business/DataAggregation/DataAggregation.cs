@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Business.Speed;
 using MOE.Common.Business.SplitFail;
 using MOE.Common.Business.WCFServiceLibrary;
@@ -45,6 +46,7 @@ namespace MOE.Common.Business.DataAggregation
         private DateTime _endDate;
 
         private DateTime _startDate;
+        private ConcurrentQueue<EventCountAggregation> _eventAggregationConcurrentQueue = new ConcurrentQueue<EventCountAggregation>();
 
 
         public void StartAggregation(string[] args)
@@ -101,53 +103,138 @@ namespace MOE.Common.Business.DataAggregation
                     .ToList();
                 Console.WriteLine("Begin Aggregating Signals");
                 Parallel.ForEach(signals, signal =>
-                    //foreach (var signal in signals)
+                //foreach (var signal in signals)
                 {
                     Console.WriteLine(signal.SignalID + " " + dt.ToString());
                     ProcessSignal(signal, dt, dt.AddMinutes(binSize));
                 });
-                if (_approachCycleAggregationConcurrentQueue.Count > 0)
-                {
-                    Console.WriteLine("Saving Approach Cycle Data to Database...");
-                    BulkSaveApproachCycleData();
-                }
-                if (_approachPcdAggregationConcurrentQueue.Count > 0)
-                {
-                    Console.WriteLine("Saving Approach PCD Data to Database...");
-                    BulkSaveApproachPcdData();
-                }
-                if (_approachSplitFailAggregationConcurrentQueue.Count > 0)
-                {
-                    Console.WriteLine("Saving Approach Split Fail Data to Database...");
-                    BulkSaveApproachSplitFailData();
-                }
-                if (_approachYellowRedActivationAggregationConcurrentQueue.Count > 0)
-                {
-                    Console.WriteLine("Saving Approach Yellow Red Activations Data to Database...");
-                    BulkSaveApproachYellowRedActivationsData();
-                }
-                if (_approachSpeedAggregationConcurrentQueue.Count > 0)
-                {
-                    Console.WriteLine("Saving Approach Speed Data to Database...");
-                    BulkSaveApproachSpeedData();
-                }
-                if (_detectorAggregationConcurrentQueue.Count > 0)
-                {
-                    Console.WriteLine("Saving Detector Data to Database...");
-                    BulkSaveDetectorData();
-                }
-                if (_priorityAggregationConcurrentQueue.Count > 0)
-                {
-                    Console.WriteLine("Saving Priority Data to Database...");
-                    BulkSavePriorityData();
-                }
-                if (_preemptAggregationConcurrentQueue.Count > 0)
-                {
-                    Console.WriteLine("Saving Preempt Data to Database...");
-                    BulkSavePreemptData();
-                }
+                BulkSaveAllAggregateDataInParallel();
             }
             _startDate = _startDate.AddDays(1);
+        }
+
+        private void BulkSaveAllAggregateDataInParallel()
+        {
+            Parallel.Invoke(
+                () =>
+                {
+                    if (_approachCycleAggregationConcurrentQueue.Count > 0)
+                    {
+                        Console.WriteLine("Saving Approach Cycle Data to Database...");
+                        BulkSaveApproachCycleData();
+                    }
+                },
+                () =>
+                {
+                    if (_approachPcdAggregationConcurrentQueue.Count > 0)
+                    {
+                        Console.WriteLine("Saving Approach PCD Data to Database...");
+                        BulkSaveApproachPcdData();
+                    }
+                },
+
+                () =>
+                {
+                    if (_approachSplitFailAggregationConcurrentQueue.Count > 0)
+                    {
+                        Console.WriteLine("Saving Approach Split Fail Data to Database...");
+                        BulkSaveApproachSplitFailData();
+                    }
+                },
+
+                () =>
+                {
+                    if (_approachYellowRedActivationAggregationConcurrentQueue.Count > 0)
+                    {
+                        Console.WriteLine("Saving Approach Yellow Red Activations Data to Database...");
+                        BulkSaveApproachYellowRedActivationsData();
+                    }
+                },
+
+                () =>
+                {
+                    if (_approachSpeedAggregationConcurrentQueue.Count > 0)
+                    {
+                        Console.WriteLine("Saving Approach Speed Data to Database...");
+                        BulkSaveApproachSpeedData();
+                    }
+                },
+
+                () =>
+                {
+                    if (_detectorAggregationConcurrentQueue.Count > 0)
+                    {
+                        Console.WriteLine("Saving Detector Data to Database...");
+                        BulkSaveDetectorData();
+                    }
+                },
+
+                () =>
+                {
+                    if (_priorityAggregationConcurrentQueue.Count > 0)
+                    {
+                        Console.WriteLine("Saving Priority Data to Database...");
+                        BulkSavePriorityData();
+                    }
+                },
+
+                () =>
+                {
+                    if (_preemptAggregationConcurrentQueue.Count > 0)
+                    {
+                        Console.WriteLine("Saving Preempt Data to Database...");
+                        BulkSavePreemptData();
+                    }
+                },
+
+                () =>
+                {
+                    if (_eventAggregationConcurrentQueue.Count > 0)
+                    {
+                        Console.WriteLine("Saving Event Data to Database...");
+                        BulkSaveEventData();
+                    }
+                });
+        }
+
+        private void BulkSaveEventData()
+        {
+            var eventAggregationTable = new DataTable();
+            eventAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
+            eventAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
+            eventAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(string)));
+            eventAggregationTable.Columns.Add(new DataColumn("EventCount", typeof(int)));
+
+            while (_eventAggregationConcurrentQueue.TryDequeue(out var preemptionAggregation))
+            {
+                var dataRow = eventAggregationTable.NewRow();
+                dataRow["BinStartTime"] = preemptionAggregation.BinStartTime;
+                dataRow["SignalID"] = preemptionAggregation.SignalId;
+                dataRow["EventCount"] = preemptionAggregation.EventCount;
+                eventAggregationTable.Rows.Add(dataRow);
+            }
+            var connectionString =
+                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
+                sqlBulkCopy.DestinationTableName = "EventCountAggregation";
+                sqlBulkCopy.BulkCopyTimeout = 180;
+                sqlBulkCopy.BatchSize = 50000;
+                try
+                {
+                    connection.Open();
+                    sqlBulkCopy.WriteToServer(eventAggregationTable);
+                    connection.Close();
+                }
+                catch (Exception e)
+                {
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    throw new Exception("Unable to import Event Count Data");
+                }
+            }
         }
 
         private void BulkSavePreemptData()
@@ -188,9 +275,10 @@ namespace MOE.Common.Business.DataAggregation
                 }
                 catch (Exception e)
                 {
-                    var applicationEventRepository = ApplicationEventRepositoryFactory.Create();
-                    applicationEventRepository.QuickAdd("AggregateAtspmData", "AggregateAtspmData", "BulkSave",
-                        ApplicationEvent.SeverityLevels.High, e.Message);
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    throw new Exception("Unable to import Preempt data");
                 }
             }
         }
@@ -237,9 +325,10 @@ namespace MOE.Common.Business.DataAggregation
                 }
                 catch (Exception e)
                 {
-                    var applicationEventRepository = ApplicationEventRepositoryFactory.Create();
-                    applicationEventRepository.QuickAdd("AggregateAtspmData", "AggregateAtspmData", "BulkSave",
-                        ApplicationEvent.SeverityLevels.High, e.Message);
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    throw new Exception("Unable to import Priority Data");
                 }
             }
         }
@@ -275,9 +364,10 @@ namespace MOE.Common.Business.DataAggregation
                 }
                 catch (Exception e)
                 {
-                    var applicationEventRepository = ApplicationEventRepositoryFactory.Create();
-                    applicationEventRepository.QuickAdd("AggregateAtspmData", "AggregateAtspmData", "BulkSave",
-                        ApplicationEvent.SeverityLevels.High, e.Message);
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    throw new Exception("Unable to import Detector Data");
                 }
             }
         }
@@ -321,9 +411,10 @@ namespace MOE.Common.Business.DataAggregation
                 }
                 catch (Exception e)
                 {
-                    var applicationEventRepository = ApplicationEventRepositoryFactory.Create();
-                    applicationEventRepository.QuickAdd("AggregateAtspmData", "AggregateAtspmData", "BulkSave",
-                        ApplicationEvent.SeverityLevels.High, e.Message);
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    throw new Exception("Unable to import Speed Data");
                 }
             }
         }
@@ -369,9 +460,10 @@ namespace MOE.Common.Business.DataAggregation
                 }
                 catch (Exception e)
                 {
-                    var applicationEventRepository = ApplicationEventRepositoryFactory.Create();
-                    applicationEventRepository.QuickAdd("AggregateAtspmData", "AggregateAtspmData", "BulkSave",
-                        ApplicationEvent.SeverityLevels.High, e.Message);
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    throw new Exception("Unable to import Approach Cycle Data");
                 }
             }
         }
@@ -413,9 +505,10 @@ namespace MOE.Common.Business.DataAggregation
                 }
                 catch (Exception e)
                 {
-                    var applicationEventRepository = ApplicationEventRepositoryFactory.Create();
-                    applicationEventRepository.QuickAdd("AggregateAtspmData", "AggregateAtspmData", "BulkSave",
-                        ApplicationEvent.SeverityLevels.High, e.Message);
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    throw new Exception("Unable to import Approach PCD Data");
                 }
             }
         }
@@ -461,9 +554,10 @@ namespace MOE.Common.Business.DataAggregation
                 }
                 catch (Exception e)
                 {
-                    var applicationEventRepository = ApplicationEventRepositoryFactory.Create();
-                    applicationEventRepository.QuickAdd("AggregateAtspmData", "AggregateAtspmData", "BulkSave",
-                        ApplicationEvent.SeverityLevels.High, e.Message);
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    throw new Exception("Unable to import Split Fail Data");
                 }
             }
         }
@@ -503,9 +597,10 @@ namespace MOE.Common.Business.DataAggregation
                 }
                 catch (Exception e)
                 {
-                    var applicationEventRepository = ApplicationEventRepositoryFactory.Create();
-                    applicationEventRepository.QuickAdd("AggregateAtspmData", "AggregateAtspmData", "BulkSave",
-                        ApplicationEvent.SeverityLevels.High, e.Message);
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    throw new Exception("Unable to import Yellow and Red Acvtivation Data");
                 }
             }
         }
@@ -549,6 +644,13 @@ namespace MOE.Common.Business.DataAggregation
             var preemptCodes = new List<int> {102, 105};
             var priorityCodes = new List<int> {112, 113, 114};
             Parallel.Invoke(
+                () =>
+                {
+                    int eventCount =
+                        controllerEventLogRepository.GetSignalEventsCountBetweenDates(signal.SignalID, startTime, endTime);
+                    _eventAggregationConcurrentQueue.Enqueue(new EventCountAggregation{BinStartTime = startTime,
+                        EventCount = eventCount,SignalId = signal.SignalID});
+                },
                 () =>
                 {
                     if (records.Count(r => preemptCodes.Contains(r.EventCode)) > 0)
