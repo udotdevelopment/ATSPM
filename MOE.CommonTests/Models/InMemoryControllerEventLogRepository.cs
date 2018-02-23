@@ -483,5 +483,10 @@ namespace MOE.CommonTests.Models
                 return null;
             }
         }
+
+        public int GetSignalEventsCountBetweenDates(string signalId, DateTime startTime, DateTime endTime)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

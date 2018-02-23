@@ -87,15 +87,20 @@ namespace SPM.Controllers
         {
             switch (aggDataExportViewModel.SelectedMetricTypeId)
             {
+                case 16:
+                    return GetLaneByLaneChart(aggDataExportViewModel);
+                case 17:
+                    return GetAdvanceCountChart(aggDataExportViewModel);
+
                 case 18:
                     return GetArrivalOnGreenChart(aggDataExportViewModel);
-                    break;
+                    
                 case 20:
                     return GetSplitFailChart(aggDataExportViewModel);
-                    break;
+                    
                 case 26:
                     return GetYraChart(aggDataExportViewModel);
-                    break;
+                    ;
                 case 22:
                     return GetPreemptionChart(aggDataExportViewModel);
                 case 24:
@@ -105,89 +110,60 @@ namespace SPM.Controllers
             }
         }
 
-        private ActionResult GetPriorityChart(AggDataExportViewModel aggDataExportViewModel)
+        private ActionResult GetAdvanceCountChart(AggDataExportViewModel aggDataExportViewModel)
         {
-            SignalPriorityAggregationOptions options = new SignalPriorityAggregationOptions();
+            ApproachSpeedAggregationOptions options = new ApproachSpeedAggregationOptions();
+            return GetChart(aggDataExportViewModel, options);
+        }
+
+        private ActionResult GetLaneByLaneChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            DetectorVolumeAggregationOptions options = new DetectorVolumeAggregationOptions();
+            return GetChart(aggDataExportViewModel, options);
+        }
+
+        private ActionResult GetChart(AggDataExportViewModel aggDataExportViewModel, SignalAggregationMetricOptions options)
+        {
             Enum.TryParse(aggDataExportViewModel.SelectedChartType, out SeriesChartType tempSeriesChartType);
             options.SelectedChartType = tempSeriesChartType;
             if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count > 0)
             {
-               SetCommonValues(aggDataExportViewModel, options);
+                SetCommonValues(aggDataExportViewModel, options);
                 return GetChartFromService(options);
             }
             else
             {
                 return Content("<h1 class='text-danger'>Missing Parameters</h1>");
             }
+        }
+
+        private ActionResult GetPriorityChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            SignalPriorityAggregationOptions options = new SignalPriorityAggregationOptions();
+            return GetChart(aggDataExportViewModel, options);
         }
 
         private ActionResult GetPreemptionChart(AggDataExportViewModel aggDataExportViewModel)
         {
             SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
-            Enum.TryParse(aggDataExportViewModel.SelectedChartType, out SeriesChartType tempSeriesChartType);
-            options.SelectedChartType = tempSeriesChartType;
-            if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count > 0)
-            {
-                SetCommonValues(aggDataExportViewModel, options);
-                return GetChartFromService(options);
-            }
-            else
-            {
-                return Content("<h1 class='text-danger'>Missing Parameters</h1>");
-            }
+            return GetChart(aggDataExportViewModel, options);
         }
 
         private ActionResult GetSplitFailChart(AggDataExportViewModel aggDataExportViewModel)
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
-            Enum.TryParse(aggDataExportViewModel.SelectedChartType, out SeriesChartType tempSeriesChartType);
-            options.SelectedChartType = tempSeriesChartType;
-            if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count > 0)
-            {
-                options.FilterMovements = aggDataExportViewModel.FilterMovements;
-                options.FilterDirections = aggDataExportViewModel.FilterDirections;
-                SetCommonValues(aggDataExportViewModel, options);
-                return GetChartFromService(options);
-            }
-            else
-            {
-                return Content("<h1 class='text-danger'>Missing Parameters</h1>");
-            }
+            return GetChart(aggDataExportViewModel, options);
         }
 
         private ActionResult GetYraChart(AggDataExportViewModel aggDataExportViewModel)
         {
             ApproachYellowRedActivationsAggregationOptions options = new ApproachYellowRedActivationsAggregationOptions();
-            Enum.TryParse(aggDataExportViewModel.SelectedChartType, out SeriesChartType tempSeriesChartType);
-            options.SelectedChartType = tempSeriesChartType;
-            if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count > 0)
-            {
-                options.FilterMovements = aggDataExportViewModel.FilterMovements;
-                options.FilterDirections = aggDataExportViewModel.FilterDirections;
-                SetCommonValues(aggDataExportViewModel, options);
-                return GetChartFromService(options);
-            }
-            else
-            {
-                return Content("<h1 class='text-danger'>Missing Parameters</h1>");
-            }
+            return GetChart(aggDataExportViewModel, options);
         }
         private ActionResult GetArrivalOnGreenChart(AggDataExportViewModel aggDataExportViewModel)
         {
             ApproachPcdAggregationOptions options = new ApproachPcdAggregationOptions();
-            Enum.TryParse(aggDataExportViewModel.SelectedChartType, out SeriesChartType tempSeriesChartType);
-            options.SelectedChartType = tempSeriesChartType;
-            if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count > 0)
-            {
-                options.FilterMovements = aggDataExportViewModel.FilterMovements;
-                options.FilterDirections = aggDataExportViewModel.FilterDirections;
-                SetCommonValues(aggDataExportViewModel, options);
-                return GetChartFromService(options);
-            }
-            else
-            {
-                return Content("<h1 class='text-danger'>Missing Parameters</h1>");
-            }
+            return GetChart(aggDataExportViewModel, options);
         }
 
         private static void SetCommonValues(AggDataExportViewModel aggDataExportViewModel, SignalAggregationMetricOptions options)
@@ -202,6 +178,8 @@ namespace SPM.Controllers
             options.SelectedDimension = aggDataExportViewModel.SelectedDimension;
             SetTimeOptionsFromViewModel(aggDataExportViewModel, options);
             options.FilterSignals = aggDataExportViewModel.FilterSignals;
+            options.FilterMovements = aggDataExportViewModel.FilterMovements;
+            options.FilterDirections = aggDataExportViewModel.FilterDirections;
             options.SelectedAggregatedDataType =
                 options.AggregatedDataTypes.FirstOrDefault(a =>
                     a.Id == aggDataExportViewModel.SelectedAggregatedData);
@@ -335,6 +313,12 @@ namespace SPM.Controllers
             List<AggregatedDataType> AggregatedDataTypes;
             switch (id)
             {
+                case 16:
+                    AggregatedDataTypes = new DetectorVolumeAggregationOptions().AggregatedDataTypes;
+                    break;
+                case 17:
+                    AggregatedDataTypes = new ApproachSpeedAggregationOptions().AggregatedDataTypes;
+                    break;
                 case 18:
                     AggregatedDataTypes = new ApproachPcdAggregationOptions().AggregatedDataTypes;
                     break;
