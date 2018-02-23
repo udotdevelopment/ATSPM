@@ -472,8 +472,13 @@
     <Compile Include="Migrations\201802160023347_GeneralSettings.Designer.cs">
       <DependentUpon>201802160023347_GeneralSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802231745557_EventCountAggregationTable.cs" />
+    <Compile Include="Migrations\201802231745557_EventCountAggregationTable.Designer.cs">
+      <DependentUpon>201802231745557_EventCountAggregationTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
+    <Compile Include="Models\EventCountAggregation.cs" />
     <Compile Include="Models\ApproachPcdAggregation.cs" />
     <Compile Include="Models\ApproachYellowRedActivationsAggregation.cs" />
     <Compile Include="Models\ApproachSplitFailAggregation.cs" />
@@ -913,6 +918,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802160023347_GeneralSettings.resx">
       <DependentUpon>201802160023347_GeneralSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802231745557_EventCountAggregationTable.resx">
+      <DependentUpon>201802231745557_EventCountAggregationTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

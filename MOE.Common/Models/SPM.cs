@@ -56,6 +56,7 @@ namespace MOE.Common.Models
         public virtual DbSet<ApproachCycleAggregation> ApproachCycleAggregations { get; set; }
         public virtual DbSet<ApproachPcdAggregation> ApproachPcdAggregations { get; set; }
         public virtual DbSet<ApproachSplitFailAggregation> ApproachSplitFailAggregations { get; set; }
+        public virtual DbSet<EventCountAggregation> EventCountAggregation { get; set; }
 
         public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedActivationAggregations
         {
