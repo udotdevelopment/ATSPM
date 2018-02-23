@@ -89,7 +89,9 @@ namespace SPM.Controllers
             {
                 case 16:
                     return GetLaneByLaneChart(aggDataExportViewModel);
-                    
+                case 17:
+                    return GetAdvanceCountChart(aggDataExportViewModel);
+
                 case 18:
                     return GetArrivalOnGreenChart(aggDataExportViewModel);
                     
@@ -106,6 +108,12 @@ namespace SPM.Controllers
                 default:
                         return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
             }
+        }
+
+        private ActionResult GetAdvanceCountChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            ApproachSpeedAggregationOptions options = new DetectorVolumeAggregationOptions();
+            return GetChart(aggDataExportViewModel, options);
         }
 
         private ActionResult GetLaneByLaneChart(AggDataExportViewModel aggDataExportViewModel)
