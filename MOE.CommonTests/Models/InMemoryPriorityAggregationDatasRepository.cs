@@ -45,7 +45,8 @@ namespace MOE.CommonTests.Models
 
         public List<PriorityAggregation> GetPriorityBySignalIdAndDateRange(string signalId, DateTime start, DateTime end)
         {
-            throw new NotImplementedException();
+            return _db.PriorityAggregations
+                .Where(p => p.SignalID == signalId && p.BinStartTime >= start && p.BinStartTime < end).ToList();
         }
 
         public void Update(PriorityAggregation priorityAggregation)

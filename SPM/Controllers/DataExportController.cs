@@ -28,7 +28,7 @@ namespace SPM.Controllers
         {
             DataExportViewModel viewModel = new DataExportViewModel();
             DateTime date = DateTime.Today;
-            viewModel.StartDate = Convert.ToDateTime("10/17/2017");// date.AddDays(-1);
+            viewModel.EndDate = Convert.ToDateTime("10/17/2017");// date.AddDays(-1);
             viewModel.EndDate = Convert.ToDateTime("10/18/2017");// date;
             return View(viewModel);
         }
@@ -72,7 +72,7 @@ namespace SPM.Controllers
                 List<int> eventParams, eventCodes;
                 GetEventCodesAndEventParameters(dataExportViewModel, out eventParams, out eventCodes);
                 int recordCount = controllerEventLogRepository.GetRecordCountByParameterAndEvent(dataExportViewModel.SignalId,
-                    dataExportViewModel.StartDate, dataExportViewModel.EndDate, eventParams, eventCodes);
+                    dataExportViewModel.EndDate, dataExportViewModel.EndDate, eventParams, eventCodes);
                 if (recordCount > dataExportViewModel.RecordCountLimit)
                 {
                     return Content("The data set you have selected is too large. Your current request will generate " + recordCount.ToString() +
@@ -81,7 +81,7 @@ namespace SPM.Controllers
                 else
                 {
                     List<Controller_Event_Log> events = controllerEventLogRepository.GetRecordsByParameterAndEvent(dataExportViewModel.SignalId,
-                        dataExportViewModel.StartDate, dataExportViewModel.EndDate, eventParams, eventCodes);
+                        dataExportViewModel.EndDate, dataExportViewModel.EndDate, eventParams, eventCodes);
                     byte[] file = Exporter.GetCsvFile(events);
                     return File(file, "csv", "ControllerEventLogs.csv");
                 }
@@ -173,7 +173,7 @@ namespace SPM.Controllers
                     List<int> eventParams, eventCodes;
                     GetEventCodesAndEventParameters(dataExportViewModel, out eventParams, out eventCodes);
                     int recordCount = controllerEventLogRepository.GetRecordCountByParameterAndEvent(dataExportViewModel.SignalId,
-                            dataExportViewModel.DateTimePickerViewModel.StartDate, dataExportViewModel.EndDate, eventParams, eventCodes);
+                            dataExportViewModel.DateTimePickerViewModel.StartDateTime, dataExportViewModel.EndDate, eventParams, eventCodes);
                     dataExportViewModel.RecordCountLimit = Convert.ToInt32(ConfigurationManager.AppSettings["RawDataCountLimit"]);
                     if (recordCount > dataExportViewModel.RecordCountLimit)
                     {

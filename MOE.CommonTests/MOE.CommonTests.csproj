@@ -134,6 +134,7 @@
     <Compile Include="Business\WCFServiceLibrary\DetectorVolumeAggregationChart\ApproachSplitFailAggregationChartTimeXDirectionSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\DetectorVolumeAggregationChart\ApproachSplitFailAggregationChartTimeXRouteSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\DetectorVolumeAggregationChart\ApproachSplitFailAggregationChartTimeXSignalSeriesTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PriorityAggregationChart\PriorityAggregationApproachXDetectorSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationChart\SignalPreemptionAggregationChartSignalXSignalSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationChart\SignalPreemptionAggregationChartTimeOfDayRouteSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationChart\SignalPreemptionAggregationChartTimeOfDaySignalSeriesTests.cs" />
