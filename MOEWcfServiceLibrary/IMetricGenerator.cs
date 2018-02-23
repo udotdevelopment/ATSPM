@@ -32,6 +32,7 @@ namespace MOEWcfServiceLibrary
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachYellowRedActivationsAggregationOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.DetectorAggregationMetricOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.DetectorVolumeAggregationOptions))]
+    [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachSpeedAggregationOptions))]
 
     public interface IMetricGenerator
     {

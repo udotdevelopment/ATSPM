@@ -12,8 +12,7 @@ namespace MOE.Common.Business.DataAggregation
     public class SpeedAggregationByApproach : AggregationByApproach
     {
         public SpeedAggregationByApproach(Approach approach, BinFactoryOptions timeOptions, DateTime startDate,
-            DateTime endDate,
-            bool getProtectedPhase, AggregatedDataType dataType) : base(approach, timeOptions, startDate, endDate,
+            DateTime endDate, bool getProtectedPhase, AggregatedDataType dataType) : base(approach, timeOptions, startDate, endDate,
             getProtectedPhase, dataType)
         {
         }

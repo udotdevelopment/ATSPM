@@ -112,7 +112,7 @@ namespace SPM.Controllers
 
         private ActionResult GetAdvanceCountChart(AggDataExportViewModel aggDataExportViewModel)
         {
-            ApproachSpeedAggregationOptions options = new DetectorVolumeAggregationOptions();
+            ApproachSpeedAggregationOptions options = new ApproachSpeedAggregationOptions();
             return GetChart(aggDataExportViewModel, options);
         }
 
@@ -315,6 +315,9 @@ namespace SPM.Controllers
             {
                 case 16:
                     AggregatedDataTypes = new DetectorVolumeAggregationOptions().AggregatedDataTypes;
+                    break;
+                case 17:
+                    AggregatedDataTypes = new ApproachSpeedAggregationOptions().AggregatedDataTypes;
                     break;
                 case 18:
                     AggregatedDataTypes = new ApproachPcdAggregationOptions().AggregatedDataTypes;
