@@ -142,6 +142,7 @@
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationChart\SignalPreemptionAggregationChartTimeXSignalSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SplitFailOptionsTests.cs" />
     <Compile Include="Helpers\XMLtoListImporter.cs" />
+    <Compile Include="Models\Custom\DetectorTests.cs" />
     <Compile Include="Models\InMemoryDetectorAggregationsRepository.cs" />
     <Compile Include="Models\InMemoryControllerEventLogRepository.cs" />
     <Compile Include="Models\InMemoryPreemptAggregationDatasRepository.cs" />

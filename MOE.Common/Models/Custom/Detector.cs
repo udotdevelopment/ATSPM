@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using MOE.Common.Models.Repositories;
 using MvcCheckBoxList.Model;
+using NuGet;
 
 namespace MOE.Common.Models
 {
@@ -77,6 +79,8 @@ namespace MOE.Common.Models
             var detectorRepository =
                 DetectorRepositoryFactory.Create();
             var detectorToCopy = detectorRepository.GetDetectorByID(ID);
+
+
             var newGD = new Detector();
 
             var dtr = DetectionTypeRepositoryFactory.Create();
@@ -84,8 +88,14 @@ namespace MOE.Common.Models
 
             newGD.DateAdded = DateTime.Now;
             newGD.DetectionTypeIDs = new List<int>();
-            foreach (var d in detectorToCopy.DetectionTypes)
-                newGD.DetectionTypeIDs.Add(d.DetectionTypeID);
+            newGD.DetectionTypes = new List<DetectionType>();
+
+            foreach (var dt in detectorToCopy.DetectionTypes)
+            {
+                newGD.DetectionTypes.Add(dt);
+            }
+
+           
 
             newGD.DistanceFromStopBar = detectorToCopy.DistanceFromStopBar;
             newGD.LaneNumber = detectorToCopy.LaneNumber;

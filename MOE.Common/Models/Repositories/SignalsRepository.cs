@@ -50,10 +50,20 @@ namespace MOE.Common.Models.Repositories
         {
             var version = _db.Signals
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.MovementType)))
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
                 .Include(signal => signal.Approaches.Select(a => a.DirectionType))
                 .Where(signal => signal.VersionID == versionId).FirstOrDefault();
 
+
+
+
+
+
+
             return version;
+
+            
         }
 
         public void SetVersionToDeleted(int versionId)
@@ -417,6 +427,9 @@ namespace MOE.Common.Models.Repositories
                 newDetector.MinSpeedFilter = detFromDb.MinSpeedFilter;
                 newDetector.DistanceFromStopBar = detFromDb.DistanceFromStopBar;
                 newDetector.DetectionTypes.AddRange(detFromDb.DetectionTypes);
+
+
+
                 _db.Detectors.Add(newDetector);
                 _db.SaveChanges();
             }

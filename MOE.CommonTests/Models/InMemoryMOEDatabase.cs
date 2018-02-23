@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MOE.Common.Business.FilterExtensions;
+using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 
 namespace MOE.CommonTests.Models
@@ -43,7 +45,37 @@ namespace MOE.CommonTests.Models
         public List<VersionAction> VersionActions = new List<VersionAction>();
         public List<DetectionTypeGraph_Detector> DetectionTypeDetectors = new List<DetectionTypeGraph_Detector>();
 
-
+        public void SetFilterSignal(SignalAggregationMetricOptions options)
+        {
+            List<FilterSignal> filterSignals = new List<FilterSignal>();
+            var signal = Signals.FirstOrDefault();
+            var filterSignal = new FilterSignal { SignalId = signal.SignalID, Exclude = false };
+            foreach (var approach in signal.Approaches)
+            {
+                var filterApproach = new FilterApproach
+                {
+                    ApproachId = approach.ApproachID,
+                    Description = String.Empty,
+                    Exclude = false
+                };
+                filterSignal.FilterApproaches.Add(filterApproach);
+                foreach (var detector in approach.Detectors)
+                {
+                    filterApproach.FilterDetectors.Add(new FilterDetector { Id = detector.ID, Description = String.Empty, Exclude = false });
+                }
+            }
+            options.FilterSignals.Add(filterSignal);
+            options.FilterDirections = new List<FilterDirection>();
+            options.FilterDirections.Add(new FilterDirection { Description = "", DirectionTypeId = 0, Include = true });
+            options.FilterDirections.Add(new FilterDirection { Description = "", DirectionTypeId = 1, Include = true });
+            options.FilterDirections.Add(new FilterDirection { Description = "", DirectionTypeId = 2, Include = true });
+            options.FilterDirections.Add(new FilterDirection { Description = "", DirectionTypeId = 3, Include = true });
+            options.FilterMovements = new List<FilterMovement>();
+            options.FilterMovements.Add(new FilterMovement { Description = "", MovementTypeId = 0, Include = true });
+            options.FilterMovements.Add(new FilterMovement { Description = "", MovementTypeId = 1, Include = true });
+            options.FilterMovements.Add(new FilterMovement { Description = "", MovementTypeId = 2, Include = true });
+            options.FilterMovements.Add(new FilterMovement { Description = "", MovementTypeId = 3, Include = true });
+        }
 
 
         public InMemoryMOEDatabase()
