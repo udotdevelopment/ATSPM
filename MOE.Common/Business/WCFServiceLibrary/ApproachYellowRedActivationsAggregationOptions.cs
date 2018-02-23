@@ -17,9 +17,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             MetricTypeID = 20;
             AggregatedDataTypes = new List<AggregatedDataType>();
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "ArrivalsOnGreen"});
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = "ArrivalsOnRed"});
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 2, DataName = "ArrivalsOnYellow"});
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "SevereRedLightViolations" });
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = "TotalRedLightViolations" });
         }
 
         public override string ChartTitle
