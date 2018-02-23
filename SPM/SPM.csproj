@@ -571,7 +571,7 @@
     <Content Include="Views\AggregateDataExport\GetAggregateDataTypes.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterMovement.cshtml" />
     <Content Include="Views\GeneralSettings\Edit.cshtml" />
-    <Content Include="Views\Shared\_DateTimePicker.cshtml" />
+    <Content Include="Views\DataExport\EditorTemplates\DateTimePickerViewModel.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

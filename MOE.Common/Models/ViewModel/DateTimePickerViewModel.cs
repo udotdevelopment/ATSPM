@@ -7,6 +7,12 @@ namespace MOE.Common.Models.ViewModel
 {
     public class DateTimePickerViewModel
     {
+        public DateTimePickerViewModel()
+        {
+            
+        }
+
+
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
@@ -38,39 +44,46 @@ namespace MOE.Common.Models.ViewModel
         public List<SelectListItem> StartAMPMList { get; set; }
         public List<SelectListItem> EndAMPMList { get; set; }
 
-
-        public DateTime StartDateTime
+        public DateTime GetStartDateTime()
         {
-            get
+            if (!String.IsNullOrEmpty(StartTime) && StartDateDay != null && !String.IsNullOrEmpty(StartTime) &&
+                !String.IsNullOrEmpty(SelectedStartAMPM))
             {
-                if (!String.IsNullOrEmpty(StartTime) && StartDateDay != null && !String.IsNullOrEmpty(StartTime) &&
-                    !String.IsNullOrEmpty(SelectedStartAMPM))
-                {
-                    return Convert.ToDateTime(StartDateDay.ToShortDateString() + " " + StartTime + " " +
-                                              SelectedStartAMPM);
-                }
-                else
-                {
-                    throw new Exception("Missing Start Time Info");
-                }
+                return Convert.ToDateTime(StartDateDay.ToShortDateString() + " " + StartTime + " " +
+                                          SelectedStartAMPM);
+            }
+            else
+            {
+                throw new Exception("Missing Start Time Info");
             }
         }
 
-        public DateTime EndDateTime
+        public DateTime GetEndDateTime()
         {
-            get
+            if (!String.IsNullOrEmpty(EndTime) && EndDateDay != null && !String.IsNullOrEmpty(EndTime) &&
+                !String.IsNullOrEmpty(SelectedEndAMPM))
             {
-                if (!String.IsNullOrEmpty(EndTime) && EndDateDay != null && !String.IsNullOrEmpty(EndTime) &&
-                    !String.IsNullOrEmpty(SelectedEndAMPM))
-                {
-                    return Convert.ToDateTime(EndDateDay.ToShortDateString() + " " + EndTime + " " +
-                                              SelectedEndAMPM);
-                }
-                else
-                {
-                    throw new Exception("Missing End Time Info");
-                }
+                return Convert.ToDateTime(EndDateDay.ToShortDateString() + " " + EndTime + " " +
+                                          SelectedEndAMPM);
             }
+            else
+            {
+                throw new Exception("Missing End Time Info");
+            }
+        }
+
+        public void SetDates()
+        {
+            StartDateDay = DateTime.Today;
+            EndDateDay = DateTime.Today;
+            StartTime = "12:00";
+            EndTime = "12:00";
+            StartAMPMList = new List<SelectListItem>();
+            StartAMPMList.Add(new SelectListItem { Value = "AM", Text = "AM", Selected = true });
+            StartAMPMList.Add(new SelectListItem { Value = "PM", Text = "PM" });
+            EndAMPMList = new List<SelectListItem>();
+            EndAMPMList.Add(new SelectListItem { Value = "AM", Text = "AM", Selected = true  });
+            EndAMPMList.Add(new SelectListItem { Value = "PM", Text = "PM"});
         }
     }
 

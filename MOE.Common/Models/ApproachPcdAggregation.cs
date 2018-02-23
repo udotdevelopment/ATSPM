@@ -31,9 +31,6 @@ namespace MOE.Common.Models
         [Required]
         public bool IsProtectedPhase { get; set; }
 
-        [Required]
-        public int DataPoints { get; set; }
-
         public sealed class ApproachPcdAggregationClassMap : ClassMap<ApproachPcdAggregation>
         {
             public ApproachPcdAggregationClassMap()

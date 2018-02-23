@@ -31,9 +31,7 @@ namespace MOE.Common.Models
 
         [Required]
         public int PreemptServices { get; set; }
-
-        [Required]
-        public int DataPoints { get; set; }
+        
 
         public sealed class PreemptionAggregationClassMap : ClassMap<PreemptionAggregation>
         {

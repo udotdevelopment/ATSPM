@@ -19,14 +19,19 @@ namespace MOE.Common.Migrations
             DropIndex("dbo.ApproachRouteDetail", new[] {"ApproachID"});
             DropIndex("dbo.Detectors", "IX_DetectorIDUnique");
             DropIndex("dbo.SPMWatchDogErrorEvents", new[] {"SignalID"});
-            try
-            {
-                DropPrimaryKey("dbo.Signals", "PK_Signals");
-            }
-            catch (Exception e)
-            {
-                DropPrimaryKey("dbo.Signals", "PK_dbo._Signals");
-            }
+            DropPrimaryKey("dbo.Signals");
+            //try
+            //{
+            //    DropPrimaryKey("dbo.Signals", "PK_Signals");
+            //}
+            //catch (Exception e)
+            //{
+            //    DropPrimaryKey("dbo.Signals", "PK_dbo._Signals");
+            //}
+            //finally
+            //{
+
+            //}
 
 
             CreateTable(

@@ -23,9 +23,6 @@ namespace MOE.Common.Models
         [Required]
         public int Volume { get; set; }
 
-        [Required]
-        public int DataPoints { get; set; }
-
         public sealed class DetectorAggregationClassMap : ClassMap<DetectorAggregation>
         {
             public DetectorAggregationClassMap()

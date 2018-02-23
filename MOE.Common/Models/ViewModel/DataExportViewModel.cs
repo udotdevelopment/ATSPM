@@ -28,8 +28,8 @@ namespace MOE.Common.Models.ViewModel
         //[Required]
         //[Display(Name = "End Date")]
         [Required]
-        public DateTimePickerViewModel DateTimePickerViewModel { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTimePickerViewModel DateTimePickerViewModel { get; set; } = new DateTimePickerViewModel();
+       // public DateTime EndDate { get; set; }
         [Display(Name = "Count")]
         public int? Count { get; set; }
         public int? RecordCountLimit { get; set; }

@@ -1,14 +1,24 @@
-﻿var recaptchaResponse;
-function SetRecapchaResponse(response) {
-    recaptchaResponse = response;
-}
+﻿$(function (ready) {
+    $(".datepicker").attr('type', 'text');
+    $("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
+    $("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
+    $("#StartEndDaySelector").datepicker({
+        onSelect: function (dateText) {
+            $("#StartDateDay").val(dateText);
+            $("#EndDateDay").val(dateText);
+        }
+    });
+    $(".datepicker").datepicker();
+});
+
 function GetRecordCount() {
     var toSend = GetValuesToSend();
     $.ajax({
-        type: "Get",
+        type: "POST",
+        contentType:"application/json",
         cache: false,
         async: true,
-        data: toSend,
+        data: JSON.stringify(toSend),
         url: urlpathGetRecordCount,
         success: function (data) { $('#GenerateData').html(data); },
         statusCode: {
@@ -29,10 +39,17 @@ function GetRecordCount() {
 }
 
 function GetValuesToSend() {
+    var DateTimePickerViewModel = {};
+    DateTimePickerViewModel.StartDateDay = $('#DateTimePickerViewModel_StartDateDay').val();
+    DateTimePickerViewModel.EndDateDay = $('#DateTimePickerViewModel_EndDateDay').val();
+    DateTimePickerViewModel.StartTime = $('#DateTimePickerViewModel_StartTime').val();
+    DateTimePickerViewModel.EndTime = $('#DateTimePickerViewModel_EndTime').val();
+    DateTimePickerViewModel.StartTime = $('#DateTimePickerViewModel_StartTime').val();
+    DateTimePickerViewModel.SelectedStartAMPM = $('#DateTimePickerViewModel_SelectedStartAMPM').val();
+    DateTimePickerViewModel.SelectedEndAMPM = $('#DateTimePickerViewModel_SelectedEndAMPM').val();
     var toSend = {};
+    toSend.DateTimePickerViewModel = DateTimePickerViewModel;
     toSend.SignalId = $('#SignalID').val();
-    toSend.StartDate = $('#StartDate').val();
-    toSend.EndDate = $('#EndDate').val();
     toSend.EventParams = $('#EventParams').val();
     toSend.EventCodes = $('#EventCodes').val();
     return toSend;

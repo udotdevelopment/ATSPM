@@ -33,9 +33,7 @@ namespace MOE.Common.Models
 
         [Required]
         public bool IsProtectedPhase { get; set; }
-
-        [Required]
-        public int DataPoints { get; set; }
+        
 
         public sealed class ApproachSpeedAggregationClassMap : ClassMap<ApproachSpeedAggregation>
         {

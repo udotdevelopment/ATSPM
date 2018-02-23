@@ -37,9 +37,7 @@ namespace MOE.Common.Models
 
         [Required]
         public int PriorityServiceExtendedGreen { get; set; }
-
-        [Required]
-        public int DataPoints { get; set; }
+        
 
         public sealed class PriorityAggregationClassMap : ClassMap<PriorityAggregation>
         {
