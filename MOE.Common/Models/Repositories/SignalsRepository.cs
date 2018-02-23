@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
 using MOE.Common.Business;
+using NuGet;
 
 namespace MOE.Common.Models.Repositories
 {
@@ -415,7 +416,7 @@ namespace MOE.Common.Models.Repositories
                 newDetector.MovementTypeID = detFromDb.MovementTypeID;
                 newDetector.MinSpeedFilter = detFromDb.MinSpeedFilter;
                 newDetector.DistanceFromStopBar = detFromDb.DistanceFromStopBar;
-
+                newDetector.DetectionTypes.AddRange(detFromDb.DetectionTypes);
                 _db.Detectors.Add(newDetector);
                 _db.SaveChanges();
             }

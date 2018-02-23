@@ -41,6 +41,9 @@ namespace MOE.CommonTests.Models
 
         public List<Signal> Signals = new List<Signal>();
         public List<VersionAction> VersionActions = new List<VersionAction>();
+        public List<DetectionTypeGraph_Detector> DetectionTypeDetectors = new List<DetectionTypeGraph_Detector>();
+
+
 
 
         public InMemoryMOEDatabase()

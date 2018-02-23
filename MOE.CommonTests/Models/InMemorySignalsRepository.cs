@@ -154,10 +154,22 @@ namespace MOE.CommonTests.Models
 
         public List<Signal> GetAllVersionsOfSignalBySignalID(string signalId)
         {
-            var signals = (from r in _db.Signals
-                           where r.SignalID == signalId
-                           && r.VersionActionId != 3
-                           select r).ToList();
+            var signals = _db.Signals.Where(s => s.SignalID == signalId && s.VersionActionId != 3);
+
+            foreach (var s in signals)
+            {
+                s.Approaches = _db.Approaches.Where(a => a.VersionID == s.VersionID).ToList();
+                foreach (var app in s.Approaches)
+                {
+                    app.Detectors = _db.Detectors.Where(d => d.ApproachID == app.ApproachID).ToList();
+
+                    foreach (var det in app.Detectors)
+                    {
+                        //TODO: Make this right.  Not every detector has every detetcion type
+                        det.DetectionTypes.Add(_db.DetectionTypes.First());
+                    }
+                }
+            }
 
             var orderedSignals = signals.OrderBy(d => d.Start).ToList();
 

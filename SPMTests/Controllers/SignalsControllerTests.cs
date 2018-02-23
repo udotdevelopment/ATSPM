@@ -381,6 +381,8 @@ namespace SPM.Controllers.Tests
                 Assert.IsTrue(results.Count == 2);
                 Assert.AreEqual(results.First().SignalID, results.Last().SignalID);
                 Assert.AreNotEqual(results.First().VersionID, results.Last().VersionID);
+
+                Assert.AreEqual(results.First().Approaches.First().Detectors.First().DetectionTypes, results.Last().Approaches.Last().Detectors.Last().DetectionTypes);
             }
             else
             {
