@@ -49,7 +49,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
 
 
 
-        private ApproachSplitFailAggregationOptions setOptionDefaults()
+        private ApproachSplitFailAggregationOptions SetOptionDefaults()
         {
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.SeriesWidth = 3;
@@ -65,7 +65,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.BinSize.FifteenMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
 
-            options.FilterSignals.Add(new FilterSignal { SignalId = "102", Exclude = false });
+
             Db.SetFilterSignal(options);
             
             return options;
@@ -75,11 +75,13 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         public void CreateMetrics(ApproachSplitFailAggregationOptions options)
         {
             options.SelectedChartType = SeriesChartType.Column;
+            options.CreateMetric();
             options.SelectedAggregationType = AggregationType.Sum;
             options.CreateMetric();
             options.SelectedAggregationType = AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.Line;
+            options.CreateMetric();
             options.SelectedAggregationType = AggregationType.Sum;
             options.CreateMetric();
             options.SelectedAggregationType = AggregationType.Average;
@@ -90,11 +92,13 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             options.SelectedAggregationType = AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedColumn;
+            options.CreateMetric();
             options.SelectedAggregationType = AggregationType.Sum;
             options.CreateMetric();
             options.SelectedAggregationType = AggregationType.Average;
             options.CreateMetric();
             options.SelectedChartType = SeriesChartType.StackedArea;
+            options.CreateMetric();
             options.SelectedAggregationType = AggregationType.Sum;
             options.CreateMetric();
             options.SelectedAggregationType = AggregationType.Average;
@@ -105,7 +109,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetric15MinuteBinStartToFinishTest()
         {
-            var options = setOptionDefaults();
+            var options = SetOptionDefaults();
             CreateMetrics(options);
             Assert.IsTrue(options.ReturnList.Count == 20);
         }
@@ -113,7 +117,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetric15MinuteBinTimePeriodTest()
         {
-            var options = setOptionDefaults();
+            var options = SetOptionDefaults();
 
 
             options.TimeOptions = new BinFactoryOptions(
@@ -140,7 +144,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetric30MinuteBinStartToFinishTest()
         {
-            var options = setOptionDefaults();
+            var options = SetOptionDefaults();
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -155,7 +159,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetric30MinuteBinTimePeriodTest()
         {
-            var options = setOptionDefaults();
+            var options = SetOptionDefaults();
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -180,7 +184,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetricHourBinStartToFinishTest()
         {
-            var options = setOptionDefaults();
+            var options = SetOptionDefaults();
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -194,7 +198,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetricHourBinTimePeriodTest()
         {
-            var options = setOptionDefaults();
+            var options = SetOptionDefaults();
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -219,7 +223,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetricDayBinStartToFinishTest()
         {
-            var options = setOptionDefaults();
+            var options = SetOptionDefaults();
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("11/1/2017"),
@@ -233,7 +237,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetricDayBinTimePeriodTest()
         {
-            var options = setOptionDefaults();
+            var options = SetOptionDefaults();
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
                 Convert.ToDateTime("11/1/2017"),
@@ -257,7 +261,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetricMonthBinStartToFinishTest()
         {
-            var options = setOptionDefaults();
+            var options = SetOptionDefaults();
 
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -272,7 +276,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetricMonthBinTimePeriodTest()
         {
-            var options = setOptionDefaults();
+            var options = SetOptionDefaults();
 
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -297,7 +301,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetricYearBinStartToFinishTest()
         {
-            var options = setOptionDefaults();
+            var options = SetOptionDefaults();
 
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -312,7 +316,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void CreateTimeMetricYearBinTimePeriodTest()
         {
-var options = setOptionDefaults();
+var options = SetOptionDefaults();
 
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),

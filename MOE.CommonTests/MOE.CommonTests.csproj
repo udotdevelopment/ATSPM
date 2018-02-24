@@ -108,6 +108,7 @@
     <Compile Include="Business\DataAggregation\SplitFailAggregationBySignalTests.cs" />
     <Compile Include="Business\Export\ExporterTests.cs" />
     <Compile Include="Business\PlanFactoryTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\AggregationTestHelper.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationChartPhaseXPhaseSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationChartSignalXSignalSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationChartSignalXDirectionSeriesTests.cs" />
