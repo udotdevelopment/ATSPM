@@ -320,7 +320,7 @@ namespace MOE.Common.Business
             //var reportTimespan = options.EndDate - options.StartDate;
             chartArea.AxisX.Title = "Time (Hour of Day)";
             chartArea.AxisX.LabelStyle.IsEndLabelVisible = false;
-            chartArea.AxisX.LabelStyle.Angle = 45;
+            chartArea.AxisX.Interval = 1;
             if (options.SelectedXAxisType ==
                 XAxisType.TimeOfDay)
             {
@@ -349,19 +349,19 @@ namespace MOE.Common.Business
                         break;
                     case BinFactoryOptions.BinSize.Day:
                         chartArea.AxisX.IntervalType = DateTimeIntervalType.Days;
-                        chartArea.AxisX.LabelStyle.Format = "dd";
+                        chartArea.AxisX.LabelStyle.Format = "MM/dd/yy";
                         chartArea.AxisX.Title = "Day of Month";
                         chartArea.AxisX.Minimum = options.StartDate.AddDays(-1).ToOADate();
                         break;
-                    case BinFactoryOptions.BinSize.Week:
-                        chartArea.AxisX.IntervalType = DateTimeIntervalType.Weeks;
-                        chartArea.AxisX.LabelStyle.Format = "MM/dd/yy";
-                        chartArea.AxisX.Title = "Start of Week";
-                        chartArea.AxisX.Minimum = options.StartDate.AddDays(-7).ToOADate();
-                        break;
+                    //case BinFactoryOptions.BinSize.Week:
+                    //    chartArea.AxisX.IntervalType = DateTimeIntervalType.Weeks;
+                    //    chartArea.AxisX.LabelStyle.Format = "";
+                    //    chartArea.AxisX.Title = "Start of Week";
+                    //    chartArea.AxisX.Minimum = options.StartDate.AddDays(-7).ToOADate();
+                    //    break;
                     case BinFactoryOptions.BinSize.Month:
                         chartArea.AxisX.IntervalType = DateTimeIntervalType.Months;
-                        chartArea.AxisX.LabelStyle.Format = "MM/yyyy";
+                        chartArea.AxisX.LabelStyle.Format = "MMM-yy";
                         chartArea.AxisX.Title = "Month and Year";
                         chartArea.AxisX.Minimum = options.StartDate.AddMonths(-1).ToOADate();
                         break;
@@ -372,8 +372,8 @@ namespace MOE.Common.Business
                         chartArea.AxisX.Minimum = options.StartDate.AddYears(-1).ToOADate();
                         break;
                     default:
-                        chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
-                        chartArea.AxisX.LabelStyle.Format = "HH";
+                        chartArea.AxisX.IntervalType = DateTimeIntervalType.Days;
+                        chartArea.AxisX.LabelStyle.Format = "MM/dd/yy";
                         break;
                 }
                 DateTime tempStart;
@@ -393,7 +393,6 @@ namespace MOE.Common.Business
                     chartArea.AxisX.Maximum = tempEnd.ToOADate();
                 }
             }
-            chartArea.AxisX.Interval = 1;
         }
 
         private static void SetImageProperties(Chart chart)

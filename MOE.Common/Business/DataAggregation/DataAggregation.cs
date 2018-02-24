@@ -85,7 +85,9 @@ namespace MOE.Common.Business.DataAggregation
                     "7191",
                     "7192",
                     "7193",
-                    "6418"
+                    "6418",
+                    "6421",
+                    "7076"
                 };
 
                 Console.WriteLine("Getting correct version of signals for time period");
@@ -209,7 +211,7 @@ namespace MOE.Common.Business.DataAggregation
             {
                 var dataRow = eventAggregationTable.NewRow();
                 dataRow["BinStartTime"] = preemptionAggregation.BinStartTime;
-                dataRow["SignalID"] = preemptionAggregation.SignalId;
+                dataRow["SignalId"] = preemptionAggregation.SignalId;
                 dataRow["EventCount"] = preemptionAggregation.EventCount;
                 eventAggregationTable.Rows.Add(dataRow);
             }
@@ -218,7 +220,7 @@ namespace MOE.Common.Business.DataAggregation
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
-                sqlBulkCopy.DestinationTableName = "EventCountAggregation";
+                sqlBulkCopy.DestinationTableName = "EventCountAggregations";
                 sqlBulkCopy.BulkCopyTimeout = 180;
                 sqlBulkCopy.BatchSize = 50000;
                 try

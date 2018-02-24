@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
@@ -16,32 +17,33 @@ namespace MOE.Common.Business.WCFServiceLibrary
     {
         public override string YAxisTitle { get; }
 
-        public override List<string> CreateMetric()
-        {
-            base.CreateMetric();
-            GetSignalObjects();
-            if (SelectedXAxisType == XAxisType.TimeOfDay &&
-                TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
-            {
-                TimeOptions.TimeOption = BinFactoryOptions.TimeOptions.TimePeriod;
-                TimeOptions.TimeOfDayStartHour = 0;
-                TimeOptions.TimeOfDayStartMinute = 0;
-                TimeOptions.TimeOfDayEndHour = 23;
-                TimeOptions.TimeOfDayEndMinute = 59;
-                if (TimeOptions.DaysOfWeek == null)
-                    TimeOptions.DaysOfWeek = new List<DayOfWeek>
-                    {
-                        DayOfWeek.Sunday,
-                        DayOfWeek.Monday,
-                        DayOfWeek.Tuesday,
-                        DayOfWeek.Wednesday,
-                        DayOfWeek.Thursday,
-                        DayOfWeek.Friday,
-                        DayOfWeek.Saturday
-                    };
-            }
-            return ReturnList;
-        }
+        //public override List<string> CreateMetric()
+        //{
+        //    base.CreateMetric();
+        //    GetSignalObjects();
+        //    if (SelectedXAxisType == XAxisType.TimeOfDay &&
+        //        TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
+        //    {
+        //        TimeOptions.TimeOption = BinFactoryOptions.TimeOptions.TimePeriod;
+        //        TimeOptions.TimeOfDayStartHour = 0;
+        //        TimeOptions.TimeOfDayStartMinute = 0;
+        //        TimeOptions.TimeOfDayEndHour = 23;
+        //        TimeOptions.TimeOfDayEndMinute = 59;
+        //        if (TimeOptions.DaysOfWeek == null)
+        //            TimeOptions.DaysOfWeek = new List<DayOfWeek>
+        //            {
+        //                DayOfWeek.Sunday,
+        //                DayOfWeek.Monday,
+        //                DayOfWeek.Tuesday,
+        //                DayOfWeek.Wednesday,
+        //                DayOfWeek.Thursday,
+        //                DayOfWeek.Friday,
+        //                DayOfWeek.Saturday
+        //            };
+        //    }
+        //    GetChartByXAxisAggregation();
+        //    return ReturnList;
+        //}
 
 
         protected override void GetChartByXAxisAggregation()
@@ -298,7 +300,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 var binsContainers = GetBinsContainersByDirection(availableDirections[i], signal);
                 var series = CreateSeries(i, availableDirections[i].Description);
-                seriesList.Add(GetTimeAggregateSeries(series, binsContainers));
+                try
+                {
+                    seriesList.Add(GetTimeAggregateSeries(series, binsContainers));
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                    throw;
+                }
             });
             foreach (var direction in availableDirections)
                 chart.Series.Add(seriesList.FirstOrDefault(s => s.Name == direction.Description));
@@ -314,6 +324,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         .AddHours(-1).ToOADate();
             var seriesList = new ConcurrentBag<Series>();
             var approaches = signal.Approaches.ToList();
+            try
+            {
+
+            
             Parallel.For(0, approaches.Count, i =>
             {
                 var phaseDescription = GetPhaseDescription(approaches[i], true);
@@ -329,6 +343,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     i++;
                 }
             });
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
             var orderedSeries = seriesList.OrderBy(s => s.Name).ToList();
             foreach (var series in orderedSeries)
                 chart.Series.Add(series);

@@ -17,8 +17,8 @@ namespace MOE.Common.Business.Bins
                     return GetBinsForRange(timeOptions, 60);
                 case BinFactoryOptions.BinSize.Day:
                     return GetDayBinsContainersForRange(timeOptions);
-                case BinFactoryOptions.BinSize.Week:
-                    return GetBinsForRange(timeOptions, 60 * 24 * 7);
+                //case BinFactoryOptions.BinSize.Week:
+                //    return GetBinsForRange(timeOptions, 60 * 24 * 7);
                 case BinFactoryOptions.BinSize.Month:
                     return GetMonthBinsForRange(timeOptions);
                 case BinFactoryOptions.BinSize.Year:

@@ -1310,5 +1310,58 @@ namespace MOE.CommonTests.Models
                 DetectorAggregations.Add(r);
             }
         }
+
+        public void PopulatePreemptAggregations(DateTime start, DateTime end, string signalId, int versionId)
+        {
+            for (var startTime = start.Date;
+                startTime <= end.Date.AddHours(23).AddMinutes(59);
+                startTime = startTime.AddMinutes(15))
+            {
+                var r = new PreemptionAggregation();
+                r.VersionId = versionId;
+                r.SignalId = signalId;
+                r.BinStartTime = startTime;
+                r.PreemptNumber = rnd.Next(1, 64);
+                r.PreemptRequests = rnd.Next(1, 200);
+                r.PreemptServices = rnd.Next(1, 200);
+                PreemptionAggregations.Add(r);
+            }
+        }
+
+        public void PopulateApproachCycleAggregationsWithRandomRecords(DateTime start, DateTime end, Approach approach)
+        {
+            for (var startTime = start.Date;
+                startTime <= end.Date.AddHours(23).AddMinutes(59);
+                startTime = startTime.AddMinutes(15))
+            {
+                var protectedPhase = new ApproachCycleAggregation
+                {
+                    BinStartTime = startTime,
+                    GreenTime = rnd.Next(1, 64),
+                    PedActuations = rnd.Next(1, 64),
+                    RedTime = rnd.Next(1, 64),
+                    ApproachId = approach.ApproachID,
+                    IsProtectedPhase = true,
+                    TotalCycles = rnd.Next(1, 64),
+                    YellowTime = rnd.Next(1, 64)
+                };
+                ApproachCycleAggregations.Add(protectedPhase);
+                if (approach.PermissivePhaseNumber != null)
+                {
+                    var permissivePhase = new ApproachCycleAggregation
+                    {
+                        BinStartTime = startTime,
+                        GreenTime = rnd.Next(1, 64),
+                        PedActuations = rnd.Next(1, 64),
+                        RedTime = rnd.Next(1, 64),
+                        ApproachId = approach.ApproachID,
+                        IsProtectedPhase = true,
+                        TotalCycles = rnd.Next(1, 64),
+                        YellowTime = rnd.Next(1, 64)
+                    };
+                    ApproachCycleAggregations.Add(permissivePhase);
+                }
+            }
+        }
     }
 }
