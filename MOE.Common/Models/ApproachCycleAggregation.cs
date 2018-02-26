@@ -23,7 +23,7 @@ namespace MOE.Common.Models
         public double RedTime { get; set; }
 
         [Required]
-        public double YellowTime { get; set; }
+        public double RedTime { get; set; }
 
         [Required]
         public double GreenTime { get; set; }
