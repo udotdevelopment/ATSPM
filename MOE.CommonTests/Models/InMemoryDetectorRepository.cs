@@ -95,5 +95,10 @@ namespace MOE.CommonTests.Models
         {
             throw new NotImplementedException();
         }
+
+        public Common.Models.SPM GetContext()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

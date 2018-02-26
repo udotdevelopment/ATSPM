@@ -63,6 +63,13 @@ namespace MOE.Common.Models.Repositories
             var g = (from r in _db.Approaches
                 where r.ApproachID == approach.ApproachID
                 select r).FirstOrDefault();
+            if (approach.Detectors != null)
+            {
+                foreach (var det in approach.Detectors)
+                {
+                    AddDetectiontypestoDetector(det);
+                }
+            }
             if (g != null)
                 try
                 {
@@ -196,6 +203,11 @@ namespace MOE.Common.Models.Repositories
             var g = (from r in _db.Approaches
                 where r.ApproachID == approach.ApproachID
                 select r).FirstOrDefault();
+            foreach (var det in approach.Detectors)
+            {
+                AddDetectiontypestoDetector(det);
+            }
+
             if (g == null)
             {
                 approach = _db.Approaches.Add(approach);
@@ -207,6 +219,37 @@ namespace MOE.Common.Models.Repositories
                 _db.SaveChanges();
             }
             return approach;
+        }
+
+        private void AddDetectiontypestoDetector(Detector detector)
+        {
+            try
+            {
+                var g = (from r in _db.Detectors
+                    where r.ID == detector.ID
+                    select r).FirstOrDefault();
+                if (g == null)
+                {
+                    detector.DetectionTypes = new List<DetectionType>();
+                    detector.DetectionTypes = _db.DetectionTypes
+                        .Where(dt => detector.DetectionTypeIDs.Contains(dt.DetectionTypeID)).ToList();
+                }
+            }
+
+            catch (Exception ex)
+            {
+                var repository =
+                    ApplicationEventRepositoryFactory.Create();
+                var error = new ApplicationEvent();
+                error.ApplicationName = "MOE.Common";
+                error.Class = "Models.Repository.SignalRepository";
+                error.Function = "Add";
+                error.Description = ex.Message;
+                error.SeverityLevel = ApplicationEvent.SeverityLevels.High;
+                error.Timestamp = DateTime.Now;
+                repository.Add(error);
+                throw;
+            }
         }
     }
 }

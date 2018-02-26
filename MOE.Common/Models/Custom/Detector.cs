@@ -69,6 +69,8 @@ namespace MOE.Common.Models
                 DecisionPoint = 0;
             var offset = Convert.ToDouble((DistanceFromStopBar / (Approach.MPH * 1.467) - DecisionPoint) * 1000);
 
+
+
             return offset;
         }
 
@@ -90,9 +92,11 @@ namespace MOE.Common.Models
             newGD.DetectionTypeIDs = new List<int>();
             newGD.DetectionTypes = new List<DetectionType>();
 
+            
+
             foreach (var dt in detectorToCopy.DetectionTypes)
             {
-                newGD.DetectionTypes.Add(dt);
+                newGD.DetectionTypeIDs.Add(dt.DetectionTypeID);
             }
 
            

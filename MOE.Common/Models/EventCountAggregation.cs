@@ -20,6 +20,8 @@ namespace MOE.Common.Models
         [Required]
         public int EventCount { get; set; }
 
+
+
         public sealed class
             EventCountAggregationClassMap : ClassMap<EventCountAggregation>
         {

@@ -6,19 +6,35 @@ namespace MOE.Common.Models.Repositories
 {
     public class DetectorRepository : IDetectorRepository
     {
-        private readonly SPM _db;
+
+        private SPM _db;
+
+
+
+
 
         public DetectorRepository()
         {
             _db = new SPM();
+
         }
 
         public DetectorRepository(SPM context)
         {
             _db = context;
+
         }
 
-        //This method probably doesn't really belong here anymore.
+
+        SPM IDetectorRepository.GetContext()
+        {
+
+            return (_db);
+        }
+
+   
+
+    //This method probably doesn't really belong here anymore.
         //public List<MOE.Common.Models.Detectors> GetDetectorsBySignalID(string SignalID)
         //{
         //    MOE.Common.Business.ModelObjectHelpers.SignalModelHelper smh = new Business.ModelObjectHelpers.SignalModelHelper(SignalID);
@@ -246,5 +262,7 @@ namespace MOE.Common.Models.Repositories
                     detectors.Add(d);
             return detectors;
         }
+
+ 
     }
 }

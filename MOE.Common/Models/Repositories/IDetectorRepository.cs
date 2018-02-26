@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MOE.Common.Models.Repositories
 {
     public interface IDetectorRepository
     {
+        SPM GetContext();
+
+
         Detector GetDetectorByDetectorID(string DetectorID);
         List<Detector> GetDetectorsBySignalID(string SignalID);
 
