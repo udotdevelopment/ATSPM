@@ -458,35 +458,32 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected DataPoint GetDataPointForSum(Bin bin)
         {
             var dataPoint = new DataPoint(bin.Start.ToOADate(), bin.Sum);
-            if (bin.Start.Hour == 0 && bin.Start.Minute == 0)
-                dataPoint.AxisLabel = bin.Start.ToString("MM/dd/yyyy HH:mm");
             return dataPoint;
         }
 
         protected DataPoint GetDataPointForAverage(Bin bin)
         {
             var dataPoint = new DataPoint(bin.Start.ToOADate(), bin.Average);
-            if (bin.Start.Hour == 0 && bin.Start.Minute == 0)
-                dataPoint.AxisLabel = StartDate.ToString("MM/dd/yyyy HH:mm");
             return dataPoint;
         }
 
         protected DataPoint GetContainerDataPointForSum(BinsContainer bin)
         {
             var dataPoint = new DataPoint(bin.Start.ToOADate(), bin.SumValue);
-            if (bin.Start.Hour == 0 && bin.Start.Minute == 0)
-                dataPoint.AxisLabel = StartDate.ToString("MM/dd/yyyy HH:mm");
             return dataPoint;
         }
 
         protected DataPoint GetContainerDataPointForAverage(BinsContainer bin)
         {
             var dataPoint = new DataPoint(bin.Start.ToOADate(), bin.AverageValue);
-            if (bin.Start.Hour == 0 && bin.Start.Minute == 0)
-                dataPoint.AxisLabel = StartDate.ToString("MM/dd/yyyy HH:mm");
             return dataPoint;
         }
 
+        private void SetDataPointLabel(BinsContainer bin, DataPoint dataPoint)
+        {
+            if (bin.Start.Hour == 0 && bin.Start.Minute == 0)
+                dataPoint.AxisLabel = StartDate.ToString("MM/dd/yyyy HH:mm");
+        }
 
         protected Series GetTimeAggregateSeries(Series series, List<BinsContainer> binsContainers)
         {
@@ -506,7 +503,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     minutes = 60;
                     break;
                 default:
-                    throw new Exception("Invalid bin size for time aggregation");
+                    throw new InvalidBinSizeException(TimeOptions.SelectedBinSize.ToString() +" is an invalid bin size for time period aggregation");
             }
             SetDataPointsForTimeAggregationSeries(binsContainers, series, endTime, minutes);
             return series;
@@ -594,5 +591,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected abstract List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal);
         protected abstract List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals);
+    }
+
+    public class InvalidBinSizeException : Exception
+    {
+        public InvalidBinSizeException()
+        {
+        }
+
+        public InvalidBinSizeException(string message)
+            : base(message)
+        {
+        }
+
+        public InvalidBinSizeException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
     }
 }

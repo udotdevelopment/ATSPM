@@ -121,18 +121,18 @@ namespace MOE.Common.Business.Bins.Tests
             Assert.IsTrue(binsContainers.First().Bins.Count == 4);
         }
 
-        [TestMethod()]
-        public void GetBinsWeekTest()
-        {
-            BinFactoryOptions binFactoryOptions = new BinFactoryOptions(
-                Convert.ToDateTime("10/17/2017 12:00 AM"),
-                Convert.ToDateTime("10/27/2017 5:00 AM"),
-                null, null, null, null, null,
-                BinFactoryOptions.BinSize.Week,
-                BinFactoryOptions.TimeOptions.StartToEnd);
-            var bins = BinFactory.GetBins(binFactoryOptions);
-            Assert.IsTrue(bins.First().Bins.Count == 2);
-        }
+        //[TestMethod()]
+        //public void GetBinsWeekTest()
+        //{
+        //    BinFactoryOptions binFactoryOptions = new BinFactoryOptions(
+        //        Convert.ToDateTime("10/17/2017 12:00 AM"),
+        //        Convert.ToDateTime("10/27/2017 5:00 AM"),
+        //        null, null, null, null, null,
+        //        BinFactoryOptions.BinSize.Week,
+        //        BinFactoryOptions.TimeOptions.StartToEnd);
+        //    var bins = BinFactory.GetBins(binFactoryOptions);
+        //    Assert.IsTrue(bins.First().Bins.Count == 2);
+        //}
 
         [TestMethod()]
         public void GetBinsMonthTest()

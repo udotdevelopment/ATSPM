@@ -17,10 +17,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             MetricTypeID = 20;
             AggregatedDataTypes = new List<AggregatedDataType>();
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "Cycles"});
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = "GapOuts"});
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 2, DataName = "ForceOffs"});
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 3, DataName = "MaxOuts"});
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "RedTime" });
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = "YellowTime" });
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 2, DataName = "GreenTime" });
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 3, DataName = "TotalCycles" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 4, DataName = "PedActuations" });
         }
 
         public override string ChartTitle
@@ -49,8 +50,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        public override string YAxisTitle => SelectedAggregationType + " of Split Fail " + Regex.Replace(
-                                                 SelectedAggregatedDataType.ToString(),
+        public override string YAxisTitle => Regex.Replace(SelectedAggregationType + " of " + 
+                                                 SelectedAggregatedDataType.DataName.ToString(),
                                                  @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1") + " " +
                                              TimeOptions.SelectedBinSize + " bins";
 

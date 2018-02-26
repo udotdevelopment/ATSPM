@@ -17,8 +17,7 @@ namespace MOE.Common.Business.Bins
             Hour,
             Day,
             Month,
-            Year,
-            Week
+            Year
         }
 
         public enum TimeOptions

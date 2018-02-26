@@ -51,7 +51,7 @@ namespace MOE.CommonTests.Models
 
         public List<DirectionType> GetDirectionsByIDs(List<int> includedDirections)
         {
-            throw new System.NotImplementedException();
+            return _db.DirectionTypes.Where(d => includedDirections.Contains(d.DirectionTypeID)).ToList();
         }
     }
 }
