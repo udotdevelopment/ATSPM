@@ -50,7 +50,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        public override string YAxisTitle => SelectedAggregationType + " of Split Fail " + Regex.Replace(
+        public override string YAxisTitle => Regex.Replace(SelectedAggregationType + " of " + 
                                                  SelectedAggregatedDataType.DataName.ToString(),
                                                  @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1") + " " +
                                              TimeOptions.SelectedBinSize + " bins";
