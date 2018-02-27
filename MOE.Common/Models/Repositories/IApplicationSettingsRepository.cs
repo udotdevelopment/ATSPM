@@ -6,5 +6,7 @@
         GeneralSettings GetGeneralSettings();
         void Save(WatchDogApplicationSettings watchDogApplicationSettings);
         void Save(GeneralSettings generalSettings);
+        int GetRawDataLimit();
+
     }
 }

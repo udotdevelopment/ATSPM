@@ -26,6 +26,17 @@ namespace MOE.Common.Models.Repositories
             return db.GeneralSettings.First();
         }
 
+        public int GetRawDataLimit()
+        {
+            GeneralSettings gs = GetGeneralSettings();
+            int limit = 0;
+            if (gs.RawDataCountLimit != null)
+            {
+                limit = (int) gs.RawDataCountLimit;
+            }
+            return limit;
+        }
+
         public void Save(WatchDogApplicationSettings watchDogApplicationSettings)
         {
             db.Entry(watchDogApplicationSettings).State = EntityState.Modified;
