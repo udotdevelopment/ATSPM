@@ -361,24 +361,45 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         .AddHours(-1).ToOADate();
         }
 
+        protected void SetTimeXAxisAxisMinimum(Chart chart)
+        {
+            if (TimeOptions.TimeOfDayStartHour != null && TimeOptions.TimeOfDayStartMinute.Value != null)
+                chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
+                    this.StartDate
+                        .AddHours(-1).ToOADate();
+        }
+
         protected void GetTimeXAxisSignalSeriesChart(List<Models.Signal> signals, Chart chart)
         {
+            SetTimeXAxisAxisMinimum(chart);
+
             var i = 1;
             foreach (var signal in signals)
             {
                 var series = CreateSeries(i, signal.SignalDescription);
+                
                 var binsContainers = GetBinsContainersBySignal(signal);
-                var container = binsContainers.FirstOrDefault();
-                if (container != null)
+
+                foreach (var container in binsContainers)
                 {
-                    foreach (var bin in container.Bins)
+                    DataPoint dataPoint;
+                    if (container != null)
                     {
-                        var dataPoint = GetDataPointForSum(bin);
+                        if (this.SelectedAggregationType == AggregationType.Sum)
+                        {
+                           dataPoint = GetContainerDataPointForSum(container);
+                        }
+                        else
+                        {
+                            dataPoint = GetContainerDataPointForAverage(container);
+                        }
+
                         series.Points.Add(dataPoint);
+                       
+                        i++;
                     }
-                    chart.Series.Add(series);
-                    i++;
                 }
+                chart.Series.Add(series);
             }
         }
 
@@ -458,6 +479,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected DataPoint GetDataPointForSum(Bin bin)
         {
             var dataPoint = new DataPoint(bin.Start.ToOADate(), bin.Sum);
+            dataPoint.Label = bin.Start.Month.ToString();
             return dataPoint;
         }
 

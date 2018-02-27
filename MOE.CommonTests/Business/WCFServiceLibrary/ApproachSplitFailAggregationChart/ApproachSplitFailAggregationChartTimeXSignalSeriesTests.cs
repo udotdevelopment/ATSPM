@@ -483,6 +483,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             options.EndDate = Convert.ToDateTime("1/1/2018");
             options.SelectedXAxisType = XAxisType.Time;
             options.SelectedSeries = SeriesType.Signal;
+            options.SelectedAggregatedDataType = new AggregatedDataType { Id = 0, DataName = "SplitFails" };
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
                 Convert.ToDateTime("1/1/2018"),
@@ -499,7 +500,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 },
                 BinFactoryOptions.BinSize.Month,
                 BinFactoryOptions.TimeOptions.TimePeriod);
-            options.FilterSignals.Add(new FilterSignal{SignalId = "101", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "105", Exclude = false});
+            // options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "103", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false}); options.FilterSignals.Add(new FilterSignal{SignalId = "105", Exclude = false});
+            Db.SetFilterSignal(options);
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();

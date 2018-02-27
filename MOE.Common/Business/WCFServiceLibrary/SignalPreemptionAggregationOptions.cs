@@ -26,8 +26,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal)
         {
-            var splitFailAggregationBySignal = new PreemptionAggregationBySignal(this, signal);
-            return splitFailAggregationBySignal.BinsContainers;
+            var aggregationBySignal = new PreemptionAggregationBySignal(this, signal);
+            return aggregationBySignal.BinsContainers;
         }
 
         protected override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)

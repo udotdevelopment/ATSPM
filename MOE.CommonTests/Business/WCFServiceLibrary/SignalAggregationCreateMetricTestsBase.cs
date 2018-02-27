@@ -1,26 +1,23 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MOE.Common.Business.WCFServiceLibrary;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.FilterExtensions;
+using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using MOE.CommonTests.Models;
 
-namespace MOE.Common.Business.WCFServiceLibrary.Tests
+namespace MOE.CommonTests.Business.WCFServiceLibrary
 {
-    [TestClass()]
-    public abstract class ApproachAggregationCreateMetricTestsBase
+    public abstract class SignalAggregationCreateMetricTestsBase
     {
         public InMemoryMOEDatabase Db = new InMemoryMOEDatabase();
 
-        public ApproachAggregationCreateMetricTestsBase()
+        public SignalAggregationCreateMetricTestsBase()
         {
             Db.ClearTables();
             Db.PopulateSignal();
@@ -31,8 +28,9 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             MetricTypeRepositoryFactory.SetMetricsRepository(new InMemoryMetricTypeRepository(Db));
             ApplicationEventRepositoryFactory.SetApplicationEventRepository(
                 new InMemoryApplicationEventRepository(Db));
-            Models.Repositories.DirectionTypeRepositoryFactory.SetDirectionsRepository(
+            Common.Models.Repositories.DirectionTypeRepositoryFactory.SetDirectionsRepository(
                 new InMemoryDirectionTypeRepository());
+            ApproachRepositoryFactory.SetApproachRepository(new InMemoryApproachRepository(Db));
             SetSpecificAggregateRepositoriesForTest();
         }
 
@@ -42,7 +40,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             SetFilterSignal(options);
         }
 
-        
+
         public virtual void CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest()
         {
 
@@ -240,6 +238,10 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             if (options.SelectedXAxisType == XAxisType.Detector)
                 return false;
             if (options.SelectedSeries == SeriesType.Detector)
+                return false;
+            if (options.SelectedSeries == SeriesType.Direction)
+                return false;
+            if (options.SelectedSeries == SeriesType.Direction)
                 return false;
             if ((options.SelectedXAxisType == XAxisType.Direction || options.SelectedXAxisType == XAxisType.Phase) &&
                 (options.SelectedSeries == SeriesType.Signal || options.SelectedSeries == SeriesType.Route))

@@ -23,6 +23,8 @@ namespace MOE.CommonTests.Models
         public List<ApproachYellowRedActivationAggregation> ApproachYellowRedActivationAggregations
             = new List<ApproachYellowRedActivationAggregation>();
 
+
+
         public List<Controller_Event_Log> Controller_Event_Log = new List<Controller_Event_Log>();
         public List<ControllerType> ControllerTypes = new List<ControllerType>();
         public List<DetectionHardware> DetectionHardwares = new List<DetectionHardware>();
@@ -195,6 +197,34 @@ namespace MOE.CommonTests.Models
                 r.TotalCycles = rnd.Next(1, 200);
 
                 PriorityAggregations.Add(r);
+            }
+        }
+
+        public void PopulateApproachSpeedAggregationsWithRandomRecords(DateTime start, DateTime end, Approach approach)
+        {
+            for (var startTime = start; startTime <= end; startTime = startTime.AddMinutes(15))
+            {
+                var r = new ApproachSpeedAggregation();
+                r.ApproachId = approach.ApproachID;
+                r.BinStartTime = startTime;
+                r.Speed15Th = rnd.Next(1, 5);
+                r.Speed85Th = rnd.Next(1, 100);
+                r.SpeedVolume = rnd.Next(1, 50);
+                r.SummedSpeed = rnd.Next(1, 500);              
+                r.IsProtectedPhase = true;
+                ApproachSpeedAggregations.Add(r);
+                if (approach.PermissivePhaseNumber != null)
+                {
+                    var approach2 = new ApproachSpeedAggregation();
+                    approach2.ApproachId = approach.ApproachID;
+                    approach2.BinStartTime = startTime;
+                    approach2.Speed15Th = rnd.Next(1, 5);
+                    approach2.Speed85Th = rnd.Next(1, 100);
+                    approach2.SpeedVolume = rnd.Next(1, 50);
+                    approach2.SummedSpeed = rnd.Next(1, 500);
+                    approach2.IsProtectedPhase = false;
+                    ApproachSpeedAggregations.Add(approach2);
+                }
             }
         }
 

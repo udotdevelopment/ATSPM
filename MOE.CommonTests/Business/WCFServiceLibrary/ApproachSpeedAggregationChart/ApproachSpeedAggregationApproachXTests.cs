@@ -10,13 +10,12 @@ using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using MOE.CommonTests.Models;
 
-namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachCycleAggregation
+namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachSpeedAggregationChart
 {
     [TestClass]
-    public class ApproachCycleAggregationApproachOptionsTests : ApproachAggregationCreateMetricTestsBase
+    public class ApproachSpeedAggregationApproachOptionsTests : ApproachAggregationCreateMetricTestsBase
     {
-
-        
+       
 
         protected override void SetSpecificAggregateRepositoriesForTest()
         {
@@ -28,22 +27,20 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachCycleAggregation
                     PopulateApproachData(approach);
                 }
             }
-            ApproachCycleAggregationRepositoryFactory.SetApplicationEventRepository(
-                new InMemoryApproachCycleAggregationRepository(Db));
+            ApproachSpeedAggregationRepositoryFactory.SetApplicationEventRepository(
+                new InMemoryApproachSpeedAggregationRepository(Db));
         }
 
         protected override void PopulateApproachData(Approach approach)
         {
-            Db.PopulateApproachCycleAggregationsWithRandomRecords(Convert.ToDateTime("1/1/2016"),
+            Db.PopulateApproachSpeedAggregationsWithRandomRecords(Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"), approach);
         }
 
         [TestMethod]
-        public void CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest()
+        public  void CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest()
         {
-
-             ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions();
-           
+            ApproachSpeedAggregationOptions options = new ApproachSpeedAggregationOptions();
             base.CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest(options);
         }
     }

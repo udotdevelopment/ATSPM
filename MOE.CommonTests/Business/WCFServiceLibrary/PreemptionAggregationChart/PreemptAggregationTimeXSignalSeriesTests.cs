@@ -14,7 +14,7 @@ using MOE.CommonTests.Models;
 namespace MOE.Common.Business.WCFServiceLibrary.Tests
 {
     [TestClass()]
-    public class PreemptAggregationApproachXDetectorSeriesTests
+    public class PreemptAggregationTimeXSignalSeriesTests
     {
         public InMemoryMOEDatabase Db = new InMemoryMOEDatabase();
         public ISignalsRepository SignalsRepository;
@@ -370,7 +370,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 BinFactoryOptions.BinSize.Month,
                 BinFactoryOptions.TimeOptions.TimePeriod);
             SetFilterSignal(options);
-            options.SelectedChartType = SeriesChartType.StackedColumn;
+            options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType =AggregationType.Sum;
             options.CreateMetric();
             options.SelectedAggregationType =AggregationType.Average;

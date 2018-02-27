@@ -360,10 +360,19 @@ namespace MOE.Common.Business
                     //    chartArea.AxisX.Minimum = options.StartDate.AddDays(-7).ToOADate();
                     //    break;
                     case BinFactoryOptions.BinSize.Month:
+                        chartArea.AxisX.MinorTickMark.Enabled = true;
+                        chartArea.AxisX.MajorTickMark.Enabled = true;
                         chartArea.AxisX.IntervalType = DateTimeIntervalType.Months;
-                        chartArea.AxisX.LabelStyle.Format = "MMM-yy";
+                        chartArea.AxisX.Interval = 1;
+                        //chartArea.AxisX.LabelStyle.Format = "MM-yyyy";
+                        chartArea.AxisX.LabelStyle.Enabled = true;
+                        chartArea.AxisX.LabelStyle.Angle = 45;
+                        chartArea.AxisX.LabelStyle.IntervalType = DateTimeIntervalType.Months;
+                        chartArea.AxisX.LabelStyle.Interval = 1;
                         chartArea.AxisX.Title = "Month and Year";
                         chartArea.AxisX.Minimum = options.StartDate.AddMonths(-1).ToOADate();
+                        chartArea.AxisX.LabelAutoFitStyle = LabelAutoFitStyles.DecreaseFont;
+                        chartArea.AxisX.LabelStyle.Enabled = true;
                         break;
                     case BinFactoryOptions.BinSize.Year:
                         chartArea.AxisX.IntervalType = DateTimeIntervalType.Years;

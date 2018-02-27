@@ -109,7 +109,7 @@
     <Compile Include="Business\Export\ExporterTests.cs" />
     <Compile Include="Business\PlanFactoryTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\AggregationTestHelper.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachAggregationCreateMetrciTestBase.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachAggregationCreateMetricTestBase.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartPhaseXPhaseSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartSignalXDirectionSeriesTests.cs" />
@@ -123,6 +123,7 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXDirectionSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXRouteSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXSignalSeriesTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachSpeedAggregationChart\ApproachSpeedAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationChartPhaseXPhaseSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationChartSignalXSignalSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationChartSignalXDirectionSeriesTests.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Business\WCFServiceLibrary\DetectorVolumeAggregationChart\DetectorVolumeAggregationApproachXDetectorSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\PreemptionAggregationChart\PreemptAggregationTimeXSignalSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\PriorityAggregationChart\PriorityAggregationApproachXSignalSeriesTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\SignalAggregationCreateMetricTestsBase.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationChart\SignalPreemptionAggregationChartSignalXSignalSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationChart\SignalPreemptionAggregationChartTimeOfDayRouteSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationChart\SignalPreemptionAggregationChartTimeOfDaySignalSeriesTests.cs" />
