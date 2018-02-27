@@ -36,10 +36,15 @@ namespace MOE.Common.Models.ViewModel
         public string EnumerationsName { get; set; }
         public string EnumerationsUrl { get; set; }
         public SignalSearchViewModel SignalSearch { get; set; }
+        public string RecaptchaPublicKey { get; set; }
         public string RecaptchaMessage { get; set; }
 
         public DataExportViewModel()
         {
+            var generalSettingsRepository =
+                MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
+            var settings = generalSettingsRepository.GetGeneralSettings();
+            RecaptchaPublicKey = settings.ReCaptchaPublicKey;
             RecordCountLimit = Convert.ToInt32(ConfigurationManager.AppSettings["RawDataCountLimit"]);
             SignalSearch = new SignalSearchViewModel();
             MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
