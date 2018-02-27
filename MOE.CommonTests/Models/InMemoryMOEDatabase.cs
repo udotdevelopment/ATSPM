@@ -284,7 +284,7 @@ namespace MOE.CommonTests.Models
                     approach2.MaxOuts = rnd.Next(1, 5);
                     approach2.SplitFailures = rnd.Next(1, 5);
                     approach2.UnknownTerminationTypes = rnd.Next(1, 5);
-                    approach2.IsProtectedPhase = false;
+                    approach2.IsProtectedPhase = true;
                     ApproachSplitFailAggregations.Add(approach2);
                 }
             }
