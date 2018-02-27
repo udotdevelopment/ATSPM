@@ -123,6 +123,7 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXDirectionSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXRouteSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXSignalSeriesTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachPcdAggregationChart\ApproachPcdAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSpeedAggregationChart\ApproachSpeedAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationChartPhaseXPhaseSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationChartSignalXSignalSeriesTests.cs" />
@@ -150,7 +151,8 @@
     <Compile Include="Business\WCFServiceLibrary\SplitFailOptionsTests.cs" />
     <Compile Include="Helpers\XMLtoListImporter.cs" />
     <Compile Include="Models\Custom\DetectorTests.cs" />
-    <Compile Include="Models\InMemoryYellowRedActivationsAggregationRepository.cs" />
+    <Compile Include="Models\InMemoryYellowRedActivationsAggregationRepository - Copy.cs" />
+    <Compile Include="Models\InMemoryPcdAggregationRepository.cs" />
     <Compile Include="Models\InMemoryApproachCycleAggregationRepository.cs" />
     <Compile Include="Models\InMemoryDetectorAggregationsRepository.cs" />
     <Compile Include="Models\InMemoryControllerEventLogRepository.cs" />

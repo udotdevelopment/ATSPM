@@ -365,7 +365,7 @@ namespace MOE.CommonTests.Models
                 r.ArrivalsOnGreen = rnd.Next(1, 200);
                 r.ArrivalsOnRed = rnd.Next(1, 200);
                 r.ArrivalsOnYellow = rnd.Next(1, 200);
-                r.IsProtectedPhase = false;
+                r.IsProtectedPhase = true;
 
                 ApproachPcdAggregations.Add(r);
             }
