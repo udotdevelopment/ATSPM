@@ -35,6 +35,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(DetectorAggregationMetricOptions))]
     [KnownType(typeof(DetectorVolumeAggregationOptions))]
     [KnownType(typeof(ApproachSpeedAggregationOptions))]
+    [KnownType(typeof(ApproachCycleAggregationOptions))]
     [KnownType(typeof(string[]))]
     public class MetricOptions
     {
