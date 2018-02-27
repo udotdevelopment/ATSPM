@@ -841,8 +841,8 @@ While each agency should consult with their IT department for specific guideline
                 new MetricType
                 {
                     MetricID = 16,
-                    ChartName = "Lane by lane",
-                    Abbreviation = "LLA",
+                    ChartName = "Detector Volume",
+                    Abbreviation = "DVA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
                 },
@@ -857,16 +857,16 @@ While each agency should consult with their IT department for specific guideline
                 new MetricType
                 {
                     MetricID = 18,
-                    ChartName = "Arrival on Green",
-                    Abbreviation = "AoGA",
+                    ChartName = "Purdue Coodination",
+                    Abbreviation = "PCDA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
                 },
                 new MetricType
                 {
                     MetricID = 19,
-                    ChartName = "Platoon Ratio",
-                    Abbreviation = "PRA",
+                    ChartName = "Cycle",
+                    Abbreviation = "CA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
                 },
@@ -880,25 +880,9 @@ While each agency should consult with their IT department for specific guideline
                 },
                 new MetricType
                 {
-                    MetricID = 21,
-                    ChartName = "Pedestrian Actuations",
-                    Abbreviation = "PedA",
-                    ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
-                },
-                new MetricType
-                {
                     MetricID = 22,
                     ChartName = "Preemption",
                     Abbreviation = "PreemptA",
-                    ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
-                },
-                new MetricType
-                {
-                    MetricID = 23,
-                    ChartName = "Approach Delay",
-                    Abbreviation = "ADA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
                 },
@@ -910,18 +894,10 @@ While each agency should consult with their IT department for specific guideline
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
                 },
-                new MetricType
-                {
-                    MetricID = 25,
-                    ChartName = "Approach Speed",
-                    Abbreviation = "ASA",
-                    ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
-                },
             new MetricType
                 {
                     MetricID = 26,
-                    ChartName = "YRA Aggregations",
+                    ChartName = "Yellow Red Activations",
                     Abbreviation = "YRAA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true

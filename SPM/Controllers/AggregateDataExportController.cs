@@ -94,7 +94,9 @@ namespace SPM.Controllers
 
                 case 18:
                     return GetArrivalOnGreenChart(aggDataExportViewModel);
-                    
+                case 19:
+                    return GetCycleChart(aggDataExportViewModel);
+
                 case 20:
                     return GetSplitFailChart(aggDataExportViewModel);
                     
@@ -108,6 +110,12 @@ namespace SPM.Controllers
                 default:
                         return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
             }
+        }
+
+        private ActionResult GetCycleChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions();
+            return GetChart(aggDataExportViewModel, options);
         }
 
         private ActionResult GetAdvanceCountChart(AggDataExportViewModel aggDataExportViewModel)
@@ -321,6 +329,9 @@ namespace SPM.Controllers
                     break;
                 case 18:
                     AggregatedDataTypes = new ApproachPcdAggregationOptions().AggregatedDataTypes;
+                    break;
+                case 19:
+                    AggregatedDataTypes = new ApproachCycleAggregationOptions().AggregatedDataTypes;
                     break;
                 case 20:
                     AggregatedDataTypes = new ApproachSplitFailAggregationOptions().AggregatedDataTypes;
