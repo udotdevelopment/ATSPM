@@ -33,14 +33,16 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachYellowRedActivation
 
         protected override void PopulateApproachData(Approach approach)
         {
-            Db.PopulateApproachYellowRedActivationAggregations(Convert.ToDateTime("12/1/2017"),
+            Db.PopulateApproachYellowRedActivationAggregations(Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"), approach.ApproachID);
         }
 
         [TestMethod]
-        public override void CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest()
+        public  void CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest()
+
         {
-            base.CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest();
+            var options = new ApproachYellowRedActivationsAggregationOptions();
+            base.CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest(options);
         }
     }
 }

@@ -76,15 +76,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override int GetSumByDirection(Models.Signal signal, DirectionType direction)
         {
-            var splitFailAggregationBySignal =
+            var yellowRedActivationsAggregationBySignal =
                 new YellowRedActivationsAggregationBySignal(this, signal, direction);
-            return splitFailAggregationBySignal.Total;
+            return yellowRedActivationsAggregationBySignal.Total;
         }
 
         protected override List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal)
         {
-            var splitFailAggregationBySignal = new YellowRedActivationsAggregationBySignal(this, signal);
-            return splitFailAggregationBySignal.BinsContainers;
+            var yellowRedActivationsAggregationBySignal = new YellowRedActivationsAggregationBySignal(this, signal);
+            return yellowRedActivationsAggregationBySignal.BinsContainers;
         }
 
         protected override List<BinsContainer> GetBinsContainersByDirection(DirectionType directionType,

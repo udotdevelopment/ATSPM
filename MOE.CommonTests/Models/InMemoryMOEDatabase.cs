@@ -292,6 +292,7 @@ namespace MOE.CommonTests.Models
 
         public void PopulateApproachYellowRedActivationAggregations(DateTime start, DateTime end, int approachId)
         {
+            var approach = this.Approaches.Where(a => a.ApproachID == approachId).FirstOrDefault();
             for (var startTime = start.Date;
                 startTime <= end.Date.AddHours(23).AddMinutes(59);
                 startTime = startTime.AddMinutes(15))
@@ -301,9 +302,19 @@ namespace MOE.CommonTests.Models
                 r.BinStartTime = startTime;
                 r.SevereRedLightViolations = rnd.Next(0, 2);
                 r.TotalRedLightViolations = rnd.Next(0, 5);
-                r.IsProtectedPhase = false;
+                r.IsProtectedPhase = true;
 
                 ApproachYellowRedActivationAggregations.Add(r);
+                if (approach.PermissivePhaseNumber != null)
+                {
+                    var approach2 = new ApproachYellowRedActivationAggregation();
+                    approach2.ApproachId = approach.ApproachID;
+                    approach2.BinStartTime = startTime;
+                    approach2.SevereRedLightViolations = rnd.Next(1, 5);
+                    approach2.TotalRedLightViolations = rnd.Next(1, 5);
+                    approach2.IsProtectedPhase = true;
+                    ApproachYellowRedActivationAggregations.Add(approach2);
+                }
             }
         }
 

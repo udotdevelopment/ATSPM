@@ -34,19 +34,19 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary
             SetSpecificAggregateRepositoriesForTest();
         }
 
-        protected void setOptionDefaults(ApproachAggregationMetricOptions options)
+        protected void SetOptionDefaults(SignalAggregationMetricOptions options)
         {
             options.SeriesWidth = 3;
             SetFilterSignal(options);
         }
 
 
-        public virtual void CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest()
+        public virtual void CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest(SignalAggregationMetricOptions options)
         {
 
-            var options = new ApproachCycleAggregationOptions();
+            
 
-            setOptionDefaults(options);
+            SetOptionDefaults(options);
             foreach (var xAxisType in Enum.GetValues(typeof(XAxisType)).Cast<XAxisType>().ToList())
             {
                 options.SelectedXAxisType = xAxisType;
@@ -81,7 +81,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary
         }
 
 
-        private static void SetTimeOptionsBasedOnBinSize(ApproachAggregationMetricOptions options,
+        private static void SetTimeOptionsBasedOnBinSize(SignalAggregationMetricOptions options,
             BinFactoryOptions.BinSize binSize)
         {
             if (binSize == BinFactoryOptions.BinSize.Day)
@@ -179,10 +179,10 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary
 
         protected abstract void SetSpecificAggregateRepositoriesForTest();
 
-        protected abstract void PopulateApproachData(Approach approach);
+        protected abstract void PopulateSignalData(Signal signal);
 
 
-        protected void SetFilterSignal(ApproachAggregationMetricOptions options)
+        protected void SetFilterSignal(SignalAggregationMetricOptions options)
         {
             List<FilterSignal> filterSignals = new List<FilterSignal>();
             var signal = Db.Signals.FirstOrDefault();
@@ -215,17 +215,28 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary
             options.FilterMovements.Add(new FilterMovement { Description = "", MovementTypeId = 3, Include = true });
         }
 
-        protected void CreateStackedColumnChart(ApproachAggregationMetricOptions options)
+        protected void CreateStackedColumnChart(SignalAggregationMetricOptions options)
         {
-            options.SelectedChartType = SeriesChartType.StackedColumn;
-            options.SelectedAggregationType = AggregationType.Sum;
-            options.CreateMetric();
-            options.SelectedAggregationType = AggregationType.Average;
-            options.CreateMetric();
+            try
+            {
+                options.SelectedChartType = SeriesChartType.StackedColumn;
+                options.SelectedAggregationType = AggregationType.Sum;
+                options.CreateMetric();
+                options.SelectedAggregationType = AggregationType.Average;
+                options.CreateMetric();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
-        protected bool IsValidCombination(ApproachAggregationMetricOptions options)
+
+        protected bool IsValidCombination(SignalAggregationMetricOptions options)
         {
+            if (options.SelectedXAxisType == XAxisType.Phase)
+                return false;
             if (options.SelectedXAxisType == XAxisType.TimeOfDay &&
                 (options.TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Day ||
                  options.TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Month ||
@@ -251,7 +262,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary
             return true;
         }
 
-        public void CreateAllCharts(ApproachCycleAggregationOptions options)
+        public void CreateAllCharts(SignalAggregationMetricOptions options)
         {
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationType.Sum;
