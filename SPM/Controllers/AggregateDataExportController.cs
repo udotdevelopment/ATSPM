@@ -85,31 +85,39 @@ namespace SPM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateMetric(AggDataExportViewModel aggDataExportViewModel)
         {
-            switch (aggDataExportViewModel.SelectedMetricTypeId)
+            if (Request.Form["CreateMetric"] != null)
             {
-                case 16:
-                    return GetLaneByLaneChart(aggDataExportViewModel);
-                case 17:
-                    return GetAdvanceCountChart(aggDataExportViewModel);
+                switch (aggDataExportViewModel.SelectedMetricTypeId)
+                {
+                    case 16:
+                        return GetLaneByLaneChart(aggDataExportViewModel);
+                    case 17:
+                        return GetAdvanceCountChart(aggDataExportViewModel);
 
-                case 18:
-                    return GetArrivalOnGreenChart(aggDataExportViewModel);
-                case 19:
-                    return GetCycleChart(aggDataExportViewModel);
+                    case 18:
+                        return GetArrivalOnGreenChart(aggDataExportViewModel);
+                    case 19:
+                        return GetCycleChart(aggDataExportViewModel);
 
-                case 20:
-                    return GetSplitFailChart(aggDataExportViewModel);
-                    
-                case 26:
-                    return GetYraChart(aggDataExportViewModel);
-                    ;
-                case 22:
-                    return GetPreemptionChart(aggDataExportViewModel);
-                case 24:
-                    return GetPriorityChart(aggDataExportViewModel);
-                default:
+                    case 20:
+                        return GetSplitFailChart(aggDataExportViewModel);
+
+                    case 26:
+                        return GetYraChart(aggDataExportViewModel);
+                        ;
+                    case 22:
+                        return GetPreemptionChart(aggDataExportViewModel);
+                    case 24:
+                        return GetPriorityChart(aggDataExportViewModel);
+                    default:
                         return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
+                }
             }
+            else if (Request.Form["Export"] != null)
+            {
+                //Export Bin Data
+            }
+            return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
         }
 
         private ActionResult GetCycleChart(AggDataExportViewModel aggDataExportViewModel)
