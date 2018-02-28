@@ -48,6 +48,11 @@ namespace MOE.Common.Models.ViewModel
             RecordCountLimit = Convert.ToInt32(ConfigurationManager.AppSettings["RawDataCountLimit"]);
             SignalSearch = new SignalSearchViewModel();
             MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
+            //RecordCountLimit = Convert.ToInt32(ConfigurationManager.AppSettings["RawDataCountLimit"]);
+            MOE.Common.Models.Repositories.IApplicationSettingsRepository repository =
+                MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
+            GeneralSettings generalSettings  = repository.GetGeneralSettings();
+            RecordCountLimit = generalSettings.RawDataCountLimit;
             EnumerationsName = "";
             EnumerationsUrl = "";
             List <ExternalLink> ExternalLinks = new List<ExternalLink>();

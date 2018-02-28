@@ -22,9 +22,15 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
 
         protected override void SetSpecificAggregateRepositoriesForTest()
         {
+            var signals = Db.Signals;
 
             PriorityAggregationDatasRepositoryFactory.SetArchivedMetricsRepository(
                 new InMemoryPriorityAggregationDatasRepository(Db));
+
+            foreach (var signal in signals)
+            {
+                PopulateSignalData(signal);
+            }
         }
 
         protected override void PopulateSignalData(Models.Signal signal)

@@ -32,7 +32,13 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary
                 new InMemoryDirectionTypeRepository());
             ApproachRepositoryFactory.SetApproachRepository(new InMemoryApproachRepository(Db));
             SetSpecificAggregateRepositoriesForTest();
+            
+
+
         }
+
+        private List<SeriesType> approvedSeries;
+        private List<XAxisType> approvedXaxis;
 
         protected void SetOptionDefaults(SignalAggregationMetricOptions options)
         {
@@ -45,8 +51,9 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary
         {
 
             
-
+            AddValidValuestoLists();
             SetOptionDefaults(options);
+           
             foreach (var xAxisType in Enum.GetValues(typeof(XAxisType)).Cast<XAxisType>().ToList())
             {
                 options.SelectedXAxisType = xAxisType;
@@ -80,6 +87,17 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary
             }
         }
 
+        private void AddValidValuestoLists()
+        {
+            approvedSeries = new List<SeriesType>();
+            approvedSeries.Add(SeriesType.Signal);
+            approvedSeries.Add(SeriesType.Route);
+
+            approvedXaxis = new List<XAxisType>();
+            approvedXaxis.Add(XAxisType.Time);
+            approvedXaxis.Add(XAxisType.TimeOfDay);
+            approvedXaxis.Add(XAxisType.Signal);
+        }
 
         private static void SetTimeOptionsBasedOnBinSize(SignalAggregationMetricOptions options,
             BinFactoryOptions.BinSize binSize)
@@ -235,8 +253,20 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary
 
         protected bool IsValidCombination(SignalAggregationMetricOptions options)
         {
+
+
+            if(!approvedSeries.Contains(options.SelectedSeries))
+            return false;
+
+            if (!approvedXaxis.Contains(options.SelectedXAxisType))
+                return false;
+
             if (options.SelectedXAxisType == XAxisType.Phase)
                 return false;
+
+            if(options.SelectedSeries == SeriesType.Route && options.SelectedXAxisType == XAxisType.Signal)
+                return false;
+
             if (options.SelectedXAxisType == XAxisType.TimeOfDay &&
                 (options.TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Day ||
                  options.TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Month ||
@@ -257,8 +287,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary
             if ((options.SelectedXAxisType == XAxisType.Direction || options.SelectedXAxisType == XAxisType.Phase) &&
                 (options.SelectedSeries == SeriesType.Signal || options.SelectedSeries == SeriesType.Route))
                 return false;
-            if (options.SelectedXAxisType == XAxisType.Signal && options.SelectedSeries == SeriesType.Route)
-                return false;
+
             return true;
         }
 

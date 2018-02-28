@@ -137,6 +137,11 @@
                         @Html.LabelFor(model => model.SelectedDimension, htmlAttributes: new {@class = "control-label"})
                         @Html.DropDownListFor(model => model.SelectedDimension, new SelectList(Model.Dimensions), new {@class = "form-control"})
                     </div>
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        @Html.CheckBoxFor(model => model.ShowEventCounts)
+                        @Html.LabelFor(model => model.ShowEventCounts, htmlAttributes: new {@class = "control-label"})
+                    </div>
+
                 </div>
             </div>
 

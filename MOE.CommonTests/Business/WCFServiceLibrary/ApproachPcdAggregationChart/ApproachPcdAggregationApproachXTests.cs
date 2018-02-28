@@ -1,16 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Business.WCFServiceLibrary.Tests;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using MOE.CommonTests.Models;
 
-namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachSplitFailAggregationChart
+namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachPcdAggregation
 {
-
     [TestClass]
-    public class ApproachSplitFailAggregationApproachOptionsTests : ApproachAggregationCreateMetricTestsBase
+    public class ApproachPcdAggregationApproachOptionsTests : ApproachAggregationCreateMetricTestsBase
     {
 
 
@@ -24,21 +27,21 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachSplitFailAggregatio
                     PopulateApproachData(approach);
                 }
             }
-            ApproachSplitFailAggregationRepositoryFactory.SetApplicationEventRepository(
-                new InMemoryApproachSplitFailAggregationRepository(Db));
+            ApproachPcdAggregationRepositoryFactory.SetApplicationEventRepository(
+                new InMemoryApproachPcdAggregationRepository(Db));
         }
 
         protected override void PopulateApproachData(Approach approach)
         {
-            Db.PopulateApproachSplitFailAggregationsWithRandomRecords(Convert.ToDateTime("1/1/2016"),
-                Convert.ToDateTime("1/1/2018"), approach);
+            Db.PopulateApproachPcdAggregations(Convert.ToDateTime("1/1/2016"),
+                Convert.ToDateTime("1/1/2018"), approach.ApproachID);
         }
 
         [TestMethod]
-        public void CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest()
+        public  void CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest()
 
         {
-            var options = new ApproachSplitFailAggregationOptions();
+            var options = new ApproachPcdAggregationOptions();
             base.CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest(options);
         }
     }
