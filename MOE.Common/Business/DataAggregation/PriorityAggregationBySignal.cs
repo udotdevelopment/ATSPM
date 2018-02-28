@@ -64,13 +64,16 @@ namespace MOE.Common.Business.DataAggregation
                                 default:
                                     throw new Exception("Invalid Aggregate Data Type");
                             }
-                            concurrentBins.Add(new Bin
+
+                            Bin newBin = new Bin
                             {
                                 Start = bin.Start,
                                 End = bin.End,
                                 Sum = preemptionSum,
                                 Average = preemptionSum
-                            });
+                            };
+                            LoadY2AxisValue(newBin, options.ShowEventCount);
+                            concurrentBins.Add(newBin);
                         }
                         else
                         {
@@ -88,6 +91,11 @@ namespace MOE.Common.Business.DataAggregation
                 });
                 BinsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
             }
+        }
+
+        protected override void LoadBins(ApproachAggregationMetricOptions options, Models.Signal signal)
+        {
+            throw new NotImplementedException();
         }
     }
 }

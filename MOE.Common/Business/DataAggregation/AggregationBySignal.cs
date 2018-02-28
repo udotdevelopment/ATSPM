@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
+using MOE.Common.Models;
 
 namespace MOE.Common.Business.DataAggregation
 {
     public abstract class AggregationBySignal
     {
+        public List<SignalEventCountAggregation> SignalEventCountAggregations { get; set; }
         public AggregationBySignal(SignalAggregationMetricOptions options, Models.Signal signal)
         {
             BinsContainers = BinFactory.GetBins(options.TimeOptions);
             Signal = signal;
+            if (options.ShowEventCount)
+            {
+                GetSignalEventCountAggregations(options, signal);
+            }
         }
 
         public Models.Signal Signal { get; }
@@ -36,6 +42,31 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
+
+        protected void GetSignalEventCountAggregations(SignalAggregationMetricOptions options, Models.Signal signal)
+        {
+            var signalEventCountAggregationRepository =
+                MOE.Common.Models.Repositories.SignalEventCountAggregationRepositoryFactory.Create();
+            SignalEventCountAggregations =
+                signalEventCountAggregationRepository.GetSignalEventCountAggregationBySignalIdAndDateRange(
+                    signal.SignalID, options.StartDate, options.EndDate);
+        }
+
+
+        protected void LoadY2AxisValue(Bin bin, bool ShowEventCount)
+        {
+            if (ShowEventCount)
+            {
+                if (SignalEventCountAggregations.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
+                {
+                    bin.Y2Axis = SignalEventCountAggregations
+                        .Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.EventCount);
+                }
+            }
+        }
+
         protected abstract void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal);
+
+        protected abstract void LoadBins(ApproachAggregationMetricOptions options, Models.Signal signal);
     }
 }

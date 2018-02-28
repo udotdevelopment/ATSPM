@@ -11,20 +11,20 @@ namespace MOE.Common.Business.DataAggregation
 {
     public class SpeedAggregationByApproach : AggregationByApproach
     {
-        public SpeedAggregationByApproach(Approach approach, BinFactoryOptions timeOptions, DateTime startDate,
-            DateTime endDate, bool getProtectedPhase, AggregatedDataType dataType) : base(approach, timeOptions, startDate, endDate,
+        public SpeedAggregationByApproach(Approach approach, ApproachSpeedAggregationOptions options, DateTime startDate,
+            DateTime endDate, bool getProtectedPhase, AggregatedDataType dataType) : base(approach, options, startDate, endDate,
             getProtectedPhase, dataType)
         {
         }
 
-        protected override void LoadBins(Approach approach, DateTime startDate, DateTime endDate,
+        protected override void LoadBins(Approach approach, ApproachAggregationMetricOptions options,
             bool getProtectedPhase,
             AggregatedDataType dataType)
         {
             var approachSpeedAggregationRepository =
                 ApproachSpeedAggregationRepositoryFactory.Create();
             var speedAggregations =
-                approachSpeedAggregationRepository.GetSpeedsByApproachIDandDateRange(approach.ApproachID, startDate, endDate);
+                approachSpeedAggregationRepository.GetSpeedsByApproachIDandDateRange(approach.ApproachID, options.StartDate, options.EndDate);
             if (speedAggregations != null)
             {
                 var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
@@ -91,6 +91,12 @@ namespace MOE.Common.Business.DataAggregation
                 });
                 BinsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
             }
+        }
+
+        protected override void LoadBins(Approach approach, DetectorAggregationMetricOptions options, bool getProtectedPhase,
+            AggregatedDataType dataType)
+        {
+            throw new NotImplementedException();
         }
     }
 }

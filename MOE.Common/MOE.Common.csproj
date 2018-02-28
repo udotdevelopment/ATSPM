@@ -484,7 +484,16 @@
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
-    <Compile Include="Models\EventCountAggregation.cs" />
+    <Compile Include="Models\PhaseEventCountAggregation.cs" />
+    <Compile Include="Models\DetectorEventCountAggregation.cs" />
+    <Compile Include="Models\Repositories\IDetectorEventCountAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\IPhaseEventCountAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\ISignalEventCountAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\DetectorEventCountAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\PhaseEventCountAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\DetectorEventCountAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\PhaseEventCountAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\SignalEventCountAggregation.cs" />
     <Compile Include="Models\ApproachPcdAggregation.cs" />
     <Compile Include="Models\ApproachYellowRedActivationsAggregation.cs" />
     <Compile Include="Models\ApproachSplitFailAggregation.cs" />
@@ -502,7 +511,9 @@
     <Compile Include="Models\PreemptionAggregation.cs" />
     <Compile Include="Models\PriorityAggregation.cs" />
     <Compile Include="Models\Repositories\ActionChart.cs" />
+    <Compile Include="Models\Repositories\SignalEventCountAggregationRepository.cs" />
     <Compile Include="Models\Repositories\ApproachCycleAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\SignalEventCountAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\ApproachCycleAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\ApproachPcdAggregationRepository.cs" />
     <Compile Include="Models\Repositories\ApproachPcdAggregationRepositoryFactory.cs" />
