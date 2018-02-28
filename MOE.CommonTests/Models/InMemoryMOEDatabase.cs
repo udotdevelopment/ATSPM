@@ -46,6 +46,7 @@ namespace MOE.CommonTests.Models
         public List<Signal> Signals = new List<Signal>();
         public List<VersionAction> VersionActions = new List<VersionAction>();
         public List<DetectionTypeGraph_Detector> DetectionTypeDetectors = new List<DetectionTypeGraph_Detector>();
+        public List<SignalEventCountAggregation> SignalEventCountAggregations { get; set; }
 
         public void SetFilterSignal(SignalAggregationMetricOptions options)
         {
@@ -1404,5 +1405,22 @@ namespace MOE.CommonTests.Models
                 }
             }
         }
+
+        public void PopulateSignalEventCountwithRandomValues(DateTime start, DateTime end, Signal signal)
+        {
+            var id = 1;
+            for (var startTime = start; startTime <= end; startTime = startTime.AddMinutes(15))
+            {
+                var r = new SignalEventCountAggregation()
+                {
+                    BinStartTime = startTime,
+                    SignalId = signal.SignalID, EventCount = rnd.Next(500, 1000),
+                    Id = id
+                };
+                SignalEventCountAggregations.Add(r);
+                id++;
+            }
+        }
+    
     }
 }

@@ -24,6 +24,10 @@ namespace MOE.Common.Business.Bins
             get { return Convert.ToInt32(Math.Round(Bins.Average(b => b.Sum))); }
         }
 
+        public int Y2AxisValue {
+            get { return Bins.Sum(b => b.Y2Axis); }
+        }
+
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
     }
