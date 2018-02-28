@@ -20,7 +20,7 @@
         <div class="panel-body">
             <div class="form-horizontal">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => model.SignalID, new { @signalId = "editSignalID" })
+                @Html.HiddenFor(model => model.SignalID, new { @id = "editSignalID" })
                 @Html.HiddenFor(model => model.VersionID, new { @versionId = "editVersionID" })
         
                
