@@ -124,6 +124,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         }
 
         public abstract string YAxisTitle { get; }
+        public bool ShowEventCount { get; set; }
 
 
         public override List<string> CreateMetric()

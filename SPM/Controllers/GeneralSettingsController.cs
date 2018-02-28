@@ -33,7 +33,7 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,ApplicationID,ImageUrl,ImagePath,RawDataCountLimit")] GeneralSettings generalSettings)
+        public ActionResult Edit(GeneralSettings generalSettings)
         {
             if (ModelState.IsValid)
             {

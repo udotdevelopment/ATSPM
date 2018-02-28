@@ -66,7 +66,10 @@
                 {
                         <h1 class="text-danger">@Model.RecaptchaMessage</h1>
                     }
-                    <div class="g-recaptcha" data-sitekey="6LdvpkYUAAAAABvqjQWJqqUIAIZQRGPWi-VB47xX" data-callback="recaptchaResponse"></div>
+                    @if (!String.IsNullOrEmpty(Model.RecaptchaPublicKey))
+                    {
+                        <div class="g-recaptcha" data-sitekey="@Model.RecaptchaPublicKey" data-callback="recaptchaResponse"></div>
+                    }
 
             </div>
             </div>

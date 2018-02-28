@@ -8,18 +8,24 @@ namespace MOE.Common.Business.DataAggregation
     public class DetectorAggregationByApproach : AggregationByApproach
     {
         public DetectorAggregationByApproach(Approach approach, DetectorVolumeAggregationOptions options,
-            bool getProtectedPhase) : base(approach, options.TimeOptions, options.StartDate, options.EndDate,
+            bool getProtectedPhase) : base(approach, options, options.StartDate, options.EndDate,
             getProtectedPhase, options.SelectedAggregatedDataType)
         {
             GetApproachDetectorVolumeAggregationContainersForAllDetectors(options, approach);
-            LoadBins(approach, options.StartDate, options.EndDate, getProtectedPhase,
+            LoadBins(approach, options, getProtectedPhase,
                 options.SelectedAggregatedDataType);
         }
 
         public List<DetectorAggregationByDetector> detectorAggregationByDetectors { get; set; } =
             new List<DetectorAggregationByDetector>();
 
-        protected override void LoadBins(Approach approach, DateTime startDate, DateTime endDate,
+        protected override void LoadBins(Approach approach, ApproachAggregationMetricOptions options, bool getProtectedPhase,
+            AggregatedDataType dataType)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void LoadBins(Approach approach, DetectorAggregationMetricOptions options,
             bool getProtectedPhase,
             AggregatedDataType dataType)
         {

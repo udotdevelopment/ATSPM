@@ -11,14 +11,14 @@ namespace MOE.Common.Business.DataAggregation
 {
     public class CycleAggregationByApproach : AggregationByApproach
     {
-        public CycleAggregationByApproach(Approach approach, BinFactoryOptions timeOptions, DateTime startDate,
+        public CycleAggregationByApproach(Approach approach, ApproachAggregationMetricOptions options, DateTime startDate,
             DateTime endDate,
-            bool getProtectedPhase, AggregatedDataType dataType) : base(approach, timeOptions, startDate, endDate,
+            bool getProtectedPhase, AggregatedDataType dataType) : base(approach, options, startDate, endDate,
             getProtectedPhase, dataType)
         {
         }
 
-        protected override void LoadBins(Approach approach, DateTime startDate, DateTime endDate,
+        protected override void LoadBins(Approach approach, ApproachAggregationMetricOptions options,
             bool getProtectedPhase,
             AggregatedDataType dataType)
         {
@@ -26,7 +26,7 @@ namespace MOE.Common.Business.DataAggregation
                 ApproachCycleAggregationRepositoryFactory.Create();
             var approachCycles =
                 approachCycleAggregationRepository.GetApproachCyclesAggregationByApproachIdAndDateRange(
-                    approach.ApproachID, startDate, endDate, getProtectedPhase);
+                    approach.ApproachID, options.StartDate, options.EndDate, getProtectedPhase);
             if (approachCycles != null)
             {
                 var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
@@ -78,14 +78,15 @@ namespace MOE.Common.Business.DataAggregation
 
                                     throw new Exception("Unknown Aggregate Data Type for Approach Cycle");
                             }
-
-                            concurrentBins.Add(new Bin
+                            Bin newBin = new Bin
                             {
                                 Start = bin.Start,
                                 End = bin.End,
                                 Sum = approachCycleCount,
                                 Average = approachCycleCount
-                            });
+                            };
+                            LoadY2AxisValue(newBin, options.ShowEventCount);
+                            concurrentBins.Add(newBin);
                         }
                         else
                         {
@@ -103,6 +104,12 @@ namespace MOE.Common.Business.DataAggregation
                 });
                 BinsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
             }
+        }
+
+        protected override void LoadBins(Approach approach, DetectorAggregationMetricOptions options, bool getProtectedPhase,
+            AggregatedDataType dataType)
+        {
+            throw new NotImplementedException();
         }
     }
 }

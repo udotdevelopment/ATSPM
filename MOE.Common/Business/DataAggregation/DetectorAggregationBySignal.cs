@@ -54,9 +54,17 @@ namespace MOE.Common.Business.DataAggregation
             {
                 var bin = BinsContainers[i].Bins[binIndex];
                 foreach (var approachSplitFailAggregationContainer in ApproachDetectorVolumes)
+                {
                     bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                }
                 bin.Average = ApproachDetectorVolumes.Count > 0 ? bin.Sum / ApproachDetectorVolumes.Count : 0;
-            }
+                LoadY2AxisValue(bin, options.ShowEventCount);
+                }
+        }
+
+        protected override void LoadBins(ApproachAggregationMetricOptions options, Models.Signal signal)
+        {
+            throw new System.NotImplementedException();
         }
 
         private void GetApproachDetectorVolumeAggregationContainersForAllApporaches(

@@ -5,7 +5,7 @@ using CsvHelper.Configuration;
 
 namespace MOE.Common.Models
 {
-    public class EventCountAggregation : Aggregation
+    public class SignalEventCountAggregation : Aggregation
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -23,7 +23,7 @@ namespace MOE.Common.Models
 
 
         public sealed class
-            EventCountAggregationClassMap : ClassMap<EventCountAggregation>
+            EventCountAggregationClassMap : ClassMap<SignalEventCountAggregation>
         {
             public EventCountAggregationClassMap()
             {

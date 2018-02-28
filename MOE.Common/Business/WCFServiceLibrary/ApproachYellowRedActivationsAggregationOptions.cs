@@ -123,7 +123,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected override List<BinsContainer> GetBinsContainersByApproach(Approach approach, bool getprotectedPhase)
         {
             var approachYellowRedActivationsAggregationContainer = new YellowRedActivationsAggregationByApproach(
-                approach, TimeOptions, StartDate, EndDate,
+                approach, this, StartDate, EndDate,
                 getprotectedPhase, SelectedAggregatedDataType);
             return approachYellowRedActivationsAggregationContainer.BinsContainers;
         }
