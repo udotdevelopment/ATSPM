@@ -482,6 +482,10 @@
     <Compile Include="Migrations\201802271715081_ReCaptchaKeys.Designer.cs">
       <DependentUpon>201802271715081_ReCaptchaKeys.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802282114224_EventCounts.cs" />
+    <Compile Include="Migrations\201802282114224_EventCounts.Designer.cs">
+      <DependentUpon>201802282114224_EventCounts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\PhaseEventCountAggregation.cs" />
@@ -941,6 +945,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802271715081_ReCaptchaKeys.resx">
       <DependentUpon>201802271715081_ReCaptchaKeys.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802282114224_EventCounts.resx">
+      <DependentUpon>201802282114224_EventCounts.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
