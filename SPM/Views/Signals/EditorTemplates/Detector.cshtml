@@ -50,7 +50,7 @@
                 <div class="">
                     @Html.LabelFor(model => model.LatencyCorrection, htmlAttributes: new { @class = "control-label" })
                     <div class="">
-                        @Html.EditorFor(model => model.LatencyCorrection, new { htmlAttributes = new { @class = "form-control detectorChannel", @onblur = "CheckForDuplicatChannels()" } })
+                        @Html.EditorFor(model => model.LatencyCorrection, new { htmlAttributes = new { @class = "form-control"} })
                         @Html.ValidationMessageFor(model => model.LatencyCorrection, "", new { id = "LatencyCorrection-error", @class = "text-danger" })
                     </div>
                 </div>
