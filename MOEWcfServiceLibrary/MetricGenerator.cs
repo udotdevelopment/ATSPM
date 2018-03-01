@@ -37,6 +37,33 @@ namespace MOEWcfServiceLibrary
             return result;
         }
 
+        public List<Byte[]> ExportMetricData(MOE.Common.Business.WCFServiceLibrary.MetricOptions options)
+        {
+            List<Byte[]> result = new List<Byte[]>();
+            try
+            {
+                MOE.Common.Models.Repositories.IMetricTypeRepository metricTypeRepository =
+                    MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
+                options.MetricType = metricTypeRepository.GetMetricsByID(options.MetricTypeID);
+                result = options.SerializedMetricData;
+            }
+            catch (Exception ex)
+            {
+                MOE.Common.Models.Repositories.IApplicationEventRepository logRepository =
+                    MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
+                MOE.Common.Models.ApplicationEvent e = new MOE.Common.Models.ApplicationEvent();
+                e.ApplicationName = "MOEWCFServicLibrary";
+                e.Class = this.GetType().ToString();
+                e.Function = "ExportMetricData";
+                e.SeverityLevel = MOE.Common.Models.ApplicationEvent.SeverityLevels.High;
+                e.Description = ex.Message + ex.InnerException;
+                e.Timestamp = DateTime.Now;
+                logRepository.Add(e);
+                throw;
+            }
+            return result;
+        }
+
 
 
         public List<MOE.Common.Business.ApproachVolume.MetricInfo> CreateMetricWithDataTable(MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions options)

@@ -13,16 +13,31 @@ namespace MOE.Common.Business.Export
     {
         public static List<byte[]> ExportChartDataToCSVForDownload(Chart chart)
         {
+            try
+            {
+                List<byte[]> csvList = new List<byte[]>();
+                XmlDocument doc = ConvertChartToXML(chart);
+                if (doc != null)
+                {
+                    var seriesCollection = GetSeriesListFromChartXML(doc);
+
+                    csvList.AddRange(GetByteArrayListBySeries(seriesCollection));
+
+                    //List<byte[]> csvList = new List<byte[]>();
+                }
+                return csvList;
+            }
+            catch(Exception e)
+            {
+                throw new Exception("Error on chart: " + chart.Titles[0].Text);
+            }
+
+        }
+
+        internal static XmlDocument GetXMLFromChart(Chart chart)
+        {
             XmlDocument doc = ConvertChartToXML(chart);
-
-            var seriesCollection = GetSeriesListFromChartXML(doc);
-
-            List<byte[]> csvList = GetByteArrayListBySeries(seriesCollection);
-
-            //List<byte[]> csvList = new List<byte[]>();
-
-            return csvList;
-
+            return doc;
         }
 
         public static XmlNodeList GetSeriesListFromChartXML(XmlDocument ChartDoc)
@@ -52,24 +67,42 @@ namespace MOE.Common.Business.Export
             foreach (XmlNode s in seriesCollection)
             {
                 var points = GetPointsListFromSeriesNode(s);
-
-                StringBuilder sb = new StringBuilder();
-
-                sb.AppendLine(s.Attributes.GetNamedItem("Name").Value.ToString());
-                sb.AppendLine("XValue,YValue");
-
-                foreach (XmlNode p in points)
+                if (points != null)
                 {
-                    string XValue = p.Attributes.GetNamedItem("XValue").Value.ToString();
-                    string YValue = p.Attributes.GetNamedItem("YValues").Value.ToString();
+                    StringBuilder sb = new StringBuilder();
 
-                    sb.AppendLine(string.Join(",", XValue, YValue.ToString()));
+                    sb.AppendLine(s.Attributes.GetNamedItem("Name").Value.ToString());
+                    sb.AppendLine("XValue,YValue");
+
+                    foreach (XmlNode p in points)
+                    {
+                        try
+                        {
+                            string XValue = "";
+                            string YValue = "";
+                            if (p.Attributes.GetNamedItem("XValue") != null)
+                            {
+                                XValue = p.Attributes.GetNamedItem("XValue").Value.ToString();
+                             }
+
+                            if (p.Attributes.GetNamedItem("YValues") != null)
+                                {
+                                YValue = p.Attributes.GetNamedItem("YValues").Value.ToString();
+                            }
+
+                            sb.AppendLine(string.Join(",", XValue, YValue.ToString()));
+                        }
+                        catch(Exception e)
+                        {
+                            throw new Exception("Problem getting X or Y values from the XML");
+                        }
 
 
+                    }
+                    string x = sb.ToString();
+
+                    csvList.Add(Encoding.UTF8.GetBytes(x));
                 }
-                string x = sb.ToString();
-
-                csvList.Add(Encoding.UTF8.GetBytes(x));
 
 
             }
@@ -99,6 +132,8 @@ namespace MOE.Common.Business.Export
                 }
             }
         }
+
+
     }
 
 

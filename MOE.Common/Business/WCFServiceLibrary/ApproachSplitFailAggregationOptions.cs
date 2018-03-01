@@ -128,5 +128,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 getprotectedPhase, SelectedAggregatedDataType);
             return approachSplitFailAggregationContainer.BinsContainers;
         }
+
+        
     }
 }

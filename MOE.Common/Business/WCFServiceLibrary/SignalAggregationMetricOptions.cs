@@ -220,6 +220,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             MetricWebPath = ConfigurationManager.AppSettings["ImageWebLocation"];
             chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
             ReturnList.Add(MetricWebPath + chartName);
+            //SerializeMetricData(chart);
         }
 
         protected string CreateFileName(string MetricAbbreviation)

@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Web.UI.DataVisualization.Charting;
+using System.Xml;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 
@@ -87,6 +89,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public string MetricWebPath { get; set; }
 
+        [DataMember]
+        public List<Byte[]> SerializedMetricData = new List<byte[]>();
+
+        public List<XmlDocument> XMLMetricData = new List<XmlDocument>();
+
         public MetricType MetricType { get; set; }
 
 
@@ -157,6 +164,58 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 throw new Exception("Path not found");
             }
         }
+
+        public string CreateXMLFileName()
+        {
+            if (MetricType == null)
+            {
+                var metricTypeRepository = MetricTypeRepositoryFactory.Create();
+                MetricType = metricTypeRepository.GetMetricsByID(MetricTypeID);
+            }
+
+            var fileName = MetricType.Abbreviation +
+                           SignalID +
+                           "-" +
+                           StartDate.Year +
+                           StartDate.ToString("MM") +
+                           StartDate.ToString("dd") +
+                           StartDate.ToString("HH") +
+                           StartDate.ToString("mm") +
+                           "-" +
+                           EndDate.Year +
+                           EndDate.ToString("MM") +
+                           EndDate.ToString("dd") +
+                           EndDate.ToString("HH") +
+                           EndDate.ToString("mm-");
+            var r = new Random();
+            fileName += r.Next().ToString();
+            fileName += ".XML";
+            try
+            {
+                if (DriveAvailable())
+                    return fileName;
+                return null;
+            }
+            catch
+            {
+                throw new Exception("Path not found");
+            }
+        }
+
+        public void SerializeMetricData(Chart chart)
+        {
+            //List<XmlDocument> xmlFiles = Export.ChartToCSVExporter.GetXMLFromChart(chart);
+
+            XMLMetricData.Add(Export.ChartToCSVExporter.GetXMLFromChart(chart));
+
+            foreach(var xml in XMLMetricData)
+            {
+                xml.Save(MetricFileLocation+CreateXMLFileName());
+            }
+            //var bytes = Export.ChartToCSVExporter.ExportChartDataToCSVForDownload(chart);
+            //SerializedMetricData.AddRange(bytes);
+        }
+
 
         public bool DriveAvailable()
         {
