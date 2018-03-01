@@ -26,12 +26,12 @@ namespace MOE.Common.Business.DataAggregation
                 if (approach.ProtectedPhaseNumber == phaseNumber)
                 {
                     ApproachYellowRedActivationsures.Add(
-                        new YellowRedActivationsAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                        new YellowRedActivationsAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber == phaseNumber)
                         ApproachYellowRedActivationsures.Add(
-                            new YellowRedActivationsAggregationByApproach(approach, options.TimeOptions,
+                            new YellowRedActivationsAggregationByApproach(approach, options,
                                 options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
@@ -48,12 +48,12 @@ namespace MOE.Common.Business.DataAggregation
                 if (approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
                 {
                     ApproachYellowRedActivationsures.Add(
-                        new YellowRedActivationsAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                        new YellowRedActivationsAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null)
                         ApproachYellowRedActivationsures.Add(
-                            new YellowRedActivationsAggregationByApproach(approach, options.TimeOptions,
+                            new YellowRedActivationsAggregationByApproach(approach, options,
                                 options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
@@ -77,18 +77,23 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
+        protected override void LoadBins(ApproachAggregationMetricOptions options, Models.Signal signal)
+        {
+            throw new NotImplementedException();
+        }
+
         private void GetApproachYellowRedActivationsAggregationContainersForAllApporaches(
             ApproachYellowRedActivationsAggregationOptions options, Models.Signal signal)
         {
             foreach (var approach in signal.Approaches)
             {
                 ApproachYellowRedActivationsures.Add(
-                    new YellowRedActivationsAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                    new YellowRedActivationsAggregationByApproach(approach, options, options.StartDate,
                         options.EndDate,
                         true, options.SelectedAggregatedDataType));
                 if (approach.PermissivePhaseNumber != null)
                     ApproachYellowRedActivationsures.Add(
-                        new YellowRedActivationsAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                        new YellowRedActivationsAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             false, options.SelectedAggregatedDataType));
             }

@@ -132,7 +132,7 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachYellowRedActuationsAggregation\ApproachYellowRedActuationsAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\DetectorVolumeAggregationChart\DetectorVolumeAggregationApproachXDetectorSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\PreemptionAggregationChart\PreemptAggregationTimeXSignalSeriesTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PreemptionAggregationChart\PreemptionsAggregationChartTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\PriorityAggregationChart\PriorityAggregationApproachXSignalSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalAggregationCreateMetricTestsBase.cs" />
     <Compile Include="Business\WCFServiceLibrary\SplitFailOptionsTests.cs" />
@@ -167,6 +167,7 @@
     <Compile Include="Models\InMemoryRouteRepository.cs" />
     <Compile Include="Models\InMemorySignalsRepository.cs" />
     <Compile Include="Models\InMemoryApproachSplitFailAggregationRepository.cs" />
+    <Compile Include="Models\InMemorySignalEventCountAggregationRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

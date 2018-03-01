@@ -123,7 +123,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override List<BinsContainer> GetBinsContainersByApproach(Approach approach, bool getprotectedPhase)
         {
-            var approachSplitFailAggregationContainer = new SplitFailAggregationByApproach(approach, TimeOptions,
+            var approachSplitFailAggregationContainer = new SplitFailAggregationByApproach(approach, this,
                 StartDate, EndDate,
                 getprotectedPhase, SelectedAggregatedDataType);
             return approachSplitFailAggregationContainer.BinsContainers;

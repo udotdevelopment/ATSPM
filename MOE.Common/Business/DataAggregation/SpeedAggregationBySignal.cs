@@ -24,12 +24,12 @@ namespace MOE.Common.Business.DataAggregation
                 if (approach.ProtectedPhaseNumber == phaseNumber)
                 {
                     ApproachSpeedEvents.Add(
-                        new SpeedAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                        new SpeedAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber == phaseNumber)
                         ApproachSpeedEvents.Add(
-                            new SpeedAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                            new SpeedAggregationByApproach(approach, options, options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
                 }
@@ -44,12 +44,12 @@ namespace MOE.Common.Business.DataAggregation
                 if (approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
                 {
                     ApproachSpeedEvents.Add(
-                        new SpeedAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                        new SpeedAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null)
                         ApproachSpeedEvents.Add(
-                            new SpeedAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                            new SpeedAggregationByApproach(approach, options, options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
                 }
@@ -67,7 +67,13 @@ namespace MOE.Common.Business.DataAggregation
                 foreach (var speedAggregationByApproach in ApproachSpeedEvents)
                     bin.Sum += speedAggregationByApproach.BinsContainers[i].Bins[binIndex].Sum;
                 bin.Average = ApproachSpeedEvents.Count > 0 ? bin.Sum / ApproachSpeedEvents.Count : 0;
+                LoadY2AxisValue(bin, options.ShowEventCount);
             }
+        }
+
+        protected override void LoadBins(ApproachAggregationMetricOptions options, Models.Signal signal)
+        {
+            throw new NotImplementedException();
         }
 
         private void GetApproachSpeedEventsAggregationContainersForAllApporaches(
@@ -76,12 +82,12 @@ namespace MOE.Common.Business.DataAggregation
             foreach (var approach in signal.Approaches)
             {
                 ApproachSpeedEvents.Add(
-                    new SpeedAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                    new SpeedAggregationByApproach(approach, options, options.StartDate,
                         options.EndDate,
                         true, options.SelectedAggregatedDataType));
                 if (approach.PermissivePhaseNumber != null)
                     ApproachSpeedEvents.Add(
-                        new SpeedAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                        new SpeedAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             false, options.SelectedAggregatedDataType));
             }

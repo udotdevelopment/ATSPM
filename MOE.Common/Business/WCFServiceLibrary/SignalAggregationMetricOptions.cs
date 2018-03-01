@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
 using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Business.Bins;
+using MOE.Common.Business.DataAggregation;
 using MOE.Common.Business.FilterExtensions;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
@@ -124,6 +125,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         }
 
         public abstract string YAxisTitle { get; }
+        public bool ShowEventCount { get; set; }
 
 
         public override List<string> CreateMetric()
@@ -279,9 +281,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void GetSignalsXAxisSignalSeriesChart(List<Models.Signal> signals, Chart chart)
         {
-            var signalXAxisNumber = 1;
             var seriesName = "Signals";
             var series = CreateSeries(0, seriesName);
+            Series eventCountSeries = CreateEventCountSeries();
             foreach (var signal in signals)
             {
                 var binsContainers = GetBinsContainersBySignal(signal);
@@ -291,22 +293,50 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     : Convert.ToInt32(Math.Round(binsContainers.Sum(b => b.SumValue) / (double) signals.Count)));
                 dataPoint.AxisLabel = signal.SignalDescription;
                 series.Points.Add(dataPoint);
-                signalXAxisNumber++;
+                if (ShowEventCount)
+                {
+                    DataPoint eventCountDataPoint = new DataPoint();
+                    eventCountDataPoint.SetValueY(binsContainers.Sum(b => b.Y2AxisValue));
+                    eventCountDataPoint.AxisLabel = signal.SignalDescription;
+                    eventCountSeries.Points.Add(eventCountDataPoint);
+                }
             }
             chart.Series.Add(series);
+            if (ShowEventCount)
+            {
+                chart.Series.Add(eventCountSeries);
+            }
         }
-
 
         protected void GetTimeXAxisRouteSeriesChart(List<Models.Signal> signals, Chart chart)
         {
             var series = CreateSeries(0, "Route");
+            Series eventCountSeries = new Series();
+            if (ShowEventCount)
+            {
+                eventCountSeries = CreateEventCountSeries();
+            }
             var binsContainers = GetBinsContainersByRoute(signals);
             foreach (var binsContainer in binsContainers)
-            foreach (var bin in binsContainer.Bins)
-                series.Points.Add(SelectedAggregationType == AggregationType.Sum
-                    ? GetDataPointForSum(bin)
-                    : GetDataPointForAverage(bin));
-            chart.Series.Add(series);
+            {
+                foreach (var bin in binsContainer.Bins)
+                {
+                    series.Points.Add(SelectedAggregationType == AggregationType.Sum
+                        ? GetDataPointForSum(bin)
+                        : GetDataPointForAverage(bin));
+                    if (ShowEventCount)
+                    {
+                        DataPoint eventCountDataPoint = GetDataPointForY2AxisValue(bin);
+                        eventCountSeries.Points.Add(eventCountDataPoint);
+                    }
+                }
+                chart.Series.Add(series);
+            }
+            if (ShowEventCount)
+            {
+                chart.Series.Add(eventCountSeries);
+            }
+
         }
 
 
@@ -336,20 +366,36 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var binsContainers = GetBinsContainersByRoute(signals);
             var series = CreateSeries(0, "Route");
             chart.Series.Add(GetTimeAggregateSeries(series, binsContainers));
+            if (ShowEventCount)
+            {
+                chart.Series.Add(GetTimeAggregateEventCountSeries(CreateEventCountSeries(), binsContainers));
+            }
         }
 
         protected void GetTimeOfDayXAxisSignalSeriesChart(List<Models.Signal> signals, Chart chart)
         {
             SetTimeOfDayXAxisMinimum(chart);
             var seriesList = new ConcurrentBag<Series>();
+            var binsContainers = new ConcurrentBag<BinsContainer>();
             Parallel.For(0, signals.Count, i => // foreach (var signal in signals)
             {
-                var binsContainers = GetBinsContainersBySignal(signals[i]);
+                var signalBinsContainers = GetBinsContainersBySignal(signals[i]);
+                binsContainers.Add(signalBinsContainers.FirstOrDefault());
                 var series = CreateSeries(i, signals[i].SignalDescription);
-                seriesList.Add(GetTimeAggregateSeries(series, binsContainers));
+                seriesList.Add(GetTimeAggregateSeries(series, signalBinsContainers));
             });
+            int colorIndex = 1;
             foreach (var signal in signals)
-                chart.Series.Add(seriesList.FirstOrDefault(s => s.Name == signal.SignalDescription));
+            {
+                var series = seriesList.FirstOrDefault(s => s.Name == signal.SignalDescription);
+                series.Color = GetSeriesColorByNumber(colorIndex);
+                chart.Series.Add(series);
+                colorIndex++;
+            }
+            if (ShowEventCount)
+            {
+                chart.Series.Add(GetTimeAggregateEventCountSeries(CreateEventCountSeries(), binsContainers.ToList()));
+            }
         }
 
         protected void SetTimeOfDayXAxisMinimum(Chart chart)
@@ -372,34 +418,52 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected void GetTimeXAxisSignalSeriesChart(List<Models.Signal> signals, Chart chart)
         {
             SetTimeXAxisAxisMinimum(chart);
-
             var i = 1;
+            List<BinsContainer> binContainersForEventCountSeries = new List<BinsContainer>();
             foreach (var signal in signals)
             {
                 var series = CreateSeries(i, signal.SignalDescription);
-                
                 var binsContainers = GetBinsContainersBySignal(signal);
-
+                binContainersForEventCountSeries.Add(binsContainers.FirstOrDefault());
                 foreach (var container in binsContainers)
                 {
-                    DataPoint dataPoint;
-                    if (container != null)
+                    foreach (var bin in container.Bins)
                     {
-                        if (this.SelectedAggregationType == AggregationType.Sum)
+                        DataPoint dataPoint;
+                        if (bin != null)
                         {
-                           dataPoint = GetContainerDataPointForSum(container);
+                            if (this.SelectedAggregationType == AggregationType.Sum)
+                            {
+                                dataPoint = GetDataPointForSum(bin);
+                            }
+                            else
+                            {
+                                dataPoint = GetDataPointForAverage(bin);
+                            }
+                            series.Points.Add(dataPoint);
+                            i++;
                         }
-                        else
-                        {
-                            dataPoint = GetContainerDataPointForAverage(container);
-                        }
-
-                        series.Points.Add(dataPoint);
-                       
-                        i++;
                     }
                 }
                 chart.Series.Add(series);
+            }
+            if (ShowEventCount)
+            {
+                Series eventCountSeries = new Series();
+                if (ShowEventCount)
+                {
+                    eventCountSeries = CreateEventCountSeries();
+                }
+                for (int index = 0; index < binContainersForEventCountSeries[0].Bins.Count; index++)
+                {
+                    int eventCountSum = 0;
+                    foreach (var binsContainer in binContainersForEventCountSeries)
+                    {
+                        eventCountSum += binsContainer.Bins[index].Y2Axis;
+                    }
+                    eventCountSeries.Points.Add(new DataPoint(binContainersForEventCountSeries[0].Bins[index].Start.ToOADate(), binContainersForEventCountSeries[0].Bins[index].Y2Axis));
+                }
+                chart.Series.Add(eventCountSeries);
             }
         }
 
@@ -479,7 +543,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected DataPoint GetDataPointForSum(Bin bin)
         {
             var dataPoint = new DataPoint(bin.Start.ToOADate(), bin.Sum);
-            dataPoint.Label = bin.Start.Month.ToString();
+            //dataPoint.Label = bin.Start.Month.ToString();
             return dataPoint;
         }
 
@@ -489,9 +553,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return dataPoint;
         }
 
+        protected DataPoint GetDataPointForY2AxisValue(Bin bin)
+        {
+            var dataPoint = new DataPoint(bin.Start.ToOADate(), bin.Y2Axis);
+            
+            return dataPoint;
+        }
+
         protected DataPoint GetContainerDataPointForSum(BinsContainer bin)
         {
             var dataPoint = new DataPoint(bin.Start.ToOADate(), bin.SumValue);
+            return dataPoint;
+        }
+
+        protected DataPoint GetContainerDataPointForY2Axis(BinsContainer bin)
+        {
+            var dataPoint = new DataPoint(bin.Start.ToOADate(), bin.Y2AxisValue);
             return dataPoint;
         }
 
@@ -509,10 +586,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected Series GetTimeAggregateSeries(Series series, List<BinsContainer> binsContainers)
         {
-            var endTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day,
-                TimeOptions.TimeOfDayEndHour ?? 0, TimeOptions.TimeOfDayEndMinute ?? 0, 0);
+            SetEndTimeAndMinutes(out var endTime, out var minutes);
+            SetDataPointsForTimeAggregationSeries(binsContainers, series, endTime, minutes);
+            return series;
+        }
 
-            int minutes;
+        protected Series GetTimeAggregateEventCountSeries(Series series, List<BinsContainer> binsContainers)
+        {
+            SetEndTimeAndMinutes(out var endTime, out var minutes);
+            SetDataPointsForTimeAggregationEventCountSeries(binsContainers, series, endTime, minutes);
+            return series;
+        }
+
+        private void SetEndTimeAndMinutes(out DateTime endTime, out int minutes)
+        {
+            endTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day,
+                            TimeOptions.TimeOfDayEndHour ?? 0, TimeOptions.TimeOfDayEndMinute ?? 0, 0);
             switch (TimeOptions.SelectedBinSize)
             {
                 case BinFactoryOptions.BinSize.FifteenMinute:
@@ -525,10 +614,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     minutes = 60;
                     break;
                 default:
-                    throw new InvalidBinSizeException(TimeOptions.SelectedBinSize.ToString() +" is an invalid bin size for time period aggregation");
+                    throw new InvalidBinSizeException(TimeOptions.SelectedBinSize.ToString() + " is an invalid bin size for time period aggregation");
             }
-            SetDataPointsForTimeAggregationSeries(binsContainers, series, endTime, minutes);
-            return series;
         }
 
         private void SetDataPointsForTimeAggregationSeries(List<BinsContainer> binsContainers, Series series,
@@ -538,6 +625,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     TimeOptions.TimeOfDayStartHour ?? 0, TimeOptions.TimeOfDayStartMinute ?? 0, 0);
                 startTime < endTime;
                 startTime = startTime.AddMinutes(minutes))
+            {
                 if (SelectedAggregationType == AggregationType.Sum)
                 {
                     var sumValue = binsContainers.FirstOrDefault().Bins.Where(b =>
@@ -553,6 +641,21 @@ namespace MOE.Common.Business.WCFServiceLibrary
                             b.Start.Hour == startTime.Hour && b.Start.Minute == startTime.Minute).Average(b => b.Sum);
                     series.Points.AddXY(startTime, Convert.ToInt32(Math.Round(averageValue)));
                 }
+            }
+        }
+
+        private void SetDataPointsForTimeAggregationEventCountSeries(List<BinsContainer> binsContainers, Series eventCountSeries,
+            DateTime endTime, int minutes)
+        {
+            for (var startTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day,
+                    TimeOptions.TimeOfDayStartHour ?? 0, TimeOptions.TimeOfDayStartMinute ?? 0, 0);
+                startTime < endTime;
+                startTime = startTime.AddMinutes(minutes))
+            {
+                var sumValue = binsContainers.FirstOrDefault().Bins.Where(b =>
+                        b.Start.Hour == startTime.Hour && b.Start.Minute == startTime.Minute).Sum(b => b.Y2Axis);
+                    eventCountSeries.Points.AddXY(startTime, sumValue);
+            }
         }
 
         protected Series CreateSeries(int seriesColorNumber, string seriesName)
@@ -566,6 +669,18 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return series;
         }
 
+        protected Series CreateEventCountSeries()
+        {
+            var series = new Series();
+            series.BorderWidth = SeriesWidth;
+            series.Color = GetSeriesColorByNumber(-1);
+            series.Name = "Event Count";
+            series.ChartArea = "ChartArea1";
+            series.ChartType = SeriesChartType.Line;
+            series.YAxisType = AxisType.Secondary;
+            return series;
+        }
+
         protected Color GetSeriesColorByNumber(int colorNumber)
         {
             while (colorNumber > 10)
@@ -573,6 +688,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             switch (colorNumber)
             {
+                case -1:
+                    return Color.Black;
                 case 0:
                     return Color.FromArgb(33, 119, 242);
                 case 1:
@@ -610,6 +727,20 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
+
+        protected static void PopulateBinsForRoute(List<Models.Signal> signals, List<BinsContainer> binsContainers, AggregationBySignal aggregationBySignal)
+        {
+            for (var i = 0; i < binsContainers.Count; i++)
+            {
+                for (var binIndex = 0; binIndex < binsContainers[i].Bins.Count; binIndex++)
+                {
+                    var bin = binsContainers[i].Bins[binIndex];
+                    bin.Sum += aggregationBySignal.BinsContainers[i].Bins[binIndex].Sum;
+                    bin.Average = Convert.ToInt32(Math.Round((double)(bin.Sum / signals.Count)));
+                    bin.Y2Axis += aggregationBySignal.BinsContainers[i].Bins[binIndex].Y2Axis;
+                }
+            }
+        }
 
         protected abstract List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal);
         protected abstract List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals);

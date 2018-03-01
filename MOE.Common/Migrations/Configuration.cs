@@ -596,6 +596,16 @@ While each agency should consult with their IT department for specific guideline
                     ParentId = 11,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 7
+                },
+                new Menu
+                {
+                    MenuId = 56,
+                    MenuName = "General Settins",
+                    Controller = "GeneralSettings",
+                    Action = "Edit",
+                    ParentId = 53,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 2
                 }
             );
 

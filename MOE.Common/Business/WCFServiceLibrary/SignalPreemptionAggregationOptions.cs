@@ -36,15 +36,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var signal in signals)
             {
                 var preemptionAggregationBySignal = new PreemptionAggregationBySignal(this, signal);
-                for (var i = 0; i < binsContainers.Count; i++)
-                for (var binIndex = 0; binIndex < binsContainers[i].Bins.Count; binIndex++)
-                {
-                    var bin = binsContainers[i].Bins[binIndex];
-                    bin.Sum += preemptionAggregationBySignal.BinsContainers[i].Bins[binIndex].Sum;
-                    bin.Average = Convert.ToInt32(Math.Round((double) (bin.Sum / signals.Count)));
-                }
+                PopulateBinsForRoute(signals, binsContainers, preemptionAggregationBySignal);
             }
             return binsContainers;
         }
+
     }
 }

@@ -24,12 +24,12 @@ namespace MOE.Common.Business.DataAggregation
                 if (approach.ProtectedPhaseNumber == phaseNumber)
                 {
                     ApproachPcdures.Add(
-                        new PcdAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                        new PcdAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber == phaseNumber)
                         ApproachPcdures.Add(
-                            new PcdAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                            new PcdAggregationByApproach(approach, options, options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
                 }
@@ -44,12 +44,12 @@ namespace MOE.Common.Business.DataAggregation
                 if (approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
                 {
                     ApproachPcdures.Add(
-                        new PcdAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                        new PcdAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null)
                         ApproachPcdures.Add(
-                            new PcdAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                            new PcdAggregationByApproach(approach, options, options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
                 }
@@ -67,7 +67,13 @@ namespace MOE.Common.Business.DataAggregation
                 foreach (var approachPcdAggregationContainer in ApproachPcdures)
                     bin.Sum += approachPcdAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
                 bin.Average = ApproachPcdures.Count > 0 ? bin.Sum / ApproachPcdures.Count : 0;
-            }
+                LoadY2AxisValue(bin, options.ShowEventCount);
+                }
+        }
+
+        protected override void LoadBins(ApproachAggregationMetricOptions options, Models.Signal signal)
+        {
+            throw new NotImplementedException();
         }
 
         private void GetApproachPcdAggregationContainersForAllApporaches(
@@ -76,12 +82,12 @@ namespace MOE.Common.Business.DataAggregation
             foreach (var approach in signal.Approaches)
             {
                 ApproachPcdures.Add(
-                    new PcdAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                    new PcdAggregationByApproach(approach, options, options.StartDate,
                         options.EndDate,
                         true, options.SelectedAggregatedDataType));
                 if (approach.PermissivePhaseNumber != null)
                     ApproachPcdures.Add(
-                        new PcdAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                        new PcdAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             false, options.SelectedAggregatedDataType));
             }

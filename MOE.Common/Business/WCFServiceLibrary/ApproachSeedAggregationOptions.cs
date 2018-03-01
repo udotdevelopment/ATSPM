@@ -123,7 +123,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override List<BinsContainer> GetBinsContainersByApproach(Approach approach, bool getprotectedPhase)
         {
-            var approachSpeedAggregationContainer = new SpeedAggregationByApproach(approach, TimeOptions,
+            var approachSpeedAggregationContainer = new SpeedAggregationByApproach(approach, this,
                 StartDate, EndDate,
                 getprotectedPhase, SelectedAggregatedDataType);
             return approachSpeedAggregationContainer.BinsContainers;

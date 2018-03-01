@@ -116,11 +116,18 @@ namespace SPM.Controllers
 
         private bool GetReCaptchaStatus(string response)
         {
+            var generalSettingsRepository =
+                MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
+            var settings = generalSettingsRepository.GetGeneralSettings();
+            if (String.IsNullOrEmpty(settings.ReCaptchaPublicKey) && String.IsNullOrEmpty(settings.ReCaptchaSecretKey))
+            {
+                return true;
+            }
             var userIp = Request.UserHostAddress;
 #if DEBUG
             userIp = "168.178.126.48";
 #endif
-            string secretKey = "6LdvpkYUAAAAAOni2rKME1gtxqzMKTvHxXJoZa4r";
+            string secretKey = settings.ReCaptchaSecretKey;
             var client = new WebClient();
             var result = client.DownloadString(
                 $"https://www.google.com/recaptcha/api/siteverify?secret={secretKey}&response={response}&remoteip={userIp}");

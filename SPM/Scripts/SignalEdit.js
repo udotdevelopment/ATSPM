@@ -359,13 +359,13 @@ function CopyApproach(approachID) {
     });
 }
 
-//function CheckForDuplicatChannels()
-//{
-//    if(IsDuplicateChannel())
-//    {
-//        alert("This is a duplicate channel");
-//    }
-//}
+function CheckForDuplicatChannels()
+{
+    if(IsDuplicateChannel())
+    {
+        alert("This is a duplicate channel");
+    }
+}
 
 function IsDuplicateChannel() {
     var channelArray=[];

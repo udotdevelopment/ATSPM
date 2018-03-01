@@ -70,8 +70,13 @@ namespace MOE.Common.Business
         {
             var chart = new Chart();
             SetImageProperties(chart);
-            chart.ChartAreas.Add(CreateTimeXIntYChartArea(options));
+            ChartArea chartAreaAgg = CreateTimeXIntYChartArea(options);
+            chart.ChartAreas.Add(chartAreaAgg);
             chart.Titles.Add(options.ChartTitle);
+            if (options.ShowEventCount)
+            {
+                SetUpY2Axis(chartAreaAgg, options);
+            }
             return chart;
         }
 
@@ -242,7 +247,11 @@ namespace MOE.Common.Business
             SetDimension(options, chartArea);
             chartArea.Name = "ChartArea1";
             SetIntYAxis(chartArea, options);
-            SetTimeXAxis(chartArea, options);         
+            if (options.ShowEventCount)
+            {
+                SetIntY2Axis(chartArea, options);
+            }
+            SetTimeXAxis(chartArea, options);
             return chartArea;
         }
 
@@ -299,6 +308,15 @@ namespace MOE.Common.Business
                 chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
             chartArea.AxisY.Title = options.YAxisTitle;
             chartArea.AxisY.Minimum = 0;
+        }
+
+        private static void SetIntY2Axis(ChartArea chartArea, SignalAggregationMetricOptions options)
+        {
+            chartArea.AxisY2.Enabled = AxisEnabled.True;
+            chartArea.AxisY2.MajorGrid.Enabled = false;
+            chartArea.AxisY2.IntervalAutoMode = IntervalAutoMode.VariableCount;
+            chartArea.AxisY2.Title = "Event Count";
+            chartArea.AxisY2.Minimum = 0;
         }
 
         private static void SetTimeXAxis(ChartArea chartArea, SignalAggregationMetricOptions options)
@@ -448,6 +466,16 @@ namespace MOE.Common.Business
             chartArea.AxisY2.MajorGrid.Enabled = false;
             chartArea.AxisY2.IntervalType = DateTimeIntervalType.Number;
             chartArea.AxisY2.Title = "Volume Per Hour ";
+        }
+        private static void SetUpY2Axis(ChartArea chartArea, SignalAggregationMetricOptions options)
+        {
+            if (options.Y2AxisMax != null)
+                chartArea.AxisY2.Maximum = options.Y2AxisMax.Value;
+            chartArea.AxisY2.Enabled = AxisEnabled.True;
+            chartArea.AxisY2.MajorTickMark.Enabled = true;
+            chartArea.AxisY2.MajorGrid.Enabled = false;
+            chartArea.AxisY2.IntervalType = DateTimeIntervalType.Number;
+            chartArea.AxisY2.Title = "Event Count";
         }
 
         private static void SetUpYAxis(ChartArea chartArea, MetricOptions options)

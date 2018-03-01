@@ -124,7 +124,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override List<BinsContainer> GetBinsContainersByApproach(Approach approach, bool getprotectedPhase)
         {
-            var approachCycleAggregationContainer = new CycleAggregationByApproach(approach, TimeOptions, StartDate,
+            var approachCycleAggregationContainer = new CycleAggregationByApproach(approach, this, StartDate,
                 EndDate,
                 getprotectedPhase, SelectedAggregatedDataType);
             return approachCycleAggregationContainer.BinsContainers;

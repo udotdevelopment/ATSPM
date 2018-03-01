@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 
@@ -8,28 +9,31 @@ namespace MOE.Common.Business.DataAggregation
 {
     public class CycleAggregationBySignal : AggregationBySignal
     {
+        public List<CycleAggregationByApproach> ApproachCycles { get; }
+
         public CycleAggregationBySignal(ApproachCycleAggregationOptions options, Models.Signal signal) : base(
             options, signal)
         {
-            ApproachCycleures = new List<CycleAggregationByApproach>();
+            ApproachCycles = new List<CycleAggregationByApproach>();
             GetApproachCycleAggregationContainersForAllApporaches(options, signal);
             LoadBins(null, null);
         }
 
+
         public CycleAggregationBySignal(ApproachCycleAggregationOptions options, Models.Signal signal,
             int phaseNumber) : base(options, signal)
         {
-            ApproachCycleures = new List<CycleAggregationByApproach>();
+            ApproachCycles = new List<CycleAggregationByApproach>();
             foreach (var approach in signal.Approaches)
                 if (approach.ProtectedPhaseNumber == phaseNumber)
                 {
-                    ApproachCycleures.Add(
-                        new CycleAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                    ApproachCycles.Add(
+                        new CycleAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber == phaseNumber)
-                        ApproachCycleures.Add(
-                            new CycleAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                        ApproachCycles.Add(
+                            new CycleAggregationByApproach(approach, options, options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
                 }
@@ -39,24 +43,22 @@ namespace MOE.Common.Business.DataAggregation
         public CycleAggregationBySignal(ApproachCycleAggregationOptions options, Models.Signal signal,
             DirectionType direction) : base(options, signal)
         {
-            ApproachCycleures = new List<CycleAggregationByApproach>();
+            ApproachCycles = new List<CycleAggregationByApproach>();
             foreach (var approach in signal.Approaches)
                 if (approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
                 {
-                    ApproachCycleures.Add(
-                        new CycleAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                    ApproachCycles.Add(
+                        new CycleAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null)
-                        ApproachCycleures.Add(
-                            new CycleAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                        ApproachCycles.Add(
+                            new CycleAggregationByApproach(approach, options, options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
                 }
             LoadBins(null, null);
         }
-
-        public List<CycleAggregationByApproach> ApproachCycleures { get; }
 
         protected override void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal)
         {
@@ -64,24 +66,34 @@ namespace MOE.Common.Business.DataAggregation
             for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
             {
                 var bin = BinsContainers[i].Bins[binIndex];
-                foreach (var approachCycleAggregationContainer in ApproachCycleures)
+                foreach (var approachCycleAggregationContainer in ApproachCycles)
+                {
                     bin.Sum += approachCycleAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
-                bin.Average = ApproachCycleures.Count > 0 ? bin.Sum / ApproachCycleures.Count : 0;
+                    bin.Average = ApproachCycles.Count > 0 ? bin.Sum / ApproachCycles.Count : 0;
+                    LoadY2AxisValue(bin, options.ShowEventCount);
+                }
+
             }
         }
+
+        protected override void LoadBins(ApproachAggregationMetricOptions options, Models.Signal signal)
+        {
+            throw new NotImplementedException();
+        }
+
 
         private void GetApproachCycleAggregationContainersForAllApporaches(
             ApproachCycleAggregationOptions options, Models.Signal signal)
         {
             foreach (var approach in signal.Approaches)
             {
-                ApproachCycleures.Add(
-                    new CycleAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                ApproachCycles.Add(
+                    new CycleAggregationByApproach(approach, options, options.StartDate,
                         options.EndDate,
                         true, options.SelectedAggregatedDataType));
                 if (approach.PermissivePhaseNumber != null)
-                    ApproachCycleures.Add(
-                        new CycleAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                    ApproachCycles.Add(
+                        new CycleAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             false, options.SelectedAggregatedDataType));
             }
@@ -91,8 +103,8 @@ namespace MOE.Common.Business.DataAggregation
         public int GetCyclesByDirection(DirectionType direction)
         {
             var splitFails = 0;
-            if (ApproachCycleures != null)
-                splitFails = ApproachCycleures
+            if (ApproachCycles != null)
+                splitFails = ApproachCycles
                     .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
                     .Sum(a => a.BinsContainers.FirstOrDefault().SumValue);
             return splitFails;
@@ -100,11 +112,11 @@ namespace MOE.Common.Business.DataAggregation
 
         public int GetAverageCyclesByDirection(DirectionType direction)
         {
-            var approachCycleuresByDirection = ApproachCycleures
+            var approachCyclesByDirection = ApproachCycles
                 .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID);
             var splitFails = 0;
-            if (approachCycleuresByDirection.Any())
-                splitFails = Convert.ToInt32(Math.Round(approachCycleuresByDirection
+            if (approachCyclesByDirection.Any())
+                splitFails = Convert.ToInt32(Math.Round(approachCyclesByDirection
                     .Average(a => a.BinsContainers.FirstOrDefault().SumValue)));
             return splitFails;
         }

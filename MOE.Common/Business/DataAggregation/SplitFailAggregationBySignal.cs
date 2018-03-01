@@ -24,12 +24,12 @@ namespace MOE.Common.Business.DataAggregation
                 if (approach.ProtectedPhaseNumber == phaseNumber)
                 {
                     ApproachSplitFailures.Add(
-                        new SplitFailAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                        new SplitFailAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber == phaseNumber)
                         ApproachSplitFailures.Add(
-                            new SplitFailAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                            new SplitFailAggregationByApproach(approach, options, options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
                 }
@@ -44,12 +44,12 @@ namespace MOE.Common.Business.DataAggregation
                 if (approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
                 {
                     ApproachSplitFailures.Add(
-                        new SplitFailAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                        new SplitFailAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null)
                         ApproachSplitFailures.Add(
-                            new SplitFailAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                            new SplitFailAggregationByApproach(approach, options, options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
                 }
@@ -65,9 +65,17 @@ namespace MOE.Common.Business.DataAggregation
             {
                 var bin = BinsContainers[i].Bins[binIndex];
                 foreach (var approachSplitFailAggregationContainer in ApproachSplitFailures)
+                {
                     bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
-                bin.Average = ApproachSplitFailures.Count > 0 ? bin.Sum / ApproachSplitFailures.Count : 0;
+                    bin.Average = ApproachSplitFailures.Count > 0 ? bin.Sum / ApproachSplitFailures.Count : 0;
+                    LoadY2AxisValue(bin, options.ShowEventCount);
+                    }
             }
+        }
+
+        protected override void LoadBins(ApproachAggregationMetricOptions options, Models.Signal signal)
+        {
+            throw new NotImplementedException();
         }
 
         private void GetApproachSplitFailAggregationContainersForAllApporaches(
@@ -76,12 +84,12 @@ namespace MOE.Common.Business.DataAggregation
             foreach (var approach in signal.Approaches)
             {
                 ApproachSplitFailures.Add(
-                    new SplitFailAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                    new SplitFailAggregationByApproach(approach, options, options.StartDate,
                         options.EndDate,
                         true, options.SelectedAggregatedDataType));
                 if (approach.PermissivePhaseNumber != null)
                     ApproachSplitFailures.Add(
-                        new SplitFailAggregationByApproach(approach, options.TimeOptions, options.StartDate,
+                        new SplitFailAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             false, options.SelectedAggregatedDataType));
             }

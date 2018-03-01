@@ -39,7 +39,9 @@ namespace MOE.Common.Models
                 {
                     detChannel = value;
                     if (Approach != null && Approach.SignalID != null)
-                        DetectorID = Approach.SignalID + value;
+                    {
+                        DetectorID = Approach.SignalID + value.ToString("D2");
+                    }
                 }
             }
         }

@@ -46,7 +46,7 @@ namespace MOE.Common.Business.DataAggregation
         private DateTime _endDate;
 
         private DateTime _startDate;
-        private ConcurrentQueue<EventCountAggregation> _eventAggregationConcurrentQueue = new ConcurrentQueue<EventCountAggregation>();
+        private ConcurrentQueue<SignalEventCountAggregation> _eventAggregationConcurrentQueue = new ConcurrentQueue<SignalEventCountAggregation>();
 
 
         public void StartAggregation(string[] args)
@@ -650,7 +650,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     int eventCount =
                         controllerEventLogRepository.GetSignalEventsCountBetweenDates(signal.SignalID, startTime, endTime);
-                    _eventAggregationConcurrentQueue.Enqueue(new EventCountAggregation{BinStartTime = startTime,
+                    _eventAggregationConcurrentQueue.Enqueue(new SignalEventCountAggregation{BinStartTime = startTime,
                         EventCount = eventCount,SignalId = signal.SignalID});
                 },
                 () =>
