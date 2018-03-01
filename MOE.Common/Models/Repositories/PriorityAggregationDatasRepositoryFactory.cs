@@ -11,7 +11,7 @@
             return new PriorityAggregationDatasRepository();
         }
 
-        public static void SetArchivedMetricsRepository(IPriorityAggregationDatasRepository newRepository)
+        public static void SetRepository(IPriorityAggregationDatasRepository newRepository)
         {
             _priorityAggregationDatasRepository = newRepository;
         }

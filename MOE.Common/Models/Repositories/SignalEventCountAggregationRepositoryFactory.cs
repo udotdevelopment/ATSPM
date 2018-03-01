@@ -11,7 +11,7 @@
             return new SignalEventCountAggregationRepository();
         }
 
-        public static void SetApplicationEventRepository(ISignalEventCountAggregationRepository newRepository)
+        public static void SetRepository(ISignalEventCountAggregationRepository newRepository)
         {
             _approachCycleAggregationRepository = newRepository;
         }

@@ -65,6 +65,7 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
+
         protected abstract void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal);
 
         protected abstract void LoadBins(ApproachAggregationMetricOptions options, Models.Signal signal);

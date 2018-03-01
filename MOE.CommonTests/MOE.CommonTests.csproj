@@ -128,7 +128,7 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachYellowRedActuationsAggregation\ApproachYellowRedActuationsAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\DetectorVolumeAggregationChart\DetectorVolumeAggregationApproachXDetectorSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\PreemptionAggregationChart\PreemptAggregationTimeXSignalSeriesTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PreemptionAggregationChart\PreemptionsAggregationChartTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\PriorityAggregationChart\PriorityAggregationApproachXSignalSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalAggregationCreateMetricTestsBase.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationChart\SignalPreemptionAggregationChartSignalXSignalSeriesTests.cs" />
