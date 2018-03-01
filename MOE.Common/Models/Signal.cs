@@ -42,7 +42,9 @@ namespace MOE.Common.Models
                             a.SignalID = value;
                             if (a.Detectors != null)
                                 foreach (var d in a.Detectors)
-                                    d.DetectorID = value + d.DetChannel;
+                                {
+                                    d.DetectorID = value + d.DetChannel.ToString("D2");
+                                }
                         }
                 }
             }
