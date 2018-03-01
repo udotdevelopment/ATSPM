@@ -31,7 +31,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                  Db.PopulatePreemptionAggregationsWithValue3(Convert.ToDateTime("1/1/2016"), Convert.ToDateTime("1/1/2018"), signal);
                 Db.PopulateSignalEventCountwithRandomValues(Convert.ToDateTime("1/1/2016"), Convert.ToDateTime("1/1/2018"), signal);
             }
-            SignalEventCountAggregationRepositoryFactory.SetApplicationEventRepository(new InMemorySignalEventCountAggregationRepository(Db));
+            SignalEventCountAggregationRepositoryFactory.SetRepository(new InMemorySignalEventCountAggregationRepository(Db));
             PreemptAggregationDatasRepositoryFactory.SetArchivedMetricsRepository(new InMemoryPreemptAggregationDatasRepository(Db));
             MOE.Common.Models.Repositories.SignalsRepositoryFactory.SetSignalsRepository(new InMemorySignalsRepository(Db));
             MetricTypeRepositoryFactory.SetMetricsRepository(new InMemoryMetricTypeRepository(Db));

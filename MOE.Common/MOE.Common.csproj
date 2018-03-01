@@ -382,6 +382,7 @@
     <Compile Include="Business\DataAggregation\PreemptionAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\DetectorAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\SplitFailAggregationBySignal.cs" />
+    <Compile Include="Business\Export\ChartToCSVExporter.cs" />
     <Compile Include="Business\Export\Exporter.cs" />
     <Compile Include="Business\FilterExtensions\FilterApproach.cs" />
     <Compile Include="Business\FilterExtensions\FilterDetector.cs" />
@@ -594,8 +595,6 @@
     <Compile Include="Business\Detector.cs" />
     <Compile Include="Business\DetectorCollection.cs" />
     <Compile Include="Business\DetectorDataPoint.cs" />
-    <Compile Include="Business\Export\AdvancedExport.cs" />
-    <Compile Include="Business\Export\Detectors.cs" />
     <Compile Include="Business\InfoBox.cs" />
     <Compile Include="Business\Inrix\GraphLine.cs" />
     <Compile Include="Business\Inrix\Segment.cs" />

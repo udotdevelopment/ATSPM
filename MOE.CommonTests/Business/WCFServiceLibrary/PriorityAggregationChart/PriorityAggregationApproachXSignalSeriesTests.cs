@@ -24,8 +24,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         {
             var signals = Db.Signals;
 
-            PriorityAggregationDatasRepositoryFactory.SetArchivedMetricsRepository(
-                new InMemoryPriorityAggregationDatasRepository(Db));
+            SignalEventCountAggregationRepositoryFactory.SetRepository(new InMemorySignalEventCountAggregationRepository(Db));
+            PriorityAggregationDatasRepositoryFactory.SetRepository(new InMemoryPriorityAggregationDatasRepository(Db));
 
             foreach (var signal in signals)
             {
@@ -37,6 +37,8 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         {
             Db.PopulatePriorityAggregations(Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"),signal.SignalID, signal.VersionID);
+
+            Db.PopulateSignalEventCountwithRandomValues(Convert.ToDateTime("1/1/2016"), Convert.ToDateTime("1/1/2018"), signal);
         }
 
         [TestMethod]

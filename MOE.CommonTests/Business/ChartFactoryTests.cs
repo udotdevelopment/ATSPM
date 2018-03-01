@@ -12,16 +12,48 @@ using MOE.Common.Business.Bins;
 using MOE.Common.Business.FilterExtensions;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.CommonTests.Models;
+using MOE.Common.Models.Repositories;
+using System.Xml.Linq;
+using System.Xml;
+using System.Web.UI.WebControls;
 
 namespace MOE.Common.Business.Tests
 {
     [TestClass()]
     public class ChartFactoryTests
     {
+        public InMemoryMOEDatabase Db = new InMemoryMOEDatabase();
+        public ISignalsRepository SignalsRepository;
+
         [TestInitialize]
         public void Initialize()
         {
+            Db.ClearTables();
+            Db.PopulateSignal();
+            Db.PopulateSignalsWithApproaches();
+            Db.PopulateApproachesWithDetectors();
+            var signals = Db.Signals;
+            foreach (var signal in signals)
+            {
+                Db.PopulatePreemptAggregations(Convert.ToDateTime("1/1/2016"), Convert.ToDateTime("1/1/2018"), signal.SignalID, signal.VersionID);
 
+            }
+
+            ApproachRepositoryFactory.SetApproachRepository(new InMemoryApproachRepository(Db));
+            PreemptAggregationDatasRepositoryFactory.SetArchivedMetricsRepository(
+                new InMemoryPreemptAggregationDatasRepository(Db));
+            MOE.Common.Models.Repositories.SignalsRepositoryFactory.SetSignalsRepository(
+                new InMemorySignalsRepository(Db));
+            MetricTypeRepositoryFactory.SetMetricsRepository(new InMemoryMetricTypeRepository(Db));
+            ApplicationEventRepositoryFactory.SetApplicationEventRepository(new InMemoryApplicationEventRepository(Db));
+            DetectorAggregationsRepositoryFactory.SetDetectorAggregationRepository(new InMemoryDetectorAggregationsRepository(Db));
+
+            Models.Repositories.DirectionTypeRepositoryFactory.SetDirectionsRepository(
+                new InMemoryDirectionTypeRepository());
+
+            SignalsRepository = SignalsRepositoryFactory.Create();
+
+            PreemptAggregationDatasRepositoryFactory.SetArchivedMetricsRepository(new InMemoryPreemptAggregationDatasRepository(Db));
         }
 
         [TestMethod()]
@@ -96,14 +128,14 @@ namespace MOE.Common.Business.Tests
 
             Chart chart = ChartFactory.CreateStringXIntYChart(options);
 
-           Assert.IsNotNull(chart);
+            Assert.IsNotNull(chart);
             Assert.IsTrue(chart.Titles[0].Text.Contains("Aggregation"));
 
         }
 
         private ApproachSplitFailAggregationOptions NewOptionsForTest()
         {
-            
+
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
@@ -122,5 +154,180 @@ namespace MOE.Common.Business.Tests
             return options;
 
         }
+
+        [TestMethod()]
+        public void GetBinsTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void AddSeriesToSeriesListTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void ChartInitializationTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void ChartInitializationTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateDefaultChartTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateSplitFailureChartTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateTimeXIntYChartTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateLaneByLaneAggregationChartTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateAdvancedCountsAggregationChartTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateArrivalOnGreenAggregationChartTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreatePlatoonRatioAggregationChartTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void GetApproachAggregationRecordsTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreatePedestrianActuationAggregationChartTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void PreemptionAggregationChartTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateApproachDelayAggregationChartTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void TransitSignalPriorityAggregationChartTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void GetSeriesFromBinsTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateLineSeriesTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateStackedAreaSeriesTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateColumnSeriesTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateStackedColumnSeriesTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateStringXIntYChartTest1()
+        {
+            Assert.Fail();
+        }
+
+        private Chart CreateATestChart()
+        {
+            Chart chart = new Chart();
+            ChartArea cha1 = new ChartArea();
+            
+            Series s1 = new Series();
+            Series s2 = new Series();
+            s1.Name = "FirstSeries";
+            s1.ChartType = SeriesChartType.Line;
+
+            s2.Name = "SecondSeries";
+            s2.ChartType = SeriesChartType.Column;
+
+            AddPointsToTestSeries(s1);
+            AddPointsToTestSeries(s2);
+
+
+
+
+            s1.XAxisType = AxisType.Primary;
+            s2.XAxisType = AxisType.Secondary;
+
+            chart.Series.Add(s1);
+            chart.Series.Add(s2);
+            chart.ChartAreas.Add(cha1);
+
+
+            return chart;
+
+        }
+
+        private void AddPointsToTestSeries(Series s)
+        {
+            for (int i = 1; i < 7; i++)
+            {
+                var dp = new DataPoint(i, i);
+                s.Points.Add(dp);
+
+            }
+        }
+
+        
     }
 }
