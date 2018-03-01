@@ -372,9 +372,14 @@ function IsDuplicateChannel() {
     $(".detectorChannel").each(function (i, obj) {
         channelArray.push(obj.value);        
     });
-    var channelUniqueArray = channelArray.slice();
-    $.uniqueSort(channelUniqueArray);
+    var channelUniqueArray = unique(channelArray);
     return (channelArray.length != channelUniqueArray.length);    
+}
+
+function unique(array) {
+    return $.grep(array, function (el, index) {
+        return index == $.inArray(el, array);
+    });
 }
 
 function CopyDetector(ID, approachID) {
