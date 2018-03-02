@@ -16,7 +16,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public ApproachVolumeOptions(string signalID, DateTime startDate, DateTime endDate, double? yAxisMax,
             int binSize, bool showDirectionalSplits,
-            bool showTotalVolume, bool showNBWBVolume, bool showSBEBVolume, bool showTMCDetection,
+            bool showTotalVolume, bool ShowNbEbVolume, bool ShowSbWbVolume, bool showTMCDetection,
             bool showAdvanceDetection)
         {
             SignalID = signalID;
@@ -27,8 +27,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             SelectedBinSize = binSize;
             ShowTotalVolume = showTotalVolume;
             ShowDirectionalSplits = showDirectionalSplits;
-            ShowNBWBVolume = showNBWBVolume;
-            ShowSBEBVolume = showSBEBVolume;
+            ShowNbEbVolume = ShowNbEbVolume;
+            ShowSbWbVolume = ShowSbWbVolume;
             ShowTMCDetection = showTMCDetection;
             ShowAdvanceDetection = showAdvanceDetection;
         }
@@ -59,12 +59,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public bool ShowTotalVolume { get; set; }
 
         [DataMember]
-        [Display(Name = "Show NB/WB Volume")]
-        public bool ShowNBWBVolume { get; set; }
+        [Display(Name = "Show NB/EB Volume")]
+        public bool ShowNbEbVolume { get; set; }
 
         [DataMember]
-        [Display(Name = "Show SB/EB Volume")]
-        public bool ShowSBEBVolume { get; set; }
+        [Display(Name = "Show SB/WB Volume")]
+        public bool ShowSbWbVolume { get; set; }
 
         [DataMember]
         [Display(Name = "Show TMC Detection")]
@@ -80,8 +80,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             YAxisMax = null;
             ShowDirectionalSplits = false;
             ShowTotalVolume = false;
-            ShowNBWBVolume = true;
-            ShowSBEBVolume = true;
+            ShowNbEbVolume = true;
+            ShowSbWbVolume = true;
             ShowTMCDetection = true;
             ShowAdvanceDetection = true;
         }

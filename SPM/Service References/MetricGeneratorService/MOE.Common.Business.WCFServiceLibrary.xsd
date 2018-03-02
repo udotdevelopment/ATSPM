@@ -187,8 +187,8 @@
           <xs:element minOccurs="0" name="SelectedBinSize" type="xs:int" />
           <xs:element minOccurs="0" name="ShowAdvanceDetection" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowDirectionalSplits" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowNBWBVolume" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowSBEBVolume" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowNbEbVolume" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowSbWbVolume" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowTMCDetection" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowTotalVolume" type="xs:boolean" />
         </xs:sequence>

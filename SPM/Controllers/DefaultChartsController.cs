@@ -259,8 +259,8 @@ namespace SPM.Controllers
                                                           "SetApproachVolumeMetric(" + metricOptions.SelectedBinSize.ToString() + "," +
                                                           metricOptions.ShowDirectionalSplits.ToString().ToLower() + "," +
                                                           metricOptions.ShowTotalVolume.ToString().ToLower() + "," +
-                                                          metricOptions.ShowSBEBVolume.ToString().ToLower() + "," +
-                                                          metricOptions.ShowNBWBVolume.ToString().ToLower() + "," +
+                                                          metricOptions.ShowSbWbVolume.ToString().ToLower() + "," +
+                                                          metricOptions.ShowNbEbVolume.ToString().ToLower() + "," +
                                                           metricOptions.ShowTMCDetection.ToString().ToLower() + "," +
                                                           metricOptions.ShowAdvanceDetection.ToString().ToLower() +
                                                           "); CreateMetric();";
@@ -926,8 +926,8 @@ namespace SPM.Controllers
             sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
             sb.Append("&ShowDirectionalSplits=" + metricOptions.ShowDirectionalSplits.ToString());
             sb.Append("&ShowTotalVolume=" + metricOptions.ShowTotalVolume.ToString().ToLower());
-            sb.Append("&ShowSBEBVolume=" + metricOptions.ShowSBEBVolume.ToString().ToLower());
-            sb.Append("&ShowNBWBVolume=" + metricOptions.ShowNBWBVolume.ToString().ToLower());
+            sb.Append("&ShowSbWbVolume=" + metricOptions.ShowSbWbVolume.ToString().ToLower());
+            sb.Append("&ShowNbEbVolume=" + metricOptions.ShowNbEbVolume.ToString().ToLower());
             sb.Append("&ShowTMCDetection=" + metricOptions.ShowTMCDetection.ToString().ToLower());
             sb.Append("&ShowAdvanceDetection=" + metricOptions.ShowAdvanceDetection.ToString().ToLower());
 

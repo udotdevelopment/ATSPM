@@ -200,9 +200,9 @@ namespace MOE.Common.Business.ApproachVolume
 
         public void SetLegend()
         {
-            if (!Options.ShowNBWBVolume)
+            if (!Options.ShowNbEbVolume)
                 Chart.Series[0].IsVisibleInLegend = false;
-            if (!Options.ShowSBEBVolume)
+            if (!Options.ShowSbWbVolume)
                 Chart.Series[1].IsVisibleInLegend = false;
         }
 
@@ -273,13 +273,13 @@ namespace MOE.Common.Business.ApproachVolume
                             }
                     }
 
-                if (options.ShowNBWBVolume)
+                if (options.ShowNbEbVolume)
                     foreach (var vol in D1volumes)
                         //This is the Thicker Solid Red line
                         chart.Series[0].Points.AddXY(vol.Key, vol.Value);
 
 
-                if (options.ShowSBEBVolume)
+                if (options.ShowSbWbVolume)
                     foreach (var vol in D2volumes)
                         //This is the Thicker Solid Blue line
                         chart.Series[1].Points.AddXY(vol.Key, vol.Value);
