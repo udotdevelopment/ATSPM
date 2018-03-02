@@ -38,7 +38,7 @@ namespace SPM.Models
         public List<FilterMovement> FilterMovements { get; set; } = new List<FilterMovement>();
 
         [Display(Name = "Show Event Counts")]
-        public bool ShowEventCounts { get; set; }
+        public bool ShowEventCount { get; set; }
 
         [Required]
         [Display(Name = "Dimesion")]

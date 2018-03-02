@@ -199,6 +199,7 @@ namespace SPM.Controllers
             options.SelectedAggregatedDataType =
                 options.AggregatedDataTypes.FirstOrDefault(a =>
                     a.Id == aggDataExportViewModel.SelectedAggregatedData);
+            options.ShowEventCount = aggDataExportViewModel.ShowEventCount;
         }
 
         private ActionResult GetChartFromService(SignalAggregationMetricOptions options)
