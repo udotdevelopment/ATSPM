@@ -46,7 +46,9 @@ namespace MOE.Common.Business.DataAggregation
         private DateTime _endDate;
 
         private DateTime _startDate;
-        private ConcurrentQueue<SignalEventCountAggregation> _eventAggregationConcurrentQueue = new ConcurrentQueue<SignalEventCountAggregation>();
+        private ConcurrentQueue<SignalEventCountAggregation> _signalEventAggregationConcurrentQueue = new ConcurrentQueue<SignalEventCountAggregation>();
+        private ConcurrentQueue<PhaseEventCountAggregation> _phaseEventAggregationConcurrentQueue = new ConcurrentQueue<PhaseEventCountAggregation>();
+        private ConcurrentQueue<DetectorEventCountAggregation> _detectorEventAggregationConcurrentQueue = new ConcurrentQueue<DetectorEventCountAggregation>();
 
 
         public void StartAggregation(string[] args)
@@ -191,28 +193,47 @@ namespace MOE.Common.Business.DataAggregation
 
                 () =>
                 {
-                    if (_eventAggregationConcurrentQueue.Count > 0)
+                    if (_signalEventAggregationConcurrentQueue.Count > 0)
                     {
-                        Console.WriteLine("Saving Event Data to Database...");
-                        BulkSaveEventData();
+                        Console.WriteLine("Saving Signal Event Data to Database...");
+                        BulkSaveSignalEventData();
                     }
-                });
+                },
+
+                () =>
+                {
+                    if (_detectorEventAggregationConcurrentQueue.Count > 0)
+                    {
+                        Console.WriteLine("Saving Detector Event Data to Database...");
+                        BulkSaveDetectorEventData();
+                    }
+                },
+                () =>
+                {
+                    if (_phaseEventAggregationConcurrentQueue.Count > 0)
+                    {
+                        Console.WriteLine("Saving Phase Event Data to Database...");
+                        BulkSavePhaseEventData();
+                    }
+                });;
         }
 
-        private void BulkSaveEventData()
+        private void BulkSavePhaseEventData()
         {
             var eventAggregationTable = new DataTable();
             eventAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             eventAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
-            eventAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(string)));
+            eventAggregationTable.Columns.Add(new DataColumn("ApproachId", typeof(int)));
             eventAggregationTable.Columns.Add(new DataColumn("EventCount", typeof(int)));
+            eventAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
 
-            while (_eventAggregationConcurrentQueue.TryDequeue(out var preemptionAggregation))
+            while (_phaseEventAggregationConcurrentQueue.TryDequeue(out var preemptionAggregation))
             {
                 var dataRow = eventAggregationTable.NewRow();
                 dataRow["BinStartTime"] = preemptionAggregation.BinStartTime;
-                dataRow["SignalId"] = preemptionAggregation.SignalId;
+                dataRow["ApproachId"] = preemptionAggregation.ApproachId;
                 dataRow["EventCount"] = preemptionAggregation.EventCount;
+                dataRow["IsProtectedPhase"] = preemptionAggregation.IsProtectedPhase;
                 eventAggregationTable.Rows.Add(dataRow);
             }
             var connectionString =
@@ -220,7 +241,7 @@ namespace MOE.Common.Business.DataAggregation
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
-                sqlBulkCopy.DestinationTableName = "EventCountAggregations";
+                sqlBulkCopy.DestinationTableName = "PhaseEventCountAggregations";
                 sqlBulkCopy.BulkCopyTimeout = 180;
                 sqlBulkCopy.BatchSize = 50000;
                 try
@@ -234,7 +255,86 @@ namespace MOE.Common.Business.DataAggregation
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
                         this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
-                    throw new Exception("Unable to import Event Count Data");
+                    throw new Exception("Unable to import Phase Event Count Data");
+                }
+            }
+        }
+        private void BulkSaveDetectorEventData()
+        {
+            var eventAggregationTable = new DataTable();
+            eventAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
+            eventAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
+            eventAggregationTable.Columns.Add(new DataColumn("DetectorId", typeof(string)));
+            eventAggregationTable.Columns.Add(new DataColumn("EventCount", typeof(int)));
+
+            while (_detectorEventAggregationConcurrentQueue.TryDequeue(out var preemptionAggregation))
+            {
+                var dataRow = eventAggregationTable.NewRow();
+                dataRow["BinStartTime"] = preemptionAggregation.BinStartTime;
+                dataRow["DetectorId"] = preemptionAggregation.DetectorId;
+                dataRow["EventCount"] = preemptionAggregation.EventCount;
+                eventAggregationTable.Rows.Add(dataRow);
+            }
+            var connectionString =
+                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
+                sqlBulkCopy.DestinationTableName = "DetectorEventCountAggregations";
+                sqlBulkCopy.BulkCopyTimeout = 180;
+                sqlBulkCopy.BatchSize = 50000;
+                try
+                {
+                    connection.Open();
+                    sqlBulkCopy.WriteToServer(eventAggregationTable);
+                    connection.Close();
+                }
+                catch (Exception e)
+                {
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    throw new Exception("Unable to import Detector Event Count Data");
+                }
+            }
+        }
+
+        private void BulkSaveSignalEventData()
+        {
+            var eventAggregationTable = new DataTable();
+            eventAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
+            eventAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
+            eventAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(string)));
+            eventAggregationTable.Columns.Add(new DataColumn("EventCount", typeof(int)));
+
+            while (_signalEventAggregationConcurrentQueue.TryDequeue(out var preemptionAggregation))
+            {
+                var dataRow = eventAggregationTable.NewRow();
+                dataRow["BinStartTime"] = preemptionAggregation.BinStartTime;
+                dataRow["SignalId"] = preemptionAggregation.SignalId;
+                dataRow["EventCount"] = preemptionAggregation.EventCount;
+                eventAggregationTable.Rows.Add(dataRow);
+            }
+            var connectionString =
+                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
+                sqlBulkCopy.DestinationTableName = "SignalEventCountAggregations";
+                sqlBulkCopy.BulkCopyTimeout = 180;
+                sqlBulkCopy.BatchSize = 50000;
+                try
+                {
+                    connection.Open();
+                    sqlBulkCopy.WriteToServer(eventAggregationTable);
+                    connection.Close();
+                }
+                catch (Exception e)
+                {
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    throw new Exception("Unable to import Signal Event Count Data");
                 }
             }
         }
@@ -650,7 +750,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     int eventCount =
                         controllerEventLogRepository.GetSignalEventsCountBetweenDates(signal.SignalID, startTime, endTime);
-                    _eventAggregationConcurrentQueue.Enqueue(new SignalEventCountAggregation{BinStartTime = startTime,
+                    _signalEventAggregationConcurrentQueue.Enqueue(new SignalEventCountAggregation{BinStartTime = startTime,
                         EventCount = eventCount,SignalId = signal.SignalID});
                 },
                 () =>
