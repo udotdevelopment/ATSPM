@@ -47,7 +47,7 @@ namespace MOE.Common.Business.DataAggregation
 
         private DateTime _startDate;
         private ConcurrentQueue<SignalEventCountAggregation> _signalEventAggregationConcurrentQueue = new ConcurrentQueue<SignalEventCountAggregation>();
-        private ConcurrentQueue<PhaseEventCountAggregation> _phaseEventAggregationConcurrentQueue = new ConcurrentQueue<PhaseEventCountAggregation>();
+        private ConcurrentQueue<ApproachEventCountAggregation> _approachEventAggregationConcurrentQueue = new ConcurrentQueue<ApproachEventCountAggregation>();
 
 
         public void StartAggregation(string[] args)
@@ -201,7 +201,7 @@ namespace MOE.Common.Business.DataAggregation
 
                 () =>
                 {
-                    if (_phaseEventAggregationConcurrentQueue.Count > 0)
+                    if (_approachEventAggregationConcurrentQueue.Count > 0)
                     {
                         Console.WriteLine("Saving Phase Event Data to Database...");
                         BulkSavePhaseEventData();
@@ -218,7 +218,7 @@ namespace MOE.Common.Business.DataAggregation
             eventAggregationTable.Columns.Add(new DataColumn("EventCount", typeof(int)));
             eventAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
 
-            while (_phaseEventAggregationConcurrentQueue.TryDequeue(out var preemptionAggregation))
+            while (_approachEventAggregationConcurrentQueue.TryDequeue(out var preemptionAggregation))
             {
                 var dataRow = eventAggregationTable.NewRow();
                 dataRow["BinStartTime"] = preemptionAggregation.BinStartTime;
@@ -232,7 +232,7 @@ namespace MOE.Common.Business.DataAggregation
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
-                sqlBulkCopy.DestinationTableName = "PhaseEventCountAggregations";
+                sqlBulkCopy.DestinationTableName = "ApproachEventCountAggregations";
                 sqlBulkCopy.BulkCopyTimeout = 180;
                 sqlBulkCopy.BatchSize = 50000;
                 try
@@ -786,7 +786,7 @@ namespace MOE.Common.Business.DataAggregation
                     () => { SetSplitFailData(startTime, endTime, approach, true); },
                     () => { SetYellowRedActivationData(startTime, endTime, approach, true); });
             }
-            _phaseEventAggregationConcurrentQueue.Enqueue(new PhaseEventCountAggregation
+            _approachEventAggregationConcurrentQueue.Enqueue(new ApproachEventCountAggregation
             {
                 BinStartTime = startTime,
                 EventCount = eventCount,

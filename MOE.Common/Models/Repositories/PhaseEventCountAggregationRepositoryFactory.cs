@@ -1,17 +1,17 @@
 ﻿namespace MOE.Common.Models.Repositories
 {
-    public class PhaseEventCountAggregationRepositoryFactory
+    public class ApproachEventCountAggregationRepositoryFactory
     {
-        private static IPhaseEventCountAggregationRepository _phaseCycleAggregationRepository;
+        private static IApproachEventCountAggregationRepository _phaseCycleAggregationRepository;
 
-        public static IPhaseEventCountAggregationRepository Create()
+        public static IApproachEventCountAggregationRepository Create()
         {
             if (_phaseCycleAggregationRepository != null)
                 return _phaseCycleAggregationRepository;
-            return new PhaseEventCountAggregationRepository();
+            return new ApproachEventCountAggregationRepository();
         }
 
-        public static void SetApplicationEventRepository(IPhaseEventCountAggregationRepository newRepository)
+        public static void SetApplicationEventRepository(IApproachEventCountAggregationRepository newRepository)
         {
             _phaseCycleAggregationRepository = newRepository;
         }
