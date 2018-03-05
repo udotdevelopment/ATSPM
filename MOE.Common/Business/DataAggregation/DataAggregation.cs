@@ -765,6 +765,10 @@ namespace MOE.Common.Business.DataAggregation
         {
             SetSplitFailData(startTime, endTime, approach, false);
             var signalPhase = new SignalPhase(startTime, endTime, approach, false, 15, 6, false);
+            var controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
+            int eventCount =
+                controllerEventLogRepository.GetApproachEventsCountBetweenDates(approach.ApproachID,
+                    startTime, endTime, approach.ProtectedPhaseNumber);
             Parallel.Invoke(() => { SetApproachCycleData(signalPhase, startTime, approach, records, false); },
                 () => { SetApproachPcdData(signalPhase, startTime, approach); },
                 () => { SetSplitFailData(startTime, endTime, approach, false); },
@@ -772,6 +776,9 @@ namespace MOE.Common.Business.DataAggregation
             if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
             {
                 SetSplitFailData(startTime, endTime, approach, true);
+                eventCount +=
+                    controllerEventLogRepository.GetApproachEventsCountBetweenDates(approach.ApproachID,
+                        startTime, endTime, (int)approach.PermissivePhaseNumber);
                 var permissiveSignalPhase = new SignalPhase(startTime, endTime, approach, false, 15, 6, true);
                 Parallel.Invoke(
                     () => { SetApproachCycleData(permissiveSignalPhase, startTime, approach, records, true); },
@@ -779,6 +786,14 @@ namespace MOE.Common.Business.DataAggregation
                     () => { SetSplitFailData(startTime, endTime, approach, true); },
                     () => { SetYellowRedActivationData(startTime, endTime, approach, true); });
             }
+            _phaseEventAggregationConcurrentQueue.Enqueue(new PhaseEventCountAggregation
+            {
+                BinStartTime = startTime,
+                EventCount = eventCount,
+                ApproachId = approach.ApproachID,
+                IsProtectedPhase = approach.IsProtectedPhaseOverlap
+            });
+
         }
 
         private void SetYellowRedActivationData(DateTime startTime, DateTime endTime, Approach approach,
