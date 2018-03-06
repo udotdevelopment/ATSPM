@@ -279,11 +279,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         GetTimeOfDayXAxisApproachSeriesChart(signal, chart);
                         if (ShowEventCount)
                         {
-                            var eventCountOptions = (ApproachEventCountAggregationOptions)this;
-                            var binsContainers = GetBinsContainersByRoute(new List<Models.Signal> { signal });
-                            Series series = CreateEventCountSeries();
-                            eventCountOptions.SetTimeAggregateSeries(series, binsContainers);
-                            chart.Series.Add(series);
+                            SetTimeofDayAxisSignalSeriesForEventCount(signal, chart);
                         }
                     }
                     break;
@@ -295,11 +291,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         GetTimeOfDayXAxisDirectionSeriesChart(signal, chart);
                         if (ShowEventCount)
                         {
-                            var eventCountOptions = (ApproachEventCountAggregationOptions)this;
-                            var binsContainers = GetBinsContainersByRoute(Signals);
-                            Series series = CreateEventCountSeries();
-                            eventCountOptions.SetTimeAggregateSeries(series, binsContainers);
-                            chart.Series.Add(series);
+                            SetTimeofDayAxisSignalSeriesForEventCount(signal, chart);
                         }
                     }
                     ;
@@ -310,11 +302,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     SaveChartImage(chart);
                     if (ShowEventCount)
                     {
-                        var eventCountOptions = (ApproachEventCountAggregationOptions)this;
-                        var binsContainers = GetBinsContainersByRoute(Signals);
-                        Series series = CreateEventCountSeries();
-                        eventCountOptions.SetTimeAggregateSeries(series, binsContainers);
-                        chart.Series.Add(series);
+                        SetTimeOfDayAxisRouteSeriesForEventCount(Signals, chart);
                     }
                     break;
                 case SeriesType.Route:
@@ -322,17 +310,23 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     GetTimeOfDayXAxisRouteSeriesChart(Signals, chart);
                     if (ShowEventCount)
                     {
-                        var eventCountOptions = (ApproachEventCountAggregationOptions)this;
-                        var binsContainers = GetBinsContainersByRoute(Signals);
-                        Series series = CreateEventCountSeries();
-                        eventCountOptions.SetTimeAggregateSeries(series, binsContainers);
-                        chart.Series.Add(series);
+                        SetTimeOfDayAxisRouteSeriesForEventCount(Signals, chart);
                     }
                     break;
                 default:
                     throw new Exception("Invalid X-Axis Series Combination");
             }
             SaveChartImage(chart);
+        }
+        
+
+        private void SetTimeofDayAxisSignalSeriesForEventCount(Models.Signal signal, Chart chart)
+        {
+            var eventCountOptions = new  ApproachEventCountAggregationOptions(this);
+            var binsContainers = GetBinsContainersByRoute(new List<Models.Signal> { signal });
+            Series series = CreateEventCountSeries();
+            eventCountOptions.SetTimeAggregateSeries(series, binsContainers);
+            chart.Series.Add(series);
         }
 
 

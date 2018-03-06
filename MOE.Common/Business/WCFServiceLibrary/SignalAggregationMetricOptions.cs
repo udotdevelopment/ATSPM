@@ -271,16 +271,19 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 case SeriesType.Signal:
                     chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
                     GetTimeXAxisSignalSeriesChart(Signals, chart);
-                    SaveChartImage(chart);
                     break;
                 case SeriesType.Route:
                     chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
                     SetTimeXAxisRouteSeriesChart(Signals, chart);
-                    SaveChartImage(chart);
                     break;
                 default:
                     throw new Exception("Invalid X-Axis Series Combination");
             }
+            if (ShowEventCount)
+            {
+                SetTimeXAxisRouteSeriesForEventCount(Signals, chart);
+            }
+            SaveChartImage(chart);
         }
 
         protected virtual void GetSignalCharts()
@@ -294,6 +297,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     break;
                 default:
                     throw new Exception("Invalid X-Axis Series Combination");
+            }
+            if (ShowEventCount)
+            {
+                SetSignalsXAxisSignalSeriesForEventCount(Signals, chart);
             }
             SaveChartImage(chart);
         }
@@ -324,10 +331,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected void SetTimeXAxisRouteSeriesChart(List<Models.Signal> signals, Chart chart)
         {
             Series series = GetTimeXAxisRouteSeries(signals);
-            if (ShowEventCount)
-            {
-                SetTimeXAxisRouteSeriesForEventCount(signals, chart);
-            }
             chart.Series.Add(series);
         }
 
@@ -355,16 +358,19 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 case SeriesType.Signal:
                     chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
                     GetTimeOfDayXAxisSignalSeriesChart(Signals, chart);
-                    SaveChartImage(chart);
                     break;
                 case SeriesType.Route:
                     chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
                     GetTimeOfDayXAxisRouteSeriesChart(Signals, chart);
-                    SaveChartImage(chart);
                     break;
                 default:
                     throw new Exception("Invalid X-Axis Series Combination");
             }
+            if (ShowEventCount)
+            {
+                SetTimeOfDayAxisRouteSeriesForEventCount(Signals, chart);
+            }
+            SaveChartImage(chart);
         }
 
         protected void GetTimeOfDayXAxisRouteSeriesChart(List<Models.Signal> signals, Chart chart)
@@ -373,11 +379,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var binsContainers = GetBinsContainersByRoute(signals);
             var series = CreateSeries(0, "Route");
             SetTimeAggregateSeries(series, binsContainers);
-            if (ShowEventCount)
-            {
-                SetTimeOfDayAxisRouteSeriesForEventCount(signals, chart);
-            }
-
             chart.Series.Add(series);
         }
 
@@ -402,10 +403,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 series.Color = GetSeriesColorByNumber(colorIndex);
                 chart.Series.Add(series);
                 colorIndex++;
-            }
-            if (ShowEventCount)
-            {
-                SetTimeOfDayAxisRouteSeriesForEventCount(signals, chart);
             }
         }
 
@@ -436,10 +433,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 series.Color = GetSeriesColorByNumber(i);
                 chart.Series.Add(series);
                 i++;
-            }
-            if (ShowEventCount)
-            {
-                SetTimeXAxisRouteSeriesForEventCount(signals, chart);
             }
         }
 
