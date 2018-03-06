@@ -440,16 +440,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var eventCountOptions = new SignalEventCountAggregationOptions(this);
             Series eventCountSeries = eventCountOptions.GetSignalsXAxisSignalSeries(signals, "Event Count");
-            SetEventCountSeries(eventCountSeries);
-            chart.Series.Add(eventCountSeries);
+            
+            chart.Series.Add(SetEventCountSeries(eventCountSeries));
         }
 
         public virtual void SetTimeXAxisRouteSeriesForEventCount(List<Models.Signal> signals, Chart chart)
         {
             var eventCountOptions = new SignalEventCountAggregationOptions(this);
             Series series = eventCountOptions.GetTimeXAxisRouteSeries(signals);
-            SetEventCountSeries(series);
-            chart.Series.Add(series);
+            
+            chart.Series.Add(SetEventCountSeries(series));
         }
 
 
@@ -659,11 +659,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected Series CreateEventCountSeries()
         {
             Series series = new Series();
-            SetEventCountSeries(series);
-            return series;
+            return SetEventCountSeries(series);
         }
 
-        protected Series SetEventCountSeries(Series series)
+        public Series SetEventCountSeries(Series series)
         {
             series.BorderWidth = SeriesWidth;
             series.Color = GetSeriesColorByNumber(-1);

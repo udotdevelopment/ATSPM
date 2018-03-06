@@ -558,8 +558,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var eventCountOptions = new ApproachEventCountAggregationOptions(this);
             Series series = eventCountOptions.GetDirectionXAxisDirectionSeries(signal);
-            SetEventCountSeries(series);
-            chart.Series.Add(series);
+            chart.Series.Add(SetEventCountSeries(series));
         }
 
 
@@ -567,8 +566,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var eventCountOptions = new ApproachEventCountAggregationOptions(this);
             Series series = eventCountOptions.GetApproachXAxisApproachSeries(signal, -1);
-            SetEventCountSeries(series);
-            chart.Series.Add(series);
+            
+            chart.Series.Add(SetEventCountSeries(series));
         }
 
 
@@ -576,8 +575,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var eventCountOptions = new ApproachEventCountAggregationOptions(this);
             Series series = eventCountOptions.GetTimeXAxisSignalSeries(signal);
-            SetEventCountSeries(series);
-            chart.Series.Add(series);
+            
+            chart.Series.Add(SetEventCountSeries(series));
         }
 
         public override void SetSignalsXAxisSignalSeriesForEventCount(List<Models.Signal> signals, Chart chart)
@@ -592,8 +591,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var eventCountOptions = new ApproachEventCountAggregationOptions(this);
             Series series = eventCountOptions.GetTimeXAxisRouteSeries(signals);
-            SetEventCountSeries(series);
-            chart.Series.Add(series);
+            chart.Series.Add(SetEventCountSeries(series));
         }
 
         public override void SetTimeOfDayAxisRouteSeriesForEventCount(List<Models.Signal> signals, Chart chart)
