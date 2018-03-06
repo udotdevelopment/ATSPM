@@ -7,9 +7,9 @@ using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.DataAggregation
 {
-    public class PreemptionAggregationBySignal : AggregationBySignal
+    public class SignalEventCountAggregationBySignal : AggregationBySignal
     {
-        public PreemptionAggregationBySignal(SignalPreemptionAggregationOptions options, Models.Signal signal) : base(
+        public SignalEventCountAggregationBySignal(SignalEventCountAggregationOptions options, Models.Signal signal) : base(
             options, signal)
         {
             LoadBins(options, signal);
@@ -17,12 +17,12 @@ namespace MOE.Common.Business.DataAggregation
 
         protected override void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal)
         {
-            var preemptionAggregationRepository =
-                PreemptAggregationDatasRepositoryFactory.Create();
-            var preemptions =
-                preemptionAggregationRepository.GetPreemptionsBySignalIdAndDateRange(
+            var signalEventCountAggregationRepository = SignalEventCountAggregationRepositoryFactory
+                .Create();
+            var signalEventCounts =
+                signalEventCountAggregationRepository.GetSignalEventCountAggregationBySignalIdAndDateRange(
                     signal.SignalID, BinsContainers.Min(b => b.Start), BinsContainers.Max(b => b.End));
-            if (preemptions != null)
+            if (signalEventCounts != null)
             {
                 var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
                 //foreach (var binsContainer in binsContainers)
@@ -34,34 +34,24 @@ namespace MOE.Common.Business.DataAggregation
                     //foreach (var bin in binsContainer.Bins)
                     Parallel.ForEach(binsContainer.Bins, bin =>
                     {
-                        if (preemptions.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
+                        if (signalEventCounts.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
                         {
-                            var preemptionSum = 0;
+                            var signalEventCountSum = 0;
 
                             switch (options.SelectedAggregatedDataType.DataName)
                             {
-                                case "PreemptNumber":
-                                    preemptionSum = preemptions.Where(s =>
+                                case "EventCount":
+                                    signalEventCountSum = signalEventCounts.Where(s =>
                                             s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                        .Sum(s => s.PreemptNumber);
-                                    break;
-                                case "PreemptRequests":
-                                    preemptionSum = preemptions.Where(s =>
-                                            s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                        .Sum(s => s.PreemptRequests);
-                                    break;
-                                case "PreemptServices":
-                                    preemptionSum = preemptions.Where(s =>
-                                            s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                        .Sum(s => s.PreemptServices);
+                                        .Sum(s => s.EventCount);
                                     break;
                             }
                             Bin newBin = new Bin
                             {
                                 Start = bin.Start,
                                 End = bin.End,
-                                Sum = preemptionSum,
-                                Average = preemptionSum
+                                Sum = signalEventCountSum,
+                                Average = signalEventCountSum
                             };
                             concurrentBins.Add(newBin);
                         }

@@ -65,7 +65,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var splitFailAggregationBySignal =
                 new PcdAggregationBySignal(this, signal);
-            return splitFailAggregationBySignal.Total;
+            return splitFailAggregationBySignal.Average;
         }
 
         protected override int GetAverageByDirection(Models.Signal signal, DirectionType direction)
@@ -74,12 +74,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 new PcdAggregationBySignal(this, signal, direction);
             return splitFailAggregationBySignal.Average;
         }
+        
 
         protected override int GetSumByDirection(Models.Signal signal, DirectionType direction)
         {
             var splitFailAggregationBySignal =
                 new PcdAggregationBySignal(this, signal, direction);
-            return splitFailAggregationBySignal.Total;
+            return splitFailAggregationBySignal.Average;
         }
 
         protected override List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal)
@@ -103,7 +104,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return splitFailAggregationBySignal.BinsContainers;
         }
 
-        protected override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
+        public override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
         {
             var aggregations = new ConcurrentBag<PcdAggregationBySignal>();
             Parallel.ForEach(signals, signal => { aggregations.Add(new PcdAggregationBySignal(this, signal)); });

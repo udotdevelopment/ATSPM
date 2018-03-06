@@ -9,9 +9,9 @@ using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.DataAggregation
 {
-    public class SplitFailAggregationByApproach : AggregationByApproach
+    public class EventCountAggregationByApproach : AggregationByApproach
     {
-        public SplitFailAggregationByApproach(Approach approach, ApproachSplitFailAggregationOptions options, DateTime startDate,
+        public EventCountAggregationByApproach(Approach approach, ApproachEventCountAggregationOptions options, DateTime startDate,
             DateTime endDate,
             bool getProtectedPhase, AggregatedDataType dataType) : base(approach, options, startDate, endDate,
             getProtectedPhase, dataType)
@@ -22,12 +22,12 @@ namespace MOE.Common.Business.DataAggregation
             bool getProtectedPhase,
             AggregatedDataType dataType)
         {
-            var splitFailAggregationRepository =
-                ApproachSplitFailAggregationRepositoryFactory.Create();
-            var splitFails =
-                splitFailAggregationRepository.GetApproachSplitFailsAggregationByApproachIdAndDateRange(
+            var eventCountAggregationRepository =
+                ApproachEventCountAggregationRepositoryFactory.Create();
+            var eventCounts =
+                eventCountAggregationRepository.GetPhaseEventCountAggregationByPhaseIdAndDateRange(
                     approach.ApproachID, options.StartDate, options.EndDate, getProtectedPhase);
-            if (splitFails != null)
+            if (eventCounts != null)
             {
                 var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
                 //foreach (var binsContainer in binsContainers)
@@ -39,30 +39,15 @@ namespace MOE.Common.Business.DataAggregation
                     //foreach (var bin in binsContainer.Bins)
                     Parallel.ForEach(binsContainer.Bins, bin =>
                     {
-                        if (splitFails.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
+                        if (eventCounts.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
                         {
-                            var splitFailCount = 0;
+                            var eventCountCount = 0;
                             switch (dataType.DataName)
                             {
-                                case "SplitFails":
-                                    splitFailCount =
-                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.SplitFailures);
-                                    break;
-                                case "ForceOffs":
-                                    splitFailCount =
-                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.ForceOffs);
-                                    break;
-                                case "GapOuts":
-                                    splitFailCount =
-                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.GapOuts);
-                                    break;
-                                case "MaxOuts":
-                                    splitFailCount =
-                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.MaxOuts);
+                                case "EventCount":
+                                    eventCountCount =
+                                        eventCounts.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.EventCount);
                                     break;
                                 default:
 
@@ -73,8 +58,8 @@ namespace MOE.Common.Business.DataAggregation
                             {
                                 Start = bin.Start,
                                 End = bin.End,
-                                Sum = splitFailCount,
-                                Average = splitFailCount
+                                Sum = eventCountCount,
+                                Average = eventCountCount
                             });
                         }
                         else

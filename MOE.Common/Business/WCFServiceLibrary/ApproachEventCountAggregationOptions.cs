@@ -11,17 +11,21 @@ using MOE.Common.Models;
 namespace MOE.Common.Business.WCFServiceLibrary
 {
     [DataContract]
-    public class ApproachCycleAggregationOptions : ApproachAggregationMetricOptions
+    public class ApproachEventCountAggregationOptions : ApproachAggregationMetricOptions
     {
-        public ApproachCycleAggregationOptions()
+        public ApproachEventCountAggregationOptions()
         {
-            MetricTypeID = 20;
+            MetricTypeID = 21;
             AggregatedDataTypes = new List<AggregatedDataType>();
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "RedTime" });
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = "YellowTime" });
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 2, DataName = "GreenTime" });
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 3, DataName = "TotalCycles" });
-            AggregatedDataTypes.Add(new AggregatedDataType { Id = 4, DataName = "PedActuations" });
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "EventCount"});
+        }
+
+        public ApproachEventCountAggregationOptions(ApproachAggregationMetricOptions options)
+        {
+            MetricTypeID = 21;
+            AggregatedDataTypes = new List<AggregatedDataType>();
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 0, DataName = "EventCount" });
+            CopySignalAggregationBaseValues(options);
         }
 
         public override string ChartTitle
@@ -50,72 +54,72 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        public override string YAxisTitle => Regex.Replace(SelectedAggregationType + " of " + 
-                                                 SelectedAggregatedDataType.DataName.ToString(),
+        public override string YAxisTitle => SelectedAggregationType + " of Split Fail " + Regex.Replace(
+                                                 SelectedAggregatedDataType.ToString(),
                                                  @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1") + " " +
                                              TimeOptions.SelectedBinSize + " bins";
 
 
         protected override int GetAverageByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
-            var splitFailAggregationBySignal =
-                new CycleAggregationBySignal(this, signal);
-            return splitFailAggregationBySignal.Average;
+            var eventCountAggregationBySignal =
+                new EventCountAggregationBySignal(this, signal);
+            return eventCountAggregationBySignal.Average;
         }
 
         protected override int GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
-            var splitFailAggregationBySignal =
-                new CycleAggregationBySignal(this, signal);
-            return splitFailAggregationBySignal.Average;
+            var eventCountAggregationBySignal =
+                new EventCountAggregationBySignal(this, signal);
+            return eventCountAggregationBySignal.Average;
         }
 
         protected override int GetAverageByDirection(Models.Signal signal, DirectionType direction)
         {
-            var splitFailAggregationBySignal =
-                new CycleAggregationBySignal(this, signal, direction);
-            return splitFailAggregationBySignal.Average;
+            var eventCountAggregationBySignal =
+                new EventCountAggregationBySignal(this, signal, direction);
+            return eventCountAggregationBySignal.Average;
         }
 
         protected override int GetSumByDirection(Models.Signal signal, DirectionType direction)
         {
-            var splitFailAggregationBySignal =
-                new CycleAggregationBySignal(this, signal, direction);
-            return splitFailAggregationBySignal.Average;
+            var eventCountAggregationBySignal =
+                new EventCountAggregationBySignal(this, signal, direction);
+            return eventCountAggregationBySignal.Average;
         }
 
         protected override List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal)
         {
-            var splitFailAggregationBySignal = new CycleAggregationBySignal(this, signal);
-            return splitFailAggregationBySignal.BinsContainers;
+            var eventCountAggregationBySignal = new EventCountAggregationBySignal(this, signal);
+            return eventCountAggregationBySignal.BinsContainers;
         }
 
         protected override List<BinsContainer> GetBinsContainersByDirection(DirectionType directionType,
             Models.Signal signal)
         {
-            var splitFailAggregationBySignal =
-                new CycleAggregationBySignal(this, signal, directionType);
-            return splitFailAggregationBySignal.BinsContainers;
+            var eventCountAggregationBySignal =
+                new EventCountAggregationBySignal(this, signal, directionType);
+            return eventCountAggregationBySignal.BinsContainers;
         }
 
         protected override List<BinsContainer> GetBinsContainersByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
-            var splitFailAggregationBySignal =
-                new CycleAggregationBySignal(this, signal, phaseNumber);
-            return splitFailAggregationBySignal.BinsContainers;
+            var eventCountAggregationBySignal =
+                new EventCountAggregationBySignal(this, signal, phaseNumber);
+            return eventCountAggregationBySignal.BinsContainers;
         }
 
         public override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
         {
-            var aggregations = new ConcurrentBag<CycleAggregationBySignal>();
-            Parallel.ForEach(signals, signal => { aggregations.Add(new CycleAggregationBySignal(this, signal)); });
+            var aggregations = new ConcurrentBag<EventCountAggregationBySignal>();
+            Parallel.ForEach(signals, signal => { aggregations.Add(new EventCountAggregationBySignal(this, signal)); });
             var binsContainers = BinFactory.GetBins(TimeOptions);
-            foreach (var splitFailAggregationBySignal in aggregations)
+            foreach (var eventCountAggregationBySignal in aggregations)
                 for (var i = 0; i < binsContainers.Count; i++)
                 for (var binIndex = 0; binIndex < binsContainers[i].Bins.Count; binIndex++)
                 {
                     var bin = binsContainers[i].Bins[binIndex];
-                    bin.Sum += splitFailAggregationBySignal.BinsContainers[i].Bins[binIndex].Sum;
+                    bin.Sum += eventCountAggregationBySignal.BinsContainers[i].Bins[binIndex].Sum;
                     bin.Average = Convert.ToInt32(Math.Round((double) (bin.Sum / signals.Count)));
                 }
             return binsContainers;
@@ -124,10 +128,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override List<BinsContainer> GetBinsContainersByApproach(Approach approach, bool getprotectedPhase)
         {
-            var approachCycleAggregationContainer = new CycleAggregationByApproach(approach, this, StartDate,
-                EndDate,
+            var approachEventCountAggregationContainer = new EventCountAggregationByApproach(approach, this,
+                StartDate, EndDate,
                 getprotectedPhase, SelectedAggregatedDataType);
-            return approachCycleAggregationContainer.BinsContainers;
+            return approachEventCountAggregationContainer.BinsContainers;
         }
     }
 }

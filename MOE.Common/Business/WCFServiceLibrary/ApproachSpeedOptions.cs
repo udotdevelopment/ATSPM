@@ -126,7 +126,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             if (Y2AxisMax != null && Y2AxisMax > 0)
                 chartArea.AxisY.Minimum = Y2AxisMax.Value;
             else
-                chartArea.AxisY.Minimum = 20;
+                chartArea.AxisY.Minimum = 0;
 
             chartArea.AxisY.Title = "Average Speed";
 

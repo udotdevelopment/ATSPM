@@ -100,7 +100,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return detectorAggregationBySignal.BinsContainers;
         }
 
-        protected override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
+        public override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
         {
             var aggregations = new ConcurrentBag<DetectorAggregationBySignal>();
             Parallel.ForEach(signals, signal => { aggregations.Add(new DetectorAggregationBySignal(this, signal)); });

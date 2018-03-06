@@ -31,7 +31,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return priorityAggregationBySignal.BinsContainers;
         }
 
-        protected override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
+        public override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
         {
             var binsContainers = BinFactory.GetBins(TimeOptions);
             foreach (var signal in signals)

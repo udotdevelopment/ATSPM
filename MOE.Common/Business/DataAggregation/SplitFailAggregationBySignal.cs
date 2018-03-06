@@ -68,7 +68,6 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
                     bin.Average = ApproachSplitFailures.Count > 0 ? bin.Sum / ApproachSplitFailures.Count : 0;
-                    LoadY2AxisValue(bin, options.ShowEventCount);
                     }
             }
         }
@@ -94,7 +93,6 @@ namespace MOE.Common.Business.DataAggregation
                             false, options.SelectedAggregatedDataType));
             }
         }
-
 
         public int GetSplitFailsByDirection(DirectionType direction)
         {

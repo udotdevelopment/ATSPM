@@ -11,7 +11,7 @@
             return new ApproachEventCountAggregationRepository();
         }
 
-        public static void SetApplicationEventRepository(IApproachEventCountAggregationRepository newRepository)
+        public static void SetRepository(IApproachEventCountAggregationRepository newRepository)
         {
             _phaseCycleAggregationRepository = newRepository;
         }

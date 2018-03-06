@@ -66,7 +66,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var speedAggregationBySignal =
                 new SpeedAggregationBySignal(this, signal);
-            return speedAggregationBySignal.Total;
+            return speedAggregationBySignal.Average;
         }
 
         protected override int GetAverageByDirection(Models.Signal signal, DirectionType direction)
@@ -80,7 +80,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var speedAggregationBySignal =
                 new SpeedAggregationBySignal(this, signal, direction);
-            return speedAggregationBySignal.Total;
+            return speedAggregationBySignal.Average;
         }
 
         protected override List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal)
@@ -104,7 +104,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return speedAggregationBySignal.BinsContainers;
         }
 
-        protected override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
+        public override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
         {
             var aggregations = new ConcurrentBag<SpeedAggregationBySignal>();
             Parallel.ForEach(signals, signal => { aggregations.Add(new SpeedAggregationBySignal(this, signal)); });

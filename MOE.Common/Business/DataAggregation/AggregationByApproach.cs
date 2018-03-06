@@ -16,7 +16,7 @@ namespace MOE.Common.Business.DataAggregation
         {
             get { return BinsContainers.Sum(c => c.SumValue); }
         }
-        
+
 
         public Approach Approach { get; }
         public List<BinsContainer> BinsContainers { get; set; } = new List<BinsContainer>();
@@ -35,12 +35,10 @@ namespace MOE.Common.Business.DataAggregation
         }
 
         public AggregationByApproach(Approach approach, ApproachAggregationMetricOptions options, DateTime startDate,
-            DateTime endDate,
-            bool getProtectedPhase, AggregatedDataType dataType)
+            DateTime endDate, bool getProtectedPhase, AggregatedDataType dataType)
         {
             BinsContainers = BinFactory.GetBins(options.TimeOptions);
             Approach = approach;
-
             if (options.ShowEventCount)
             {
                 ApproachEventCountAggregations = GetApproachEventCountAggregations(options, approach, true);
@@ -54,31 +52,17 @@ namespace MOE.Common.Business.DataAggregation
 
         protected List<ApproachEventCountAggregation> GetApproachEventCountAggregations(ApproachAggregationMetricOptions options, Approach approach, bool getProtectedPhase)
         {
-            var phaseEventCountAggregationRepository =
+            var approachEventCountAggregationRepository =
                 MOE.Common.Models.Repositories.ApproachEventCountAggregationRepositoryFactory.Create();
             return
-                phaseEventCountAggregationRepository.GetApproachEventCountAggregationByPhaseIdAndDateRange(
+                approachEventCountAggregationRepository.GetPhaseEventCountAggregationByPhaseIdAndDateRange(
                     Approach.ApproachID, options.StartDate, options.EndDate, getProtectedPhase);
         }
-
-
-        protected void LoadY2AxisValue(Bin bin, bool ShowEventCount)
-        {
-            if (ShowEventCount)
-            {
-                if (ApproachEventCountAggregations.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
-                {
-                    bin.Y2Axis = ApproachEventCountAggregations
-                        .Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.EventCount);
-                }
-            }
-        }
+        
 
         protected abstract void LoadBins(Approach approach, ApproachAggregationMetricOptions options,
             bool getProtectedPhase, AggregatedDataType dataType);
-
-        protected abstract void LoadBins(Approach approach, DetectorAggregationMetricOptions options,
-            bool getProtectedPhase, AggregatedDataType dataType);
+        
 
     }
 }

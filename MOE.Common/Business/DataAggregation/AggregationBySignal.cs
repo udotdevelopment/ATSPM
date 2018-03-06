@@ -14,10 +14,6 @@ namespace MOE.Common.Business.DataAggregation
         {
             BinsContainers = BinFactory.GetBins(options.TimeOptions);
             Signal = signal;
-            if (options.ShowEventCount)
-            {
-                GetSignalEventCountAggregations(options, signal);
-            }
         }
 
         public Models.Signal Signal { get; }
@@ -41,29 +37,7 @@ namespace MOE.Common.Business.DataAggregation
                 return numberOfBins > 0 ? Convert.ToInt32(Math.Round(Total / numberOfBins)) : 0;
             }
         }
-
-
-        protected void GetSignalEventCountAggregations(SignalAggregationMetricOptions options, Models.Signal signal)
-        {
-            var signalEventCountAggregationRepository =
-                MOE.Common.Models.Repositories.SignalEventCountAggregationRepositoryFactory.Create();
-            SignalEventCountAggregations =
-                signalEventCountAggregationRepository.GetSignalEventCountAggregationBySignalIdAndDateRange(
-                    signal.SignalID, options.StartDate, options.EndDate);
-        }
-
-
-        protected void LoadY2AxisValue(Bin bin, bool ShowEventCount)
-        {
-            if (ShowEventCount)
-            {
-                if (SignalEventCountAggregations.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
-                {
-                    bin.Y2Axis = SignalEventCountAggregations
-                        .Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.EventCount);
-                }
-            }
-        }
+        
 
 
         protected abstract void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal);

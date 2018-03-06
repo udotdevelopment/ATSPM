@@ -8,25 +8,31 @@ using MOE.Common.Business.DataAggregation;
 namespace MOE.Common.Business.WCFServiceLibrary
 {
     [DataContract]
-    public class SignalPreemptionAggregationOptions : SignalAggregationMetricOptions
+    public class SignalEventCountAggregationOptions : SignalAggregationMetricOptions
     {
-        public SignalPreemptionAggregationOptions()
+        public SignalEventCountAggregationOptions()
         {
-            MetricTypeID = 22;
+            MetricTypeID = 23;
             AggregatedDataTypes = new List<AggregatedDataType>();
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "PreemptNumber"});
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = "PreemptRequests"});
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 2, DataName = "PreemptServices"});
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "EventCount"});
         }
 
-        public override string YAxisTitle => SelectedAggregationType + " of Preemption " + Regex.Replace(
+        public SignalEventCountAggregationOptions(SignalAggregationMetricOptions options)
+        {
+            MetricTypeID = 23;
+            AggregatedDataTypes = new List<AggregatedDataType>();
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 0, DataName = "EventCount" });
+            CopySignalAggregationBaseValues(options);
+        }
+
+        public override string YAxisTitle => SelectedAggregationType + " of EventCount " + Regex.Replace(
                                                  SelectedAggregatedDataType.ToString(),
                                                  @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1") + " " +
                                              TimeOptions.SelectedBinSize + " bins";
 
         protected override List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal)
         {
-            var aggregationBySignal = new PreemptionAggregationBySignal(this, signal);
+            var aggregationBySignal = new SignalEventCountAggregationBySignal(this, signal);
             return aggregationBySignal.BinsContainers;
         }
 
@@ -35,8 +41,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var binsContainers = BinFactory.GetBins(TimeOptions);
             foreach (var signal in signals)
             {
-                var preemptionAggregationBySignal = new PreemptionAggregationBySignal(this, signal);
-                PopulateBinsForRoute(signals, binsContainers, preemptionAggregationBySignal);
+                var eventCountAggregationBySignal = new SignalEventCountAggregationBySignal(this, signal);
+                PopulateBinsForRoute(signals, binsContainers, eventCountAggregationBySignal);
             }
             return binsContainers;
         }

@@ -41,6 +41,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         {
             options.SeriesWidth = 3;
             SetFilterSignal(options);
+            options.ShowEventCount = true;
         }
 
         
@@ -69,7 +70,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                                 if (IsValidCombination(options))
                                 {
                                     CreateStackedColumnChart(options);
-                                    Assert.IsTrue(options.ReturnList.Count == 2);
+                                    Assert.IsTrue(options.ReturnList.Count == 2 || options.ReturnList.Count == 4);
                                 }
                             }
                             catch (InvalidBinSizeException e)

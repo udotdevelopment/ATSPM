@@ -8,6 +8,5 @@ namespace MOE.Common.Business.Bins
         public DateTime End { get; set; }
         public int Sum { get; set; } = 0;
         public double Average { get; set; } = 0;
-        public int Y2Axis { get; set; } = 0;
     }
 }

@@ -70,7 +70,6 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     bin.Sum += approachCycleAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
                     bin.Average = ApproachCycles.Count > 0 ? bin.Sum / ApproachCycles.Count : 0;
-                    LoadY2AxisValue(bin, options.ShowEventCount);
                 }
 
             }

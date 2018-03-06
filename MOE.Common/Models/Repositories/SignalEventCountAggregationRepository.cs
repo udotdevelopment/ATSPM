@@ -18,24 +18,27 @@ namespace MOE.Common.Models.Repositories
             _db = context;
         }
 
-        public int GetSignalEventCountSumAggregationBySignalIdAndDateRange(string SignalId, DateTime start,
-            DateTime end)
+       
+
+
+        public int GetSignalEventCountSumAggregationBySignalIdAndDateRange(string signalId, DateTime start, DateTime end)
         {
             var cycles = 0;
-            if (_db.SignalEventCountAggregations.Any(r => r.SignalId == SignalId
-                                                       && r.BinStartTime >= start && r.BinStartTime <= end))
-                cycles = _db.SignalEventCountAggregations.Where(r => r.SignalId == SignalId
-                                                                  && r.BinStartTime >= start &&
-                                                                  r.BinStartTime <= end)
+            if (_db.SignalEventCountAggregations.Any(r => r.SignalId == signalId
+                                                          && r.BinStartTime >= start && r.BinStartTime <= end))
+            {
+                cycles = _db.SignalEventCountAggregations.Where(r => r.SignalId == signalId
+                                                                     && r.BinStartTime >= start &&
+                                                                     r.BinStartTime <= end)
                     .Sum(r => r.EventCount);
+            }
             return cycles;
         }
-        
 
-        public List<SignalEventCountAggregation> GetSignalEventCountAggregationBySignalIdAndDateRange(string SignalId,
+        public List<SignalEventCountAggregation> GetSignalEventCountAggregationBySignalIdAndDateRange(string signalId,
             DateTime startDate, DateTime endDate)
         {
-            return _db.SignalEventCountAggregations.Where(r => r.SignalId == SignalId
+            return _db.SignalEventCountAggregations.Where(r => r.SignalId == signalId
                                                             && r.BinStartTime >= startDate &&
                                                             r.BinStartTime <= endDate).ToList();
         }
