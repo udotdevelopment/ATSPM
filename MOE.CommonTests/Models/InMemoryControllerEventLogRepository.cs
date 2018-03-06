@@ -488,5 +488,12 @@ namespace MOE.CommonTests.Models
         {
             throw new NotImplementedException();
         }
+
+        public int GetApproachEventsCountBetweenDates(int approachId, DateTime startTime, DateTime endTime,
+            int phaseNumber)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

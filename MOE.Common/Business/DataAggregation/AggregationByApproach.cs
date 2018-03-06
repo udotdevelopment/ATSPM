@@ -11,7 +11,7 @@ namespace MOE.Common.Business.DataAggregation
 {
     public abstract class AggregationByApproach
     {
-        protected List<PhaseEventCountAggregation> PhaseEventCountAggregations { get; set; }
+        protected List<ApproachEventCountAggregation> ApproachEventCountAggregations { get; set; }
         public int Total
         {
             get { return BinsContainers.Sum(c => c.SumValue); }
@@ -41,21 +41,21 @@ namespace MOE.Common.Business.DataAggregation
             Approach = approach;
             if (options.ShowEventCount)
             {
-                PhaseEventCountAggregations = GetPhaseEventCountAggregations(options, approach, true);
+                ApproachEventCountAggregations = GetApproachEventCountAggregations(options, approach, true);
                 if (approach.PermissivePhaseNumber != null)
                 {
-                    PhaseEventCountAggregations.AddRange(GetPhaseEventCountAggregations(options, approach, false));
+                    ApproachEventCountAggregations.AddRange(GetApproachEventCountAggregations(options, approach, false));
                 }
             }
             LoadBins(approach, options, getProtectedPhase, dataType);
         }
 
-        protected List<PhaseEventCountAggregation> GetPhaseEventCountAggregations(ApproachAggregationMetricOptions options, Approach approach, bool getProtectedPhase)
+        protected List<ApproachEventCountAggregation> GetApproachEventCountAggregations(ApproachAggregationMetricOptions options, Approach approach, bool getProtectedPhase)
         {
             var phaseEventCountAggregationRepository =
-                MOE.Common.Models.Repositories.PhaseEventCountAggregationRepositoryFactory.Create();
+                MOE.Common.Models.Repositories.ApproachEventCountAggregationRepositoryFactory.Create();
             return
-                phaseEventCountAggregationRepository.GetPhaseEventCountAggregationByPhaseIdAndDateRange(
+                phaseEventCountAggregationRepository.GetApproachEventCountAggregationByPhaseIdAndDateRange(
                     Approach.ApproachID, options.StartDate, options.EndDate, getProtectedPhase);
         }
         

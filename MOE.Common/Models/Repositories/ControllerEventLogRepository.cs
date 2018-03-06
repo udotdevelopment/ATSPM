@@ -482,5 +482,19 @@ namespace MOE.Common.Models.Repositories
                 select r).Count();
             return results;
         }
+
+        public int GetApproachEventsCountBetweenDates(int approachId, DateTime startTime, DateTime endTime, 
+            int phaseNumber)
+        {
+            var approachCodes = new List<int> {1, 8, 10};
+            var ar = ApproachRepositoryFactory.Create();
+            Approach approach = ar.GetApproachByApproachID(approachId);
+
+            var results = _db.Controller_Event_Log.Where(r => 
+                r.SignalID == approach.SignalID && r.Timestamp > startTime && r.Timestamp < endTime
+                && approachCodes.Contains(r.EventCode) && r.EventParam == phaseNumber);
+
+            return results.Count();
+        }
     }
 }

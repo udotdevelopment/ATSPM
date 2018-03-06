@@ -133,8 +133,8 @@ function GetApproachVolumeMetric(metricTypeID) {
     tosend.SelectedBinSize = $("#SelectedBinSize").val();
     tosend.ShowTotalVolume = $("#ShowTotalVolume").is(":checked");
     tosend.ShowDirectionalSplits = $("#ShowDirectionalSplits").is(":checked");
-    tosend.ShowNBWBVolume = $("#ShowNBWBVolume").is(":checked");
-    tosend.ShowSBEBVolume = $("#ShowSBEBVolume").is(":checked");
+    tosend.ShowNbEbVolume = $("#ShowNbEbVolume").is(":checked");
+    tosend.ShowSbWbVolume = $("#ShowSbWbVolume").is(":checked");
     tosend.ShowTMCDetection = $("#ShowTMCDetection").is(":checked");
     tosend.ShowAdvanceDetection = $("#ShowAdvanceDetection").is(":checked");
     GetMetric(urlpathApproachVolume, tosend);

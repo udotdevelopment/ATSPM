@@ -58,5 +58,8 @@ namespace MOE.Common.Models.Repositories
             int eventParam, DateTime date);
 
         int GetSignalEventsCountBetweenDates(string signalId, DateTime startTime, DateTime endTime);
+
+        int GetApproachEventsCountBetweenDates(int approachId, DateTime startTime, DateTime endTime,
+            int phaseNumber);
     }
 }

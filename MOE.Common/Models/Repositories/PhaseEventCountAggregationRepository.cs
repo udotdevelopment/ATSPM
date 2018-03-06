@@ -4,16 +4,16 @@ using System.Linq;
 
 namespace MOE.Common.Models.Repositories
 {
-    public class PhaseEventCountAggregationRepository : IPhaseEventCountAggregationRepository
+    public class ApproachEventCountAggregationRepository : IApproachEventCountAggregationRepository
     {
         private readonly SPM _db;
 
-        public PhaseEventCountAggregationRepository()
+        public ApproachEventCountAggregationRepository()
         {
             _db = new SPM();
         }
 
-        public PhaseEventCountAggregationRepository(SPM context)
+        public ApproachEventCountAggregationRepository(SPM context)
         {
             _db = context;
         }
@@ -24,20 +24,20 @@ namespace MOE.Common.Models.Repositories
             var cycles = 0;
             if (getProtectedPhase)
             {
-                if (_db.PhaseEventCountAggregations.Any(r => r.ApproachId == approachId && r.IsProtectedPhase
+                if (_db.ApproachEventCountAggregations.Any(r => r.ApproachId == approachId && r.IsProtectedPhase
                                                              && r.BinStartTime >= start && r.BinStartTime <= end))
                 {
-                    cycles = _db.PhaseEventCountAggregations.Where(r => r.ApproachId == approachId && r.IsProtectedPhase
+                    cycles = _db.ApproachEventCountAggregations.Where(r => r.ApproachId == approachId && r.IsProtectedPhase
                                                                         && r.BinStartTime >= start && r.BinStartTime <= end)
                         .Sum(r => r.EventCount);
                 }
             }
             else
             {
-                if (_db.PhaseEventCountAggregations.Any(r => r.ApproachId == approachId && !r.IsProtectedPhase
+                if (_db.ApproachEventCountAggregations.Any(r => r.ApproachId == approachId && !r.IsProtectedPhase
                                                              && r.BinStartTime >= start && r.BinStartTime <= end))
                 {
-                    cycles = _db.PhaseEventCountAggregations.Where(r => r.ApproachId == approachId && !r.IsProtectedPhase
+                    cycles = _db.ApproachEventCountAggregations.Where(r => r.ApproachId == approachId && !r.IsProtectedPhase
                                                                         && r.BinStartTime >= start && r.BinStartTime <= end)
                         .Sum(r => r.EventCount);
                 }
@@ -46,30 +46,30 @@ namespace MOE.Common.Models.Repositories
         }
         
 
-        public List<PhaseEventCountAggregation> GetPhaseEventCountAggregationByPhaseIdAndDateRange(int approachId, DateTime start,
+        public List<ApproachEventCountAggregation> GetApproachEventCountAggregationByPhaseIdAndDateRange(int approachId, DateTime start,
             DateTime end, bool getProtectedPhase)
         {
             if (getProtectedPhase)
             {
-                if (_db.PhaseEventCountAggregations.Any(r => r.ApproachId == approachId && r.IsProtectedPhase
+                if (_db.ApproachEventCountAggregations.Any(r => r.ApproachId == approachId && r.IsProtectedPhase
                                                              && r.BinStartTime >= start && r.BinStartTime <= end))
                 {
-                    return _db.PhaseEventCountAggregations.Where(r => r.ApproachId == approachId && r.IsProtectedPhase
+                    return _db.ApproachEventCountAggregations.Where(r => r.ApproachId == approachId && r.IsProtectedPhase
                                                                       && r.BinStartTime >= start &&
                                                                       r.BinStartTime <= end).ToList();
                 }
             }
             else
             {
-                if (_db.PhaseEventCountAggregations.Any(r => r.ApproachId == approachId && !r.IsProtectedPhase
+                if (_db.ApproachEventCountAggregations.Any(r => r.ApproachId == approachId && !r.IsProtectedPhase
                                                              && r.BinStartTime >= start && r.BinStartTime <= end))
                 {
-                    return _db.PhaseEventCountAggregations.Where(r => r.ApproachId == approachId && !r.IsProtectedPhase
+                    return _db.ApproachEventCountAggregations.Where(r => r.ApproachId == approachId && !r.IsProtectedPhase
                                                                       && r.BinStartTime >= start &&
                                                                       r.BinStartTime <= end).ToList();
                 }
             }
-            return new List<PhaseEventCountAggregation>();
+            return new List<ApproachEventCountAggregation>();
         }
     }
 

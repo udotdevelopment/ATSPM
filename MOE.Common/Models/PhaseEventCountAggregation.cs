@@ -5,7 +5,7 @@ using CsvHelper.Configuration;
 
 namespace MOE.Common.Models
 {
-    public class PhaseEventCountAggregation : Aggregation
+    public class ApproachEventCountAggregation : Aggregation
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -25,7 +25,7 @@ namespace MOE.Common.Models
 
 
         public sealed class
-            ApproachCountAggregationClassMap : ClassMap<PhaseEventCountAggregation>
+            ApproachCountAggregationClassMap : ClassMap<ApproachEventCountAggregation>
         {
             public ApproachCountAggregationClassMap()
             {

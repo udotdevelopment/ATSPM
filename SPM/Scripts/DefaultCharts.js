@@ -73,13 +73,13 @@ function SetPCDMetric(selectedBinSize, selectedDotSize, showPlanStatistics, show
     $("#ShowVolumes").prop('checked',showVolumes);
 }
 
-function SetApproachVolumeMetric(selectedBinSize, showDirectionalSplits, showTotalVolumes, showSBEBVolume, showNBWBVolume,
+function SetApproachVolumeMetric(selectedBinSize, showDirectionalSplits, showTotalVolumes, ShowSbWbVolume, ShowNbEbVolume,
     showTMCDetection, showAdvanceDetection) {
     $("#SelectedBinSize").val(selectedBinSize);
     $("#ShowDirectionalSplits").prop('checked',showDirectionalSplits);
     $("#ShowTotalVolumes").prop('checked',showTotalVolumes);
-    $("#ShowSBEBVolume").prop('checked',showSBEBVolume);
-    $("#ShowNBWBVolume").prop('checked',showNBWBVolume);
+    $("#ShowSbWbVolume").prop('checked',ShowSbWbVolume);
+    $("#ShowNbEbVolume").prop('checked',ShowNbEbVolume);
     $("#ShowTMCDetection").prop('checked',showTMCDetection);
     $("#ShowAdvanceDetection").prop('checked',showAdvanceDetection);
 }

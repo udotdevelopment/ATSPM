@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web.UI.DataVisualization.Charting;
+using System.Xml;
+using System.Xml.Linq;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
+using Newtonsoft.Json;
 
 namespace MOE.Common.Business
 {
@@ -139,27 +143,7 @@ namespace MOE.Common.Business
             Bins = GetBins(options);
             return chart;
         }
-
-        //public static Chart CreatePurdueSplitFailureAggregationChart(SignalAggregationMetricOptions options)
-        //{
-        //    options.MetricTypeID = 20;
-        //    Chart chart = ChartInitialization(options);
-        //    Bins = GetBins(options);
-        //    foreach (var a in options.Approaches)
-        //    {
-        //        Series s = CreateLineSeries(a.Description, Color.FromArgb(_rnd.Next(100,255), _rnd.Next(100, 255), _rnd.Next(100, 255)));
-        //        List<ApproachSplitFailAggregation> records = GetApproachAggregationRecords(a,options);
-        //        PopulateBinsWithSplitFailAggregateSums(records);
-        //        foreach (var bin in Bins)
-        //        {
-        //            s.Points.AddXY(bin.Start, bin.Sum);
-        //        }
-
-        //        chart.Series.Add(s);
-        //    }
-        //    return chart;
-        //}
-
+        
         private static void PopulateBinsWithSplitFailAggregateSums(List<ApproachSplitFailAggregation> records)
         {
             foreach (var bin in Bins)
@@ -270,6 +254,8 @@ namespace MOE.Common.Business
             SetTimeXAxis(chartArea, options);
             return chartArea;
         }
+
+
 
         private static void SetSplitFailX2Axis(ChartArea chartArea, SplitFailOptions options)
         {
@@ -567,5 +553,11 @@ namespace MOE.Common.Business
             chartArea.AxisX.LabelStyle.Font = new Font("Microsoft Sans Serif", 12);
             chartArea.AxisX.LabelStyle.Angle = 45;
         }
+
+
+
+        
+
+
     }
 }
