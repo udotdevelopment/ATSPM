@@ -17,35 +17,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
     {
         public override string YAxisTitle { get; }
 
-        //public override List<string> CreateMetric()
-        //{
-        //    base.CreateMetric();
-        //    GetSignalObjects();
-        //    if (SelectedXAxisType == XAxisType.TimeOfDay &&
-        //        TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
-        //    {
-        //        TimeOptions.TimeOption = BinFactoryOptions.TimeOptions.TimePeriod;
-        //        TimeOptions.TimeOfDayStartHour = 0;
-        //        TimeOptions.TimeOfDayStartMinute = 0;
-        //        TimeOptions.TimeOfDayEndHour = 23;
-        //        TimeOptions.TimeOfDayEndMinute = 59;
-        //        if (TimeOptions.DaysOfWeek == null)
-        //            TimeOptions.DaysOfWeek = new List<DayOfWeek>
-        //            {
-        //                DayOfWeek.Sunday,
-        //                DayOfWeek.Monday,
-        //                DayOfWeek.Tuesday,
-        //                DayOfWeek.Wednesday,
-        //                DayOfWeek.Thursday,
-        //                DayOfWeek.Friday,
-        //                DayOfWeek.Saturday
-        //            };
-        //    }
-        //    GetChartByXAxisAggregation();
-        //    return ReturnList;
-        //}
-
-
         protected override void GetChartByXAxisAggregation()
         {
             switch (SelectedXAxisType)
@@ -81,6 +52,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     {
                         chart = ChartFactory.CreateStringXIntYChart(this);
                         GetDirectionXAxisDirectionSeriesChart(signal, chart);
+                        if (ShowEventCount)
+                        {
+                            SetDirectionXAxisSignalSeriesForEventCount(chart, signal);
+                        }
                         SaveChartImage(chart);
                     }
                     break;
@@ -91,10 +66,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void GetDirectionXAxisDirectionSeriesChart(Models.Signal signal, Chart chart)
         {
+            Series series = GetDirectionXAxisDirectionSeries(signal);
+            chart.Series.Add(series);
+        }
+
+        private Series GetDirectionXAxisDirectionSeries(Models.Signal signal)
+        {
+            var series = CreateSeries(0, signal.SignalDescription);
             var directionsList = GetFilteredDirections();
             var columnCounter = 1;
             var colorCount = 1;
-            var series = CreateSeries(0, signal.SignalDescription);
             foreach (var direction in directionsList)
             {
                 var dataPoint = new DataPoint();
@@ -109,7 +90,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 colorCount++;
                 columnCounter++;
             }
-            chart.Series.Add(series);
+
+            return series;
         }
 
         private List<DirectionType> GetFilteredDirections()
@@ -130,6 +112,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     {
                         chart = ChartFactory.CreateStringXIntYChart(this);
                         GetApproachXAxisChart(signal, chart);
+                        if (ShowEventCount)
+                        {
+                            SetApproachXAxisSignalSeriesForEventCount(chart, signal);
+                        }
                         SaveChartImage(chart);
                     }
                     break;
@@ -138,9 +124,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
+
         protected override void GetTimeCharts()
         {
-            Chart chart;
+            Chart chart = null;
             switch (SelectedSeries)
             {
                 case SeriesType.PhaseNumber:
@@ -148,7 +135,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     {
                         chart = ChartFactory.CreateTimeXIntYChart(this, new List<Models.Signal> {signal});
                         GetTimeXAxisApproachSeriesChart(signal, chart);
-                        SaveChartImage(chart);
+                        if (ShowEventCount)
+                        {
+                            SetTimeXAxisSignalSeriesForEventCount(chart, signal);
+                        }
                     }
                     break;
                 case SeriesType.Direction:
@@ -156,24 +146,44 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     {
                         chart = ChartFactory.CreateTimeXIntYChart(this, new List<Models.Signal> {signal});
                         GetTimeXAxisDirectionSeriesChart(signal, chart);
-                        SaveChartImage(chart);
+                        if (ShowEventCount)
+                        {
+                            SetTimeXAxisSignalSeriesForEventCount(chart, signal);
+                            //var eventCountOptions = (ApproachEventCountAggregationOptions)this;
+                            //Series series = eventCountOptions.GetTimeXAxisSignalSeries(signal);
+                            //chart.Series.Add(series);
+                        }
                     }
                     ;
                     break;
                 case SeriesType.Signal:
                     chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
                     GetTimeXAxisSignalSeriesChart(Signals, chart);
-                    SaveChartImage(chart);
+                    if (ShowEventCount)
+                    {
+                        SetTimeXAxisRouteSeriesForEventCount(Signals, chart);
+                        //var eventCountOptions = (ApproachEventCountAggregationOptions)this;
+                        //Series series = eventCountOptions.GetTimeXAxisRouteSeries(Signals);
+                        //chart.Series.Add(series);
+                    }
                     break;
                 case SeriesType.Route:
                     chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
-                    GetTimeXAxisRouteSeriesChart(Signals, chart);
-                    SaveChartImage(chart);
+                    SetTimeXAxisRouteSeriesChart(Signals, chart);
+                    if (ShowEventCount)
+                    {
+                        SetTimeXAxisRouteSeriesForEventCount(Signals, chart);
+                        //var eventCountOptions = (ApproachEventCountAggregationOptions)this;
+                        //Series series = eventCountOptions.GetTimeXAxisRouteSeries(Signals);
+                        //chart.Series.Add(series);
+                    }
                     break;
                 default:
                     throw new Exception("Invalid X-Axis Series Combination");
             }
+            SaveChartImage(chart);
         }
+
 
         protected override void GetSignalCharts()
         {
@@ -194,6 +204,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     break;
                 default:
                     throw new Exception("Invalid X-Axis Series Combination");
+            }
+            if (ShowEventCount)
+            {
+                SetSignalsXAxisSignalSeriesForEventCount(Signals, chart);
             }
             SaveChartImage(chart);
         }
@@ -255,7 +269,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override void GetTimeOfDayCharts()
         {
-            Chart chart;
+            Chart chart = null;
             switch (SelectedSeries)
             {
                 case SeriesType.PhaseNumber:
@@ -263,15 +277,30 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     {
                         chart = ChartFactory.CreateTimeXIntYChart(this, new List<Models.Signal> {signal});
                         GetTimeOfDayXAxisApproachSeriesChart(signal, chart);
-                        SaveChartImage(chart);
+                        if (ShowEventCount)
+                        {
+                            var eventCountOptions = (ApproachEventCountAggregationOptions)this;
+                            var binsContainers = GetBinsContainersByRoute(new List<Models.Signal> { signal });
+                            Series series = CreateEventCountSeries();
+                            eventCountOptions.SetTimeAggregateSeries(series, binsContainers);
+                            chart.Series.Add(series);
+                        }
                     }
                     break;
                 case SeriesType.Direction:
                     foreach (var signal in Signals)
                     {
-                        chart = ChartFactory.CreateTimeXIntYChart(this, new List<Models.Signal> {signal});
+                        var signals = new List<Models.Signal> {signal};
+                        chart = ChartFactory.CreateTimeXIntYChart(this, signals);
                         GetTimeOfDayXAxisDirectionSeriesChart(signal, chart);
-                        SaveChartImage(chart);
+                        if (ShowEventCount)
+                        {
+                            var eventCountOptions = (ApproachEventCountAggregationOptions)this;
+                            var binsContainers = GetBinsContainersByRoute(Signals);
+                            Series series = CreateEventCountSeries();
+                            eventCountOptions.SetTimeAggregateSeries(series, binsContainers);
+                            chart.Series.Add(series);
+                        }
                     }
                     ;
                     break;
@@ -279,15 +308,31 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
                     GetTimeOfDayXAxisSignalSeriesChart(Signals, chart);
                     SaveChartImage(chart);
+                    if (ShowEventCount)
+                    {
+                        var eventCountOptions = (ApproachEventCountAggregationOptions)this;
+                        var binsContainers = GetBinsContainersByRoute(Signals);
+                        Series series = CreateEventCountSeries();
+                        eventCountOptions.SetTimeAggregateSeries(series, binsContainers);
+                        chart.Series.Add(series);
+                    }
                     break;
                 case SeriesType.Route:
                     chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
                     GetTimeOfDayXAxisRouteSeriesChart(Signals, chart);
-                    SaveChartImage(chart);
+                    if (ShowEventCount)
+                    {
+                        var eventCountOptions = (ApproachEventCountAggregationOptions)this;
+                        var binsContainers = GetBinsContainersByRoute(Signals);
+                        Series series = CreateEventCountSeries();
+                        eventCountOptions.SetTimeAggregateSeries(series, binsContainers);
+                        chart.Series.Add(series);
+                    }
                     break;
                 default:
                     throw new Exception("Invalid X-Axis Series Combination");
             }
+            SaveChartImage(chart);
         }
 
 
@@ -302,7 +347,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 var series = CreateSeries(i, availableDirections[i].Description);
                 try
                 {
-                    seriesList.Add(GetTimeAggregateSeries(series, binsContainers));
+                    SetTimeAggregateSeries(series, binsContainers);
+                    seriesList.Add(series);
                 }
                 catch (Exception e)
                 {
@@ -333,13 +379,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 var phaseDescription = GetPhaseDescription(approaches[i], true);
                 var binsContainers = GetBinsContainersByApproach(approaches[i], true);
                 var series = CreateSeries(i, approaches[i].Description + phaseDescription);
-                seriesList.Add(GetTimeAggregateSeries(series, binsContainers));
+                SetTimeAggregateSeries(series, binsContainers);
+                seriesList.Add(series);
                 if (approaches[i].PermissivePhaseNumber != null)
                 {
                     var permissivePhaseDescription = GetPhaseDescription(approaches[i], false);
                     var permissiveBinsContainers = GetBinsContainersByApproach(approaches[i], false);
                     var permissiveSeries = CreateSeries(i, approaches[i].Description + permissivePhaseDescription);
-                    seriesList.Add(GetTimeAggregateSeries(permissiveSeries, permissiveBinsContainers));
+                    SetTimeAggregateSeries(permissiveSeries, permissiveBinsContainers);
+                    seriesList.Add(permissiveSeries);
                     i++;
                 }
             });
@@ -364,24 +412,36 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var phaseNumber in availablePhaseNumbers)
             {
                 var seriesName = "Phase " + phaseNumber;
-                var series = CreateSeries(colorCode, seriesName);
-                foreach (var signal in signals)
-                {
-                    var binsContainers = GetBinsContainersByPhaseNumber(signal, phaseNumber);
-                    var dataPoint = new DataPoint();
-                    dataPoint.SetValueY(SelectedAggregationType == AggregationType.Sum
-                        ? binsContainers.Sum(b => b.SumValue)
-                        : binsContainers.Average(b => b.SumValue));
-                    dataPoint.AxisLabel = signal.SignalDescription;
-                    series.Points.Add(dataPoint);
-                }
+                Series series = GetSignalXAxisPhaseNumberSeries(signals, colorCode, phaseNumber, seriesName);
                 colorCode++;
                 chart.Series.Add(series);
             }
         }
 
+        public Series GetSignalXAxisPhaseNumberSeries(List<Models.Signal> signals, int colorCode, int phaseNumber, string seriesName)
+        {
+            var series = CreateSeries(colorCode, seriesName);
+            foreach (var signal in signals)
+            {
+                var binsContainers = GetBinsContainersByPhaseNumber(signal, phaseNumber);
+                var dataPoint = new DataPoint();
+                dataPoint.SetValueY(SelectedAggregationType == AggregationType.Sum
+                    ? binsContainers.Sum(b => b.SumValue)
+                    : binsContainers.Average(b => b.SumValue));
+                dataPoint.AxisLabel = signal.SignalDescription;
+                series.Points.Add(dataPoint);
+            }
+
+            return series;
+        }
 
         protected void GetApproachXAxisChart(Models.Signal signal, Chart chart)
+        {
+            Series series = GetApproachXAxisApproachSeries(signal, 0);
+            chart.Series.Add(series);
+        }
+
+        private Series GetApproachXAxisApproachSeries(Models.Signal signal, int colorCode)
         {
             var series = CreateSeries(0, signal.SignalDescription);
             var i = 1;
@@ -413,13 +473,19 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     i++;
                 }
             }
-            chart.Series.Add(series);
+
+            return series;
         }
 
         protected void GetPhaseXAxisChart(Models.Signal signal, Chart chart)
         {
-            var series = CreateSeries(0, signal.SignalDescription);
+            Series series = GetPhaseXAxisPhaseSeries(signal, 0);
             chart.Series.Add(series);
+        }
+
+        public Series GetPhaseXAxisPhaseSeries(Models.Signal signal, int colorCode)
+        {
+            var series = CreateSeries(colorCode, signal.SignalDescription);
             var i = 1;
             var phaseNumbers = signal.GetPhasesForSignal();
             foreach (var phaseNumber in phaseNumbers)
@@ -435,6 +501,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 series.Points.Add(dataPoint);
                 i++;
             }
+            return series;
         }
 
         protected void GetTimeXAxisApproachSeriesChart(Models.Signal signal, Chart chart)
@@ -462,9 +529,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
         private void GetApproachTimeSeriesByProtectedPermissive(Chart chart, int i, Approach approach,
             bool getProtectedPhase)
         {
+            Series series = GetTimeXAxisPhaseSeries(i, approach, getProtectedPhase);
+            chart.Series.Add(series);
+        }
+
+        private Series GetTimeXAxisPhaseSeries(int colorCode, Approach approach, bool getProtectedPhase)
+        {
             var phaseDescription = GetPhaseDescription(approach, getProtectedPhase);
             var binsContainers = GetBinsContainersByApproach(approach, getProtectedPhase);
-            var series = CreateSeries(i, approach.Description + phaseDescription);
+            var series = CreateSeries(colorCode, approach.Description + phaseDescription);
             if ((TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Month ||
                  TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Year) &&
                 TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)
@@ -483,9 +556,61 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         : GetDataPointForAverage(bin);
                     series.Points.Add(dataPoint);
                 }
+
+            return series;
+        }
+
+
+        public virtual void SetDirectionXAxisSignalSeriesForEventCount(Chart chart, Models.Signal signal)
+        {
+            var eventCountOptions = new ApproachEventCountAggregationOptions(this);
+            Series series = eventCountOptions.GetDirectionXAxisDirectionSeries(signal);
+            SetEventCountSeries(series);
             chart.Series.Add(series);
         }
 
+
+        public virtual void SetApproachXAxisSignalSeriesForEventCount(Chart chart, Models.Signal signal)
+        {
+            var eventCountOptions = new ApproachEventCountAggregationOptions(this);
+            Series series = eventCountOptions.GetApproachXAxisApproachSeries(signal, -1);
+            SetEventCountSeries(series);
+            chart.Series.Add(series);
+        }
+
+
+        public virtual void SetTimeXAxisSignalSeriesForEventCount(Chart chart, Models.Signal signal)
+        {
+            var eventCountOptions = new ApproachEventCountAggregationOptions(this);
+            Series series = eventCountOptions.GetTimeXAxisSignalSeries(signal);
+            SetEventCountSeries(series);
+            chart.Series.Add(series);
+        }
+
+        public override void SetSignalsXAxisSignalSeriesForEventCount(List<Models.Signal> signals, Chart chart)
+        {
+            var eventCountOptions = new ApproachEventCountAggregationOptions(this);
+            Series series = eventCountOptions.GetSignalsXAxisSignalSeries(signals, "Event Count");
+            SetEventCountSeries(series);
+            chart.Series.Add(series);
+        }
+
+        public override void SetTimeXAxisRouteSeriesForEventCount(List<Models.Signal> signals, Chart chart)
+        {
+            var eventCountOptions = new ApproachEventCountAggregationOptions(this);
+            Series series = eventCountOptions.GetTimeXAxisRouteSeries(signals);
+            SetEventCountSeries(series);
+            chart.Series.Add(series);
+        }
+
+        public override void SetTimeOfDayAxisRouteSeriesForEventCount(List<Models.Signal> signals, Chart chart)
+        {
+            var eventCountOptions = new ApproachEventCountAggregationOptions(this);
+            Series eventCountSeries = CreateEventCountSeries();
+            var eventBinsContainers = eventCountOptions.GetBinsContainersByRoute(signals);
+            eventCountOptions.SetTimeAggregateSeries(eventCountSeries, eventBinsContainers);
+            chart.Series.Add(eventCountSeries);
+        }
 
         protected abstract List<BinsContainer> GetBinsContainersByApproach(Approach approach, bool getprotectedPhase);
         protected abstract int GetAverageByPhaseNumber(Models.Signal signal, int phaseNumber);
@@ -497,5 +622,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Models.Signal signal);
 
         protected abstract List<BinsContainer> GetBinsContainersByPhaseNumber(Models.Signal signal, int phaseNumber);
+
     }
 }

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
-    public interface ISignalEventCountAggregationRepository
+    public interface IPhaseEventCountAggregationRepository
     {
-        int GetSignalEventCountSumAggregationBySignalIdAndDateRange(string SignalId, DateTime start,
-            DateTime end);
+        int GetPhaseEventCountSumAggregationByPhaseIdAndDateRange(int approachId, DateTime start,
+            DateTime end, bool getProtectedPhase);
 
-        List<SignalEventCountAggregation> GetSignalEventCountAggregationBySignalIdAndDateRange(string SignalId,
-            DateTime startDate, DateTime endDate);
+        List<PhaseEventCountAggregation> GetPhaseEventCountAggregationByPhaseIdAndDateRange(int approachId, DateTime start,
+            DateTime end, bool getProtectedPhase);
     }
 }

@@ -11,7 +11,7 @@
             return new PhaseEventCountAggregationRepository();
         }
 
-        public static void SetApplicationEventRepository(IPhaseEventCountAggregationRepository newRepository)
+        public static void SetRepository(IPhaseEventCountAggregationRepository newRepository)
         {
             _phaseCycleAggregationRepository = newRepository;
         }

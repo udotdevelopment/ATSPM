@@ -33,19 +33,6 @@ namespace MOE.Common.Business.DataAggregation
                     Detector.ID, options.StartDate, options.EndDate);
         }
 
-
-        protected void LoadY2AxisValue(Bin bin, bool ShowEventCount)
-        {
-            if (ShowEventCount)
-            {
-                if (DetectorEventCountAggregations.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
-                {
-                    bin.Y2Axis = DetectorEventCountAggregations
-                        .Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.EventCount);
-                }
-            }
-        }
-
         protected abstract void LoadBins(Models.Detector detector, DetectorAggregationMetricOptions options);
     }
 }

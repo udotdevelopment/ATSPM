@@ -169,6 +169,7 @@
     <Compile Include="Models\InMemorySignalsRepository.cs" />
     <Compile Include="Models\InMemoryApproachSplitFailAggregationRepository.cs" />
     <Compile Include="Models\InMemorySignalEventCountAggregationRepository.cs" />
+    <Compile Include="Models\InMemoryPhaseEventCountAggregationRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

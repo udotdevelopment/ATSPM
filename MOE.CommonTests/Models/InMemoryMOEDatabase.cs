@@ -47,6 +47,7 @@ namespace MOE.CommonTests.Models
         public List<VersionAction> VersionActions = new List<VersionAction>();
         public List<DetectionTypeGraph_Detector> DetectionTypeDetectors = new List<DetectionTypeGraph_Detector>();
         public List<SignalEventCountAggregation> SignalEventCountAggregations { get; set; } = new List<SignalEventCountAggregation>();
+        public List<PhaseEventCountAggregation> PhaseEventCountAggregations { get; set; } = new List<PhaseEventCountAggregation>();
 
         public void SetFilterSignal(SignalAggregationMetricOptions options)
         {
@@ -1421,6 +1422,36 @@ namespace MOE.CommonTests.Models
                 id++;
             }
         }
-    
+
+        public void PopulateApproachEventCountwithRandomValues(DateTime start, DateTime end, Approach approach)
+        {
+            var id = 1;
+            for (var startTime = start; startTime <= end; startTime = startTime.AddMinutes(15))
+            {
+                var r = new PhaseEventCountAggregation()
+                {
+                    BinStartTime = startTime,
+                    ApproachId = approach.ApproachID,
+                    IsProtectedPhase = true,
+                    EventCount = rnd.Next(500, 1000),
+                    Id = id
+                };
+                PhaseEventCountAggregations.Add(r);
+                id++;
+                if (approach.PermissivePhaseNumber != null)
+                {
+                    var permissivePhase = new PhaseEventCountAggregation()
+                    {
+                        BinStartTime = startTime,
+                        ApproachId = approach.ApproachID,
+                        IsProtectedPhase = true,
+                        EventCount = rnd.Next(500, 1000),
+                        Id = id
+                    };
+                    PhaseEventCountAggregations.Add(permissivePhase);
+                    id++;
+                }
+            }
+        }
     }
 }

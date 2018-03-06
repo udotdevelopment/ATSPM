@@ -64,7 +64,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var splitFailAggregationBySignal =
                 new YellowRedActivationsAggregationBySignal(this, signal);
-            return splitFailAggregationBySignal.Total;
+            return splitFailAggregationBySignal.Average;
         }
 
         protected override int GetAverageByDirection(Models.Signal signal, DirectionType direction)
@@ -78,7 +78,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var yellowRedActivationsAggregationBySignal =
                 new YellowRedActivationsAggregationBySignal(this, signal, direction);
-            return yellowRedActivationsAggregationBySignal.Total;
+            return yellowRedActivationsAggregationBySignal.Average;
         }
 
         protected override List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal)
@@ -102,7 +102,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return splitFailAggregationBySignal.BinsContainers;
         }
 
-        protected override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
+        public override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
         {
             var aggregations = new ConcurrentBag<YellowRedActivationsAggregationBySignal>();
             Parallel.ForEach(signals,

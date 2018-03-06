@@ -78,7 +78,6 @@ namespace MOE.Common.Business.DataAggregation
                                 Sum = preemptionSum,
                                 Average = preemptionSum
                             };
-                            LoadY2AxisValue(newBin, options.ShowEventCount);
                             concurrentBins.Add(newBin);
                         }
                         else

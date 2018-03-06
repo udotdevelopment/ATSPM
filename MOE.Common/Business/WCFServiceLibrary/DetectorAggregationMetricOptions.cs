@@ -155,7 +155,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     break;
                 case SeriesType.Route:
                     chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
-                    GetTimeXAxisRouteSeriesChart(Signals, chart);
+                    SetTimeXAxisRouteSeriesChart(Signals, chart);
                     SaveChartImage(chart);
                     break;
                 default:
@@ -278,7 +278,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     var binsContainers = GetBinsContainersByDetector(detectors[i]);
                     var series = CreateSeries(i, detectors[i].Description);
-                    seriesList.Add(GetTimeAggregateSeries(series, binsContainers));
+                    SetTimeAggregateSeries(series, binsContainers);
+                    seriesList.Add(series);
                     ;
                 });
             }

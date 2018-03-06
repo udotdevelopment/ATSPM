@@ -18,34 +18,30 @@ namespace MOE.Common.Business.DataAggregation
 
         public List<DetectorAggregationByDetector> detectorAggregationByDetectors { get; set; } =
             new List<DetectorAggregationByDetector>();
-
-        protected override void LoadBins(Approach approach, ApproachAggregationMetricOptions options, bool getProtectedPhase,
-            AggregatedDataType dataType)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void LoadBins(Approach approach, DetectorAggregationMetricOptions options,
-            bool getProtectedPhase,
-            AggregatedDataType dataType)
-        {
-            for (var i = 0; i < BinsContainers.Count; i++)
-            for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
-            {
-                var bin = BinsContainers[i].Bins[binIndex];
-                foreach (var detectorAggregationByDetector in detectorAggregationByDetectors)
-                    bin.Sum += detectorAggregationByDetector.BinsContainers[i].Bins[binIndex].Sum;
-                bin.Average = detectorAggregationByDetectors.Count > 0
-                    ? bin.Sum / detectorAggregationByDetectors.Count
-                    : 0;
-            }
-        }
+        
 
         private void GetApproachDetectorVolumeAggregationContainersForAllDetectors(
             DetectorVolumeAggregationOptions options, Approach approach)
         {
             foreach (var detector in approach.Detectors)
                 detectorAggregationByDetectors.Add(new DetectorAggregationByDetector(detector, options));
+        }
+
+        protected override void LoadBins(Approach approach, ApproachAggregationMetricOptions options, bool getProtectedPhase,
+            AggregatedDataType dataType)
+        {
+            for (var i = 0; i < BinsContainers.Count; i++)
+            {
+                for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
+                {
+                    var bin = BinsContainers[i].Bins[binIndex];
+                    foreach (var detectorAggregationByDetector in detectorAggregationByDetectors)
+                        bin.Sum += detectorAggregationByDetector.BinsContainers[i].Bins[binIndex].Sum;
+                    bin.Average = detectorAggregationByDetectors.Count > 0
+                        ? bin.Sum / detectorAggregationByDetectors.Count
+                        : 0;
+                }
+            }
         }
     }
 }

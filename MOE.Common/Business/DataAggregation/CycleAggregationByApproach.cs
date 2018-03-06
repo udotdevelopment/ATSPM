@@ -85,7 +85,6 @@ namespace MOE.Common.Business.DataAggregation
                                 Sum = approachCycleCount,
                                 Average = approachCycleCount
                             };
-                            LoadY2AxisValue(newBin, options.ShowEventCount);
                             concurrentBins.Add(newBin);
                         }
                         else
@@ -105,11 +104,6 @@ namespace MOE.Common.Business.DataAggregation
                 BinsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
             }
         }
-
-        protected override void LoadBins(Approach approach, DetectorAggregationMetricOptions options, bool getProtectedPhase,
-            AggregatedDataType dataType)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

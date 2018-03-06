@@ -11,7 +11,7 @@ namespace MOE.Common.Business.DataAggregation
         public PcdAggregationBySignal(ApproachPcdAggregationOptions options, Models.Signal signal) : base(
             options, signal)
         {
-            ApproachPcdures = new List<PcdAggregationByApproach>();
+            ApproachPcds = new List<PcdAggregationByApproach>();
             GetApproachPcdAggregationContainersForAllApporaches(options, signal);
             LoadBins(null, null);
         }
@@ -19,16 +19,16 @@ namespace MOE.Common.Business.DataAggregation
         public PcdAggregationBySignal(ApproachPcdAggregationOptions options, Models.Signal signal,
             int phaseNumber) : base(options, signal)
         {
-            ApproachPcdures = new List<PcdAggregationByApproach>();
+            ApproachPcds = new List<PcdAggregationByApproach>();
             foreach (var approach in signal.Approaches)
                 if (approach.ProtectedPhaseNumber == phaseNumber)
                 {
-                    ApproachPcdures.Add(
+                    ApproachPcds.Add(
                         new PcdAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber == phaseNumber)
-                        ApproachPcdures.Add(
+                        ApproachPcds.Add(
                             new PcdAggregationByApproach(approach, options, options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
@@ -39,16 +39,16 @@ namespace MOE.Common.Business.DataAggregation
         public PcdAggregationBySignal(ApproachPcdAggregationOptions options, Models.Signal signal,
             DirectionType direction) : base(options, signal)
         {
-            ApproachPcdures = new List<PcdAggregationByApproach>();
+            ApproachPcds = new List<PcdAggregationByApproach>();
             foreach (var approach in signal.Approaches)
                 if (approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
                 {
-                    ApproachPcdures.Add(
+                    ApproachPcds.Add(
                         new PcdAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null)
-                        ApproachPcdures.Add(
+                        ApproachPcds.Add(
                             new PcdAggregationByApproach(approach, options, options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
@@ -56,37 +56,48 @@ namespace MOE.Common.Business.DataAggregation
             LoadBins(null, null);
         }
 
-        public List<PcdAggregationByApproach> ApproachPcdures { get; }
+        public List<PcdAggregationByApproach> ApproachPcds { get; }
 
         protected override void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal)
         {
             for (var i = 0; i < BinsContainers.Count; i++)
-            for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
             {
-                var bin = BinsContainers[i].Bins[binIndex];
-                foreach (var approachPcdAggregationContainer in ApproachPcdures)
-                    bin.Sum += approachPcdAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
-                bin.Average = ApproachPcdures.Count > 0 ? bin.Sum / ApproachPcdures.Count : 0;
-                LoadY2AxisValue(bin, options.ShowEventCount);
+                for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
+                {
+                    var bin = BinsContainers[i].Bins[binIndex];
+                    foreach (var approachPcdAggregationContainer in ApproachPcds)
+                        bin.Sum += approachPcdAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                    bin.Average = ApproachPcds.Count > 0 ? bin.Sum / ApproachPcds.Count : 0;
                 }
+            }
         }
 
         protected override void LoadBins(ApproachAggregationMetricOptions options, Models.Signal signal)
         {
-            throw new NotImplementedException();
+            for (var i = 0; i < BinsContainers.Count; i++)
+            {
+                for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
+                {
+                    var bin = BinsContainers[i].Bins[binIndex];
+                    foreach (var approachPcdAggregationContainer in ApproachPcds)
+                        bin.Sum += approachPcdAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                    bin.Average = ApproachPcds.Count > 0 ? bin.Sum / ApproachPcds.Count : 0;
+                }
+            }
         }
+
 
         private void GetApproachPcdAggregationContainersForAllApporaches(
             ApproachPcdAggregationOptions options, Models.Signal signal)
         {
             foreach (var approach in signal.Approaches)
             {
-                ApproachPcdures.Add(
+                ApproachPcds.Add(
                     new PcdAggregationByApproach(approach, options, options.StartDate,
                         options.EndDate,
                         true, options.SelectedAggregatedDataType));
                 if (approach.PermissivePhaseNumber != null)
-                    ApproachPcdures.Add(
+                    ApproachPcds.Add(
                         new PcdAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             false, options.SelectedAggregatedDataType));
@@ -97,8 +108,8 @@ namespace MOE.Common.Business.DataAggregation
         public int GetPcdsByDirection(DirectionType direction)
         {
             var splitFails = 0;
-            if (ApproachPcdures != null)
-                splitFails = ApproachPcdures
+            if (ApproachPcds != null)
+                splitFails = ApproachPcds
                     .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
                     .Sum(a => a.BinsContainers.FirstOrDefault().SumValue);
             return splitFails;
@@ -106,7 +117,7 @@ namespace MOE.Common.Business.DataAggregation
 
         public int GetAveragePcdsByDirection(DirectionType direction)
         {
-            var approachPcduresByDirection = ApproachPcdures
+            var approachPcduresByDirection = ApproachPcds
                 .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID);
             var splitFails = 0;
             if (approachPcduresByDirection.Any())

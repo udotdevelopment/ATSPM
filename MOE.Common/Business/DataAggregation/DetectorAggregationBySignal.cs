@@ -58,7 +58,6 @@ namespace MOE.Common.Business.DataAggregation
                     bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
                 }
                 bin.Average = ApproachDetectorVolumes.Count > 0 ? bin.Sum / ApproachDetectorVolumes.Count : 0;
-                LoadY2AxisValue(bin, options.ShowEventCount);
                 }
         }
 
