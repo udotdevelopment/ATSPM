@@ -189,14 +189,23 @@
       <Name>WavetronicsSpeedListener</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="XMLDataFiles\Signals\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="XMLDataFiles\Approaches\approachesfor7185.xml" />
-    <Content Include="XMLDataFiles\Detectors\detectorsFor7185.xml" />
-    <Content Include="XMLDataFiles\DetectorToDetectorTypes\DetetrorTypesforDetecotrsFor7185.xml" />
+    <Content Include="XMLDataFiles\Approaches\Approaches.xml" />
+    <Content Include="XMLDataFiles\Approaches\approachesfor7185.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="XMLDataFiles\Detectors\detectorsFor7185.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="XMLDataFiles\DetectorToDetectionTypes\DetectorTypesforDetectorsFor7185.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="XMLDataFiles\EventLogFiles\7185_10_17_2017.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="XMLDataFiles\MetricTypeDetectorTyes\mtdt.xml" />
+    <Content Include="XMLDataFiles\Signals\signals.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
