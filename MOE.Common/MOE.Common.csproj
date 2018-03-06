@@ -412,7 +412,6 @@
     <Compile Include="Business\WatchDog\WatchDogScan.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSpeedAggregationOptions.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachSeedAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachEventCountAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachYellowRedActivationsAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachPcdAggregationOptions.cs" />
@@ -502,7 +501,7 @@
     <Compile Include="Models\PhaseEventCountAggregation.cs" />
     <Compile Include="Models\DetectorEventCountAggregation.cs" />
     <Compile Include="Models\Repositories\IDetectorEventCountAggregationRepository.cs" />
-    <Compile Include="Models\Repositories\IPhaseEventCountAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\IApproachEventCountAggregationRepository.cs" />
     <Compile Include="Models\Repositories\ISignalEventCountAggregationRepository.cs" />
     <Compile Include="Models\Repositories\DetectorEventCountAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseEventCountAggregationRepository.cs" />

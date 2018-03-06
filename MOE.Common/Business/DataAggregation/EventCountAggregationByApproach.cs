@@ -23,7 +23,7 @@ namespace MOE.Common.Business.DataAggregation
             AggregatedDataType dataType)
         {
             var eventCountAggregationRepository =
-                PhaseEventCountAggregationRepositoryFactory.Create();
+                ApproachEventCountAggregationRepositoryFactory.Create();
             var eventCounts =
                 eventCountAggregationRepository.GetPhaseEventCountAggregationByPhaseIdAndDateRange(
                     approach.ApproachID, options.StartDate, options.EndDate, getProtectedPhase);

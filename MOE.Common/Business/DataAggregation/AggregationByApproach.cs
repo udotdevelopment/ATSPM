@@ -52,10 +52,10 @@ namespace MOE.Common.Business.DataAggregation
 
         protected List<ApproachEventCountAggregation> GetApproachEventCountAggregations(ApproachAggregationMetricOptions options, Approach approach, bool getProtectedPhase)
         {
-            var phaseEventCountAggregationRepository =
+            var approachEventCountAggregationRepository =
                 MOE.Common.Models.Repositories.ApproachEventCountAggregationRepositoryFactory.Create();
             return
-                phaseEventCountAggregationRepository.GetApproachEventCountAggregationByPhaseIdAndDateRange(
+                approachEventCountAggregationRepository.GetPhaseEventCountAggregationByPhaseIdAndDateRange(
                     Approach.ApproachID, options.StartDate, options.EndDate, getProtectedPhase);
         }
         

@@ -47,7 +47,7 @@ namespace MOE.CommonTests.Models
         public List<VersionAction> VersionActions = new List<VersionAction>();
         public List<DetectionTypeGraph_Detector> DetectionTypeDetectors = new List<DetectionTypeGraph_Detector>();
         public List<SignalEventCountAggregation> SignalEventCountAggregations { get; set; } = new List<SignalEventCountAggregation>();
-        public List<PhaseEventCountAggregation> PhaseEventCountAggregations { get; set; } = new List<PhaseEventCountAggregation>();
+        public List<ApproachEventCountAggregation> PhaseEventCountAggregations { get; set; } = new List<ApproachEventCountAggregation>();
 
         public void SetFilterSignal(SignalAggregationMetricOptions options)
         {
@@ -1428,7 +1428,7 @@ namespace MOE.CommonTests.Models
             var id = 1;
             for (var startTime = start; startTime <= end; startTime = startTime.AddMinutes(15))
             {
-                var r = new PhaseEventCountAggregation()
+                var r = new ApproachEventCountAggregation()
                 {
                     BinStartTime = startTime,
                     ApproachId = approach.ApproachID,
@@ -1440,7 +1440,7 @@ namespace MOE.CommonTests.Models
                 id++;
                 if (approach.PermissivePhaseNumber != null)
                 {
-                    var permissivePhase = new PhaseEventCountAggregation()
+                    var permissivePhase = new ApproachEventCountAggregation()
                     {
                         BinStartTime = startTime,
                         ApproachId = approach.ApproachID,

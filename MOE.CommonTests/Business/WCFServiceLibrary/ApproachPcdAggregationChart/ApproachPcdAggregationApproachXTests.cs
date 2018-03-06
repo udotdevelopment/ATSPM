@@ -29,7 +29,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachPcdAggregation
             }
             ApproachPcdAggregationRepositoryFactory.SetApplicationEventRepository(
                 new InMemoryApproachPcdAggregationRepository(Db));
-            PhaseEventCountAggregationRepositoryFactory.SetRepository(new InMemoryPhaseEventCountAggregationRepository(Db));
+            ApproachEventCountAggregationRepositoryFactory.SetRepository(new InMemoryApproachEventCountAggregationRepository(Db));
         }
 
         protected override void PopulateApproachData(Approach approach)

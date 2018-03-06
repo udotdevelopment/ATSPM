@@ -5,17 +5,17 @@ using MOE.CommonTests.Models;
 
 namespace MOE.Common.Models.Repositories
 {
-    public class InMemoryPhaseEventCountAggregationRepository : IPhaseEventCountAggregationRepository
+    public class InMemoryApproachEventCountAggregationRepository : IApproachEventCountAggregationRepository
     {
         private InMemoryMOEDatabase _db;
 
 
-        public InMemoryPhaseEventCountAggregationRepository()
+        public InMemoryApproachEventCountAggregationRepository()
         {
             _db = new InMemoryMOEDatabase();
         }
 
-        public InMemoryPhaseEventCountAggregationRepository(InMemoryMOEDatabase context)
+        public InMemoryApproachEventCountAggregationRepository(InMemoryMOEDatabase context)
         {
             _db = context;
         }
@@ -48,7 +48,7 @@ namespace MOE.Common.Models.Repositories
         }
         
 
-        public List<PhaseEventCountAggregation> GetPhaseEventCountAggregationByPhaseIdAndDateRange(int approachId, DateTime start,
+        public List<ApproachEventCountAggregation> GetPhaseEventCountAggregationByPhaseIdAndDateRange(int approachId, DateTime start,
             DateTime end, bool getProtectedPhase)
         {
             if (getProtectedPhase)
@@ -71,8 +71,9 @@ namespace MOE.Common.Models.Repositories
                                                                       r.BinStartTime <= end).ToList();
                 }
             }
-            return new List<PhaseEventCountAggregation>();
+            return new List<ApproachEventCountAggregation>();
         }
+        
     }
 
     
