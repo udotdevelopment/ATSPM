@@ -304,7 +304,8 @@ namespace SPM.Controllers
                                                           metricOptions.ShowPlanStatistics.ToString().ToLower() + "," +
                                                           metricOptions.ShowAverageSpeed.ToString().ToLower() + "," +
                                                           metricOptions.ShowPostedSpeed.ToString().ToLower() + ","+
-                                                          metricOptions.Show85Percentile.ToString().ToLower() +
+                                                          metricOptions.Show85Percentile.ToString().ToLower() + "," +
+                                                          metricOptions.Show15Percentile.ToString().ToLower() +
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
@@ -542,6 +543,7 @@ namespace SPM.Controllers
             sb.Append("&ShowAverageSpeed=" + metricOptions.ShowAverageSpeed.ToString().ToLower());
             sb.Append("&ShowPostedSpeed=" + metricOptions.ShowPostedSpeed.ToString().ToLower());
             sb.Append("&Show85Percentile=" + metricOptions.Show85Percentile.ToString().ToLower());
+            sb.Append("&Show15Percentile=" + metricOptions.Show15Percentile.ToString().ToLower());
 
             sb.Append("&SignalID=" + metricOptions.SignalID);
             string _startDate = metricOptions.StartDate.ToString().Trim();

@@ -15,7 +15,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public ApproachSpeedOptions(string signalID, DateTime startDate, DateTime endDate, double yAxisMax,
             double yAxisMin,
             int binSize, int dotSize, bool showPlanStatistics, int metricTypeID, bool showPostedSpeed,
-            bool showAverageSpeed, bool show85Percentile)
+            bool showAverageSpeed, bool show85Percentile, bool show15Percentile)
         {
             SignalID = signalID;
             //StartDate = startDate;
@@ -27,8 +27,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
             ShowPostedSpeed = showPostedSpeed;
             ShowAverageSpeed = showAverageSpeed;
             Show85Percentile = show85Percentile;
+            Show15Percentile = show15Percentile;
             MetricTypeID = metricTypeID;
         }
+
 
         public ApproachSpeedOptions()
         {
@@ -63,6 +65,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [Display(Name = "Show 85% Speeds")]
         public bool Show85Percentile { get; set; }
 
+        [DataMember]
+        [Display(Name = "Show 15% Speeds")]
+        public bool Show15Percentile { get; set; }
+
         public void SetDefaults()
         {
             YAxisMax = 60;
@@ -71,6 +77,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             ShowAverageSpeed = true;
             ShowPostedSpeed = true;
             Show85Percentile = true;
+            Show15Percentile = true;
         }
 
         public override List<string> CreateMetric()
@@ -283,7 +290,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
                 plannumberLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 plannumberLabel.ForeColor = Color.Black;
-                plannumberLabel.RowIndex = 3;
+                plannumberLabel.RowIndex = 4;
 
                 var avgLabel = new CustomLabel();
 
@@ -308,7 +315,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 fifthteenthLabel.ToPosition = plan.EndTime.ToOADate();
                 fifthteenthLabel.Text = "15% Sp " + plan.Fifteenth + "\n";
                 fifthteenthLabel.LabelMark = LabelMarkStyle.LineSideMark;
-                fifthteenthLabel.ForeColor = Color.Blue;
+                fifthteenthLabel.ForeColor = Color.Orange;
                 fifthteenthLabel.RowIndex = 3;
 
                 if (ShowPlanStatistics)
@@ -318,6 +325,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(avgLabel);
                     if (Show85Percentile)
                         chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(eightyfifthLabel);
+                    if (Show15Percentile)
+                        chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(fifthteenthLabel);
                 }
                 backGroundColor++;
             }
