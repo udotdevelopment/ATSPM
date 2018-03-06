@@ -299,7 +299,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 case SeriesType.Signal:
                     chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
                     GetTimeOfDayXAxisSignalSeriesChart(Signals, chart);
-                    SaveChartImage(chart);
                     if (ShowEventCount)
                     {
                         SetTimeOfDayAxisRouteSeriesForEventCount(Signals, chart);
