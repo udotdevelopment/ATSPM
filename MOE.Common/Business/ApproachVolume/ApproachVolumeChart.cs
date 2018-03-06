@@ -455,7 +455,7 @@ namespace MOE.Common.Business.ApproachVolume
             //  {
             var D1Peak = findPeakHour(D1Volumes, binSizeMultiplier);
             var D1PeakHour = D1Peak.Key;
-            var D1PeakHourVolume = D1Peak.Value / 4;
+            var D1PeakHourVolume = D1Peak.Value / binSizeMultiplier;
             var D1PHvol = findPeakValueinHour(D1PeakHour, D1Volumes, binSizeMultiplier);
             // Find the Peak hour factor for Direciton1
             double D1PHF = 0;
@@ -472,7 +472,7 @@ namespace MOE.Common.Business.ApproachVolume
             var D2Peak = findPeakHour(D2Volumes, binSizeMultiplier);
 
             var D2PeakHour = D2Peak.Key;
-            var D2PeakHourVolume = D2Peak.Value / 4;
+            var D2PeakHourVolume = D2Peak.Value / binSizeMultiplier;
             var D2PHvol = findPeakValueinHour(D2PeakHour, D2Volumes, binSizeMultiplier);
             // Find the Peak hour factor for Direciton2
             double D2PHF = 0;
@@ -573,7 +573,7 @@ namespace MOE.Common.Business.ApproachVolume
                 subTotal = 0;
                 for (var x = 0; x < binMultiplier; x++)
                     subTotal = subTotal + dirVolumes.ElementAt(i + x).Value;
-
+                subTotal = (int) (subTotal / binMultiplier);
                 iteratedVolumes.Add(startTime, subTotal);
             }
 
