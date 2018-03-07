@@ -314,6 +314,7 @@ namespace MOE.Common.Business
         {
             chartArea.AxisY2.Enabled = AxisEnabled.True;
             chartArea.AxisY2.MajorGrid.Enabled = false;
+            chartArea.AxisY2.MinorGrid.Enabled = false;
             chartArea.AxisY2.IntervalAutoMode = IntervalAutoMode.VariableCount;
             chartArea.AxisY2.Title = "Event Count";
             chartArea.AxisY2.Minimum = 0;
@@ -472,7 +473,7 @@ namespace MOE.Common.Business
             if (options.Y2AxisMax != null)
                 chartArea.AxisY2.Maximum = options.Y2AxisMax.Value;
             chartArea.AxisY2.Enabled = AxisEnabled.True;
-            chartArea.AxisY2.MajorTickMark.Enabled = true;
+            chartArea.AxisY2.MajorTickMark.Enabled = false;
             chartArea.AxisY2.MajorGrid.Enabled = false;
             chartArea.AxisY2.IntervalType = DateTimeIntervalType.Number;
             chartArea.AxisY2.Title = "Event Count";
