@@ -49,6 +49,34 @@ namespace MOE.CommonTests.Helpers
             }
         }
 
+        public static void LoadSpeedEvents(string xmlFileName, InMemoryMOEDatabase _db)
+        {
+
+            string localFilePath = filePath + @"SpeedEvents\" + xmlFileName;
+
+
+            var doc = XElement.Load(localFilePath);
+
+            var incomingEvents = doc.Elements("Controller_Event_Log").Select(x => new Speed_Events
+            {
+                DetectorID = (String)(x.Element("DetectorID")),
+                MPH = (Int32)(x.Element("MPH")),
+                KPH = (Int32)(x.Element("KPH")),
+                timestamp = (DateTime)(x.Element("Timestamp"))
+            }).ToList();
+
+            foreach (var e in incomingEvents)
+            {
+
+                _db.Speed_Events.Add(e);
+
+            }
+
+
+
+
+        }
+
         public static void LoadSignals(string xmlFileName, InMemoryMOEDatabase _db)
         {
 
@@ -242,26 +270,30 @@ namespace MOE.CommonTests.Helpers
 
         public static void AddDetectionTypesToMetricTypes(string xmlFileName, InMemoryMOEDatabase _db)
         {
-            string localFilePath = filePath + "\\DetectorToDetectionTypes\\" + xmlFileName;
+            string localFilePath = filePath + "\\MetricTypeDetectorTypes\\" + xmlFileName;
 
 
             var doc = XElement.Load(localFilePath);
 
-            foreach (var det in _db.Detectors)
+            foreach (var mt in _db.MetricTypes)
             {
-                det.DetectionTypeIDs = new List<int>();
-                var types = doc.Elements("MOEAgg.dbo.DetectionTypeDetector");
+                mt.DetectionTypes = new List<DetectionType>();
+                var types = doc.Elements("MetricDetectionType");
                 foreach (var t in types)
                 {
-                    if (t.Element("ID").Value == det.ID.ToString())
+                    if (t.Element("MetricType_MetricID").Value == mt.MetricID.ToString())
                     {
-                        //var detType = new DetectionType(
-                        //    ID = t.Element("ID").Value,
-                        //    t.Element("DetectionTypeID").Value
-                        //    );
+                        var detType = _db.DetectionTypes.Where(dt => dt.DetectionTypeID == (Int32)(t.Element("DetectionType_DetectionTypeID"))).FirstOrDefault();
+                        if (detType != null)
+                        {
+                            if(detType.MetricTypes == null)
+                            {
+                                detType.MetricTypes = new List<MetricType>();
+                            }
 
-                        det.DetectionTypeIDs.Add(Convert.ToInt32(t.Element("DetectionTypeID").Value));
-                        // det.DetectionTypes.Add(detType);
+                            mt.DetectionTypes.Add(detType);
+                            detType.MetricTypes.Add(mt);
+                        }
                     }
 
                 }

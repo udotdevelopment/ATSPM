@@ -62,6 +62,7 @@ namespace MOE.Common.Business.DataAggregation
 
         protected override void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal)
         {
+           
             for (var i = 0; i < BinsContainers.Count; i++)
             for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
             {
@@ -77,7 +78,16 @@ namespace MOE.Common.Business.DataAggregation
 
         protected override void LoadBins(ApproachAggregationMetricOptions options, Models.Signal signal)
         {
-            throw new NotImplementedException();
+            for (var i = 0; i < BinsContainers.Count; i++)
+            {
+                for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
+                {
+                    var bin = BinsContainers[i].Bins[binIndex];
+                    foreach (var approachCycleAggregationContainer in ApproachCycles)
+                        bin.Sum += approachCycleAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                    bin.Average = ApproachCycles.Count > 0 ? bin.Sum / ApproachCycles.Count : 0;
+                }
+            }
         }
 
 

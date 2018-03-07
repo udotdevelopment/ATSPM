@@ -233,6 +233,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void SaveChartImage(Chart chart)
         {
+            chart.ChartAreas[0].AxisY2.MajorGrid.Enabled = false;
+            chart.ChartAreas[0].AxisY2.MinorGrid.Enabled = false;
             var chartName = CreateFileName(MetricType.Abbreviation);
             MetricFileLocation = ConfigurationManager.AppSettings["ImageLocation"];
             MetricWebPath = ConfigurationManager.AppSettings["ImageWebLocation"];

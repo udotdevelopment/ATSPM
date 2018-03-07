@@ -85,7 +85,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         }
 
 
-        private static void SetTimeOptionsBasedOnBinSize(ApproachAggregationMetricOptions options,
+        public static void SetTimeOptionsBasedOnBinSize(ApproachAggregationMetricOptions options,
             BinFactoryOptions.BinSize binSize)
         {
             if (binSize == BinFactoryOptions.BinSize.Day)
