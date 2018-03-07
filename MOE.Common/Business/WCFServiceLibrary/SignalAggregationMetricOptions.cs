@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
+using System.Xml;
 using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.DataAggregation;
@@ -17,6 +18,12 @@ using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
+
+    public enum ChartAction
+    {
+        CreateMetric,
+        ExportXML
+    }
     public enum AggregationType
     {
         Sum,
@@ -69,6 +76,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public BinFactoryOptions TimeOptions { get; set; }
 
+        [DataMember]
+        public ChartAction SelectedChartAction { get; set; }
         [DataMember]
         public SeriesChartType SelectedChartType { get; set; }
 
@@ -233,12 +242,19 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void SaveChartImage(Chart chart)
         {
-            var chartName = CreateFileName(MetricType.Abbreviation);
-            MetricFileLocation = ConfigurationManager.AppSettings["ImageLocation"];
-            MetricWebPath = ConfigurationManager.AppSettings["ImageWebLocation"];
-            chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
-            ReturnList.Add(MetricWebPath + chartName);
-            //SerializeMetricData(chart);
+            if (SelectedChartAction == ChartAction.ExportXML)
+            {
+                XMLMetricData = new List<XmlDocument>();
+                SerializeMetricData(chart);
+            }
+            else
+            {
+                var chartName = CreateFileName(MetricType.Abbreviation);
+                MetricFileLocation = ConfigurationManager.AppSettings["ImageLocation"];
+                MetricWebPath = ConfigurationManager.AppSettings["ImageWebLocation"];
+                chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
+                ReturnList.Add(MetricWebPath + chartName);
+            }
         }
 
         protected string CreateFileName(string MetricAbbreviation)

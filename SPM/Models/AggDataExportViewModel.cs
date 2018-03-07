@@ -23,6 +23,7 @@ namespace SPM.Models
         [Required]
         public List<FilterSignal> FilterSignals { get; set; } = new List<FilterSignal>();
 
+        public ChartAction SelectedChartAction { get; set; }
         public virtual ICollection<MetricType> MetricTypes { get; set; }
         public List<AggregatedDataType> AggregatedDataTypes { get; set; } = new List<AggregatedDataType>();
         public virtual ICollection<Dimension> Dimensions { get; set; }

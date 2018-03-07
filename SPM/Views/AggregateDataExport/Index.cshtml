@@ -195,14 +195,14 @@
                     <button id="CreateMetric" type="submit" name="CreateMetric" value="CreateMetric" class="btn btn-primary">Create Chart &nbsp;<span id='RunReportSpinner' class="glyphicon"></span></button>
                     @Html.ValidationSummary(false, "", new {@class = "text-danger"})
                 </div>
-                <div class="col-md-4 col-sm-12 col-xs-12">
-                    <button id="Export" type="submit" name="Export" value="Export" class="btn btn-primary">Export Bin Data &nbsp;<span id='RunReportSpinner' class="glyphicon"></span></button>
-                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-                </div> 
+                
             </div>
         </div>
     </div>
-}
+}@*<div class="col-md-4 col-sm-12 col-xs-12">
+    <button id="Export" type="submit" name="Export" value="Export" class="btn btn-default" >Export Chart &nbsp;<span id='RunReportSpinner' class="glyphicon"></span></button>
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+</div>*@ 
         <div id="Results"></div>
 
         @section Scripts
@@ -218,5 +218,6 @@
                 var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';
                 var urlpathGetMetricsList = '@Url.Action("GetMetricsList", "DefaultCharts")';
                 var urlpathFillSignals = '@Url.Action("FillSignals", "DefaultCharts")';
+                var urlpathExportData = '@Url.Action("Index", "AggregateDataExport")';
             </script>
         }

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/MOE.Common.Business.Bins" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.Bins" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/System" />
+  <xs:complexType name="BinFactoryOptions">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="DaysOfWeek" nillable="true" type="q1:ArrayOfDayOfWeek" />
+      <xs:element minOccurs="0" name="End" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="SelectedBinSize" type="tns:BinFactoryOptions.BinSize" />
+      <xs:element minOccurs="0" name="Start" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="TimeOfDayEndHour" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TimeOfDayEndMinute" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TimeOfDayStartHour" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TimeOfDayStartMinute" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TimeOption" type="tns:BinFactoryOptions.TimeOptions" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BinFactoryOptions" nillable="true" type="tns:BinFactoryOptions" />
+  <xs:simpleType name="BinFactoryOptions.BinSize">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FifteenMinute" />
+      <xs:enumeration value="ThirtyMinute" />
+      <xs:enumeration value="Hour" />
+      <xs:enumeration value="Day" />
+      <xs:enumeration value="Month" />
+      <xs:enumeration value="Year" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="BinFactoryOptions.BinSize" nillable="true" type="tns:BinFactoryOptions.BinSize" />
+  <xs:simpleType name="BinFactoryOptions.TimeOptions">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="StartToEnd" />
+      <xs:enumeration value="TimePeriod" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="BinFactoryOptions.TimeOptions" nillable="true" type="tns:BinFactoryOptions.TimeOptions" />
+</xs:schema>

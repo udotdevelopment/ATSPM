@@ -89,13 +89,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public string MetricWebPath { get; set; }
 
-        [DataMember]
-        public List<Byte[]> SerializedMetricData = new List<byte[]>();
-
-        public List<XmlDocument> XMLMetricData = new List<XmlDocument>();
+        public List<XmlDocument> XMLMetricData { get; protected set; } = new List<XmlDocument>();
 
         public MetricType MetricType { get; set; }
-
 
         [DataMember]
         public List<string> ReturnList { get; set; }
@@ -111,8 +107,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void LogMetricRun()
         {
-            var appEventRepository =
-                ApplicationEventRepositoryFactory.Create();
+            var appEventRepository = ApplicationEventRepositoryFactory.Create();
             var applicationEvent = new ApplicationEvent();
             applicationEvent.ApplicationName = "SPM Website";
             applicationEvent.Description = MetricType.ChartName + " Executed";
@@ -123,8 +118,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public string GetSignalLocation()
         {
-            var signalRepository =
-                SignalsRepositoryFactory.Create();
+            var signalRepository = SignalsRepositoryFactory.Create();
             return signalRepository.GetSignalLocation(SignalID);
         }
 
@@ -204,16 +198,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public void SerializeMetricData(Chart chart)
         {
-            //List<XmlDocument> xmlFiles = Export.ChartToCSVExporter.GetXMLFromChart(chart);
-
             XMLMetricData.Add(Export.ChartToCSVExporter.GetXMLFromChart(chart));
-
-            foreach(var xml in XMLMetricData)
-            {
-                xml.Save(MetricFileLocation+CreateXMLFileName());
-            }
-            //var bytes = Export.ChartToCSVExporter.ExportChartDataToCSVForDownload(chart);
-            //SerializedMetricData.AddRange(bytes);
         }
 
 

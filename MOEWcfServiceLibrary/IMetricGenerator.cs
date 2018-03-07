@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Xml;
 
 namespace MOEWcfServiceLibrary
 {
@@ -39,6 +40,8 @@ namespace MOEWcfServiceLibrary
     {
         [OperationContract]
         List<String> CreateMetric(MOE.Common.Business.WCFServiceLibrary.MetricOptions options);
+        [OperationContract]
+        XmlElement[] ExportMetricData(MOE.Common.Business.WCFServiceLibrary.MetricOptions options);
         [OperationContract]
         List<MOE.Common.Business.ApproachVolume.MetricInfo> CreateMetricWithDataTable(MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions options);
         [OperationContract]
