@@ -23,6 +23,7 @@ namespace SPM.Models
         [Required]
         public List<FilterSignal> FilterSignals { get; set; } = new List<FilterSignal>();
 
+        public ChartAction SelectedChartAction { get; set; }
         public virtual ICollection<MetricType> MetricTypes { get; set; }
         public List<AggregatedDataType> AggregatedDataTypes { get; set; } = new List<AggregatedDataType>();
         public virtual ICollection<Dimension> Dimensions { get; set; }
@@ -208,8 +209,14 @@ namespace SPM.Models
         {
             switch (SelectedMetricTypeId)
                 {
+                    case 16:
+                        AggregatedDataTypes = new DetectorVolumeAggregationOptions().AggregatedDataTypes;
+                        break;
                     case 18:
                         AggregatedDataTypes = new ApproachPcdAggregationOptions().AggregatedDataTypes;
+                        break;
+                    case 19:
+                        AggregatedDataTypes = new ApproachCycleAggregationOptions().AggregatedDataTypes;
                         break;
                     case 20:
                         AggregatedDataTypes = new ApproachSplitFailAggregationOptions().AggregatedDataTypes;
@@ -220,8 +227,17 @@ namespace SPM.Models
                     case 24:
                         AggregatedDataTypes = new SignalPriorityAggregationOptions().AggregatedDataTypes;
                         break;
-                    case 16:
+                    case 25:
+                        AggregatedDataTypes = new ApproachSpeedAggregationOptions().AggregatedDataTypes;
+                        break;
+                    case 26:
                         AggregatedDataTypes = new ApproachYellowRedActivationsAggregationOptions().AggregatedDataTypes;
+                        break;
+                    case 27:
+                        AggregatedDataTypes = new SignalEventCountAggregationOptions().AggregatedDataTypes;
+                        break;
+                    case 28:
+                        AggregatedDataTypes = new ApproachEventCountAggregationOptions().AggregatedDataTypes;
                         break;
                     default:
                         throw new Exception("Invalid Metric Type");

@@ -51,6 +51,9 @@
       <HintPath>..\packages\Caseiro.Mvc.PagedList.1.0.2\lib\net40\Caseiro.Mvc.PagedList.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
@@ -191,8 +194,9 @@
     <Compile Include="Controllers\ActionLogsController.cs" />
     <Compile Include="Controllers\AggregateDataExportController.cs" />
     <Compile Include="Controllers\ApproachesController.cs" />
-    <Compile Include="Controllers\ArchiveSettingsController.cs" />
+    <Compile Include="Controllers\ArchiveSettingsOldController.cs" />
     <Compile Include="Controllers\ConfigurationTableController.cs" />
+    <Compile Include="Controllers\DatabaseArchiveSettingsController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\DefaultChartsController.cs" />
     <Compile Include="Controllers\DetectorCommentsController.cs" />
@@ -218,6 +222,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArchiveSettingsViewModel.cs" />
     <Compile Include="Models\AggDataExportViewModel.cs" />
+    <Compile Include="Models\MetricAndXmlResultViewModel.cs" />
     <Compile Include="Models\MetricResultViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -335,6 +340,8 @@
     <Content Include="Images\TTTJamieMackey.pdf" />
     <Content Include="Images\TTTMarkTaylor.pdf" />
     <Content Include="Images\Signal Ops QIT Final Report Released.pdf" />
+    <Content Include="Properties\DataSources\MOE.Common.Business.TMC.TMCInfo.datasource" />
+    <Content Include="Properties\DataSources\System.Xml.Linq.XElement.datasource" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
@@ -443,6 +450,15 @@
     </None>
     <None Include="Service References\MetricGeneratorService\configuration91.svcinfo" />
     <None Include="Service References\MetricGeneratorService\configuration.svcinfo" />
+    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.Bins.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.FilterExtensions.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.TMC.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\MetricGeneratorService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -564,7 +580,7 @@
     <Content Include="Views\AggregateDataExport\GetRouteSignals.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterSignal.cshtml" />
     <Content Include="Views\ArchiveSettings\DisplayTemplates\Signal.cshtml" />
-    <Content Include="Views\ArchiveSettings\Index.cshtml" />
+    <Content Include="Views\ArchiveSettings\IndexOld.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterApproach.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDetector.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDirection.cshtml" />
@@ -572,6 +588,15 @@
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterMovement.cshtml" />
     <Content Include="Views\GeneralSettings\Edit.cshtml" />
     <Content Include="Views\DataExport\EditorTemplates\DateTimePickerViewModel.cshtml" />
+    <None Include="Service References\MetricGeneratorService\System.Web.UI.DataVisualization.Charting.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MetricGeneratorService\System.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Views\AggregateDataExport\MetricResult.cshtml" />
+    <Content Include="Views\DatabaseArchiveSettings\Create.cshtml" />
+    <Content Include="Views\DatabaseArchiveSettings\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -617,6 +642,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Views\DataArchive\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

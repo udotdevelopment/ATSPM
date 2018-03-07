@@ -6,8 +6,12 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.WCFServiceLibrary" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.FilterExtensions" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/System.Web.UI.DataVisualization.Charting" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.Bins" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/System" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.ApproachVolume" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.Helpers" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.TMC" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IMetricGenerator_CreateMetric_InputMessage">
@@ -15,6 +19,12 @@
   </wsdl:message>
   <wsdl:message name="IMetricGenerator_CreateMetric_OutputMessage">
     <wsdl:part name="parameters" element="tns:CreateMetricResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMetricGenerator_GetChartAndXmlFileLocations_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetChartAndXmlFileLocations" />
+  </wsdl:message>
+  <wsdl:message name="IMetricGenerator_GetChartAndXmlFileLocations_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetChartAndXmlFileLocationsResponse" />
   </wsdl:message>
   <wsdl:message name="IMetricGenerator_CreateMetricWithDataTable_InputMessage">
     <wsdl:part name="parameters" element="tns:CreateMetricWithDataTable" />
@@ -33,6 +43,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IMetricGenerator/CreateMetric" message="tns:IMetricGenerator_CreateMetric_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMetricGenerator/CreateMetricResponse" message="tns:IMetricGenerator_CreateMetric_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetChartAndXmlFileLocations">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMetricGenerator/GetChartAndXmlFileLocations" message="tns:IMetricGenerator_GetChartAndXmlFileLocations_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMetricGenerator/GetChartAndXmlFileLocationsResponse" message="tns:IMetricGenerator_GetChartAndXmlFileLocations_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="CreateMetricWithDataTable">
       <wsdl:input wsaw:Action="http://tempuri.org/IMetricGenerator/CreateMetricWithDataTable" message="tns:IMetricGenerator_CreateMetricWithDataTable_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMetricGenerator/CreateMetricWithDataTableResponse" message="tns:IMetricGenerator_CreateMetricWithDataTable_OutputMessage" />
@@ -46,6 +60,15 @@
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="CreateMetric">
       <soap:operation soapAction="http://tempuri.org/IMetricGenerator/CreateMetric" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetChartAndXmlFileLocations">
+      <soap:operation soapAction="http://tempuri.org/IMetricGenerator/GetChartAndXmlFileLocations" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

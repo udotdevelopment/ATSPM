@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Xml;
 
 namespace MOEWcfServiceLibrary
 {
@@ -37,15 +38,15 @@ namespace MOEWcfServiceLibrary
             return result;
         }
 
-        public List<Byte[]> ExportMetricData(MOE.Common.Business.WCFServiceLibrary.MetricOptions options)
+        public List<Tuple<string, string>> GetChartAndXmlFileLocations(MOE.Common.Business.WCFServiceLibrary.MetricOptions options)
         {
-            List<Byte[]> result = new List<Byte[]>();
             try
             {
                 MOE.Common.Models.Repositories.IMetricTypeRepository metricTypeRepository =
                     MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
                 options.MetricType = metricTypeRepository.GetMetricsByID(options.MetricTypeID);
-                result = options.SerializedMetricData;
+                options.CreateMetric();
+                return options.ResultChartAndXmlLocations;
             }
             catch (Exception ex)
             {
@@ -61,7 +62,6 @@ namespace MOEWcfServiceLibrary
                 logRepository.Add(e);
                 throw;
             }
-            return result;
         }
 
 

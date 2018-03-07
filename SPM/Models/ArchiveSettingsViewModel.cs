@@ -17,36 +17,29 @@ namespace SPM.Models
 {
     public class ArchiveSettingsViewModel 
     {
-        //public TablePartition  SelectedTablePartition { get; set; }
-        public List<Signal> Signals { get; set; } = new List<Signal>();
-
-         //public DeleteOrMove SelecteDeleteOrMove { get; set; }
 
         public  MOE.Common.Models.DatabaseArchiveSettings DbArchiveSettings { get; set; }
-        public SignalSearchViewModel SignalSearch { get; set; }
-        //public List<Tuple<string, string>> SignalSelectList { get; set; }
 
         public List<DatabaseArchiveExcludedSignals> ExcludedSignals { get; set; }
 
         public ArchiveSettingsViewModel()
         {
             DbArchiveSettings = new DatabaseArchiveSettings();
-            SetTablePartitionList();
-            SetDeletOrMoveList();
-            SignalSearch = new SignalSearchViewModel();
+            //SetTablePartitionList();
+            //SetDeletOrMoveList();
         }
 
-        private void SetDeletOrMoveList()
-        {
-            DbArchiveSettings.DeleteOrMoveOptionList = new List<DeleteOrMove>();
-            DbArchiveSettings.DeleteOrMoveOptionList.AddRange(new List<DeleteOrMove> { DeleteOrMove.Delete, DeleteOrMove.Move});
-        }
+        //private void SetDeletOrMoveList()
+        //{
+        //    DbArchiveSettings.DeleteOrMoveOptionList = new List<DeleteOrMove>();
+        //    DbArchiveSettings.DeleteOrMoveOptionList.AddRange(new List<DeleteOrMove> { DeleteOrMove.Delete, DeleteOrMove.Move});
+        //}
 
-        private void SetTablePartitionList()
-        {
-            DbArchiveSettings.TablePartitionsList = new List<TablePartition>();
-            DbArchiveSettings.TablePartitionsList.AddRange(new List<TablePartition> { TablePartition.PartitionTables, TablePartition.NonPartitionTables});
-        }
+        //private void SetTablePartitionList()
+        //{
+        //    DbArchiveSettings.TablePartitionsList = new List<TableScheme>();
+        //    DbArchiveSettings.TablePartitionsList.AddRange(new List<TableScheme> { TableScheme.Partitioned, TableScheme.Standard});
+        //}
 
     }
 }

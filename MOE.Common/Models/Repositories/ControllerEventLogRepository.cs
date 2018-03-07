@@ -476,11 +476,9 @@ namespace MOE.Common.Models.Repositories
 
         public int GetSignalEventsCountBetweenDates(string signalId, DateTime startTime, DateTime endTime)
         {
-            var results = (from r in _db.Controller_Event_Log
-                where r.SignalID == signalId && r.Timestamp > startTime && r.Timestamp < endTime
-                      && r.EventCode > 130 && r.EventCode < 150
-                select r).Count();
-            return results;
+            return _db.Controller_Event_Log.Count(r => r.SignalID == signalId &&
+                                                r.Timestamp >= startTime
+                                                && r.Timestamp < endTime);
         }
 
         public int GetApproachEventsCountBetweenDates(int approachId, DateTime startTime, DateTime endTime, 

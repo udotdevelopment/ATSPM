@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/MOE.Common.Business.TMC" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.TMC" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="TMCInfo">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ImageLocations" nillable="true" type="q1:ArrayOfstring" />
+      <xs:element minOccurs="0" name="tmcData" nillable="true" type="tns:ArrayOfTMCData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TMCInfo" nillable="true" type="tns:TMCInfo" />
+  <xs:complexType name="ArrayOfTMCData">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TMCData" nillable="true" type="tns:TMCData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTMCData" nillable="true" type="tns:ArrayOfTMCData" />
+  <xs:complexType name="TMCData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Count" type="xs:int" />
+      <xs:element minOccurs="0" name="Direction" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LaneType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MovementType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TMCData" nillable="true" type="tns:TMCData" />
+</xs:schema>

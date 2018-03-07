@@ -9,10 +9,10 @@ namespace MOE.Common.Models
     //    Yes,
     //    No
     //}
-    public enum TablePartition
+    public enum TableScheme
     {
-        PartitionTables,
-        NonPartitionTables
+        Partitioned,
+        Standard
     }
 
     public enum DeleteOrMove
@@ -23,26 +23,19 @@ namespace MOE.Common.Models
 
     public class DatabaseArchiveSettings : ApplicationSettings
     {
-        [Display(Name = "Archive?")]
-        public bool? SelectedUseArchive { get; set; }
+        [Display(Name = "Enable Database Archive")]
+        public bool EnableDatbaseArchive { get; set; }
 
-        [Display(Name = "Use Table Partition Or Not")]
-        [NotMapped]
-        public List<TablePartition> TablePartitionsList { get; set; }
-
-        public TablePartition? SelectedTablePartition { get; set; }
+        public TableScheme? SelectedTableScheme { get; set; }
 
         [Display(Name = "Remove Index after how many months:")]
-        public int? MonthsToRemoveIndex { get; set; }
+        public int? MonthsToKeepIndex { get; set; }
 
         [Display(Name = "Move/Remove data after how many months:")]
-        public int? MonthsToRemoveData { get; set; }
+        public int? MonthsToKeepData { get; set; }
 
         [Display(Name = "Move to path:")]
         public string ArchivePath { get; set; }
-
-        [NotMapped]
-        public List<DeleteOrMove> DeleteOrMoveOptionList { get; set; }
 
         public DeleteOrMove? SelectedDeleteOrMove { get; set; }
 

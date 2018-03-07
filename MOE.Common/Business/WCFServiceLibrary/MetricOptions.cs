@@ -38,6 +38,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(DetectorVolumeAggregationOptions))]
     [KnownType(typeof(ApproachSpeedAggregationOptions))]
     [KnownType(typeof(ApproachCycleAggregationOptions))]
+    [KnownType(typeof(SignalEventCountAggregationOptions))]
+    [KnownType(typeof(ApproachEventCountAggregationOptions))]
     [KnownType(typeof(string[]))]
     public class MetricOptions
     {
@@ -89,16 +91,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public string MetricWebPath { get; set; }
 
-        [DataMember]
-        public List<Byte[]> SerializedMetricData = new List<byte[]>();
-
-        public List<XmlDocument> XMLMetricData = new List<XmlDocument>();
+        public List<XmlDocument> XMLMetricData { get; protected set; } = new List<XmlDocument>();
 
         public MetricType MetricType { get; set; }
 
-
         [DataMember]
         public List<string> ReturnList { get; set; }
+
+        public List<Tuple<string, string>> ResultChartAndXmlLocations { get; set; } = new List<Tuple<string, string>>();
 
         public virtual List<string> CreateMetric()
         {
@@ -111,8 +111,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void LogMetricRun()
         {
-            var appEventRepository =
-                ApplicationEventRepositoryFactory.Create();
+            var appEventRepository = ApplicationEventRepositoryFactory.Create();
             var applicationEvent = new ApplicationEvent();
             applicationEvent.ApplicationName = "SPM Website";
             applicationEvent.Description = MetricType.ChartName + " Executed";
@@ -123,8 +122,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public string GetSignalLocation()
         {
-            var signalRepository =
-                SignalsRepositoryFactory.Create();
+            var signalRepository = SignalsRepositoryFactory.Create();
             return signalRepository.GetSignalLocation(SignalID);
         }
 
@@ -164,56 +162,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 throw new Exception("Path not found");
             }
         }
-
-        public string CreateXMLFileName()
-        {
-            if (MetricType == null)
-            {
-                var metricTypeRepository = MetricTypeRepositoryFactory.Create();
-                MetricType = metricTypeRepository.GetMetricsByID(MetricTypeID);
-            }
-
-            var fileName = MetricType.Abbreviation +
-                           SignalID +
-                           "-" +
-                           StartDate.Year +
-                           StartDate.ToString("MM") +
-                           StartDate.ToString("dd") +
-                           StartDate.ToString("HH") +
-                           StartDate.ToString("mm") +
-                           "-" +
-                           EndDate.Year +
-                           EndDate.ToString("MM") +
-                           EndDate.ToString("dd") +
-                           EndDate.ToString("HH") +
-                           EndDate.ToString("mm-");
-            var r = new Random();
-            fileName += r.Next().ToString();
-            fileName += ".XML";
-            try
-            {
-                if (DriveAvailable())
-                    return fileName;
-                return null;
-            }
-            catch
-            {
-                throw new Exception("Path not found");
-            }
-        }
+        
 
         public void SerializeMetricData(Chart chart)
         {
-            //List<XmlDocument> xmlFiles = Export.ChartToCSVExporter.GetXMLFromChart(chart);
-
             XMLMetricData.Add(Export.ChartToCSVExporter.GetXMLFromChart(chart));
+        }
 
-            foreach(var xml in XMLMetricData)
-            {
-                xml.Save(MetricFileLocation+CreateXMLFileName());
-            }
-            //var bytes = Export.ChartToCSVExporter.ExportChartDataToCSVForDownload(chart);
-            //SerializedMetricData.AddRange(bytes);
+        public XmlDocument GetXmlForChart(Chart chart)
+        {
+            return Export.ChartToCSVExporter.GetXMLFromChart(chart);
         }
 
 

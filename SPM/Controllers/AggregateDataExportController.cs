@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.DataVisualization.Charting;
+using System.Xml;
+using Ionic.Zip;
 using MOE.Common.Business;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.FilterExtensions;
@@ -15,6 +18,7 @@ using MOE.Common.Business.WCFServiceLibrary;
 using SPM.Models;
 using MOE.Common.Models;
 using MOE.Common.Models.ViewModel.Chart;
+using SPM.MetricGeneratorService;
 
 namespace SPM.Controllers
 {
@@ -87,37 +91,37 @@ namespace SPM.Controllers
         {
             if (Request.Form["CreateMetric"] != null)
             {
-                switch (aggDataExportViewModel.SelectedMetricTypeId)
-                {
-                    case 16:
-                        return GetLaneByLaneChart(aggDataExportViewModel);
-                    case 17:
-                        return GetAdvanceCountChart(aggDataExportViewModel);
-
-                    case 18:
-                        return GetArrivalOnGreenChart(aggDataExportViewModel);
-                    case 19:
-                        return GetCycleChart(aggDataExportViewModel);
-
-                    case 20:
-                        return GetSplitFailChart(aggDataExportViewModel);
-
-                    case 26:
-                        return GetYraChart(aggDataExportViewModel);
-                        ;
-                    case 22:
-                        return GetPreemptionChart(aggDataExportViewModel);
-                    case 24:
-                        return GetPriorityChart(aggDataExportViewModel);
-                    default:
-                        return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
-                }
+                aggDataExportViewModel.SelectedChartAction = ChartAction.CreateMetric;
             }
-            else if (Request.Form["Export"] != null)
+            else
             {
-                //Export Bin Data
+                aggDataExportViewModel.SelectedChartAction = ChartAction.ExportXML;
             }
-            return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
+            switch (aggDataExportViewModel.SelectedMetricTypeId)
+            {
+                case 16:
+                    return GetLaneByLaneChart(aggDataExportViewModel);
+                case 25:
+                    return GetApproachSpeedAggregationChart(aggDataExportViewModel);
+                case 18:
+                    return GetArrivalOnGreenChart(aggDataExportViewModel);
+                case 19:
+                    return GetCycleChart(aggDataExportViewModel);
+                case 20:
+                    return GetSplitFailChart(aggDataExportViewModel);
+                case 26:
+                    return GetYraChart(aggDataExportViewModel);
+                case 22:
+                    return GetPreemptionChart(aggDataExportViewModel);
+                case 24:
+                    return GetPriorityChart(aggDataExportViewModel);
+                case 27:
+                    return GetSignalEventCountChart(aggDataExportViewModel);
+                case 28:
+                    return GetApproachEventCountChart(aggDataExportViewModel);
+                default:
+                    return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
+            }
         }
 
         private ActionResult GetCycleChart(AggDataExportViewModel aggDataExportViewModel)
@@ -126,7 +130,7 @@ namespace SPM.Controllers
             return GetChart(aggDataExportViewModel, options);
         }
 
-        private ActionResult GetAdvanceCountChart(AggDataExportViewModel aggDataExportViewModel)
+        private ActionResult GetApproachSpeedAggregationChart(AggDataExportViewModel aggDataExportViewModel)
         {
             ApproachSpeedAggregationOptions options = new ApproachSpeedAggregationOptions();
             return GetChart(aggDataExportViewModel, options);
@@ -141,6 +145,7 @@ namespace SPM.Controllers
         private ActionResult GetChart(AggDataExportViewModel aggDataExportViewModel, SignalAggregationMetricOptions options)
         {
             Enum.TryParse(aggDataExportViewModel.SelectedChartType, out SeriesChartType tempSeriesChartType);
+            options.SelectedChartAction = aggDataExportViewModel.SelectedChartAction;
             options.SelectedChartType = tempSeriesChartType;
             if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count > 0)
             {
@@ -152,6 +157,7 @@ namespace SPM.Controllers
                 return Content("<h1 class='text-danger'>Missing Parameters</h1>");
             }
         }
+        
 
         private ActionResult GetPriorityChart(AggDataExportViewModel aggDataExportViewModel)
         {
@@ -170,7 +176,16 @@ namespace SPM.Controllers
             ApproachSplitFailAggregationOptions options = new ApproachSplitFailAggregationOptions();
             return GetChart(aggDataExportViewModel, options);
         }
-
+        private ActionResult GetSignalEventCountChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            SignalEventCountAggregationOptions options = new SignalEventCountAggregationOptions();
+            return GetChart(aggDataExportViewModel, options);
+        }
+        private ActionResult GetApproachEventCountChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            ApproachEventCountAggregationOptions options = new ApproachEventCountAggregationOptions();
+            return GetChart(aggDataExportViewModel, options);
+        }
         private ActionResult GetYraChart(AggDataExportViewModel aggDataExportViewModel)
         {
             ApproachYellowRedActivationsAggregationOptions options = new ApproachYellowRedActivationsAggregationOptions();
@@ -204,21 +219,22 @@ namespace SPM.Controllers
 
         private ActionResult GetChartFromService(SignalAggregationMetricOptions options)
         {
-            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
+            Models.MetricAndXmlResultViewModel result = new Models.MetricAndXmlResultViewModel();
             MetricGeneratorService.MetricGeneratorClient client =
                     new MetricGeneratorService.MetricGeneratorClient();
             try
             {
                 client.Open();
-                result.ChartPaths = client.CreateMetric(options);
+                var resultPaths = client.GetChartAndXmlFileLocations(options);
                 client.Close();
+                result.ChartPaths = resultPaths.ToList();
+                return PartialView("~/Views/AggregateDataExport/MetricResult.cshtml", result);
             }
             catch (Exception ex)
             {
                 client.Close();
                 return Content("<h1>" + ex.Message + "</h1>");
             }
-            return PartialView("~/Views/DefaultCharts/MetricResult.cshtml", result);
         }
 
         private static void SetTimeOptionsFromViewModel(AggDataExportViewModel aggDataExportViewModel, SignalAggregationMetricOptions options)
@@ -282,7 +298,7 @@ namespace SPM.Controllers
             viewModel.Weekends = true;
             return View(viewModel);
         }
-
+        
         private void SetAggregateDataViewModelLists(AggDataExportViewModel viewModel)
         {
             var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
@@ -333,7 +349,7 @@ namespace SPM.Controllers
                 case 16:
                     AggregatedDataTypes = new DetectorVolumeAggregationOptions().AggregatedDataTypes;
                     break;
-                case 17:
+                case 25:
                     AggregatedDataTypes = new ApproachSpeedAggregationOptions().AggregatedDataTypes;
                     break;
                 case 18:
@@ -353,6 +369,12 @@ namespace SPM.Controllers
                     break;
                 case 24:
                     AggregatedDataTypes = new SignalPriorityAggregationOptions().AggregatedDataTypes;
+                    break;
+                case 27:
+                    AggregatedDataTypes = new SignalEventCountAggregationOptions().AggregatedDataTypes;
+                    break;
+                case 28:
+                    AggregatedDataTypes = new ApproachEventCountAggregationOptions().AggregatedDataTypes;
                     break;
                 default:
                     throw new Exception("Invalid Metric Type");

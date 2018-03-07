@@ -32,6 +32,28 @@ function LoadRoute() {
     });
 }
 
+function ExportChart() {
+    var formData = $("#form0").serialize();
+    $.ajax({
+        url: urlpathExportData,
+        type: "POST",
+        cache: false,
+        dataType: 'json',
+        data: formData,
+        async: true,
+        success: function (data) {
+        },
+        onerror: function () { alert("Error"); }
+    });
+}
+
+function GetRequestVerificationTokenObject() {
+    var headers = {};
+    var token = $('[name=__RequestVerificationToken]').val();
+    headers['__RequestVerificationToken'] = token;
+    return headers;
+}
+
 function LoadDataAggregateTypes() {
     var metricId = $("#SelectedMetricTypeId").val();
     $.ajax({
