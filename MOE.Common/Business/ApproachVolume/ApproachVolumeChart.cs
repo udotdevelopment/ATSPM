@@ -442,7 +442,7 @@ namespace MOE.Common.Business.ApproachVolume
             double biDirPHF = 0;
             if (biDirPHvol > 0)
             {
-                biDirPHF = Convert.ToDouble(biDirPeakVolume) / Convert.ToDouble(biDirPHvol * binSizeMultiplier);
+                biDirPHF = Convert.ToDouble(biDirPeakVolume) / Convert.ToDouble(biDirPHvol);
                 biDirPHF = SetSigFigs(biDirPHF, 3);
             }
 
@@ -455,13 +455,13 @@ namespace MOE.Common.Business.ApproachVolume
             //  {
             var D1Peak = findPeakHour(D1Volumes, binSizeMultiplier);
             var D1PeakHour = D1Peak.Key;
-            var D1PeakHourVolume = D1Peak.Value / binSizeMultiplier;
+            var D1PeakHourVolume = D1Peak.Value;
             var D1PHvol = findPeakValueinHour(D1PeakHour, D1Volumes, binSizeMultiplier);
             // Find the Peak hour factor for Direciton1
             double D1PHF = 0;
             if (D1PHvol > 0)
             {
-                D1PHF = Convert.ToDouble(D1PeakHourVolume) / Convert.ToDouble(D1PHvol * binSizeMultiplier);
+                D1PHF = Convert.ToDouble(D1PeakHourVolume) / Convert.ToDouble(D1PHvol);
                 D1PHF = SetSigFigs(D1PHF, 3);
             }
 
@@ -472,13 +472,13 @@ namespace MOE.Common.Business.ApproachVolume
             var D2Peak = findPeakHour(D2Volumes, binSizeMultiplier);
 
             var D2PeakHour = D2Peak.Key;
-            var D2PeakHourVolume = D2Peak.Value / binSizeMultiplier;
+            var D2PeakHourVolume = D2Peak.Value;
             var D2PHvol = findPeakValueinHour(D2PeakHour, D2Volumes, binSizeMultiplier);
             // Find the Peak hour factor for Direciton2
             double D2PHF = 0;
             if (D2PHvol > 0)
             {
-                D2PHF = Convert.ToDouble(D2PeakHourVolume) / Convert.ToDouble(D2PHvol * binSizeMultiplier);
+                D2PHF = Convert.ToDouble(D2PeakHourVolume) / Convert.ToDouble(D2PHvol);
                 D2PHF = SetSigFigs(D2PHF, 3);
             }
             // }
@@ -488,7 +488,7 @@ namespace MOE.Common.Business.ApproachVolume
 
 
             var totalVolume = D1TV + D2TV;
-            var PHKF = SetSigFigs(Convert.ToDouble(biDirPeakVolume) / Convert.ToDouble(totalVolume), 3).ToString();
+            var PHKF = SetSigFigs(Convert.ToDouble(biDirPeakVolume * binSizeMultiplier) / Convert.ToDouble(totalVolume), 3).ToString();
             var D1PHKF = SetSigFigs(Convert.ToDouble(D1PeakHourVolume) / Convert.ToDouble(D1TV), 3).ToString();
             var D1PHDF = findPHDF(D1PeakHour, D1PeakHourVolume, D2Volumes, binSizeMultiplier).ToString();
             var D2PHKF = SetSigFigs(Convert.ToDouble(D2PeakHourVolume) / Convert.ToDouble(D2TV), 3).ToString();
@@ -615,8 +615,10 @@ namespace MOE.Common.Business.ApproachVolume
 
                 StartofHour = StartofHour.AddMinutes(60 / binMultiplier);
             }
-            if (Peakhourvolume > 0)
-                PHDF = SetSigFigs(Convert.ToDouble(totalVolume) / Convert.ToDouble(Peakhourvolume), 3);
+            totalVolume /= binMultiplier;
+            totalVolume += Peakhourvolume;
+            if (totalVolume > 0)
+                PHDF = SetSigFigs(Convert.ToDouble(Peakhourvolume) / Convert.ToDouble(totalVolume), 3);
             else
                 PHDF = 0;
             return PHDF;
