@@ -856,26 +856,26 @@ While each agency should consult with their IT department for specific guideline
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
                 },
-                new MetricType
-                {
-                    MetricID = 17,
-                    ChartName = "Advanced Counts",
-                    Abbreviation = "ACA",
-                    ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
-                },
+                //new MetricType
+                //{
+                //    MetricID = 17,
+                //    ChartName = "Advanced Counts",
+                //    Abbreviation = "ACA",
+                //    ShowOnWebsite = false,
+                //    ShowOnAggregationSite = true
+                //},
                 new MetricType
                 {
                     MetricID = 18,
-                    ChartName = "Purdue Coodination",
-                    Abbreviation = "PCDA",
+                    ChartName = "ApproachPcd", //"Purdue Coodination",
+                    Abbreviation = "APCD", // "PCDA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
                 },
                 new MetricType
                 {
                     MetricID = 19,
-                    ChartName = "Cycle",
+                    ChartName = "Approach Cycle", // "Cycle"
                     Abbreviation = "CA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
@@ -883,7 +883,7 @@ While each agency should consult with their IT department for specific guideline
                 new MetricType
                 {
                     MetricID = 20,
-                    ChartName = "Purdue Split Failure",
+                    ChartName = "Approach Split Fail",  //"Purdue Split Failure",
                     Abbreviation = "SFA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
@@ -891,7 +891,7 @@ While each agency should consult with their IT department for specific guideline
                 new MetricType
                 {
                     MetricID = 22,
-                    ChartName = "Preemption",
+                    ChartName = "Signal Preemption",  //"Preemption",
                     Abbreviation = "PreemptA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
@@ -899,16 +899,40 @@ While each agency should consult with their IT department for specific guideline
                 new MetricType
                 {
                     MetricID = 24,
-                    ChartName = "Transit Signal Priority",
-                    Abbreviation = "TSPA",
+                    ChartName = "Signal Priority", // "Transit Signal Priority",
+                    Abbreviation = "TSPA", 
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
                 },
-            new MetricType
+                new MetricType
+                {
+                    MetricID = 25,
+                    ChartName = "Approach Speed",
+                    Abbreviation = "ASA",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = true
+                },
+               new MetricType
                 {
                     MetricID = 26,
-                    ChartName = "Yellow Red Activations",
+                    ChartName = "Approach Yellow Red Activations", //"Yellow Red Activations",
                     Abbreviation = "YRAA",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = true
+                },
+               new MetricType
+                {
+                    MetricID = 27,
+                    ChartName = "Signal Event Count",
+                    Abbreviation = "SEC",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = true
+                },
+                new MetricType
+                {
+                    MetricID = 28,
+                    ChartName = "Approach Event Count",
+                    Abbreviation = "AEC",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
                 }
