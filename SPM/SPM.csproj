@@ -221,6 +221,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArchiveSettingsViewModel.cs" />
     <Compile Include="Models\AggDataExportViewModel.cs" />
+    <Compile Include="Models\MetricAndXmlResultViewModel.cs" />
     <Compile Include="Models\MetricResultViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -586,18 +587,13 @@
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterMovement.cshtml" />
     <Content Include="Views\GeneralSettings\Edit.cshtml" />
     <Content Include="Views\DataExport\EditorTemplates\DateTimePickerViewModel.cshtml" />
-    <Content Include="Service References\MetricGeneratorService\SPM.MetricGeneratorService.ArrayOfXmlElement.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
     <None Include="Service References\MetricGeneratorService\System.Web.UI.DataVisualization.Charting.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\MetricGeneratorService\System.Xml.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MetricGeneratorService\System.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\AggregateDataExport\MetricResult.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

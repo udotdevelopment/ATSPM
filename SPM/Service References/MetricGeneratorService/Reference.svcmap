@@ -31,7 +31,6 @@
     <MetadataFile FileName="MOE.Common.Business.Bins.xsd" MetadataType="Schema" ID="0a3b2f2d-0041-49dc-a368-34aa275483d6" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/MOEWcfServiceLibrary/ChartGenerator/mex" />
     <MetadataFile FileName="System.xsd" MetadataType="Schema" ID="b5cde657-fd3d-4b6f-991d-33640202fb4a" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/MOEWcfServiceLibrary/ChartGenerator/mex" />
     <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="bba3d317-9e7b-4936-a293-0f98fa23e8dc" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/MOEWcfServiceLibrary/ChartGenerator/mex" />
-    <MetadataFile FileName="System.Xml.xsd" MetadataType="Schema" ID="4087b890-4c7f-4201-8fd6-498cc6910b31" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/MOEWcfServiceLibrary/ChartGenerator/mex" />
     <MetadataFile FileName="MOE.Common.Business.ApproachVolume.xsd" MetadataType="Schema" ID="2c5f7906-234e-4608-9569-12ffbe7feadd" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/MOEWcfServiceLibrary/ChartGenerator/mex" />
     <MetadataFile FileName="MOE.Common.Business.TMC.xsd" MetadataType="Schema" ID="2f61a048-151a-409b-8f2a-8bb7312180d6" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/MOEWcfServiceLibrary/ChartGenerator/mex" />
   </Metadata>

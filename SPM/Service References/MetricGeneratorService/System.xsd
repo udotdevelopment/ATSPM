@@ -18,4 +18,25 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="DayOfWeek" nillable="true" type="tns:DayOfWeek" />
+  <xs:complexType name="ArrayOfTupleOfstringstring">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TupleOfstringstring" nillable="true" type="tns:TupleOfstringstring" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTupleOfstringstring" nillable="true" type="tns:ArrayOfTupleOfstringstring" />
+  <xs:complexType name="TupleOfstringstring">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="TupleOf{0}{1}{#}" Namespace="http://schemas.datacontract.org/2004/07/System" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="string" Namespace="http://www.w3.org/2001/XMLSchema" />
+          <GenericParameter Name="string" Namespace="http://www.w3.org/2001/XMLSchema" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="m_Item1" nillable="true" type="xs:string" />
+      <xs:element name="m_Item2" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TupleOfstringstring" nillable="true" type="tns:TupleOfstringstring" />
 </xs:schema>

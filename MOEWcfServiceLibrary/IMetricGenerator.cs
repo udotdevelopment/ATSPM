@@ -41,7 +41,7 @@ namespace MOEWcfServiceLibrary
         [OperationContract]
         List<String> CreateMetric(MOE.Common.Business.WCFServiceLibrary.MetricOptions options);
         [OperationContract]
-        XmlElement[] ExportMetricData(MOE.Common.Business.WCFServiceLibrary.MetricOptions options);
+        List<Tuple<string, string>> GetChartAndXmlFileLocations(MOE.Common.Business.WCFServiceLibrary.MetricOptions options);
         [OperationContract]
         List<MOE.Common.Business.ApproachVolume.MetricInfo> CreateMetricWithDataTable(MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions options);
         [OperationContract]

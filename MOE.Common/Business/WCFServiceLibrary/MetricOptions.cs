@@ -96,6 +96,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public List<string> ReturnList { get; set; }
 
+        public List<Tuple<string, string>> ResultChartAndXmlLocations { get; set; } = new List<Tuple<string, string>>();
+
         public virtual List<string> CreateMetric()
         {
             var metricTypeRepository = MetricTypeRepositoryFactory.Create();
@@ -158,47 +160,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 throw new Exception("Path not found");
             }
         }
-
-        public string CreateXMLFileName()
-        {
-            if (MetricType == null)
-            {
-                var metricTypeRepository = MetricTypeRepositoryFactory.Create();
-                MetricType = metricTypeRepository.GetMetricsByID(MetricTypeID);
-            }
-
-            var fileName = MetricType.Abbreviation +
-                           SignalID +
-                           "-" +
-                           StartDate.Year +
-                           StartDate.ToString("MM") +
-                           StartDate.ToString("dd") +
-                           StartDate.ToString("HH") +
-                           StartDate.ToString("mm") +
-                           "-" +
-                           EndDate.Year +
-                           EndDate.ToString("MM") +
-                           EndDate.ToString("dd") +
-                           EndDate.ToString("HH") +
-                           EndDate.ToString("mm-");
-            var r = new Random();
-            fileName += r.Next().ToString();
-            fileName += ".XML";
-            try
-            {
-                if (DriveAvailable())
-                    return fileName;
-                return null;
-            }
-            catch
-            {
-                throw new Exception("Path not found");
-            }
-        }
+        
 
         public void SerializeMetricData(Chart chart)
         {
             XMLMetricData.Add(Export.ChartToCSVExporter.GetXMLFromChart(chart));
+        }
+
+        public XmlDocument GetXmlForChart(Chart chart)
+        {
+            return Export.ChartToCSVExporter.GetXMLFromChart(chart);
         }
 
 

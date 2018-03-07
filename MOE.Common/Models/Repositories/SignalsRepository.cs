@@ -39,11 +39,15 @@ namespace MOE.Common.Models.Repositories
                 .Where(signal => signal.VersionActionId != 3)
                 .ToList();
 
-
-            var orderedSignals = signals.OrderByDescending(signal => signal.Start);
-
-
-            return orderedSignals.First();
+            if (signals.Count > 1)
+            {
+                var orderedSignals = signals.OrderByDescending(signal => signal.Start);
+                return orderedSignals.First();
+            }
+            else
+            {
+                return signals.FirstOrDefault();
+            }
         }
 
         public Signal GetSignalVersionByVersionId(int versionId)
@@ -54,12 +58,6 @@ namespace MOE.Common.Models.Repositories
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
                 .Include(signal => signal.Approaches.Select(a => a.DirectionType))
                 .Where(signal => signal.VersionID == versionId).FirstOrDefault();
-
-
-
-
-
-
 
             return version;
 

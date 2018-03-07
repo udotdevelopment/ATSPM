@@ -152,54 +152,14 @@ namespace SPM.Controllers
             if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count > 0)
             {
                 SetCommonValues(aggDataExportViewModel, options);
-                if (options.SelectedChartAction == ChartAction.CreateMetric)
-                {
-                    return GetChartFromService(options);
-                }
-                else
-                {
-                    return GetXmlFromService(options);
-                }
+                return GetChartFromService(options);
             }
             else
             {
                 return Content("<h1 class='text-danger'>Missing Parameters</h1>");
             }
         }
-
-        private ActionResult GetXmlFromService(SignalAggregationMetricOptions options)
-        {
-            ArrayOfXmlElement result;
-            MetricGeneratorService.MetricGeneratorClient client =
-                new MetricGeneratorService.MetricGeneratorClient();
-            try
-            {
-                client.Open();
-                result = client.ExportMetricData(options);
-                client.Close();
-            }
-            catch (Exception ex)
-            {
-                client.Close();
-                return Content("<h1>" + ex.Message + "</h1>");
-            }
-            var outputStream = new MemoryStream();
-            using (var zip = new ZipFile())
-            {
-                var resultList = result.ToList();
-                for (var index = 0; index < resultList.Count(); index++)
-                {
-                    XmlDocument xmlDocument = new XmlDocument();
-                    xmlDocument.LoadXml(resultList[index].ToString());
-                    var xmlOutputStream = new MemoryStream();
-                    xmlDocument.Save(xmlOutputStream);
-                    zip.AddEntry("Chart"+index.ToString()+".xml", xmlOutputStream);
-                }
-                zip.Save(outputStream);
-            }
-            outputStream.Position = 0;
-            return File(outputStream, "application/zip", "filename.zip");
-        }
+        
 
         private ActionResult GetPriorityChart(AggDataExportViewModel aggDataExportViewModel)
         {
@@ -252,21 +212,22 @@ namespace SPM.Controllers
 
         private ActionResult GetChartFromService(SignalAggregationMetricOptions options)
         {
-            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
+            Models.MetricAndXmlResultViewModel result = new Models.MetricAndXmlResultViewModel();
             MetricGeneratorService.MetricGeneratorClient client =
                     new MetricGeneratorService.MetricGeneratorClient();
             try
             {
                 client.Open();
-                result.ChartPaths = client.CreateMetric(options);
+                var resultPaths = client.GetChartAndXmlFileLocations(options);
                 client.Close();
+                result.ChartPaths = resultPaths.ToList();
+                return PartialView("~/Views/AggregateDataExport/MetricResult.cshtml", result);
             }
             catch (Exception ex)
             {
                 client.Close();
                 return Content("<h1>" + ex.Message + "</h1>");
             }
-            return PartialView("~/Views/DefaultCharts/MetricResult.cshtml", result);
         }
 
         private static void SetTimeOptionsFromViewModel(AggDataExportViewModel aggDataExportViewModel, SignalAggregationMetricOptions options)
@@ -330,46 +291,7 @@ namespace SPM.Controllers
             viewModel.Weekends = true;
             return View(viewModel);
         }
-
-        // POST: AggDataExportViewModel
-        [HttpPost]
-        public ActionResult Index(AggDataExportViewModel aggDataExportViewModel)
-        {
-            if (Request.Form["CreateMetric"] != null)
-            {
-                aggDataExportViewModel.SelectedChartAction = ChartAction.CreateMetric;
-            }
-            else
-            {
-                aggDataExportViewModel.SelectedChartAction = ChartAction.ExportXML;
-            }
-            switch (aggDataExportViewModel.SelectedMetricTypeId)
-            {
-                case 16:
-                    return GetLaneByLaneChart(aggDataExportViewModel);
-                case 17:
-                    return GetAdvanceCountChart(aggDataExportViewModel);
-
-                case 18:
-                    return GetArrivalOnGreenChart(aggDataExportViewModel);
-                case 19:
-                    return GetCycleChart(aggDataExportViewModel);
-
-                case 20:
-                    return GetSplitFailChart(aggDataExportViewModel);
-
-                case 26:
-                    return GetYraChart(aggDataExportViewModel);
-                    ;
-                case 22:
-                    return GetPreemptionChart(aggDataExportViewModel);
-                case 24:
-                    return GetPriorityChart(aggDataExportViewModel);
-                default:
-                    return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
-            }
-        }
-
+        
         private void SetAggregateDataViewModelLists(AggDataExportViewModel viewModel)
         {
             var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();

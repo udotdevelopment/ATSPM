@@ -107,7 +107,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public List<Models.Signal> Signals { get; set; } = new List<Models.Signal>();
 
-        public virtual string ChartTitle
+    public virtual string ChartTitle
         {
             get
             {
@@ -242,22 +242,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void SaveChartImage(Chart chart)
         {
-            if (SelectedChartAction == ChartAction.ExportXML)
+            if (ResultChartAndXmlLocations == null)
             {
-                XMLMetricData = new List<XmlDocument>();
-                SerializeMetricData(chart);
+                ResultChartAndXmlLocations = new List<Tuple<string, string>>();
             }
-            else
-            {
-                var chartName = CreateFileName(MetricType.Abbreviation);
-                MetricFileLocation = ConfigurationManager.AppSettings["ImageLocation"];
-                MetricWebPath = ConfigurationManager.AppSettings["ImageWebLocation"];
-                chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
-                ReturnList.Add(MetricWebPath + chartName);
-            }
+            XmlDocument xmlDocument = GetXmlForChart(chart);
+            string xmlChartName = CreateFileName(MetricType.Abbreviation, ".xml");
+            xmlDocument.Save(MetricFileLocation + xmlChartName);  
+            var chartName = CreateFileName(MetricType.Abbreviation, ".jpg");
+            MetricFileLocation = ConfigurationManager.AppSettings["ImageLocation"];
+            MetricWebPath = ConfigurationManager.AppSettings["ImageWebLocation"];
+            chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
+            ResultChartAndXmlLocations.Add(new Tuple<string, string>(MetricWebPath + chartName, MetricWebPath + xmlChartName));
+            ReturnList.Add(MetricWebPath + chartName);
         }
 
-        protected string CreateFileName(string MetricAbbreviation)
+        protected string CreateFileName(string MetricAbbreviation, string extension)
         {
             var fileName = MetricAbbreviation +
                            "-" +
@@ -274,9 +274,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
                            EndDate.ToString("mm-");
             var r = new Random();
             fileName += r.Next().ToString();
-            fileName += ".jpg";
+            fileName += extension;
             return fileName;
         }
+        
 
 
         protected virtual void GetTimeCharts()

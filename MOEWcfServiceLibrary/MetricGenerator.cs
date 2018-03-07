@@ -38,19 +38,15 @@ namespace MOEWcfServiceLibrary
             return result;
         }
 
-        public XmlElement[] ExportMetricData(MOE.Common.Business.WCFServiceLibrary.MetricOptions options)
+        public List<Tuple<string, string>> GetChartAndXmlFileLocations(MOE.Common.Business.WCFServiceLibrary.MetricOptions options)
         {
-            List <XmlElement> result = new List<XmlElement>();
             try
             {
                 MOE.Common.Models.Repositories.IMetricTypeRepository metricTypeRepository =
                     MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
                 options.MetricType = metricTypeRepository.GetMetricsByID(options.MetricTypeID);
                 options.CreateMetric();
-                foreach (var xmlDocument in options.XMLMetricData)
-                {
-                    result.Add(xmlDocument.DocumentElement);
-                }
+                return options.ResultChartAndXmlLocations;
             }
             catch (Exception ex)
             {
@@ -66,7 +62,6 @@ namespace MOEWcfServiceLibrary
                 logRepository.Add(e);
                 throw;
             }
-            return result.ToArray();
         }
 
 

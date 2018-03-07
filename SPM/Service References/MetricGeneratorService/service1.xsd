@@ -2,7 +2,7 @@
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.WCFServiceLibrary" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/System.Xml" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/System" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.ApproachVolume" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.TMC" />
   <xs:element name="CreateMetric">
@@ -19,17 +19,17 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ExportMetricData">
+  <xs:element name="GetChartAndXmlFileLocations">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/MOE.Common.Business.WCFServiceLibrary" minOccurs="0" name="options" nillable="true" type="q3:MetricOptions" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ExportMetricDataResponse">
+  <xs:element name="GetChartAndXmlFileLocationsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/System.Xml" minOccurs="0" name="ExportMetricDataResult" nillable="true" type="q4:ArrayOfXmlElement" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="GetChartAndXmlFileLocationsResult" nillable="true" type="q4:ArrayOfTupleOfstringstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

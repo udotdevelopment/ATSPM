@@ -9,16 +9,7 @@
 //------------------------------------------------------------------------------
 
 namespace SPM.MetricGeneratorService {
-    using System.Runtime.Serialization;
-    using System;
     
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.CollectionDataContractAttribute(Name="ArrayOfXmlElement", Namespace="http://schemas.datacontract.org/2004/07/System.Xml", ItemName="XmlElement")]
-    [System.SerializableAttribute()]
-    public class ArrayOfXmlElement : System.Collections.Generic.List<System.Xml.Linq.XElement> {
-    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="MetricGeneratorService.IMetricGenerator")]
@@ -55,7 +46,7 @@ namespace SPM.MetricGeneratorService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMetricGenerator/CreateMetric", ReplyAction="http://tempuri.org/IMetricGenerator/CreateMetricResponse")]
         System.Threading.Tasks.Task<string[]> CreateMetricAsync(MOE.Common.Business.WCFServiceLibrary.MetricOptions options);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMetricGenerator/ExportMetricData", ReplyAction="http://tempuri.org/IMetricGenerator/ExportMetricDataResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMetricGenerator/GetChartAndXmlFileLocations", ReplyAction="http://tempuri.org/IMetricGenerator/GetChartAndXmlFileLocationsResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.PCDOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.TMCOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.AoROptions))]
@@ -81,10 +72,10 @@ namespace SPM.MetricGeneratorService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachCycleAggregationOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.SignalPreemptionAggregationOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.SignalPriorityAggregationOptions))]
-        SPM.MetricGeneratorService.ArrayOfXmlElement ExportMetricData(MOE.Common.Business.WCFServiceLibrary.MetricOptions options);
+        System.Tuple<string, string>[] GetChartAndXmlFileLocations(MOE.Common.Business.WCFServiceLibrary.MetricOptions options);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMetricGenerator/ExportMetricData", ReplyAction="http://tempuri.org/IMetricGenerator/ExportMetricDataResponse")]
-        System.Threading.Tasks.Task<SPM.MetricGeneratorService.ArrayOfXmlElement> ExportMetricDataAsync(MOE.Common.Business.WCFServiceLibrary.MetricOptions options);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMetricGenerator/GetChartAndXmlFileLocations", ReplyAction="http://tempuri.org/IMetricGenerator/GetChartAndXmlFileLocationsResponse")]
+        System.Threading.Tasks.Task<System.Tuple<string, string>[]> GetChartAndXmlFileLocationsAsync(MOE.Common.Business.WCFServiceLibrary.MetricOptions options);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMetricGenerator/CreateMetricWithDataTable", ReplyAction="http://tempuri.org/IMetricGenerator/CreateMetricWithDataTableResponse")]
         MOE.Common.Business.ApproachVolume.MetricInfo[] CreateMetricWithDataTable(MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions options);
@@ -134,12 +125,12 @@ namespace SPM.MetricGeneratorService {
             return base.Channel.CreateMetricAsync(options);
         }
         
-        public SPM.MetricGeneratorService.ArrayOfXmlElement ExportMetricData(MOE.Common.Business.WCFServiceLibrary.MetricOptions options) {
-            return base.Channel.ExportMetricData(options);
+        public System.Tuple<string, string>[] GetChartAndXmlFileLocations(MOE.Common.Business.WCFServiceLibrary.MetricOptions options) {
+            return base.Channel.GetChartAndXmlFileLocations(options);
         }
         
-        public System.Threading.Tasks.Task<SPM.MetricGeneratorService.ArrayOfXmlElement> ExportMetricDataAsync(MOE.Common.Business.WCFServiceLibrary.MetricOptions options) {
-            return base.Channel.ExportMetricDataAsync(options);
+        public System.Threading.Tasks.Task<System.Tuple<string, string>[]> GetChartAndXmlFileLocationsAsync(MOE.Common.Business.WCFServiceLibrary.MetricOptions options) {
+            return base.Channel.GetChartAndXmlFileLocationsAsync(options);
         }
         
         public MOE.Common.Business.ApproachVolume.MetricInfo[] CreateMetricWithDataTable(MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions options) {

@@ -137,6 +137,7 @@
         <xs:sequence>
           <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="BinSizeList" nillable="true" type="q6:ArrayOfint" />
           <xs:element minOccurs="0" name="SelectedBinSize" type="xs:int" />
+          <xs:element minOccurs="0" name="Show15Percentile" type="xs:boolean" />
           <xs:element minOccurs="0" name="Show85Percentile" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowAverageSpeed" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowPlanStatistics" type="xs:boolean" />
