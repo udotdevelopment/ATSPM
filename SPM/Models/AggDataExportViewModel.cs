@@ -220,7 +220,7 @@ namespace SPM.Models
                     case 24:
                         AggregatedDataTypes = new SignalPriorityAggregationOptions().AggregatedDataTypes;
                         break;
-                    case 16:
+                    case 26:
                         AggregatedDataTypes = new ApproachYellowRedActivationsAggregationOptions().AggregatedDataTypes;
                         break;
                     default:
