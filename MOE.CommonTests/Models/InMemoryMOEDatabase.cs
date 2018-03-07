@@ -93,9 +93,19 @@ namespace MOE.CommonTests.Models
             PopulateLaneTypes();
             PopulateDetectionHardware();
             PoplateMetricTypes();
+            PopulateMetricTypesWithDetectionTypes();
+            
         }
 
-
+        private void PopulateMetricTypesWithDetectionTypes()
+        {
+            var metricType = MetricTypes.Where(mt => mt.MetricID == 12).FirstOrDefault();
+            var detType = DetectionTypes.Where(dt => dt.DetectionTypeID == 6).FirstOrDefault();
+            metricType.DetectionTypes = new List<DetectionType>();
+            detType.MetricTypes = new List<MetricType>();
+            metricType.DetectionTypes.Add(detType);
+            detType.MetricTypes.Add(metricType);
+        }
 
         public void ClearTables()
         {
@@ -463,6 +473,7 @@ namespace MOE.CommonTests.Models
                 ChartName = "Purdue Phase Termination",
                 Abbreviation = "PPT",
                 ShowOnWebsite = true
+                
             };
             var mt2 = new MetricType
             {
@@ -1118,6 +1129,8 @@ namespace MOE.CommonTests.Models
                 MetricID = 12,
                 ChartName = "Purdue Split Failure",
                 Abbreviation = "SF",
+                
+               
                 ShowOnWebsite = true
             };
             var b13 = new MetricType

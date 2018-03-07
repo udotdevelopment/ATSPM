@@ -113,13 +113,14 @@ function SetYRAMetric(severeLevelSeconds, showRedLightViolations, showSevereRedL
     $("#ShowAverageTimeYellowOccurences").prop('checked',showAverageTimeYellowOccurences);
 }
 
-function SetSpeedMetric(selectedBinSize, showPlanStatistics, showAverageSpeed, showPostedSpeed, show85Percentile)
+function SetSpeedMetric(selectedBinSize, showPlanStatistics, showAverageSpeed, showPostedSpeed, show85Percentile, show15Percentile)
 {
     $("#SelectedBinSize").val(selectedBinSize);
     $("#ShowPlanStatistics").prop('checked',showPlanStatistics);
     $("#ShowAverageSpeed").prop('checked',showAverageSpeed);
     $("#ShowPostedSpeed").prop('checked',showPostedSpeed);
     $("#Show85Percentile").prop('checked',show85Percentile);
+    $("#Show15Percentile").prop('checked', show15Percentile);
 }
 
 function SetSplitFailMetric(firstSecondsOfRed, showFailLines, showAverageLines, showPercentLines) {

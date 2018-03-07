@@ -163,6 +163,7 @@ function GetApproachSpeedMetric(metricTypeID) {
     tosend.ShowPostedSpeed = $("#ShowPostedSpeed").is(":checked");
     tosend.ShowAverageSpeed = $("#ShowAverageSpeed").is(":checked");
     tosend.Show85Percentile = $("#Show85Percentile").is(":checked");
+    tosend.Show15Percentile = $("#Show15Percentile").is(":checked");
     GetMetric(urlpathApproachSpeed, tosend);
 }
 function GetYellowAndRedMetric(metricTypeID) {

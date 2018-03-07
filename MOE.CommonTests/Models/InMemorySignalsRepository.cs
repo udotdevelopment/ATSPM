@@ -284,7 +284,8 @@ namespace MOE.CommonTests.Models
 
         public string GetSignalDescription(string signalId)
         {
-            throw new NotImplementedException();
+            var signal = _db.Signals.Where(s => s.SignalID == signalId).FirstOrDefault();
+            return signal.PrimaryName + "-" + signal.SecondaryName;
         }
 
         public List<Common.Models.Signal> GetAllEnabledSignals()
@@ -425,10 +426,28 @@ namespace MOE.CommonTests.Models
                     .Where(signal => signal.VersionActionId != 3)
                     .ToList();
 
+                
+
                 var orderedSignals = signals.OrderByDescending(signal => signal.Start);
 
+                var returnSignal = orderedSignals.First();
 
-                return orderedSignals.First();
+                returnSignal.Approaches = _db.Approaches.Where(a => a.VersionID == returnSignal.VersionID).ToList();
+
+            foreach (var a in returnSignal.Approaches)
+            {
+                a.Detectors = _db.Detectors.Where(d => d.ApproachID == a.ApproachID).ToList();
+
+                foreach(var d in a.Detectors)
+                {
+
+                    d.DetectionTypes = _db.DetectionTypes.Where(dt => d.DetectionTypeIDs.Contains(dt.DetectionTypeID)).ToList();
+                }
+            }
+
+            
+
+            return orderedSignals.First();
         }
         
 
