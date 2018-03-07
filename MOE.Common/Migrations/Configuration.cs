@@ -593,14 +593,14 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "Database Archive Settings",
                     Controller = "ArchiveSettings",
                     Action = "Index",
-                    ParentId = 11,
+                    ParentId = 53,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 7
+                    DisplayOrder = 2
                 },
                 new Menu
                 {
-                    MenuId = 56,
-                    MenuName = "General Settins",
+                    MenuId = 57,
+                    MenuName = "General Settings",
                     Controller = "GeneralSettings",
                     Action = "Edit",
                     ParentId = 53,
@@ -1028,10 +1028,10 @@ While each agency should consult with their IT department for specific guideline
                 new DatabaseArchiveSettings
                 {
                     ApplicationID = 3,
-                    SelectedUseArchive = true,
-                    SelectedTablePartition = TablePartition.PartitionTables,
-                    MonthsToRemoveIndex = 6,
-                    MonthsToRemoveData = 6,
+                    EnableDatbaseArchive = true,
+                    SelectedTableScheme = TableScheme.Partitioned,
+                    MonthsToKeepIndex = 6,
+                    MonthsToKeepData = 6,
                     SelectedDeleteOrMove = DeleteOrMove.Move,
                     StartTime = 22,
                     TimeDuration = 8,

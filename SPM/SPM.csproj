@@ -194,8 +194,9 @@
     <Compile Include="Controllers\ActionLogsController.cs" />
     <Compile Include="Controllers\AggregateDataExportController.cs" />
     <Compile Include="Controllers\ApproachesController.cs" />
-    <Compile Include="Controllers\ArchiveSettingsController.cs" />
+    <Compile Include="Controllers\ArchiveSettingsOldController.cs" />
     <Compile Include="Controllers\ConfigurationTableController.cs" />
+    <Compile Include="Controllers\DatabaseArchiveSettingsController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\DefaultChartsController.cs" />
     <Compile Include="Controllers\DetectorCommentsController.cs" />
@@ -579,7 +580,7 @@
     <Content Include="Views\AggregateDataExport\GetRouteSignals.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterSignal.cshtml" />
     <Content Include="Views\ArchiveSettings\DisplayTemplates\Signal.cshtml" />
-    <Content Include="Views\ArchiveSettings\Index.cshtml" />
+    <Content Include="Views\ArchiveSettings\IndexOld.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterApproach.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDetector.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDirection.cshtml" />
@@ -594,6 +595,8 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Views\AggregateDataExport\MetricResult.cshtml" />
+    <Content Include="Views\DatabaseArchiveSettings\Create.cshtml" />
+    <Content Include="Views\DatabaseArchiveSettings\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -639,6 +642,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Views\DataArchive\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

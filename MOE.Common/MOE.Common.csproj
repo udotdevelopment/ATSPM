@@ -496,6 +496,10 @@
     <Compile Include="Migrations\201803051955275_ApproachEventCountAggregation.Designer.cs">
       <DependentUpon>201803051955275_ApproachEventCountAggregation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803072127121_DatabaseArchiveChanges.cs" />
+    <Compile Include="Migrations\201803072127121_DatabaseArchiveChanges.Designer.cs">
+      <DependentUpon>201803072127121_DatabaseArchiveChanges.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\PhaseEventCountAggregation.cs" />
@@ -829,6 +833,7 @@
     <Compile Include="Models\ViewModel\Chart\MetricsListViewModel.cs" />
     <Compile Include="Models\ViewModel\Chart\PreemptViewModel.cs" />
     <Compile Include="Models\ViewModel\Chart\SignalInfoBoxViewModel.cs" />
+    <Compile Include="Models\ViewModel\DatabaseArchive\DatabaseArchiveViewModel.cs" />
     <Compile Include="Models\ViewModel\DataExportViewModel.cs" />
     <Compile Include="Models\ViewModel\DateTimePickerViewModel.cs" />
     <Compile Include="Models\ViewModel\Day.cs" />
@@ -960,6 +965,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803051955275_ApproachEventCountAggregation.resx">
       <DependentUpon>201803051955275_ApproachEventCountAggregation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803072127121_DatabaseArchiveChanges.resx">
+      <DependentUpon>201803072127121_DatabaseArchiveChanges.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
