@@ -17,10 +17,10 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         InMemoryMOEDatabase db = new InMemoryMOEDatabase();
 
         [TestInitialize()]
-        void Initialize()
+        public void Initialize()
         {
             db.ClearTables();
-            XMLToListImporter.LoadControllerEventLog("7185_10_17_2017.xml", db);
+            XMLToListImporter.LoadControllerEventLogsFromMOEDB(db);
             XMLToListImporter.LoadSignals("signals.xml", db);
             XMLToListImporter.LoadApproaches("approachesfor7185.xml", db);
             XMLToListImporter.LoadDetectors("detectorsFor7185.xml", db);
@@ -34,9 +34,11 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 new InMemoryApplicationEventRepository(db));
             Models.Repositories.DirectionTypeRepositoryFactory.SetDirectionsRepository(
                 new InMemoryDirectionTypeRepository());
+            SpeedEventRepositoryFactory.SetSignalsRepository(new InMemorySpeedEventRepository(db));
             ApproachRepositoryFactory.SetApproachRepository(new InMemoryApproachRepository(db));
             ControllerEventLogRepositoryFactory.SetRepository(new InMemoryControllerEventLogRepository(db));
             DetectorRepositoryFactory.SetDetectorRepository(new InMemoryDetectorRepository(db));
+            XMLToListImporter.LoadSpeedEvents("7185speed.xml", db);
         }
 
         [TestMethod()]
