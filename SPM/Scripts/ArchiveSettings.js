@@ -1,5 +1,6 @@
 ﻿$(function(ready) {
     ShowArchiveSettings();
+    ShowDeleteMoveOptions();
 });
 function ShowArchiveSettings() {
     var archiveEnabled = $("#EnableDatbaseArchive").is(":checked");;
@@ -13,18 +14,22 @@ function ShowArchiveSettings() {
 
 function ShowDeleteMoveOptions() {
     var deleteOrMove = $("#SelectedDeleteOrMove").val();
-    if (deleteOrMove == 1) {
+    if (deleteOrMove == 2) {
         $('#MoveOption').removeClass("hidden");
         var tableType = $("#SelectedTableScheme").val();
-        if (tableType == 0) {
+        if (tableType == 2) {
             $('#DeleteForStandardTable').removeClass("hidden");
+        } else {
+            $('#DeleteForStandardTable').addClass("hidden");
         }
     }
     else {
         $('#MoveOption').addClass("hidden");
         var tableType = $("#SelectedTableScheme").val();
-        if (tableType == 0) {
+        if (tableType == 2) {
             $('#DeleteForStandardTable').removeClass("hidden");
+        } else {
+            $('#DeleteForStandardTable').addClass("hidden");
         }
     }
 }

@@ -519,7 +519,7 @@
     <Compile Include="Models\ApproachCycleAggregation.cs" />
     <Compile Include="Models\Custom\ActionLog.cs" />
     <Compile Include="Models\Custom\Aggregation.cs" />
-    <Compile Include="Models\DatabaseArchiveExcludedSignals.cs" />
+    <Compile Include="Models\DatabaseArchiveExcludedSignal.cs" />
     <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Models\DatabaseInitializer.cs" />
     <Compile Include="Models\DetectionHardware.cs" />

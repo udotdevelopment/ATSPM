@@ -579,7 +579,6 @@
     <Content Include="Views\AggregateDataExport\Index.cshtml" />
     <Content Include="Views\AggregateDataExport\GetRouteSignals.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterSignal.cshtml" />
-    <Content Include="Views\ArchiveSettings\DisplayTemplates\Signal.cshtml" />
     <Content Include="Views\ArchiveSettings\IndexOld.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterApproach.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDetector.cshtml" />
@@ -596,6 +595,7 @@
     </None>
     <Content Include="Views\AggregateDataExport\MetricResult.cshtml" />
     <Content Include="Views\DatabaseArchiveSettings\Edit.cshtml" />
+    <Content Include="Views\ArchiveSettings\EditorTemplates\DatabaseArchiveExcludedSignal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

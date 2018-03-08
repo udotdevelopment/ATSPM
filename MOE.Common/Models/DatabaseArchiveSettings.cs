@@ -11,14 +11,14 @@ namespace MOE.Common.Models
     //}
     public enum TableScheme
     {
-        Partitioned,
-        Standard
+        Partitioned = 1,
+        Standard = 2
     }
 
     public enum DeleteOrMove
     {
-        Delete,
-        Move
+        Delete = 1,
+        Move =2
     }
 
     public class DatabaseArchiveSettings : ApplicationSettings

@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MOE.Common.Models;
+using MOE.Common.Models.ViewModel.DatabaseArchive;
 
 namespace SPM.Controllers
 {
@@ -16,15 +17,18 @@ namespace SPM.Controllers
         // GET: DatabaseArchiveSettings/Edit/5
         public ActionResult Edit()
         {
+            MOE.Common.Models.ViewModel.DatabaseArchive.ArchiveSettingsViewModel archiveSettingsViewModel = new ArchiveSettingsViewModel();
             var applicationSettingsRepository =
                 MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
-            DatabaseArchiveSettings databaseArchiveSettings =
+            archiveSettingsViewModel.DatabaseArchiveSettings =
                 applicationSettingsRepository.GetDatabaseArchiveSettings();
-            if (databaseArchiveSettings == null)
+            archiveSettingsViewModel.ExcludedSignals.Add(new DatabaseArchiveExcludedSignal{ Id = 1, SignalId = "7063"});
+            archiveSettingsViewModel.ExcludedSignals.Add(new DatabaseArchiveExcludedSignal { Id = 1, SignalId = "7064" });
+            if (archiveSettingsViewModel.DatabaseArchiveSettings == null)
             {
                 return HttpNotFound();
             }
-            return View(databaseArchiveSettings);
+            return View(archiveSettingsViewModel);
         }
 
         // POST: DatabaseArchiveSettings/Edit/5
@@ -32,16 +36,16 @@ namespace SPM.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit( DatabaseArchiveSettings databaseArchiveSettings)
+        public ActionResult Edit(MOE.Common.Models.ViewModel.DatabaseArchive.ArchiveSettingsViewModel archiveSettingsViewModel)
         {
             if (ModelState.IsValid)
             {
                 var applicationSettingsRepository =
                     MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
-                applicationSettingsRepository.Save(databaseArchiveSettings);
-                return View(databaseArchiveSettings);
+                applicationSettingsRepository.Save(archiveSettingsViewModel.DatabaseArchiveSettings);
+                return View(archiveSettingsViewModel);
             }
-            return View(databaseArchiveSettings);
+            return Content("Unable to Save Database Archive Settings");
         }
     }
 }

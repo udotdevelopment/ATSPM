@@ -97,7 +97,7 @@ namespace MOE.Common.Business.DataAggregation
                     .GroupBy(r => r.SignalID)
                     .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).Select(s => s.VersionID).ToList();
                 var signals = db.Signals
-                    //.Where(signal => versionIds.Contains(signal.VersionID))
+                    .Where(signal => versionIds.Contains(signal.VersionID))
                     .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
                     .Include(signal => signal.Approaches.Select(a =>
                         a.Detectors.Select(d => d.DetectionTypes.Select(det => det.MetricTypes))))

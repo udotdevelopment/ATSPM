@@ -1,4 +1,4 @@
-﻿@model MOE.Common.Models.DatabaseArchiveSettings
+﻿@model MOE.Common.Models.ViewModel.DatabaseArchive.ArchiveSettingsViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -14,92 +14,94 @@
         <h4>Database Archive Settings</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ID)
-        @Html.HiddenFor(model => model.ApplicationID)
+        @Html.HiddenFor(model => model.DatabaseArchiveSettings.ID)
+        @Html.HiddenFor(model => model.DatabaseArchiveSettings.ApplicationID)
 
 <div class="form-group">
-    @Html.LabelFor(model => model.EnableDatbaseArchive, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.DatabaseArchiveSettings.EnableDatbaseArchive, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
         <div class="checkbox">
-            @Html.CheckBoxFor(model => model.EnableDatbaseArchive, new { @onchange = "ShowArchiveSettings()"})
-            @Html.ValidationMessageFor(model => model.EnableDatbaseArchive, "", new { @class = "text-danger" })
+            @Html.CheckBoxFor(model => model.DatabaseArchiveSettings.EnableDatbaseArchive, new { @onchange = "ShowArchiveSettings()", @class = "form -control" })
+            @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.EnableDatbaseArchive, "", new { @class = "text-danger" })
         </div>
     </div>
 </div>
         
         
-         <div id="EnabledArchiveSettings" class="">
+        <div id="EnabledArchiveSettings" class="">
             
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.SelectedTableScheme, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EnumDropDownListFor(model => model.SelectedTableScheme, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.SelectedTableScheme, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.DatabaseArchiveSettings.SelectedTableScheme, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EnumDropDownListFor(model => model.DatabaseArchiveSettings.SelectedTableScheme, "Select a Table Scheme", new { @onchange = "ShowDeleteMoveOptions()", @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.SelectedTableScheme, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.MonthsToKeepIndex, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.MonthsToKeepIndex, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.MonthsToKeepIndex, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.DatabaseArchiveSettings.MonthsToKeepIndex, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DatabaseArchiveSettings.MonthsToKeepIndex, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.MonthsToKeepIndex, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.MonthsToKeepData, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.MonthsToKeepData, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.MonthsToKeepData, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.DatabaseArchiveSettings.MonthsToKeepData, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DatabaseArchiveSettings.MonthsToKeepData, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.MonthsToKeepData, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
                     
 
-             <div class="form-group">
-                 @Html.LabelFor(model => model.SelectedDeleteOrMove, htmlAttributes: new { @class = "control-label col-md-2" })
-                 <div class="col-md-10">
-                     @Html.EnumDropDownListFor(model => model.SelectedDeleteOrMove, htmlAttributes: new { @onchange = "ShowDeleteMoveOptions()", @class = "form-control" })
-                     @Html.ValidationMessageFor(model => model.SelectedDeleteOrMove, "", new { @class = "text-danger" })
-                 </div>
-             </div>
-             <div id="MoveOption" class="hidden">
-                 <div class="form-group">
-                     @Html.LabelFor(model => model.ArchivePath, htmlAttributes: new { @class = "control-label col-md-2" })
-                     <div class="col-md-10">
-                         @Html.EditorFor(model => model.ArchivePath, new { htmlAttributes = new { @class = "form-control" } })
-                         @Html.ValidationMessageFor(model => model.ArchivePath, "", new { @class = "text-danger" })
-                     </div>
-                 </div>
-             </div>
-             <div id="DeleteForStandardTable"class="hidden">
-                 <div class="form-group">
-                     @Html.LabelFor(model => model.NumberOfRows, htmlAttributes: new { @class = "control-label col-md-2" })
-                     <div class="col-md-10">
-                         @Html.EditorFor(model => model.NumberOfRows, new { htmlAttributes = new { @class = "form-control" } })
-                         @Html.ValidationMessageFor(model => model.NumberOfRows, "", new { @class = "text-danger" })
-                     </div>
-                 </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.DatabaseArchiveSettings.SelectedDeleteOrMove, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EnumDropDownListFor(model => model.DatabaseArchiveSettings.SelectedDeleteOrMove, "Select An Action", new { @onchange = "ShowDeleteMoveOptions()", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.SelectedDeleteOrMove, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div id="MoveOption" class="hidden">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatabaseArchiveSettings.ArchivePath, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DatabaseArchiveSettings.ArchivePath, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.ArchivePath, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div id="DeleteForStandardTable"class="hidden">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatabaseArchiveSettings.NumberOfRows, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DatabaseArchiveSettings.NumberOfRows, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.NumberOfRows, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
-                 <div class="form-group">
-                     @Html.LabelFor(model => model.StartTime, htmlAttributes: new { @class = "control-label col-md-2" })
-                     <div class="col-md-10">
-                         @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control" } })
-                         @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
-                     </div>
-                 </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatabaseArchiveSettings.StartTime, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DatabaseArchiveSettings.StartTime, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.StartTime, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
-                 <div class="form-group">
-                     @Html.LabelFor(model => model.TimeDuration, htmlAttributes: new { @class = "control-label col-md-2" })
-                     <div class="col-md-10">
-                         @Html.EditorFor(model => model.TimeDuration, new { htmlAttributes = new { @class = "form-control" } })
-                         @Html.ValidationMessageFor(model => model.TimeDuration, "", new { @class = "text-danger" })
-                     </div>
-                 </div>
-             </div>
-         </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatabaseArchiveSettings.TimeDuration, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DatabaseArchiveSettings.TimeDuration, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.TimeDuration, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        
+                @Html.EditorFor(model => model.ExcludedSignals)
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Save" class="btn btn-default" />

@@ -17,7 +17,7 @@ namespace MOE.Common.Models.Repositories
             _db = context;
         }
 
-        public List<DatabaseArchiveExcludedSignals> GetAllExcludedSignals()
+        public List<DatabaseArchiveExcludedSignal> GetAllExcludedSignals()
         {
             var excludedSignals = _db.DatabaseArchiveExcludedSignals
                 .ToList();
@@ -26,7 +26,7 @@ namespace MOE.Common.Models.Repositories
             return orderedSignals;
         }
 
-        public DatabaseArchiveExcludedSignals GetExcludedSignalBySignalId(string signalId)
+        public DatabaseArchiveExcludedSignal GetExcludedSignalBySignalId(string signalId)
         {
             var signalToFind = (from r in _db.DatabaseArchiveExcludedSignals
                 where r.SignalId == signalId
@@ -40,7 +40,7 @@ namespace MOE.Common.Models.Repositories
                 .ToList();
             if (GetExcludedSignalBySignalId(signalId) == null)
             {
-                var newSignal = new DatabaseArchiveExcludedSignals();
+                var newSignal = new DatabaseArchiveExcludedSignal();
                 newSignal.SignalId = signalId;
                 excludedSignals.Add(newSignal);
             }

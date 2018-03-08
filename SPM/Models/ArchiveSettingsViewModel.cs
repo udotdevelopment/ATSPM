@@ -20,7 +20,7 @@ namespace SPM.Models
 
         public  MOE.Common.Models.DatabaseArchiveSettings DbArchiveSettings { get; set; }
 
-        public List<DatabaseArchiveExcludedSignals> ExcludedSignals { get; set; }
+        public List<DatabaseArchiveExcludedSignal> ExcludedSignals { get; set; }
 
         public ArchiveSettingsViewModel()
         {

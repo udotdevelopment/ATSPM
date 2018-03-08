@@ -8,28 +8,13 @@ namespace MOE.Common.Models.ViewModel.DatabaseArchive
 {
     public class ArchiveSettingsViewModel
     {
-        public MOE.Common.Models.DatabaseArchiveSettings DbArchiveSettings { get; set; }
+        public MOE.Common.Models.DatabaseArchiveSettings DatabaseArchiveSettings { get; set; }
 
-        public List<DatabaseArchiveExcludedSignals> ExcludedSignals { get; set; }
+        public List<DatabaseArchiveExcludedSignal> ExcludedSignals { get; set; } = new List<DatabaseArchiveExcludedSignal>();
 
         public ArchiveSettingsViewModel()
         {
-            DbArchiveSettings = new DatabaseArchiveSettings();
-            //SetTablePartitionList();
-            //SetDeletOrMoveList();
         }
-
-        //private void SetDeletOrMoveList()
-        //{
-        //    DbArchiveSettings.DeleteOrMoveOptionList = new List<DeleteOrMove>();
-        //    DbArchiveSettings.DeleteOrMoveOptionList.AddRange(new List<DeleteOrMove> { DeleteOrMove.Delete, DeleteOrMove.Move });
-        //}
-
-        //private void SetTablePartitionList()
-        //{
-        //    DbArchiveSettings.TablePartitionsList = new List<TableScheme>();
-        //    DbArchiveSettings.TablePartitionsList.AddRange(new List<TableScheme> { TableScheme.Partitioned, TableScheme.Standard });
-        //}
 
     }
 }
