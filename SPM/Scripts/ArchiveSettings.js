@@ -1,11 +1,14 @@
-﻿function UseArchiveYesOptions() {
-    var YesUseArchive = document.getElementById("UseArchiveYes").checked;
-    if (YesUseArchive == true) {
-        $('#DivOff').removeClass("hidden");
+﻿$(function(ready) {
+    ShowArchiveSettings();
+});
+function ShowArchiveSettings() {
+    var archiveEnabled = $("#EnableDatbaseArchive").is(":checked");;
+    if (archiveEnabled == true) {
+        $('#EnabledArchiveSettings').removeClass("hidden");
     }
-    //else {
-    //    $('#DivOff').removeClass("hidden");
-    //}
+    else {
+        $('#EnabledArchiveSettings').addClass("hidden");
+    }
 }
 
 function UseArchiveNoOptions() {
