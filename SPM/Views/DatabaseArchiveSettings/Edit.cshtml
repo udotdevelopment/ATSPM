@@ -55,46 +55,50 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.ArchivePath, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.ArchivePath, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.ArchivePath, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+                    
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.SelectedDeleteOrMove, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EnumDropDownListFor(model => model.SelectedDeleteOrMove, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.SelectedDeleteOrMove, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+             <div class="form-group">
+                 @Html.LabelFor(model => model.SelectedDeleteOrMove, htmlAttributes: new { @class = "control-label col-md-2" })
+                 <div class="col-md-10">
+                     @Html.EnumDropDownListFor(model => model.SelectedDeleteOrMove, htmlAttributes: new { @onchange = "ShowDeleteMoveOptions()", @class = "form-control" })
+                     @Html.ValidationMessageFor(model => model.SelectedDeleteOrMove, "", new { @class = "text-danger" })
+                 </div>
+             </div>
+             <div id="MoveOption" class="hidden">
+                 <div class="form-group">
+                     @Html.LabelFor(model => model.ArchivePath, htmlAttributes: new { @class = "control-label col-md-2" })
+                     <div class="col-md-10">
+                         @Html.EditorFor(model => model.ArchivePath, new { htmlAttributes = new { @class = "form-control" } })
+                         @Html.ValidationMessageFor(model => model.ArchivePath, "", new { @class = "text-danger" })
+                     </div>
+                 </div>
+             </div>
+             <div id="DeleteForStandardTable"class="hidden">
+                 <div class="form-group">
+                     @Html.LabelFor(model => model.NumberOfRows, htmlAttributes: new { @class = "control-label col-md-2" })
+                     <div class="col-md-10">
+                         @Html.EditorFor(model => model.NumberOfRows, new { htmlAttributes = new { @class = "form-control" } })
+                         @Html.ValidationMessageFor(model => model.NumberOfRows, "", new { @class = "text-danger" })
+                     </div>
+                 </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.NumberOfRows, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.NumberOfRows, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.NumberOfRows, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+                 <div class="form-group">
+                     @Html.LabelFor(model => model.StartTime, htmlAttributes: new { @class = "control-label col-md-2" })
+                     <div class="col-md-10">
+                         @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control" } })
+                         @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
+                     </div>
+                 </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.StartTime, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.TimeDuration, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.TimeDuration, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.TimeDuration, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
+                 <div class="form-group">
+                     @Html.LabelFor(model => model.TimeDuration, htmlAttributes: new { @class = "control-label col-md-2" })
+                     <div class="col-md-10">
+                         @Html.EditorFor(model => model.TimeDuration, new { htmlAttributes = new { @class = "form-control" } })
+                         @Html.ValidationMessageFor(model => model.TimeDuration, "", new { @class = "text-danger" })
+                     </div>
+                 </div>
+             </div>
+         </div>
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">

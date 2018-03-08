@@ -11,6 +11,24 @@ function ShowArchiveSettings() {
     }
 }
 
+function ShowDeleteMoveOptions() {
+    var deleteOrMove = $("#SelectedDeleteOrMove").val();
+    if (deleteOrMove == 1) {
+        $('#MoveOption').removeClass("hidden");
+        var tableType = $("#SelectedTableScheme").val();
+        if (tableType == 0) {
+            $('#DeleteForStandardTable').removeClass("hidden");
+        }
+    }
+    else {
+        $('#MoveOption').addClass("hidden");
+        var tableType = $("#SelectedTableScheme").val();
+        if (tableType == 0) {
+            $('#DeleteForStandardTable').removeClass("hidden");
+        }
+    }
+}
+
 function UseArchiveNoOptions() {
     var NoUseArchive = document.getElementById("UseArchiveNo").checked;
     if (NoUseArchive == true) {
