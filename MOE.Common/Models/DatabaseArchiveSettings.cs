@@ -36,7 +36,7 @@ namespace MOE.Common.Models
 
         [Display(Name = "Move to path:")]
         public string ArchivePath { get; set; }
-
+        [Display(Name = "Delete or Move")]
         public DeleteOrMove? SelectedDeleteOrMove { get; set; }
 
         [Display(Name = "Number Of Rows To Delete/Move At A Time")]

@@ -21,6 +21,11 @@ namespace MOE.Common.Models.Repositories
             return db.WatchdogApplicationSettings.First();
         }
 
+        public DatabaseArchiveSettings GetDatabaseArchiveSettings()
+        {
+            return db.DatabaseArchiveSettings.First();
+        }
+
         public GeneralSettings GetGeneralSettings()
         {
             return db.GeneralSettings.First();
@@ -35,6 +40,12 @@ namespace MOE.Common.Models.Repositories
                 limit = (int) gs.RawDataCountLimit;
             }
             return limit;
+        }
+
+        public void Save(DatabaseArchiveSettings databaseArchiveSettings)
+        {
+            db.Entry(databaseArchiveSettings).State = EntityState.Modified;
+            db.SaveChanges();
         }
 
         public void Save(WatchDogApplicationSettings watchDogApplicationSettings)

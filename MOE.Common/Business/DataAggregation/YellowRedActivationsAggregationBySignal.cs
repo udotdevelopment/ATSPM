@@ -79,7 +79,16 @@ namespace MOE.Common.Business.DataAggregation
 
         protected override void LoadBins(ApproachAggregationMetricOptions options, Models.Signal signal)
         {
-            throw new NotImplementedException();
+            for (var i = 0; i < BinsContainers.Count; i++)
+            for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
+            {
+                var bin = BinsContainers[i].Bins[binIndex];
+                foreach (var approachYellowRedActivationsAggregationContainer in ApproachYellowRedActivationsures)
+                    bin.Sum += approachYellowRedActivationsAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                bin.Average = ApproachYellowRedActivationsures.Count > 0
+                    ? bin.Sum / ApproachYellowRedActivationsures.Count
+                    : 0;
+            }
         }
 
         private void GetApproachYellowRedActivationsAggregationContainersForAllApporaches(

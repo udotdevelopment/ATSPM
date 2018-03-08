@@ -595,7 +595,6 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Views\AggregateDataExport\MetricResult.cshtml" />
-    <Content Include="Views\DatabaseArchiveSettings\Create.cshtml" />
     <Content Include="Views\DatabaseArchiveSettings\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

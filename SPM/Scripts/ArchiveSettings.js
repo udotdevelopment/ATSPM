@@ -1,11 +1,32 @@
-﻿function UseArchiveYesOptions() {
-    var YesUseArchive = document.getElementById("UseArchiveYes").checked;
-    if (YesUseArchive == true) {
-        $('#DivOff').removeClass("hidden");
+﻿$(function(ready) {
+    ShowArchiveSettings();
+});
+function ShowArchiveSettings() {
+    var archiveEnabled = $("#EnableDatbaseArchive").is(":checked");;
+    if (archiveEnabled == true) {
+        $('#EnabledArchiveSettings').removeClass("hidden");
     }
-    //else {
-    //    $('#DivOff').removeClass("hidden");
-    //}
+    else {
+        $('#EnabledArchiveSettings').addClass("hidden");
+    }
+}
+
+function ShowDeleteMoveOptions() {
+    var deleteOrMove = $("#SelectedDeleteOrMove").val();
+    if (deleteOrMove == 1) {
+        $('#MoveOption').removeClass("hidden");
+        var tableType = $("#SelectedTableScheme").val();
+        if (tableType == 0) {
+            $('#DeleteForStandardTable').removeClass("hidden");
+        }
+    }
+    else {
+        $('#MoveOption').addClass("hidden");
+        var tableType = $("#SelectedTableScheme").val();
+        if (tableType == 0) {
+            $('#DeleteForStandardTable').removeClass("hidden");
+        }
+    }
 }
 
 function UseArchiveNoOptions() {

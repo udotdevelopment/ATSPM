@@ -15,7 +15,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     {
         public ApproachSpeedAggregationOptions()
         {
-            MetricTypeID = 20;
+            MetricTypeID = 25;
             AggregatedDataTypes = new List<AggregatedDataType>();
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "SummedSpeed" });
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = "SpeedVolume" });
