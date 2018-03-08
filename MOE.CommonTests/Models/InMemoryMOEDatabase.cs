@@ -1458,5 +1458,34 @@ namespace MOE.CommonTests.Models
                 }
             }
         }
+
+        public void AddTestSignalForSplitFailTest()
+        {
+            var signal = new Signal
+            {
+                SignalID = "7185",
+                VersionID = 1,
+                Start = Convert.ToDateTime("1/1/2010"),
+                PrimaryName = "Primary: ",
+                SecondaryName = "Secondary: ",
+                VersionActionId = 1,
+                RegionID = 1
+            };
+            var approach = new Approach{ ApproachID = 1, SignalID = "7185", Description = "Test", DirectionTypeID = 1, IsPermissivePhaseOverlap = false, IsProtectedPhaseOverlap = false, VersionID = 1, ProtectedPhaseNumber = 0, PermissivePhaseNumber = 8};
+            var detector = new Detector { DetChannel  = 44, ApproachID = 1, DateAdded = new DateTime(2010, 1,1), DetectionHardwareID = 1, DetectorID = "718544", ID = 1, MovementTypeID = 3, LaneTypeID = 1, LaneNumber = 1};
+            detector.Approach = approach;
+            List<MetricType> metricTypes = new List<MetricType>();
+            metricTypes.Add( new MetricType { MetricID = 12, ChartName = "Split Fail" } );
+        var detectionType = new DetectionType{ DetectionTypeID = 6, Description = "Stop Bar Presence", MetricTypes = metricTypes};
+                detector.DetectionTypes = new List<DetectionType>();
+                detector.DetectionTypes.Add(detectionType);
+            signal.Approaches = new List<Approach>();
+            signal.Approaches.Add(approach);
+            approach.Detectors = new List<Detector>();
+            approach.Detectors.Add(detector);
+            approach.Signal = signal;
+
+            Signals.Add(signal);
+        }
     }
 }

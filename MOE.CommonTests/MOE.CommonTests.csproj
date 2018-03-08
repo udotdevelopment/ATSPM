@@ -112,6 +112,7 @@
     <Compile Include="Business\Export\ChartToCSVExporterTests.cs" />
     <Compile Include="Business\Export\ExporterTests.cs" />
     <Compile Include="Business\PlanFactoryTests.cs" />
+    <Compile Include="Business\SplitFail\SplitFailPhaseTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\AggregationTestHelper.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachAggregationCreateMetricTestBase.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationApproachXTests.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Business\WCFServiceLibrary\SignalAggregationCreateMetricTestsBase.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalAggregationMetricOptionsTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SplitFailOptionsTests.cs" />
+    <Compile Include="Helpers\AddControllerEventLogsToInMemoryDb.cs" />
     <Compile Include="Helpers\XMLtoListImporter.cs" />
     <Compile Include="Models\Custom\DetectorTests.cs" />
     <Compile Include="Models\InMemorySpeedEventRepository.cs" />

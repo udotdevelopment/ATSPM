@@ -9,7 +9,7 @@ namespace MOE.Common.Business.SplitFail
         public DateTime DetectorOff { get; set; }
         public bool ReviewedForOverlap { get; set; } = false;
 
-        public double Duration
+        public double DurationInMilliseconds
         {
             get
             {

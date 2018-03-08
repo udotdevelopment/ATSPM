@@ -26,17 +26,20 @@ namespace MOE.Common.Business
         }
 
         public TerminationType TerminationEvent { get; }
-        public double RedOccupancyTime { get; private set; }
-        public double GreenOccupancyTime { get; private set; }
+        public double RedOccupancyTimeInMilliseconds { get; private set; }
+        public double GreenOccupancyTimeInMilliseconds { get; private set; }
         public double GreenOccupancyPercent { get; private set; }
         public double RedOccupancyPercent { get; private set; }
         public bool IsSplitFail { get; private set; }
+        public List<SplitFailDetectorActivation> ActivationsDuringGreen { get; set; }
+        public List<SplitFailDetectorActivation> ActivationsDuringRed { get; set; }
+
 
         public void SetDetectorActivations(List<SplitFailDetectorActivation> detectorActivations)
         {
             var redPeriodToAnalyze = RedEvent.AddSeconds(_firstSecondsOfRed);
 
-            var activationsDuringRed = detectorActivations.Where
+            ActivationsDuringRed = detectorActivations.Where
                 //detStart AFTER redStart and Before red+AnalaysTime
                 (d => d.DetectorOn >= RedEvent && d.DetectorOn < redPeriodToAnalyze
 
@@ -44,30 +47,30 @@ namespace MOE.Common.Business
                       || d.DetectorOff >= RedEvent && d.DetectorOff < redPeriodToAnalyze
 
                       //DetStart BEFORE redStart and detOff after cycleEnd
-                      || d.DetectorOn <= RedEvent && d.DetectorOff >= EndTime).ToList();
+                      || d.DetectorOn <= RedEvent && d.DetectorOff >= EndTime).OrderBy(d => d.DetectorOn).ToList();
             //if (activationsDuringRed.Count == 0)
             //{
             //    RedOccupancyTime = CheckForDetectorActivationBiggerThanPeriod(RedEvent, redPeriodToAnalyze, detectorActivations);
             //}
             //else
             //{
-            RedOccupancyTime = GetOccupancy(RedEvent, redPeriodToAnalyze, activationsDuringRed);
+            RedOccupancyTimeInMilliseconds = GetOccupancy(RedEvent, redPeriodToAnalyze, ActivationsDuringRed);
             //}
-            var activationsDuringGreen = detectorActivations.Where(d =>
+            ActivationsDuringGreen = detectorActivations.Where(d =>
                 d.DetectorOn >= StartTime && d.DetectorOn < YellowEvent ||
                 d.DetectorOff >= StartTime && d.DetectorOff < YellowEvent ||
-                d.DetectorOn <= StartTime && d.DetectorOff >= YellowEvent).ToList();
+                d.DetectorOn <= StartTime && d.DetectorOff >= YellowEvent).OrderBy(d => d.DetectorOn).ToList();
             //if (activationsDuringGreen.Count == 0)
             //{
             //    GreenOccupancyTime = CheckForDetectorActivationBiggerThanPeriod(StartTime, YellowEvent, detectorActivations);
             //}
             //else
             //{
-            GreenOccupancyTime = GetOccupancy(StartTime, YellowEvent, activationsDuringGreen);
+            GreenOccupancyTimeInMilliseconds = GetOccupancy(StartTime, YellowEvent, ActivationsDuringGreen);
             //}
             double millisecondsOfRedStart = _firstSecondsOfRed * 1000;
-            RedOccupancyPercent = RedOccupancyTime / millisecondsOfRedStart * 100;
-            GreenOccupancyPercent = GreenOccupancyTime / TotalGreenTimeMilliseconds * 100;
+            RedOccupancyPercent = RedOccupancyTimeInMilliseconds / millisecondsOfRedStart * 100;
+            GreenOccupancyPercent = GreenOccupancyTimeInMilliseconds / TotalGreenTimeMilliseconds * 100;
             IsSplitFail = GreenOccupancyPercent > 79 && RedOccupancyPercent > 79;
         }
 
@@ -92,7 +95,7 @@ namespace MOE.Common.Business
                 else if (detectorActivation.DetectorOn >= start && detectorActivation.DetectorOff >= end)
                     occupancy += (end - detectorActivation.DetectorOn).TotalMilliseconds;
                 else
-                    occupancy += detectorActivation.Duration;
+                    occupancy += detectorActivation.DurationInMilliseconds;
             return occupancy;
         }
     }
