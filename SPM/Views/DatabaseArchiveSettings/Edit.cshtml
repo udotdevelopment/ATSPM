@@ -21,7 +21,7 @@
     @Html.LabelFor(model => model.EnableDatbaseArchive, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
         <div class="checkbox">
-            @Html.EditorFor(model => model.EnableDatbaseArchive, new { @onchange = "ShowArchiveSettings()"})
+            @Html.CheckBoxFor(model => model.EnableDatbaseArchive, new { @onchange = "ShowArchiveSettings()"})
             @Html.ValidationMessageFor(model => model.EnableDatbaseArchive, "", new { @class = "text-danger" })
         </div>
     </div>

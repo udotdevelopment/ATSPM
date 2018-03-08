@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
+using System.Xml;
 using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.DataAggregation;
@@ -233,15 +234,23 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void SaveChartImage(Chart chart)
         {
-            var chartName = CreateFileName(MetricType.Abbreviation);
+            if (ResultChartAndXmlLocations == null)
+            {
+                ResultChartAndXmlLocations = new List<Tuple<string, string>>();
+            }
+            XmlDocument xmlDocument = GetXmlForChart(chart);
+            string xmlChartName = CreateFileName(MetricType.Abbreviation, ".xml");
+            xmlDocument.Save(MetricFileLocation + xmlChartName);
+            var chartName = CreateFileName(MetricType.Abbreviation, ".jpg");
             MetricFileLocation = ConfigurationManager.AppSettings["ImageLocation"];
             MetricWebPath = ConfigurationManager.AppSettings["ImageWebLocation"];
             chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
+            ResultChartAndXmlLocations.Add(new Tuple<string, string>(MetricWebPath + chartName, MetricWebPath + xmlChartName));
             ReturnList.Add(MetricWebPath + chartName);
 
         }
 
-        protected string CreateFileName(string MetricAbbreviation)
+        protected string CreateFileName(string MetricAbbreviation, string extension)
         {
             var fileName = MetricAbbreviation +
                            "-" +
@@ -258,7 +267,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                            EndDate.ToString("mm-");
             var r = new Random();
             fileName += r.Next().ToString();
-            fileName += ".jpg";
+            fileName += extension;
             return fileName;
         }
 

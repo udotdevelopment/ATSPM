@@ -89,14 +89,6 @@ namespace SPM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateMetric(AggDataExportViewModel aggDataExportViewModel)
         {
-            if (Request.Form["CreateMetric"] != null)
-            {
-                aggDataExportViewModel.SelectedChartAction = ChartAction.CreateMetric;
-            }
-            else
-            {
-                aggDataExportViewModel.SelectedChartAction = ChartAction.ExportXML;
-            }
             switch (aggDataExportViewModel.SelectedMetricTypeId)
             {
                 case 16:
@@ -145,7 +137,6 @@ namespace SPM.Controllers
         private ActionResult GetChart(AggDataExportViewModel aggDataExportViewModel, SignalAggregationMetricOptions options)
         {
             Enum.TryParse(aggDataExportViewModel.SelectedChartType, out SeriesChartType tempSeriesChartType);
-            options.SelectedChartAction = aggDataExportViewModel.SelectedChartAction;
             options.SelectedChartType = tempSeriesChartType;
             if (TryValidateModel(aggDataExportViewModel) && aggDataExportViewModel.FilterSignals.Count > 0)
             {
