@@ -26,6 +26,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             XMLToListImporter.LoadDetectors("detectorsFor7185.xml", db);
             XMLToListImporter.AddDetectionTypesToDetectors
                 ("DetectorTypesforDetectorsFor7185.xml", db);
+            XMLToListImporter.AddDetectionTypesToMetricTypes("mtdt.xml", db);
             MOE.Common.Models.Repositories.SignalsRepositoryFactory.SetSignalsRepository(
             new InMemorySignalsRepository(db));
             MetricTypeRepositoryFactory.SetMetricsRepository(new InMemoryMetricTypeRepository(db));

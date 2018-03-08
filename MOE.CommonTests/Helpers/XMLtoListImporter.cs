@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MOE.CommonTests.Models;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace MOE.CommonTests.Helpers
 {
@@ -47,6 +49,50 @@ namespace MOE.CommonTests.Helpers
                 _db.Controller_Event_Log.Add(e);
 
             }
+        }
+
+        public static void LoadControllerEventLogsFromMOEDB(InMemoryMOEDatabase _db)
+        {
+            System.Data.SqlClient.SqlConnectionStringBuilder builder =
+             new System.Data.SqlClient.SqlConnectionStringBuilder();
+            builder["Data Source"] = "srwtcmoe";
+            builder["integrated Security"] = true;
+            builder["Initial Catalog"] = "MOE;NewValue=Bad";
+            Console.WriteLine(builder.ConnectionString);
+
+            SqlConnection sqlConnection1 = new SqlConnection(builder.ConnectionString);
+            SqlCommand cmd = new SqlCommand();
+            SqlDataReader reader;
+
+            cmd.CommandText = "select * from Controller_Event_Log"
+                               +" Where Timestamp between '02/01/2018 00:00' and '02/01/2018 23:59'"
+                               +" and SignalID = '7185'";
+
+            cmd.CommandType = CommandType.Text;
+            cmd.Connection = sqlConnection1;
+
+            sqlConnection1.Open();
+
+            reader = cmd.ExecuteReader();
+
+            sqlConnection1.Close();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    Controller_Event_Log cel = new Controller_Event_Log();
+                    cel.SignalID = reader.GetString(0);
+                    cel.Timestamp = reader.GetDateTime(1);
+                    cel.EventCode = reader.GetInt32(2);
+                    cel.EventParam = reader.GetInt32(3);
+
+                    _db.Controller_Event_Log.Add(cel);
+                }
+            }
+            reader.Close();
+
+
         }
 
         public static void LoadSpeedEvents(string xmlFileName, InMemoryMOEDatabase _db)
