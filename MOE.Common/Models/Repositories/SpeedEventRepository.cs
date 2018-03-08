@@ -8,7 +8,7 @@ namespace MOE.Common.Models.Repositories
     {
         private readonly SPM db = new SPM();
 
-        public List<Speed_Events> GetSpeedEventsBySiganl(DateTime startDate, DateTime endDate, Approach approach)
+        public List<Speed_Events> GetSpeedEventsBySignal(DateTime startDate, DateTime endDate, Approach approach)
         {
             var speedEvents = new List<Speed_Events>();
             foreach (var detector in approach.Detectors)

@@ -18,8 +18,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             bool showAverageSpeed, bool show85Percentile, bool show15Percentile)
         {
             SignalID = signalID;
-            //StartDate = startDate;
-            //EndDate = endDate;
+            StartDate = startDate;
+            EndDate = endDate;
             YAxisMax = yAxisMax;
             YAxisMin = yAxisMin;
             SelectedBinSize = binSize;

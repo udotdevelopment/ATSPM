@@ -127,6 +127,7 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXDirectionSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXRouteSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXSignalSeriesTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachSpeedOptionsTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\JustTimeXSeriesApproachTestsBase.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachPcdAggregationChart\ApproachPcdAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachPcdAggregationChart\ApproachPcdAggregationOptionsTimeXPhaseTests.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Business\WCFServiceLibrary\SplitFailOptionsTests.cs" />
     <Compile Include="Helpers\XMLtoListImporter.cs" />
     <Compile Include="Models\Custom\DetectorTests.cs" />
+    <Compile Include="Models\InMemorySpeedEventRepository.cs" />
     <Compile Include="Models\InMemoryYellowRedActivationsAggregationRepository - Copy.cs" />
     <Compile Include="Models\InMemoryPcdAggregationRepository.cs" />
     <Compile Include="Models\InMemoryApproachCycleAggregationRepository.cs" />
@@ -208,11 +210,15 @@
     <Content Include="XMLDataFiles\EventLogFiles\7185_10_17_2017.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="XMLDataFiles\MetricTypeDetectorTypes\mtdt.xml" />
+    <Content Include="XMLDataFiles\MetricTypeDetectorTypes\mtdt.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="XMLDataFiles\Signals\signals.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="XMLDataFiles\SpeedEvents\7185speed.xml" />
+    <Content Include="XMLDataFiles\SpeedEvents\7185speed.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

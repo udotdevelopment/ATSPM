@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MOE.CommonTests.Models;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace MOE.CommonTests.Helpers
 {
@@ -47,6 +49,53 @@ namespace MOE.CommonTests.Helpers
                 _db.Controller_Event_Log.Add(e);
 
             }
+        }
+
+        public static void LoadControllerEventLogsFromMOEDB(InMemoryMOEDatabase _db)
+        {
+            System.Data.SqlClient.SqlConnectionStringBuilder builder =
+             new System.Data.SqlClient.SqlConnectionStringBuilder();
+            builder["Data Source"] = "srwtcmoe";
+            builder["Password"] = "dontshareme";
+            builder["Persist Security Info"] = true;
+            builder["User ID"] = "datareader";
+            builder["Initial Catalog"] = "MOE";
+            Console.WriteLine(builder.ConnectionString);
+
+            SqlConnection sqlConnection1 = new SqlConnection(builder.ConnectionString);
+            SqlCommand cmd = new SqlCommand();
+            SqlDataReader reader;
+
+            cmd.CommandText = "select * from Controller_Event_Log"
+                               +" Where Timestamp between '02/01/2018 00:00' and '02/01/2018 23:59'"
+                               +" and SignalID = '7185'";
+
+            cmd.CommandType = CommandType.Text;
+            cmd.Connection = sqlConnection1;
+
+            sqlConnection1.Open();
+
+            reader = cmd.ExecuteReader();
+
+           
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    Controller_Event_Log cel = new Controller_Event_Log();
+                    cel.SignalID = reader.GetString(0);
+                    cel.Timestamp = reader.GetDateTime(1);
+                    cel.EventCode = reader.GetInt32(2);
+                    cel.EventParam = reader.GetInt32(3);
+
+                    _db.Controller_Event_Log.Add(cel);
+                }
+            }
+            reader.Close();
+            sqlConnection1.Close();
+
+
         }
 
         public static void LoadSpeedEvents(string xmlFileName, InMemoryMOEDatabase _db)
@@ -152,27 +201,19 @@ namespace MOE.CommonTests.Helpers
                 incoming.Add(appr);
             }
 
-            
-
-            //var incoming = doc.Elements("Approach").Select(x => new Approach
-            //{
-            //    ApproachID = Convert.ToInt32(x.Element("ApproachID").Value),
-            //    SignalID = x.Element("SignalID").Value,
-            //    DirectionTypeID = Convert.ToInt32(x.Element("DirectionTypeID").Value),
-            //    Description = x.Element("Description").Value,
-            //    MPH = Convert.ToInt32(x.Element("MPH").Value),
-            //    ProtectedPhaseNumber = Convert.ToInt32(x.Element("ProtectedPhaseNumber").Value),
-            //    IsProtectedPhaseOverlap = (x.Element("IsProtectedPhaseOverlap").Value).Equals("1"),
-            //    PermissivePhaseNumber = Convert.ToInt32(x.Element("PermissivePhaseNumber").Value),
-            //    VersionID = Convert.ToInt32(x.Element("VersionID").Value),
-            //    IsPermissivePhaseOverlap = (x.Element("IsPermissivePhaseOverlap").Value).Equals("1")
-
-            //    }
-            //).ToList();
+           
 
             foreach (var e in incoming)
             {
+                var signal = _db.Signals.Where(s => s.SignalID == e.SignalID).FirstOrDefault();
 
+                    if(signal!=null)
+                {
+                    signal.Approaches = new List<Approach>();
+                    signal.Approaches.Add(e);
+                    e.Signal = signal;
+
+                }
                 _db.Approaches.Add(e);
 
             }
@@ -210,31 +251,19 @@ namespace MOE.CommonTests.Helpers
                 incoming.Add(det);
             }
 
-            // List<Controller_Event_Log> 
-            //var incoming = doc.Elements("Detector").Select(x => new Detector
-            //{
-            //    ID = (Int32)x.Element("ID"),
-            //    DetectorID = (String)x.Element("DetectorID").Value,
-            //    DetChannel = (Int32)x.Element("DetChannel"),
-            //    DistanceFromStopBar = Convert.ToInt32((String)x.Element("DistanceFromStopBar").Value??"0"),
-            //    MinSpeedFilter = Convert.ToInt32(x.Element("MinSpeedFilter").Value),
-            //    DateAdded = Convert.ToDateTime(x.Element("DateAdded").Value),
-            //    DateDisabled = Convert.ToDateTime(x.Element("DateDisabled").Value),
-            //    LaneNumber = Convert.ToInt32(x.Element("LaneNumber").Value),
-            //    MovementTypeID = Convert.ToInt32(x.Element("MovementTypeID").Value),
-            //    LaneTypeID = Convert.ToInt32(x.Element("LaneTypeID").Value),
-            //    DecisionPoint = Convert.ToInt32(x.Element("DecisionPoint").Value),
-            //    MovementDelay = Convert.ToInt32(x.Element("MovementDelay").Value),
-            //    ApproachID = Convert.ToInt32(x.Element("ApproachID").Value),
-            //    DetectionHardwareID = Convert.ToInt32(x.Element("DetectionHardwareID").Value),
-            //    LatencyCorrection = Convert.ToInt32((x.Element("LatencyCorrection").Value))
 
-            //    }
-            //).ToList();
 
             foreach (var e in incoming)
             {
-                //e.DetectionTypeIDs
+                var appr = _db.Approaches.Where(s => s.ApproachID == e.ApproachID).FirstOrDefault();
+
+                if (appr != null)
+                {
+                    appr.Detectors = new List<Detector>();
+                    appr.Detectors.Add(e);
+                    e.Approach = appr;
+
+                }
                 _db.Detectors.Add(e);
 
             }
