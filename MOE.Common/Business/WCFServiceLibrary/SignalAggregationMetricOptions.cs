@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
-using System.Xml;
 using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.DataAggregation;
@@ -18,12 +17,6 @@ using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
-
-    public enum ChartAction
-    {
-        CreateMetric,
-        ExportXML
-    }
     public enum AggregationType
     {
         Sum,
@@ -77,8 +70,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public BinFactoryOptions TimeOptions { get; set; }
 
         [DataMember]
-        public ChartAction SelectedChartAction { get; set; }
-        [DataMember]
         public SeriesChartType SelectedChartType { get; set; }
 
         [DataMember]
@@ -107,7 +98,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public List<Models.Signal> Signals { get; set; } = new List<Models.Signal>();
 
-    public virtual string ChartTitle
+        public virtual string ChartTitle
         {
             get
             {
@@ -242,22 +233,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void SaveChartImage(Chart chart)
         {
-            if (ResultChartAndXmlLocations == null)
-            {
-                ResultChartAndXmlLocations = new List<Tuple<string, string>>();
-            }
-            XmlDocument xmlDocument = GetXmlForChart(chart);
-            string xmlChartName = CreateFileName(MetricType.Abbreviation, ".xml");
-            xmlDocument.Save(MetricFileLocation + xmlChartName);  
-            var chartName = CreateFileName(MetricType.Abbreviation, ".jpg");
+            var chartName = CreateFileName(MetricType.Abbreviation);
             MetricFileLocation = ConfigurationManager.AppSettings["ImageLocation"];
             MetricWebPath = ConfigurationManager.AppSettings["ImageWebLocation"];
             chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
-            ResultChartAndXmlLocations.Add(new Tuple<string, string>(MetricWebPath + chartName, MetricWebPath + xmlChartName));
             ReturnList.Add(MetricWebPath + chartName);
+
         }
 
-        protected string CreateFileName(string MetricAbbreviation, string extension)
+        protected string CreateFileName(string MetricAbbreviation)
         {
             var fileName = MetricAbbreviation +
                            "-" +
@@ -274,10 +258,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                            EndDate.ToString("mm-");
             var r = new Random();
             fileName += r.Next().ToString();
-            fileName += extension;
+            fileName += ".jpg";
             return fileName;
         }
-        
 
 
         protected virtual void GetTimeCharts()

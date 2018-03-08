@@ -48,6 +48,7 @@ namespace MOE.CommonTests.Models
         public List<DetectionTypeGraph_Detector> DetectionTypeDetectors = new List<DetectionTypeGraph_Detector>();
         public List<SignalEventCountAggregation> SignalEventCountAggregations { get; set; } = new List<SignalEventCountAggregation>();
         public List<ApproachEventCountAggregation> PhaseEventCountAggregations { get; set; } = new List<ApproachEventCountAggregation>();
+        public List<Speed_Events> Speed_Events { get; set; } = new List<Speed_Events>();
 
         public void SetFilterSignal(SignalAggregationMetricOptions options)
         {
@@ -93,19 +94,10 @@ namespace MOE.CommonTests.Models
             PopulateLaneTypes();
             PopulateDetectionHardware();
             PoplateMetricTypes();
-            PopulateMetricTypesWithDetectionTypes();
+            
             
         }
 
-        private void PopulateMetricTypesWithDetectionTypes()
-        {
-            var metricType = MetricTypes.Where(mt => mt.MetricID == 12).FirstOrDefault();
-            var detType = DetectionTypes.Where(dt => dt.DetectionTypeID == 6).FirstOrDefault();
-            metricType.DetectionTypes = new List<DetectionType>();
-            detType.MetricTypes = new List<MetricType>();
-            metricType.DetectionTypes.Add(detType);
-            detType.MetricTypes.Add(metricType);
-        }
 
         public void ClearTables()
         {
@@ -1457,7 +1449,7 @@ namespace MOE.CommonTests.Models
                     {
                         BinStartTime = startTime,
                         ApproachId = approach.ApproachID,
-                        IsProtectedPhase = true,
+                        IsProtectedPhase = false,
                         EventCount = rnd.Next(500, 1000),
                         Id = id
                     };

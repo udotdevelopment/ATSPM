@@ -15,14 +15,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
     {
         public ApproachEventCountAggregationOptions()
         {
-            MetricTypeID = 21;
+            MetricTypeID = 28;
             AggregatedDataTypes = new List<AggregatedDataType>();
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "EventCount"});
         }
 
         public ApproachEventCountAggregationOptions(ApproachAggregationMetricOptions options)
         {
-            MetricTypeID = 21;
+            MetricTypeID = 28;
             AggregatedDataTypes = new List<AggregatedDataType>();
             AggregatedDataTypes.Add(new AggregatedDataType { Id = 0, DataName = "EventCount" });
             CopySignalAggregationBaseValues(options);

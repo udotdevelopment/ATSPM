@@ -127,7 +127,9 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXDirectionSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXRouteSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXSignalSeriesTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\JustTimeXSeriesApproachTestsBase.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachPcdAggregationChart\ApproachPcdAggregationApproachXTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachPcdAggregationChart\ApproachPcdAggregationOptionsTimeXPhaseTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSpeedAggregationChart\ApproachSpeedAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachYellowRedActuationsAggregation\ApproachYellowRedActuationsAggregationApproachXTests.cs" />
@@ -202,13 +204,15 @@
     <Content Include="XMLDataFiles\DetectorToDetectionTypes\DetectorTypesforDetectorsFor7185.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="XMLDataFiles\EventLogFiles\7185Events02_01_2018.xml" />
     <Content Include="XMLDataFiles\EventLogFiles\7185_10_17_2017.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="XMLDataFiles\MetricTypeDetectorTyes\mtdt.xml" />
+    <Content Include="XMLDataFiles\MetricTypeDetectorTypes\mtdt.xml" />
     <Content Include="XMLDataFiles\Signals\signals.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="XMLDataFiles\SpeedEvents\7185speed.xml" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
