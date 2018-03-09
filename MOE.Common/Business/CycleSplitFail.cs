@@ -15,13 +15,13 @@ namespace MOE.Common.Business
             Unknown
         }
 
-        private readonly int _firstSecondsOfRed;
+        public readonly int FirstSecondsOfRed;
 
         public CycleSplitFail(DateTime firstGreenEvent, DateTime redEvent, DateTime yellowEvent,
             DateTime lastGreenEvent, TerminationType terminationType,
             int firstSecondsOfRed) : base(firstGreenEvent, redEvent, yellowEvent, lastGreenEvent)
         {
-            _firstSecondsOfRed = firstSecondsOfRed;
+            FirstSecondsOfRed = firstSecondsOfRed;
             TerminationEvent = terminationType;
         }
 
@@ -37,7 +37,7 @@ namespace MOE.Common.Business
 
         public void SetDetectorActivations(List<SplitFailDetectorActivation> detectorActivations)
         {
-            var redPeriodToAnalyze = RedEvent.AddSeconds(_firstSecondsOfRed);
+            var redPeriodToAnalyze = RedEvent.AddSeconds(FirstSecondsOfRed);
 
             ActivationsDuringRed = detectorActivations.Where
                 //detStart AFTER redStart and Before red+AnalaysTime
@@ -48,27 +48,27 @@ namespace MOE.Common.Business
 
                       //DetStart BEFORE redStart and detOff after cycleEnd
                       || d.DetectorOn <= RedEvent && d.DetectorOff >= EndTime).OrderBy(d => d.DetectorOn).ToList();
-            //if (activationsDuringRed.Count == 0)
-            //{
-            //    RedOccupancyTime = CheckForDetectorActivationBiggerThanPeriod(RedEvent, redPeriodToAnalyze, detectorActivations);
-            //}
-            //else
-            //{
-            RedOccupancyTimeInMilliseconds = GetOccupancy(RedEvent, redPeriodToAnalyze, ActivationsDuringRed);
-            //}
+            if (ActivationsDuringRed.Count == 0)
+            {
+                RedOccupancyTimeInMilliseconds = CheckForDetectorActivationBiggerThanPeriod(RedEvent, redPeriodToAnalyze, detectorActivations);
+            }
+            else
+            {
+                RedOccupancyTimeInMilliseconds = GetOccupancy(RedEvent, redPeriodToAnalyze, ActivationsDuringRed);
+            }
             ActivationsDuringGreen = detectorActivations.Where(d =>
                 d.DetectorOn >= StartTime && d.DetectorOn < YellowEvent ||
                 d.DetectorOff >= StartTime && d.DetectorOff < YellowEvent ||
                 d.DetectorOn <= StartTime && d.DetectorOff >= YellowEvent).OrderBy(d => d.DetectorOn).ToList();
-            //if (activationsDuringGreen.Count == 0)
-            //{
-            //    GreenOccupancyTime = CheckForDetectorActivationBiggerThanPeriod(StartTime, YellowEvent, detectorActivations);
-            //}
-            //else
-            //{
-            GreenOccupancyTimeInMilliseconds = GetOccupancy(StartTime, YellowEvent, ActivationsDuringGreen);
-            //}
-            double millisecondsOfRedStart = _firstSecondsOfRed * 1000;
+            if (ActivationsDuringGreen.Count == 0)
+            {
+                GreenOccupancyTimeInMilliseconds = CheckForDetectorActivationBiggerThanPeriod(StartTime, YellowEvent, detectorActivations);
+            }
+            else
+            {
+                GreenOccupancyTimeInMilliseconds = GetOccupancy(StartTime, YellowEvent, ActivationsDuringGreen);
+            }
+            double millisecondsOfRedStart = FirstSecondsOfRed * 1000;
             RedOccupancyPercent = RedOccupancyTimeInMilliseconds / millisecondsOfRedStart * 100;
             GreenOccupancyPercent = GreenOccupancyTimeInMilliseconds / TotalGreenTimeMilliseconds * 100;
             IsSplitFail = GreenOccupancyPercent > 79 && RedOccupancyPercent > 79;
