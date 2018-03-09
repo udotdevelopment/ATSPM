@@ -16,7 +16,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public ApproachVolumeOptions(string signalID, DateTime startDate, DateTime endDate, double? yAxisMax,
             int binSize, bool showDirectionalSplits,
-            bool showTotalVolume, bool ShowNbEbVolume, bool ShowSbWbVolume, bool showTMCDetection,
+            bool showTotalVolume, bool showNbEbVolume, bool showSbWbVolume, bool showTMCDetection,
             bool showAdvanceDetection)
         {
             SignalID = signalID;
@@ -27,8 +27,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             SelectedBinSize = binSize;
             ShowTotalVolume = showTotalVolume;
             ShowDirectionalSplits = showDirectionalSplits;
-            ShowNbEbVolume = ShowNbEbVolume;
-            ShowSbWbVolume = ShowSbWbVolume;
+            ShowNbEbVolume = showNbEbVolume;
+            ShowSbWbVolume = showSbWbVolume;
             ShowTMCDetection = showTMCDetection;
             ShowAdvanceDetection = showAdvanceDetection;
         }
