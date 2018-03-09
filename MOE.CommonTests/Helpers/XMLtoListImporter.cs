@@ -13,11 +13,11 @@ using System.Data;
 
 namespace MOE.CommonTests.Helpers
 {
-    public class XMLToListImporter
+    public class XmlToListImporter
     {
         private static readonly string filePath = @".\.\XMLDataFiles\";
 
-        private static XElement emptyElement = XElement.Parse("<x>" +
+        private static readonly XElement emptyElement = XElement.Parse("<x>" +
             "<string>0</string>" +
             "<integer>0</integer>" +
             "<date>01/01/2020</date>"+
@@ -25,7 +25,7 @@ namespace MOE.CommonTests.Helpers
 
         
 
-        public static void LoadControllerEventLog(string xmlFileName, InMemoryMOEDatabase _db)
+        public static void LoadControllerEventLog(string xmlFileName, InMemoryMOEDatabase db)
         {
 
             string localFilePath = filePath+ @"EventLogFiles\" + xmlFileName;
@@ -38,20 +38,19 @@ namespace MOE.CommonTests.Helpers
                 {
                     EventCode = Convert.ToInt32(x.Element("EventCode").Value),
                     EventParam = Convert.ToInt32(x.Element("EventParam").Value),
-                    Timestamp = Convert.ToDateTime(x.Element("timestamp").Value),
-                    SignalID = x.Element("signalid").Value.ToString()
+                    Timestamp = Convert.ToDateTime(x.Element("Timestamp").Value),
+                    SignalID = x.Element("SignalID").Value.ToString()
                 }
             ).ToList();
 
-            foreach (var e in incomingEvents)
-            {
 
-                _db.Controller_Event_Log.Add(e);
 
-            }
+                db.Controller_Event_Log.AddRange(incomingEvents);
+
+            
         }
 
-        public static void LoadControllerEventLogsFromMOEDB(InMemoryMOEDatabase _db)
+        public static void LoadControllerEventLogsFromMOEDB(InMemoryMOEDatabase db)
         {
             System.Data.SqlClient.SqlConnectionStringBuilder builder =
              new System.Data.SqlClient.SqlConnectionStringBuilder();
@@ -89,7 +88,7 @@ namespace MOE.CommonTests.Helpers
                     cel.EventCode = reader.GetInt32(2);
                     cel.EventParam = reader.GetInt32(3);
 
-                    _db.Controller_Event_Log.Add(cel);
+                    db.Controller_Event_Log.Add(cel);
                 }
             }
             reader.Close();
@@ -98,7 +97,7 @@ namespace MOE.CommonTests.Helpers
 
         }
 
-        public static void LoadSpeedEvents(string xmlFileName, InMemoryMOEDatabase _db)
+        public static void LoadSpeedEvents(string xmlFileName, InMemoryMOEDatabase db)
         {
 
             string localFilePath = filePath + @"SpeedEvents\" + xmlFileName;
@@ -106,7 +105,7 @@ namespace MOE.CommonTests.Helpers
 
             var doc = XElement.Load(localFilePath);
 
-            var incomingEvents = doc.Elements("Controller_Event_Log").Select(x => new Speed_Events
+            var incomingEvents = doc.Elements("SpeedEvent").Select(x => new Speed_Events
             {
                 DetectorID = (String)(x.Element("DetectorID")),
                 MPH = (Int32)(x.Element("MPH")),
@@ -114,19 +113,14 @@ namespace MOE.CommonTests.Helpers
                 timestamp = (DateTime)(x.Element("Timestamp"))
             }).ToList();
 
-            foreach (var e in incomingEvents)
-            {
-
-                _db.Speed_Events.Add(e);
-
-            }
+             db.Speed_Events.AddRange(incomingEvents);
 
 
 
 
         }
 
-        public static void LoadSignals(string xmlFileName, InMemoryMOEDatabase _db)
+        public static void LoadSignals(string xmlFileName, InMemoryMOEDatabase db)
         {
 
             string localFilePath = filePath + @"\Signals\" + xmlFileName;
@@ -156,12 +150,12 @@ namespace MOE.CommonTests.Helpers
             foreach (var e in incoming)
             {
 
-                _db.Signals.Add(e);
+                db.Signals.Add(e);
 
             }
         }
 
-        public static void LoadApproaches(string xmlFileName, InMemoryMOEDatabase _db)
+        public static void LoadApproaches(string xmlFileName, InMemoryMOEDatabase db)
         {
 
             string localFilePath = filePath + "\\Approaches\\" + xmlFileName;
@@ -205,7 +199,7 @@ namespace MOE.CommonTests.Helpers
 
             foreach (var e in incoming)
             {
-                var signal = _db.Signals.Where(s => s.SignalID == e.SignalID).FirstOrDefault();
+                var signal = db.Signals.Where(s => s.SignalID == e.SignalID).FirstOrDefault();
 
                     if(signal!=null)
                 {
@@ -214,12 +208,18 @@ namespace MOE.CommonTests.Helpers
                     e.Signal = signal;
 
                 }
-                _db.Approaches.Add(e);
+
+                var direction = db.DirectionTypes.Where(d => d.DirectionTypeID == e.DirectionTypeID).FirstOrDefault();
+                if (direction != null)
+                {
+                    e.DirectionType = direction;
+                }
+                db.Approaches.Add(e);
 
             }
         }
 
-        public static void LoadDetectors(string xmlFileName, InMemoryMOEDatabase _db)
+        public static void LoadDetectors(string xmlFileName, InMemoryMOEDatabase db)
         {
 
             string localFilePath = filePath + "\\Detectors\\" + xmlFileName;
@@ -255,7 +255,7 @@ namespace MOE.CommonTests.Helpers
 
             foreach (var e in incoming)
             {
-                var appr = _db.Approaches.Where(s => s.ApproachID == e.ApproachID).FirstOrDefault();
+                var appr = db.Approaches.Where(s => s.ApproachID == e.ApproachID).FirstOrDefault();
 
                 if (appr != null)
                 {
@@ -264,19 +264,28 @@ namespace MOE.CommonTests.Helpers
                     e.Approach = appr;
 
                 }
-                _db.Detectors.Add(e);
+
+                var hardware = db.DetectionHardwares.Where(h => h.ID == e.DetectionHardwareID).FirstOrDefault();
+
+                if (hardware != null)
+                {
+                    e.DetectionHardware = hardware;
+                }
+
+
+                db.Detectors.Add(e);
 
             }
         }
 
-        public static void AddDetectionTypesToDetectors(string xmlFileName, InMemoryMOEDatabase _db)
+        public static void AddDetectionTypesToDetectors(string xmlFileName, InMemoryMOEDatabase db)
         {
             string localFilePath = filePath + "\\DetectorToDetectionTypes\\" + xmlFileName;
 
 
             var doc = XElement.Load(localFilePath);
 
-            foreach(var det in _db.Detectors)
+            foreach(var det in db.Detectors)
             {
                 det.DetectionTypeIDs = new List<int>();
                 var types = doc.Elements("MOEAgg.dbo.DetectionTypeDetector");
@@ -297,14 +306,14 @@ namespace MOE.CommonTests.Helpers
             }
         }
 
-        public static void AddDetectionTypesToMetricTypes(string xmlFileName, InMemoryMOEDatabase _db)
+        public static void AddDetectionTypesToMetricTypes(string xmlFileName, InMemoryMOEDatabase db)
         {
             string localFilePath = filePath + "\\MetricTypeDetectorTypes\\" + xmlFileName;
 
 
             var doc = XElement.Load(localFilePath);
 
-            foreach (var mt in _db.MetricTypes)
+            foreach (var mt in db.MetricTypes)
             {
                 mt.DetectionTypes = new List<DetectionType>();
                 var types = doc.Elements("MetricDetectionType");
@@ -312,7 +321,7 @@ namespace MOE.CommonTests.Helpers
                 {
                     if (t.Element("MetricType_MetricID").Value == mt.MetricID.ToString())
                     {
-                        var detType = _db.DetectionTypes.Where(dt => dt.DetectionTypeID == (Int32)(t.Element("DetectionType_DetectionTypeID"))).FirstOrDefault();
+                        var detType = db.DetectionTypes.Where(dt => dt.DetectionTypeID == (Int32)(t.Element("DetectionType_DetectionTypeID"))).FirstOrDefault();
                         if (detType != null)
                         {
                             if(detType.MetricTypes == null)

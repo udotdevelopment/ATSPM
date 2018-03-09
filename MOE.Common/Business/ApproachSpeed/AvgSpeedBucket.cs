@@ -17,13 +17,15 @@ namespace MOE.Common.Business
         {
             StartTime = startTime;
             EndTime = endTime;
-            XAxis = endTime;
+            XAxis = startTime;
             _binSizeMultiplier = 60 / binSize;
             MovementDelay = movementdelay;
             var speedsForBucket = new List<int>();
+
             foreach (var cycle in cycles)
-                if (cycle.StartTime >= startTime && cycle.EndTime <= endTime)
+                if (cycle.StartTime >= startTime && cycle.EndTime < endTime)
                     speedsForBucket.AddRange(cycle.SpeedEvents.Select(s => s.MPH));
+
             if (speedsForBucket.Count > 0)
             {
                 speedsForBucket.Sort();

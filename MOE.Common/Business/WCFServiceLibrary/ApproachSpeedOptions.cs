@@ -80,6 +80,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Show15Percentile = true;
         }
 
+        public List<DetectorSpeed> SpeedDetectors = new List<DetectorSpeed>();
+
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
@@ -229,8 +231,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected void AddSpeedDataToChart(Chart chart, Models.Detector detector, DateTime startDate,
             DateTime endDate, int binSize)
         {
-            var detectorSpeed = new DetectorSpeed(detector, startDate, endDate, binSize, false);
-            foreach (var bucket in detectorSpeed.AvgSpeedBucketCollection.AvgSpeedBuckets)
+            var speedDetector = new DetectorSpeed(detector, startDate, endDate, binSize, false);
+            foreach (var bucket in speedDetector.AvgSpeedBucketCollection.AvgSpeedBuckets)
             {
                 chart.Series["Average MPH"].Points.AddXY(bucket.StartTime, bucket.AvgSpeed);
                 chart.Series["85th Percentile Speed"].Points.AddXY(bucket.StartTime, bucket.EightyFifth);
@@ -238,8 +240,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 if (ShowPostedSpeed)
                     chart.Series["Posted Speed"].Points.AddXY(bucket.StartTime, detector.Approach.MPH);
             }
+            SpeedDetectors.Add(speedDetector);
             if (ShowPlanStatistics)
-                SetSpeedPlanStrips(detectorSpeed.Plans, chart, startDate, detector.MinSpeedFilter ?? 0);
+                SetSpeedPlanStrips(speedDetector.Plans, chart, startDate, detector.MinSpeedFilter ?? 0);
         }
 
         protected void SetSpeedPlanStrips(List<PlanSpeed> plans, Chart chart, DateTime graphStartDate,

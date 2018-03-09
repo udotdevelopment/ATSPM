@@ -140,7 +140,8 @@
     <Compile Include="Business\WCFServiceLibrary\SignalAggregationCreateMetricTestsBase.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalAggregationMetricOptionsTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SplitFailOptionsTests.cs" />
-    <Compile Include="Helpers\XMLtoListImporter.cs" />
+    <Compile Include="Helpers\XmlHelperTests.cs" />
+    <Compile Include="Helpers\XmlToListImporter.cs" />
     <Compile Include="Models\Custom\DetectorTests.cs" />
     <Compile Include="Models\InMemorySpeedEventRepository.cs" />
     <Compile Include="Models\InMemoryYellowRedActivationsAggregationRepository - Copy.cs" />
@@ -196,7 +197,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="XMLDataFiles\Approaches\Approaches.xml" />
+    <Content Include="XMLDataFiles\Approaches\Approaches.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="XMLDataFiles\Approaches\approachesfor7185.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -206,7 +209,9 @@
     <Content Include="XMLDataFiles\DetectorToDetectionTypes\DetectorTypesforDetectorsFor7185.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="XMLDataFiles\EventLogFiles\7185Events02_01_2018.xml" />
+    <Content Include="XMLDataFiles\EventLogFiles\7185Events02_01_2018.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="XMLDataFiles\EventLogFiles\7185_10_17_2017.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -215,6 +220,7 @@
     </Content>
     <Content Include="XMLDataFiles\Signals\signals.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="XMLDataFiles\SpeedEvents\7185speed.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

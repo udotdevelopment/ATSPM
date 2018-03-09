@@ -16,7 +16,7 @@ namespace MOE.Common.Business
             while (dt.AddMinutes(binSize) <= endTime)
             {
                 var avg = new AvgSpeedBucket(dt, dt.AddMinutes(binSize), binSize, movementdelay,
-                    cycles.Where(c => c.StartTime >= dt && c.EndTime < endTime).ToList());
+                    cycles);
                 AvgSpeedBuckets.Add(avg);
                 dt = dt.AddMinutes(binSize);
             }

@@ -20,13 +20,13 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         public void Initialize()
         {
             db.ClearTables();
-            XMLToListImporter.LoadControllerEventLog("7185_10_17_2017.xml", db);
-            XMLToListImporter.LoadSignals("signals.xml", db);
-            XMLToListImporter.LoadApproaches("approachesfor7185.xml", db);
-            XMLToListImporter.LoadDetectors("detectorsFor7185.xml", db);
-            XMLToListImporter.AddDetectionTypesToDetectors
+            XmlToListImporter.LoadControllerEventLog("7185_10_17_2017.xml", db);
+            XmlToListImporter.LoadSignals("signals.xml", db);
+            XmlToListImporter.LoadApproaches("approachesfor7185.xml", db);
+            XmlToListImporter.LoadDetectors("detectorsFor7185.xml", db);
+            XmlToListImporter.AddDetectionTypesToDetectors
                 ("DetectorTypesforDetectorsFor7185.xml", db);
-            XMLToListImporter.AddDetectionTypesToMetricTypes("mtdt.xml", db);
+            XmlToListImporter.AddDetectionTypesToMetricTypes("mtdt.xml", db);
             MOE.Common.Models.Repositories.SignalsRepositoryFactory.SetSignalsRepository(
             new InMemorySignalsRepository(db));
             MetricTypeRepositoryFactory.SetMetricsRepository(new InMemoryMetricTypeRepository(db));
@@ -56,58 +56,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             Assert.IsTrue(path.Count > 0);
         }
 
-        [TestMethod()]
-        public void GetRecordsFromXMLTest()
-        {
-            InMemoryMOEDatabase _db = new InMemoryMOEDatabase();
-
-            XMLToListImporter.LoadControllerEventLog("7185_10_17_2017.xml", _db);
-
-            Assert.IsTrue(_db.Controller_Event_Log.Count > 1000);
-        }
-
-        [TestMethod()]
-        public void GetRecordsForSignalsFromXMLTest()
-        {
-            InMemoryMOEDatabase _db = new InMemoryMOEDatabase();
-
-            XMLToListImporter.LoadSignals("signals.xml", _db);
-
-            Assert.IsTrue(_db.Signals.Count > 1000);
-        }
-        [TestMethod()]
-        public void GetRecordsForApproachesFromXMLTest()
-        {
-            InMemoryMOEDatabase _db = new InMemoryMOEDatabase();
-
-            XMLToListImporter.LoadApproaches("approachesfor7185.xml", _db);
-
-            Assert.IsTrue(_db.Approaches.Count > 7);
-        }
-
-        [TestMethod()]
-        public void GetRecordsForDetectorsFromXMLTest()
-        {
-            InMemoryMOEDatabase _db = new InMemoryMOEDatabase();
-
-            XMLToListImporter.LoadDetectors("detectorsFor7185.xml", _db);
-
-            Assert.IsTrue(_db.Detectors.Count > 7);
-        }
-
-        [TestMethod()]
-        public void AddDetectionTypesToDetectorsFromXMLTest()
-        {
-            InMemoryMOEDatabase _db = new InMemoryMOEDatabase();
-
-            XMLToListImporter.LoadDetectors("detectorsFor7185.xml", _db);
-
-            XMLToListImporter.AddDetectionTypesToDetectors("DetectorTypesforDetectorsFor7185.xml", _db);
-
-           Assert.IsTrue(_db.Detectors.Count > 7);
-            Assert.IsTrue(_db.Detectors.FirstOrDefault().DetectionTypeIDs.Count > 0);
-
-        }
+      
 
         [TestMethod()]
         public void SomeSpliTFailTest()
