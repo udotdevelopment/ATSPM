@@ -15,13 +15,13 @@ namespace MOE.Common.Business
             Unknown
         }
 
-        private readonly int _firstSecondsOfRed;
+        public readonly int FirstSecondsOfRed;
 
         public CycleSplitFail(DateTime firstGreenEvent, DateTime redEvent, DateTime yellowEvent,
             DateTime lastGreenEvent, TerminationType terminationType,
             int firstSecondsOfRed) : base(firstGreenEvent, redEvent, yellowEvent, lastGreenEvent)
         {
-            _firstSecondsOfRed = firstSecondsOfRed;
+            FirstSecondsOfRed = firstSecondsOfRed;
             TerminationEvent = terminationType;
         }
 
@@ -37,7 +37,7 @@ namespace MOE.Common.Business
 
         public void SetDetectorActivations(List<SplitFailDetectorActivation> detectorActivations)
         {
-            var redPeriodToAnalyze = RedEvent.AddSeconds(_firstSecondsOfRed);
+            var redPeriodToAnalyze = RedEvent.AddSeconds(FirstSecondsOfRed);
 
             ActivationsDuringRed = detectorActivations.Where
                 //detStart AFTER redStart and Before red+AnalaysTime
@@ -68,7 +68,7 @@ namespace MOE.Common.Business
             //{
             GreenOccupancyTimeInMilliseconds = GetOccupancy(StartTime, YellowEvent, ActivationsDuringGreen);
             //}
-            double millisecondsOfRedStart = _firstSecondsOfRed * 1000;
+            double millisecondsOfRedStart = FirstSecondsOfRed * 1000;
             RedOccupancyPercent = RedOccupancyTimeInMilliseconds / millisecondsOfRedStart * 100;
             GreenOccupancyPercent = GreenOccupancyTimeInMilliseconds / TotalGreenTimeMilliseconds * 100;
             IsSplitFail = GreenOccupancyPercent > 79 && RedOccupancyPercent > 79;

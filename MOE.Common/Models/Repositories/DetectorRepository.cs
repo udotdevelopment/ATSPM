@@ -245,10 +245,13 @@ namespace MOE.Common.Models.Repositories
         {
             var result = false;
             if (gd != null)
-                foreach (var dt in gd.DetectionTypes)
-                foreach (var m in dt.MetricTypes)
-                    if (m.MetricID == metricID)
-                        return true;
+                if (gd.DetectionTypes != null)
+                {
+                    foreach (var dt in gd.DetectionTypes)
+                    foreach (var m in dt.MetricTypes)
+                        if (m.MetricID == metricID)
+                            return true;
+                }
             return result;
         }
 
