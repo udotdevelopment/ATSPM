@@ -41,6 +41,21 @@ namespace MOE.CommonTests.Helpers
         }
 
         [TestMethod()]
+        public void ApproachesAreAssignedTosignalsTest()
+        {
+            InMemoryMOEDatabase db = new InMemoryMOEDatabase();
+
+            XmlToListImporter.LoadSignals("signals.Xml", db);
+
+            XmlToListImporter.LoadApproaches("approachesfor7185.Xml", db);
+
+            foreach (var app in db.Approaches)
+            {
+                Assert.IsNotNull(app.Signal);
+            }
+        }
+
+        [TestMethod()]
         public void LoadDetectorsFromXmlTest()
         {
             InMemoryMOEDatabase db = new InMemoryMOEDatabase();

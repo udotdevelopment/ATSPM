@@ -102,6 +102,9 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationApproachXTests .cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationTimeXApproachSeriesTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\JustDirectionXSeriesDirectionTestsBase - Copy.cs" />
     <Compile Include="Business\WCFServiceLibrary\NonAggregateCharts\ApproachSpeed\AvgSpeedBucketCollectionTests.cs" />
     <Compile Include="Business\Bins\BinFactoryTests.cs" />
     <Compile Include="Business\ChartFactoryTests.cs" />
@@ -134,7 +137,7 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachPcdAggregationChart\ApproachPcdAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachPcdAggregationChart\ApproachPcdAggregationOptionsTimeXPhaseTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSpeedAggregationChart\ApproachSpeedAggregationApproachXTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationApproachXTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationDirectionXDirectionSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachYellowRedActuationsAggregation\ApproachYellowRedActuationsAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\DetectorVolumeAggregationChart\DetectorVolumeAggregationApproachXDetectorSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\NonAggregateCharts\ChartTestHelper.cs" />
