@@ -394,9 +394,7 @@ namespace MOE.Common.Business
             var chart = new Chart();
 
             //Set the chart properties
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 650;
-            chart.Width = 1100;
+            ChartFactory.SetImageProperties(chart);
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
 
             //Set the chart title
@@ -580,10 +578,7 @@ namespace MOE.Common.Business
             }
 
             //Set the chart properties
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 650;
-            chart.Width = 1100;
-            chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
+            ChartFactory.SetImageProperties(chart);
 
             //Set the chart title
             var title = new Title();

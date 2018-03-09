@@ -106,10 +106,8 @@ namespace MOE.Common.Business.Preempt
 
         private void AddTitleAndLegend(Chart chart, int preemptNumber)
         {
-            chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 350;
-            chart.Width = 1100;
+            
+            ChartFactory.SetImageProperties(chart);
             chart.BorderSkin.SkinStyle = BorderSkinStyle.None;
             chart.BorderSkin.BorderColor = Color.Black;
             chart.BorderSkin.BorderWidth = 1;

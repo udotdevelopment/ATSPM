@@ -112,9 +112,7 @@ namespace MOE.Common.Business.TMC
 
         private void SetChartProperties()
         {
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 550;
-            chart.Width = 750;
+            ChartFactory.SetImageProperties(chart);
 
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
             chart.BorderlineColor = Color.Black;

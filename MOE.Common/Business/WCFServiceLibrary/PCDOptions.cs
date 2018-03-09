@@ -13,12 +13,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [DataContract]
     public class PCDOptions : MetricOptions
     {
-        private int MetricTypeID = 6;
+        
 
         public PCDOptions(string signalID, DateTime startDate, DateTime endDate, double yAxisMax, double y2AxisMax,
             int binSize, int dotSize, bool showPlanStatistics, bool showVolumes, int metricTypeID,
             bool showArrivalsOnGreen)
         {
+
             SignalID = signalID;
             YAxisMax = yAxisMax;
             Y2AxisMax = y2AxisMax;
@@ -26,8 +27,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
             SelectedDotSize = dotSize;
             ShowPlanStatistics = showPlanStatistics;
             ShowVolumes = showVolumes;
-            MetricTypeID = metricTypeID;
             ShowArrivalsOnGreen = showArrivalsOnGreen;
+            MetricTypeID = 6;
+            StartDate = startDate;
+            EndDate = endDate;
         }
 
         public PCDOptions()
@@ -76,6 +79,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Y2AxisMax = 2000;
             ShowPlanStatistics = true;
             ShowVolumes = true;
+            MetricTypeID = 6;
         }
 
         public override List<string> CreateMetric()

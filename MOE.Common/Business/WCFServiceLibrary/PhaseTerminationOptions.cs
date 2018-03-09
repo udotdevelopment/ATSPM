@@ -73,12 +73,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var dummychart = new Chart();
             var chartarea1 = new ChartArea();
-            dummychart.ImageType = ChartImageType.Jpeg;
-            dummychart.Height = 200;
-
-            dummychart.Width = 1100;
-
-            dummychart.ImageStorageMode = ImageStorageMode.UseImageLocation;
+            ChartFactory.SetImageProperties(dummychart);
             dummychart.BorderlineDashStyle = ChartDashStyle.Dot;
 
             var PedActivity = new Series();
@@ -178,10 +173,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var extendedDirection = string.Empty;
 
             //Set the chart properties
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 550;
-            chart.Width = 1100;
-            chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
+            ChartFactory.SetImageProperties(chart);
             chart.BorderlineDashStyle = ChartDashStyle.Dot;
             var reportTimespan = EndDate - StartDate;
 

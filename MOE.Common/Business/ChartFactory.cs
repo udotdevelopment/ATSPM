@@ -408,13 +408,22 @@ namespace MOE.Common.Business
             }
         }
 
-        private static void SetImageProperties(Chart chart)
+        public static void SetImageProperties(Chart chart)
         {
             chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 550;
-            chart.Width = 1100;
+            chart.Height = 720;
+            chart.Width = 1280;
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
         }
+
+        public static void SetImageProperties(Chart chart, int width, int height)
+        {
+            chart.ImageType = ChartImageType.Jpeg;
+            chart.Height = 720;
+            chart.Width = 1280;
+            chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
+        }
+
 
         private static ChartArea CreateChartArea(MetricOptions options)
         {

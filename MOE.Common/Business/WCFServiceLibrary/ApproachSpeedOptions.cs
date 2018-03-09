@@ -109,11 +109,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var chart = new Chart();
 
-            //Set the chart properties
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 550;
-            chart.Width = 1100;
-            chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
+
+            ChartFactory.SetImageProperties(chart);
+
 
             //Set the chart title
             SetChartTitles(chart, detector);

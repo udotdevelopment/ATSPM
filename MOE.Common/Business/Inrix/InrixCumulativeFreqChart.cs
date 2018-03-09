@@ -20,9 +20,7 @@ namespace MOE.Common.Business.Inrix
             var extendedDirection = string.Empty;
 
             //Set the chart properties
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 450;
-            chart.Width = 750;
+            ChartFactory.SetImageProperties(chart);
 
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
             chart.BorderlineColor = Color.Black;

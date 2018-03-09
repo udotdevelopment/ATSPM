@@ -15,9 +15,7 @@ namespace MOE.Common.Business.Preempt
             Options = options;
             //Set the chart properties
             Chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
-            Chart.ImageType = ChartImageType.Jpeg;
-            Chart.Height = 200;
-            Chart.Width = 1100;
+            ChartFactory.SetImageProperties(Chart);
             Chart.BorderSkin.SkinStyle = BorderSkinStyle.None;
             Chart.BorderSkin.BorderColor = Color.Black;
             Chart.BorderSkin.BorderWidth = 1;

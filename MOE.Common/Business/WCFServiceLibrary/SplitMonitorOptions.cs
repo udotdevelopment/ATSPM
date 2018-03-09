@@ -112,12 +112,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 //dummy chart to create a legend for the entire split monitor page.
                 var dummychart = new Chart();
                 var chartarea1 = new ChartArea();
-                dummychart.ImageType = ChartImageType.Jpeg;
-                dummychart.Height = 200;
-                dummychart.Width = 800;
-
-                //add comments to the chart
-                dummychart.ImageStorageMode = ImageStorageMode.UseImageLocation;
+                ChartFactory.SetImageProperties(dummychart);
                 dummychart.BorderlineDashStyle = ChartDashStyle.Dot;
 
                 var PedActivity = new Series();
@@ -447,10 +442,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var reportTimespan = graphEndDate - graphStartDate;
 
             //Set the chart properties
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 500;
-            chart.Width = 740;
-            chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
+            ChartFactory.SetImageProperties(chart);
             chart.BorderlineDashStyle = ChartDashStyle.Dot;
 
             SetChartTitle(chart, phase);

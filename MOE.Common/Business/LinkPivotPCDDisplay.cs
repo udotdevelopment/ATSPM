@@ -273,10 +273,7 @@ namespace MOE.Common.Business
             }
 
             //Set the chart properties
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 650;
-            chart.Width = 1100;
-            chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
+            ChartFactory.SetImageProperties(chart);
 
             //Set the chart title
             var title = new Title();

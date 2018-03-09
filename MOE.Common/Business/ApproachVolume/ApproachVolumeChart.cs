@@ -48,10 +48,7 @@ namespace MOE.Common.Business.ApproachVolume
             var reportTimespan = graphEndDate - graphStartDate;
             var extendedDirection = string.Empty;
             //Set the chart properties
-            Chart.ImageType = ChartImageType.Jpeg;
-            Chart.Height = 550;
-            Chart.Width = 1100;
-            Chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
+           ChartFactory.SetImageProperties(Chart);
 
             SetChartTitle(direction1, direction2);
             //Create the chart legend

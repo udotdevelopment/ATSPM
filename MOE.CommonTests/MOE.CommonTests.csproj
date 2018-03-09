@@ -102,7 +102,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Business\ApproachSpeed\AvgSpeedBucketCollectionTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\NonAggregateCharts\ApproachSpeed\AvgSpeedBucketCollectionTests.cs" />
     <Compile Include="Business\Bins\BinFactoryTests.cs" />
     <Compile Include="Business\ChartFactoryTests.cs" />
     <Compile Include="Business\ColorFactoryTests.cs" />
@@ -128,7 +128,8 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXDirectionSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXRouteSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXSignalSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachSpeedOptionsTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\NonAggregateCharts\ApproachDelayOptionsTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\NonAggregateCharts\ApproachSpeed\ApproachSpeedOptionsTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\JustTimeXSeriesApproachTestsBase.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachPcdAggregationChart\ApproachPcdAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachPcdAggregationChart\ApproachPcdAggregationOptionsTimeXPhaseTests.cs" />
@@ -136,6 +137,8 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachYellowRedActuationsAggregation\ApproachYellowRedActuationsAggregationApproachXTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\DetectorVolumeAggregationChart\DetectorVolumeAggregationApproachXDetectorSeriesTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\NonAggregateCharts\ChartTestHelper.cs" />
+    <Compile Include="Business\WCFServiceLibrary\NonAggregateCharts\PCDOptionsTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\PreemptionAggregationChart\PreemptionsAggregationChartTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\PriorityAggregationChart\PriorityAggregationApproachXSignalSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalAggregationCreateMetricTestsBase.cs" />
@@ -144,7 +147,6 @@
     <Compile Include="Helpers\XmlHelperTests.cs" />
     <Compile Include="Helpers\XmlToListImporter.cs" />
     <Compile Include="Helpers\AddControllerEventLogsToInMemoryDb.cs" />
-    <Compile Include="Helpers\XMLtoListImporter.cs" />
     <Compile Include="Models\Custom\DetectorTests.cs" />
     <Compile Include="Models\InMemorySpeedEventRepository.cs" />
     <Compile Include="Models\InMemoryYellowRedActivationsAggregationRepository - Copy.cs" />
@@ -154,7 +156,7 @@
     <Compile Include="Models\InMemoryControllerEventLogRepository.cs" />
     <Compile Include="Models\InMemoryPreemptAggregationDatasRepository.cs" />
     <Compile Include="Models\InMemoryApplicationEventRepository.cs" />
-    <Compile Include="Business\WCFServiceLibrary\MetricOptionsTests.cs" />
+    <Compile Include="Business\WCFServiceLibrary\NonAggregateCharts\MetricOptionsTests.cs" />
     <Compile Include="Models\Custom\ApproachTests.cs" />
     <Compile Include="Models\Custom\ImporterTests.cs" />
     <Compile Include="Models\InMemoryApproachRepository.cs" />

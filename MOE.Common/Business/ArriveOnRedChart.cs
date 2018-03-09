@@ -20,10 +20,7 @@ namespace MOE.Common.Business
             var reportTimespan = Options.EndDate - Options.StartDate;
 
             //Set the chart properties
-            chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 550;
-            chart.Width = 1100;
+            ChartFactory.SetImageProperties(chart);
 
             //Create the chart legend
             var chartLegend = new Legend();

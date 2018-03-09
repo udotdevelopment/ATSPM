@@ -19,9 +19,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Y2AxisMax = y2AxisMax;
             SelectedBinSize = binSize;
             ShowPlanStatistics = showPlanStatistics;
-            MetricTypeID = metricTypeID;
+            MetricTypeID = 8;
             ShowTotalDelayPerHour = ShowTotalDelayPerHour;
             ShowDelayPerVehicle = showDelayPerVehicle;
+            StartDate = startDate;
+            EndDate = endDate;
         }
 
         public ApproachDelayOptions()

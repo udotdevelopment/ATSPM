@@ -38,10 +38,7 @@ namespace MOE.Common.Business
             }
 
             //Set the chart properties
-            chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 450;
-            chart.Width = 1100;
+            ChartFactory.SetImageProperties(chart);
             chart.BorderSkin.SkinStyle = BorderSkinStyle.Raised;
             chart.BorderSkin.BorderColor = Color.Black;
             chart.BorderSkin.BorderWidth = 1;
