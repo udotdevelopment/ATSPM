@@ -15,6 +15,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             MetricTypeID = 27;
             AggregatedDataTypes = new List<AggregatedDataType>();
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "EventCount"});
+            this.Y2AxisTitle = "Event Count";
+
         }
 
         public SignalEventCountAggregationOptions(SignalAggregationMetricOptions options)
@@ -23,12 +25,19 @@ namespace MOE.Common.Business.WCFServiceLibrary
             AggregatedDataTypes = new List<AggregatedDataType>();
             AggregatedDataTypes.Add(new AggregatedDataType { Id = 0, DataName = "EventCount" });
             CopySignalAggregationBaseValues(options);
+            this.Y2AxisTitle = "Event Count";
+           
+            
         }
 
         public override string YAxisTitle => SelectedAggregationType + " of EventCount " + Regex.Replace(
                                                  SelectedAggregatedDataType.ToString(),
                                                  @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1") + " " +
                                              TimeOptions.SelectedBinSize + " bins";
+
+        
+
+        
 
         protected override List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal)
         {

@@ -315,7 +315,7 @@ namespace MOE.Common.Business
             chartArea.AxisY2.Enabled = AxisEnabled.True;
             chartArea.AxisY2.MajorGrid.Enabled = false;
             chartArea.AxisY2.MinorGrid.Enabled = false;
-            chartArea.AxisY2.Title = "Event Count";
+            chartArea.AxisY2.Title = options.Y2AxisTitle;
             chartArea.AxisY2.Minimum = 0;
         }
 
@@ -419,8 +419,8 @@ namespace MOE.Common.Business
         public static void SetImageProperties(Chart chart, int width, int height)
         {
             chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 720;
-            chart.Width = 1280;
+            chart.Height = height;
+            chart.Width = width;
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
         }
 
@@ -474,17 +474,16 @@ namespace MOE.Common.Business
             chartArea.AxisY2.MajorTickMark.Enabled = false;
             chartArea.AxisY2.MajorGrid.Enabled = false;
             chartArea.AxisY2.IntervalType = DateTimeIntervalType.Number;
-            chartArea.AxisY2.Title = "Volume Per Hour ";
+            chartArea.AxisY2.Title = options.Y2AxisTitle??"";
         }
         private static void SetUpY2Axis(ChartArea chartArea, SignalAggregationMetricOptions options)
         {
-            if (options.Y2AxisMax != null)
-                chartArea.AxisY2.Maximum = options.Y2AxisMax.Value;
+            chartArea.AxisY2.MaximumAutoSize = 50;
             chartArea.AxisY2.Enabled = AxisEnabled.True;
             chartArea.AxisY2.MajorTickMark.Enabled = false;
             chartArea.AxisY2.MajorGrid.Enabled = false;
             chartArea.AxisY2.IntervalType = DateTimeIntervalType.Number;
-            chartArea.AxisY2.Title = "Event Count";
+            chartArea.AxisY2.Title = options.Y2AxisTitle ?? "";
         }
 
         private static void SetUpYAxis(ChartArea chartArea, MetricOptions options)
