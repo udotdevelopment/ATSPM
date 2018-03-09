@@ -975,8 +975,6 @@ While each agency should consult with their IT department for specific guideline
                 }
             context.SaveChanges();
 
-            context.SaveChanges();
-
             context.VersionActions.AddOrUpdate(
                 new VersionAction {ID = 1, Description = "New"},
                 new VersionAction {ID = 2, Description = "Edit"},

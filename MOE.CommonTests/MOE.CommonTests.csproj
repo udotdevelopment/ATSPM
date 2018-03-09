@@ -208,6 +208,9 @@
     <Content Include="XMLDataFiles\Approaches\approachesfor7185.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="XMLDataFiles\EventLogFiles\ControllerEventLogs7185201710175-6pm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="XMLDataFiles\Detectors\detectorsFor7185.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

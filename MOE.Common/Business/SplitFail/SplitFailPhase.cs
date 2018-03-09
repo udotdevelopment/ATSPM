@@ -115,12 +115,12 @@ namespace MOE.Common.Business.SplitFail
         {
             var controllerEventsRepository = ControllerEventLogRepositoryFactory.Create();
             var phaseNumber = GetPermissivePhase ? Approach.PermissivePhaseNumber.Value : Approach.ProtectedPhaseNumber;
-            var detectors = Approach.Signal.GetDetectorsForSignalThatSupportAMetricByPhaseNumber(12, phaseNumber);
+            var detectors = Approach.GetDetectorsForMetricType(12);
 
             foreach (var detector in detectors)
             {
-                var lastCycle = Cycles.LastOrDefault();
-                options.EndDate = lastCycle?.EndTime ?? options.EndDate;
+                var lastCycle = Cycles.OrderBy(c => c.StartTime).LastOrDefault();
+                //options.EndDate = lastCycle?.EndTime ?? options.EndDate;
                 var events = controllerEventsRepository.GetEventsByEventCodesParam(Approach.SignalID,
                     options.StartDate, options.EndDate, new List<int> {81, 82}, detector.DetChannel);
                 if (!events.Any())
@@ -139,6 +139,7 @@ namespace MOE.Common.Business.SplitFail
 
         private void AddDetectorActivationsFromList(List<Controller_Event_Log> events)
         {
+            events = events.OrderBy(e => e.Timestamp).ToList();
             for (var i = 0; i < events.Count - 2; i++)
                 if (events[i].EventCode == 82 && events[i + 1].EventCode == 81)
                     _detectorActivations.Add(new SplitFailDetectorActivation

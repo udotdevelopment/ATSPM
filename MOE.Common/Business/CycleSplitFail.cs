@@ -48,26 +48,26 @@ namespace MOE.Common.Business
 
                       //DetStart BEFORE redStart and detOff after cycleEnd
                       || d.DetectorOn <= RedEvent && d.DetectorOff >= EndTime).OrderBy(d => d.DetectorOn).ToList();
-            //if (activationsDuringRed.Count == 0)
-            //{
-            //    RedOccupancyTime = CheckForDetectorActivationBiggerThanPeriod(RedEvent, redPeriodToAnalyze, detectorActivations);
-            //}
-            //else
-            //{
-            RedOccupancyTimeInMilliseconds = GetOccupancy(RedEvent, redPeriodToAnalyze, ActivationsDuringRed);
-            //}
+            if (ActivationsDuringRed.Count == 0)
+            {
+                RedOccupancyTimeInMilliseconds = CheckForDetectorActivationBiggerThanPeriod(RedEvent, redPeriodToAnalyze, detectorActivations);
+            }
+            else
+            {
+                RedOccupancyTimeInMilliseconds = GetOccupancy(RedEvent, redPeriodToAnalyze, ActivationsDuringRed);
+            }
             ActivationsDuringGreen = detectorActivations.Where(d =>
                 d.DetectorOn >= StartTime && d.DetectorOn < YellowEvent ||
                 d.DetectorOff >= StartTime && d.DetectorOff < YellowEvent ||
                 d.DetectorOn <= StartTime && d.DetectorOff >= YellowEvent).OrderBy(d => d.DetectorOn).ToList();
-            //if (activationsDuringGreen.Count == 0)
-            //{
-            //    GreenOccupancyTime = CheckForDetectorActivationBiggerThanPeriod(StartTime, YellowEvent, detectorActivations);
-            //}
-            //else
-            //{
-            GreenOccupancyTimeInMilliseconds = GetOccupancy(StartTime, YellowEvent, ActivationsDuringGreen);
-            //}
+            if (ActivationsDuringGreen.Count == 0)
+            {
+                GreenOccupancyTimeInMilliseconds = CheckForDetectorActivationBiggerThanPeriod(StartTime, YellowEvent, detectorActivations);
+            }
+            else
+            {
+                GreenOccupancyTimeInMilliseconds = GetOccupancy(StartTime, YellowEvent, ActivationsDuringGreen);
+            }
             double millisecondsOfRedStart = FirstSecondsOfRed * 1000;
             RedOccupancyPercent = RedOccupancyTimeInMilliseconds / millisecondsOfRedStart * 100;
             GreenOccupancyPercent = GreenOccupancyTimeInMilliseconds / TotalGreenTimeMilliseconds * 100;

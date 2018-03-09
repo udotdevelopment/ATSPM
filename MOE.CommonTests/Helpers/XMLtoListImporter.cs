@@ -201,7 +201,7 @@ namespace MOE.CommonTests.Helpers
             {
                 var signal = db.Signals.Where(s => s.SignalID == e.SignalID).FirstOrDefault();
 
-                    if(signal!=null)
+                if(signal!=null)
                 {
                     signal.Approaches = new List<Approach>();
                     signal.Approaches.Add(e);

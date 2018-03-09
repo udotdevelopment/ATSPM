@@ -314,7 +314,6 @@ namespace MOE.CommonTests.Models
                           select r).OrderByDescending(x => x.Start).Take(1).FirstOrDefault();
 
 
-
             return signal;
         }
 

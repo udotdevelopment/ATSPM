@@ -157,9 +157,15 @@ namespace MOE.Common.Models
         {
             var detectorsForMetricType = new List<Detector>();
             if (Detectors != null)
+            {
                 foreach (var d in Detectors)
+                {
                     if (d.DetectorSupportsThisMetric(metricTypeID))
+                    {
                         detectorsForMetricType.Add(d);
+                    }
+                }
+            }
             return detectorsForMetricType;
         }
     }
