@@ -11,24 +11,24 @@ namespace MOE.Common.Business.DataAggregation
         public EventCountAggregationBySignal(ApproachEventCountAggregationOptions options, Models.Signal signal) : base(
             options, signal)
         {
-            ApproachEventCountures = new List<EventCountAggregationByApproach>();
-            GetApproachEventCountAggregationContainersForAllApporaches(options, signal);
+            ApproachEventCounts = new List<EventCountAggregationByApproach>();
+            GetApproachEventCountAggregationContainersForAllApproaches(options, signal);
             LoadBins(null, null);
         }
 
         public EventCountAggregationBySignal(ApproachEventCountAggregationOptions options, Models.Signal signal,
             int phaseNumber) : base(options, signal)
         {
-            ApproachEventCountures = new List<EventCountAggregationByApproach>();
+            ApproachEventCounts = new List<EventCountAggregationByApproach>();
             foreach (var approach in signal.Approaches)
                 if (approach.ProtectedPhaseNumber == phaseNumber)
                 {
-                    ApproachEventCountures.Add(
+                    ApproachEventCounts.Add(
                         new EventCountAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber == phaseNumber)
-                        ApproachEventCountures.Add(
+                        ApproachEventCounts.Add(
                             new EventCountAggregationByApproach(approach, options, options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
@@ -39,16 +39,16 @@ namespace MOE.Common.Business.DataAggregation
         public EventCountAggregationBySignal(ApproachEventCountAggregationOptions options, Models.Signal signal,
             DirectionType direction) : base(options, signal)
         {
-            ApproachEventCountures = new List<EventCountAggregationByApproach>();
+            ApproachEventCounts = new List<EventCountAggregationByApproach>();
             foreach (var approach in signal.Approaches)
                 if (approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
                 {
-                    ApproachEventCountures.Add(
+                    ApproachEventCounts.Add(
                         new EventCountAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null)
-                        ApproachEventCountures.Add(
+                        ApproachEventCounts.Add(
                             new EventCountAggregationByApproach(approach, options, options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
@@ -56,7 +56,7 @@ namespace MOE.Common.Business.DataAggregation
             LoadBins(null, null);
         }
 
-        public List<EventCountAggregationByApproach> ApproachEventCountures { get; }
+        public List<EventCountAggregationByApproach> ApproachEventCounts { get; }
 
         protected override void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal)
         {
@@ -64,10 +64,10 @@ namespace MOE.Common.Business.DataAggregation
             for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
             {
                 var bin = BinsContainers[i].Bins[binIndex];
-                foreach (var approachEventCountAggregationContainer in ApproachEventCountures)
+                foreach (var approachEventCountAggregationContainer in ApproachEventCounts)
                 {
                     bin.Sum += approachEventCountAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
-                    bin.Average = ApproachEventCountures.Count > 0 ? bin.Sum / ApproachEventCountures.Count : 0;
+                    bin.Average = ApproachEventCounts.Count > 0 ? bin.Sum / ApproachEventCounts.Count : 0;
                     }
             }
         }
@@ -78,25 +78,25 @@ namespace MOE.Common.Business.DataAggregation
             for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
             {
                 var bin = BinsContainers[i].Bins[binIndex];
-                foreach (var approachEventCountAggregationContainer in ApproachEventCountures)
+                foreach (var approachEventCountAggregationContainer in ApproachEventCounts)
                 {
                     bin.Sum += approachEventCountAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
-                    bin.Average = ApproachEventCountures.Count > 0 ? bin.Sum / ApproachEventCountures.Count : 0;
+                    bin.Average = ApproachEventCounts.Count > 0 ? bin.Sum / ApproachEventCounts.Count : 0;
                 }
             }
         }
 
-        private void GetApproachEventCountAggregationContainersForAllApporaches(
+        private void GetApproachEventCountAggregationContainersForAllApproaches(
             ApproachEventCountAggregationOptions options, Models.Signal signal)
         {
             foreach (var approach in signal.Approaches)
             {
-                ApproachEventCountures.Add(
+                ApproachEventCounts.Add(
                     new EventCountAggregationByApproach(approach, options, options.StartDate,
                         options.EndDate,
                         true, options.SelectedAggregatedDataType));
                 if (approach.PermissivePhaseNumber != null)
-                    ApproachEventCountures.Add(
+                    ApproachEventCounts.Add(
                         new EventCountAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             false, options.SelectedAggregatedDataType));
@@ -107,8 +107,8 @@ namespace MOE.Common.Business.DataAggregation
         public int GetEventCountsByDirection(DirectionType direction)
         {
             var splitFails = 0;
-            if (ApproachEventCountures != null)
-                splitFails = ApproachEventCountures
+            if (ApproachEventCounts != null)
+                splitFails = ApproachEventCounts
                     .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
                     .Sum(a => a.BinsContainers.FirstOrDefault().SumValue);
             return splitFails;
@@ -116,7 +116,7 @@ namespace MOE.Common.Business.DataAggregation
 
         public int GetAverageEventCountsByDirection(DirectionType direction)
         {
-            var approachEventCounturesByDirection = ApproachEventCountures
+            var approachEventCounturesByDirection = ApproachEventCounts
                 .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID);
             var splitFails = 0;
             if (approachEventCounturesByDirection.Any())

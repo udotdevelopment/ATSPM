@@ -98,6 +98,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public List<string> ReturnList { get; set; }
 
+        public string Y2AxisTitle { get; set; }
+
         public List<Tuple<string, string>> ResultChartAndXmlLocations { get; set; } = new List<Tuple<string, string>>();
 
         public virtual List<string> CreateMetric()

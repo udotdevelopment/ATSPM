@@ -51,7 +51,7 @@ namespace MOE.Common.Business.DataAggregation
                                     break;
                                 default:
 
-                                    throw new Exception("Unknown Aggregate Data Type for Split Failure");
+                                    throw new Exception("Unknown Aggregate Data Type for Event Count");
                             }
 
                             concurrentBins.Add(new Bin

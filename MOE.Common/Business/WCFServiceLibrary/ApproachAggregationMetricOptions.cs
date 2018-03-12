@@ -70,7 +70,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chart.Series.Add(series);
         }
 
-        private Series GetDirectionXAxisDirectionSeries(Models.Signal signal)
+        public virtual Series GetDirectionXAxisDirectionSeries(Models.Signal signal)
         {
             var series = CreateSeries(0, signal.SignalDescription);
             var directionsList = GetFilteredDirections();
@@ -94,7 +94,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return series;
         }
 
-        private List<DirectionType> GetFilteredDirections()
+        public List<DirectionType> GetFilteredDirections()
         {
             var direcitonRepository = DirectionTypeRepositoryFactory.Create();
             var includedDirections = FilterDirections.Where(f => f.Include).Select(f => f.DirectionTypeId).ToList();

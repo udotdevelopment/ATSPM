@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.DataAggregation;
 using MOE.Common.Models;
@@ -123,6 +124,29 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     bin.Average = Convert.ToInt32(Math.Round((double) (bin.Sum / signals.Count)));
                 }
             return binsContainers;
+        }
+
+        public override Series GetDirectionXAxisDirectionSeries(Models.Signal signal)
+        {
+            var series = CreateSeries(-1, signal.SignalDescription);
+            var directionsList = GetFilteredDirections();
+            var columnCounter = 1;
+            
+            foreach (var direction in directionsList)
+            {
+                var dataPoint = new DataPoint();
+                dataPoint.XValue = columnCounter;
+                if (SelectedAggregationType == AggregationType.Sum)
+                    dataPoint.SetValueY(GetSumByDirection(signal, direction));
+                else
+                    dataPoint.SetValueY(GetAverageByDirection(signal, direction));
+                dataPoint.AxisLabel = direction.Description;
+                dataPoint.Color = GetSeriesColorByNumber(-1);
+                series.Points.Add(dataPoint);
+                columnCounter++;
+            }
+
+            return series;
         }
 
 
