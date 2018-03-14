@@ -45,13 +45,17 @@ namespace MOE.Common.Business.WCFServiceLibrary
     {
         public MetricOptions()
         {
+            var applicationSettingRepository = ApplicationSettingsRepositoryFactory.Create();
+
+            GeneralSettings generalSettings = applicationSettingRepository.GetGeneralSettings();
+
             SignalID = string.Empty;
             YAxisMin = 0;
             Y2AxisMax = 0;
             Y2AxisMin = 0;
             MetricTypeID = 0;
-            MetricFileLocation = ConfigurationManager.AppSettings["ImageLocation"];
-            MetricWebPath = ConfigurationManager.AppSettings["ImageWebLocation"];
+            MetricFileLocation = generalSettings.ImagePath;
+            MetricWebPath = generalSettings.ImageUrl;
             ReturnList = new List<string>();
         }
 
@@ -106,6 +110,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var metricTypeRepository = MetricTypeRepositoryFactory.Create();
             MetricType = metricTypeRepository.GetMetricsByID(MetricTypeID);
+
+  
             LogMetricRun();
             return new List<string>();
         }
