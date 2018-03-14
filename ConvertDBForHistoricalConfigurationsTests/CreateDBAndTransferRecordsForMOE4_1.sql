@@ -1345,6 +1345,7 @@ insert into Controller_Event_Log select  top 10000 * from SRWTCMOE.MOE.dbo.Contr
 
 
 insert into DetectorComments select ID,Timestamp, CommentText from SRWTCMOE.MOE.dbo.DetectorComments
+insert into DetectionTypeDetector select ID,DetectionTypeID from SRWTCMOE.MOE.dbo.DetectionTypeDetector
 
 insert into DownloadAgreements select CompanyName, Address, PhoneNumber, EmailAddress, Acknowledged, AgreementDate from SRWTCMOE.MOE.dbo.DownloadAgreements
 
