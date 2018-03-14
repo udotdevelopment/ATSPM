@@ -16,8 +16,8 @@ namespace MOE.Common.Business
             var approaches = signal.GetApproachesForSignalThatSupportMetric(metricTypeId);
             if (signal.Approaches != null && approaches.Count > 0)
             {
-                Parallel.ForEach(approaches, approach =>
-                    //foreach (Models.Approach approach in approaches)
+                //Parallel.ForEach(approaches, approach =>
+                foreach (Models.Approach approach in approaches)
                 {
                     var protectedSignalPhase = new SignalPhase(startDate, endDate, approach, showVolume, binSize,
                         metricTypeId, false);
@@ -28,7 +28,8 @@ namespace MOE.Common.Business
                             metricTypeId, true);
                         SignalPhaseList.Add(permissiveSignalPhase);
                     }
-                });
+                }//);
+                //TODO: Should we remove phases with no cycles?
                 SignalPhaseList = SignalPhaseList.OrderBy(s => s.Approach.ProtectedPhaseNumber).ToList();
             }
         }

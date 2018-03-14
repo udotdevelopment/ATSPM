@@ -102,6 +102,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Business\WCFServiceLibrary\NonAggregateCharts\AoROptionsTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationApproachXTests .cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationTimeXApproachSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\JustDirectionXSeriesDirectionTestsBase - Copy.cs" />

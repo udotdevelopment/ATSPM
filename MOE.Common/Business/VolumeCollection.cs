@@ -24,7 +24,7 @@ namespace MOE.Common.Business
             foreach (var row in detectorEvents)
             {
                 var query = from item in Items
-                    where item.StartTime < row.Timestamp && item.EndTime > row.Timestamp
+                    where item.StartTime <= row.Timestamp && item.EndTime > row.Timestamp
                     select item;
 
 
@@ -33,9 +33,6 @@ namespace MOE.Common.Business
             }
         }
 
-        public void AddItem(Volume volume)
-        {
-            Items.Add(volume);
-        }
+
     }
 }

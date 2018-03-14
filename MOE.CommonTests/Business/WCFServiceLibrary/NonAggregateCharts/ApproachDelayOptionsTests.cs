@@ -18,7 +18,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestInitialize()]
         public void Initialize()
         {
-            ChartTestHelper.InitializeTestDataFor7185Feb022018(db);
+            ChartTestHelper.InitializeTestDataFor7185Feb012018(db);
 
         }
         [TestMethod()]

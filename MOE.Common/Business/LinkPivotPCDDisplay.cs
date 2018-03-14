@@ -103,6 +103,7 @@ namespace MOE.Common.Business
         private void GeneratePcd(Approach approach, int delta, DateTime startDate, DateTime endDate, bool upstream,
             int maxYAxis)
         {
+            var settings = Models.Repositories.ApplicationSettingsRepositoryFactory.Create().GetGeneralSettings();
             //Create a location string to show the combined cross strees
             var location = string.Empty;
             if (approach.Signal != null)
@@ -125,7 +126,7 @@ namespace MOE.Common.Business
                     {
                         //Create a chart for the upstream detector before adjustments
                         UpstreamBeforePCDPath = CreateChart(sp, startDate, endDate, location, "before",
-                            ConfigurationManager.AppSettings["ImageLocation"], maxYAxis, "UpstreamBefore");
+                            settings.ImagePath, maxYAxis, "UpstreamBefore");
 
                         //Add the total arrival on green before adjustments to the running total
                         ExistingTotalAOG += sp.TotalArrivalOnGreen;
@@ -138,7 +139,7 @@ namespace MOE.Common.Business
 
                         //Create a chart for the upstream detector after adjustments
                         UpstreamAfterPCDPath = CreateChart(sp, startDate, endDate, location, "after",
-                            ConfigurationManager.AppSettings["ImageLocation"], maxYAxis, "UpstreamAfter");
+                            settings.ImagePath, maxYAxis, "UpstreamAfter");
 
                         //Add the total arrival on green after adjustments to the running total
                         PredictedTotalAOG += sp.TotalArrivalOnGreen;
@@ -150,7 +151,7 @@ namespace MOE.Common.Business
                     {
                         //Create a chart for downstream detector before adjustments
                         DownstreamBeforePCDPath = CreateChart(sp, startDate, endDate, location, "before",
-                            ConfigurationManager.AppSettings["ImageLocation"], maxYAxis, "DownstreamBefore");
+                            settings.ImagePath, maxYAxis, "DownstreamBefore");
 
                         //Add the arrivals on green to the total arrivals on green running total
                         ExistingTotalAOG += sp.TotalArrivalOnGreen;
@@ -163,7 +164,7 @@ namespace MOE.Common.Business
 
                         //Create a pcd chart for downstream after adjustments
                         DownstreamAfterPCDPath = CreateChart(sp, startDate, endDate, location, "after",
-                            ConfigurationManager.AppSettings["ImageLocation"], maxYAxis, "DownstreamAfter");
+                            settings.ImagePath, maxYAxis, "DownstreamAfter");
 
                         //Add the total arrivals on green to the running total
                         PredictedTotalAOG += sp.TotalArrivalOnGreen;
