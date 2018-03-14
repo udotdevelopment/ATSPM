@@ -13,8 +13,13 @@ namespace MOE.Common.Business
             int binSize)
         {
             var dt = startTime;
+            var endTimeAllowPartialBinSize = endTime.AddMinutes(binSize);
+            //this allows ending time period that is shorter than the BinSize to be counted
+            //e.g. 14 min (11:45 pm - 11:49 pm) vs 15 min BinSize
+            //however it's not inclusive (not <=) so for whole time periods 
+            //(e.g. 12:00 am - 12:00 am) we will not count 1 more period
 
-            while (dt.AddMinutes(binSize) <= endTime)
+            while (dt.AddMinutes(binSize) < endTimeAllowPartialBinSize)
             {
                 var v = new Volume(dt, dt.AddMinutes(binSize), binSize);
                 Items.Add(v);

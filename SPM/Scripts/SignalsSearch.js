@@ -19,12 +19,19 @@ function ClearSignalSearch() {
     GetSignals(1);
 }
 
-$("#SignalID").keypress(function (e) {
+//$("#SignalID").keypress(function (e) {
+//    if (e.which == 13) {
+//        e.preventDefault();
+//        GetSignalLocation();
+//    }
+//});
+
+function SignalIdPress(e) {
     if (e.which == 13) {
         e.preventDefault();
         GetSignalLocation();
     }
-});
+}
 
 function GetSignals(page) {
     var filterType = $("#Filters").val();

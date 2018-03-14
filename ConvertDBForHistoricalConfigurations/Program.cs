@@ -37,12 +37,6 @@ namespace ConvertDBForHistoricalConfigurations
             UpdateApproachesWithVersionId();
             UpdateMetriCommentsWithVersionId();
             CreateRoutes();
-            
-            
-
-
-
-
         }
 
         private static void CreateRoutes()

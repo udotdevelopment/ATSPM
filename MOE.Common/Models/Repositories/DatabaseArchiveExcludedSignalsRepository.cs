@@ -22,6 +22,12 @@ namespace MOE.Common.Models.Repositories
             var excludedSignals = _db.DatabaseArchiveExcludedSignals
                 .ToList();
             var orderedSignals = excludedSignals.OrderBy(signal => signal.SignalId).ToList();
+            var signalRepository = SignalsRepositoryFactory.Create();
+            foreach (var databaseArchiveExcludedSignal in orderedSignals)
+            {
+                databaseArchiveExcludedSignal.SignalDescription =
+                    signalRepository.GetSignalDescription(databaseArchiveExcludedSignal.SignalId);
+            }
 
             return orderedSignals;
         }
@@ -42,17 +48,24 @@ namespace MOE.Common.Models.Repositories
             {
                 var newSignal = new DatabaseArchiveExcludedSignal();
                 newSignal.SignalId = signalId;
-                excludedSignals.Add(newSignal);
+                _db.DatabaseArchiveExcludedSignals.Add(newSignal);
+                _db.SaveChanges();
             }
+        }
+
+        public bool Exists(string signalId)
+        {
+            return _db.DatabaseArchiveExcludedSignals.Any(s => s.SignalId == signalId);
         }
 
         public void DeleteFromExcludedList(string signalId)
         {
-            var excludedSignals = _db.DatabaseArchiveExcludedSignals
-                .ToList();
             var signalToDelete = GetExcludedSignalBySignalId(signalId);
             if (signalToDelete != null)
-                excludedSignals.Remove(signalToDelete);
+            {
+                _db.DatabaseArchiveExcludedSignals.Remove(signalToDelete);
+                _db.SaveChanges();
+            }
         }
     }
 }

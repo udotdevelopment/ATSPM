@@ -99,9 +99,17 @@
                 </div>
             </div>
         </div>
-
-        
-                @Html.EditorFor(model => model.ExcludedSignals)
+        <div class="col-md-6">
+            @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
+        </div>
+        <div class="col-md-6">
+            <table class="table table-striped">
+                <tbody id="SignalExclusionList">
+                    <tr><th>Signal Id</th><th>Signal Description</th><th>Remove</th></tr>
+                    @Html.EditorFor(model => model.ExcludedSignals)
+                </tbody>
+            </table>
+        </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Save" class="btn btn-default" />
@@ -113,4 +121,13 @@
 {
     <script type="text/javascript" src="~/Scripts/ArchiveSettings.js"></script>
     <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
+    <script type="text/javascript" src="~/Scripts/Map.js"></script>
+<script type="text/javascript" src="~/Scripts/AddData.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
+    <script type="text/javascript">
+        var urlpathAddSignal = '@Url.Action("AddSignal", "DatabaseArchiveSettings")';
+        var urlpathRemoveSignal = '@Url.Action("RemoveSignal", "DatabaseArchiveSettings")';
+        var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';
+
+    </script>
 }

@@ -8,5 +8,6 @@ namespace MOE.Common.Models.Repositories
         DatabaseArchiveExcludedSignal GetExcludedSignalBySignalId(string signalId);
         void DeleteFromExcludedList(string signalId);
         void AddToExcludedList(string signalId);
+        bool Exists(string signalId);
     }
 }
