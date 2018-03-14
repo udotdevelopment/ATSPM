@@ -3,7 +3,7 @@
     ShowDeleteMoveOptions();
 });
 function ShowArchiveSettings() {
-    var archiveEnabled = $("#EnableDatbaseArchive").is(":checked");;
+    var archiveEnabled = $("#DatabaseArchiveSettings_EnableDatbaseArchive").is(":checked");;
     if (archiveEnabled == true) {
         $('#EnabledArchiveSettings').removeClass("hidden");
     }
@@ -12,35 +12,42 @@ function ShowArchiveSettings() {
     }
 }
 
+function RemoveSignal(signalId) {
+    $.ajax({
+        url: urlpathRemoveSignal + "/" + signalId,
+        type: "POST",
+        headers: GetRequestVerificationTokenObject(),
+        cache: false,
+        async: true,
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            $('#'+signalId).remove();
+        },
+        onerror: function () { alert("Error"); }
+    });
+}
+
 function ShowDeleteMoveOptions() {
-    var deleteOrMove = $("#SelectedDeleteOrMove").val();
+    var deleteOrMove = $("#DatabaseArchiveSettings_SelectedDeleteOrMove").val();
     if (deleteOrMove == 2) {
         $('#MoveOption').removeClass("hidden");
-        var tableType = $("#SelectedTableScheme").val();
+        var tableType = $("#DatabaseArchiveSettings_SelectedTableScheme").val();
         if (tableType == 2) {
-            $('#DeleteForStandardTable').removeClass("hidden");
+            $('#DatabaseArchiveSettings_DeleteForStandardTable').removeClass("hidden");
         } else {
-            $('#DeleteForStandardTable').addClass("hidden");
+            $('#DatabaseArchiveSettings_DeleteForStandardTable').addClass("hidden");
         }
     }
     else {
         $('#MoveOption').addClass("hidden");
-        var tableType = $("#SelectedTableScheme").val();
+        var tableType = $("#DatabaseArchiveSettings_SelectedTableScheme").val();
         if (tableType == 2) {
-            $('#DeleteForStandardTable').removeClass("hidden");
+            $('#DatabaseArchiveSettings_DeleteForStandardTable').removeClass("hidden");
         } else {
-            $('#DeleteForStandardTable').addClass("hidden");
+            $('#DatabaseArchiveSettings_DeleteForStandardTable').addClass("hidden");
         }
     }
 }
-
-function UseArchiveNoOptions() {
-    var NoUseArchive = document.getElementById("UseArchiveNo").checked;
-    if (NoUseArchive == true) {
-        $('#DivOff').addClass("hidden");
-    }
-}
-
 
 function PartitionTablesOptions() {
     var thisIsPartitionTable = document.getElementById("IsPartitionTables").checked;
@@ -51,39 +58,17 @@ function PartitionTablesOptions() {
     }
 }
 
-function NonPartitionTablesOptions() {
-    var thisIsNonPartitionTable = document.getElementById("IsNonPartitionTables").checked;
-    if (thisIsNonPartitionTable == true) {
-        $('#DivOff').removeClass("hidden");
-        $('#DivMonthsToRemoveIndex').addClass("hidden");
-        $('#DivEndTime').removeClass("hidden");
-    }
-}
 
-function DeleteOptions() {
-    var thisIsDelete = document.getElementById("IsDelete").checked;
-    if (thisIsDelete == true) {
-        $('#DivMovePath').addClass("hidden");
-    }
-}
-
-function MoveOptions() {
-    var thisIsMove = document.getElementById("IsMove").checked;
-    if (thisIsMove == true) {
-        $('#DivMovePath').removeClass("hidden");
-    }
-}
-
-function LoadSignal() {
+function LoadExclusionSignal() {
     var signalId = $("#SignalID").val();
     $.ajax({
-        url: urlpathGetSignal + "/" + signalId,
+        url: urlpathAddSignal + "/" + signalId,
         type: "GET",
         cache: false,
         async: true,
         contentType: "application/json; charset=utf-8",
         success: function (data) {
-            $('#ExcludedSignals').append(data);
+            $('#SignalExclusionList').append(data);
             $.validator.unobtrusive.parse($("#ExcludedSignals"));
         },
         onerror: function () { alert("Error"); }
@@ -109,9 +94,15 @@ function GetSignalLocation(selectedMetricID) {
     $.get(urlpathGetSignalLocation, tosend, function (data) {
         $('#SignalLocation').text(data);
         if (data != "Signal Not Found") {
-            LoadSignal();
+            LoadExclusionSignal();
         }
     });
 }
 
+function GetRequestVerificationTokenObject() {
+    var headers = {};
+    var token = $('[name=__RequestVerificationToken]').val();
+    headers['__RequestVerificationToken'] = token;
+    return headers;
+}
 

@@ -111,6 +111,11 @@ namespace MOE.Common.Models.Repositories
             return signals;
         }
 
+        public bool Exists(string signalId)
+        {
+            return _db.DatabaseArchiveExcludedSignals.Any(s => s.SignalId == signalId);
+        }
+
         public Signal CopySignalToNewVersion(Signal originalVersion)
         {
             var newVersion = new Signal();

@@ -507,5 +507,10 @@ namespace MOE.CommonTests.Models
             }
             return signals;
         }
+
+        public bool Exists(string signalId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

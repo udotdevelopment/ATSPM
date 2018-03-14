@@ -595,7 +595,7 @@
     </None>
     <Content Include="Views\AggregateDataExport\MetricResult.cshtml" />
     <Content Include="Views\DatabaseArchiveSettings\Edit.cshtml" />
-    <Content Include="Views\ArchiveSettings\EditorTemplates\DatabaseArchiveExcludedSignal.cshtml" />
+    <Content Include="Views\DatabaseArchiveSettings\EditorTemplates\DatabaseArchiveExcludedSignal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
