@@ -25,8 +25,6 @@ namespace MOE.Common.Models
         {
             get
             {
-                if (Start == DateTime.MaxValue || Start == Convert.ToDateTime("12/31/9999"))
-                    return "Current";
                 return Start.ToShortDateString() + " - " + Note;
             }
         }
@@ -230,12 +228,14 @@ namespace MOE.Common.Models
 
         public static Signal CopyVersion(Signal origVersion)
         {
+            var signalRepository = Repositories.SignalsRepositoryFactory.Create();
             var newVersion = new Signal();
-
             CopyCommonSignalSettings(origVersion, newVersion);
-
             newVersion.SignalID = origVersion.SignalID;
-
+            newVersion.IPAddress = newVersion.IPAddress;
+            newVersion.Start = DateTime.Now;
+            newVersion.Note = "Copy of " + origVersion.Note;
+            newVersion.VersionList = signalRepository.GetAllVersionsOfSignalBySignalID(newVersion.SignalID);
             return newVersion;
         }
 

@@ -207,7 +207,7 @@ namespace MOE.Common.Models.Repositories
         public List<Pin> GetPinInfo()
         {
             var pins = new List<Pin>();
-            foreach (var signal in GetLatestVersionOfAllSignals().Where(s => s.Enabled).ToList())
+            foreach (var signal in GetLatestVersionOfAllSignals().Where(s => s.Enabled && s.SignalID == "7063").ToList())
             {
                 var pin = new Pin(signal.SignalID, signal.Latitude,
                     signal.Longitude,
@@ -371,7 +371,10 @@ namespace MOE.Common.Models.Repositories
                 .Where(signal => signal.VersionActionId != 3)
                 .OrderByDescending(signal => signal.Start)
                 .FirstOrDefault();
-
+            if (returnSignal != null)
+            {
+                returnSignal.VersionList = GetAllVersionsOfSignalBySignalID(returnSignal.SignalID);
+            }
             return returnSignal;
         }
 

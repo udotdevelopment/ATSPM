@@ -23,7 +23,8 @@ namespace MOE.Common.Models.Repositories
 
         public DatabaseArchiveSettings GetDatabaseArchiveSettings()
         {
-            return db.DatabaseArchiveSettings.First();
+            var archiveSettings = db.DatabaseArchiveSettings.First();
+            return archiveSettings;
         }
 
         public GeneralSettings GetGeneralSettings()

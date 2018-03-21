@@ -147,10 +147,12 @@
     <Compile Include="Business\WCFServiceLibrary\SignalAggregationCreateMetricTestsBase.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalAggregationMetricOptionsTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\SplitFailOptionsTests.cs" />
+    <Compile Include="Controllers\SignalsControllerTests.cs" />
     <Compile Include="Helpers\XmlHelperTests.cs" />
     <Compile Include="Helpers\XmlToListImporter.cs" />
     <Compile Include="Helpers\AddControllerEventLogsToInMemoryDb.cs" />
     <Compile Include="Models\Custom\DetectorTests.cs" />
+    <Compile Include="Models\Custom\SignalTests.cs" />
     <Compile Include="Models\InMemorySpeedEventRepository.cs" />
     <Compile Include="Models\InMemoryYellowRedActivationsAggregationRepository - Copy.cs" />
     <Compile Include="Models\InMemoryPcdAggregationRepository.cs" />

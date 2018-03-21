@@ -309,13 +309,13 @@ namespace SPM.Controllers
         {
             MOE.Common.Models.Signal copyVersion = new MOE.Common.Models.Signal();
 
-            Signal origVersion = _signalsRepository.GetSignalVersionByVersionId(versionId);
-            if (origVersion != null)
+            Signal originalVersion = _signalsRepository.GetSignalVersionByVersionId(versionId);
+            if (originalVersion != null)
             {
-                copyVersion = MOE.Common.Models.Signal.CopyVersion(origVersion);
+                copyVersion = MOE.Common.Models.Signal.CopyVersion(originalVersion);
                 copyVersion.VersionActionId = 4;
                 copyVersion.Start = DateTime.Today;
-                copyVersion.Note = "Copy of Version " + origVersion.Note;
+                copyVersion.Note = "Copy of Version " + originalVersion.Note;
             }
             try
             {
@@ -565,9 +565,6 @@ namespace SPM.Controllers
 
         private void AddSelectListsToViewBag(MOE.Common.Models.Signal signal)
         {
-
-
-           
             ViewBag.ControllerType = new SelectList(_controllerTypeRepository.GetControllerTypes(), "ControllerTypeID", "Description", signal.ControllerTypeID);
             ViewBag.Region = new SelectList(_regionRepository.GetAllRegions(), "ID", "Description", signal.RegionID);
             ViewBag.DirectionType = new SelectList(_directionTypeRepository.GetAllDirections(), "DirectionTypeID", "Abbreviation");
@@ -633,12 +630,27 @@ namespace SPM.Controllers
             {
                 mostRecentVersion = _signalsRepository.GetLatestVersionOfSignalBySignalID(sigId);
                 AddSelectListsToViewBag(mostRecentVersion);
+                var detectionTypesRepository = MOE.Common.Models.Repositories.DetectionTypeRepositoryFactory.Create();
+                var detectionTypes = detectionTypesRepository.GetAllDetectionTypes();
+                var hardwareTypesRepository =
+                    MOE.Common.Models.Repositories.DetectionHardwareRepositoryFactory.Create();
+                var hardwareTypes = hardwareTypesRepository.GetAllDetectionHardwares();
+                foreach (var approach in mostRecentVersion.Approaches)
+                {
+                    foreach (var detector in approach.Detectors)
+                    {
+                        detector.AllDetectionTypes = detectionTypes;
+                        detector.AllHardwareTypes = hardwareTypes;
+                        detector.DetectionTypeIDs = new List<int>();
+                        foreach (var detectionType in detector.DetectionTypes)
+                        {
+                            detector.DetectionTypeIDs.Add(detectionType.DetectionTypeID);
+                        }
+                    }
+                }
             }
-
-
-             
-
             return PartialView("Edit", mostRecentVersion);
+
         }
     }
 }
