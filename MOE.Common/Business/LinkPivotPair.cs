@@ -391,6 +391,7 @@ namespace MOE.Common.Business
 
         private void GetNewResultsChart(string chartLocation)
         {
+
             var chart = new Chart();
 
             //Set the chart properties
@@ -490,8 +491,10 @@ namespace MOE.Common.Business
             chart.SaveImage(chartLocation + @"LinkPivot\" + chartName,
                 ChartImageFormat.Jpeg);
 
-            ResultChartLocation = ConfigurationManager.AppSettings["ImageWebLocation"] +
-                                  @"LinkPivot/" + chartName;
+            var settingsRepository =
+                Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
+
+            ResultChartLocation = settingsRepository.GetGeneralSettings().ImageUrl;
         }
 
 

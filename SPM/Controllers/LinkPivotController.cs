@@ -13,7 +13,17 @@ namespace SPM.Controllers
     public class LinkPivotController : Controller
     {
         private MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
-        // GET: LinkPivot
+        private readonly GeneralSettings _settings;
+        LinkPivotController()
+        {
+
+            var settingsRepository
+            = MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
+
+         _settings = settingsRepository.GetGeneralSettings();
+        }
+
+    // GET: LinkPivot
         public ActionResult Analysis()
         {
             var lp = new MOE.Common.Models.ViewModel.LinkPivotViewModel();
@@ -51,9 +61,9 @@ namespace SPM.Controllers
         {
             if (ModelState.IsValid)
             {
-                DateTime _StartDate = Convert.ToDateTime(lpvm.StartDate.ToShortDateString() + " " + lpvm.StartTime +
+                DateTime startDate = Convert.ToDateTime(lpvm.StartDate.ToShortDateString() + " " + lpvm.StartTime +
                     " " + lpvm.StartAMPM);
-                DateTime _EndDate = Convert.ToDateTime(lpvm.EndDate.ToShortDateString() + " " + lpvm.EndTime +
+                DateTime endDate = Convert.ToDateTime(lpvm.EndDate.ToShortDateString() + " " + lpvm.EndTime +
                     " " + lpvm.EndAMPM);
 
                 LinkPivotServiceReference.LinkPivotServiceClient client =
@@ -61,6 +71,7 @@ namespace SPM.Controllers
 
                 //TestLinkPivot.LinkPivotServiceClient client =
                 //    new TestLinkPivot.LinkPivotServiceClient();
+
 
 
                 LinkPivotServiceReference.AdjustmentObject[] adjustments;
@@ -72,10 +83,10 @@ namespace SPM.Controllers
                 {
                     adjustments = client.GetLinkPivot(
                         lpvm.SelectedRouteId,
-                        _StartDate,
-                        _EndDate,
+                        startDate,
+                        endDate,
                         lpvm.CycleLength,
-                        ConfigurationManager.AppSettings["LinkPivotImageLocation"],
+                        _settings.ImagePath,
                         "Downstream",
                         lpvm.Bias,
                         lpvm.BiasUpDownStream,
@@ -92,10 +103,10 @@ namespace SPM.Controllers
                 {
                     adjustments = client.GetLinkPivot(
                         lpvm.SelectedRouteId,
-                        _StartDate,
-                        _EndDate,
+                        startDate,
+                        endDate,
                         lpvm.CycleLength,
-                        ConfigurationManager.AppSettings["LinkPivotImageLocation"],
+                        _settings.ImagePath,
                         "Upstream",
                         lpvm.Bias,
                         lpvm.BiasUpDownStream,
@@ -199,7 +210,9 @@ namespace SPM.Controllers
                     pcdEndDate, pcdOptions.YAxis);
                 client.Close();
                 MOE.Common.Models.ViewModel.LinkPivotPCDsViewModel pcdModel = new MOE.Common.Models.ViewModel.LinkPivotPCDsViewModel();
-                string imagePath = ConfigurationManager.AppSettings["SPMImageLocation"] + "LinkPivot/";
+
+                string imagePath = _settings.ImagePath;
+
                 pcdModel.ExistingChart = imagePath + display.UpstreamBeforePCDPath;
                 pcdModel.PredictedChart = imagePath + display.UpstreamAfterPCDPath;
                 pcdModel.ExistingDownChart = imagePath + display.DownstreamBeforePCDPath;

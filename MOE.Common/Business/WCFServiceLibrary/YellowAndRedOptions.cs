@@ -102,7 +102,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             base.CreateMetric();
             var returnList = new List<string>();
-            //string MetricLocation = ConfigurationManager.AppSettings["ImageLocation"];
+          
 
             var signalphasecollection =
                 new RLMSignalPhaseCollection(StartDate, EndDate, SignalID, BinSize, SevereLevelSeconds);

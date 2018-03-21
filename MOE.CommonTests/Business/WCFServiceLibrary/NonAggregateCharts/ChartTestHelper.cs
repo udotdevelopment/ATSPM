@@ -6,7 +6,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.NonAggregateCharts
 {
     public class ChartTestHelper
     {
-        public static void InitializeTestDataFor7185Feb022018(InMemoryMOEDatabase db)
+        public static void InitializeTestDataFor7185Feb012018(InMemoryMOEDatabase db)
         {
             db.ClearTables();
             XmlToListImporter.LoadControllerEventLog("7185Events02_01_2018.Xml", db);

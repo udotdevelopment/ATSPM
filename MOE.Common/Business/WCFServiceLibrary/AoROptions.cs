@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using System.Web.UI.DataVisualization.Charting;
@@ -10,12 +11,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
     {
         public AoROptions()
         {
-            BinSizeList = new List<int>();
-            BinSizeList.Add(15);
-            BinSizeList.Add(5);
-            MetricTypeID = 9;
+
             SetDefaults();
         }
+
+        public AoROptions(string signalId, DateTime start, DateTime end,  bool showPlanStatistics, int selectedBinSize)
+        {
+            SetDefaults();
+            StartDate = start;
+            EndDate = end;
+            SignalID = signalId;
+            ShowPlanStatistics = showPlanStatistics;
+            SelectedBinSize = selectedBinSize;
+
+        }
+
+
 
         [Required]
         [DataMember]
@@ -31,17 +42,23 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public void SetDefaults()
         {
+            BinSizeList = new List<int>();
+            BinSizeList.Add(15);
+            BinSizeList.Add(5);
+            MetricTypeID = 9;
             YAxisMax = null;
             ShowPlanStatistics = true;
             SelectedBinSize = 15;
         }
+
+        
 
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
             var returnList = new List<string>();
             var signalphasecollection =
-                new SignalPhaseCollection(StartDate, EndDate, SignalID, false, SelectedBinSize, 9);
+                new SignalPhaseCollection(StartDate, EndDate, SignalID, false, SelectedBinSize, MetricTypeID);
             if (signalphasecollection.SignalPhaseList.Count > 0)
                 foreach (var signalPhase in signalphasecollection.SignalPhaseList)
                 {
@@ -59,5 +76,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 }
             return returnList;
         }
+
+
     }
 }

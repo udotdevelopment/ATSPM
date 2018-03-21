@@ -16,7 +16,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.NonAggregateCharts.Approach
         [TestInitialize()]
         public void Initialize()
         {
-            ChartTestHelper.InitializeTestDataFor7185Feb022018(db);
+            ChartTestHelper.InitializeTestDataFor7185Feb012018(db);
         }
 
         [TestMethod()]
