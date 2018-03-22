@@ -7,12 +7,12 @@
         <div class="panel-heading">
             
             <h4>
-                @*<a class="pull-right btn btn-danger" href="javascript:DeleteSignal(@Model.SignalID)">Delete &nbsp;<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>*@
-                <a class="pull-right btn btn-danger" href="javascript:DeleteSignal()">Delete This Signal &nbsp;<span class="glyphicon glyphicon-paste" aria-hidden="true"></span></a>
+                <button type="submit" class="pull-right btn btn-success" onclick="javascript:UpdateVersionDropdown()" value="Save">Save &nbsp;<span class="glyphicon glyphicon-save" aria-hidden="true"></span></button>
+                <a class="pull-right btn btn-danger" href="javascript:DeleteSignal()">Delete This Signal &nbsp;<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
                 <a class="pull-right btn btn-default" href="javascript:CopySignal()">Copy &nbsp;<span class="glyphicon glyphicon-paste" aria-hidden="true"></span></a>
                 Signal @Model.SignalID
-                <button type="submit" class="pull-right btn btn-primary"  onclick="javascript:UpdateVersionDropdown()" value="Save">Save &nbsp;<span class="glyphicon glyphicon-save" aria-hidden="true"></span></button>
-
+                <Button onclick="AddNewVersion()" class="pull-right btn btn-info">Add New Verson &nbsp;<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></Button>
+                <Button onclick="DeleteVersion()" class="pull-right btn btn-warning">Delete This Version &nbsp;<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></Button>
                 <span class="pull-right" id="ActionMessage"></span>
             </h4>
         </div>
@@ -22,43 +22,34 @@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.HiddenFor(model => model.SignalID, new { @id = "editSignalID" })
                 @Html.HiddenFor(model => model.VersionID, new { @versionId = "editVersionID" })
-        
-               
-
-                <div class="form-group-configuration-tool  form-group col-md-6">
-                    @Html.LabelFor(model => model.VersionID, htmlAttributes: new { @class = "control-label" })
-                    <div class="">
-                        @Html.DropDownList("versionDropDown", new SelectList(Model.VersionList, "VersionId", "SelectListName", Model.VersionID), new {id = "versionDropDown", @class = "form-control", @onchange = "LoadVersionByVersionID(this.value)" })
-                        @Html.ValidationMessageFor(model => model.VersionID, "", new { id = "Version-error", @class = "text-danger" })
+                <div class="row">
+                    <div class="form-group-configuration-tool  form-group col-md-4">
+                        @Html.LabelFor(model => model.VersionID, htmlAttributes: new { @class = "control-label" })
+                        <div class="">
+                            @Html.DropDownListFor(model => model.VersionID, new SelectList(Model.VersionList, "VersionId", "SelectListName", Model.VersionID), new {id = "versionDropDown", @class = "form-control", @onchange = "LoadVersionByVersionID(this.value)" })
+                            @Html.ValidationMessageFor(model => model.VersionID, "", new { id = "Version-error", @class = "text-danger" })
+                        </div>
+                    </div>
+                
+                
+                
+                    <div class="form-group-configuration-tool  form-group col-md-4">
+                        @Html.LabelFor(model => model.Start, htmlAttributes: new { @class = "control-label" })
+                        <div class="">
+                            @Html.EditorFor(model => model.Start, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                            @Html.ValidationMessageFor(model => model.Start, "", new { id = "Start-error", @class = "text-danger" })
+                        </div>
+                    </div>
+                
+                    <div class="form-group-configuration-tool  form-group col-md-4">
+                        @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label" })
+                        <div class="">
+                            @Html.EditorFor(model => model.Note, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Note, "", new { id = "Note-error", @class = "text-danger" })
+                        </div>
                     </div>
                 </div>
                 
-                <div class="form-group-configuration-tool  form-group col-md-2">
-                    @Html.Label("Add New Version")
-                    <span onclick="AddNewVersion()" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                </div>
-                
-                <div class="form-group-configuration-tool  form-group col-md-2">
-                    @Html.Label("Delete This Version")
-                    <span onclick="DeleteVersion()" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                </div>
-                
-                <div class="form-group-configuration-tool  form-group col-md-4">
-                    @Html.LabelFor(model => model.Start, htmlAttributes: new { @class = "control-label" })
-                    <div class="">
-                        @Html.EditorFor(model => model.Start, new { htmlAttributes = new { @class = "form-control datepicker" } })
-                        @Html.ValidationMessageFor(model => model.Start, "", new { id = "Start-error", @class = "text-danger" })
-                    </div>
-                </div>
-                
-                <div class="form-group-configuration-tool  form-group col-md-4">
-                    @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label" })
-                    <div class="">
-                        @Html.EditorFor(model => model.Note, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Note, "", new { id = "Note-error", @class = "text-danger" })
-                    </div>
-                </div>
-
                 <div class="form-group-configuration-tool  form-group col-md-3">
                     @Html.LabelFor(model => model.PrimaryName, htmlAttributes: new { @class = "control-label" })
                     <div class="">

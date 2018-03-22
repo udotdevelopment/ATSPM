@@ -57,11 +57,12 @@ namespace MOE.Common.Models.Repositories
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
                 .Include(signal => signal.Approaches.Select(a => a.DirectionType))
-                .Where(signal => signal.VersionID == versionId).FirstOrDefault();
-
+                .FirstOrDefault(signal => signal.VersionID == versionId);
+            if (version != null)
+            {
+                AddSignalAndDetectorLists(version);
+            }
             return version;
-
-            
         }
 
         public void SetVersionToDeleted(int versionId)
@@ -374,8 +375,31 @@ namespace MOE.Common.Models.Repositories
             if (returnSignal != null)
             {
                 returnSignal.VersionList = GetAllVersionsOfSignalBySignalID(returnSignal.SignalID);
+                AddSignalAndDetectorLists(returnSignal);
             }
             return returnSignal;
+        }
+
+        private static void AddSignalAndDetectorLists(Signal returnSignal)
+        {
+            var detectionTypesRepository = MOE.Common.Models.Repositories.DetectionTypeRepositoryFactory.Create();
+            var detectionTypes = detectionTypesRepository.GetAllDetectionTypes();
+            var hardwareTypesRepository =
+                MOE.Common.Models.Repositories.DetectionHardwareRepositoryFactory.Create();
+            var hardwareTypes = hardwareTypesRepository.GetAllDetectionHardwares();
+            foreach (var approach in returnSignal.Approaches)
+            {
+                foreach (var detector in approach.Detectors)
+                {
+                    detector.AllDetectionTypes = detectionTypes;
+                    detector.AllHardwareTypes = hardwareTypes;
+                    detector.DetectionTypeIDs = new List<int>();
+                    foreach (var detectionType in detector.DetectionTypes)
+                    {
+                        detector.DetectionTypeIDs.Add(detectionType.DetectionTypeID);
+                    }
+                }
+            }
         }
 
         public List<Signal> GetAllVersionsOfSignalBySignalID(string signalId)

@@ -33,17 +33,17 @@ function LoadVersionByVersionID(vId) {
         cache: false,
         async: true,
         contentType: "application/json; charset=utf-8",
-                    success: function (data) {
-                        $('#SignalEdit').html(data);
-                        $("#SignalConfigurationCollapseOne").addClass("in");
-                        SetDatePicker();
-                        //HideBasicCheckBoxes();
-                        $("#ConfigurationTableHeader").click(function () {
-                            GetConfigurationTableForVersion(vId);
-                        });
-                        $.validator.unobtrusive.parse($("#SignalEdit"));
-                    },
-    onerror: function () { alert("Error"); }
+        success: function (data) {
+            $('#SignalEdit').html(data);
+            $("#SignalConfigurationCollapseOne").addClass("in");
+            SetDatePicker();
+            //HideBasicCheckBoxes();
+            $("#ConfigurationTableHeader").click(function () {
+                GetConfigurationTableForVersion(vId);
+            });
+            $.validator.unobtrusive.parse($("#SignalEdit"));
+        },
+        onerror: function () { alert("Error"); }
     });
 
 }

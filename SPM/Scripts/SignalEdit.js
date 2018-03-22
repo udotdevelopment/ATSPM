@@ -19,16 +19,12 @@ function SaveError() {
 
 function AddNewVersion() {
     var signalID = $("#SignalID").val();
-    var versionId = $("#VersionID").val();
-
-    var parameters = {};
-    parameters.ID = versionId;
     $.ajax({
         type: "POST",
         cache: false,
         async: true,
         headers: GetRequestVerificationTokenObject(),
-        data: JSON.stringify({ "versionId": versionId }),
+        data: JSON.stringify({ "signalID": signalID }),
         url: urlpathCopyVersion,
         datatype: "json",
         contentType: "application/json; charset=utf-8",
@@ -173,17 +169,10 @@ function UpdateVersionDropdown()
     var selIndex = $("#versionDropDown option:selected").index();
     var dd = document.getElementById('versionDropDown');
     var oldVersionDescription = $("#versionDropDown option:selected").text();
-
-
-
     var note = $("#Note").val();
     var date = $("#End").val();
     var newVersionDescription = date + " - " + note;
-
     dd.options[selIndex].text = newVersionDescription;
-    //$("#versionDropDown option:selected").text = newVersionDescription;
-
-
 }
 
 function PostCreateComment() {

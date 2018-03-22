@@ -134,7 +134,7 @@ namespace SPM.Controllers
             AddSelectListsToViewBag(signal);
             try
             {
-                Approach newApproach = MOE.Common.Models.Approach.CopyApproach(approachID);
+                Approach newApproach = Approach.CopyApproach(approachID);
                 _approachRepository.AddOrUpdate(newApproach);
                 return Content("<h1>Copy Successful!</h1>");
             }
@@ -191,7 +191,7 @@ namespace SPM.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult CopyDetector(int ID, int versionId, int approachID, string approachIndex)
         {
-            Detector newDetector = MOE.Common.Models.Detector.CopyDetector(ID, true); //need to increase DetChannel if not copying the whole signal.
+            Detector newDetector = Detector.CopyDetector(ID, true); //need to increase DetChannel if not copying the whole signal.
             Signal signal = _signalsRepository.GetSignalVersionByVersionId(versionId);
             Approach approach = signal.Approaches.Where(s => s.ApproachID == approachID).First();
             newDetector.ApproachID = approach.ApproachID;
@@ -274,7 +274,7 @@ namespace SPM.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Copy(string id, string newId)
         {           
-            MOE.Common.Models.Signal newSignal = new MOE.Common.Models.Signal();           
+            Signal newSignal = new Signal();           
             if (id == null)
             {
                 return Content("<h1>A signal ID is required</h1>");
@@ -282,7 +282,7 @@ namespace SPM.Controllers
             Signal signal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             if (signal != null)
             {
-                newSignal = MOE.Common.Models.Signal.CopySignal(signal, newId);
+                newSignal = Signal.CopySignal(signal, newId);
                 newSignal.VersionActionId = 1;
                 newSignal.Start = DateTime.Now;
                 newSignal.Note = "Copy of Signal " + id;
@@ -305,16 +305,17 @@ namespace SPM.Controllers
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult CopyVersion(int versionId)
+        public ActionResult CopyVersion(string signalId)
         {
-            MOE.Common.Models.Signal copyVersion = new MOE.Common.Models.Signal();
+            Signal copyVersion = new Signal();
 
-            Signal originalVersion = _signalsRepository.GetSignalVersionByVersionId(versionId);
+            Signal originalVersion = _signalsRepository.GetLatestVersionOfSignalBySignalID(signalId);
             if (originalVersion != null)
             {
-                copyVersion = MOE.Common.Models.Signal.CopyVersion(originalVersion);
+                copyVersion = Signal.CopyVersion(originalVersion);
                 copyVersion.VersionActionId = 4;
                 copyVersion.Start = DateTime.Today;
+                copyVersion.IPAddress = originalVersion.IPAddress;
                 copyVersion.Note = "Copy of Version " + originalVersion.Note;
             }
             try
@@ -360,16 +361,16 @@ namespace SPM.Controllers
                     signal.Note = "";
                 }
 
-                List<MOE.Common.Models.DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
-                foreach (MOE.Common.Models.Approach a in signal.Approaches)
+                List<DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
+                foreach (Approach a in signal.Approaches)
                 {
-                    foreach (MOE.Common.Models.Detector gd in a.Detectors)
+                    foreach (Detector gd in a.Detectors)
                     {
                         gd.Index = a.Index + "Detector[" + a.Detectors.ToList().FindIndex(d => d.DetectorID == gd.DetectorID).ToString() + "].";
                         gd.AllDetectionTypes = allDetectionTypes;
                         gd.DetectionTypeIDs = new List<int>();
                         gd.DetectorComments = gd.DetectorComments.OrderByDescending(x => x.TimeStamp).ToList();
-                        foreach (MOE.Common.Models.DetectionType dt in gd.DetectionTypes)
+                        foreach (DetectionType dt in gd.DetectionTypes)
                         {
                             gd.DetectionTypeIDs.Add(dt.DetectionTypeID);
                         }
@@ -401,52 +402,38 @@ namespace SPM.Controllers
             }
             Signal signal = _signalsRepository.GetSignalVersionByVersionId(Convert.ToInt32(Id));
             signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description).ToList();
-
             if (signal.Approaches == null)
             {
                 signal.Approaches = new List<Approach>();
             }
-
-
             foreach (Approach approach in signal.Approaches)
             {
                 approach.Detectors = approach.Detectors.OrderBy(d => d.DetectorID).ToList();
             }
-
             if (signal != null)
             {
                 if (signal.Note == null)
                 {
                     signal.Note = "";
                 }
-
-                List<MOE.Common.Models.DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
-                foreach (MOE.Common.Models.Approach a in signal.Approaches)
+                List<DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
+                foreach (Approach a in signal.Approaches)
                 {
-                    foreach (MOE.Common.Models.Detector gd in a.Detectors)
+                    foreach (Detector gd in a.Detectors)
                     {
                         gd.Index = a.Index + "Detector[" + a.Detectors.ToList().FindIndex(d => d.DetectorID == gd.DetectorID).ToString() + "].";
                         gd.AllDetectionTypes = allDetectionTypes;
                         gd.DetectionTypeIDs = new List<int>();
                         gd.DetectorComments = gd.DetectorComments.OrderByDescending(x => x.TimeStamp).ToList();
-                        foreach (MOE.Common.Models.DetectionType dt in gd.DetectionTypes)
+                        foreach (DetectionType dt in gd.DetectionTypes)
                         {
                             gd.DetectionTypeIDs.Add(dt.DetectionTypeID);
                         }
                     }
                     a.Index = "Approaches[" + signal.Approaches.ToList().FindIndex(app => app.ApproachID == a.ApproachID).ToString() + "].";
                 }
-                if (signal == null)
-                {
-                    return HttpNotFound();
-                }
-
                 signal.Comments = signal.Comments.OrderByDescending(s => s.TimeStamp).ToList();
                 AddSelectListsToViewBag(signal);
-                //foreach (MOE.Common.Models.MetricComment c in signal.Comments)
-                //{
-                //    c.MetricTypes = _metricTypeRepository.GetMetricTypesByMetricComment(c);
-                //}
             }
             return PartialView("Edit",signal);
         }
@@ -466,16 +453,16 @@ namespace SPM.Controllers
             }
             if (signal != null)
             {
-                List<MOE.Common.Models.DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
-                foreach (MOE.Common.Models.Approach a in signal.Approaches)
+                List<DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
+                foreach (Approach a in signal.Approaches)
                 {
-                    foreach (MOE.Common.Models.Detector gd in a.Detectors)
+                    foreach (Detector gd in a.Detectors)
                     {
                         gd.Index = a.Index + "Detector[" + a.Detectors.ToList().FindIndex(d => d.DetectorID == gd.DetectorID).ToString() + "].";
                         gd.AllDetectionTypes = allDetectionTypes;
                         gd.DetectionTypeIDs = new List<int>();
                         gd.DetectorComments = gd.DetectorComments.OrderByDescending(x => x.TimeStamp).ToList();
-                        foreach (MOE.Common.Models.DetectionType dt in gd.DetectionTypes)
+                        foreach (DetectionType dt in gd.DetectionTypes)
                         {
                             gd.DetectionTypeIDs.Add(dt.DetectionTypeID);
                         }
@@ -538,11 +525,11 @@ namespace SPM.Controllers
         {
             if (signal.Approaches != null)
             {
-                foreach (MOE.Common.Models.Approach a in signal.Approaches)
+                foreach (Approach a in signal.Approaches)
                 {
                     if (a.Detectors != null)
                     {
-                        foreach (MOE.Common.Models.Detector gd in a.Detectors)
+                        foreach (Detector gd in a.Detectors)
                         {
                             gd.DetectorID = a.SignalID + gd.DetChannel.ToString("D2");
                             if (gd.DetectionTypeIDs == null)
@@ -563,7 +550,7 @@ namespace SPM.Controllers
             return signal;
         }
 
-        private void AddSelectListsToViewBag(MOE.Common.Models.Signal signal)
+        private void AddSelectListsToViewBag(Signal signal)
         {
             ViewBag.ControllerType = new SelectList(_controllerTypeRepository.GetControllerTypes(), "ControllerTypeID", "Description", signal.ControllerTypeID);
             ViewBag.Region = new SelectList(_regionRepository.GetAllRegions(), "ID", "Description", signal.RegionID);
@@ -630,24 +617,6 @@ namespace SPM.Controllers
             {
                 mostRecentVersion = _signalsRepository.GetLatestVersionOfSignalBySignalID(sigId);
                 AddSelectListsToViewBag(mostRecentVersion);
-                var detectionTypesRepository = MOE.Common.Models.Repositories.DetectionTypeRepositoryFactory.Create();
-                var detectionTypes = detectionTypesRepository.GetAllDetectionTypes();
-                var hardwareTypesRepository =
-                    MOE.Common.Models.Repositories.DetectionHardwareRepositoryFactory.Create();
-                var hardwareTypes = hardwareTypesRepository.GetAllDetectionHardwares();
-                foreach (var approach in mostRecentVersion.Approaches)
-                {
-                    foreach (var detector in approach.Detectors)
-                    {
-                        detector.AllDetectionTypes = detectionTypes;
-                        detector.AllHardwareTypes = hardwareTypes;
-                        detector.DetectionTypeIDs = new List<int>();
-                        foreach (var detectionType in detector.DetectionTypes)
-                        {
-                            detector.DetectionTypeIDs.Add(detectionType.DetectionTypeID);
-                        }
-                    }
-                }
             }
             return PartialView("Edit", mostRecentVersion);
 

@@ -64,7 +64,7 @@ namespace MOE.Common.Models
         public string Note { get; set; }
 
         [Required]
-        [Display(Name = "First Day This Configuration is Valid")]
+        [Display(Name = "Version Start")]
         [DataMember]
         public DateTime Start { get; set; }
 
