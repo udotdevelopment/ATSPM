@@ -168,8 +168,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 //Save an image of the chart
                 AVC.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
 
-                AVC.info.ImageLocation = MetricWebPath + chartName;
-                MetricInfoList.Add(AVC.info);
+                AVC.MetricInfo.ImageLocation = MetricWebPath + chartName;
+                MetricInfoList.Add(AVC.MetricInfo);
             }
 
             if (ShowTMCDetection && NSTMCVolumeApproaches.Count > 0)
@@ -184,8 +184,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 //Save an image of the chart
                 AVC.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
 
-                AVC.info.ImageLocation = MetricWebPath + chartName;
-                MetricInfoList.Add(AVC.info);
+                AVC.MetricInfo.ImageLocation = MetricWebPath + chartName;
+                MetricInfoList.Add(AVC.MetricInfo);
             }
 
             if (ShowAdvanceDetection && EWAdvanceVolumeApproaches.Count > 0)
@@ -200,8 +200,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 //Save an image of the chart
                 AVC.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
 
-                AVC.info.ImageLocation = MetricWebPath + chartName;
-                MetricInfoList.Add(AVC.info);
+                AVC.MetricInfo.ImageLocation = MetricWebPath + chartName;
+                MetricInfoList.Add(AVC.MetricInfo);
             }
 
             if (ShowTMCDetection && EWTMCVolumeApproaches.Count > 0)
@@ -217,8 +217,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 AVC.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
 
 
-                AVC.info.ImageLocation = MetricWebPath + chartName;
-                MetricInfoList.Add(AVC.info);
+                AVC.MetricInfo.ImageLocation = MetricWebPath + chartName;
+                MetricInfoList.Add(AVC.MetricInfo);
             }
 
 
