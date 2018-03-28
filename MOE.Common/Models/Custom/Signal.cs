@@ -235,6 +235,7 @@ namespace MOE.Common.Models
             newVersion.IPAddress = newVersion.IPAddress;
             newVersion.Start = DateTime.Now;
             newVersion.Note = "Copy of " + origVersion.Note;
+            newVersion.Comments = new List<MetricComment>();
             newVersion.VersionList = signalRepository.GetAllVersionsOfSignalBySignalID(newVersion.SignalID);
             return newVersion;
         }

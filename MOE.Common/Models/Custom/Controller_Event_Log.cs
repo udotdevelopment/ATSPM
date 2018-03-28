@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using CsvHelper.Configuration;
 
 namespace MOE.Common.Models
 {
@@ -28,5 +29,16 @@ namespace MOE.Common.Models
         [Column(Order = 3)]
         [Key]
         public int EventParam { get; set; }
+
+        public sealed class ControllerEventLogClassMap : ClassMap<Controller_Event_Log>
+        {
+            public ControllerEventLogClassMap()
+            {
+                Map(m => m.SignalID).Name("Signal Id");
+                Map(m => m.Timestamp).Name("Timestamp");
+                Map(m => m.EventParam).Name("Event Parameter");
+                Map(m => m.EventCode).Name("Event Code");
+            }
+        }
     }
 }

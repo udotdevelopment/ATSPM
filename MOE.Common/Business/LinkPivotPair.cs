@@ -10,8 +10,7 @@ namespace MOE.Common.Business
     public class LinkPivotPair
     {
         public LinkPivotPair(Approach signalApproach, Approach downSignalApproach, DateTime startDate, DateTime endDate,
-            int cycleTime,
-            string chartLocation, double bias, string biasDirection, List<DateTime> dates, int linkNumber)
+            int cycleTime, double bias, string biasDirection, List<DateTime> dates, int linkNumber)
         {
             SignalApproach = signalApproach;
             DownSignalApproach = downSignalApproach;
@@ -210,7 +209,7 @@ namespace MOE.Common.Business
                     AogTotalPredicted = MaxArrivalOnGreen;
                     PaogTotalPredicted = PaogDownstreamPredicted;
                 }
-            GetNewResultsChart(chartLocation);
+            GetNewResultsChart();
         }
 
         public double SecondsAdded { get; set; }
@@ -389,7 +388,7 @@ namespace MOE.Common.Business
             //    "before", chartLocation);
         }
 
-        private void GetNewResultsChart(string chartLocation)
+        private void GetNewResultsChart()
         {
 
             var chart = new Chart();
@@ -487,14 +486,11 @@ namespace MOE.Common.Business
                             DateTime.Now.Minute +
                             DateTime.Now.Second +
                             ".jpg";
-
-            chart.SaveImage(chartLocation + @"LinkPivot\" + chartName,
+            var settingsRepository = MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
+            var settings = settingsRepository.GetGeneralSettings();
+            chart.SaveImage(settings.ImagePath + @"LinkPivot\" + chartName,
                 ChartImageFormat.Jpeg);
-
-            var settingsRepository =
-                Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
-
-            ResultChartLocation = settingsRepository.GetGeneralSettings().ImageUrl;
+            ResultChartLocation = settings.ImageUrl;
         }
 
 

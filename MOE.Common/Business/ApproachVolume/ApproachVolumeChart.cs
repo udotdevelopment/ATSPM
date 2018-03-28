@@ -320,11 +320,8 @@ namespace MOE.Common.Business.ApproachVolume
             totals.Color = Color.Black;
             totals.Name = "Total Volume";
             totals.BorderWidth = 2;
-            //NBSeries.Name = "NB, Ph " + key.ToString() + " Hourly Volume";
             totals.XValueType = ChartValueType.DateTime;
-
             Chart.Series.Add(totals);
-
             AddTotalValuestoSeries(chart);
         }
 
@@ -353,44 +350,33 @@ namespace MOE.Common.Business.ApproachVolume
             DateTime startTime, endTime;
             SetStartTimeAndEndTime(direction1Volumes, direction2Volumes, out startTime, out endTime);
             int binSizeMultiplier = 60 / options.SelectedBinSize;
-
             SortedDictionary<DateTime, int> combinedDirectionVolumes = new SortedDictionary<DateTime, int>();
             CombineDirectionVolumes(direction1Volumes, direction2Volumes, combinedDirectionVolumes);
-            //int combindedVolume = direction1TotalVolume + direction2TotalVolume;
-            //GetCombinedPeakHourValues(binSizeMultiplier, combinedDirectionVolumes, out DateTime combinedPeakHour, out int combinedPeakVolume, out double combinedPeakHourFactor, out string combinedPeakHourString);
-            //string combinedPeakHourKFactor = GetPeakHourKFactor(Convert.ToDouble(combinedPeakVolume) / Convert.ToDouble(combindedVolume), 3).ToString();
-
             KeyValuePair<DateTime, int> combinedPeakHourItem = GetPeakHourVolumeItem(combinedDirectionVolumes, binSizeMultiplier);
             int combinedPeakHourValue = FindPeakValueinHour(combinedPeakHourItem.Key, combinedDirectionVolumes, binSizeMultiplier);
             double combinedPeakHourFactor = GetPeakHourFactor(combinedPeakHourItem.Value, combinedPeakHourValue, binSizeMultiplier);
             double combinedPeakHourKFactor = GetPeakHourKFactor(Convert.ToDouble(combinedPeakHourItem.Value) / Convert.ToDouble(direction1TotalVolume), 3);
-            double combinedPeakHourDFactor = GetPeakHourDFactor(combinedPeakHourItem.Key, combinedPeakHourItem.Value, direction2Volumes, binSizeMultiplier);
             string combinedPeakHourString = combinedPeakHourItem.Key.ToShortTimeString() + " - " + combinedPeakHourItem.Key.AddHours(1).ToShortTimeString();
             int combinedVolume = combinedDirectionVolumes.Sum(c => c.Value)/binSizeMultiplier;
-
             KeyValuePair<DateTime, int> direction1PeakHourItem = GetPeakHourVolumeItem(direction1Volumes, binSizeMultiplier);
             int direction1PeakHourValue = FindPeakValueinHour(direction1PeakHourItem.Key, direction1Volumes, binSizeMultiplier);
             double direction1PeakHourFactor = GetPeakHourFactor(direction1PeakHourItem.Value, direction1PeakHourValue,binSizeMultiplier);
             double direction1PeakHourKFactor = GetPeakHourKFactor(Convert.ToDouble(direction1PeakHourItem.Value) / Convert.ToDouble(direction1TotalVolume), 3);
             double direction1PeakHourDFactor = GetPeakHourDFactor(direction1PeakHourItem.Key, direction1PeakHourItem.Value, direction2Volumes, binSizeMultiplier);
             string direction1PeakHourString = direction1PeakHourItem.Key.ToShortTimeString() + " - " + direction1PeakHourItem.Key.AddHours(1).ToShortTimeString();
-
             KeyValuePair<DateTime, int> direction2PeakHourItem = GetPeakHourVolumeItem(direction2Volumes, binSizeMultiplier);
             int direction2PeakValueInHour = FindPeakValueinHour(direction2PeakHourItem.Key, direction2Volumes, binSizeMultiplier);
             double direction2PeakHourFactor = GetPeakHourFactor(direction2PeakHourItem.Value, direction2PeakValueInHour, binSizeMultiplier);
             double direction2PeakHourKFactor = GetPeakHourKFactor(Convert.ToDouble(direction2PeakHourItem.Value) / Convert.ToDouble(direction2TotalVolume), 3);
             double direction2PeakHourDFactor = GetPeakHourDFactor(direction2PeakHourItem.Key, direction2PeakHourItem.Value, direction1Volumes, binSizeMultiplier);
             string direction2PeakHourString = direction2PeakHourItem.Key.ToShortTimeString() + " - " + direction2PeakHourItem.Key.AddHours(1).ToShortTimeString();
-
             DataTable volumeMetricsTable = CreateAndSetVolumeMetricsTable(direction1, direction2, direction1TotalVolume, direction2TotalVolume, startTime,
                 endTime, combinedPeakHourItem.Value, combinedPeakHourFactor, combinedPeakHourString, direction1PeakHourItem.Value, direction1PeakHourFactor,
                 direction2PeakHourItem.Value, direction2PeakHourFactor, direction1PeakHourString, direction2PeakHourString, combinedVolume,
                 combinedPeakHourKFactor, direction1PeakHourKFactor, direction1PeakHourDFactor, direction2PeakHourKFactor, direction2PeakHourDFactor);
-
             SetMetricInfo(direction1, direction2, combinedPeakHourString, combinedPeakHourItem.Value, combinedPeakHourFactor, direction1PeakHourItem, direction1PeakHourFactor, 
                 direction2PeakHourItem, direction2PeakHourFactor, direction1PeakHourString, direction2PeakHourString, combinedVolume, combinedPeakHourKFactor, 
                 direction1PeakHourKFactor, direction1PeakHourDFactor, direction2PeakHourKFactor, direction2PeakHourDFactor);
-
             return volumeMetricsTable;
         }
 

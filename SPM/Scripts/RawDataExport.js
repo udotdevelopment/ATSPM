@@ -1,11 +1,11 @@
 ﻿$(function (ready) {
     $(".datepicker").attr('type', 'text');
-    $("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
-    $("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
+    $("#DateTimePickerViewModel_StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
+    $("#DateTimePickerViewModel_EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
     $("#StartEndDaySelector").datepicker({
         onSelect: function (dateText) {
-            $("#StartDateDay").val(dateText);
-            $("#EndDateDay").val(dateText);
+            $("#DateTimePickerViewModel_StartDateDay").val(dateText);
+            $("#DateTimePickerViewModel_EndDateDay").val(dateText);
         }
     });
     $(".datepicker").datepicker();
@@ -82,3 +82,25 @@ function StartReportSpinner() {
 function StopReportSpinner() {
     $("#RunReportSpinner").removeClass("glyphicon-refresh spinning");
 }
+
+function ResetDates() {
+    var d = new Date();
+    var month = d.getMonth() + 1;
+    var day = d.getDate();
+    var endDay = d.getDate();
+
+    var output = month + '/' +
+        + day + '/' +
+        + d.getFullYear();
+    var endOutput = month + '/' +
+        + endDay + '/' +
+        + d.getFullYear();
+
+    $("#DateTimePickerViewModel_StartDateDay").val(output);
+    $("#DateTimePickerViewModel_EndDateDay").val(endOutput);
+    $("#DateTimePickerViewModel_StartAMPMddl").val("AM");
+    $("#DateTimePickerViewModel_EndAMPMddl").val("PM");
+    $("#DateTimePickerViewModel_StartEndDaySelector").datepicker("setDate", d);
+}
+
+$("#ResetDate").click(function () { ResetDates(); });

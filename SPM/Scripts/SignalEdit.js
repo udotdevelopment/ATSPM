@@ -16,17 +16,44 @@ function ClearActionMessage() {
 function SaveError() {
     $("#ActionMessage").text("Save Failed!");
 }
+function CreateJsonArray(formArray) {
+    var obj = {};
+    $.each(formArray, function (i, pair) {
+        var cObj = obj, pObj, cpName;
+        $.each(pair.name.split("."), function (i, pName) {
+            pObj = cObj;
+            cpName = pName;
+            cObj = cObj[pName] ? cObj[pName] : (cObj[pName] = {});
+        });
+        pObj[cpName] = pair.value;
+    });
+    return obj;
+}
 
 function AddNewVersion() {
-    var signalID = $("#SignalID").val();
+    //var signalID = $("#SignalID").val();
+    var formData = $("#form0").serializeArray();
+    var jsonForm = JSON.stringify(CreateJsonArray(formData));
+    //$.ajax({
+    //    url: urlpathGetSignalEdit,
+    //    headers: GetRequestVerificationTokenObject(),
+    //    type: "POST",
+    //    cache: false,
+    //    dataType: 'json',
+    //    data: formData,
+    //    async: true,
+    //    success: function (data) {
+    //    },
+    //    onerror: function () { alert("Error"); }
+    //});
     $.ajax({
         type: "POST",
         cache: false,
         async: true,
         headers: GetRequestVerificationTokenObject(),
-        data: JSON.stringify({ "signalID": signalID }),
+        data: jsonForm,
+        //    dataType: 'json',
         url: urlpathCopyVersion,
-        datatype: "json",
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             $('#SignalEdit').html(data);
@@ -37,44 +64,48 @@ function AddNewVersion() {
             500: function (content) { alert('internal server error'); }
         },
         error: function (req, status, errorObj) {
-            alert("Error");
+            alert(req.responseText);
         }
     });
    
 }
 
 function DeleteVersion() {
-    var signalID = $("#SignalID").val();
-    var versionId = $("#versionDropDown option:selected").val();
-    var versionDescription = $("#versionDropDown option:selected").text();
-    var parameters = {};
-    parameters.ID = versionId;
-    if (confirm( "Are you sure you want to delete the version " + versionDescription + " ?"))
-    {
-        $.ajax({
-            type: "POST",
-            cache: false,
-            async: true,
-            headers: GetRequestVerificationTokenObject(),
-            data: JSON.stringify({ "versionId": versionId }),
-            url: urlpathDeleteVersion,
-            datatype: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                $('#SignalEdit').html(data);
 
-            },
-            statusCode: {
-                404: function (content) { alert('cannot find resource'); },
-                500: function (content) { alert('internal server error'); }
-            },
-            error: function (req, status, errorObj) {
-                alert("Error");
-            }
-        });
+    if ($('#versionDropDown').children('option').length < 2) {
+        alert("Unable to delete version. You must have more than one version to delete.");
     }
-            
+    else {
+        var signalID = $("#SignalID").val();
+        var versionId = $("#versionDropDown option:selected").val();
+        var versionDescription = $("#versionDropDown option:selected").text();
+        var parameters = {};
+        parameters.ID = versionId;
+        if (confirm("Are you sure you want to delete the version " + versionDescription + " ?")) {
+            $.ajax({
+                type: "POST",
+                cache: false,
+                async: true,
+                headers: GetRequestVerificationTokenObject(),
+                data: JSON.stringify({ "versionId": versionId }),
+                url: urlpathDeleteVersion,
+                datatype: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function(data) {
+                    $('#SignalEdit').html(data);
 
+                },
+                statusCode: {
+                    404: function(content) { alert('cannot find resource'); },
+                    500: function(content) { alert('internal server error'); }
+                },
+                error: function(req, status, errorObj) {
+                    alert("Error");
+                }
+            });
+        }
+
+    }
 }
 
 function DeleteSignal() {

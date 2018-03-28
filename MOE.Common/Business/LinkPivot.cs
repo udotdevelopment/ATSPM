@@ -8,7 +8,7 @@ namespace MOE.Common.Business
 {
     public class LinkPivot
     {
-        public LinkPivot(int routeId, DateTime startDate, DateTime endDate, int cycleTime, string chartLocation,
+        public LinkPivot(int routeId, DateTime startDate, DateTime endDate, int cycleTime, 
             string direction, double bias, string biasDirection, List<DayOfWeek> days)
         {
             var routeRepository = RouteRepositoryFactory.Create();
@@ -41,8 +41,7 @@ namespace MOE.Common.Business
                         a.IsProtectedPhaseOverlap == downstreamPrimaryPhaseDirection.IsOverlap &&
                         a.ProtectedPhaseNumber == downstreamPrimaryPhaseDirection.Phase);
                     PairedApproaches.Add(new LinkPivotPair(approach, downstreamApproach, startDate, endDate, cycleTime,
-                        chartLocation, bias,
-                        biasDirection, Dates, i + 1));
+                        bias, biasDirection, Dates, i + 1));
                 }
                 //);
             }
@@ -70,8 +69,7 @@ namespace MOE.Common.Business
                         a.IsProtectedPhaseOverlap == downstreamPrimaryPhaseDirection.IsOverlap &&
                         a.ProtectedPhaseNumber == downstreamPrimaryPhaseDirection.Phase);
                     PairedApproaches.Add(new LinkPivotPair(approach, downstreamApproach, startDate, endDate, cycleTime,
-                        chartLocation, bias,
-                        biasDirection, Dates, i + 1));
+                        bias, biasDirection, Dates, i + 1));
                     //TODO: Fix for new routes
                     //pairedApproaches.Add(new LinkPivotPair(_ApproachRouteDetail[i].SignalId, _ApproachRouteDetail[i].DirectionType1.Description,
                     //        _ApproachRouteDetail[i].Signal.PrimaryName + " " + _ApproachRouteDetail[i].Signal.SecondaryName, _ApproachRouteDetail[i + 1].SignalId, _ApproachRouteDetail[i + 1].DirectionType1.Description,

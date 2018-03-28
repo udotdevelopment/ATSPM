@@ -238,17 +238,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 ResultChartAndXmlLocations = new List<Tuple<string, string>>();
             }
-            var settingsRepository =
-                Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
-
-            var settings = settingsRepository.GetGeneralSettings();
 
             XmlDocument xmlDocument = GetXmlForChart(chart);
             string xmlChartName = CreateFileName(MetricType.Abbreviation, ".xml");
             xmlDocument.Save(MetricFileLocation + xmlChartName);
             var chartName = CreateFileName(MetricType.Abbreviation, ".jpg");
-            MetricFileLocation = settings.ImagePath;
-            MetricWebPath = settings.ImageUrl;
             chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
             ResultChartAndXmlLocations.Add(new Tuple<string, string>(MetricWebPath + chartName, MetricWebPath + xmlChartName));
             ReturnList.Add(MetricWebPath + chartName);

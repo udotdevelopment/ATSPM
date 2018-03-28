@@ -16,8 +16,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-
-    <div class="form-horizontal">
+    
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -26,16 +25,16 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-12 col-sm-12">
-                <div class="col-md-6 col-sm-12 col-xs-12">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-6">
+                <div class="col-md-6">
+                    <div class="col-md-12">
                         @Html.LabelFor(model => model.EventCodes, htmlAttributes: new { @class = "control-label", @placeholder = "Signal Id", aria_label = "Signal Id" })
                         <div class="input-group-custom">
                             @Html.EditorFor(model => model.EventCodes, new { htmlAttributes = new { @class = "form-control", PlaceHolder = "Comma Separated List" } })
                             @Html.ValidationMessageFor(model => model.EventCodes, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-md-12">
                         @Html.LabelFor(model => model.EventParams, htmlAttributes: new { @class = "control-label", @placeholder = "Signal Id", aria_label = "Signal Id" })
                         <div class="input-group-custom">
                             @Html.EditorFor(model => model.EventParams, new { htmlAttributes = new { @class = "form-control", PlaceHolder = "Comma Separated List" } })
@@ -44,12 +43,12 @@
                     </div>
                 </div>
                 
-                <div class="col-md-6 col-sm-12 col-xs-12">
+                <div class="col-md-6">
                     <div class="form-group">
                         <ul>
                             <li>Leave blank for all Event Codes/Event Parameters</li>
                             <li>To filter on a list of codes/params, use comma and/or dash. E.g.:  1, 3, 6-8, 10</li>
-                            <li><a href=@Model.EnumerationsUrl>@Model.EnumerationsName</a></li>
+                            <li><a href=@Model.EnumerationsUrl target="_blank">@Model.EnumerationsName</a></li>
                         </ul>
                     </div>
                 </div>
@@ -63,7 +62,7 @@
                     <div id="GenerateData"></div>
                 </div>
                     @if (!String.IsNullOrEmpty(Model.RecaptchaMessage))
-                {
+                    {
                         <h1 class="text-danger">@Model.RecaptchaMessage</h1>
                     }
                     @if (!String.IsNullOrEmpty(Model.RecaptchaPublicKey))
@@ -73,7 +72,6 @@
 
             </div>
             </div>
-    </div>
 
 }
 </body>
@@ -84,7 +82,7 @@
     <script> var urlpathGetRecordCount = '@Url.Action("GetRecordCount", "DataExport")';</script>
     <script> var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';</script>    
     <script> var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';</script>
-    <script src="~/Scripts/RawDataExport.js"></script>
-    <script src="~/Scripts/Map.js"></script>
+    <script type="text/javascript" src="~/Scripts/RawDataExport.js"></script>
+    <script type="text/javascript" src="~/Scripts/Map.js"></script>
     <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
 }

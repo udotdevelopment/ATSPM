@@ -305,22 +305,53 @@ namespace SPM.Controllers
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult CopyVersion(string signalId)
+        public ActionResult CopyVersion(Signal signal)
         {
+
+            //originalSignalVersion = SetDetectionTypes(originalSignalVersion);
+            //MOE.Common.Models.Repositories.ISignalsRepository repository =
+            //    MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            //repository.AddOrUpdate(originalSignalVersion);
             Signal copyVersion = new Signal();
 
-            Signal originalVersion = _signalsRepository.GetLatestVersionOfSignalBySignalID(signalId);
-            if (originalVersion != null)
+            Signal originalSignalVersion = _signalsRepository.GetLatestVersionOfSignalBySignalID(signal.SignalID);
+            if (originalSignalVersion != null)
             {
-                copyVersion = Signal.CopyVersion(originalVersion);
+                copyVersion = Signal.CopyVersion(originalSignalVersion);
                 copyVersion.VersionActionId = 4;
                 copyVersion.Start = DateTime.Today;
-                copyVersion.IPAddress = originalVersion.IPAddress;
-                copyVersion.Note = "Copy of Version " + originalVersion.Note;
+                copyVersion.IPAddress = originalSignalVersion.IPAddress;
+                copyVersion.Note = "Copy of Version " + originalSignalVersion.Note;
             }
             try
             {
                 _signalsRepository.AddOrUpdate(copyVersion);
+                var commentRepository = MOE.Common.Models.Repositories.MetricCommentRepositoryFactory.Create();
+                foreach (var origVersionComment in originalSignalVersion.Comments)
+                {
+                    MetricComment metricComment = new MetricComment
+                    {
+                        CommentText = origVersionComment.CommentText,
+                        VersionID = copyVersion.VersionID,
+                        SignalID = originalSignalVersion.SignalID,
+                        TimeStamp = origVersionComment.TimeStamp,
+                    };
+                    if (origVersionComment.MetricTypes != null)
+                    {
+                        metricComment.MetricTypeIDs = new List<int>();
+                        foreach (var metricType in origVersionComment.MetricTypes)
+                        {
+                            metricComment.MetricTypeIDs.Add(metricType.MetricID);
+                        }
+                    }
+                    if (origVersionComment.MetricIDs != null)
+                        metricComment.MetricIDs = (int[])origVersionComment.MetricIDs.Clone();
+                    metricComment.MetricTypes = origVersionComment.MetricTypes;
+                    //commentRepository.Add(metricComment);
+                    copyVersion.Comments.Add(metricComment);
+                }
+                _signalsRepository.AddOrUpdate(copyVersion);
+                copyVersion = _signalsRepository.GetLatestVersionOfSignalBySignalID(copyVersion.SignalID);
             }
             catch (Exception ex)
             {

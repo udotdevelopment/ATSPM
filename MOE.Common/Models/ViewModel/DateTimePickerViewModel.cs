@@ -72,18 +72,23 @@ namespace MOE.Common.Models.ViewModel
             }
         }
 
+        public DateTime GetEndDateTimePlusOneMinute()
+        {
+            return GetEndDateTime().AddMinutes(1);
+        }
+
         public void SetDates()
         {
-            StartDateDay = DateTime.Today;
+            StartDateDay = DateTime.Today.AddDays(-1);
             EndDateDay = DateTime.Today;
             StartTime = "12:00";
-            EndTime = "12:00";
+            EndTime = "11:59";
             StartAMPMList = new List<SelectListItem>();
             StartAMPMList.Add(new SelectListItem { Value = "AM", Text = "AM", Selected = true });
             StartAMPMList.Add(new SelectListItem { Value = "PM", Text = "PM" });
             EndAMPMList = new List<SelectListItem>();
-            EndAMPMList.Add(new SelectListItem { Value = "AM", Text = "AM", Selected = true  });
-            EndAMPMList.Add(new SelectListItem { Value = "PM", Text = "PM"});
+            EndAMPMList.Add(new SelectListItem { Value = "AM", Text = "AM" });
+            EndAMPMList.Add(new SelectListItem { Value = "PM", Text = "PM", Selected = true });
         }
     }
 

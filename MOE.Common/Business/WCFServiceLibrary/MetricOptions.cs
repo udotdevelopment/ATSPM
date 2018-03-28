@@ -110,8 +110,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var metricTypeRepository = MetricTypeRepositoryFactory.Create();
             MetricType = metricTypeRepository.GetMetricsByID(MetricTypeID);
-
-  
+            var settingsRepository = Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
+            var settings = settingsRepository.GetGeneralSettings();
+            MetricFileLocation = settings.ImagePath;
+            MetricWebPath = settings.ImageUrl;
             LogMetricRun();
             return new List<string>();
         }

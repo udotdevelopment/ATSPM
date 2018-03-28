@@ -28,11 +28,6 @@ namespace SPM.Controllers
         {
             DataExportViewModel viewModel = new DataExportViewModel();
             viewModel.DateTimePickerViewModel.SetDates();
-            //DateTime date = DateTime.Today;
-            //viewModel.DateTimePickerViewModel.StartTime = "12:00";
-            //viewModel.DateTimePickerViewModel.EndTime = "12:00";
-            //viewModel.DateTimePickerViewModel.StartDateDay = Convert.ToDateTime("10/17/2017");// date.AddDays(-1);
-            //viewModel.DateTimePickerViewModel.EndDateDay = Convert.ToDateTime("10/18/2017");// date.AddDays(-1);
             return View(viewModel);
         }
 
@@ -41,25 +36,6 @@ namespace SPM.Controllers
             return str.Split(',').Select(int.Parse).ToList();
         }
 
-        // POST: DataExportViewModels/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateJsonAntiForgeryToken]
-        //public ActionResult RawDataExport(DataExportViewModel vm)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        List<int> inputEventCodes = StringToIntList(vm.EventCodes);
-        //        int inputParam = Convert.ToInt32(vm.EventParams);
-        //        //int Count = controllerEventLogRepository.GetRecordCount().GetEventCountByEventCodesParamDateTimeRange(vm.SignalId, vm.StartDate,
-        //        //    vm.EndDate, StartHour, StartMinute, EndHour, EndMinute,
-        //        //    inputEventCodes, inputParam);
-        //        //vm.Count = Count;
-        //        return RedirectToAction("RawDataExport");
-        //    }
-        //    return View(vm);
-        //}
         [HttpPost]
         public ActionResult RawDataExport(DataExportViewModel dataExportViewModel)
         {
@@ -75,7 +51,7 @@ namespace SPM.Controllers
                 List<int> eventParams, eventCodes;
                 GetEventCodesAndEventParameters(dataExportViewModel, out eventParams, out eventCodes);
                 int recordCount = controllerEventLogRepository.GetRecordCountByParameterAndEvent(dataExportViewModel.SignalId,
-                    dataExportViewModel.DateTimePickerViewModel.GetStartDateTime(), dataExportViewModel.DateTimePickerViewModel.GetEndDateTime(), eventParams, eventCodes);
+                    dataExportViewModel.DateTimePickerViewModel.GetStartDateTime(), dataExportViewModel.DateTimePickerViewModel.GetEndDateTimePlusOneMinute(), eventParams, eventCodes);
                 if (recordCount > dataExportViewModel.RecordCountLimit)
                 {
                     return Content("The data set you have selected is too large. Your current request will generate " + recordCount.ToString() +
@@ -84,8 +60,8 @@ namespace SPM.Controllers
                 else
                 {
                     List<Controller_Event_Log> events = controllerEventLogRepository.GetRecordsByParameterAndEvent(dataExportViewModel.SignalId,
-                        dataExportViewModel.DateTimePickerViewModel.GetStartDateTime(), dataExportViewModel.DateTimePickerViewModel.GetEndDateTime(), eventParams, eventCodes);
-                    byte[] file = Exporter.GetCsvFile(events);
+                        dataExportViewModel.DateTimePickerViewModel.GetStartDateTime(), dataExportViewModel.DateTimePickerViewModel.GetEndDateTimePlusOneMinute(), eventParams, eventCodes);
+                    byte[] file = Exporter.GetCsvFileForControllerEventLogs(events);
                     return File(file, "csv", "ControllerEventLogs.csv");
                 }
             }
@@ -183,7 +159,7 @@ namespace SPM.Controllers
                     List<int> eventParams, eventCodes;
                     GetEventCodesAndEventParameters(dataExportViewModel, out eventParams, out eventCodes);
                     int recordCount = controllerEventLogRepository.GetRecordCountByParameterAndEvent(dataExportViewModel.SignalId,
-                            dataExportViewModel.DateTimePickerViewModel.GetStartDateTime(), dataExportViewModel.DateTimePickerViewModel.GetEndDateTime(), eventParams, eventCodes);
+                            dataExportViewModel.DateTimePickerViewModel.GetStartDateTime(), dataExportViewModel.DateTimePickerViewModel.GetEndDateTimePlusOneMinute(), eventParams, eventCodes);
                     if (recordCount > dataExportViewModel.RecordCountLimit)
                     {
                         return Content("The data set you have selected is too large. Your current request will generate " + recordCount.ToString() +
@@ -198,20 +174,8 @@ namespace SPM.Controllers
                 {
                     return Content(e.Message);
                 }
-               
-               
             }
             return Content("This request cannot be processed. You may be missing parameters");
         }
-
-
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        //db.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
     }
 }

@@ -80,7 +80,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Show15Percentile = true;
         }
 
-        public List<DetectorSpeed> SpeedDetectors = new List<DetectorSpeed>();
+        public List<DetectorSpeed> SpeedDetectors { get; set; } = new List<DetectorSpeed>();
 
         public override List<string> CreateMetric()
         {
@@ -238,6 +238,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 if (ShowPostedSpeed)
                     chart.Series["Posted Speed"].Points.AddXY(bucket.StartTime, detector.Approach.MPH);
             }
+            if(SpeedDetectors == null)
+                SpeedDetectors = new List<DetectorSpeed>();
             SpeedDetectors.Add(speedDetector);
             if (ShowPlanStatistics)
                 SetSpeedPlanStrips(speedDetector.Plans, chart, startDate, detector.MinSpeedFilter ?? 0);
