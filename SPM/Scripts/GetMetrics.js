@@ -80,8 +80,6 @@ function GetCommonValues()
     tosend.Y2AxisMax = $("#Y2AxisMax").val();
     tosend.YAxisMin = $("#YAxisMin").val();
     tosend.Y2AxisMin = $("#Y2AxisMin").val();
-    
-    
     return tosend;
 }
 
@@ -122,6 +120,7 @@ function GetPCDMetric(metricTypeID) {
     tosend.MetricTypeID = metricTypeID;
     tosend.SelectedBinSize = $("#SelectedBinSize").val();
     tosend.SelectedDotSize = $("#SelectedDotSize").val();
+    tosend.SelectedLineSize = $("#SelectedLineSize").val();
     tosend.ShowPlanStatistics = $("#ShowPlanStatistics").is(":checked");
     tosend.ShowVolumes = $("#ShowVolumes").is(":checked");
     GetMetric(urlpathPCD, tosend);

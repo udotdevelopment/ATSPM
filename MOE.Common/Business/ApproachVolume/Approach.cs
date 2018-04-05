@@ -10,7 +10,6 @@ namespace MOE.Common.Business.ApproachVolume
             Direction = approach.DirectionType.Description;
             ApproachModel = approach;
             Detectors = new DetectorCollection(approach);
-
             DetectorEvents = null;
         }
 

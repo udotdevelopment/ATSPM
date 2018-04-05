@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.ApproachVolume;
+using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
+using Approach = MOE.Common.Business.ApproachVolume.Approach;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
@@ -14,23 +17,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public List<MetricInfo> MetricInfoList;
 
 
-        public ApproachVolumeOptions(string signalID, DateTime startDate, DateTime endDate, double? yAxisMax,
-            int binSize, bool showDirectionalSplits,
-            bool showTotalVolume, bool showNbEbVolume, bool showSbWbVolume, bool showTMCDetection,
+        public ApproachVolumeOptions(string signalId, DateTime startDate, DateTime endDate, double? yAxisMax,
+            int binSize, bool showDirectionalSplits, bool showTotalVolume, bool showNbEbVolume, bool showSbWbVolume, bool showTmcDetection,
             bool showAdvanceDetection)
         {
-            SignalID = signalID;
-            //StartDate = startDate;
-            //EndDate = endDate;
+            SignalID = signalId;
+            StartDate = startDate;
+            EndDate = endDate;
             YAxisMax = yAxisMax;
-
             SelectedBinSize = binSize;
             ShowTotalVolume = showTotalVolume;
             ShowDirectionalSplits = showDirectionalSplits;
             ShowNbEbVolume = showNbEbVolume;
             ShowSbWbVolume = showSbWbVolume;
-            ShowTMCDetection = showTMCDetection;
+            ShowTMCDetection = showTmcDetection;
             ShowAdvanceDetection = showAdvanceDetection;
+            MetricTypeID = 7;
         }
 
         public ApproachVolumeOptions()
@@ -89,140 +91,69 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
+
             var returnList = new List<string>();
             MetricInfoList = new List<MetricInfo>();
-            var signalsRepository =
-                SignalsRepositoryFactory.Create();
-            //var signal = signalsRepository.GetSignalBySignalID(this.SignalID);    
+
+            var signalsRepository =SignalsRepositoryFactory.Create();
+            var directionRepository = DirectionTypeRepositoryFactory.Create();
+            var allDirections = directionRepository.GetAllDirections();
             var signal = signalsRepository.GetVersionOfSignalByDate(SignalID, StartDate);
-            var NSAdvanceVolumeApproaches = new List<Approach>();
-            var NSTMCVolumeApproaches = new List<Approach>();
-            var EWAdvanceVolumeApproaches = new List<Approach>();
-            var EWTMCVolumeApproaches = new List<Approach>();
-
-            //Sort the approaches by metric type and direction
-
-            foreach (var a in signal.Approaches)
+            var directions = signal.GetAvailableDirections();
+            if (directions.Any(d => d.Description == "Northbound") || directions.Any(d => d.Description == "Southbound"))
             {
-                if (a.DirectionType.Description == "Northbound" && a.GetDetectorsForMetricType(6).Count > 0)
+                DirectionType northboundDirection = allDirections.FirstOrDefault(d => d.Description == "Northbound");
+                DirectionType southboundDirection = allDirections.FirstOrDefault(d => d.Description == "Southbound");
+                List<Models.Approach> northboundApproaches = signal.Approaches
+                    .Where(a => a.DirectionTypeID == northboundDirection.DirectionTypeID).ToList();
+                List<Models.Approach> southboundApproaches = signal.Approaches
+                    .Where(a => a.DirectionTypeID == southboundDirection.DirectionTypeID).ToList();
+                if (northboundApproaches.Count > 0 || southboundApproaches.Count >0)
                 {
-                    var av = new Approach(a);
-                    NSAdvanceVolumeApproaches.Add(av);
-                }
-
-                if (a.DirectionType.Description == "Northbound" && a.GetDetectorsForMetricType(5).Count > 0)
-                {
-                    var av = new Approach(a);
-                    NSTMCVolumeApproaches.Add(av);
-                }
-                if (a.DirectionType.Description == "Southbound" && a.GetDetectorsForMetricType(6).Count > 0)
-                {
-                    var av = new Approach(a);
-                    NSAdvanceVolumeApproaches.Add(av);
-                }
-
-                if (a.DirectionType.Description == "Southbound" && a.GetDetectorsForMetricType(5).Count > 0)
-                {
-                    var av = new Approach(a);
-                    NSTMCVolumeApproaches.Add(av);
-                }
-                if (a.DirectionType.Description == "Eastbound" && a.GetDetectorsForMetricType(6).Count > 0)
-                {
-                    var av = new Approach(a);
-                    EWAdvanceVolumeApproaches.Add(av);
-                }
-
-                if (a.DirectionType.Description == "Eastbound" && a.GetDetectorsForMetricType(5).Count > 0)
-                {
-                    var av = new Approach(a);
-                    EWTMCVolumeApproaches.Add(av);
-                }
-                if (a.DirectionType.Description == "Westbound" && a.GetDetectorsForMetricType(6).Count > 0)
-                {
-                    var av = new Approach(a);
-                    EWAdvanceVolumeApproaches.Add(av);
-                }
-
-                if (a.DirectionType.Description == "Westbound" && a.GetDetectorsForMetricType(5).Count > 0)
-                {
-                    var av = new Approach(a);
-                    EWTMCVolumeApproaches.Add(av);
+                    CreateAndSaveCharts(northboundDirection, southboundDirection, northboundApproaches, southboundApproaches);
                 }
             }
-
-
-            var location = GetSignalLocation();
-
-            //create the charts for each metric type and direction
-
-            if (ShowAdvanceDetection && NSAdvanceVolumeApproaches.Count > 0)
+            if (directions.Any(d => d.Description == "Westbound") || directions.Any(d => d.Description == "Eastbound"))
             {
-                var AVC =
-                    new ApproachVolumeChart(
-                        StartDate, EndDate, SignalID, location, "Northbound", "Southbound", this,
-                        NSAdvanceVolumeApproaches, true);
-
-                var chartName = CreateFileName();
-
-
-                //Save an image of the chart
-                AVC.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
-
-                AVC.MetricInfo.ImageLocation = MetricWebPath + chartName;
-                MetricInfoList.Add(AVC.MetricInfo);
+                DirectionType eastboundDirection = allDirections.FirstOrDefault(d => d.Description == "Eastbound");
+                DirectionType westboundDirection = allDirections.FirstOrDefault(d => d.Description == "Westbound");
+                var eastboundApproaches = signal.Approaches
+                    .Where(a => a.DirectionTypeID == eastboundDirection.DirectionTypeID).ToList();
+                var westboundApproaches = signal.Approaches
+                    .Where(a => a.DirectionTypeID == westboundDirection.DirectionTypeID).ToList();
+                if (eastboundApproaches.Count > 0 || westboundApproaches.Count > 0)
+                {
+                        new ApproachVolume.ApproachVolume(eastboundApproaches, westboundApproaches, this, eastboundDirection, westboundDirection, 4);
+                    CreateAndSaveCharts(eastboundDirection, westboundDirection, eastboundApproaches, westboundApproaches);
+                }
             }
-
-            if (ShowTMCDetection && NSTMCVolumeApproaches.Count > 0)
-            {
-                var AVC =
-                    new ApproachVolumeChart(StartDate, EndDate, SignalID,
-                        location, "Northbound", "Southbound", this, NSTMCVolumeApproaches, false);
-
-                var chartName = CreateFileName();
-
-
-                //Save an image of the chart
-                AVC.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
-
-                AVC.MetricInfo.ImageLocation = MetricWebPath + chartName;
-                MetricInfoList.Add(AVC.MetricInfo);
-            }
-
-            if (ShowAdvanceDetection && EWAdvanceVolumeApproaches.Count > 0)
-            {
-                var AVC =
-                    new ApproachVolumeChart(StartDate, EndDate,
-                        SignalID, location, "Eastbound", "Westbound", this, EWAdvanceVolumeApproaches, true);
-
-                var chartName = CreateFileName();
-
-
-                //Save an image of the chart
-                AVC.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
-
-                AVC.MetricInfo.ImageLocation = MetricWebPath + chartName;
-                MetricInfoList.Add(AVC.MetricInfo);
-            }
-
-            if (ShowTMCDetection && EWTMCVolumeApproaches.Count > 0)
-            {
-                var AVC =
-                    new ApproachVolumeChart(StartDate, EndDate,
-                        SignalID, location, "Eastbound", "Westbound", this, EWTMCVolumeApproaches, false);
-
-                var chartName = CreateFileName();
-
-
-                //Save an image of the chart
-                AVC.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
-
-
-                AVC.MetricInfo.ImageLocation = MetricWebPath + chartName;
-                MetricInfoList.Add(AVC.MetricInfo);
-            }
-
-
             return returnList;
+        }
+
+        private void CreateAndSaveCharts(DirectionType primaryDirection, DirectionType opposingDirection, List<Models.Approach> primaryApproaches, List<Models.Approach> opposingApproaches)
+        {
+            ApproachVolume.ApproachVolume advanceCountApproachVolume =
+                new ApproachVolume.ApproachVolume(primaryApproaches, opposingApproaches, this, primaryDirection, opposingDirection, 2);
+            ApproachVolume.ApproachVolume laneByLaneCountApproachVolume =
+                new ApproachVolume.ApproachVolume(primaryApproaches, opposingApproaches, this, primaryDirection, opposingDirection, 4);
+            if (advanceCountApproachVolume.PrimaryDirectionVolume != null &&
+                advanceCountApproachVolume.OpposingDirectionVolume != null && advanceCountApproachVolume.MetricInfo.CombinedVolume >0 && ShowAdvanceDetection)
+            {
+                string chartName = CreateFileName();
+                ApproachVolumeChart chart = new ApproachVolumeChart(this, advanceCountApproachVolume, primaryDirection, opposingDirection);
+                chart.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
+                advanceCountApproachVolume.MetricInfo.ImageLocation = MetricWebPath + chartName;
+                MetricInfoList.Add(advanceCountApproachVolume.MetricInfo);
+            }
+            if (laneByLaneCountApproachVolume.PrimaryDirectionVolume != null &&
+                laneByLaneCountApproachVolume.OpposingDirectionVolume != null && laneByLaneCountApproachVolume.MetricInfo.CombinedVolume > 0 && ShowTMCDetection)
+            {
+                string chartName = CreateFileName();
+                ApproachVolumeChart chart = new ApproachVolumeChart(this, laneByLaneCountApproachVolume, primaryDirection, opposingDirection);
+                chart.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
+                laneByLaneCountApproachVolume.MetricInfo.ImageLocation = MetricWebPath + chartName;
+                MetricInfoList.Add(laneByLaneCountApproachVolume.MetricInfo);
+            }
         }
     }
 }

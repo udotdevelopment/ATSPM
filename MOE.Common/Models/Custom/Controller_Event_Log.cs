@@ -36,8 +36,8 @@ namespace MOE.Common.Models
             {
                 Map(m => m.SignalID).Name("Signal Id");
                 Map(m => m.Timestamp).Name("Timestamp");
-                Map(m => m.EventParam).Name("Event Parameter");
                 Map(m => m.EventCode).Name("Event Code");
+                Map(m => m.EventParam).Name("Event Parameter");
             }
         }
     }

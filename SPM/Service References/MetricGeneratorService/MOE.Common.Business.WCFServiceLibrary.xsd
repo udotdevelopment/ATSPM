@@ -211,7 +211,6 @@
           <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/MOE.Common.Business.FilterExtensions" minOccurs="0" name="FilterSignals" nillable="true" type="q10:ArrayOfFilterSignal" />
           <xs:element minOccurs="0" name="SelectedAggregatedDataType" nillable="true" type="tns:AggregatedDataType" />
           <xs:element minOccurs="0" name="SelectedAggregationType" type="tns:AggregationType" />
-          <xs:element minOccurs="0" name="SelectedChartAction" type="tns:ChartAction" />
           <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/System.Web.UI.DataVisualization.Charting" minOccurs="0" name="SelectedChartType" type="q11:SeriesChartType" />
           <xs:element minOccurs="0" name="SelectedDimension" type="tns:Dimension" />
           <xs:element minOccurs="0" name="SelectedSeries" type="tns:SeriesType" />
@@ -243,13 +242,6 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="AggregationType" nillable="true" type="tns:AggregationType" />
-  <xs:simpleType name="ChartAction">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="CreateMetric" />
-      <xs:enumeration value="ExportXML" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="ChartAction" nillable="true" type="tns:ChartAction" />
   <xs:simpleType name="Dimension">
     <xs:restriction base="xs:string">
       <xs:enumeration value="TwoDimensional" />
@@ -358,4 +350,20 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ApproachCycleAggregationOptions" nillable="true" type="tns:ApproachCycleAggregationOptions" />
+  <xs:complexType name="SignalEventCountAggregationOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SignalAggregationMetricOptions">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SignalEventCountAggregationOptions" nillable="true" type="tns:SignalEventCountAggregationOptions" />
+  <xs:complexType name="ApproachEventCountAggregationOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ApproachAggregationMetricOptions">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ApproachEventCountAggregationOptions" nillable="true" type="tns:ApproachEventCountAggregationOptions" />
 </xs:schema>

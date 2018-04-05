@@ -22,6 +22,11 @@ namespace MOE.Common.Models.Repositories
             return db.DirectionTypes.Where(d => includedDirections.Contains(d.DirectionTypeID)).ToList();
         }
 
+        public DirectionType GetByDescription(string directionDescription)
+        {
+            return db.DirectionTypes.FirstOrDefault(d => d.Description == directionDescription);
+        }
+
         public List<DirectionType> GetAllDirections()
         {
             var results = (from r in db.DirectionTypes

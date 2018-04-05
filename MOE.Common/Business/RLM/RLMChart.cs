@@ -128,8 +128,7 @@ namespace MOE.Common.Business
             chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
             chart.Titles.Add(
                 ChartTitleFactory.GetSignalLocationAndDateRange(Options.SignalID, Options.StartDate, Options.EndDate));
-            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(signalPhase.Approach.ProtectedPhaseNumber,
-                signalPhase.Approach.DirectionType.Description));
+            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(signalPhase.Approach));
             var statistics = new Dictionary<string, string>();
             statistics.Add("Total Violations", signalPhase.Violations + " (" + signalPhase.PercentViolations + "%)");
             statistics.Add("Severe Violations",

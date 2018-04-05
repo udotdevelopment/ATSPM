@@ -157,56 +157,45 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             chart.ChartAreas.Add(chartArea);
 
-            //Add the point series
-            var pointSeries = new Series();
-            pointSeries.ChartType = SeriesChartType.Line;
-            pointSeries.Color = Color.Red;
-            pointSeries.Name = "Average MPH";
-            pointSeries.XValueType = ChartValueType.DateTime;
-            //pointSeries.MarkerSize = Convert.ToInt32(uxDotSizeDropDownList.SelectedValue);
+            if (ShowAverageSpeed)
+            {
+                var averageSeries = new Series();
+                averageSeries.ChartType = SeriesChartType.Line;
+                averageSeries.Color = Color.Red;
+                averageSeries.Name = "Average MPH";
+                averageSeries.XValueType = ChartValueType.DateTime;
+                chart.Series.Add(averageSeries);
+            }
 
-            var eightyFifthSeries = new Series();
-            eightyFifthSeries.ChartType = SeriesChartType.Line;
-            eightyFifthSeries.Color = Color.Blue;
-            eightyFifthSeries.Name = "85th Percentile Speed";
-            eightyFifthSeries.XValueType = ChartValueType.DateTime;
-            //pointSeries.MarkerSize = Convert.ToInt32(uxDotSizeDropDownList.SelectedValue);
+            if (Show85Percentile)
+            {
+                var eightyFifthSeries = new Series();
+                eightyFifthSeries.ChartType = SeriesChartType.Line;
+                eightyFifthSeries.Color = Color.Blue;
+                eightyFifthSeries.Name = "85th Percentile Speed";
+                eightyFifthSeries.XValueType = ChartValueType.DateTime;
+                chart.Series.Add(eightyFifthSeries);
+            }
 
-            var fifteenthSeries = new Series();
-            fifteenthSeries.ChartType = SeriesChartType.Line;
-            fifteenthSeries.Color = Color.Orange;
-            fifteenthSeries.Name = "15th Percentile Speed";
-            fifteenthSeries.XValueType = ChartValueType.DateTime;
+            if (Show15Percentile)
+            {
+                var fifteenthSeries = new Series();
+                fifteenthSeries.ChartType = SeriesChartType.Line;
+                fifteenthSeries.Color = Color.Orange;
+                fifteenthSeries.Name = "15th Percentile Speed";
+                fifteenthSeries.XValueType = ChartValueType.DateTime;
+                chart.Series.Add(fifteenthSeries);
+            }
 
-            //Add the Posted Speed series
-            var postedspeedSeries = new Series();
-            postedspeedSeries.ChartType = SeriesChartType.Line;
-            postedspeedSeries.Color = Color.DarkGreen;
-            postedspeedSeries.Name = "Posted Speed";
-            //greenSeries.XValueType = ChartValueType.DateTime;
-            postedspeedSeries.BorderWidth = 2;
-
-            chart.Series.Add(postedspeedSeries);
-            chart.Series.Add(eightyFifthSeries);
-            chart.Series.Add(fifteenthSeries);
-            chart.Series.Add(pointSeries);
-
-            //Add the Posts series to ensure the chart is the size of the selected timespan
-            var testSeries = new Series();
-            testSeries.IsVisibleInLegend = false;
-            testSeries.ChartType = SeriesChartType.Point;
-            testSeries.Color = Color.White;
-            testSeries.Name = "Posts";
-            testSeries.XValueType = ChartValueType.DateTime;
-            pointSeries.MarkerSize = 0;
-            chart.Series.Add(testSeries);
-
-
-            //Add points at the start and and of the x axis to ensure
-            //the graph covers the entire period selected by the user
-            //whether there is data or not
-            chart.Series["Posts"].Points.AddXY(StartDate, 0);
-            chart.Series["Posts"].Points.AddXY(EndDate, 0);
+            if (ShowPostedSpeed)
+            {
+                var postedspeedSeries = new Series();
+                postedspeedSeries.ChartType = SeriesChartType.Line;
+                postedspeedSeries.Color = Color.DarkGreen;
+                postedspeedSeries.Name = "Posted Speed";
+                postedspeedSeries.BorderWidth = 2;
+                chart.Series.Add(postedspeedSeries);
+            }
 
             return chart;
         }
@@ -216,8 +205,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chart.Titles.Add(ChartTitleFactory.GetChartName(MetricTypeID));
             chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
                 SignalID, StartDate, EndDate));
-            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(detector.Approach.ProtectedPhaseNumber,
-                detector.Approach.DirectionType.Description));
+            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(detector.Approach));
             chart.Titles.Add(ChartTitleFactory.GetTitle("Detection Type: " + detector.DetectionHardware.Name +
                                                         "; Speed Accuracy +/- 2 mph" + "\n" +
                                                         "Detector Distance from Stop Bar: " +
@@ -232,8 +220,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var speedDetector = new DetectorSpeed(detector, startDate, endDate, binSize, false);
             foreach (var bucket in speedDetector.AvgSpeedBucketCollection.AvgSpeedBuckets)
             {
+                if(ShowAverageSpeed)
                 chart.Series["Average MPH"].Points.AddXY(bucket.StartTime, bucket.AvgSpeed);
+                if(Show85Percentile)
                 chart.Series["85th Percentile Speed"].Points.AddXY(bucket.StartTime, bucket.EightyFifth);
+                if(Show15Percentile)
                 chart.Series["15th Percentile Speed"].Points.AddXY(bucket.StartTime, bucket.FifteenthPercentile);
                 if (ShowPostedSpeed)
                     chart.Series["Posted Speed"].Points.AddXY(bucket.StartTime, detector.Approach.MPH);

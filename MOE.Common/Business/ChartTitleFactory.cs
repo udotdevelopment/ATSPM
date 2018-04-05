@@ -61,9 +61,18 @@ namespace MOE.Common.Business
             return title;
         }
 
-        internal static Title GetPhaseAndPhaseDescriptions(int phaseNumber, string description)
+        internal static Title GetPhaseAndPhaseDescriptions(Models.Approach approach)
         {
-            var title = new Title("Phase " + phaseNumber + ": " + description);
+            Title title;
+            if (approach.IsProtectedPhaseOverlap)
+            {
+                title = new Title("Overlap " + approach.ProtectedPhaseNumber + ": " + approach.Description);
+            }
+            else
+            {
+                title = new Title("Phase " + approach.ProtectedPhaseNumber + ": " + approach.Description);
+            }
+            
             title.Font = new Font(title.Font.FontFamily, title.Font.Size, FontStyle.Bold);
             return title;
         }

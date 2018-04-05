@@ -432,7 +432,7 @@ namespace MOE.Common.Business
             SetUpYAxis(chartArea, options);
             SetUpY2Axis(chartArea, options);
             SetUpXAxis(chartArea, options);
-            SetUpX2Axis(chartArea, options);
+            //SetUpX2Axis(chartArea, options);
             return chartArea;
         }
 
@@ -459,11 +459,29 @@ namespace MOE.Common.Business
             chartArea.AxisX.Minimum = options.StartDate.ToOADate();
             chartArea.AxisX.Maximum = options.EndDate.ToOADate();
             var reportTimespan = options.EndDate - options.StartDate;
-            if (reportTimespan.Days < 1)
-                if (reportTimespan.Hours > 1)
-                    chartArea.AxisX.Interval = 1;
-                else
-                    chartArea.AxisX.LabelStyle.Format = "HH:mm";
+            if (reportTimespan.TotalHours <= 2)
+            {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Minutes;
+                chartArea.AxisX.Interval = 15;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm";
+            }
+            if (reportTimespan.TotalHours > 2 && reportTimespan.TotalHours <= 24)
+            {
+                chartArea.AxisX.Interval = 1;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm";
+            }
+            else if (reportTimespan.TotalHours > 24 && reportTimespan.TotalHours <= 48)
+            {
+                chartArea.AxisX.Interval = 12;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm";
+            }
+            else if (reportTimespan.TotalHours > 48)
+            {
+                chartArea.AxisX.Interval = 24;
+                chartArea.AxisX.LabelStyle.Format = "MM/dd/yyyy";
+            }
+
+
         }
 
         private static void SetUpY2Axis(ChartArea chartArea, MetricOptions options)
@@ -563,9 +581,43 @@ namespace MOE.Common.Business
         }
 
 
+        public static Chart CreateApproachVolumeChart(ApproachVolumeOptions options, ApproachVolume.ApproachVolume approachVolume)
+        {
+            Chart chart = new Chart();
+            SetImageProperties(chart);
+            chart.Titles.Add(ChartTitleFactory.GetChartName(options.MetricTypeID));
+            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(options.SignalID, options.StartDate, options.EndDate));
+            chart.Titles.Add(ChartTitleFactory.GetBoldTitle(approachVolume.PrimaryDirection.Description + " and " + approachVolume.OpposingDirection.Description + " Approaches"));
+            Legend chartLegend = new Legend();
+            chartLegend.Name = "MainLegend";
+            chartLegend.Docking = Docking.Left;
+            chart.Legends.Add(chartLegend);
+            chart.ChartAreas.Add(CreateChartArea(options));
+            CustomizeChartAreaForApproachVolume(chart, options);
+            return chart;
+        }
 
-        
+        private static void CustomizeChartAreaForApproachVolume(Chart chart, ApproachVolumeOptions options)
+        {
+            chart.ChartAreas[0].AxisY.Minimum = options.YAxisMin;
+            if (options.YAxisMax != null)
+                chart.ChartAreas[0].AxisY.Maximum = options.YAxisMax ?? 0;
+            chart.ChartAreas[0].AxisY.Title = "Volume (Vehicles Per Hour)";
+            chart.ChartAreas[0].AxisY.Interval = 200;
 
-
+            if (options.ShowDirectionalSplits)
+            {
+                chart.ChartAreas[0].AxisY2.Minimum = 0.0;
+                chart.ChartAreas[0].AxisY2.Maximum = 1.0;
+                chart.ChartAreas[0].AxisY2.Title = "Directional Split";
+                chart.ChartAreas[0].AxisY2.IntervalType = DateTimeIntervalType.Number;
+                chart.ChartAreas[0].AxisY2.Interval = .1;
+                chart.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
+                chart.ChartAreas[0].AxisY2.IsStartedFromZero = chart.ChartAreas[0].AxisY.IsStartedFromZero;
+                chart.ChartAreas[0].AxisY2.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
+                chart.ChartAreas[0].AxisY2.MajorGrid.Enabled = false;
+            }
+            chart.ChartAreas[0].AxisX.Interval = 1;
+        }
     }
 }

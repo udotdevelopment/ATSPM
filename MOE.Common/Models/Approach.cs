@@ -37,7 +37,8 @@ namespace MOE.Common.Models
         public DirectionType DirectionType { get; set; }
 
         [DataMember]
-        public string Description { get; set; }
+        public string Description { get;
+            set; }
 
         [Display(Name = "MPH (Advanced Count, Advanced Speed)")]
         [DataMember]

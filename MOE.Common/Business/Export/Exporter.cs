@@ -45,9 +45,9 @@ namespace MOE.Common.Business.Export
                     foreach (var record in records)
                     {
                         csv.WriteField(record.SignalID);
-                        csv.WriteField(record.Timestamp.ToString("MM/dd/yyyy hh:mm:ss.fff"));
-                        csv.WriteField(record.EventParam);
+                        csv.WriteField(record.Timestamp.ToString("MM/dd/yyyy HH:mm:ss.fff"));
                         csv.WriteField(record.EventCode);
+                        csv.WriteField(record.EventParam);
                         csv.NextRecord();
                     }
                 }

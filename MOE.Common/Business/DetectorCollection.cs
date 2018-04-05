@@ -133,29 +133,19 @@ namespace MOE.Common.Business
             Approach approach, bool Has_PCD, bool Has_TMC)
         {
             var gr = DetectorRepositoryFactory.Create();
-
             var signalId = approach.SignalID;
-
-
             if (Has_TMC)
             {
                 ApproachCountDetectors.Clear();
-
-
                 ApproachCountDetectors.AddRange(RemoveExitDetectors(approach.GetDetectorsForMetricType(5)));
             }
-
             if (Has_PCD)
             {
                 ApproachCountDetectors.Clear();
                 ApproachCountDetectors.AddRange(RemoveExitDetectors(approach.GetDetectorsForMetricType(6)));
             }
-
-
             var eventsList = new List<ControllerEventLogs>();
-
             var MergedEvents = new ControllerEventLogs(signalId, startDate, endDate);
-
             foreach (var detector in ApproachCountDetectors)
             {
                 var li = new List<int> {82};

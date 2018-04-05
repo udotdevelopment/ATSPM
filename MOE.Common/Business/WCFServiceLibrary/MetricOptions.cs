@@ -48,7 +48,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var applicationSettingRepository = ApplicationSettingsRepositoryFactory.Create();
 
             GeneralSettings generalSettings = applicationSettingRepository.GetGeneralSettings();
-
             SignalID = string.Empty;
             YAxisMin = 0;
             Y2AxisMax = 0;
@@ -108,6 +107,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public virtual List<string> CreateMetric()
         {
+            EndDate = EndDate.AddMinutes(1);
             var metricTypeRepository = MetricTypeRepositoryFactory.Create();
             MetricType = metricTypeRepository.GetMetricsByID(MetricTypeID);
             var settingsRepository = Models.Repositories.ApplicationSettingsRepositoryFactory.Create();

@@ -13,15 +13,6 @@ namespace SPM.Controllers
     public class LinkPivotController : Controller
     {
         private MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
-        private readonly GeneralSettings _settings;
-        LinkPivotController()
-        {
-
-            var settingsRepository
-            = MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
-
-         _settings = settingsRepository.GetGeneralSettings();
-        }
 
     // GET: LinkPivot
         public ActionResult Analysis()
@@ -71,7 +62,8 @@ namespace SPM.Controllers
 
                 //TestLinkPivot.LinkPivotServiceClient client =
                 //    new TestLinkPivot.LinkPivotServiceClient();
-
+                var settingsRepository  = MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
+                GeneralSettings settings = settingsRepository.GetGeneralSettings();
 
 
                 LinkPivotServiceReference.AdjustmentObject[] adjustments;
@@ -86,7 +78,7 @@ namespace SPM.Controllers
                         startDate,
                         endDate,
                         lpvm.CycleLength,
-                        _settings.ImagePath,
+                        settings.ImagePath,
                         "Downstream",
                         lpvm.Bias,
                         lpvm.BiasUpDownStream,
@@ -106,7 +98,7 @@ namespace SPM.Controllers
                         startDate,
                         endDate,
                         lpvm.CycleLength,
-                        _settings.ImagePath,
+                        settings.ImagePath,
                         "Upstream",
                         lpvm.Bias,
                         lpvm.BiasUpDownStream,
@@ -211,7 +203,9 @@ namespace SPM.Controllers
                 client.Close();
                 MOE.Common.Models.ViewModel.LinkPivotPCDsViewModel pcdModel = new MOE.Common.Models.ViewModel.LinkPivotPCDsViewModel();
 
-                string imagePath = _settings.ImagePath;
+                var settingsRepository = MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
+                GeneralSettings settings = settingsRepository.GetGeneralSettings();
+                string imagePath = settings.ImagePath;
 
                 pcdModel.ExistingChart = imagePath + display.UpstreamBeforePCDPath;
                 pcdModel.PredictedChart = imagePath + display.UpstreamAfterPCDPath;

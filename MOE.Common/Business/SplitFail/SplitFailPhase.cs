@@ -121,8 +121,8 @@ namespace MOE.Common.Business.SplitFail
             {
                 var lastCycle = Cycles.OrderBy(c => c.StartTime).LastOrDefault();
                 //options.EndDate = lastCycle?.EndTime ?? options.EndDate;
-                var events = controllerEventsRepository.GetEventsByEventCodesParam(Approach.SignalID,
-                    options.StartDate, options.EndDate, new List<int> {81, 82}, detector.DetChannel);
+                var events = controllerEventsRepository.GetEventsByEventCodesParamWithOffset(Approach.SignalID,
+                    options.StartDate, options.EndDate, new List<int> {81, 82}, detector.DetChannel, detector.GetOffset(), detector.LatencyCorrection);
                 if (!events.Any())
                 {
                     CheckForDetectorOnBeforeStart(options, controllerEventsRepository, detector);

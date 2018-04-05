@@ -68,15 +68,12 @@ namespace MOEWcfServiceLibrary
 
         public List<MOE.Common.Business.ApproachVolume.MetricInfo> CreateMetricWithDataTable(MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions options)
         {
-            List<string> result = new List<string>();
-
-
             try
             {
                 MOE.Common.Models.Repositories.IMetricTypeRepository metricTypeRepository =
                     MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
                 options.MetricType = metricTypeRepository.GetMetricsByID(options.MetricTypeID);
-                result = options.CreateMetric();
+                options.CreateMetric();
             }
             catch (Exception ex)
             {
@@ -92,8 +89,10 @@ namespace MOEWcfServiceLibrary
                 logRepository.Add(e);
                 throw;
             }
+
             return options.MetricInfoList;
         }
+        
 
         public MOE.Common.Business.TMC.TMCInfo CreateTMCChart(MOE.Common.Business.WCFServiceLibrary.TMCOptions options)
         {

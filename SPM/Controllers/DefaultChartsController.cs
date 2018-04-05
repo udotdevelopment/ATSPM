@@ -242,6 +242,7 @@ namespace SPM.Controllers
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 6); " +
                                                           "SetPCDMetric(" + metricOptions.SelectedBinSize.ToString() + "," +
                                                           metricOptions.SelectedDotSize.ToString().ToLower() + "," +
+                                                          metricOptions.SelectedLineSize.ToString().ToLower() + "," +
                                                           metricOptions.ShowPlanStatistics.ToString().ToLower() + "," +
                                                           metricOptions.ShowVolumes.ToString().ToLower() + 
                                                           "); CreateMetric();";
@@ -1091,6 +1092,7 @@ namespace SPM.Controllers
 
             sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
             sb.Append("&SelectedDotSize=" + metricOptions.SelectedDotSize.ToString().ToLower());
+            sb.Append("&SelectedLineSize=" + metricOptions.SelectedLineSize.ToString().ToLower());
             sb.Append("&ShowPlanStatistics=" + metricOptions.ShowPlanStatistics.ToString().ToLower());
             sb.Append("&ShowVolumes=" + metricOptions.ShowVolumes.ToString().ToLower());
 

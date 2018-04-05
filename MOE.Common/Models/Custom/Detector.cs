@@ -133,14 +133,19 @@ namespace MOE.Common.Models
         {
             var result = false;
             if (DetectionTypes != null)
+            {
                 foreach (var dt in DetectionTypes)
-                foreach (var m in dt.MetricTypes)
-                    if (m.MetricID == metricID)
+                {
+                    foreach (var m in dt.MetricTypes)
                     {
-                        result = true;
-                        break;
+                        if (m.MetricID == metricID)
+                        {
+                            result = true;
+                            break;
+                        }
                     }
-
+                }
+            }
             return result;
         }
 

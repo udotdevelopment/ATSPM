@@ -6,7 +6,7 @@ namespace MOE.Common.Business
     {
         private readonly int binSizeMultiplier;
 
-        private int yAxis;
+        //private int yAxis;
 
         public Volume(DateTime startTime, DateTime endTime, int binSize)
         {
@@ -25,7 +25,7 @@ namespace MOE.Common.Business
 
         public DateTime EndTime { get; }
 
-        public int DetectorCount { get; private set; }
+        public int DetectorCount { get; set; }
 
         public int YAxis => DetectorCount * binSizeMultiplier;
 
@@ -38,9 +38,9 @@ namespace MOE.Common.Business
         //    this.detectorCount = volume;
         //}
 
-        public void AddDetectorToVolume()
-        {
-            DetectorCount++;
-        }
+        //public void AddDetectorToVolume()
+        //{
+        //    DetectorCount++;
+        //}
     }
 }

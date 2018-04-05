@@ -39,8 +39,10 @@ namespace SPM.MetricGeneratorService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.DetectorVolumeAggregationOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachSpeedAggregationOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachCycleAggregationOptions))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachEventCountAggregationOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.SignalPreemptionAggregationOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.SignalPriorityAggregationOptions))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.SignalEventCountAggregationOptions))]
         string[] CreateMetric(MOE.Common.Business.WCFServiceLibrary.MetricOptions options);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMetricGenerator/CreateMetric", ReplyAction="http://tempuri.org/IMetricGenerator/CreateMetricResponse")]
@@ -70,8 +72,10 @@ namespace SPM.MetricGeneratorService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.DetectorVolumeAggregationOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachSpeedAggregationOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachCycleAggregationOptions))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachEventCountAggregationOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.SignalPreemptionAggregationOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.SignalPriorityAggregationOptions))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.SignalEventCountAggregationOptions))]
         System.Tuple<string, string>[] GetChartAndXmlFileLocations(MOE.Common.Business.WCFServiceLibrary.MetricOptions options);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMetricGenerator/GetChartAndXmlFileLocations", ReplyAction="http://tempuri.org/IMetricGenerator/GetChartAndXmlFileLocationsResponse")]

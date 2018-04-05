@@ -66,9 +66,10 @@ function SetTMCMetric(selectedBinSize, showLaneVolumes, showTotalVolumes, showDa
     $("#ShowDataTable").prop('checked',showDataTable);
 }
 
-function SetPCDMetric(selectedBinSize, selectedDotSize, showPlanStatistics, showVolumes) {
+function SetPCDMetric(selectedBinSize, selectedDotSize, selectedLineSize, showPlanStatistics, showVolumes) {
     $("#SelectedBinSize").val(selectedBinSize);
     $("#SelectedDotSize").val(selectedDotSize);
+    $("#SelectedLineSize").val(selectedLineSize);
     $("#ShowPlanStatistics").prop('checked',showPlanStatistics);
     $("#ShowVolumes").prop('checked',showVolumes);
 }

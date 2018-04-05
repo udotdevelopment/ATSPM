@@ -12,5 +12,6 @@ namespace MOE.Common.Models.Repositories
         List<SelectListItem> GetSelectList();
 
         List<DirectionType> GetDirectionsByIDs(List<int> includedDirections);
+        DirectionType GetByDescription(string directionDescription);
     }
 }

@@ -134,13 +134,8 @@ namespace MOE.Common.Business
             chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
             chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
                 Options.SignalID, Options.StartDate, Options.EndDate));
-            if (!signalPhase.Approach.IsProtectedPhaseOverlap)
                 chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(
-                    signalPhase.Approach.ProtectedPhaseNumber, signalPhase.Approach.DirectionType.Description));
-            else
-                chart.Titles.Add(
-                    ChartTitleFactory.GetPhaseAndPhaseDescriptions(signalPhase.Approach.ProtectedPhaseNumber,
-                        " Overlap"));
+                    signalPhase.Approach));
             chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
             chart.Titles.Add(ChartTitleFactory.GetTitle(
                 "Simplified Approach Delay. Displays time between approach activation during the red phase and when the phase turns green."

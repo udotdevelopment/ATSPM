@@ -332,6 +332,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\ActionLog\ChartData.cs" />
+    <Compile Include="Business\ApproachVolume\ApproachVolume.cs" />
     <Compile Include="Business\ApproachVolume\ApproachVolumeViewModel.cs" />
     <Compile Include="Business\ApproachVolume\MetricInfo.cs" />
     <Compile Include="Business\ArchiveMetric.cs" />

@@ -75,7 +75,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public TMCInfo CreateMetric()
         {
-            LogMetricRun();
+            base.CreateMetric();
 
             var repository =
                 SignalsRepositoryFactory.Create();

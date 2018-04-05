@@ -89,7 +89,7 @@ namespace MOE.Common.Migrations
                         PedActuations = c.Int(false)
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Approaches", t => t.ApproachId, true)
+                .ForeignKey("dbo.Approaches", t => t.ApproachId, false)
                 .Index(t => t.ApproachId);
 
             CreateTable(
@@ -104,7 +104,7 @@ namespace MOE.Common.Migrations
                         ArrivalsOnYellow = c.Int(false)
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Approaches", t => t.ApproachId, true)
+                .ForeignKey("dbo.Approaches", t => t.ApproachId, false)
                 .Index(t => t.ApproachId);
 
             CreateTable(
@@ -120,7 +120,7 @@ namespace MOE.Common.Migrations
                         Speed15Th = c.Double(false)
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Approaches", t => t.ApproachId, true)
+                .ForeignKey("dbo.Approaches", t => t.ApproachId, false)
                 .Index(t => t.ApproachId);
 
             CreateTable(
@@ -133,7 +133,7 @@ namespace MOE.Common.Migrations
                         SplitFailures = c.Int(false)
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Approaches", t => t.ApproachId, true)
+                .ForeignKey("dbo.Approaches", t => t.ApproachId, false)
                 .Index(t => t.ApproachId);
 
             CreateTable(
@@ -147,7 +147,7 @@ namespace MOE.Common.Migrations
                         TotalRedLightViolations = c.Int(false)
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Approaches", t => t.ApproachId, true)
+                .ForeignKey("dbo.Approaches", t => t.ApproachId, false)
                 .Index(t => t.ApproachId);
 
             CreateTable(
@@ -210,7 +210,7 @@ namespace MOE.Common.Migrations
                         DwellCyclesInTransition = c.Int(false)
                     })
                 .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.Signals", t => t.VersionlID, true)
+                .ForeignKey("dbo.Signals", t => t.VersionlID, false)
                 .Index(t => t.VersionlID);
 
             DropTable("dbo.Archived_Metrics");

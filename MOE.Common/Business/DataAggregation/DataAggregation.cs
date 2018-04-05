@@ -65,35 +65,36 @@ namespace MOE.Common.Business.DataAggregation
             var options = new ParallelOptions {MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"])};
             for (var dt = _startDate; dt < _endDate.AddDays(1); dt = dt.AddMinutes(binSize))
             {
-                var tempSignalIds = new List<string>
-                {
-                    "1094",
-                    "1095",
-                    "1096",
-                    "1097",
-                    "7180",
-                    "7181",
-                    "7182",
-                    "7183",
-                    "7184",
-                    "7185",
-                    "7186",
-                    "7187",
-                    "7076",
-                    "7188",
-                    "7189",
-                    "7190",
-                    "7191",
-                    "7192",
-                    "7193",
-                    "6418",
-                    "6421",
-                    "7076"
-                };
+                //var tempSignalIds = new List<string>
+                //{
+                //    "1094",
+                //    "1095",
+                //    "1096",
+                //    "1097",
+                //    "7180",
+                //    "7181",
+                //    "7182",
+                //    "7183",
+                //    "7184",
+                //    "7185",
+                //    "7186",
+                //    "7187",
+                //    "7076",
+                //    "7188",
+                //    "7189",
+                //    "7190",
+                //    "7191",
+                //    "7192",
+                //    "7193",
+                //    "6418",
+                //    "6421",
+                //    "7076"
+                //};
 
                 Console.WriteLine("Getting correct version of signals for time period");
                 var versionIds = db.Signals.Where(r =>
-                        r.VersionActionId != 3 && r.Start < dt && tempSignalIds.Contains(r.SignalID))
+                        r.VersionActionId != 3 && r.Start < dt //&& tempSignalIds.Contains(r.SignalID)
+                        )
                     .GroupBy(r => r.SignalID)
                     .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).Select(s => s.VersionID).ToList();
                 var signals = db.Signals

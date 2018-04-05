@@ -58,6 +58,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public int SelectedDotSize { get; set; }
 
+        [Required]
+        [Display(Name = "Line Size")]
+        [DataMember]
+        public int SelectedLineSize { get; set; }
+
         public List<DotSizeItem> DotSizeList { get; set; }
 
         [DataMember]
@@ -113,6 +118,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         private Chart GetNewChart(Approach approach)
         {
             var chart = ChartFactory.CreateDefaultChart(this);
+            chart.ChartAreas[0].AxisY2.Title = "Volume Per Hour";
             CreateChartLegend(chart);
             if (ShowVolumes)
                 CreateVolumeSeries(chart);
@@ -127,7 +133,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void SetSeriesLineWidth(Series series)
         {
-            if (SelectedDotSize == 2)
+            if (SelectedLineSize == 2)
                 series.BorderWidth = 3;
         }
 
@@ -209,8 +215,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chart.Titles.Add(
                 ChartTitleFactory.GetSignalLocationAndDateRangeAndMessage(approach.SignalID, StartDate, EndDate,
                     message));
-            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(approach.ProtectedPhaseNumber,
-                approach.DirectionType.Description));
+            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(approach));
             chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
 

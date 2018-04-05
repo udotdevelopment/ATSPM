@@ -8,26 +8,23 @@
   <xs:element name="ArrayOfMetricInfo" nillable="true" type="tns:ArrayOfMetricInfo" />
   <xs:complexType name="MetricInfo">
     <xs:sequence>
-      <xs:element minOccurs="0" name="D1PHF" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="D1PeakHour" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="D1PeakHourDValue" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="D1PeakHourKValue" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="D1PeakHourVolume" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="D1TotalVolume" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="D2PHF" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="D2PeakHour" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="D2PeakHourDValue" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="D2PeakHourKValue" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="D2PeakHourVolume" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="D2TotalVolume" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CombinedPeakHourFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="CombinedPeakHourKFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="CombinedPeakHourString" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CombinedPeakHourValue" type="xs:int" />
+      <xs:element minOccurs="0" name="CombinedVolume" type="xs:int" />
       <xs:element minOccurs="0" name="Direction1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Direction1PeakHourDFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="Direction1PeakHourFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="Direction1PeakHourKFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="Direction1PeakHourString" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Direction1PeakHourValue" type="xs:int" />
       <xs:element minOccurs="0" name="Direction2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Direction2PeakHourDFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="Direction2PeakHourFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="Direction2PeakHourKFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="Direction2PeakHourString" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ImageLocation" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PHF" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PeakHour" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PeakHourKFactor" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PeakHourVolume" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TotalVolume" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="MetricInfo" nillable="true" type="tns:MetricInfo" />
