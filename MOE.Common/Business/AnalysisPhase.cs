@@ -70,23 +70,23 @@ namespace MOE.Common.Business
         {
 
             List<Models.Controller_Event_Log> events = (from row in terminationeventstable
-                          where row.EventParam == phasenumber && (row.EventCode == 4 || 
-                          row.EventCode == 5 || row.EventCode == 6
-                          || row.EventCode == 7
-                          )
-                          
-                          select row).ToList();
+                                                        where row.EventParam == phasenumber && (row.EventCode == 4 ||
+                                                        row.EventCode == 5 || row.EventCode == 6
+                                                        || row.EventCode == 7
+                                                        )
 
-            List<Models.Controller_Event_Log> sortedEvents = events.OrderBy(x => x.Timestamp).ThenByDescending(y => y.EventCode).ToList();
+                                                        select row).ToList();
+
+            List<Models.Controller_Event_Log> sortedEvents = events.OrderBy(x => x.Timestamp).ThenBy(y => y.EventCode).ToList();
             return sortedEvents;
         }
 
         public List<Models.Controller_Event_Log> FindPedEvents(List<Models.Controller_Event_Log> terminationeventstable, int phasenumber)
         {
             List<Models.Controller_Event_Log> events = (from row in terminationeventstable
-                         where row.EventParam == phasenumber && (row.EventCode == 21 || row.EventCode == 23)
-                          orderby row.Timestamp
-                          select row).ToList();
+                                                        where row.EventParam == phasenumber && (row.EventCode == 21 || row.EventCode == 23)
+                                                        orderby row.Timestamp
+                                                        select row).ToList();
 
             return events;
         }
@@ -100,7 +100,7 @@ namespace MOE.Common.Business
 
             return events;
         }
-        
+
         /// <summary>
         /// Constructor used for Phase Termination Chart
         /// </summary>
@@ -113,7 +113,7 @@ namespace MOE.Common.Business
             this.phaseNumber = phasenumber;
             TerminationEvents = FindTerminationEvents(terminationeventstable, phaseNumber);
 
-            
+
 
             PedestrianEvents = FindPedEvents(terminationeventstable, phaseNumber);
 
@@ -125,10 +125,10 @@ namespace MOE.Common.Business
             percentMaxOuts = FindPercentageConsecutiveEvents(TerminationEvents, 5, consecutiveCount);
             percentForceOffs = FindPercentageConsecutiveEvents(TerminationEvents, 6, consecutiveCount);
             totalPhaseTerminations = TerminationEvents.Count;
-    
+
         }
 
-        
+
         /// <summary>
         /// Constructor Used for Split monitor
         /// </summary>
@@ -139,7 +139,7 @@ namespace MOE.Common.Business
         {
             MOE.Common.Models.Repositories.ISignalsRepository repository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = repository.GetSignalBySignalID(signalID);     
+            var signal = repository.GetSignalBySignalID(signalID);
             this.phaseNumber = phasenumber;
             this.signalId = signalID;
             this.IsOverlap = false;
@@ -154,10 +154,10 @@ namespace MOE.Common.Business
             else
             {
                 this.Direction = "Unknown";
-            }            
+            }
         }
 
-        private List<Models.Controller_Event_Log> FindConsecutiveEvents(List<Models.Controller_Event_Log> terminationEvents, 
+        private List<Models.Controller_Event_Log> FindConsecutiveEvents(List<Models.Controller_Event_Log> terminationEvents,
             int eventtype, int consecutiveCount)
         {
             List<Models.Controller_Event_Log> ConsecutiveEvents = new List<Models.Controller_Event_Log>();
@@ -189,18 +189,18 @@ namespace MOE.Common.Business
         private List<Models.Controller_Event_Log> FindUnknownTerminationEvents(List<Models.Controller_Event_Log> terminationEvents)
         {
             List<Models.Controller_Event_Log> unknownTermEvents = new List<Models.Controller_Event_Log>();
-            for(int x=0; x + 1 < terminationEvents.Count;x++)
+            for (int x = 0; x + 1 < terminationEvents.Count; x++)
             {
                 Models.Controller_Event_Log currentEvent = terminationEvents[x];
                 Models.Controller_Event_Log nextEvent = terminationEvents[x + 1];
 
-                if(currentEvent.EventCode == 7 && nextEvent.EventCode == 7)
+                if (currentEvent.EventCode == 7 && nextEvent.EventCode == 7)
                 {
                     //if (x + 2 <= terminationEvents.Count)
                     //{
                     //    TimeSpan t = terminationEvents[x + 2].Timestamp - terminationEvents[x + 1].Timestamp;
 
-                        unknownTermEvents.Add(currentEvent);
+                    unknownTermEvents.Add(currentEvent);
                     //}
                 }
             }
@@ -208,7 +208,7 @@ namespace MOE.Common.Business
         }
 
 
-        private double FindPercentageConsecutiveEvents(List<Models.Controller_Event_Log> terminationEvents, int eventtype, 
+        private double FindPercentageConsecutiveEvents(List<Models.Controller_Event_Log> terminationEvents, int eventtype,
             int consecutiveCount)
         {
             double percentile = 0;
@@ -219,7 +219,7 @@ namespace MOE.Common.Business
 
             if (terminationEvents.Count() > 0)
             {
-                percentile= terminationEventsOfType / total;
+                percentile = terminationEventsOfType / total;
             }
             return percentile;
         }
