@@ -198,10 +198,6 @@
       <Project>{87951632-A7BE-4E04-B62C-C4FC2FC0CD5A}</Project>
       <Name>MOE.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SPM\SPM.csproj">
-      <Project>{9589DEB3-61EF-4517-AF80-CCB7996AD4DD}</Project>
-      <Name>SPM</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WavetronicsSpeedListener\WavetronicsSpeedListener.csproj">
       <Project>{23FADD7C-2165-4EED-B930-C6ACDD2AC12F}</Project>
       <Name>WavetronicsSpeedListener</Name>

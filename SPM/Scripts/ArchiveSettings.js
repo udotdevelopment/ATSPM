@@ -1,4 +1,5 @@
-﻿$(function(ready) {
+﻿$(function (ready) {
+    $("#SignalID").rules("remove", "required")
     ShowArchiveSettings();
     ShowDeleteMoveOptions();
 });

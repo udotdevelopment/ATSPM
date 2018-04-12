@@ -3,6 +3,8 @@
     <tr id="@Model.SignalId">
         <td>
             @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.SignalId)
+            @Html.HiddenFor(model => model.SignalDescription)
             @Html.DisplayFor(model => model.SignalId, new { htmlAttributes = new { @class = "form-control" } })
         </td>
         <td>
