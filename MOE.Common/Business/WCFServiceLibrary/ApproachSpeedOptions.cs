@@ -205,7 +205,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chart.Titles.Add(ChartTitleFactory.GetChartName(MetricTypeID));
             chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
                 SignalID, StartDate, EndDate));
-            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(detector.Approach));
+            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(detector.Approach, false));
             chart.Titles.Add(ChartTitleFactory.GetTitle("Detection Type: " + detector.DetectionHardware.Name +
                                                         "; Speed Accuracy +/- 2 mph" + "\n" +
                                                         "Detector Distance from Stop Bar: " +

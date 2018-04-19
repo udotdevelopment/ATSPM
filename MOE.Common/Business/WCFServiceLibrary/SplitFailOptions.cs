@@ -101,25 +101,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 if (getPermissivePhase)
                 {
                     sfChart.Chart.BackColor = Color.LightGray;
-                    if (approach.IsPermissivePhaseOverlap)
-                    {
-                        sfChart.Chart.Titles[2].Text = "Overlap " + sfChart.Chart.Titles[2].Text + " " + direction;
-                    }
-                    else
-                    {
-                        sfChart.Chart.Titles[2].Text = "Permissive " + sfChart.Chart.Titles[2].Text + " " + direction;
-                    }
-                }
-                else
-                {
-                    if (approach.IsProtectedPhaseOverlap)
-                    {
-                        sfChart.Chart.Titles[2].Text = "Overlap " + sfChart.Chart.Titles[2].Text + " " + direction;
-                    }
-                    else
-                    {
-                        sfChart.Chart.Titles[2].Text = "Protected " + sfChart.Chart.Titles[2].Text + " " + direction;
-                    }
                 }
             }
             Thread.Sleep(300);

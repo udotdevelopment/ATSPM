@@ -61,16 +61,17 @@ namespace MOE.Common.Business
             return title;
         }
 
-        internal static Title GetPhaseAndPhaseDescriptions(Models.Approach approach)
+        internal static Title GetPhaseAndPhaseDescriptions(Models.Approach approach, bool getPermissivePhase)
         {
             Title title;
+            int phaseNumber = getPermissivePhase ? approach.PermissivePhaseNumber.Value : approach.ProtectedPhaseNumber;
             if (approach.IsProtectedPhaseOverlap)
             {
-                title = new Title("Overlap " + approach.ProtectedPhaseNumber + ": " + approach.Description);
+                title = new Title("Overlap " + phaseNumber + ": " + approach.Description);
             }
             else
             {
-                title = new Title("Phase " + approach.ProtectedPhaseNumber + ": " + approach.Description);
+                title = new Title("Phase " + phaseNumber + ": " + approach.Description);
             }
             
             title.Font = new Font(title.Font.FontFamily, title.Font.Size, FontStyle.Bold);

@@ -256,7 +256,7 @@ namespace MOE.Common.Models.Repositories
                           s.EventParam == param &&
                           eventCodes.Contains(s.EventCode)
                     select s;
-                events = events.OrderBy(e => e.Timestamp);
+                events = events.OrderBy(e => e.Timestamp).ThenBy(e => e.EventParam);
                 return events.ToList();
             }
             catch (Exception ex)
@@ -380,7 +380,7 @@ namespace MOE.Common.Models.Repositories
         }
 
 
-        public List<Controller_Event_Log> GetEventsByEventCodesParamWithOffset(string signalId,
+        public List<Controller_Event_Log> GetEventsByEventCodesParamWithOffsetAndLatencyCorrection(string signalId,
             DateTime startTime, DateTime endTime, List<int> eventCodes, int param, double offset,
             double latencyCorrection)
         {
@@ -408,7 +408,39 @@ namespace MOE.Common.Models.Repositories
                 var e = new ApplicationEvent();
                 e.ApplicationName = "MOE.Common";
                 e.Class = GetType().ToString();
-                e.Function = "GetEventsByEventCodesParamWithOffset";
+                e.Function = "GetEventsByEventCodesParamWithOffsetAndLatencyCorrection";
+                e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
+                e.Timestamp = DateTime.Now;
+                e.Description = ex.Message;
+                logRepository.Add(e);
+                throw;
+            }
+        }
+
+        public List<Controller_Event_Log> GetEventsByEventCodesParamWithLatencyCorrection(string signalId,
+            DateTime startTime, DateTime endTime, List<int> eventCodes, int param, double latencyCorrection)
+        {
+            try
+            {
+                var events = _db.Controller_Event_Log.Where(s => s.SignalID == signalId &&
+                          s.Timestamp >= startTime &&
+                          s.Timestamp <= endTime &&
+                          s.EventParam == param &&
+                          eventCodes.Contains(s.EventCode)).ToList();
+                foreach (var cel in events)
+                {
+                    cel.Timestamp = cel.Timestamp.AddSeconds(0 - latencyCorrection);
+                }
+                return events.OrderBy(e => e.Timestamp).ThenBy(e => e.EventCode).ToList();
+            }
+            catch (Exception ex)
+            {
+                var logRepository =
+                    ApplicationEventRepositoryFactory.Create();
+                var e = new ApplicationEvent();
+                e.ApplicationName = "MOE.Common";
+                e.Class = GetType().ToString();
+                e.Function = "GetEventsByEventCodesParamWithLatencyCorrection";
                 e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
                 e.Timestamp = DateTime.Now;
                 e.Description = ex.Message;
@@ -436,7 +468,7 @@ namespace MOE.Common.Models.Repositories
                 var e = new ApplicationEvent();
                 e.ApplicationName = "MOE.Common";
                 e.Class = GetType().ToString();
-                e.Function = "GetEventsByEventCodesParamWithOffset";
+                e.Function = "GetEventsByEventCodesParamWithOffsetAndLatencyCorrection";
                 e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
                 e.Description = ex.Message;
                 e.Timestamp = DateTime.Now;
@@ -465,7 +497,7 @@ namespace MOE.Common.Models.Repositories
                 var e = new ApplicationEvent();
                 e.ApplicationName = "MOE.Common";
                 e.Class = GetType().ToString();
-                e.Function = "GetEventsByEventCodesParamWithOffset";
+                e.Function = "GetEventsByEventCodesParamWithOffsetAndLatencyCorrection";
                 e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
                 e.Description = ex.Message;
                 e.Timestamp = DateTime.Now;

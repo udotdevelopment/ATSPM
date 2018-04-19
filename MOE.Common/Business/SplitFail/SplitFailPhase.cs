@@ -9,6 +9,13 @@ namespace MOE.Common.Business.SplitFail
     public class SplitFailPhase
     {
         private List<SplitFailDetectorActivation> _detectorActivations = new List<SplitFailDetectorActivation>();
+        public List<SplitFailBin> Bins { get; } = new List<SplitFailBin>();
+        public int TotalFails { get; }
+        public Approach Approach { get; }
+        public bool GetPermissivePhase { get; }
+        public List<CycleSplitFail> Cycles { get; }
+        public List<PlanSplitFail> Plans { get; }
+        public Dictionary<string, string> Statistics { get; }
 
         public SplitFailPhase(Approach approach, SplitFailOptions options, bool getPermissivePhase)
         {
@@ -23,14 +30,6 @@ namespace MOE.Common.Business.SplitFail
             Statistics.Add("Total Split Failures", TotalFails.ToString());
             SetBinStatistics(options);
         }
-
-        public List<SplitFailBin> Bins { get; } = new List<SplitFailBin>();
-        public int TotalFails { get; }
-        public Approach Approach { get; }
-        private bool GetPermissivePhase { get; }
-        public List<CycleSplitFail> Cycles { get; }
-        public List<PlanSplitFail> Plans { get; }
-        public Dictionary<string, string> Statistics { get; }
 
         private void AddDetectorActivationsToCycles()
         {
@@ -115,14 +114,13 @@ namespace MOE.Common.Business.SplitFail
         {
             var controllerEventsRepository = ControllerEventLogRepositoryFactory.Create();
             var phaseNumber = GetPermissivePhase ? Approach.PermissivePhaseNumber.Value : Approach.ProtectedPhaseNumber;
-            var detectors = Approach.GetDetectorsForMetricType(12);
+            var detectors = Approach.GetAllDetectorsOfDetectionType(6);// .GetDetectorsForMetricType(12);
 
             foreach (var detector in detectors)
             {
-                var lastCycle = Cycles.OrderBy(c => c.StartTime).LastOrDefault();
-                //options.EndDate = lastCycle?.EndTime ?? options.EndDate;
-                var events = controllerEventsRepository.GetEventsByEventCodesParamWithOffset(Approach.SignalID,
-                    options.StartDate, options.EndDate, new List<int> {81, 82}, detector.DetChannel, detector.GetOffset(), detector.LatencyCorrection);
+                //var lastCycle = Cycles.OrderBy(c => c.StartTime).LastOrDefault();
+                List<Models.Controller_Event_Log> events = controllerEventsRepository.GetEventsByEventCodesParamWithLatencyCorrection(Approach.SignalID,
+                    options.StartDate, options.EndDate, new List<int> {81, 82}, detector.DetChannel, detector.LatencyCorrection);
                 if (!events.Any())
                 {
                     CheckForDetectorOnBeforeStart(options, controllerEventsRepository, detector);

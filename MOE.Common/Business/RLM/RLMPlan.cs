@@ -382,7 +382,7 @@ namespace MOE.Common.Business
             var detectors = Approach.GetDetectorsForMetricType(11);
             var detectorActivations = new List<Controller_Event_Log>();
             foreach (var d in detectors)
-                detectorActivations.AddRange(repository.GetEventsByEventCodesParamWithOffset(Approach.SignalID,
+                detectorActivations.AddRange(repository.GetEventsByEventCodesParamWithOffsetAndLatencyCorrection(Approach.SignalID,
                     StartTime, EndTime,
                     new List<int> {82}, d.DetChannel, 0, d.LatencyCorrection));
             TotalVolume = detectorActivations.Count;

@@ -159,7 +159,7 @@ namespace MOE.Common.Business.SplitFail
             var phaseNumber = GetPermissivePhase
                 ? SplitFailPhase.Approach.PermissivePhaseNumber.Value
                 : SplitFailPhase.Approach.ProtectedPhaseNumber;
-            Chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(SplitFailPhase.Approach));
+            Chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(SplitFailPhase.Approach, SplitFailPhase.GetPermissivePhase));
             Chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
 

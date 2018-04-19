@@ -16,7 +16,7 @@ namespace MOE.Common.Business
             DownSignalApproach = downSignalApproach;
             StartDate = startDate;
             LinkNumber = linkNumber;
-            SetPcds(downSignalApproach, endDate, dates);
+            SetPcds(endDate, dates);
             //Check to see if both directions have detection if so analyze both
             if (UpstreamPcd.Count > 0 && DownstreamPcd.Count > 0)
                 if (bias != 0)
@@ -362,7 +362,7 @@ namespace MOE.Common.Business
             PaogTotalPredicted = Math.Round(AogTotalPredicted / (TotalVolumeUpstream + TotalVolumeDownstream), 2) * 100;
         }
 
-        private void SetPcds(Approach downSignalApproach, DateTime endDate, List<DateTime> dates)
+        private void SetPcds(DateTime endDate, List<DateTime> dates)
         {
             foreach (var dt in dates)
             {
@@ -373,7 +373,7 @@ namespace MOE.Common.Business
                 AogUpstreamBefore += upstreamPcd.TotalArrivalOnGreen;
                 TotalVolumeUpstream += upstreamPcd.TotalVolume;
                 var downstreamPcd = new SignalPhase(
-                    tempStartDate, tempEndDate, downSignalApproach, false, 15, 13, false);
+                    tempStartDate, tempEndDate, DownSignalApproach, false, 15, 13, false);
                 DownstreamPcd.Add(downstreamPcd);
                 AogDownstreamBefore += downstreamPcd.TotalArrivalOnGreen;
                 TotalVolumeDownstream += downstreamPcd.TotalVolume;
@@ -488,9 +488,9 @@ namespace MOE.Common.Business
                             ".jpg";
             var settingsRepository = MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
             var settings = settingsRepository.GetGeneralSettings();
-            chart.SaveImage(settings.ImagePath + @"LinkPivot\" + chartName,
+            chart.SaveImage(settings.ImagePath + chartName,
                 ChartImageFormat.Jpeg);
-            ResultChartLocation = settings.ImageUrl;
+            ResultChartLocation = settings.ImageUrl + chartName;
         }
 
 

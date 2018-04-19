@@ -44,5 +44,10 @@ namespace MOE.Common.Business
         public double Delay { get; }
 
         public ArrivalType ArrivalType { get; }
+
+        public void AddSeconds(int seconds)
+        {
+            
+        }
     }
 }

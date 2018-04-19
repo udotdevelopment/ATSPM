@@ -125,7 +125,7 @@ namespace MOE.Common.Business
                     if (upstream)
                     {
                         //Create a chart for the upstream detector before adjustments
-                        UpstreamBeforePCDPath = CreateChart(sp, startDate, endDate, location, "before",
+                        UpstreamBeforePCDPath = settings.ImageUrl + CreateChart(sp, startDate, endDate, location, "before",
                             settings.ImagePath, maxYAxis, "UpstreamBefore");
 
                         //Add the total arrival on green before adjustments to the running total
@@ -138,7 +138,7 @@ namespace MOE.Common.Business
                         sp.LinkPivotAddSeconds(delta * -1);
 
                         //Create a chart for the upstream detector after adjustments
-                        UpstreamAfterPCDPath = CreateChart(sp, startDate, endDate, location, "after",
+                        UpstreamAfterPCDPath = settings.ImageUrl + CreateChart(sp, startDate, endDate, location, "after",
                             settings.ImagePath, maxYAxis, "UpstreamAfter");
 
                         //Add the total arrival on green after adjustments to the running total
@@ -150,7 +150,7 @@ namespace MOE.Common.Business
                     else
                     {
                         //Create a chart for downstream detector before adjustments
-                        DownstreamBeforePCDPath = CreateChart(sp, startDate, endDate, location, "before",
+                        DownstreamBeforePCDPath = settings.ImageUrl + CreateChart(sp, startDate, endDate, location, "before",
                             settings.ImagePath, maxYAxis, "DownstreamBefore");
 
                         //Add the arrivals on green to the total arrivals on green running total
@@ -163,7 +163,7 @@ namespace MOE.Common.Business
                         sp.LinkPivotAddSeconds(delta);
 
                         //Create a pcd chart for downstream after adjustments
-                        DownstreamAfterPCDPath = CreateChart(sp, startDate, endDate, location, "after",
+                        DownstreamAfterPCDPath = settings.ImageUrl + CreateChart(sp, startDate, endDate, location, "after",
                             settings.ImagePath, maxYAxis, "DownstreamAfter");
 
                         //Add the total arrivals on green to the running total
@@ -241,7 +241,7 @@ namespace MOE.Common.Business
                             ".jpg";
 
             //Save an image of the chart
-            chart.SaveImage(chartLocation + @"LinkPivot\" + chartName, ChartImageFormat.Jpeg);
+            chart.SaveImage(chartLocation  + chartName, ChartImageFormat.Jpeg);
             return chartName;
         }
 

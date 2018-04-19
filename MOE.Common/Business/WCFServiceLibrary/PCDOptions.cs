@@ -206,16 +206,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chart.Legends.Add(chartLegend);
         }
 
-        private void SetChartTitle(Chart chart, Approach approach, Dictionary<string, string> statistics)
+        private void SetChartTitle(Chart chart, SignalPhase signalPhase, Dictionary<string, string> statistics)
         {
-            var detectorsForMetric = approach.GetDetectorsForMetricType(MetricTypeID);
+            var detectorsForMetric = signalPhase.Approach.GetDetectorsForMetricType(MetricTypeID);
             var message = "\n Advanced detector located " + detectorsForMetric.FirstOrDefault().DistanceFromStopBar +
                           " ft. upstream of stop bar";
             chart.Titles.Add(ChartTitleFactory.GetChartName(MetricTypeID));
             chart.Titles.Add(
-                ChartTitleFactory.GetSignalLocationAndDateRangeAndMessage(approach.SignalID, StartDate, EndDate,
+                ChartTitleFactory.GetSignalLocationAndDateRangeAndMessage(signalPhase.Approach.SignalID, StartDate, EndDate,
                     message));
-            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(approach));
+            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(signalPhase.Approach, signalPhase.GetPermissivePhase));
             chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
 
@@ -231,20 +231,20 @@ namespace MOE.Common.Business.WCFServiceLibrary
             if (ShowVolumes)
                 AddVolumeToChart(chart, signalPhase.Volume);
             if (ShowArrivalsOnGreen)
-                AddArrivalOnGreen(chart, totalOnGreenArrivals, totalDetectorHits, signalPhase.Approach);
+                AddArrivalOnGreen(chart, totalOnGreenArrivals, totalDetectorHits, signalPhase);
             if (ShowPlanStatistics)
                 SetPlanStrips(signalPhase.Plans, chart);
         }
 
         private void AddArrivalOnGreen(Chart chart, double totalOnGreenArrivals, double totalDetectorHits,
-            Approach approach)
+            SignalPhase signalPhase)
         {
             double percentArrivalOnGreen = 0;
             if (totalDetectorHits > 0)
                 percentArrivalOnGreen = totalOnGreenArrivals / totalDetectorHits * 100;
             var statistics = new Dictionary<string, string>();
             statistics.Add("AoG", Math.Round(percentArrivalOnGreen) + "%");
-            SetChartTitle(chart, approach, statistics);
+            SetChartTitle(chart, signalPhase, statistics);
         }
 
         private void AddVolumeToChart(Chart chart, VolumeCollection volumeCollection)

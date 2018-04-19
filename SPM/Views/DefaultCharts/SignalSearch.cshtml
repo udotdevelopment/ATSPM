@@ -8,6 +8,7 @@
         @Html.LabelFor(model => model.SignalID, htmlAttributes: new { id="SignalID-error", @class = "control-label" })
         <div class="input-group-custom">
             @Html.EditorFor(model => model.SignalID, new { htmlAttributes = new {@onkeypress= "SignalIdPress(event)", id = "SignalID", @class = "form-control  signalID-width", placeholder = "Signal ID" } })
+        <input type="button" class="btn btn-default" value="Select" onclick="GetSignalLocation()">
             <label id="SignalLocation">Press Enter to select signal</label>
         </div>@Html.ValidationMessageFor(model => model.SignalID, "", new { id = "SignalID-error", @class = "text-danger" })
         <br />

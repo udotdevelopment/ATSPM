@@ -62,8 +62,6 @@ namespace SPM.Controllers
 
                 //TestLinkPivot.LinkPivotServiceClient client =
                 //    new TestLinkPivot.LinkPivotServiceClient();
-                var settingsRepository  = MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
-                GeneralSettings settings = settingsRepository.GetGeneralSettings();
 
 
                 LinkPivotServiceReference.AdjustmentObject[] adjustments;
@@ -78,7 +76,6 @@ namespace SPM.Controllers
                         startDate,
                         endDate,
                         lpvm.CycleLength,
-                        settings.ImagePath,
                         "Downstream",
                         lpvm.Bias,
                         lpvm.BiasUpDownStream,
@@ -98,7 +95,6 @@ namespace SPM.Controllers
                         startDate,
                         endDate,
                         lpvm.CycleLength,
-                        settings.ImagePath,
                         "Upstream",
                         lpvm.Bias,
                         lpvm.BiasUpDownStream,
@@ -207,10 +203,10 @@ namespace SPM.Controllers
                 GeneralSettings settings = settingsRepository.GetGeneralSettings();
                 string imagePath = settings.ImagePath;
 
-                pcdModel.ExistingChart = imagePath + display.UpstreamBeforePCDPath;
-                pcdModel.PredictedChart = imagePath + display.UpstreamAfterPCDPath;
-                pcdModel.ExistingDownChart = imagePath + display.DownstreamBeforePCDPath;
-                pcdModel.PredictedDownChart = imagePath + display.DownstreamAfterPCDPath;
+                pcdModel.ExistingChart = display.UpstreamBeforePCDPath;
+                pcdModel.PredictedChart = display.UpstreamAfterPCDPath;
+                pcdModel.ExistingDownChart = display.DownstreamBeforePCDPath;
+                pcdModel.PredictedDownChart = display.DownstreamAfterPCDPath;
                 pcdModel.ExistingAog = Convert.ToInt32(display.ExistingAOG);
                 pcdModel.ExistingAogPercent = Math.Round(display.ExistingPAOG * 100);
                 pcdModel.PredictedAog = Convert.ToInt32(display.PredictedAOG);

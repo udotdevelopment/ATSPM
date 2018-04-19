@@ -389,7 +389,7 @@ namespace MOE.CommonTests.Models
         }
 
 
-        public List<Controller_Event_Log> GetEventsByEventCodesParamWithOffset(string signalId,
+        public List<Controller_Event_Log> GetEventsByEventCodesParamWithOffsetAndLatencyCorrection(string signalId,
            DateTime startTime, DateTime endTime, List<int> eventCodes, int param, double offset, double latencyCorrection)
         {
             try
@@ -416,7 +416,7 @@ namespace MOE.CommonTests.Models
                 ApplicationEvent e = new ApplicationEvent();
                 e.ApplicationName = "MOE.Common";
                 e.Class = GetType().ToString();
-                e.Function = "GetEventsByEventCodesParamWithOffset";
+                e.Function = "GetEventsByEventCodesParamWithOffsetAndLatencyCorrection";
                 e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
                 e.Timestamp = DateTime.Now;
                 e.Description = ex.Message;
@@ -424,6 +424,12 @@ namespace MOE.CommonTests.Models
                 throw;
             }
 
+        }
+
+        public List<Controller_Event_Log> GetEventsByEventCodesParamWithLatencyCorrection(string signalId, DateTime startTime, DateTime endTime,
+            List<int> eventCodes, int param, double latencyCorrection)
+        {
+            throw new NotImplementedException();
         }
 
         public Controller_Event_Log GetFirstEventBeforeDate(string signalId,
@@ -446,7 +452,7 @@ namespace MOE.CommonTests.Models
                 ApplicationEvent e = new ApplicationEvent();
                 e.ApplicationName = "MOE.Common";
                 e.Class = GetType().ToString();
-                e.Function = "GetEventsByEventCodesParamWithOffset";
+                e.Function = "GetEventsByEventCodesParamWithOffsetAndLatencyCorrection";
                 e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
                 e.Description = ex.Message;
                 e.Timestamp = DateTime.Now;
@@ -475,7 +481,7 @@ namespace MOE.CommonTests.Models
                 ApplicationEvent e = new ApplicationEvent();
                 e.ApplicationName = "MOE.Common";
                 e.Class = GetType().ToString();
-                e.Function = "GetEventsByEventCodesParamWithOffset";
+                e.Function = "GetEventsByEventCodesParamWithOffsetAndLatencyCorrection";
                 e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
                 e.Description = ex.Message;
                 e.Timestamp = DateTime.Now;

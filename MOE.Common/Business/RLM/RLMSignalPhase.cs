@@ -17,7 +17,7 @@ namespace MOE.Common.Business
         {
             SevereRedLightViolationSeconds = severeRedLightViolatinsSeconds;
             Approach = approach;
-            IsPermissive = usePermissivePhase;
+            GetPermissivePhase = usePermissivePhase;
             var controllerRepository =
                 ControllerEventLogRepositoryFactory.Create();
             if (!Approach.IsProtectedPhaseOverlap)
@@ -36,7 +36,7 @@ namespace MOE.Common.Business
         {
         }
 
-        public bool IsPermissive { get; set; }
+        public bool GetPermissivePhase { get; set; }
 
         public VolumeCollection Volume { get; }
 

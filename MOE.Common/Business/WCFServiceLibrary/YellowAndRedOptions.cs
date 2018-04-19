@@ -114,7 +114,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     var rlmChart = new RLMChart();
                     var chart = rlmChart.GetChart(signalPhase, this);
 
-                    if (signalPhase.IsPermissive)
+                    if (signalPhase.GetPermissivePhase)
                     {
                         chart.BackColor = Color.LightGray;
                         chart.Titles[2].Text = "Permissive " + chart.Titles[2].Text + " " +

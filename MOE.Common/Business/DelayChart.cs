@@ -135,7 +135,7 @@ namespace MOE.Common.Business
             chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
                 Options.SignalID, Options.StartDate, Options.EndDate));
                 chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(
-                    signalPhase.Approach));
+                    signalPhase.Approach, signalPhase.GetPermissivePhase));
             chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
             chart.Titles.Add(ChartTitleFactory.GetTitle(
                 "Simplified Approach Delay. Displays time between approach activation during the red phase and when the phase turns green."

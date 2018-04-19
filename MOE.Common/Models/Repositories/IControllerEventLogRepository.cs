@@ -28,8 +28,12 @@ namespace MOE.Common.Models.Repositories
             DateTime startTime, DateTime endTime, int startHour, int startMinute, int endHour, int endMinute,
             List<int> eventCodes, int param);
 
-        List<Controller_Event_Log> GetEventsByEventCodesParamWithOffset(string signalId,
+        List<Controller_Event_Log> GetEventsByEventCodesParamWithOffsetAndLatencyCorrection(string signalId,
             DateTime startTime, DateTime endTime, List<int> eventCodes, int param, double offset,
+            double latencyCorrection);
+
+        List<Controller_Event_Log> GetEventsByEventCodesParamWithLatencyCorrection(string signalId,
+            DateTime startTime, DateTime endTime, List<int> eventCodes, int param,
             double latencyCorrection);
 
         Controller_Event_Log GetFirstEventBeforeDate(string signalId,

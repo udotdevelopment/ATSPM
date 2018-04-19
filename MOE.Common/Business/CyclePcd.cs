@@ -27,5 +27,13 @@ namespace MOE.Common.Business
         {
             DetectorEvents.Add(ddp);
         }
+
+        public void AddSecondsToDetectorEvents(int seconds)
+        {
+            foreach (var detectorDataPoint in DetectorEvents)
+            {
+                //detectorDataPoint.
+            }
+        }
     }
 }

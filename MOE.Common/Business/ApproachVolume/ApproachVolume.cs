@@ -61,7 +61,7 @@ namespace MOE.Common.Business.ApproachVolume
                         if (detector.LaneType.LaneTypeID == 1)
                         {
                             Detectors.Add(detector);
-                            detectorEvents.AddRange(controllerEventLogRepository.GetEventsByEventCodesParamWithOffset(
+                            detectorEvents.AddRange(controllerEventLogRepository.GetEventsByEventCodesParamWithOffsetAndLatencyCorrection(
                                 detector.Approach.SignalID, _approachVolumeOptions.StartDate,
                                 _approachVolumeOptions.EndDate, new List<int> {82}, detector.DetChannel,
                                 detector.GetOffset(), detector.LatencyCorrection));

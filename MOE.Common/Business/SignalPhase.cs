@@ -8,21 +8,28 @@ namespace MOE.Common.Business
 {
     public class SignalPhase
     {
+        private readonly bool _showVolume;
+        private readonly int _binSize;
+        private readonly int _metricTypeId;
+
         public SignalPhase(DateTime startDate, DateTime endDate, Approach approach,
             bool showVolume, int binSize, int metricTypeId, bool getPermissivePhase)
         {
+            _showVolume = showVolume;
+            _binSize = binSize;
+            _metricTypeId = metricTypeId;
             StartDate = startDate;
             EndDate = endDate;
             Approach = approach;
             GetPermissivePhase = getPermissivePhase;
-            GetSignalPhaseData(showVolume, binSize, metricTypeId);
+            GetSignalPhaseData();
         }
 
         public VolumeCollection Volume { get; private set; }
         public List<PlanPcd> Plans { get; private set; }
         public List<CyclePcd> Cycles { get; private set; }
         private List<Controller_Event_Log> DetectorEvents { get; set; }
-        private bool GetPermissivePhase { get; }
+        public bool GetPermissivePhase { get; }
         public Approach Approach { get; }
         public double AvgDelay => TotalDelay / TotalVolume;
 
@@ -73,18 +80,23 @@ namespace MOE.Common.Business
             Volume = null;
             foreach (var row in DetectorEvents)
                 row.Timestamp = row.Timestamp.AddSeconds(seconds);
-            //Todo:Fix for Link Pivot
+            GetPlansCyclesAndEvents();
             //Plans.LinkPivotAddDetectorData(this.DetectorEvents);
         }
 
-        private void GetSignalPhaseData(bool showVolume, int binSize, int metricTypeId)
+        private void GetSignalPhaseData()
         {
-            GetDetectorEvents(metricTypeId);
+            GetDetectorEvents(_metricTypeId);
+            GetPlansCyclesAndEvents();
+        }
+
+        private void GetPlansCyclesAndEvents()
+        {
             Cycles = CycleFactory.GetPcdCycles(StartDate, EndDate, Approach, DetectorEvents, GetPermissivePhase);
             Plans = PlanFactory.GetPcdPlans(Cycles, StartDate, EndDate, Approach);
             //GetPreemptEvents();
-            if (showVolume)
-                SetVolume(DetectorEvents, binSize);
+            if (_showVolume)
+                SetVolume(DetectorEvents, _binSize);
         }
 
         private void GetDetectorEvents(int metricTypeId)
@@ -93,7 +105,7 @@ namespace MOE.Common.Business
             DetectorEvents = new List<Controller_Event_Log>();
             var detectorsForMetric = Approach.GetDetectorsForMetricType(metricTypeId);
             foreach (var d in detectorsForMetric)
-                DetectorEvents.AddRange(celRepository.GetEventsByEventCodesParamWithOffset(Approach.SignalID, StartDate,
+                DetectorEvents.AddRange(celRepository.GetEventsByEventCodesParamWithOffsetAndLatencyCorrection(Approach.SignalID, StartDate,
                     EndDate, new List<int> {81}, d.DetChannel, d.GetOffset(), d.LatencyCorrection));
         }
 

@@ -17,9 +17,15 @@ function GetMap()
         zoom: 6,
         customizeOverlays: false
     });
-    dataLayer = [];
-    AddData();
-    map.entities.push(dataLayer);
+    var dataLayer = AddData();
+    //map.entities.push(dataLayer);
+    Microsoft.Maps.loadModule("Microsoft.Maps.Clustering", function () {
+        var clusterLayer = new Microsoft.Maps.ClusterLayer(dataLayer, {
+            clusteredPinCallback: customizeClusteredPin
+        });
+        map.layers.insert(clusterLayer);
+
+    });
 }
 
 function GetRouteMap() {
@@ -34,9 +40,15 @@ function GetRouteMap() {
         zoom: 6,
         customizeOverlays: false
     });
-    dataLayer = [];
-    AddRouteData();
-    map.entities.push(dataLayer);
+    dataLayer = AddData();
+    //map.entities.push(dataLayer);
+    Microsoft.Maps.loadModule("Microsoft.Maps.Clustering", function () {
+        var clusterLayer = new Microsoft.Maps.ClusterLayer(dataLayer, {
+            clusteredPinCallback: customizeClusteredPin
+        });
+        map.layers.insert(clusterLayer);
+
+    });
 }
 
 
@@ -72,28 +84,51 @@ function CenterMap(region) {
 
 
 function GetMapWithCenter(lat, long, zoom) {
-    map = new Microsoft.Maps.Map(document.getElementById('mapDiv'), { credentials: 'ArDqSVBgLAcobelrUlW6yVPIyL-UGPwVKTE0ce2_tAxvrZr5YFnSEFds7I1CNy5O',
+
+    map = new Microsoft.Maps.Map(document.getElementById('mapDiv'), {
+        credentials: 'ArDqSVBgLAcobelrUlW6yVPIyL-UGPwVKTE0ce2_tAxvrZr5YFnSEFds7I1CNy5O',
         center: new Microsoft.Maps.Location(lat, long),
         mapTypeId: Microsoft.Maps.MapTypeId.road,
-        showDashboard: false,
+        showDashboard: true,
         showScalebar: false,
         enableSearchLogo: false,
         showMapTypeSelector: false,
-        zoom: zoom
+        zoom: zoom,
+        customizeOverlays: false
     });
+    var dataLayer = AddData();
+    //map.entities.push(dataLayer);
+    Microsoft.Maps.loadModule("Microsoft.Maps.Clustering", function () {
+        var clusterLayer = new Microsoft.Maps.ClusterLayer(dataLayer, {
+            clusteredPinCallback: customizeClusteredPin
+        });
+        map.layers.insert(clusterLayer);
 
-
-    dataLayer = [];
-    AddData();
-    map.entities.push(dataLayer);
-
-    var infoboxLayer = [];
-    map.entities.push(infoboxLayer);
-
-    infobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), { visible: false, offset: new Microsoft.Maps.Point(0, 20) });
-    infoboxLayer.push(infobox);
+    });
 }
 
+
+function customizeClusteredPin(cluster) {
+    //Add click event to clustered pushpin
+    Microsoft.Maps.Events.addHandler(cluster, 'click', clusterClicked);
+}
+
+function clusterClicked(e) {
+    if (e.target.containedPushpins) {
+        var locs = [];
+        for (var i = 0, len = e.target.containedPushpins.length; i < len; i++) {
+            //Get the location of each pushpin.
+            locs.push(e.target.containedPushpins[i].getLocation());
+        }
+
+        //Create a bounding box for the pushpins.
+        var bounds = Microsoft.Maps.LocationRect.fromLocations(locs);
+
+        //Zoom into the bounding box of the cluster. 
+        //Add a padding to compensate for the pixel area of the pushpins.
+        map.setView({ bounds: bounds, padding: 100 });
+    }
+}
 
 function closeInfobox() {
     if (infobox != null) {

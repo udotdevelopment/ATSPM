@@ -123,7 +123,7 @@ namespace MOE.Common.Business
             chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
             chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
                 Options.SignalID, Options.StartDate, Options.EndDate));
-                chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(signalPhase.Approach));
+                chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(signalPhase.Approach, signalPhase.GetPermissivePhase));
             chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
 
