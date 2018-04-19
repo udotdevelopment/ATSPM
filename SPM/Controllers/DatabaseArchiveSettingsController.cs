@@ -27,8 +27,8 @@ namespace SPM.Controllers
             var databaseArchiveExcludedSignal =
                 MOE.Common.Models.Repositories.DatabaseArchiveExcludedSignalsRepositoryFactory.Create();
             archiveSettingsViewModel.ExcludedSignals = databaseArchiveExcludedSignal.GetAllExcludedSignals();
-            archiveSettingsViewModel.DatabaseArchiveSettings.SelectedTableScheme = null;
-            archiveSettingsViewModel.DatabaseArchiveSettings.SelectedDeleteOrMove = null;
+            //archiveSettingsViewModel.DatabaseArchiveSettings.SelectedTableScheme = null;
+            //archiveSettingsViewModel.DatabaseArchiveSettings.SelectedDeleteOrMove = null;
             if (archiveSettingsViewModel.DatabaseArchiveSettings == null)
             {
                 return HttpNotFound();

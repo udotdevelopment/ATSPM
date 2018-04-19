@@ -501,6 +501,10 @@
     <Compile Include="Migrations\201803072127121_DatabaseArchiveChanges.Designer.cs">
       <DependentUpon>201803072127121_DatabaseArchiveChanges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803301713324_DatabaseArchiveProcessedPartitions.cs" />
+    <Compile Include="Migrations\201803301713324_DatabaseArchiveProcessedPartitions.Designer.cs">
+      <DependentUpon>201803301713324_DatabaseArchiveProcessedPartitions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\PhaseEventCountAggregation.cs" />
@@ -827,6 +831,7 @@
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\MetricComment.cs" />
     <Compile Include="Models\SPMWatchDogErrorEvent.cs" />
+    <Compile Include="Models\TablePartitionProcessed.cs" />
     <Compile Include="Models\VersionAction.cs" />
     <Compile Include="Models\ViewModel\Chart\FillSignalsViewModel.cs" />
     <Compile Include="Models\ViewModel\Chart\SignalSearchViewModel.cs" />
@@ -869,6 +874,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Migrations\CreateAndPopulateMOEDB.sql" />
+    <EmbeddedResource Include="Migrations\CreateIntegratedSwapAndMoveDataJob.sql" />
     <Content Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <Content Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
     <None Include="ClassDiagram1.cd" />
@@ -969,6 +975,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803072127121_DatabaseArchiveChanges.resx">
       <DependentUpon>201803072127121_DatabaseArchiveChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803301713324_DatabaseArchiveProcessedPartitions.resx">
+      <DependentUpon>201803301713324_DatabaseArchiveProcessedPartitions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

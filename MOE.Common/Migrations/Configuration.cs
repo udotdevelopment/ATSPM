@@ -591,8 +591,8 @@ While each agency should consult with their IT department for specific guideline
                 {
                     MenuId = 56,
                     MenuName = "Database Archive Settings",
-                    Controller = "ArchiveSettings",
-                    Action = "Index",
+                    Controller = "DatabaseArchiveSettings",
+                    Action = "edit",
                     ParentId = 53,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 2
@@ -1021,19 +1021,18 @@ While each agency should consult with their IT department for specific guideline
                 }
             );
 
-            context.DatabaseArchiveSettings.AddOrUpdate(
-                c => c.ApplicationID,
+            context.DatabaseArchiveSettings.AddOrUpdate(m => m.ApplicationID,
                 new DatabaseArchiveSettings
                 {
                     ApplicationID = 3,
-                    EnableDatbaseArchive = false,
-                    SelectedTableScheme = TableScheme.Partitioned,
-                    MonthsToKeepIndex = 6,
-                    MonthsToKeepData = 6,
-                    SelectedDeleteOrMove = DeleteOrMove.Move,
-                    StartTime = 22,
-                    TimeDuration = 8,
-                    NumberOfRows = 10000
+                    //EnableDatbaseArchive = false,
+                    //SelectedTableScheme = TableScheme.Partitioned,
+                    //MonthsToKeepIndex = 6,
+                    //MonthsToKeepData = 6,
+                    //SelectedDeleteOrMove = DeleteOrMove.Move,
+                    //StartTime = 22,
+                    //TimeDuration = 8,
+                    //NumberOfRows = 10000
                 }
             );
 
