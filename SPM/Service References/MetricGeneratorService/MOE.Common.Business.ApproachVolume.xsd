@@ -12,18 +12,24 @@
       <xs:element minOccurs="0" name="CombinedPeakHourKFactor" type="xs:double" />
       <xs:element minOccurs="0" name="CombinedPeakHourString" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CombinedPeakHourValue" type="xs:int" />
+      <xs:element minOccurs="0" name="CombinedPeakHourVolume" type="xs:int" />
       <xs:element minOccurs="0" name="CombinedVolume" type="xs:int" />
       <xs:element minOccurs="0" name="Direction1" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Direction1PeakHourDFactor" type="xs:double" />
       <xs:element minOccurs="0" name="Direction1PeakHourFactor" type="xs:double" />
       <xs:element minOccurs="0" name="Direction1PeakHourKFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="Direction1PeakHourMaxValue" type="xs:int" />
       <xs:element minOccurs="0" name="Direction1PeakHourString" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Direction1PeakHourValue" type="xs:int" />
+      <xs:element minOccurs="0" name="Direction1PeakHourVolume" type="xs:int" />
+      <xs:element minOccurs="0" name="Direction1Volume" type="xs:int" />
       <xs:element minOccurs="0" name="Direction2" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Direction2PeakHourDFactor" type="xs:double" />
       <xs:element minOccurs="0" name="Direction2PeakHourFactor" type="xs:double" />
       <xs:element minOccurs="0" name="Direction2PeakHourKFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="Direction2PeakHourMaxValue" type="xs:int" />
       <xs:element minOccurs="0" name="Direction2PeakHourString" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Direction2PeakHourVolume" type="xs:int" />
+      <xs:element minOccurs="0" name="Direction2Volume" type="xs:int" />
       <xs:element minOccurs="0" name="ImageLocation" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>

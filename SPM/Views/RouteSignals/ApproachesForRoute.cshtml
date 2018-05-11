@@ -2,10 +2,9 @@
 
 <div>
     <table class="table-condensed table-striped">
+        <thead>
+        <tr class=""><th rowspan="2">Signal ID</th><th colspan="3">Primary</th><th colspan="3">Opposing</th></tr>
         <tr>
-            <th>
-                Signal ID
-            </th>
             <th>
                 Direction
             </th>
@@ -13,37 +12,39 @@
                 Phase
             </th>
             <th>
-                Is Overlap
+                Overlap
             </th>
-            <th>Opposing Direction</th>
-            <th>Opposing Phase</th>
-            <th>Opposing Is Overlap</th>
+            <th>Direction</th>
+            <th>Phase</th>
+            <th>Overlap</th>
         </tr>
-
-        @foreach (var item in Model.PairedApproaches) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item1.RouteSignal.SignalId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item1.Direction.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item1.Phase)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item1.IsOverlap)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item2.Direction.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item2.Phase)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item2.IsOverlap)
-            </td>
-        </tr>
-        }
+        </thead>
+        <tbody>
+        @foreach (var item in Model.PairedApproaches)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item1.RouteSignal.SignalId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item1.Direction.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item1.Phase)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item1.IsOverlap)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item2.Direction.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item2.Phase)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item2.IsOverlap)
+                </td>
+            </tr>
+        }</tbody>
     </table>
 </div>

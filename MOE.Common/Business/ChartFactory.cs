@@ -236,8 +236,10 @@ namespace MOE.Common.Business
             var chartArea = new ChartArea();
             chartArea.Name = "ChartArea1";
             SetSplitFailYAxis(chartArea, options);
-            SetSplitFailXAxis(chartArea, options);
-            SetSplitFailX2Axis(chartArea, options);
+            SetUpXAxis(chartArea, options);
+            SetUpX2Axis(chartArea, options);
+            //SetSplitFailXAxis(chartArea, options);
+            //SetSplitFailX2Axis(chartArea, options);
             return chartArea;
         }
 
@@ -444,11 +446,28 @@ namespace MOE.Common.Business
             chartArea.AxisX2.Minimum = options.StartDate.ToOADate();
             chartArea.AxisX2.Maximum = options.EndDate.ToOADate();
             var reportTimespan = options.EndDate - options.StartDate;
-            if (reportTimespan.Days < 1)
-                if (reportTimespan.Hours > 1)
-                    chartArea.AxisX2.Interval = 1;
-                else
-                    chartArea.AxisX2.LabelStyle.Format = "HH:mm";
+            double totalHoursRounded = Math.Round(reportTimespan.TotalHours);
+            if (totalHoursRounded <= 2)
+            {
+                chartArea.AxisX2.IntervalType = DateTimeIntervalType.Minutes;
+                chartArea.AxisX2.Interval = 15;
+                chartArea.AxisX2.LabelStyle.Format = "HH:mm";
+            }
+            if (totalHoursRounded > 2 && totalHoursRounded <= 24)
+            {
+                chartArea.AxisX2.Interval = 1;
+                chartArea.AxisX2.LabelStyle.Format = "HH:mm";
+            }
+            else if (totalHoursRounded > 24 && totalHoursRounded <= 48)
+            {
+                chartArea.AxisX2.Interval = 12;
+                chartArea.AxisX2.LabelStyle.Format = "HH:mm";
+            }
+            else if (totalHoursRounded > 48)
+            {
+                chartArea.AxisX2.Interval = 24;
+                chartArea.AxisX2.LabelStyle.Format = "MM/dd/yyyy";
+            }
         }
 
         private static void SetUpXAxis(ChartArea chartArea, MetricOptions options)
@@ -459,23 +478,24 @@ namespace MOE.Common.Business
             chartArea.AxisX.Minimum = options.StartDate.ToOADate();
             chartArea.AxisX.Maximum = options.EndDate.ToOADate();
             var reportTimespan = options.EndDate - options.StartDate;
-            if (reportTimespan.TotalHours <= 2)
+            double totalHoursRounded = Math.Round(reportTimespan.TotalHours);
+            if (totalHoursRounded <= 2)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Minutes;
                 chartArea.AxisX.Interval = 15;
                 chartArea.AxisX.LabelStyle.Format = "HH:mm";
             }
-            if (reportTimespan.TotalHours > 2 && reportTimespan.TotalHours <= 24)
+            if (totalHoursRounded > 2 && totalHoursRounded <= 24)
             {
                 chartArea.AxisX.Interval = 1;
                 chartArea.AxisX.LabelStyle.Format = "HH:mm";
             }
-            else if (reportTimespan.TotalHours > 24 && reportTimespan.TotalHours <= 48)
+            else if (totalHoursRounded > 24 && totalHoursRounded <= 48)
             {
                 chartArea.AxisX.Interval = 12;
                 chartArea.AxisX.LabelStyle.Format = "HH:mm";
             }
-            else if (reportTimespan.TotalHours > 48)
+            else if (totalHoursRounded > 48)
             {
                 chartArea.AxisX.Interval = 24;
                 chartArea.AxisX.LabelStyle.Format = "MM/dd/yyyy";

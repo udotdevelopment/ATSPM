@@ -78,7 +78,7 @@ namespace MOE.Common.Business
         private double CheckForDetectorActivationBiggerThanPeriod(DateTime startTime, DateTime endTime,
             List<SplitFailDetectorActivation> detectorActivations)
         {
-            if (detectorActivations.Count(d => d.DetectorOn < startTime && endTime > d.DetectorOff) > 0)
+            if (detectorActivations.Count(d => d.DetectorOn < startTime &&  d.DetectorOff > endTime) > 0)
                 return (endTime - startTime).Milliseconds;
             return 0;
         }

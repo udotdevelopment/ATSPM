@@ -151,7 +151,7 @@ namespace MOE.Common.Business
             while (dt < signalPhase.EndDate)
             {
                 var pcdsInBin = from item in signalPhase.Cycles
-                    where item.StartTime >= dt && item.EndTime < dt.AddMinutes(binSize)
+                    where item.StartTime >= dt && item.StartTime < dt.AddMinutes(binSize)
                     select item;
 
                 var binDelay = pcdsInBin.Sum(d => d.TotalDelay);

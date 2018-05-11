@@ -63,14 +63,13 @@ return pins;}";
         public static void CreateRouteScript()
         {
             //string Locations = string.Empty;
-            var script = @"function AddRouteData() { 
-            var pinColor =new Microsoft.Maps.Color(255, 238, 118, 35);
-            var iconURL = '../images/orangePin.png';
-            var regionDdl = $('#Regions')[0];var regionFilter = 0; 
-                if (regionDdl.options[regionDdl.selectedIndex].value != '')
-                {regionFilter = regionDdl.options[regionDdl.selectedIndex].value;} 
-            var reportType = $('#MetricTypes')[0]; var reportTypeFilter = 0; 
-                if (reportType.options[reportType.selectedIndex].value != '') 
+            var script = @"function AddData() {
+            var regionDdl = $('#Regions')[0];
+            var pins = [];
+            var regionFilter = 0; if (regionDdl.options[regionDdl.selectedIndex].value != '') 
+                {regionFilter = regionDdl.options[regionDdl.selectedIndex].value;}
+            var reportType = $('#MetricTypes')[0]; 
+            var reportTypeFilter = 0; if (reportType.options[reportType.selectedIndex].value != '')
                 { reportTypeFilter = ','+reportType.options[reportType.selectedIndex].value;}";
             var pins = GetPins();
             foreach (var pin in pins)
@@ -94,7 +93,9 @@ return pins;}";
             }
 
             //The Locaitons string will be used ot create a literal that is inserted into the default.html
-            script += "}";
+
+            script += @" 
+return pins;}";
 
             var appSettings = ConfigurationManager.AppSettings;
             for (var i = 0; i < appSettings.Count; i++)

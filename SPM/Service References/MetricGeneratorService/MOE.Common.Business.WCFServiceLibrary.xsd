@@ -10,6 +10,7 @@
         <xs:sequence>
           <xs:element minOccurs="0" name="SelectedBinSize" type="xs:int" />
           <xs:element minOccurs="0" name="SelectedDotSize" type="xs:int" />
+          <xs:element minOccurs="0" name="SelectedLineSize" type="xs:int" />
           <xs:element minOccurs="0" name="ShowArrivalsOnGreen" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowPlanStatistics" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowVolumes" type="xs:boolean" />

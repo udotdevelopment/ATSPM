@@ -505,6 +505,10 @@
     <Compile Include="Migrations\201803301713324_DatabaseArchiveProcessedPartitions.Designer.cs">
       <DependentUpon>201803301713324_DatabaseArchiveProcessedPartitions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804251748599_MetricTypeIdentityRemoval.cs" />
+    <Compile Include="Migrations\201804251748599_MetricTypeIdentityRemoval.Designer.cs">
+      <DependentUpon>201804251748599_MetricTypeIdentityRemoval.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\PhaseEventCountAggregation.cs" />
@@ -874,6 +878,9 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Migrations\CreateAndPopulateMOEDB.sql" />
+    <EmbeddedResource Include="Migrations\201804251748599_MetricTypeIdentityRemoval.resx">
+      <DependentUpon>201804251748599_MetricTypeIdentityRemoval.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CreateIntegratedSwapAndMoveDataJob.sql" />
     <Content Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <Content Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

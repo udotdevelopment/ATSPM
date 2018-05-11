@@ -26,7 +26,11 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript" src="~/Scripts/AddRouteData.js"></script>
     <script type="text/javascript" src="~/Scripts/RouteEdit.js"></script>
+    <script type="text/javascript" src="~/Scripts/Map.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
     <script> var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';</script>
     <script> var urlpathApproaches = '@Url.Action("ApproachList", "RouteSignals")';</script>
     <script> var urlpathRouteApproaches = '@Url.Action("ApproachesForRoute", "RouteSignals")';</script>

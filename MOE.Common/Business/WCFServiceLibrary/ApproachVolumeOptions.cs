@@ -105,9 +105,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 DirectionType northboundDirection = allDirections.FirstOrDefault(d => d.Description == "Northbound");
                 DirectionType southboundDirection = allDirections.FirstOrDefault(d => d.Description == "Southbound");
                 List<Models.Approach> northboundApproaches = signal.Approaches
-                    .Where(a => a.DirectionTypeID == northboundDirection.DirectionTypeID).ToList();
+                    .Where(a => a.DirectionTypeID == northboundDirection.DirectionTypeID && a.ProtectedPhaseNumber !=0).ToList();
                 List<Models.Approach> southboundApproaches = signal.Approaches
-                    .Where(a => a.DirectionTypeID == southboundDirection.DirectionTypeID).ToList();
+                    .Where(a => a.DirectionTypeID == southboundDirection.DirectionTypeID && a.ProtectedPhaseNumber != 0).ToList();
                 if (northboundApproaches.Count > 0 || southboundApproaches.Count >0)
                 {
                     CreateAndSaveCharts(northboundDirection, southboundDirection, northboundApproaches, southboundApproaches);
@@ -118,12 +118,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 DirectionType eastboundDirection = allDirections.FirstOrDefault(d => d.Description == "Eastbound");
                 DirectionType westboundDirection = allDirections.FirstOrDefault(d => d.Description == "Westbound");
                 var eastboundApproaches = signal.Approaches
-                    .Where(a => a.DirectionTypeID == eastboundDirection.DirectionTypeID).ToList();
+                    .Where(a => a.DirectionTypeID == eastboundDirection.DirectionTypeID && a.ProtectedPhaseNumber != 0).ToList();
                 var westboundApproaches = signal.Approaches
-                    .Where(a => a.DirectionTypeID == westboundDirection.DirectionTypeID).ToList();
+                    .Where(a => a.DirectionTypeID == westboundDirection.DirectionTypeID && a.ProtectedPhaseNumber != 0).ToList();
                 if (eastboundApproaches.Count > 0 || westboundApproaches.Count > 0)
                 {
-                        new ApproachVolume.ApproachVolume(eastboundApproaches, westboundApproaches, this, eastboundDirection, westboundDirection, 4);
                     CreateAndSaveCharts(eastboundDirection, westboundDirection, eastboundApproaches, westboundApproaches);
                 }
             }

@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MOE.Common.Models
 {
     public class MetricType
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int MetricID { get; set; }
 
         [Required]

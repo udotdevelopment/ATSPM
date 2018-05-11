@@ -2,13 +2,13 @@
   <publishTarget publishUrl="\\srwtcmoe\d$\UDOT\TestMoeWcfLibrary\">
     <file relUrl="bin/CsvHelper.xml" publishTime="12/15/2017 12:36:52" />
     <file relUrl="bin/SharpSnmpLib.Portable.xml" publishTime="08/31/2017 18:08:41" />
-    <file relUrl="MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="04/18/2018 15:18:54" />
+    <file relUrl="MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="04/25/2018 12:27:35" />
     <file relUrl="bin/EntityFramework.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Extensions.Logging.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/System.Web.Mvc.dll" publishTime="08/31/2017 18:08:41" />
-    <file relUrl="Web.config" publishTime="04/17/2018 09:43:49" />
+    <file relUrl="Web.config" publishTime="04/25/2018 12:27:00" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/AlexPilotti.FTPS.Client.xml" publishTime="08/31/2017 18:08:41" />
@@ -21,7 +21,7 @@
     <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Extensions.Options.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/System.Web.Razor.xml" publishTime="08/31/2017 18:08:41" />
-    <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="04/03/2018 11:17:59" />
+    <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="04/25/2018 11:13:04" />
     <file relUrl="bin/System.Web.Mvc.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Extensions.Logging.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Web.XmlTransform.dll" publishTime="08/31/2017 18:08:41" />
@@ -30,13 +30,13 @@
     <file relUrl="bin/SharpSnmpLib.Full.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/System.Interactive.Async.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Owin.dll" publishTime="08/31/2017 18:08:41" />
-    <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="04/17/2018 09:43:49" />
+    <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="04/25/2018 12:27:00" />
     <file relUrl="bin/Remotion.Linq.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Owin.Security.Cookies.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Newtonsoft.Json.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll" publishTime="09/27/2017 19:57:32" />
-    <file relUrl="MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="04/18/2018 15:18:54" />
+    <file relUrl="MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="04/25/2018 12:27:35" />
     <file relUrl="bin/Microsoft.Owin.Security.Cookies.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Owin.Security.OAuth.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.xml" publishTime="08/31/2017 18:08:41" />
@@ -44,39 +44,39 @@
     <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/AlexPilotti.FTPS.Client.dll" publishTime="08/31/2017 18:08:41" />
-    <file relUrl="bin/MOEWcfServiceLibrary.dll" publishTime="04/18/2018 15:10:43" />
-    <file relUrl="bin/MOEWcfServiceLibrary.pdb" publishTime="04/18/2018 15:10:43" />
+    <file relUrl="bin/MOEWcfServiceLibrary.dll" publishTime="04/25/2018 12:17:35" />
+    <file relUrl="bin/MOEWcfServiceLibrary.pdb" publishTime="04/25/2018 12:17:35" />
     <file relUrl="bin/Microsoft.EntityFrameworkCore.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/EntityFramework.SqlServer.xml" publishTime="08/31/2017 18:08:41" />
+    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/SnmpSharpNet.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Remotion.Linq.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/CsvHelper.dll" publishTime="12/15/2017 12:36:52" />
     <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="08/31/2017 18:08:41" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="08/31/2017 18:08:41" />
-    <file relUrl="bin/MOE.Common.pdb" publishTime="04/18/2018 15:10:43" />
+    <file relUrl="bin/MOE.Common.pdb" publishTime="04/25/2018 12:09:39" />
     <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="08/31/2017 18:08:41" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="08/31/2017 18:08:41" />
-    <file relUrl="bin/MOE.Common.dll" publishTime="04/18/2018 15:10:43" />
+    <file relUrl="bin/MOE.Common.dll" publishTime="04/25/2018 12:09:39" />
     <file relUrl="bin/System.Web.Razor.dll" publishTime="08/31/2017 18:08:41" />
-    <file relUrl="bin/Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll" publishTime="09/27/2017 19:57:32" />
     <file relUrl="bin/System.Web.WebPages.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/SharpSnmpLib.Full.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/EntityFramework.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Core.xml" publishTime="08/31/2017 18:08:41" />
-    <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="04/03/2018 11:17:59" />
+    <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="04/25/2018 11:13:04" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Memory.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Memory.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/System.Collections.Immutable.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.EntityFrameworkCore.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/System.Web.WebPages.xml" publishTime="08/31/2017 18:08:41" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="08/31/2017 18:08:41" />
+    <file relUrl="bin/Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll" publishTime="09/27/2017 19:57:32" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll" publishTime="09/27/2017 19:57:32" />
     <file relUrl="bin/NuGet.Core.dll" publishTime="08/31/2017 18:08:41" />
-    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="08/31/2017 18:08:41" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/MOE.Common.dll.config" publishTime="02/22/2018 10:18:27" />
     <file relUrl="bin/SharpSnmpLib.Portable.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/MvcCheckBoxList.dll" publishTime="08/31/2017 18:08:41" />

@@ -26,8 +26,8 @@ namespace MOE.Common.Migrations
                         TimeSwappedTableDropped = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
-            string sqlResName = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".CreateIntegratedSwapAndMoveDataJob.sql";
-            this.SqlResource(sqlResName);
+           // string sqlResName = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".CreateIntegratedSwapAndMoveDataJob.sql";
+            //this.SqlResource(sqlResName);
         }
 
 

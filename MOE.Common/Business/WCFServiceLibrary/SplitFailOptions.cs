@@ -63,7 +63,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
-            EndDate = EndDate.AddSeconds(59);
+            //EndDate = EndDate.AddSeconds(59);
             var returnString = new List<string>();
             var sr = SignalsRepositoryFactory.Create();
             var signal = sr.GetVersionOfSignalByDate(SignalID, StartDate);
@@ -71,21 +71,21 @@ namespace MOE.Common.Business.WCFServiceLibrary
             if (metricApproaches.Count > 0)
                 //Parallel.ForEach(metricApproaches, approach =>
                 foreach (Approach approach in metricApproaches)
+                {
+                    if (approach.ProtectedPhaseNumber > 0)
                     {
-                        if (approach.ProtectedPhaseNumber > 0)
-                        {
-                            var splitFailPhase = new SplitFailPhase(approach, this, false);
-                            var chartName = CreateFileName();
-                            GetChart(splitFailPhase, chartName, returnString, false, approach);
-                        }
-                        if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
-                        {
-                            
-                            var splitFailPermissivePhase = new SplitFailPhase(approach, this, true);
-                            var permChartName = CreateFileName();
-                            GetChart(splitFailPermissivePhase, permChartName, returnString, true, approach);
-                        }
+                        var splitFailPhase = new SplitFailPhase(approach, this, false);
+                        var chartName = CreateFileName();
+                        GetChart(splitFailPhase, chartName, returnString, false, approach);
                     }
+                    if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
+                    {
+                            
+                        var splitFailPermissivePhase = new SplitFailPhase(approach, this, true);
+                        var permChartName = CreateFileName();
+                        GetChart(splitFailPermissivePhase, permChartName, returnString, true, approach);
+                    }
+                }
                 //);
             return returnString;
         }

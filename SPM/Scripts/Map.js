@@ -40,7 +40,7 @@ function GetRouteMap() {
         zoom: 6,
         customizeOverlays: false
     });
-    dataLayer = AddData();
+    var dataLayer = AddData();
     //map.entities.push(dataLayer);
     Microsoft.Maps.loadModule("Microsoft.Maps.Clustering", function () {
         var clusterLayer = new Microsoft.Maps.ClusterLayer(dataLayer, {
