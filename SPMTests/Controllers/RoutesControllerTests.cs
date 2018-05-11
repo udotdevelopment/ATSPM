@@ -31,7 +31,7 @@ namespace SPM.Controllers.Tests
         [TestMethod()]
         public void IndexTest()
         {
-            var controller = new RoutesController();
+            var controller = new SPM.Controllers.RoutesController();
             var result = controller.Index() as ViewResult;
             var routes = result.Model as List<Route>;
 

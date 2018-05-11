@@ -27,7 +27,7 @@ namespace SPM.Controllers.Tests
             //InMemoryApplicationSettingsRepository appRep = new InMemoryApplicationSettingsRepository();
             //MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.SetMetricsRepository(appRep);
 
-            WatchDogApplicationSettingsController controller = new WatchDogApplicationSettingsController();
+            var controller = new WatchDogApplicationSettingsController();
             ActionResult ar = controller.Edit();
 
             Assert.IsNotNull(ar);
