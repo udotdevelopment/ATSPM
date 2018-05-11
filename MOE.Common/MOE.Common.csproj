@@ -511,8 +511,10 @@
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
+    <Compile Include="Models\Phase.cs" />
     <Compile Include="Models\PhaseEventCountAggregation.cs" />
     <Compile Include="Models\DetectorEventCountAggregation.cs" />
+    <Compile Include="Models\Region.cs" />
     <Compile Include="Models\Repositories\IDetectorEventCountAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IApproachEventCountAggregationRepository.cs" />
     <Compile Include="Models\Repositories\ISignalEventCountAggregationRepository.cs" />
@@ -520,6 +522,7 @@
     <Compile Include="Models\Repositories\PhaseEventCountAggregationRepository.cs" />
     <Compile Include="Models\Repositories\DetectorEventCountAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\PhaseEventCountAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\ShrinkFileGroup.cs" />
     <Compile Include="Models\SignalEventCountAggregation.cs" />
     <Compile Include="Models\ApproachPcdAggregation.cs" />
     <Compile Include="Models\ApproachYellowRedActivationsAggregation.cs" />
@@ -774,7 +777,6 @@
     <Compile Include="Models\MetricsFilterType.cs" />
     <Compile Include="Models\MetricType.cs" />
     <Compile Include="Models\MovementType.cs" />
-    <Compile Include="Models\Region.cs" />
     <Compile Include="Models\Repositories\ApproachRepository.cs" />
     <Compile Include="Models\Repositories\ApproachRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\ControllerTypeRepository.cs" />
@@ -835,7 +837,10 @@
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\MetricComment.cs" />
     <Compile Include="Models\SPMWatchDogErrorEvent.cs" />
+    <Compile Include="Models\StatusOfProcessedTable.cs" />
     <Compile Include="Models\TablePartitionProcessed.cs" />
+    <Compile Include="Models\ToBeProcessedTable.cs" />
+    <Compile Include="Models\ToBeProcessedTableIndex.cs" />
     <Compile Include="Models\VersionAction.cs" />
     <Compile Include="Models\ViewModel\Chart\FillSignalsViewModel.cs" />
     <Compile Include="Models\ViewModel\Chart\SignalSearchViewModel.cs" />

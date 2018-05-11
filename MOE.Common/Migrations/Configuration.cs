@@ -1,8 +1,10 @@
+using System;
 using System.Data.Entity.Migrations;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using MOE.Common.Business.SiteSecurity;
 using MOE.Common.Models;
+using Action = MOE.Common.Models.Action;
 
 namespace MOE.Common.Migrations
 {
@@ -883,7 +885,7 @@ While each agency should consult with their IT department for specific guideline
                 new MetricType
                 {
                     MetricID = 20,
-                    ChartName = "Approach Split Fail",  //"Purdue Split Failure",
+                    ChartName = "Approach Split Fail", //"Purdue Split Failure",
                     Abbreviation = "SFA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
@@ -891,7 +893,7 @@ While each agency should consult with their IT department for specific guideline
                 new MetricType
                 {
                     MetricID = 22,
-                    ChartName = "Signal Preemption",  //"Preemption",
+                    ChartName = "Signal Preemption", //"Preemption",
                     Abbreviation = "PreemptA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
@@ -900,7 +902,7 @@ While each agency should consult with their IT department for specific guideline
                 {
                     MetricID = 24,
                     ChartName = "Signal Priority", // "Transit Signal Priority",
-                    Abbreviation = "TSPA", 
+                    Abbreviation = "TSPA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
                 },
@@ -912,7 +914,7 @@ While each agency should consult with their IT department for specific guideline
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
                 },
-               new MetricType
+                new MetricType
                 {
                     MetricID = 26,
                     ChartName = "Approach Yellow Red Activations", //"Yellow Red Activations",
@@ -920,7 +922,7 @@ While each agency should consult with their IT department for specific guideline
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
                 },
-               new MetricType
+                new MetricType
                 {
                     MetricID = 27,
                     ChartName = "Signal Event Count",
@@ -1129,6 +1131,93 @@ While each agency should consult with their IT department for specific guideline
                 }
             );
 
+            context.ToBeProcessededTables.AddOrUpdate(
+                new ToBeProcessededTable()
+                {
+                    PartitionedTableName = "Controller_Event_Log",
+                    UpdatedTime = Convert.ToDateTime("2018-05-13 00:20:00.000"),
+                    PreserveDataSelect = "SELECT [SignalID], [Timestamp], [EventCode], [EventParam]",
+                    TableId = 1,
+                    PreserveDataWhere =
+                        "WHERE SignalID in (select SignalID from  [dbo].[DatabaseArchiveExcludedSignals] )",
+                    InsertValues = "INSERT INTO [SignalID], [Timestamp], [EventCode], [EventParam]",
+                    DataBaseName = "MoePartition",
+                    Verbose = true,
+                    CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, 
+                                            [Timestamp] [datetime2](7) NOT NULL, [EventCode] [int] NOT NULL, [EventParam] [int] NOT NULL"
+                },
+
+                new ToBeProcessededTable()
+                {
+                    PartitionedTableName = "Speed_Events",
+                    UpdatedTime = Convert.ToDateTime("2018-05-13 00:20:00.000"),
+                    PreserveDataSelect = "SELECT [DetectorID], [MPH], [KPH], [Timestamp]",
+                    TableId = 2,
+                    PreserveDataWhere = @" WHERE  DetectorID  in 
+                                            (SELECT [DetectorID]   
+                                            FROM [dbo].[Detectors]   
+                                             WHERE  [ApproachID]  in  
+                                                (SELECT [ApproachID]  
+                                                 FROM  [dbo].[Approaches]   
+                                                 WHERE [SignalID]  in  
+                                                    (Select [SignalId]  
+                                                     FROM  [dbo].[DatabaseArchiveExcludedSignals] )))",
+                    InsertValues = "Insert into [DetectorID], [MPH], [KPH], [Timestamp]",
+                    DataBaseName = "MoePartition",
+                    Verbose = true,
+                    CreateColumns4Table =
+                        "[DetectorID] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, [MPH] [int] NOT NULL, [KPH] [int] NOT NULL, [Timestamp] [datetime2](7) NOT NULL"
+                }
+            );
+
+            context.ToBeProcessededIndexes.AddOrUpdate(
+                new ToBeProcessedTableIndex()
+                {
+                    TableId = 1,
+                    IndexId = 1,
+                    ClusteredText = "Clustered",
+                    TextForIndex =
+                        "([Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+                    IndexName = "IX_Clustered_Controller_Event_Log_Temp"
+                },
+                new ToBeProcessedTableIndex()
+                {
+                    TableId = 1,
+                    IndexId = 2,
+                    ClusteredText = "NonClustered",
+                    TextForIndex =
+                        "([SignalID] ASC, [Timestamp] ASC, [EventCode] ASC, [EventParam] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+                    IndexName = "IX_Controller_Event_Log"
+                },
+                new ToBeProcessedTableIndex()
+                {
+                    TableId = 2,
+                    IndexId = 1,
+                    ClusteredText = "Clustered",
+                    TextForIndex =
+                        "([Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+                    IndexName = "IX_Clustered_Speed_Events"
+                },
+                new ToBeProcessedTableIndex()
+                {
+                    TableId = 2,
+                    IndexId = 2,
+                    ClusteredText = "NonClustered",
+                    TextForIndex =
+                        "([DetectorID] ASC, [Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+                    IndexName = "IX_ByDetID"
+                },
+                new ToBeProcessedTableIndex()
+                {
+                    TableId = 2,
+                    IndexId = 3,
+                    ClusteredText = "NonClustered",
+                    TextForIndex =
+                        "([Timestamp] ASC, [DetectorID] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+                    IndexName = "ByTimestampByDetID"
+                }
+            );
+
             context.Regions.AddOrUpdate(
                 new Region {ID = 1, Description = "Region 1"},
                 new Region {ID = 2, Description = "Region 2"},
@@ -1206,3 +1295,4 @@ While each agency should consult with their IT department for specific guideline
         }
     }
 }
+
