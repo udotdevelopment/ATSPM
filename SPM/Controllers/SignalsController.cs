@@ -85,29 +85,51 @@ namespace SPM.Controllers
             return View(wctv);
         }
 
-        public ActionResult AddNewVersion(string id)
+        public int AddNewVersion(string id)
         {
             var existingSignal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
-            if (existingSignal == null)
-            {
-                return Content("<h1>" +"No Signal Matches this SignalID" + "</h1>");
-            }
+            //if (existingSignal == null)
+            //{
+            //    return Content("<h1>" +"No Signal Matches this SignalID" + "</h1>");
+            //}
 
             Signal signal = _signalsRepository.CopySignalToNewVersion(existingSignal);
-                try
+            signal.VersionList = _signalsRepository.GetAllVersionsOfSignalBySignalID(signal.SignalID);
+            
+            try
                 {
                     _signalsRepository.AddOrUpdate(signal);
+                    var commentRepository = MOE.Common.Models.Repositories.MetricCommentRepositoryFactory.Create();
+                    foreach (var origVersionComment in existingSignal.Comments)
+                    {
+                        MetricComment metricComment = new MetricComment
+                        {
+                            CommentText = origVersionComment.CommentText,
+                            VersionID = signal.VersionID,
+                            SignalID = existingSignal.SignalID,
+                            TimeStamp = origVersionComment.TimeStamp,
+                        };
+                        if (origVersionComment.MetricTypes != null)
+                        {
+                            metricComment.MetricTypeIDs = new List<int>();
+                            foreach (var metricType in origVersionComment.MetricTypes)
+                            {
+                                metricComment.MetricTypeIDs.Add(metricType.MetricID);
+                            }
+                        }
+                        commentRepository.AddOrUpdate(metricComment);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    return Content("<h1>" + ex.Message + "</h1>");
+                    return -1;
                 }
                 finally
                 {
                     AddSelectListsToViewBag(signal);
                 }
-                return PartialView("Edit", signal);
-            }
+            return signal.VersionID;
+        }
             
         
 
@@ -319,7 +341,7 @@ namespace SPM.Controllers
             {
                 copyVersion = Signal.CopyVersion(originalSignalVersion);
                 copyVersion.VersionActionId = 4;
-                copyVersion.Start = DateTime.Today;
+                copyVersion.Start = DateTime.Now;
                 copyVersion.IPAddress = originalSignalVersion.IPAddress;
                 copyVersion.Note = "Copy of Version " + originalSignalVersion.Note;
             }
@@ -464,6 +486,7 @@ namespace SPM.Controllers
                     a.Index = "Approaches[" + signal.Approaches.ToList().FindIndex(app => app.ApproachID == a.ApproachID).ToString() + "].";
                 }
                 signal.Comments = signal.Comments.OrderByDescending(s => s.TimeStamp).ToList();
+                signal.VersionList = _signalsRepository.GetAllVersionsOfSignalBySignalID(signal.SignalID);
                 AddSelectListsToViewBag(signal);
             }
             return PartialView("Edit",signal);
@@ -589,7 +612,7 @@ namespace SPM.Controllers
             ViewBag.MovementType = new SelectList(_movementTypeRepository.GetAllMovementTypes(), "MovementTypeID", "Description");
             ViewBag.LaneType = new SelectList(_laneTypeRepository.GetAllLaneTypes(), "LaneTypeID", "Description");
             ViewBag.DetectionHardware = new SelectList(_detectionHardwareRepository.GetAllDetectionHardwares(), "ID", "Name");
-            signal.VersionList = _signalsRepository.GetAllVersionsOfSignalBySignalID(signal.SignalID);
+            
         }
 
         // GET: Signals/Delete/5

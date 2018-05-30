@@ -935,6 +935,14 @@ While each agency should consult with their IT department for specific guideline
                     Abbreviation = "AEC",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
+                },
+                new MetricType
+                {
+                    MetricID = 29,
+                    ChartName = "Phase Termination",
+                    Abbreviation = "AEC",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = true
                 }
             );
             context.SaveChanges();

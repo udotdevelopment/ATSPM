@@ -7,6 +7,7 @@ namespace MOE.Common.Migrations
     {
         public override void Up()
         {
+            //This causes a problem with cascade deleting the metric comments if you delete the metric types
             DropForeignKey("dbo.MetricCommentMetricTypes", "MetricType_MetricID", "dbo.MetricTypes");
             DropForeignKey("dbo.DetectionTypeMetricTypes", "MetricType_MetricID", "dbo.MetricTypes");
             DropForeignKey("dbo.ActionLogMetricTypes", "MetricType_MetricID", "dbo.MetricTypes");

@@ -470,7 +470,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chart.Series.Add(eventCountSeries);
         }
 
-        protected Series GetTimeXAxisSignalSeries(Models.Signal signal)
+        public Series GetTimeXAxisSignalSeries(Models.Signal signal)
         {
             var series = CreateSeries(-1, signal.SignalDescription);
             var binsContainers = GetBinsContainersBySignal(signal);

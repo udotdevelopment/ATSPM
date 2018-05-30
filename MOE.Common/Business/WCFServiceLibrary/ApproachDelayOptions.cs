@@ -58,7 +58,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public void SetDefaults()
         {
             YAxisMax = 15;
-            Y2AxisMax = 20000;
+            Y2AxisMax = 10;
             ShowPlanStatistics = true;
             ShowTotalDelayPerHour = true;
             ShowDelayPerVehicle = true;

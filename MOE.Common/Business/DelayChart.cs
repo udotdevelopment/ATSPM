@@ -52,13 +52,13 @@ namespace MOE.Common.Business
                 if (Options.Y2AxisMax != null && Options.Y2AxisMax > 0)
                     chartArea.AxisY2.Maximum = Options.Y2AxisMax.Value;
                 else
-                    chartArea.AxisY2.Maximum = 50000;
+                    chartArea.AxisY2.Maximum = 10;
                 chartArea.AxisY2.Minimum = 0;
                 chartArea.AxisY2.Enabled = AxisEnabled.True;
                 chartArea.AxisY2.MajorTickMark.Enabled = true;
                 chartArea.AxisY2.MajorGrid.Enabled = false;
-                chartArea.AxisY2.Interval = 5000;
-                chartArea.AxisY2.Title = "Delay per Hour (Seconds) ";
+                chartArea.AxisY2.Interval = 5;
+                chartArea.AxisY2.Title = "Delay per Hour (hrs) ";
                 chartArea.AxisY2.TitleForeColor = Color.Red;
             }
 
@@ -164,7 +164,7 @@ namespace MOE.Common.Business
                 else
                     bindDelaypervehicle = 0;
 
-                bindDelayperhour = binDelay / (60 / binSize);
+                bindDelayperhour = binDelay * (60 / binSize) /60/60;
 
                 if (showDelayPerVehicle)
                     chart.Series["Approach Delay Per Vehicle"].Points.AddXY(dt, bindDelaypervehicle);
@@ -175,7 +175,7 @@ namespace MOE.Common.Business
             }
             var statistics = new Dictionary<string, string>();
             statistics.Add("Average Delay Per Vehicle (AD)", Math.Round(signalPhase.AvgDelay) + " seconds");
-            statistics.Add("Total Delay For Selected Period (TD)", Math.Round(signalPhase.TotalDelay) + " seconds");
+            statistics.Add("Total Delay For Selected Period (TD)", Math.Round(signalPhase.TotalDelay/60/60,1) + " hours");
             SetChartTitles(signalPhase, statistics);
         }
 
@@ -237,7 +237,7 @@ namespace MOE.Common.Business
                     var aogLabel = new CustomLabel();
                     aogLabel.FromPosition = plan.StartTime.ToOADate();
                     aogLabel.ToPosition = plan.EndTime.ToOADate();
-                    aogLabel.Text = totalDelay + " TD";
+                    aogLabel.Text = Math.Round(totalDelay / 60 /60, 1) + " TD";
                     aogLabel.LabelMark = LabelMarkStyle.LineSideMark;
                     aogLabel.ForeColor = Color.Red;
                     aogLabel.RowIndex = 1;

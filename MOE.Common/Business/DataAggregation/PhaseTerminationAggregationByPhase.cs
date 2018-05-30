@@ -9,24 +9,19 @@ using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.DataAggregation
 {
-    public class SplitFailAggregationByApproach : AggregationByApproach
+    public class PhaseTerminationAggregationByPhase : AggregationByPhase
     {
-        public SplitFailAggregationByApproach(Approach approach, ApproachSplitFailAggregationOptions options, DateTime startDate,
-            DateTime endDate,
-            bool getProtectedPhase, AggregatedDataType dataType) : base(approach, options, startDate, endDate,
-            getProtectedPhase, dataType)
+        public PhaseTerminationAggregationByPhase(Models.Signal signal, int phaseNumber, PhaseTerminationAggregationOptions options, AggregatedDataType dataType) 
+            : base(signal, phaseNumber, options, dataType)
         {
         }
 
-        protected override void LoadBins(Approach approach, ApproachAggregationMetricOptions options,
-            bool getProtectedPhase,
+        protected override void LoadBins(Models.Signal signal, int phaseNumber, PhaseAggregationMetricOptions options,
             AggregatedDataType dataType)
         {
-            var splitFailAggregationRepository =
-                ApproachSplitFailAggregationRepositoryFactory.Create();
-            var splitFails =
-                splitFailAggregationRepository.GetApproachSplitFailsAggregationByApproachIdAndDateRange(
-                    approach.ApproachID, options.StartDate, options.EndDate, getProtectedPhase);
+            var phaseTerminationAggregationRepository = PhaseTerminationAggregationRepositoryFactory.Create();
+            var splitFails = phaseTerminationAggregationRepository.GetPhaseTerminationsAggregationBySignalIdPhaseNumberAndDateRange(
+                signal.SignalID, phaseNumber, options.StartDate, options.EndDate);
             if (splitFails != null)
             {
                 var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
@@ -41,13 +36,28 @@ namespace MOE.Common.Business.DataAggregation
                     {
                         if (splitFails.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
                         {
-                            var splitFailCount = 0;
+                            var terminationCount = 0;
                             switch (dataType.DataName)
                             {
-                                case "SplitFails":
-                                    splitFailCount =
+                                case "GapOuts":
+                                    terminationCount =
                                         splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.SplitFailures);
+                                            .Sum(s => s.GapOuts);
+                                    break;
+                                case "ForceOffs":
+                                    terminationCount =
+                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.ForceOffs);
+                                    break;
+                                case "MaxOuts":
+                                    terminationCount =
+                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.MaxOuts);
+                                    break;
+                                case "Unknown":
+                                    terminationCount =
+                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.UnknownTerminationTypes);
                                     break;
                                 default:
 
@@ -58,8 +68,8 @@ namespace MOE.Common.Business.DataAggregation
                             {
                                 Start = bin.Start,
                                 End = bin.End,
-                                Sum = splitFailCount,
-                                Average = splitFailCount
+                                Sum = terminationCount,
+                                Average = terminationCount
                             });
                         }
                         else

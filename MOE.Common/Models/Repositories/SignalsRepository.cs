@@ -132,7 +132,7 @@ namespace MOE.Common.Models.Repositories
 
             newVersion.SignalID = originalVersion.SignalID;
             newVersion.Start = DateTime.Today;
-            newVersion.Note = originalVersion.Note;
+            newVersion.Note = "Copy of " + originalVersion.Note;
             newVersion.PrimaryName = originalVersion.PrimaryName;
             newVersion.SecondaryName = originalVersion.SecondaryName;
             newVersion.IPAddress = originalVersion.IPAddress;
@@ -141,7 +141,6 @@ namespace MOE.Common.Models.Repositories
             newVersion.Enabled = originalVersion.Enabled;
             newVersion.Latitude = originalVersion.Latitude;
             newVersion.Longitude = originalVersion.Longitude;
-
             _db.Signals.Add(newVersion);
             _db.SaveChanges();
 
@@ -469,6 +468,7 @@ namespace MOE.Common.Models.Repositories
                 newApp.ProtectedPhaseNumber = apprFromDb.ProtectedPhaseNumber;
                 newApp.DirectionTypeID = apprFromDb.DirectionTypeID;
                 newApp.IsProtectedPhaseOverlap = apprFromDb.IsProtectedPhaseOverlap;
+                newApp.IsPermissivePhaseOverlap = apprFromDb.IsPermissivePhaseOverlap;
                 newApp.MPH = apprFromDb.MPH;
                 newApp.PermissivePhaseNumber = apprFromDb.PermissivePhaseNumber;
                 newApp.VersionID = newSignal.VersionID;
@@ -491,20 +491,21 @@ namespace MOE.Common.Models.Repositories
                 var newDetector = new Detector();
 
                 newDetector.DecisionPoint = detFromDb.DecisionPoint;
+                newDetector.LatencyCorrection = detFromDb.LatencyCorrection;
                 newDetector.ApproachID = newApp.ApproachID;
                 newDetector.DateAdded = DateTime.Today;
                 newDetector.DetChannel = detFromDb.DetChannel;
                 newDetector.DetectionHardwareID = detFromDb.DetectionHardwareID;
                 newDetector.DetectorID = detFromDb.DetectorID;
                 newDetector.LaneNumber = detFromDb.LaneNumber;
-                newDetector.DetectorCommentIDs.AddRange(detFromDb.DetectorCommentIDs);
+                if(detFromDb.DetectorCommentIDs != null)
+                    newDetector.DetectorCommentIDs.AddRange(detFromDb.DetectorCommentIDs);
                 newDetector.MovementTypeID = detFromDb.MovementTypeID;
                 newDetector.MinSpeedFilter = detFromDb.MinSpeedFilter;
                 newDetector.DistanceFromStopBar = detFromDb.DistanceFromStopBar;
+                if(newDetector.DetectionTypes == null)
+                    newDetector.DetectionTypes = new List<DetectionType>();
                 newDetector.DetectionTypes.AddRange(detFromDb.DetectionTypes);
-
-
-
                 _db.Detectors.Add(newDetector);
                 _db.SaveChanges();
             }

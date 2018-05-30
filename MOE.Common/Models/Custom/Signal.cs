@@ -256,7 +256,7 @@ namespace MOE.Common.Models
                 foreach (var a in origSignal.Approaches)
                 {
                     var aForNewSignal =
-                        Approach.CopyApproachForSignal(a.ApproachID); //this does the db.Save inside.
+                        Approach.CopyApproachForSignal(a); //this does the db.Save inside.
                     newSignal.Approaches.Add(aForNewSignal);
                 }
         }
