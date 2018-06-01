@@ -104,9 +104,9 @@ namespace MOE.Common.Business.DataAggregation
         }
 
 
-        public int GetEventCountsByDirection(DirectionType direction)
+        public double GetEventCountsByDirection(DirectionType direction)
         {
-            var splitFails = 0;
+            double splitFails = 0;
             if (ApproachEventCounts != null)
                 splitFails = ApproachEventCounts
                     .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)

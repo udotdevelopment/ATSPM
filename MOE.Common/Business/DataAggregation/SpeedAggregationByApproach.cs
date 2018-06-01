@@ -42,10 +42,19 @@ namespace MOE.Common.Business.DataAggregation
                             double speedAggregationCount = 0;
                             switch (dataType.DataName)
                             {
-                                case "SummedSpeed":
-                                    speedAggregationCount =
-                                        speedAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                case "AverageSpeed":
+                                    if (speedAggregations.Any(s =>
+                                        s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
+                                    {
+                                        double summedSpeed = speedAggregations.Where(s =>
+                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.SummedSpeed);
+                                        double summedVolume = speedAggregations.Where(s =>
+                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                                .Sum(s => s.SpeedVolume);
+                                        if(summedVolume > 0)
+                                            speedAggregationCount = summedSpeed / summedVolume;
+                                    }
                                     break;
                                 case "SpeedVolume":
                                     speedAggregationCount =

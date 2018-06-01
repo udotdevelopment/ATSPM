@@ -8,11 +8,11 @@ namespace MOE.Common.Business.Bins
     {
         public List<BinsContainer> BinsContainers = new List<BinsContainer>();
 
-        public int SumValue
+        public double SumValue
         {
             get
             {
-                var sum = 0;
+                double sum = 0;
 
                 foreach (var containter in BinsContainers)
                     sum = sum + containter.Bins.Sum(b => b.Sum);

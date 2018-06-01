@@ -1,9 +1,5 @@
 ﻿@model SPM.Models.MetricResultViewModel
 
-<script type="text/javascript">
-    function ShowMetricUrl() {
-    @Html.Raw(Model.ShowMetricUrlJavascript)
-}</script>
 
 @{
     foreach(String s in Model.ChartPaths)
@@ -11,3 +7,7 @@
         <img src="@s" alt="Chart" />
     }
 }
+<script type="text/javascript">
+    function ShowMetricUrl() {
+        @Html.Raw(Model.ShowMetricUrlJavascript)
+    }</script>

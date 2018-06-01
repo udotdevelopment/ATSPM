@@ -585,7 +585,7 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "Raw Data Export",
                     Controller = "DataExport",
                     Action = "RawDataExport",
-                    ParentId = 2,
+                    ParentId = 11,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 4
                 },

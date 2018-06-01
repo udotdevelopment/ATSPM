@@ -115,6 +115,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 ChartFactory.SetImageProperties(dummychart);
                 dummychart.BorderlineDashStyle = ChartDashStyle.Dot;
 
+                dummychart.Height = 100;
+
                 var PedActivity = new Series();
                 var GapoutSeries = new Series();
                 var MaxOutSeries = new Series();

@@ -518,9 +518,12 @@
     <Compile Include="Migrations\201805251650242_PhaseTerminationAggregation.Designer.cs">
       <DependentUpon>201805251650242_PhaseTerminationAggregation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805311757143_DatabaseArchive.cs" />
+    <Compile Include="Migrations\201805311757143_DatabaseArchive.Designer.cs">
+      <DependentUpon>201805311757143_DatabaseArchive.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
-    <Compile Include="Models\Phase.cs" />
     <Compile Include="Models\PhaseTerminationAggregation.cs" />
     <Compile Include="Models\PhaseEventCountAggregation.cs" />
     <Compile Include="Models\DetectorEventCountAggregation.cs" />
@@ -901,6 +904,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805251650242_PhaseTerminationAggregation.resx">
       <DependentUpon>201805251650242_PhaseTerminationAggregation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805311757143_DatabaseArchive.resx">
+      <DependentUpon>201805311757143_DatabaseArchive.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CreateIntegratedSwapAndMoveDataJob.sql" />
     <Content Include="Migrations\CustomStuffForExistingUpgrade.txt" />

@@ -749,32 +749,35 @@ namespace MOE.Common.Business.DataAggregation
             var preemptCodes = new List<int> {102, 105};
             var priorityCodes = new List<int> {112, 113, 114};
             Parallel.Invoke(
-                //() =>
-                //{
-                //    int eventCount =
-                //        controllerEventLogRepository.GetSignalEventsCountBetweenDates(signal.SignalID, startTime, endTime);
-                //    _signalEventAggregationConcurrentQueue.Enqueue(new SignalEventCountAggregation{BinStartTime = startTime,
-                //        EventCount = eventCount,SignalId = signal.SignalID});
-                //},
+                () =>
+                {
+                    int eventCount = controllerEventLogRepository.GetSignalEventsCountBetweenDates(signal.SignalID, startTime, endTime);
+                    _signalEventAggregationConcurrentQueue.Enqueue(new SignalEventCountAggregation
+                    {
+                        BinStartTime = startTime,
+                        EventCount = eventCount,
+                        SignalId = signal.SignalID
+                    });
+                },
                 () =>
                 {
                     AggregatePhaseTerminations(startTime, endTime, signal);
-                }//,
-                //() =>
-                //{
-                //    if (records.Count(r => preemptCodes.Contains(r.EventCode)) > 0)
-                //        AggregatePreemptCodes(startTime, records, signal, preemptCodes);
-                //},
-                //() =>
-                //{
-                //    if (records.Count(r => priorityCodes.Contains(r.EventCode)) > 0)
-                //        AggregatePriorityCodes(startTime, records, signal, priorityCodes);
-                //},
-                //() =>
-                //{
-                //    if (signal.Approaches != null)
-                //        ProcessApproach(signal, startTime, endTime, records);
-                //}
+                },
+                () =>
+                {
+                if (records.Count(r => preemptCodes.Contains(r.EventCode)) > 0)
+                    AggregatePreemptCodes(startTime, records, signal, preemptCodes);
+                },
+                () =>
+                {
+                    if (records.Count(r => priorityCodes.Contains(r.EventCode)) > 0)
+                        AggregatePriorityCodes(startTime, records, signal, priorityCodes);
+                },
+                () =>
+                {
+                    if (signal.Approaches != null)
+                        ProcessApproach(signal, startTime, endTime, records);
+                }
             );
         }
 

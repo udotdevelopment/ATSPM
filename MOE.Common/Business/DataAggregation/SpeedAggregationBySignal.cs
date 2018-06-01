@@ -100,9 +100,9 @@ namespace MOE.Common.Business.DataAggregation
         }
 
 
-        public int GetSpeedEventssByDirection(DirectionType direction)
+        public double GetSpeedEventssByDirection(DirectionType direction)
         {
-            var speedEvents = 0;
+            double speedEvents = 0;
             if (ApproachSpeedEvents != null)
                 speedEvents = ApproachSpeedEvents
                     .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)

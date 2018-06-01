@@ -17,7 +17,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             MetricTypeID = 25;
             AggregatedDataTypes = new List<AggregatedDataType>();
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "SummedSpeed" });
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "AverageSpeed" });
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = "SpeedVolume" });
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 2, DataName = "Speed85Th" });
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 3, DataName = "Speed15Th" });
@@ -62,7 +62,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return speedAggregationBySignal.Average;
         }
 
-        protected override int GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
+        protected override double GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
             var speedAggregationBySignal =
                 new SpeedAggregationBySignal(this, signal);
@@ -76,7 +76,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return speedAggregationBySignal.Average;
         }
 
-        protected override int GetSumByDirection(Models.Signal signal, DirectionType direction)
+        protected override double GetSumByDirection(Models.Signal signal, DirectionType direction)
         {
             var speedAggregationBySignal =
                 new SpeedAggregationBySignal(this, signal, direction);

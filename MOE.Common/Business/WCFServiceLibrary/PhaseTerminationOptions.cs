@@ -121,7 +121,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             dummychartLegend.Alignment = StringAlignment.Center;
             dummychart.Legends.Add(dummychartLegend);
 
-
+            dummychart.Height = 100;
             dummychart.SaveImage(MetricFileLocation + "PPTLegend.jpeg", ChartImageFormat.Jpeg);
 
             ReturnList.Add(MetricWebPath + "PPTLegend.jpeg");
@@ -132,8 +132,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             base.CreateMetric();
             var location = GetSignalLocation();
             var chart = new Chart();
-
-
+            CreateLegend();
             var analysisPhaseCollection =
                 new AnalysisPhaseCollection(SignalID, StartDate,
                     EndDate, SelectedConsecutiveCount);
@@ -265,6 +264,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chart.Series.Add(ForceOffSeries);
             chart.Series.Add(PedSeries);
             chart.Series.Add(UnknownTermination);
+
+            //var dummychartLegend = new Legend();
+
+            //dummychartLegend.IsDockedInsideChartArea = true;
+
+            //dummychartLegend.Title = "Chart Legend";
+            //dummychartLegend.Docking = Docking.Top;
+            //dummychartLegend.Alignment = StringAlignment.Center;
+            //chart.Legends.Add(dummychartLegend);
 
 
             //Add the Posts series to ensure the chart is the size of the selected timespan

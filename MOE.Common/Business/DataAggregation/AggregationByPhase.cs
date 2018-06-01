@@ -12,7 +12,7 @@ namespace MOE.Common.Business.DataAggregation
     public abstract class AggregationByPhase
     {
         //protected List<ApproachEventCountAggregation> ApproachEventCountAggregations { get; set; }
-        public int Total
+        public double Total
         {
             get { return BinsContainers.Sum(c => c.SumValue); }
         }

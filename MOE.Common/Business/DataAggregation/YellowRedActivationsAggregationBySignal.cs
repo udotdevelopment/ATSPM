@@ -109,9 +109,9 @@ namespace MOE.Common.Business.DataAggregation
         }
 
 
-        public int GetYellowRedActivationssByDirection(DirectionType direction)
+        public double GetYellowRedActivationssByDirection(DirectionType direction)
         {
-            var splitFails = 0;
+            double splitFails = 0;
             if (ApproachYellowRedActivationsures != null)
                 splitFails = ApproachYellowRedActivationsures
                     .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)

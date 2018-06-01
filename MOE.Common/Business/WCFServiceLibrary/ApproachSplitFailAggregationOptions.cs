@@ -62,7 +62,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return splitFailAggregationBySignal.Average;
         }
 
-        protected override int GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
+        protected override double GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
             var splitFailAggregationBySignal =
                 new SplitFailAggregationBySignal(this, signal);
@@ -76,7 +76,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return splitFailAggregationBySignal.Average;
         }
 
-        protected override int GetSumByDirection(Models.Signal signal, DirectionType direction)
+        protected override double GetSumByDirection(Models.Signal signal, DirectionType direction)
         {
             var splitFailAggregationBySignal =
                 new SplitFailAggregationBySignal(this, signal, direction);
