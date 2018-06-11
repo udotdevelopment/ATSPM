@@ -600,9 +600,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected abstract List<BinsContainer> GetBinsContainersByApproach(Approach approach, bool getprotectedPhase);
         protected abstract int GetAverageByPhaseNumber(Models.Signal signal, int phaseNumber);
-        protected abstract int GetSumByPhaseNumber(Models.Signal signal, int phaseNumber);
+        protected abstract double GetSumByPhaseNumber(Models.Signal signal, int phaseNumber);
         protected abstract int GetAverageByDirection(Models.Signal signal, DirectionType direction);
-        protected abstract int GetSumByDirection(Models.Signal signal, DirectionType direction);
+        protected abstract double GetSumByDirection(Models.Signal signal, DirectionType direction);
 
         protected abstract List<BinsContainer> GetBinsContainersByDirection(DirectionType directionType,
             Models.Signal signal);

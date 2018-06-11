@@ -19,9 +19,15 @@ function LoadSignalEdit(signalID) {
             });
             $.validator.unobtrusive.parse($("#SignalEdit"));
         },
+        complete: function () {
+            RemoveHiddenInputFromCheckboxes();},
         onerror: function () { alert("Error"); }
     });
 
+}
+
+function RemoveHiddenInputFromCheckboxes() {
+    $("input[type='hidden'][name$=Overlap]").remove();
 }
 
 function LoadVersionByVersionID(vId) {

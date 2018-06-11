@@ -82,6 +82,7 @@ namespace MOE.Common.Business.Preempt
 
             chart.Series.Add(posts);
             chart.Series.Add(PreemptSeries);
+            chart.Height = 200;
             AddDataToChart(chart, Options.StartDate, Options.EndDate, DTTB, Options.SignalID);
             var plans = PlanFactory.GetBasicPlans(Options.StartDate, Options.EndDate, Options.SignalID);
             SetSimplePlanStrips(plans, chart, Options.StartDate, DTTB);

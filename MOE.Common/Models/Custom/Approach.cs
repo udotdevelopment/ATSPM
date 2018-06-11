@@ -98,6 +98,7 @@ namespace MOE.Common.Models
             newApproach.MPH = approachToCopy.MPH;
             newApproach.ProtectedPhaseNumber = approachToCopy.ProtectedPhaseNumber;
             newApproach.IsProtectedPhaseOverlap = approachToCopy.IsProtectedPhaseOverlap;
+            newApproach.IsPermissivePhaseOverlap = approachToCopy.IsPermissivePhaseOverlap;
             newApproach.PermissivePhaseNumber = approachToCopy.PermissivePhaseNumber;
             newApproach.Detectors = new List<Detector>();
             return newApproach;
@@ -138,11 +139,8 @@ namespace MOE.Common.Models
             return newApproach;
         }
 
-        public static Approach CopyApproachForSignal(int approachIDToCopy)
+        public static Approach CopyApproachForSignal(Approach approachToCopy)
         {
-            var approachRepository =
-                ApproachRepositoryFactory.Create();
-            var approachToCopy = approachRepository.GetApproachByApproachID(approachIDToCopy);
             var newApproach = CopyApproachCommonProperties(approachToCopy, true);
             foreach (var d in approachToCopy.Detectors)
             {

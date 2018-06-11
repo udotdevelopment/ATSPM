@@ -103,9 +103,9 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
-        public int GetSplitFailsByDirection(DirectionType direction)
+        public double GetSplitFailsByDirection(DirectionType direction)
         {
-            var splitFails = 0;
+            double splitFails = 0;
             if (ApproachSplitFailures != null)
                 splitFails = ApproachSplitFailures
                     .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)

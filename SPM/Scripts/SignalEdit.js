@@ -31,9 +31,9 @@ function CreateJsonArray(formArray) {
 }
 
 function AddNewVersion() {
-    //var signalID = $("#SignalID").val();
-    var formData = $("#form0").serializeArray();
-    var jsonForm = JSON.stringify(CreateJsonArray(formData));
+    var signalId = $("#editSignalID").val();
+    //var formData = $("#form0").serializeArray();
+    //var jsonForm = JSON.stringify(CreateJsonArray(formData));
     //$.ajax({
     //    url: urlpathGetSignalEdit,
     //    headers: GetRequestVerificationTokenObject(),
@@ -46,18 +46,21 @@ function AddNewVersion() {
     //    },
     //    onerror: function () { alert("Error"); }
     //});
+    var newVersionId;
     $.ajax({
         type: "POST",
         cache: false,
         async: true,
-        headers: GetRequestVerificationTokenObject(),
-        data: jsonForm,
+        //headers: GetRequestVerificationTokenObject(),
+        //data: jsonForm,
         //    dataType: 'json',
-        url: urlpathCopyVersion,
+        url: urlpathCopyVersion + "/" + signalId,
         contentType: "application/json; charset=utf-8",
         success: function (data) {
-            $('#SignalEdit').html(data);
-
+            newVersionId = data;
+        },
+        complete:function() {
+            LoadVersionByVersionID(newVersionId);
         },
         statusCode: {
             404: function (content) { alert('cannot find resource'); },
@@ -72,13 +75,13 @@ function AddNewVersion() {
 
 function DeleteVersion() {
 
-    if ($('#versionDropDown').children('option').length < 2) {
+    if ($('#VersionID').children('option').length < 2) {
         alert("Unable to delete version. You must have more than one version to delete.");
     }
     else {
         var signalID = $("#SignalID").val();
-        var versionId = $("#versionDropDown option:selected").val();
-        var versionDescription = $("#versionDropDown option:selected").text();
+        var versionId = $("#VersionID option:selected").val();
+        var versionDescription = $("#VersionID option:selected").text();
         var parameters = {};
         parameters.ID = versionId;
         if (confirm("Are you sure you want to delete the version " + versionDescription + " ?")) {
@@ -197,9 +200,9 @@ function GetConfigurationTableForVersion(versionId) {
 
 function UpdateVersionDropdown()
 {
-    var selIndex = $("#versionDropDown option:selected").index();
-    var dd = document.getElementById('versionDropDown');
-    var oldVersionDescription = $("#versionDropDown option:selected").text();
+    var selIndex = $("#VersionID option:selected").index();
+    var dd = document.getElementById('VersionID');
+    var oldVersionDescription = $("#VersionID option:selected").text();
     var note = $("#Note").val();
     var date = $("#End").val();
     var newVersionDescription = date + " - " + note;
@@ -571,11 +574,10 @@ function GetCreateNewDetector(approachID) {
                 });
 }
 
-function SyncText(e, approachID)
-{
-    $(".mph_" + approachID).each(function () {
+function SyncText(e, approachID) {
+    $(".mph_" + approachID).each(function() {
         $(this).val($(e).val());
-    })
+    });
 }
 
 function ShowHideDetectionTypeOptions(e,ID) {

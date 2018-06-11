@@ -40,6 +40,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(ApproachCycleAggregationOptions))]
     [KnownType(typeof(SignalEventCountAggregationOptions))]
     [KnownType(typeof(ApproachEventCountAggregationOptions))]
+    [KnownType(typeof(PhaseTerminationAggregationOptions))]
     [KnownType(typeof(string[]))]
     public class MetricOptions
     {

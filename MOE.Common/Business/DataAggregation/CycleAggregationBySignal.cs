@@ -109,9 +109,9 @@ namespace MOE.Common.Business.DataAggregation
         }
 
 
-        public int GetCyclesByDirection(DirectionType direction)
+        public double GetCyclesByDirection(DirectionType direction)
         {
-            var splitFails = 0;
+            double splitFails = 0;
             if (ApproachCycles != null)
                 splitFails = ApproachCycles
                     .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)

@@ -76,7 +76,7 @@ namespace MOE.Common.Business.Preempt
 
             Chart.Series.Add(posts);
             Chart.Series.Add(PreemptSeries);
-
+            Chart.Height = 200;
             //Add points at the start and and of the x axis to ensure
             //the graph covers the entire period selected by the user
             //whether there is data or not

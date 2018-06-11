@@ -68,7 +68,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return eventCountAggregationBySignal.Average;
         }
 
-        protected override int GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
+        protected override double GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
             var eventCountAggregationBySignal =
                 new EventCountAggregationBySignal(this, signal);
@@ -82,7 +82,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return eventCountAggregationBySignal.Average;
         }
 
-        protected override int GetSumByDirection(Models.Signal signal, DirectionType direction)
+        protected override double GetSumByDirection(Models.Signal signal, DirectionType direction)
         {
             var eventCountAggregationBySignal =
                 new EventCountAggregationBySignal(this, signal, direction);

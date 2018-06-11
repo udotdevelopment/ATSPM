@@ -20,6 +20,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "ArrivalsOnGreen"});
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = "ArrivalsOnRed"});
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 2, DataName = "ArrivalsOnYellow"});
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 3, DataName = "PercentArrivalsOnGreen" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 4, DataName = "PlatoonRatio" });
         }
 
         public override string ChartTitle
@@ -61,7 +63,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return splitFailAggregationBySignal.Average;
         }
 
-        protected override int GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
+        protected override double GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
             var splitFailAggregationBySignal =
                 new PcdAggregationBySignal(this, signal);
@@ -76,7 +78,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         }
         
 
-        protected override int GetSumByDirection(Models.Signal signal, DirectionType direction)
+        protected override double GetSumByDirection(Models.Signal signal, DirectionType direction)
         {
             var splitFailAggregationBySignal =
                 new PcdAggregationBySignal(this, signal, direction);

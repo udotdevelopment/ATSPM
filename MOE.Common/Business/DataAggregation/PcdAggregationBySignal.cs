@@ -105,9 +105,9 @@ namespace MOE.Common.Business.DataAggregation
         }
 
 
-        public int GetPcdsByDirection(DirectionType direction)
+        public double GetPcdsByDirection(DirectionType direction)
         {
-            var splitFails = 0;
+            double splitFails = 0;
             if (ApproachPcds != null)
                 splitFails = ApproachPcds
                     .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)

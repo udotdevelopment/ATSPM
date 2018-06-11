@@ -51,7 +51,7 @@ namespace MOE.Common.Models.ViewModel
         public DateTime StartDate { get; set; }
 
         [Required]
-        [Display(Name = "Start Date")]
+        [Display(Name = "End Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }

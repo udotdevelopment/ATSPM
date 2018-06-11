@@ -23,18 +23,6 @@ namespace MOE.Common.Models
         public int SplitFailures { get; set; }
 
         [Required]
-        public int GapOuts { get; set; }
-
-        [Required]
-        public int ForceOffs { get; set; }
-
-        [Required]
-        public int MaxOuts { get; set; }
-
-        [Required]
-        public int UnknownTerminationTypes { get; set; }
-
-        [Required]
         public bool IsProtectedPhase { get; set; }
 
         public sealed class ApproachSplitFailAggregationClassMap : ClassMap<ApproachSplitFailAggregation>
@@ -46,9 +34,6 @@ namespace MOE.Common.Models
                 Map(m => m.BinStartTime).Name("Bin Start Time");
                 Map(m => m.ApproachId).Name("Approach ID");
                 Map(m => m.SplitFailures).Name("Split Failures");
-                Map(m => m.GapOuts).Name("Gap Outs");
-                Map(m => m.MaxOuts).Name("Max Outs");
-                Map(m => m.UnknownTerminationTypes).Name("Unknown Termination Types");
                 Map(m => m.IsProtectedPhase).Name("Is Protected Phase");
             }
         }

@@ -18,7 +18,7 @@ namespace MOE.Common.Business.DataAggregation
 
         public Models.Signal Signal { get; }
 
-        public int Total
+        public double Total
         {
             get { return BinsContainers.Sum(c => c.SumValue); }
         }

@@ -130,8 +130,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             else
                 chartArea.AxisY.Maximum = 60;
 
-            if (Y2AxisMax != null && Y2AxisMax > 0)
-                chartArea.AxisY.Minimum = Y2AxisMax.Value;
+            if (YAxisMin > 0)
+                chartArea.AxisY.Minimum = YAxisMin;
             else
                 chartArea.AxisY.Minimum = 0;
 
@@ -181,7 +181,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 var fifteenthSeries = new Series();
                 fifteenthSeries.ChartType = SeriesChartType.Line;
-                fifteenthSeries.Color = Color.Orange;
+                fifteenthSeries.Color = Color.Black;
                 fifteenthSeries.Name = "15th Percentile Speed";
                 fifteenthSeries.XValueType = ChartValueType.DateTime;
                 chart.Series.Add(fifteenthSeries);
@@ -290,26 +290,26 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
                 avgLabel.FromPosition = plan.StartTime.ToOADate();
                 avgLabel.ToPosition = plan.EndTime.ToOADate();
-                avgLabel.Text = "Ave Sp " + plan.AvgSpeed + "\n" +
-                                "Std Dev " + plan.StdDevAvgSpeed;
+                avgLabel.Text = "Avg " + plan.AvgSpeed + "\n" +
+                                "StDev " + plan.StdDevAvgSpeed;
                 avgLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 avgLabel.ForeColor = Color.Red;
-                avgLabel.RowIndex = 1;
+                avgLabel.RowIndex = 2;
 
                 var eightyfifthLabel = new CustomLabel();
                 eightyfifthLabel.FromPosition = plan.StartTime.ToOADate();
                 eightyfifthLabel.ToPosition = plan.EndTime.ToOADate();
-                eightyfifthLabel.Text = "85% Sp " + plan.EightyFifth + "\n";
+                eightyfifthLabel.Text = "85% " + plan.EightyFifth + "\n";
                 eightyfifthLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 eightyfifthLabel.ForeColor = Color.Blue;
-                eightyfifthLabel.RowIndex = 2;
+                eightyfifthLabel.RowIndex = 1;
 
                 var fifthteenthLabel = new CustomLabel();
                 fifthteenthLabel.FromPosition = plan.StartTime.ToOADate();
                 fifthteenthLabel.ToPosition = plan.EndTime.ToOADate();
-                fifthteenthLabel.Text = "15% Sp " + plan.Fifteenth + "\n";
+                fifthteenthLabel.Text = "15% " + plan.Fifteenth + "\n";
                 fifthteenthLabel.LabelMark = LabelMarkStyle.LineSideMark;
-                fifthteenthLabel.ForeColor = Color.Orange;
+                fifthteenthLabel.ForeColor = Color.Black;
                 fifthteenthLabel.RowIndex = 3;
 
                 if (ShowPlanStatistics)

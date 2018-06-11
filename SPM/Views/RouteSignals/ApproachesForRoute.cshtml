@@ -3,7 +3,7 @@
 <div>
     <table class="table-condensed table-striped">
         <thead>
-        <tr class=""><th rowspan="2">Signal ID</th><th colspan="3">Primary</th><th colspan="3">Opposing</th></tr>
+        <tr class=""><th rowspan="2">Signal</th><th colspan="3">Primary</th><th colspan="3">Opposing</th></tr>
         <tr>
             <th>
                 Direction
@@ -24,7 +24,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Item1.RouteSignal.SignalId)
+                    @Html.DisplayFor(modelItem => item.Item1.RouteSignal.Signal.SignalDescription)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Item1.Direction.Description)

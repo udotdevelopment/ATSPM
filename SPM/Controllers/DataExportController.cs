@@ -17,6 +17,7 @@ using Newtonsoft.Json.Linq;
 
 namespace SPM.Controllers
 {
+    [Authorize(Roles = "Data")]
     public class DataExportController : Controller
     {
         MOE.Common.Models.Repositories.IControllerEventLogRepository controllerEventLogRepository =

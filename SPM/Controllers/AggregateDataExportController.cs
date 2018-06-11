@@ -111,10 +111,15 @@ namespace SPM.Controllers
                     return GetSignalEventCountChart(aggDataExportViewModel);
                 case 28:
                     return GetApproachEventCountChart(aggDataExportViewModel);
+                case 29:
+                    return GetPhaseTerminationChart(aggDataExportViewModel);
+                case 30:
+                    return GetPhasePedChart(aggDataExportViewModel);
                 default:
                     return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
             }
         }
+
 
         private ActionResult GetCycleChart(AggDataExportViewModel aggDataExportViewModel)
         {
@@ -148,7 +153,16 @@ namespace SPM.Controllers
                 return Content("<h1 class='text-danger'>Missing Parameters</h1>");
             }
         }
-        
+        private ActionResult GetPhasePedChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            PhasePedAggregationOptions options = new PhasePedAggregationOptions();
+            return GetChart(aggDataExportViewModel, options);
+        }
+        private ActionResult GetPhaseTerminationChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            PhaseTerminationAggregationOptions options = new PhaseTerminationAggregationOptions();
+            return GetChart(aggDataExportViewModel, options);
+        }
 
         private ActionResult GetPriorityChart(AggDataExportViewModel aggDataExportViewModel)
         {
@@ -366,6 +380,12 @@ namespace SPM.Controllers
                     break;
                 case 28:
                     AggregatedDataTypes = new ApproachEventCountAggregationOptions().AggregatedDataTypes;
+                    break;
+                case 29:
+                    AggregatedDataTypes = new PhaseTerminationAggregationOptions().AggregatedDataTypes;
+                    break;
+                case 30:
+                    AggregatedDataTypes = new PhasePedAggregationOptions().AggregatedDataTypes;
                     break;
                 default:
                     throw new Exception("Invalid Metric Type");

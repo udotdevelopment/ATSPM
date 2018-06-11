@@ -14,7 +14,7 @@ namespace MOE.Common.Business.Bins
 
         public List<Bin> Bins { get; set; } = new List<Bin>();
 
-        public int SumValue
+        public double SumValue
         {
             get { return Bins.Sum(b => b.Sum); }
         }

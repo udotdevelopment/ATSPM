@@ -49,21 +49,6 @@ namespace MOE.Common.Business.DataAggregation
                                         splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.SplitFailures);
                                     break;
-                                case "ForceOffs":
-                                    splitFailCount =
-                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.ForceOffs);
-                                    break;
-                                case "GapOuts":
-                                    splitFailCount =
-                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.GapOuts);
-                                    break;
-                                case "MaxOuts":
-                                    splitFailCount =
-                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.MaxOuts);
-                                    break;
                                 default:
 
                                     throw new Exception("Unknown Aggregate Data Type for Split Failure");

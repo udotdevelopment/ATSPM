@@ -217,7 +217,7 @@ namespace MOE.Common.Business
         public double MaxPercentAog { get; set; }
         public List<SignalPhase> UpstreamPcd { get; } = new List<SignalPhase>();
         public List<SignalPhase> DownstreamPcd { get; } = new List<SignalPhase>();
-        public double PaogUpstreamBefore { get; } = 0;
+        public double PaogUpstreamBefore { get; set; } = 0;
         public double PaogDownstreamBefore { get; set; }
         public double PaogDownstreamPredicted { get; set; }
         public double PaogUpstreamPredicted { get; set; }
@@ -378,7 +378,7 @@ namespace MOE.Common.Business
                 AogDownstreamBefore += downstreamPcd.TotalArrivalOnGreen;
                 TotalVolumeDownstream += downstreamPcd.TotalVolume;
             }
-            //PaogUpstreamBefore = Math.Round(AogUpstreamBefore / TotalVolumeUpstream, 2) * 100;
+            PaogUpstreamBefore = Math.Round(AogUpstreamBefore / TotalVolumeUpstream, 2) * 100;
             //AogUpstreamBefore = UpstreamPcd.TotalArrivalOnGreen;
             //upstreamBeforePCDPath = CreateChart(upstreamPCD, startDate, endDate, signalLocation,
             //    "before", chartLocation);

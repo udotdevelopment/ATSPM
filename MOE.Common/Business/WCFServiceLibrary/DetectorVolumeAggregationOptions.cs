@@ -58,7 +58,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return detectorAggregationBySignal.Average;
         }
 
-        protected override int GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
+        protected override double GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
             var detectorAggregationBySignal =
                 new DetectorAggregationBySignal(this, signal);
@@ -72,7 +72,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return detectorAggregationBySignal.Average;
         }
 
-        protected override int GetSumByDirection(Models.Signal signal, DirectionType direction)
+        protected override double GetSumByDirection(Models.Signal signal, DirectionType direction)
         {
             var detectorAggregationByDetector =
                 new DetectorAggregationBySignal(this, signal, direction);

@@ -22,6 +22,11 @@ namespace MOE.Common.Models.Repositories
             var route = db.Routes
                 .Include(r => r.RouteSignals.Select(s => s.PhaseDirections)).FirstOrDefault(r => r.Id == routeID);
             route.RouteSignals = route.RouteSignals.OrderBy(s => s.Order).ToList();
+            var signalRepository = Repositories.SignalsRepositoryFactory.Create();
+            foreach (var routeSignal in route.RouteSignals)
+            {
+                routeSignal.Signal = signalRepository.GetLatestVersionOfSignalBySignalID(routeSignal.SignalId);
+            }
             if (route != null)
                 return route;
             var repository =

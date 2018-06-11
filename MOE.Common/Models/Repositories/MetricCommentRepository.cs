@@ -84,7 +84,10 @@ namespace MOE.Common.Models.Repositories
                     throw;
                 }
             else
+            {
                 db.MetricComments.Add(metricComment);
+                db.SaveChanges();
+            }
         }
 
         public void Remove(MetricComment metricComment)
