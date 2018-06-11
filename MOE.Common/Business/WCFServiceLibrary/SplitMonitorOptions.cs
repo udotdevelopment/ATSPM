@@ -439,49 +439,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 detID = detectors.First().ToString();
             else
                 detID = "0";
-            var chart = new Chart();
-            var extendedDirection = string.Empty;
+            var chart = ChartFactory.CreateDefaultChart(this);
             var reportTimespan = graphEndDate - graphStartDate;
 
             //Set the chart properties
             ChartFactory.SetImageProperties(chart);
             chart.BorderlineDashStyle = ChartDashStyle.Dot;
-
             SetChartTitle(chart, phase);
 
-
-            //Create the chart area
-            var chartArea = new ChartArea();
-            chartArea.Name = "ChartArea1";
-
-            chartArea.AxisX.Title = "Time (Hour of Day)";
-            chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX.LabelStyle.Format = "HH";
-            chartArea.AxisX2.LabelStyle.Format = "HH";
-            chartArea.AxisX.LabelAutoFitStyle = LabelAutoFitStyles.None;
-            if (reportTimespan.Days < 1)
-                if (reportTimespan.Hours > 1)
-                {
-                    chartArea.AxisX2.Interval = 1;
-                    chartArea.AxisX.Interval = 1;
-                }
-                else
-                {
-                    chartArea.AxisX.LabelStyle.Format = "HH:mm";
-                    chartArea.AxisX2.LabelStyle.Format = "HH:mm";
-                }
-            chartArea.AxisX2.Enabled = AxisEnabled.True;
-            chartArea.AxisX2.MajorTickMark.Enabled = true;
-            chartArea.AxisX2.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX2.LabelAutoFitStyle = LabelAutoFitStyles.None;
-
-
-            chartArea.AxisY.Title = "Phase Duration (Seconds)";
-            if (YAxisMax != null)
-                chartArea.AxisY.Maximum = YAxisMax.Value;
-            chartArea.AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
-
-            chart.ChartAreas.Add(chartArea);
+            chart.ChartAreas[0].AxisY.Title = "Phase Duration (Seconds)";
+            chart.ChartAreas[0].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
 
             var PedActivity = new Series();
             PedActivity.ChartType = SeriesChartType.Point;

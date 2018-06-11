@@ -302,7 +302,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 eightyfifthLabel.Text = "85% " + plan.EightyFifth + "\n";
                 eightyfifthLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 eightyfifthLabel.ForeColor = Color.Blue;
-                eightyfifthLabel.RowIndex = 1;
+                eightyfifthLabel.RowIndex = 3;
 
                 var fifthteenthLabel = new CustomLabel();
                 fifthteenthLabel.FromPosition = plan.StartTime.ToOADate();
@@ -310,7 +310,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 fifthteenthLabel.Text = "15% " + plan.Fifteenth + "\n";
                 fifthteenthLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 fifthteenthLabel.ForeColor = Color.Black;
-                fifthteenthLabel.RowIndex = 3;
+                fifthteenthLabel.RowIndex = 1;
 
                 if (ShowPlanStatistics)
                 {

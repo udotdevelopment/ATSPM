@@ -517,10 +517,6 @@
     <Compile Include="Migrations\201804251748599_MetricTypeIdentityRemoval.Designer.cs">
       <DependentUpon>201804251748599_MetricTypeIdentityRemoval.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201805112004498_shrink.cs" />
-    <Compile Include="Migrations\201805112004498_shrink.Designer.cs">
-      <DependentUpon>201805112004498_shrink.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201805251650242_PhaseTerminationAggregation.cs" />
     <Compile Include="Migrations\201805251650242_PhaseTerminationAggregation.Designer.cs">
       <DependentUpon>201805251650242_PhaseTerminationAggregation.cs</DependentUpon>
@@ -532,6 +528,10 @@
     <Compile Include="Migrations\201806072115260_PhasePedDelayAggregation.cs" />
     <Compile Include="Migrations\201806072115260_PhasePedDelayAggregation.Designer.cs">
       <DependentUpon>201806072115260_PhasePedDelayAggregation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806111534173_archiveProcessingTable.cs" />
+    <Compile Include="Migrations\201806111534173_archiveProcessingTable.Designer.cs">
+      <DependentUpon>201806111534173_archiveProcessingTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
@@ -553,7 +553,6 @@
     <Compile Include="Models\Repositories\PhaseEventCountAggregationRepository.cs" />
     <Compile Include="Models\Repositories\DetectorEventCountAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\PhaseEventCountAggregationRepositoryFactory.cs" />
-    <Compile Include="Models\ShrinkFileGroup.cs" />
     <Compile Include="Models\SignalEventCountAggregation.cs" />
     <Compile Include="Models\ApproachPcdAggregation.cs" />
     <Compile Include="Models\ApproachYellowRedActivationsAggregation.cs" />
@@ -917,9 +916,6 @@
     <EmbeddedResource Include="Migrations\201804251748599_MetricTypeIdentityRemoval.resx">
       <DependentUpon>201804251748599_MetricTypeIdentityRemoval.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805112004498_shrink.resx">
-      <DependentUpon>201805112004498_shrink.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805251650242_PhaseTerminationAggregation.resx">
       <DependentUpon>201805251650242_PhaseTerminationAggregation.cs</DependentUpon>
     </EmbeddedResource>
@@ -928,6 +924,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806072115260_PhasePedDelayAggregation.resx">
       <DependentUpon>201806072115260_PhasePedDelayAggregation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806111534173_archiveProcessingTable.resx">
+      <DependentUpon>201806111534173_archiveProcessingTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CreateIntegratedSwapAndMoveDataJob.sql" />
     <Content Include="Migrations\CustomStuffForExistingUpgrade.txt" />

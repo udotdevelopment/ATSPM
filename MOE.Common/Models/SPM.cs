@@ -63,7 +63,6 @@ namespace MOE.Common.Models
         public virtual DbSet<DetectorEventCountAggregation> DetectorEventCountAggregations { get; set; }
 
         public virtual DbSet<TablePartitionProcessed> TablePartitionProcesseds { get; set; }
-        public virtual DbSet<ShrinkFileGroup> ShrinkFileGroups { get; set; }
         public virtual DbSet<StatusOfProcessedTable> StatusOfProcessedTables { get; set; }
         public virtual DbSet<ToBeProcessededTable> ToBeProcessededTables { get; set; }
         public virtual DbSet<ToBeProcessedTableIndex> ToBeProcessededIndexes { get; set; }

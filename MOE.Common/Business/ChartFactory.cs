@@ -97,6 +97,25 @@ namespace MOE.Common.Business
             return chart;
         }
 
+
+        //public static Chart CreateSplitMonitorChart(SplitMonitorOptions options)
+        //{
+        //    var chart = new Chart();
+        //    SetImageProperties(chart);
+        //    chart.ChartAreas.Add(CreateSplitMonitorChartArea(options));
+        //    SetLegend(chart);
+        //    return chart;
+        //}
+
+        //private static ChartArea CreateSplitMonitorChartArea(SplitMonitorOptions options)
+        //{
+        //    var chartArea = new ChartArea();
+        //    chartArea.Name = "ChartArea1";
+        //    SetUpXAxis(chartArea, options);
+        //    SetUpX2Axis(chartArea, options);
+        //    return chartArea;
+        //}
+
         public static Chart CreateTimeXIntYChart(SignalAggregationMetricOptions options, List<Models.Signal> signals)
         {
             var chart = new Chart();
@@ -434,7 +453,7 @@ namespace MOE.Common.Business
             SetUpYAxis(chartArea, options);
             SetUpY2Axis(chartArea, options);
             SetUpXAxis(chartArea, options);
-            //SetUpX2Axis(chartArea, options);
+            SetUpX2Axis(chartArea, options);
             return chartArea;
         }
 
@@ -456,12 +475,12 @@ namespace MOE.Common.Business
             if (totalHoursRounded > 2 && totalHoursRounded <= 24)
             {
                 chartArea.AxisX2.Interval = 1;
-                chartArea.AxisX2.LabelStyle.Format = "HH:mm";
+                chartArea.AxisX2.LabelStyle.Format = "HH";
             }
             else if (totalHoursRounded > 24 && totalHoursRounded <= 48)
             {
                 chartArea.AxisX2.Interval = 12;
-                chartArea.AxisX2.LabelStyle.Format = "HH:mm";
+                chartArea.AxisX2.LabelStyle.Format = "HH";
             }
             else if (totalHoursRounded > 48)
             {
@@ -488,12 +507,12 @@ namespace MOE.Common.Business
             if (totalHoursRounded > 2 && totalHoursRounded <= 24)
             {
                 chartArea.AxisX.Interval = 1;
-                chartArea.AxisX.LabelStyle.Format = "HH:mm";
+                chartArea.AxisX.LabelStyle.Format = "HH";
             }
             else if (totalHoursRounded > 24 && totalHoursRounded <= 48)
             {
                 chartArea.AxisX.Interval = 12;
-                chartArea.AxisX.LabelStyle.Format = "HH:mm";
+                chartArea.AxisX.LabelStyle.Format = "HH";
             }
             else if (totalHoursRounded > 48)
             {
@@ -639,5 +658,6 @@ namespace MOE.Common.Business
             }
             chart.ChartAreas[0].AxisX.Interval = 1;
         }
+
     }
 }

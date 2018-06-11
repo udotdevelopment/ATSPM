@@ -168,49 +168,33 @@ namespace MOE.Common.Business.WCFServiceLibrary
             string signalId, string location, int consecutiveCount,
             int maxPhaseInUse, bool showPedWalkStartTime)
         {
-            var chart = new Chart();
-            var extendedDirection = string.Empty;
+            var chart = ChartFactory.CreateDefaultChart(this);
+
+            
 
             //Set the chart properties
-            ChartFactory.SetImageProperties(chart);
+            //ChartFactory.SetImageProperties(chart);
             chart.BorderlineDashStyle = ChartDashStyle.Dot;
-            var reportTimespan = EndDate - StartDate;
+            //var reportTimespan = EndDate - StartDate;
 
             SetChartTitle(chart);
             //Create the chart area
-            var chartArea = new ChartArea();
-            chartArea.Name = "ChartArea1";
-            chartArea.AxisY.Maximum = maxPhaseInUse + .5;
-            chartArea.AxisY.Minimum = -.5;
-
-            chartArea.AxisX.Title = "Time (Hour of Day)";
-            chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX.LabelStyle.Format = "HH";
-            chartArea.AxisX2.LabelStyle.Format = "HH";
-            if (reportTimespan.Days < 1)
-                if (reportTimespan.Hours > 1)
-                {
-                    chartArea.AxisX2.Interval = 1;
-                    chartArea.AxisX.Interval = 1;
-                }
-                else
-                {
-                    chartArea.AxisX.LabelStyle.Format = "HH:mm";
-                    chartArea.AxisX2.LabelStyle.Format = "HH:mm";
-                }
-            chartArea.AxisX2.Enabled = AxisEnabled.True;
-            chartArea.AxisX2.MajorTickMark.Enabled = true;
-            chartArea.AxisX2.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX2.LabelAutoFitStyle = LabelAutoFitStyles.None;
-
-            chartArea.AxisY.Title = "Phase Number";
+            
+            chart.ChartAreas[0].AxisY.Maximum = maxPhaseInUse + .5;
+            chart.ChartAreas[0].AxisY.Minimum = -.5;
+            //chart.ChartAreas[0].AxisX2.Enabled = AxisEnabled.True;
+            /*
+            chart.ChartAreas[0].AxisX2.MajorTickMark.Enabled = true;
+            chart.ChartAreas[0].AxisX2.IntervalType = DateTimeIntervalType.Hours;
+            chart.ChartAreas[0].AxisX2.LabelAutoFitStyle = LabelAutoFitStyles.None;
+            */
+            chart.ChartAreas[0].AxisY.Title = "Phase Number";
             //chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.FixedCount;
-            chartArea.AxisY.Interval = 1;
-            chartArea.AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
-            chartArea.AxisY.IntervalOffset = .5;
+            chart.ChartAreas[0].AxisY.Interval = 1;
+            chart.ChartAreas[0].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
+            chart.ChartAreas[0].AxisY.IntervalOffset = .5;
 
-            chart.ChartAreas.Add(chartArea);
-
+            
             var GapoutSeries = new Series();
             GapoutSeries.ChartType = SeriesChartType.Point;
             GapoutSeries.Color = Color.OliveDrab;
