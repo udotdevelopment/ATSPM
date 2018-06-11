@@ -17,7 +17,7 @@
     {
         if(@m.MenuObject.ParentId == 0)
         { 
-            if(m.MenuObject.MenuName != "Admin" || (m.MenuObject.MenuName == "Admin" && m.IsAdmin))
+            if(m.MenuObject.MenuName != "Admin" || (m.MenuObject.MenuName == "Admin" && m.IsAdmin) || (m.MenuObject.MenuName == "Admin" && m.IsData))
             { 
         <li>
             @*<a tabindex="-1" href="@Url.Action(m.MenuObject.Action, m.MenuObject.Controller, new { id = UrlParameter.Optional }, this.Request.Url.Scheme)" class=" dropdown-toggle menuitem" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@m.MenuObject.MenuName <span class="caret"></span></a>*@

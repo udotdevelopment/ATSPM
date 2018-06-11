@@ -12,6 +12,7 @@ using MOE.Common.Models.ViewModel.RouteEdit;
 
 namespace SPM.Controllers
 {
+    [Authorize(Roles = "Technician")]
     public class RoutesController : Controller
     {
         MOE.Common.Models.Repositories.IRouteRepository routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
@@ -48,6 +49,7 @@ namespace SPM.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "Id,RouteName")] Route route)
         {
             if (ModelState.IsValid)
@@ -79,6 +81,7 @@ namespace SPM.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "Id,RouteName")] Route route)
         {
             if (ModelState.IsValid)
@@ -107,6 +110,7 @@ namespace SPM.Controllers
         // POST: Routes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             routeRepository.DeleteByID(id);
