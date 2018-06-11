@@ -56,6 +56,7 @@ namespace MOE.Common.Business.PEDDelay
         public double MinDelay { get; private set; }
         public double AverageDelay { get; private set; }
         public double MaxDelay { get; private set; }
+        public double TotalDelay { get; set; }
 
         private void AddCyclesToPlans()
         {
@@ -75,13 +76,13 @@ namespace MOE.Common.Business.PEDDelay
                 if (i < Events.Count - 2 && Events[i].EventCode == 21 &&
                     Events[i + 1].EventCode == 45 && Events[i + 2].EventCode == 22)
                 {
-                    Cycles.Add(new PedCycle(Events[i].Timestamp, Events[i + 1].Timestamp));
+                    Cycles.Add(new PedCycle(Events[i].Timestamp, Events[i].Timestamp));
                     i = i + 2;
                 }
                 else if (i < Events.Count - 2 && Events[i].EventCode == 22 &&
                          Events[i + 1].EventCode == 45 && Events[i + 2].EventCode == 21)
                 {
-                    Cycles.Add(new PedCycle(Events[i + 1].Timestamp, Events[i + 2].Timestamp));
+                    Cycles.Add(new PedCycle( Events[i + 2].Timestamp, Events[i + 1].Timestamp));
                     i = i + 2;
                 }
         }
@@ -94,7 +95,7 @@ namespace MOE.Common.Business.PEDDelay
                 MinDelay = Cycles.Min(c => c.Delay);
                 MaxDelay = Cycles.Max(c => c.Delay);
                 AverageDelay = Cycles.Average(c => c.Delay);
-
+                TotalDelay = Cycles.Sum(c => c.Delay);
 
                 var dt = new DateTime(StartDate.Year, StartDate.Month, StartDate.Day, StartDate.Hour, 0, 0);
                 var nextDt = dt.AddHours(1);

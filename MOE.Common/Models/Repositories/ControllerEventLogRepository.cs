@@ -42,7 +42,7 @@ namespace MOE.Common.Models.Repositories
 
         public List<Controller_Event_Log> GetAllAggregationCodes(string signalId, DateTime startTime, DateTime endTime)
         {
-            var codes = new List<int> {150, 114, 113, 112, 105, 102, 1, 45};
+            var codes = new List<int> {150, 114, 113, 112, 105, 102, 1};
             var records = _db.Controller_Event_Log
                 .Where(c => c.SignalID == signalId && c.Timestamp >= startTime && c.Timestamp <= endTime &&
                             codes.Contains(c.EventCode))

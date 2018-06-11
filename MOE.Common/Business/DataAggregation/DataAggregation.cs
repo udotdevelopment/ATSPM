@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Internal;
+using MOE.Common.Business.PEDDelay;
 using MOE.Common.Business.Speed;
 using MOE.Common.Business.SplitFail;
 using MOE.Common.Business.WCFServiceLibrary;
@@ -45,6 +46,8 @@ namespace MOE.Common.Business.DataAggregation
 
         private readonly ConcurrentQueue<PhaseTerminationAggregation> _phaseTerminationAggregationQueue =
             new ConcurrentQueue<PhaseTerminationAggregation>();
+        private readonly ConcurrentQueue<PhasePedAggregation> _phasePedAggregations =
+            new ConcurrentQueue<PhasePedAggregation>();
 
         private DateTime _endDate;
 
@@ -495,7 +498,6 @@ namespace MOE.Common.Business.DataAggregation
             approachAggregationTable.Columns.Add(new DataColumn("YellowTime", typeof(double)));
             approachAggregationTable.Columns.Add(new DataColumn("GreenTime", typeof(double)));
             approachAggregationTable.Columns.Add(new DataColumn("TotalCycles", typeof(int)));
-            approachAggregationTable.Columns.Add(new DataColumn("PedActuations", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
             while (_approachCycleAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
@@ -506,7 +508,6 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["YellowTime"] = approachAggregationData.YellowTime;
                 dataRow["GreenTime"] = approachAggregationData.GreenTime;
                 dataRow["TotalCycles"] = approachAggregationData.TotalCycles;
-                dataRow["PedActuations"] = approachAggregationData.PedActuations;
                 dataRow["IsProtectedPhase"] = approachAggregationData.IsProtectedPhase;
                 approachAggregationTable.Rows.Add(dataRow);
             }
@@ -662,10 +663,55 @@ namespace MOE.Common.Business.DataAggregation
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
                         this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
-                    throw new Exception("Unable to import Split Fail Data");
+                    throw new Exception("Unable to import Ped Aggregation Data");
                 }
             }
         }
+
+
+        private void BulkSavePedData()
+        {
+            var phasePedAggregationTable = new DataTable();
+            phasePedAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("PhaseNumber", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("PedDelay", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("PedCount", typeof(int)));
+            while (_phasePedAggregations.TryDequeue(out var phaseTerminationAggregation))
+            {
+                var dataRow = phasePedAggregationTable.NewRow();
+                dataRow["BinStartTime"] = phaseTerminationAggregation.BinStartTime;
+                dataRow["SignalId"] = phaseTerminationAggregation.SignalId;
+                dataRow["PhaseNumber"] = phaseTerminationAggregation.PhaseNumber;
+                dataRow["PedDelay"] = phaseTerminationAggregation.PedDelay;
+                dataRow["PedCount"] = phaseTerminationAggregation.PedCount;
+                phasePedAggregationTable.Rows.Add(dataRow);
+            }
+            var connectionString =
+                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
+                sqlBulkCopy.DestinationTableName = "PhasePedAggregations";
+                sqlBulkCopy.BulkCopyTimeout = 180;
+                sqlBulkCopy.BatchSize = 50000;
+                try
+                {
+                    connection.Open();
+                    sqlBulkCopy.WriteToServer(phasePedAggregationTable);
+                    connection.Close();
+                }
+                catch (Exception e)
+                {
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    throw new Exception("Unable to import Ped Data");
+                }
+            }
+        }
+
 
         private void BulkSaveApproachYellowRedActivationsData()
         {
@@ -765,6 +811,10 @@ namespace MOE.Common.Business.DataAggregation
                 },
                 () =>
                 {
+                    AggregatePedDelay(startTime, endTime, signal);
+                },
+                () =>
+                {
                 if (records.Count(r => preemptCodes.Contains(r.EventCode)) > 0)
                     AggregatePreemptCodes(startTime, records, signal, preemptCodes);
                 },
@@ -779,6 +829,23 @@ namespace MOE.Common.Business.DataAggregation
                         ProcessApproach(signal, startTime, endTime, records);
                 }
             );
+        }
+
+        private void AggregatePedDelay(DateTime startTime, DateTime endTime, Models.Signal signal)
+        {
+            PedDelaySignal pedDelaySignal = new PedDelaySignal(signal.SignalID, startTime, endTime);
+            foreach (var pedPhase in pedDelaySignal.PedPhases)
+            {
+                PhasePedAggregation pedAggregation = new PhasePedAggregation
+                {
+                    SignalId = signal.SignalID,
+                    PhaseNumber = pedPhase.PhaseNumber,
+                    BinStartTime = startTime,
+                    PedCount =  pedPhase.Cycles.Count,
+                    PedDelay = pedPhase.TotalDelay,
+                };
+                _phasePedAggregations.Enqueue(pedAggregation);
+            }
         }
 
         private void AggregatePhaseTerminations(DateTime startTime, DateTime endTime, Models.Signal signal)
@@ -803,6 +870,7 @@ namespace MOE.Common.Business.DataAggregation
         private void ProcessApproach(Models.Signal signal, DateTime startTime, DateTime endTime,
             List<Controller_Event_Log> records)
         {
+
             if (signal.Approaches != null)
                 Parallel.ForEach(signal.Approaches, signalApproach =>
                     //foreach (var signalApproach in signal.Approaches)
@@ -924,12 +992,10 @@ namespace MOE.Common.Business.DataAggregation
 
             if (isPermissivePhase)
             {
-                pedActuations = records.Count(r => r.EventCode == 45 && r.EventParam == approach.PermissivePhaseNumber);
                 totalCycles = records.Count(r => r.EventCode == 1 && r.EventParam == approach.PermissivePhaseNumber);
             }
             else
             {
-                pedActuations = records.Count(r => r.EventCode == 45 && r.EventParam == approach.ProtectedPhaseNumber);
                 totalCycles = records.Count(r => r.EventCode == 1 && r.EventParam == approach.ProtectedPhaseNumber);
             }
             var approachAggregation = new ApproachCycleAggregation

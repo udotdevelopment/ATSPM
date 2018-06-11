@@ -113,6 +113,8 @@ namespace SPM.Controllers
                     return GetApproachEventCountChart(aggDataExportViewModel);
                 case 29:
                     return GetPhaseTerminationChart(aggDataExportViewModel);
+                case 30:
+                    return GetPhasePedChart(aggDataExportViewModel);
                 default:
                     return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
             }
@@ -150,6 +152,11 @@ namespace SPM.Controllers
             {
                 return Content("<h1 class='text-danger'>Missing Parameters</h1>");
             }
+        }
+        private ActionResult GetPhasePedChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            PhasePedAggregationOptions options = new PhasePedAggregationOptions();
+            return GetChart(aggDataExportViewModel, options);
         }
         private ActionResult GetPhaseTerminationChart(AggDataExportViewModel aggDataExportViewModel)
         {
@@ -376,6 +383,9 @@ namespace SPM.Controllers
                     break;
                 case 29:
                     AggregatedDataTypes = new PhaseTerminationAggregationOptions().AggregatedDataTypes;
+                    break;
+                case 30:
+                    AggregatedDataTypes = new PhasePedAggregationOptions().AggregatedDataTypes;
                     break;
                 default:
                     throw new Exception("Invalid Metric Type");

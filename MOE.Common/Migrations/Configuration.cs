@@ -945,6 +945,14 @@ While each agency should consult with their IT department for specific guideline
                     Abbreviation = "AEC",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
+                },
+                new MetricType
+                {
+                    MetricID = 30,
+                    ChartName = "Phase Pedestrian Delay",
+                    Abbreviation = "APD",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = true
                 }
             );
             context.SaveChanges();
@@ -1291,12 +1299,16 @@ While each agency should consult with their IT department for specific guideline
                 userManager.AddToRole(user.Id, "User");
                 roleManager.Create(new IdentityRole("Technician"));
                 userManager.AddToRole(user.Id, "Technician");
+                roleManager.Create(new IdentityRole("Data"));
+                userManager.AddToRole(user.Id, "Data");
             }
             else
             {
                 var user = userManager.FindByName("DefaultAdmin@SPM.Gov");
                 roleManager.Create(new IdentityRole("Technician"));
                 userManager.AddToRole(user.Id, "Technician");
+                roleManager.Create(new IdentityRole("Data"));
+                userManager.AddToRole(user.Id, "Data");
             }
 
             context.SaveChanges();

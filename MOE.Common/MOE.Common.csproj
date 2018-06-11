@@ -373,6 +373,8 @@
     <Compile Include="Business\DataAggregation\PcdAggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\PcdAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\CycleAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\PhasePedAggregationByPhase.cs" />
+    <Compile Include="Business\DataAggregation\PhasePedAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\SignalEventCountAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\SpeedAggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\SpeedAggregationBySignal.cs" />
@@ -418,6 +420,7 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSpeedAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachEventCountAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PhasePedAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\PhaseTerminationAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachYellowRedActivationsAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachPcdAggregationOptions.cs" />
@@ -522,13 +525,21 @@
     <Compile Include="Migrations\201805311757143_DatabaseArchive.Designer.cs">
       <DependentUpon>201805311757143_DatabaseArchive.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806072115260_PhasePedDelayAggregation.cs" />
+    <Compile Include="Migrations\201806072115260_PhasePedDelayAggregation.Designer.cs">
+      <DependentUpon>201806072115260_PhasePedDelayAggregation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
+    <Compile Include="Models\PhasePedAggregation.cs" />
     <Compile Include="Models\PhaseTerminationAggregation.cs" />
     <Compile Include="Models\PhaseEventCountAggregation.cs" />
     <Compile Include="Models\DetectorEventCountAggregation.cs" />
     <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\Repositories\IPhasePedAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\PhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseTerminationAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\PhasePedAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\PhaseTerminationAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\IPhaseTerminationAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IDetectorEventCountAggregationRepository.cs" />
@@ -907,6 +918,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805311757143_DatabaseArchive.resx">
       <DependentUpon>201805311757143_DatabaseArchive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806072115260_PhasePedDelayAggregation.resx">
+      <DependentUpon>201806072115260_PhasePedDelayAggregation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CreateIntegratedSwapAndMoveDataJob.sql" />
     <Content Include="Migrations\CustomStuffForExistingUpgrade.txt" />
