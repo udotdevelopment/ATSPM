@@ -13,7 +13,7 @@ namespace MOE.Common.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201805111954188_shrink"; }
+            get { return "201805112004498_shrink"; }
         }
         
         string IMigrationMetadata.Source
