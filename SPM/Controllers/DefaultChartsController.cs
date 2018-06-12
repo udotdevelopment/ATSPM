@@ -916,10 +916,6 @@ namespace SPM.Controllers
                 } 
             }
 
-
-
-
-
            
 
             StringBuilder sb = new StringBuilder();
@@ -1134,10 +1130,6 @@ namespace SPM.Controllers
                 MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
             return  metricRepository.GetMetricsByID(id);
         }
-
-        
-
-       
 
     }
 }

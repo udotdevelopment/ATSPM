@@ -144,7 +144,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 t.Add105Events(SignalID, StartDate, EndDate);
                 var detailchart = new PreemptDetailChart(this, t);
-                var chart = detailchart.Chart;
+                var chart = detailchart.DetailChart;
                 var chartName = CreateFileName();
                 chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
                 returnList.Add(MetricWebPath + chartName);

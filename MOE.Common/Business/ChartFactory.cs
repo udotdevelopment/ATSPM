@@ -350,7 +350,7 @@ namespace MOE.Common.Business
                 XAxisType.TimeOfDay)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
-                chartArea.AxisX.LabelStyle.Format = "HH:mm";
+                chartArea.AxisX.LabelStyle.Format = "HH";
                 chartArea.AxisX.Minimum = options.StartDate.AddMinutes(-15).ToOADate();
             }
             else
