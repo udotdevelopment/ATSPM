@@ -256,9 +256,7 @@ namespace MOE.Common.Business
             chartArea.Name = "ChartArea1";
             SetSplitFailYAxis(chartArea, options);
             SetUpXAxis(chartArea, options);
-            SetUpX2Axis(chartArea, options);
-            //SetSplitFailXAxis(chartArea, options);
-            //SetSplitFailX2Axis(chartArea, options);
+            SetSplitFailPassX2Axis(chartArea, options);
             return chartArea;
         }
 
@@ -275,7 +273,6 @@ namespace MOE.Common.Business
             SetTimeXAxis(chartArea, options);
             return chartArea;
         }
-
 
 
         private static void SetSplitFailX2Axis(ChartArea chartArea, SplitFailOptions options)
@@ -389,7 +386,6 @@ namespace MOE.Common.Business
                         chartArea.AxisX.MajorTickMark.Enabled = true;
                         chartArea.AxisX.IntervalType = DateTimeIntervalType.Months;
                         chartArea.AxisX.Interval = 1;
-                        //chartArea.AxisX.LabelStyle.Format = "MM-yyyy";
                         chartArea.AxisX.LabelStyle.Enabled = true;
                         chartArea.AxisX.LabelStyle.Angle = 45;
                         chartArea.AxisX.LabelStyle.IntervalType = DateTimeIntervalType.Months;
@@ -488,6 +484,15 @@ namespace MOE.Common.Business
                 chartArea.AxisX2.LabelStyle.Format = "MM/dd/yyyy";
             }
         }
+        private static void SetSplitFailPassX2Axis(ChartArea chartArea, MetricOptions options)
+        {
+            chartArea.AxisX2.Enabled = AxisEnabled.True;
+            chartArea.AxisX2.IntervalType = DateTimeIntervalType.Days;
+            chartArea.AxisX2.LabelStyle.Format = "  ";
+            chartArea.AxisX2.Minimum = options.StartDate.ToOADate();
+            chartArea.AxisX2.Maximum = options.EndDate.ToOADate();
+            chartArea.AxisX2.Interval = 30;
+            }
 
         private static void SetUpXAxis(ChartArea chartArea, MetricOptions options)
         {

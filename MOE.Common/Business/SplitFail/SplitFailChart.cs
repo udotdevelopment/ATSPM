@@ -203,12 +203,11 @@ namespace MOE.Common.Business.SplitFail
                         break;
                     default:
                         plannumberlabel.Text = "Plan " + plan.PlanNumber;
-
                         break;
                 }
 
                 plannumberlabel.ForeColor = Color.Black;
-                plannumberlabel.RowIndex = 4;
+                plannumberlabel.RowIndex = 2;
                 plannumberlabel.LabelMark = LabelMarkStyle.LineSideMark;
                 chart.ChartAreas[0].AxisX2.CustomLabels.Add(plannumberlabel);
 
@@ -220,12 +219,11 @@ namespace MOE.Common.Business.SplitFail
                 planMetrics.Text += "\n" + Convert.ToInt32(plan.PercentFails) + "% SF";
 
                 planMetrics.ForeColor = Color.Black;
-                planMetrics.RowIndex = 3;
+                planMetrics.RowIndex = 1;
                 chart.ChartAreas[0].AxisX2.CustomLabels.Add(planMetrics);
                 //Change the background color counter for alternating color
                 backGroundColor++;
             }
-            //);
         }
     }
 }
