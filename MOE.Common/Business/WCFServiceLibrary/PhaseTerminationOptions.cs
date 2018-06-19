@@ -131,7 +131,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             base.CreateMetric();
             var location = GetSignalLocation();
-            var chart = new Chart();
+            var chart = ChartFactory.CreateDefaultChart(this);
+
             CreateLegend();
             var analysisPhaseCollection =
                 new AnalysisPhaseCollection(SignalID, StartDate,

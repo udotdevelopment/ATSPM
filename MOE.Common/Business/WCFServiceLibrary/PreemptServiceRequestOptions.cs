@@ -22,8 +22,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var returnList = new List<string>();
             var eventsTable = new ControllerEventLogs();
             eventsTable.FillforPreempt(SignalID, StartDate, EndDate);
-            var prChart = new PreemptRequestChart(this, eventsTable);
-            var chart = prChart.Chart;
+
+            var psrChart = new PreemptRequestChart(this, eventsTable);
+            var chart = psrChart.PreemptServiceRequestChart;
             var chartName = CreateFileName();
             chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
             returnList.Add(MetricWebPath + chartName);

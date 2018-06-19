@@ -30,7 +30,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             if (eventsTable.Events.Count > 0)
             {
                 var psChart = new PreemptServiceMetric(this, eventsTable);
-                var chart = psChart.chart;
+                var chart = psChart.ServiceChart;
                 var chartName = CreateFileName();
                 chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
                 returnString.Add(MetricWebPath + chartName);
