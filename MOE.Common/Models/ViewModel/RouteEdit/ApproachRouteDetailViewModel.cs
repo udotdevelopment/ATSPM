@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Models.ViewModel.RouteEdit
 {
@@ -10,6 +6,6 @@ namespace MOE.Common.Models.ViewModel.RouteEdit
     {
         public string RouteName { get; set; }
         public int RouteID { get; set; }
-        public List<MOE.Common.Models.ApproachRouteDetail> Approaches { get; set; }
+        public List<RouteSignal> RouteSignals { get; set; }
     }
 }

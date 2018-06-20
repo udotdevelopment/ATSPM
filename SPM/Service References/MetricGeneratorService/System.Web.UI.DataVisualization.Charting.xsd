@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/System.Web.UI.DataVisualization.Charting" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/System.Web.UI.DataVisualization.Charting" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="SeriesChartType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Point" />
+      <xs:enumeration value="FastPoint" />
+      <xs:enumeration value="Bubble" />
+      <xs:enumeration value="Line" />
+      <xs:enumeration value="Spline" />
+      <xs:enumeration value="StepLine" />
+      <xs:enumeration value="FastLine" />
+      <xs:enumeration value="Bar" />
+      <xs:enumeration value="StackedBar" />
+      <xs:enumeration value="StackedBar100" />
+      <xs:enumeration value="Column" />
+      <xs:enumeration value="StackedColumn" />
+      <xs:enumeration value="StackedColumn100" />
+      <xs:enumeration value="Area" />
+      <xs:enumeration value="SplineArea" />
+      <xs:enumeration value="StackedArea" />
+      <xs:enumeration value="StackedArea100" />
+      <xs:enumeration value="Pie" />
+      <xs:enumeration value="Doughnut" />
+      <xs:enumeration value="Stock" />
+      <xs:enumeration value="Candlestick" />
+      <xs:enumeration value="Range" />
+      <xs:enumeration value="SplineRange" />
+      <xs:enumeration value="RangeBar" />
+      <xs:enumeration value="RangeColumn" />
+      <xs:enumeration value="Radar" />
+      <xs:enumeration value="Polar" />
+      <xs:enumeration value="ErrorBar" />
+      <xs:enumeration value="BoxPlot" />
+      <xs:enumeration value="Renko" />
+      <xs:enumeration value="ThreeLineBreak" />
+      <xs:enumeration value="Kagi" />
+      <xs:enumeration value="PointAndFigure" />
+      <xs:enumeration value="Funnel" />
+      <xs:enumeration value="Pyramid" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="SeriesChartType" nillable="true" type="tns:SeriesChartType" />
+</xs:schema>

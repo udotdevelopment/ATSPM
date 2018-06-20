@@ -22,12 +22,7 @@ namespace GetMaxTimeRecords
 
                 return (mostRecentEventTime);
             }
-            else
-            {
-                return (DateTime.Now.AddDays(-2));
-            }
-
-
+            return (DateTime.Now.AddDays(-2));
         }
 
         //private object[] GetRandomRow(DataConsumer consumer)

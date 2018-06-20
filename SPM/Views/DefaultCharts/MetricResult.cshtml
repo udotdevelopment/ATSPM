@@ -1,8 +1,13 @@
-﻿@model IEnumerable<String>
+﻿@model SPM.Models.MetricResultViewModel
+
 
 @{
-    foreach(String s in Model)
+    foreach(String s in Model.ChartPaths)
     {
-        <img src="@s" alt="PCD Chart" />
+        <img src="@s" alt="Chart" />
     }
 }
+<script type="text/javascript">
+    function ShowMetricUrl() {
+        @Html.Raw(Model.ShowMetricUrlJavascript)
+    }</script>

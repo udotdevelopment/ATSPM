@@ -51,6 +51,9 @@
       <HintPath>..\packages\Caseiro.Mvc.PagedList.1.0.2\lib\net40\Caseiro.Mvc.PagedList.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
@@ -79,6 +82,8 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.DataVisualization" />
+    <Reference Include="System.Web.DataVisualization.Design" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -187,10 +192,12 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActionLogsController.cs" />
+    <Compile Include="Controllers\AggregateDataExportController.cs" />
     <Compile Include="Controllers\ApproachesController.cs" />
-    <Compile Include="Controllers\ApproachRouteDetailsController.cs" />
-    <Compile Include="Controllers\ApproachRoutesController.cs" />
+    <Compile Include="Controllers\ArchiveSettingsOldController.cs" />
     <Compile Include="Controllers\ConfigurationTableController.cs" />
+    <Compile Include="Controllers\DatabaseArchiveSettingsController.cs" />
+    <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\DefaultChartsController.cs" />
     <Compile Include="Controllers\DetectorCommentsController.cs" />
     <Compile Include="Controllers\DetectorsController.cs" />
@@ -201,14 +208,22 @@
     <Compile Include="Controllers\MenusController.cs" />
     <Compile Include="Controllers\MetricCommentsController.cs" />
     <Compile Include="Controllers\PurdueTravelTimeController.cs" />
+    <Compile Include="Controllers\RoutePhaseDirectionsController.cs" />
+    <Compile Include="Controllers\RoutesController.cs" />
+    <Compile Include="Controllers\RouteSignalsController.cs" />
     <Compile Include="Controllers\SignalsController.cs" />
     <Compile Include="Controllers\SPMUsersController.cs" />
+    <Compile Include="Controllers\GeneralSettingsController.cs" />
     <Compile Include="Controllers\WatchDogApplicationSettingsController.cs" />
     <Compile Include="Filters\ValidateJsonAntiForgeryTokenAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ArchiveSettingsViewModel.cs" />
+    <Compile Include="Models\AggDataExportViewModel.cs" />
+    <Compile Include="Models\MetricAndXmlResultViewModel.cs" />
+    <Compile Include="Models\MetricResultViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\SPMConfigurationTableViewModel.cs" />
@@ -288,6 +303,8 @@
     <Content Include="Images\NewUDOTLogo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\orangePin - Copy.png" />
+    <Content Include="Images\orangePin.png" />
     <Content Include="Images\pointer_shadow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -302,6 +319,9 @@
     </Content>
     <Content Include="Scripts\ActionLog.js" />
     <Content Include="Scripts\AddData.js" />
+    <Content Include="Scripts\AddRouteData.js" />
+    <Content Include="Scripts\AggregateDataExport.js" />
+    <Content Include="Scripts\ArchiveSettings.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Chart.min.js.map">
@@ -321,11 +341,15 @@
     <Content Include="Images\TTTJamieMackey.pdf" />
     <Content Include="Images\TTTMarkTaylor.pdf" />
     <Content Include="Images\Signal Ops QIT Final Report Released.pdf" />
+    <Content Include="Properties\DataSources\MOE.Common.Business.TMC.TMCInfo.datasource" />
+    <Content Include="Properties\DataSources\System.Xml.Linq.XElement.datasource" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery-migrate-3.0.0.js" />
+    <Content Include="Scripts\jquery-migrate-3.0.0.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -335,8 +359,11 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\RawDataExport.js" />
     <Content Include="Scripts\RouteEdit.js" />
+    <Content Include="Scripts\RouteMap.js" />
     <Content Include="Scripts\SignalDetail.js" />
+    <Content Include="Scripts\TestJavaScript.js" />
     <Content Include="Scripts\User.js" />
     <Content Include="Scripts\SignalEdit.js" />
     <Content Include="Scripts\SignalsSearch.js" />
@@ -424,6 +451,15 @@
     </None>
     <None Include="Service References\MetricGeneratorService\configuration91.svcinfo" />
     <None Include="Service References\MetricGeneratorService\configuration.svcinfo" />
+    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.Bins.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.FilterExtensions.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.TMC.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\MetricGeneratorService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -489,16 +525,6 @@
     <Content Include="Views\FAQs\Edit.cshtml" />
     <Content Include="Views\FAQs\Index.cshtml" />
     <Content Include="Views\FAQs\Display.cshtml" />
-    <Content Include="Views\ApproachRoutes\Create.cshtml" />
-    <Content Include="Views\ApproachRoutes\Delete.cshtml" />
-    <Content Include="Views\ApproachRoutes\Details.cshtml" />
-    <Content Include="Views\ApproachRoutes\Edit.cshtml" />
-    <Content Include="Views\ApproachRoutes\Index.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Create.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Delete.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Details.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Edit.cshtml" />
-    <Content Include="Views\ApproachRouteDetails\Index.cshtml" />
     <Content Include="Views\ActionLogs\Usage.cshtml" />
     <Content Include="Views\DefaultCharts\GetApproachVolumeMetric.cshtml" />
     <Content Include="Views\ActionLogs\Chart.cshtml" />
@@ -522,14 +548,55 @@
     <Content Include="Views\DetectorComments\Create.cshtml" />
     <Content Include="Views\Signals\SignalDetail.cshtml" />
     <Content Include="Views\Signals\SignalDetailResult.cshtml" />
-    <Content Include="Views\Signals\_SignalPartial.cshtml" />
-    <Content Include="Views\Account\Users.cshtml" />
     <Content Include="Views\SPMUsers\Delete.cshtml" />
     <Content Include="Views\SPMUsers\Details.cshtml" />
     <Content Include="Views\SPMUsers\Edit.cshtml" />
     <Content Include="Views\SPMUsers\Index.cshtml" />
     <Content Include="Views\DefaultCharts\GetTMCMetric.cshtml" />
     <Content Include="Views\WatchDogApplicationSettings\Edit.cshtml" />
+    <Content Include="Views\DataExport\RawDataExport.cshtml" />
+    <Content Include="Views\RouteSignals\RouteMap.cshtml" />
+    <Content Include="Views\RouteSignals\RouteInfoBox.cshtml" />
+    <Content Include="Views\RouteSignals\ApproachList.cshtml" />
+    <Content Include="Views\RouteSignals\Create.cshtml" />
+    <Content Include="Views\RouteSignals\Delete.cshtml" />
+    <Content Include="Views\RouteSignals\Details.cshtml" />
+    <Content Include="Views\RouteSignals\Edit.cshtml" />
+    <Content Include="Views\RouteSignals\Index.cshtml" />
+    <Content Include="Views\RoutePhaseDirections\Create.cshtml" />
+    <Content Include="Views\RoutePhaseDirections\Delete.cshtml" />
+    <Content Include="Views\RoutePhaseDirections\Details.cshtml" />
+    <Content Include="Views\RoutePhaseDirections\Edit.cshtml" />
+    <Content Include="Views\RoutePhaseDirections\Index.cshtml" />
+    <Content Include="Views\Routes\Create.cshtml" />
+    <Content Include="Views\Routes\Delete.cshtml" />
+    <Content Include="Views\Routes\Details.cshtml" />
+    <Content Include="Views\Routes\Edit.cshtml" />
+    <Content Include="Views\Routes\Index.cshtml" />
+    <Content Include="Views\RouteSignals\ApproachesForRoute.cshtml" />
+    <Content Include="Views\Routes\EditorTemplates\RouteSignal.cshtml" />
+    <Content Include="Views\Routes\EditorTemplates\RoutePhaseDirection.cshtml" />
+    <Content Include="Views\RouteSignals\SignalsList.cshtml" />
+    <Content Include="Views\AggregateDataExport\Index.cshtml" />
+    <Content Include="Views\AggregateDataExport\GetRouteSignals.cshtml" />
+    <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterSignal.cshtml" />
+    <Content Include="Views\ArchiveSettings\IndexOld.cshtml" />
+    <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterApproach.cshtml" />
+    <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDetector.cshtml" />
+    <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDirection.cshtml" />
+    <Content Include="Views\AggregateDataExport\GetAggregateDataTypes.cshtml" />
+    <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterMovement.cshtml" />
+    <Content Include="Views\GeneralSettings\Edit.cshtml" />
+    <Content Include="Views\DataExport\EditorTemplates\DateTimePickerViewModel.cshtml" />
+    <None Include="Service References\MetricGeneratorService\System.Web.UI.DataVisualization.Charting.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MetricGeneratorService\System.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Views\AggregateDataExport\MetricResult.cshtml" />
+    <Content Include="Views\DatabaseArchiveSettings\Edit.cshtml" />
+    <Content Include="Views\DatabaseArchiveSettings\EditorTemplates\DatabaseArchiveExcludedSignal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -575,6 +642,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Views\DataArchive\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

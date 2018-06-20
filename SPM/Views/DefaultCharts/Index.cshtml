@@ -3,6 +3,9 @@
 @{
     ViewBag.Title = "UDOT Automated Traffic Signal Performance Measures";
 }
+<script type="text/javascript">function LoadFromUrl() {
+    @Html.Raw(Model.RunMetricJavascript)
+}</script>
 
 <h2>Signal</h2>
 <form id="MainForm" class="col-md-12 well">
@@ -60,7 +63,7 @@
             </div>
         </div>
         <div>
-            <button id="CreateMetric" type="button" class="btn btn-primary">Create Chart &nbsp; <span id='RunReportSpinner' class="glyphicon"></span></button>
+            <button id="CreateMetric" type="button" class="btn btn-primary">Create Chart &nbsp;<span id='RunReportSpinner' class="glyphicon"></span></button>
 
         </div>
     </div>
@@ -72,7 +75,8 @@
 
 
 @section Scripts
-    {
+{
+    
     <script type="text/javascript" src="~/Scripts/DefaultCharts.js"></script>
     <script type="text/javascript" src="~/Scripts/Map.js"></script>
     <script type="text/javascript" src="~/Scripts/GetMetrics.js"></script>

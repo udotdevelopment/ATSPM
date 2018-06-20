@@ -1,226 +1,165 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business
 {
     public class AnalysisPhase
     {
+        public List<Controller_Event_Log> ConsecutiveForceOff = new List<Controller_Event_Log>();
+        public List<Controller_Event_Log> ConsecutiveGapOuts = new List<Controller_Event_Log>();
+        public List<Controller_Event_Log> ConsecutiveMaxOut = new List<Controller_Event_Log>();
+        public AnalysisPhaseCycleCollection Cycles;
 
-        private int phaseNumber;
-        public int PhaseNumber
-        {
-            get
-            {
-                return phaseNumber;
-            }
-        }
+        public List<Controller_Event_Log> PedestrianEvents = new List<Controller_Event_Log>();
 
 
+        public List<Controller_Event_Log> TerminationEvents = new List<Controller_Event_Log>();
 
-        private string signalId;
-        public string SignalID
-        {
-            get
-            {
-                return signalId;
-            }
-        }
+        public List<Controller_Event_Log> UnknownTermination = new List<Controller_Event_Log>();
 
-        private double percentMaxOuts;
-        public double PercentMaxOuts
-        {
-            get
-            {
-                return percentMaxOuts;
-            }
-        }
-
-        private double percentForceOffs;
-        public double PercentForceOffs
-        {
-            get
-            {
-                return percentForceOffs;
-            }
-        }
-
-        private int totalPhaseTerminations;
-        public int TotalPhaseTerminations
-        {
-            get
-            {
-                return totalPhaseTerminations;
-            }
-        }
-
-        public string Direction { get; set; }
-        public bool IsOverlap { get; set; }
-
-        public List<Models.Controller_Event_Log> PedestrianEvents = new List<Models.Controller_Event_Log>();
-        public List<Models.Controller_Event_Log> TerminationEvents = new List<Models.Controller_Event_Log>();
-        public List<Models.Controller_Event_Log> ConsecutiveGapOuts = new List<Models.Controller_Event_Log>();
-        public List<Models.Controller_Event_Log> ConsecutiveMaxOut = new List<Models.Controller_Event_Log>();
-        public List<Models.Controller_Event_Log> ConsecutiveForceOff = new List<Models.Controller_Event_Log>();
-        public List<Models.Controller_Event_Log> UnknownTermination = new List<Models.Controller_Event_Log>();
-        public Business.AnalysisPhaseCycleCollection Cycles;
-
-        public List<Models.Controller_Event_Log> FindTerminationEvents(List<Models.Controller_Event_Log> terminationeventstable, int phasenumber)
-        {
-
-            List<Models.Controller_Event_Log> events = (from row in terminationeventstable
-                          where row.EventParam == phasenumber && (row.EventCode == 4 || 
-                          row.EventCode == 5 || row.EventCode == 6
-                          || row.EventCode == 7
-                          )
-                          
-                          select row).ToList();
-
-            List<Models.Controller_Event_Log> sortedEvents = events.OrderBy(x => x.Timestamp).ThenByDescending(y => y.EventCode).ToList();
-            return sortedEvents;
-        }
-
-        public List<Models.Controller_Event_Log> FindPedEvents(List<Models.Controller_Event_Log> terminationeventstable, int phasenumber)
-        {
-            List<Models.Controller_Event_Log> events = (from row in terminationeventstable
-                         where row.EventParam == phasenumber && (row.EventCode == 21 || row.EventCode == 23)
-                          orderby row.Timestamp
-                          select row).ToList();
-
-            return events;
-        }
-
-        public List<Models.Controller_Event_Log> FindPhaseEvents(List<Models.Controller_Event_Log> PhaseEventsTable, int PhaseNumber)
-        {
-            List<Models.Controller_Event_Log> events = (from row in PhaseEventsTable
-                                                        where row.EventParam == PhaseNumber
-                                                        orderby row.Timestamp
-                                                        select row).ToList();
-
-            return events;
-        }
-        
         /// <summary>
-        /// Constructor used for Phase Termination Chart
+        ///     Constructor used for Phase Termination Chart
         /// </summary>
         /// <param name="phasenumber"></param>
         /// <param name="terminationeventstable"></param>
         /// <param name="consecutiveCount"></param>
-        public AnalysisPhase(int phasenumber, List<Models.Controller_Event_Log> terminationeventstable, int consecutiveCount)
+        public AnalysisPhase(int phasenumber, List<Controller_Event_Log> terminationeventstable, int consecutiveCount)
         {
+            PhaseNumber = phasenumber;
+            TerminationEvents = FindTerminationEvents(terminationeventstable, PhaseNumber);
 
-            this.phaseNumber = phasenumber;
-            TerminationEvents = FindTerminationEvents(terminationeventstable, phaseNumber);
 
-            
-
-            PedestrianEvents = FindPedEvents(terminationeventstable, phaseNumber);
+            PedestrianEvents = FindPedEvents(terminationeventstable, PhaseNumber);
 
 
             ConsecutiveGapOuts = FindConsecutiveEvents(TerminationEvents, 4, consecutiveCount);
             ConsecutiveMaxOut = FindConsecutiveEvents(TerminationEvents, 5, consecutiveCount);
             ConsecutiveForceOff = FindConsecutiveEvents(TerminationEvents, 6, consecutiveCount);
             UnknownTermination = FindUnknownTerminationEvents(TerminationEvents);
-            percentMaxOuts = FindPercentageConsecutiveEvents(TerminationEvents, 5, consecutiveCount);
-            percentForceOffs = FindPercentageConsecutiveEvents(TerminationEvents, 6, consecutiveCount);
-            totalPhaseTerminations = TerminationEvents.Count;
-    
+            PercentMaxOuts = FindPercentageConsecutiveEvents(TerminationEvents, 5, consecutiveCount);
+            PercentForceOffs = FindPercentageConsecutiveEvents(TerminationEvents, 6, consecutiveCount);
+            TotalPhaseTerminations = TerminationEvents.Count;
         }
 
-        
+
         /// <summary>
-        /// Constructor Used for Split monitor
+        ///     Constructor Used for Split monitor
         /// </summary>
         /// <param name="phasenumber"></param>
         /// <param name="signalID"></param>
         /// <param name="CycleEventsTable"></param>
-        public AnalysisPhase(int phasenumber, string signalID, List<Models.Controller_Event_Log> CycleEventsTable)
+        public AnalysisPhase(int phasenumber, string signalID, List<Controller_Event_Log> CycleEventsTable)
         {
-            MOE.Common.Models.Repositories.ISignalsRepository repository =
-                MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = repository.GetSignalBySignalID(signalID);     
-            this.phaseNumber = phasenumber;
-            this.signalId = signalID;
-            this.IsOverlap = false;
-            List<Models.Controller_Event_Log> PedEvents = FindPedEvents(CycleEventsTable, phasenumber);
-            List<Models.Controller_Event_Log> PhaseEvents = FindPhaseEvents(CycleEventsTable, phasenumber);
-            Cycles = new AnalysisPhaseCycleCollection(phasenumber, signalId, PhaseEvents, PedEvents);
-            Models.Approach approach = signal.Approaches.Where(a => a.ProtectedPhaseNumber == phasenumber).FirstOrDefault();
-            if (approach != null)
-            {
-                this.Direction = approach.DirectionType.Description;
-            }
-            else
-            {
-                this.Direction = "Unknown";
-            }            
+            var repository =
+                SignalsRepositoryFactory.Create();
+            var signal = repository.GetLatestVersionOfSignalBySignalID(signalID);
+            PhaseNumber = phasenumber;
+            SignalID = signalID;
+            IsOverlap = false;
+            var pedEvents = FindPedEvents(CycleEventsTable, phasenumber);
+            var phaseEvents = FindPhaseEvents(CycleEventsTable, phasenumber);
+            Cycles = new AnalysisPhaseCycleCollection(phasenumber, SignalID, phaseEvents, pedEvents);
+            var approach = signal.Approaches.FirstOrDefault(a => a.ProtectedPhaseNumber == phasenumber);
+            Direction = approach != null ? approach.DirectionType.Description : "Unknown";
         }
 
-        private List<Models.Controller_Event_Log> FindConsecutiveEvents(List<Models.Controller_Event_Log> terminationEvents, 
+        public int PhaseNumber { get; }
+
+        public string SignalID { get; }
+
+        public double PercentMaxOuts { get; }
+
+        public double PercentForceOffs { get; }
+
+        public int TotalPhaseTerminations { get; }
+
+        public string Direction { get; set; }
+        public bool IsOverlap { get; set; }
+
+        public List<Controller_Event_Log> FindTerminationEvents(List<Controller_Event_Log> terminationeventstable,
+            int phasenumber)
+        {
+            var events = (from row in terminationeventstable
+                where row.EventParam == phasenumber && (row.EventCode == 4 ||
+                                                        row.EventCode == 5 || row.EventCode == 6
+                                                        || row.EventCode == 7
+                      )
+                select row).ToList();
+
+            var sortedEvents = events.OrderBy(x => x.Timestamp).ThenByDescending(y => y.EventCode).ToList();
+            return sortedEvents;
+        }
+
+        public List<Controller_Event_Log> FindPedEvents(List<Controller_Event_Log> terminationeventstable,
+            int phasenumber)
+        {
+            var events = (from row in terminationeventstable
+                where row.EventParam == phasenumber && (row.EventCode == 21 || row.EventCode == 23)
+                orderby row.Timestamp
+                select row).ToList();
+
+            return events;
+        }
+
+        public List<Controller_Event_Log> FindPhaseEvents(List<Controller_Event_Log> PhaseEventsTable, int PhaseNumber)
+        {
+            var events = (from row in PhaseEventsTable
+                where row.EventParam == PhaseNumber
+                orderby row.Timestamp
+                select row).ToList();
+
+            return events;
+        }
+
+        private List<Controller_Event_Log> FindConsecutiveEvents(List<Controller_Event_Log> terminationEvents,
             int eventtype, int consecutiveCount)
         {
-            List<Models.Controller_Event_Log> ConsecutiveEvents = new List<Models.Controller_Event_Log>();
-            int runningConsecCount = 0;
+            var ConsecutiveEvents = new List<Controller_Event_Log>();
+            var runningConsecCount = 0;
             // Order the events by datestamp
             var eventsInOrder = terminationEvents.OrderBy(TerminationEvent => TerminationEvent.Timestamp);
-            foreach (Models.Controller_Event_Log termEvent in eventsInOrder)
-            {
+            foreach (var termEvent in eventsInOrder)
                 if (termEvent.EventCode != 7)
                 {
                     if (termEvent.EventCode == eventtype)
-                    {
                         runningConsecCount++;
-                    }
                     else
-                    {
                         runningConsecCount = 0;
-                    }
 
                     if (runningConsecCount >= consecutiveCount)
-                    {
                         ConsecutiveEvents.Add(termEvent);
-                    }
                 }
-            }
             return ConsecutiveEvents;
         }
 
-        private List<Models.Controller_Event_Log> FindUnknownTerminationEvents(List<Models.Controller_Event_Log> terminationEvents)
+        private List<Controller_Event_Log> FindUnknownTerminationEvents(List<Controller_Event_Log> terminationEvents)
         {
-            List<Models.Controller_Event_Log> unknownTermEvents = new List<Models.Controller_Event_Log>();
-            for(int x=0; x + 1 < terminationEvents.Count;x++)
+            var unknownTermEvents = new List<Controller_Event_Log>();
+            for (var x = 0; x + 1 < terminationEvents.Count; x++)
             {
-                Models.Controller_Event_Log currentEvent = terminationEvents[x];
-                Models.Controller_Event_Log nextEvent = terminationEvents[x + 1];
+                var currentEvent = terminationEvents[x];
+                var nextEvent = terminationEvents[x + 1];
 
-                if(currentEvent.EventCode == 7 && nextEvent.EventCode == 7)
-                {
-                    //if (x + 2 <= terminationEvents.Count)
-                    //{
-                    //    TimeSpan t = terminationEvents[x + 2].Timestamp - terminationEvents[x + 1].Timestamp;
-
-                        unknownTermEvents.Add(currentEvent);
-                    //}
-                }
+                if (currentEvent.EventCode == 7 && nextEvent.EventCode == 7)
+                    unknownTermEvents.Add(currentEvent);
             }
             return unknownTermEvents;
         }
 
 
-        private double FindPercentageConsecutiveEvents(List<Models.Controller_Event_Log> terminationEvents, int eventtype, 
+        private double FindPercentageConsecutiveEvents(List<Controller_Event_Log> terminationEvents, int eventtype,
             int consecutiveCount)
         {
             double percentile = 0;
             double total = terminationEvents.Where(t => t.EventCode != 7).Count();
             //Get all termination events of the event type
-            int terminationEventsOfType = terminationEvents.Where(
+            var terminationEventsOfType = terminationEvents.Where(
                 TerminationEvent => TerminationEvent.EventCode == eventtype).Count();
 
             if (terminationEvents.Count() > 0)
-            {
-                percentile= terminationEventsOfType / total;
-            }
+                percentile = terminationEventsOfType / total;
             return percentile;
         }
     }

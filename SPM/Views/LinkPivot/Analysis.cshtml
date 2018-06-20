@@ -21,10 +21,10 @@
                             <legend>Report Options</legend>
                             <div class="form-group">
                                 <label class="control-label" for="Routes">Route</label>
-                                @Html.DropDownListFor(model => model.SelectedApproachRouteId,
-        new SelectList(Model.AppRoutes, "ApproachRouteId", "RouteName"),
+                                @Html.DropDownListFor(model => model.SelectedRouteId,
+        new SelectList(Model.Routes, "Id", "RouteName"),
                           "--Select Route--", new { @id = "Routes", @class = "form-control", onclick = "ClearReport()" })
-                                @Html.ValidationMessageFor(model => model.SelectedApproachRouteId, "", new { id="Routes-error", @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.SelectedRouteId, "", new { id="Routes-error", @class = "text-danger" })
                             </div>
                             <div class="form-group">
                                 <div class="panel-group col-md-12 no-gutter">
@@ -64,7 +64,6 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                @*@Html.LabelFor(model => model.EndTime, htmlAttributes: new { id = "EndTime-error", @class = "control-label" })*@
                                 @Html.LabelFor(model => model.EndTime, htmlAttributes: new { @class = "control-label" })
                                 <div class="input-group-custom">
                                     @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { onchange = "ClearReport()", @class = "form-control timeWidth", placeholder = "End Time" } })
@@ -76,14 +75,6 @@
                             @Html.ValidationMessageFor(model => model.EndAMPM, "", new { id = "EndAMPM-error", @class = "text-danger" })
                             @Html.ValidationMessageFor(model => model.StartTime, "", new { id = "StartTime-error", @class = "text-danger" })
                             @Html.ValidationMessageFor(model => model.EndTime, "", new { id = "EndTime-error", @class = "text-danger" })
-
-
-
-
-
-
-
-
                             <div class="panel-group col-md-12">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
@@ -95,13 +86,6 @@
                                         <div class="form-group">
                                             <h3>Days to Include</h3> 
                                             <div id="DaysDiv" class="col-md-12 DaysDiv">
-                                                @*@Html.CheckBox("Sunday", false)
-                                @Html.CheckBox("Monday", true)
-                                @Html.CheckBox("Tuesday", true)
-                                @Html.CheckBox("Wednesday", true)
-                                @Html.CheckBox("Thursday", true)
-                                @Html.CheckBox("Friday", true)
-                                @Html.CheckBox("Saturday", false)*@
                                                 @Html.CheckBoxListFor(x => x.PostedDays.DayIDs,
                                 x => x.AvailableDays,
                                 x => x.DayId,
@@ -111,7 +95,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            @*<label class="control-label" for="uxStartingPointDdl" id="uxStartingPointDdl-error">Starting Point</label>*@
                                             @Html.LabelFor(model => model.StartingPoint)
                                             @{List<SelectListItem> StartingPointlistItems = new List<SelectListItem>();
                                             StartingPointlistItems.Add(new SelectListItem { Text = "Downstream", Value = "Downstream", Selected = true });
@@ -156,7 +139,6 @@
             </form>
         }
         <br />
-
         <div id="PCDOptionsPlaceHolder"></div>
     </div>
     <div class="col-md-9">

@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.AoROptions" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAQAAAACAAAAAAAAAAAAAAAAAAAAAAIAQAAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\AoROptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.ApproachAggregationMetricOptions" Collapsed="true">
+    <Position X="23" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gABEBAAAAAEAAAhAQBAEAAFFAQBAUkEQCCKAQAARCEI=</HashCode>
+      <FileName>Business\WCFServiceLibrary\ApproachAggregationMetricOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.ApproachCycleAggregationOptions" Collapsed="true">
+    <Position X="18.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABABAAAAAAAAABAAAAAAABAAAAABEAACCAAAIARAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\ApproachCycleAggregationOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.ApproachDelayOptions" Collapsed="true">
+    <Position X="38.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAQAAAACAAAAAAAAAAAAAAAAAAAAIAIAQAAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\ApproachDelayOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.ApproachEventCountAggregationOptions" Collapsed="true">
+    <Position X="23" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABABAAAAAAAAABAAAAAAABAAAAABEAACCAAAIARAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\ApproachEventCountAggregationOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.ApproachPcdAggregationOptions" Collapsed="true">
+    <Position X="27.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABABAAAAAAAAABAAAAAAABAAAAABEAACCAAAIARAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\ApproachPcdAggregationOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.ApproachSpeedAggregationOptions" Collapsed="true">
+    <Position X="16.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABABAAAAAAAAABAAAAAAABAAAAABEAACCAAAIARAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\ApproachSeedAggregationOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.ApproachSpeedOptions" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAQAAAACAAAAACAAAABAAABAAEAAAgIAQABAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\ApproachSpeedOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.ApproachSplitFailAggregationOptions" Collapsed="true">
+    <Position X="20.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABABAAAAAAAAABAAAAAAABAAAAABEAACCAAAIARAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\ApproachSplitFailAggregationOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions" Collapsed="true">
+    <Position X="41" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIgAAgQAAAACIAAAAAAAAAAAgAAAAQAAEAIAAEAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\ApproachVolumeOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.ApproachYellowRedActivationsAggregationOptions" Collapsed="true">
+    <Position X="25.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABABAAAAAAAAABAAAAAAABAAAAABEAACCAAAIARAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\ApproachYellowRedActivationsAggregationOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.DetectorAggregationMetricOptions" Collapsed="true">
+    <Position X="29.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEgAAAAAAAEAAAgAAAAEARAAAAAAAAAAAAAAIAEBAAI=</HashCode>
+      <FileName>Business\WCFServiceLibrary\DetectorAggregationMetricOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.DetectorVolumeAggregationOptions" Collapsed="true">
+    <Position X="29.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABABAAAAAAAAABAAAAAAABAAAAABEAACCAAAIERAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\DetectorVolumeAggregationOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.DotSizeItem" Collapsed="true">
+    <Position X="56.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\DotSizeItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.MetricOptions" Collapsed="true">
+    <Position X="26.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABgEEIAAAAAABAAAAABgBAkAAACAgAAAIEAAABA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\MetricOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.PCDOptions" Collapsed="true">
+    <Position X="43.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAEAAAACQAAACCEgEigAAgAAAAMAAgAAIAAJIAQAiAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\PCDOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.PedDelayOptions" Collapsed="true">
+    <Position X="47.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\PedDelayOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.PhaseTerminationOptions" Collapsed="true">
+    <Position X="52.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAQAAACAAAAAAAAAAEgAAIABAABAAIIAAAACA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\PhaseTerminationOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.PreemptDetailOptions" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\PreemptDetailOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.PreemptServiceMetricOptions" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\PreemptServiceMetricOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.PreemptServiceRequestOptions" Collapsed="true">
+    <Position X="11.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\PreemptServiceRequestOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.AggregatedDataType" Collapsed="true">
+    <Position X="54.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\SignalAggregationMetricOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.SignalAggregationMetricOptions" Collapsed="true">
+    <Position X="24" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAJtAgRBgFQAAgAEJgEAAZxCCAiFUQArBAAIoABKAc=</HashCode>
+      <FileName>Business\WCFServiceLibrary\SignalAggregationMetricOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.InvalidBinSizeException" Collapsed="true">
+    <Position X="54.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\SignalAggregationMetricOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.SignalEventCountAggregationOptions" Collapsed="true">
+    <Position X="27.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAACAAAAAAhAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\SignalEventCountAggregationOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.SignalPreemptionAggregationOptions" Collapsed="true">
+    <Position X="29.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAACAAAAAABAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\SignalPreemptionAggregationOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.SignalPriorityAggregationOptions" Collapsed="true">
+    <Position X="25.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAACAAAAAABAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\SignalPriorityAggregationOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.SplitFailOptions" Collapsed="true">
+    <Position X="9.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAQAAGAAAAAAAAAAAAAAACAAAAAAAAIABAAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\SplitFailOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.SplitMonitorOptions" Collapsed="true">
+    <Position X="36.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEABCBAQAAAAAAAAAAgAAIQgAAYAAAAAAEKIAAQAAI=</HashCode>
+      <FileName>Business\WCFServiceLibrary\SplitMonitorOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.TMCOptions" Collapsed="true">
+    <Position X="45.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIIgAAQAAAACAAAAAAAIAAgAEAQCAAAAAAIAAAAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\TMCOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MOE.Common.Business.WCFServiceLibrary.YellowAndRedOptions" Collapsed="true">
+    <Position X="50" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAwAAAAABgAAIAIAgAAAAAQABAAAAQIAAAAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\YellowAndRedOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="MOE.Common.Business.WCFServiceLibrary.AggregationType" Collapsed="true">
+    <Position X="54.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Business\WCFServiceLibrary\SignalAggregationMetricOptions.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MOE.Common.Business.WCFServiceLibrary.SeriesType" Collapsed="true">
+    <Position X="54.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAGAAAAAAAAIAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\SignalAggregationMetricOptions.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MOE.Common.Business.WCFServiceLibrary.XAxisType" Collapsed="true">
+    <Position X="56.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAEAAAAIAAAAAAAAAAAEABQA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\SignalAggregationMetricOptions.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MOE.Common.Business.WCFServiceLibrary.Dimension" Collapsed="true">
+    <Position X="56.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Business\WCFServiceLibrary\SignalAggregationMetricOptions.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -81,7 +81,7 @@ namespace MOEWcfServiceLibrary
         /// <param name="friday"></param>
         /// <param name="saturday"></param>
         /// <returns>AdjustmentObject Array</returns>
-        public AdjustmentObject[] GetLinkPivot(int routeId, DateTime startDate, DateTime endDate, int cycleTime, string chartLocation,
+        public AdjustmentObject[] GetLinkPivot(int routeId, DateTime startDate, DateTime endDate, int cycleTime, 
             string direction, double bias, string biasDirection, bool sunday, bool monday, bool tuesday, bool wednesday,
             bool thursday, bool friday, bool saturday)
         {
@@ -118,7 +118,7 @@ namespace MOEWcfServiceLibrary
 
             //Generate a Link Pivot Object
             MOE.Common.Business.LinkPivot lp = new MOE.Common.Business.LinkPivot(routeId, startDate, endDate,
-                cycleTime, chartLocation, direction, bias, biasDirection, daysList);
+                cycleTime, direction, bias, biasDirection, daysList);
 
             //Instantiate the return object
             List<AdjustmentObject> adjustments = new List<AdjustmentObject>();

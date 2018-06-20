@@ -15,7 +15,7 @@
             @Html.DisplayNameFor(model => model.Agency.Description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Signal.PrimaryName)
+            @Html.DisplayNameFor(model => model.SignalID)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Date)
@@ -26,7 +26,6 @@
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
-        <th></th>
     </tr>
 
 @foreach (var item in Model) {
@@ -35,7 +34,7 @@
             @Html.DisplayFor(modelItem => item.Agency.Description)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Signal.PrimaryName)
+            @Html.DisplayFor(modelItem => item.SignalID)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Date)
@@ -45,10 +44,6 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Details", "Details", new { id=item.ActionLogID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ActionLogID })
         </td>
     </tr>
 }

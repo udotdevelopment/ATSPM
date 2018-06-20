@@ -1,27 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Validation;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Models.Repositories
 {
     public class FAQRepository : IFAQRepository
     {
-        Models.SPM db = new SPM();
+        private readonly SPM db = new SPM();
 
-        public List<Models.FAQ> GetAll()
+        public List<FAQ> GetAll()
         {
             return db.FAQs.OrderBy(f => f.OrderNumber).ToList();
         }
 
-        public Models.FAQ GetbyID(int id)
+        public FAQ GetbyID(int id)
         {
             return db.FAQs.Where(m => m.FAQID == id).First();
         }
 
-        public void Add(Models.FAQ item)
+        public void Add(FAQ item)
         {
             db.FAQs.Add(item);
             db.SaveChanges();
@@ -29,7 +26,7 @@ namespace MOE.Common.Models.Repositories
 
         public void Remove(int id)
         {
-            FAQ faq = GetbyID(id);
+            var faq = GetbyID(id);
             if (faq != null)
             {
                 db.FAQs.Remove(faq);
@@ -41,9 +38,9 @@ namespace MOE.Common.Models.Repositories
             }
         }
 
-        public void Update(Models.FAQ item)
+        public void Update(FAQ item)
         {
-            FAQ faqFromDatabase = GetbyID(item.FAQID);
+            var faqFromDatabase = GetbyID(item.FAQID);
             if (faqFromDatabase != null)
             {
                 db.Entry(faqFromDatabase).CurrentValues.SetValues(item);
@@ -54,6 +51,5 @@ namespace MOE.Common.Models.Repositories
                 throw new Exception("FAQ Not Found");
             }
         }
-
     }
 }

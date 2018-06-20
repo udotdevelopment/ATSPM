@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace MOE.Common.Business
+﻿namespace MOE.Common.Business
 {
     public class AdvancedVolumeDataExport
     {
@@ -13,7 +8,6 @@ namespace MOE.Common.Business
 
         //public SortedDictionary<int, string> directions = new SortedDictionary<int, string>();
 
-            
 
         //public AdvancedVolumeDataExport(DateTime startDate, DateTime endDate, List<string> DayOfweek,
         //    string signalId, string location, int volumeBinSize)
@@ -74,11 +68,9 @@ namespace MOE.Common.Business
         //            Data.MOE.VolumeExportDataTable tempTable = approachDirectioncollection.GetVolumeExportData(dt, dtEnd, signalId,
         //            volumeBinSize, directions);
         //            masterTable.Merge(tempTable);
-                    
+
         //        }
         //    }
         //}
     }
-
-    
 }
