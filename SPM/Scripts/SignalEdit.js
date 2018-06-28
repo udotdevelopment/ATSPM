@@ -1,6 +1,6 @@
 ﻿function SetDatePicker() {
     $(".datepicker").attr('type', 'text');
-    $(".datepicker").datepicker();
+    $(".datepicker").datepicker({ constrainInput: false });
 }
 
 function SaveSuccesful()

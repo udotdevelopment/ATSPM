@@ -57,8 +57,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             base.CreateMetric();
             var returnList = new List<string>();
-            var signalphasecollection =
-                new SignalPhaseCollection(StartDate, EndDate, SignalID, false, SelectedBinSize, MetricTypeID);
+            var signalphasecollection = new SignalPhaseCollection(this, false, SelectedBinSize);
             if (signalphasecollection.SignalPhaseList.Count > 0)
                 foreach (var signalPhase in signalphasecollection.SignalPhaseList)
                 {

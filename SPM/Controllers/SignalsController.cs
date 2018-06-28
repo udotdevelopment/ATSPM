@@ -308,6 +308,7 @@ namespace SPM.Controllers
                 newSignal.VersionActionId = 1;
                 newSignal.Start = DateTime.Now;
                 newSignal.Note = "Copy of Signal " + id;
+                newSignal.VersionList = new List<Signal>{newSignal};
             }
             try
             {

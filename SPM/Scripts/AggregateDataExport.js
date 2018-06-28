@@ -16,6 +16,22 @@ function SetDateTextBoxes (){
     $(".datepicker").datepicker();
 }
 
+function ResetDates() {
+    var d = new Date();
+    var month = d.getMonth() + 1;
+    var day = d.getDate();
+
+    var output = month + '/' +
+        + day + '/' +
+        + d.getFullYear();
+    $("#StartDateDay").val(output);
+    $("#EndDateDay").val(output);
+    //$("#StartTime").val("12:00");
+    //$("#EndTime").val("11:59");
+    //$("#StartAMPMddl").val("AM");
+    //$("#EndAMPMddl").val("PM");
+    $("#StartEndDaySelector").datepicker("setDate", d);
+}
 function LoadRoute() {
     var RouteId = $("#SelectedRouteId").val();
     $.ajax({
@@ -147,25 +163,6 @@ function ClearSignals() {
     $('#RouteSignals').html('');
 }
 
-function ResetDates() {
-    var d = new Date();
-    var month = d.getMonth() + 1;
-    var day = d.getDate();
-    var endDay = d.getDate().addDays(1);
-
-    var output = month + '/' +
-        + day + '/' +
-        + d.getFullYear();
-    var endOutput = month + '/' +
-        + endDay + '/' +
-        + d.getFullYear();
-
-    $("#StartDateDay").val(output);
-    $("#EndDateDay").val(endOutput);
-    $("#StartAMPMddl").val("AM");
-    $("#EndAMPMddl").val("PM");
-    $("#StartEndDaySelector").datepicker("setDate", d);
-}
 
 function CloseSignalList() {
     $("#RouteSignals").removeClass("in");

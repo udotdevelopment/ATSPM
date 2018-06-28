@@ -38,7 +38,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         Time,
         TimeOfDay,
         Direction,
-        Phase,
+        Approach,
         Signal,
         Detector
     }
@@ -99,6 +99,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public List<Models.Signal> Signals { get; set; } = new List<Models.Signal>();
 
+        public abstract string YAxisTitle { get; }
+        [DataMember]
+        public bool ShowEventCount { get; set; }
+
         public virtual string ChartTitle
         {
             get
@@ -125,8 +129,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        public abstract string YAxisTitle { get; }
-        public bool ShowEventCount { get; set; }
 
 
         public void CopySignalAggregationBaseValues(SignalAggregationMetricOptions options)
@@ -150,6 +152,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
+            Y2AxisTitle = "Event Count";
             GetSignalObjects();
             if (SelectedXAxisType == XAxisType.TimeOfDay &&
                 TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)

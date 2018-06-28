@@ -19,8 +19,9 @@ function LoadSignalEdit(signalID) {
             });
             $.validator.unobtrusive.parse($("#SignalEdit"));
         },
-        complete: function () {
-            RemoveHiddenInputFromCheckboxes();},
+        complete: function() {
+            RemoveHiddenInputFromCheckboxes();
+        },
         onerror: function () { alert("Error"); }
     });
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MOE.Common.Business.PEDDelay
@@ -32,7 +33,7 @@ namespace MOE.Common.Business.PEDDelay
                     _PedPhases.Add(new PedPhase(currentPhase, signalID, startDate, endDate, _Plans));
                 }
             );
-            _PedPhases.Sort((x, y) => x.PhaseNumber.CompareTo(y.PhaseNumber));
+            _PedPhases = _PedPhases.OrderBy(x => x.PhaseNumber).ToList();
         }
 
         public string SignalID => _SignalID;

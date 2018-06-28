@@ -9,8 +9,8 @@
             
             <h4>
                 <button type="submit" class="pull-right btn btn-success" onclick="javascript:UpdateVersionDropdown()" value="Save">Save &nbsp;<span class="glyphicon glyphicon-save" aria-hidden="true"></span></button>
-                <button type="button" class="pull-right btn btn-danger" href="javascript:DeleteSignal()">Delete This Signal &nbsp;<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                <button type="button" class="pull-right btn btn-default" href="javascript:CopySignal()">Copy Signal&nbsp;<span class="glyphicon glyphicon-paste" aria-hidden="true"></span></button>
+                <button type="button" class="pull-right btn btn-danger" onclick="DeleteSignal()">Delete This Signal &nbsp;<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                <button type="button" class="pull-right btn btn-default" onclick="CopySignal()">Copy Signal&nbsp;<span class="glyphicon glyphicon-paste" aria-hidden="true"></span></button>
                 Signal @Model.SignalID
                 <Button type="button"onclick="AddNewVersion()" class="pull-right btn btn-info">Add New Verson &nbsp;<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></Button>
                 <Button type="button" onclick="DeleteVersion()" class="pull-right btn btn-warning">Delete This Version &nbsp;<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></Button>
