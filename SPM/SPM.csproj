@@ -311,6 +311,9 @@
     <Content Include="Images\rightArrow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\PartnersLogo.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\SignalPerformanceMetrics.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
