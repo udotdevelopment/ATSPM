@@ -205,7 +205,7 @@ namespace MOE.Common.Business
                 public static bool GetCurrentRecords(string Server, string SignalId, string User, string Password, string LocalDir, string RemoteDir, bool DeleteFilesAfterFTP, int SNMPRetry, int SNMPTimeout, int SNMPPort, bool ImportAfterFTP, bool activemode, int waitbetweenrecords, BulkCopyOptions Options, int FTPTimeout)//, CancellationToken Token)
                 {
                     bool recordsComplete = false;
-                    
+                    bool SkipCurrentLog = true;  // TODO: add to config file
                     MOE.Common.Models.Repositories.IApplicationEventRepository errorRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
 
 
@@ -248,9 +248,9 @@ namespace MOE.Common.Business
                         }
                         catch (AggregateException)
                         {
-                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, "The connection task timed out for signal " + Server);
+                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + "The connection task timed out");
+                            Console.WriteLine(SignalId + " @ " + Server + " - " + "The connection task timed out");
                         }
-                            { Console.WriteLine("Connection Failure"); }
 
                         connected = true;
                         
@@ -258,26 +258,29 @@ namespace MOE.Common.Business
                     //If there is an error, Print the error and go on to the next file.
                     catch (FTPException ex)
                     {
-                        errorRepository.QuickAdd("FTPFromAllcontrollers","Signal", "ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium,  ex.Message);
-                        Console.WriteLine(ex.Message);
+                        errorRepository.QuickAdd("FTPFromAllcontrollers","Signal", "GetCurrentRecords_ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + ex.Message);
+                        Console.WriteLine(SignalId + " @ " + Server + " - " + ex.Message);
                     }
                     catch (AggregateException)
-                    { Console.WriteLine("Connection Failure"); }
+                    {
+                        errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + "Connection Failure - One or more errors occured");
+                        Console.WriteLine(SignalId + " @ " + Server + " - " + "Connection Failure - One or more errors occured before connection established");
+                    }
 
                     catch (SocketException ex)
                     {
-                        errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
-                        Console.WriteLine(ex.Message);
+                        errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + ex.Message);
+                        Console.WriteLine(SignalId + " @ " + Server + " - " + ex.Message);
                     }
                     catch (IOException ex)
                     {
-                        errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
-                        Console.WriteLine(ex.Message);
+                        errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + ex.Message);
+                        Console.WriteLine(SignalId + " @ " + Server + " - " + ex.Message);
                     }
                     catch (Exception ex)
                     {
-                        errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
-                        Console.WriteLine(ex.Message);
+                        errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + ex.Message);
+                        Console.WriteLine(SignalId + " @ " + Server + " - " + ex.Message);
                     }
 
                     if (connected)
@@ -297,20 +300,15 @@ namespace MOE.Common.Business
 
                         }
                         catch (AggregateException)
-                        { Console.WriteLine("Connection Failure"); }
-
+                        {
+                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + "Connection Failure - One or more errors occured after connection established");
+                            Console.WriteLine(SignalId + " @ " + Server + " - " + "Connection Failure - One or more errors occured after connection established"); 
+                        }
                         catch (Exception ex)
                         {
-                           
-                            errorRepository.QuickAdd("FTPFromAllcontrollers","Signal", "GetCurrentRecords", Models.ApplicationEvent.SeverityLevels.Medium,  ex.Message);
-                            Console.WriteLine(ex.Message);
+                            errorRepository.QuickAdd("FTPFromAllcontrollers","Signal", "GetCurrentRecords", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + ex.Message);
+                            Console.WriteLine(SignalId + " @ " + Server + " - " + ex.Message);
                         }
-
-
-
-
-                      
-
                        
                         try
                         {
@@ -335,9 +333,18 @@ namespace MOE.Common.Business
                            //errorRepository.QuickAdd("FTPFromAllcontrollers","Signal", "GetFTPFileList", Models.ApplicationEvent.SeverityLevels.Information, "Retrevied File list from " + Server);
                         if (RemoteFiles != null)
                         {
+                        DateTime LocalDate = DateTime.Now;
+                            if (SkipCurrentLog)
+                            {
+                                LocalDate = LocalDate.AddMinutes(-16);
+                            }
+                            else
+                            {
+                                LocalDate = LocalDate.AddMinutes(120);
+                            }
                             foreach (AlexPilotti.FTPS.Common.DirectoryListItem FTPFile in RemoteFiles)
                             {
-                                if (!FTPFile.IsDirectory && FTPFile.Name.Contains(FilePattern))
+                                if (!FTPFile.IsDirectory && FTPFile.Name.Contains(FilePattern) && FTPFile.CreationTime < LocalDate)
                                 {
                                     try
                                     {
@@ -373,13 +380,13 @@ namespace MOE.Common.Business
                                     //If there is an error, Print the error and try the file again.
                                     catch (AggregateException)
                                     {
-                                        errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "TransferFiles", Models.ApplicationEvent.SeverityLevels.Medium, "Transfer Task Timed Out");
+                                        errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_TransferFiles", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + "Transfer Task Timed Out");
                                     }
                                     catch (Exception ex)
                                     {
-                                        string errorMessage = "Exception:" + ex.Message + " While Transfering file: " + FTPFile + " from " + RemoteDir + " on " + Server + " to " + LocalDir;
+                                        string errorMessage = "Exception:" + ex.Message + " While Transfering file: " + FTPFile + " from signal" + SignalId + " @ " + RemoteDir + " on " + Server + " to " + LocalDir;
                                         Console.WriteLine(errorMessage);
-                                        errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "TransferFiles", Models.ApplicationEvent.SeverityLevels.Medium, errorMessage);
+                                        errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_TransferFiles", Models.ApplicationEvent.SeverityLevels.Medium, errorMessage);
                                         RetryFiles.Add(FTPFile.Name);
 
 
@@ -394,15 +401,15 @@ namespace MOE.Common.Business
                            
                             if (DeleteFilesAfterFTP)
                             {
-                                DeleteFilesFromFTPServer(FTP, RetrievedFiles, waitbetweenrecords, RemoteDir, Server);//, Token);
+                                DeleteFilesFromFTPServer(FTP, RetrievedFiles, waitbetweenrecords, RemoteDir, Server, SignalId);//, Token);
 
                             }
                         }
 
                         catch (Exception ex)
                         {
-                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "RetrieveFiles", Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
-                            Console.WriteLine(ex.Message);
+                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_RetrieveFiles", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + ex.Message);
+                            Console.WriteLine(SignalId + " @ " + Server + " - " + ex.Message);
                         }
 
 
@@ -467,30 +474,35 @@ namespace MOE.Common.Business
                         //Turn Logging off.
                         //The ASC3 controller stoploggin if the current file is removed.  to make sure logging comtinues, we must turn the loggin feature off on the 
                         //controller, then turn it back on.
-                        try
-                        {
+                        
 
-
-                            TurnOffASC3LoggingOverSNMP(SNMPRetry, SNMPPort, SNMPTimeout, Server);
-
-                            Thread.Sleep(SNMPTimeout);
-
-
-   
-                            TurnOnASC3LoggingOverSNMP(SNMPRetry, SNMPPort, SNMPTimeout, Server);
+                        if (SkipCurrentLog && CheckASC3LoggingOverSNMP(SNMPRetry, SNMPPort, SNMPTimeout, Server, SignalId))
+                        { 
+                          //Do Nothing
                         }
-                        catch
-                        {
+                        else
+                        { 
+                                try
+                                {
+                                TurnOffASC3LoggingOverSNMP(SNMPRetry, SNMPPort, SNMPTimeout, Server, SignalId);
 
+                                Thread.Sleep(SNMPTimeout);
+
+                                TurnOnASC3LoggingOverSNMP(SNMPRetry, SNMPPort, SNMPTimeout, Server, SignalId);
+                                }
+                                catch
+                                {
+
+                                } 
                         }
-
+                        
 
                     }
-                        return recordsComplete;
+                    return recordsComplete;
 
-                    }
+                }
 
-        static public void DeleteFilesFromFTPServer(FTPSClient FTP, List<String>FilesToDelete, int WaitBetweenRecords, string RemoteDirectory, string Server)//, CancellationToken Token)
+        static public void DeleteFilesFromFTPServer(FTPSClient FTP, List<String>FilesToDelete, int WaitBetweenRecords, string RemoteDirectory, string Server, string SignalId)//, CancellationToken Token)
                 {
 
                     MOE.Common.Models.Repositories.IApplicationEventRepository errorRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
@@ -499,32 +511,32 @@ namespace MOE.Common.Business
                     {
                         try
                         {
-  
-
-
                             FTP.DeleteFile(FTPFile);
                         }
                         catch (FTPException ex)
                         {
-                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
-                            Console.WriteLine(ex.Message);
+                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + ex.Message);
+                            Console.WriteLine(SignalId + " @ " + Server + " - " + ex.Message);
                         }
                         catch (AggregateException)
-                        { Console.WriteLine("Connection Failure"); }
+                        {
+                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + "Connection Failure one or more errors occured deleting the file via FTP");
+                            Console.WriteLine(SignalId + " @ " + Server + " - " + "Connection Failure one or more errors occured deleting the file via FTP");
+                        }
 
                         catch (SocketException ex)
                         {
-                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
+                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + ex.Message);
                             Console.WriteLine(ex.Message);
                         }
                         catch (IOException ex)
                         {
-                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
+                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + ex.Message);
                             Console.WriteLine(ex.Message);
                         }
                         catch (Exception ex)
                         {
-                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
+                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + Server + " - " + ex.Message);
                             Console.WriteLine("Exception:" + ex.Message + " While Deleting file: " + FTPFile + " from " + RemoteDirectory + " on " + Server);
 
                         }
@@ -533,7 +545,7 @@ namespace MOE.Common.Business
             
                 }
 
-        static public void TurnOffASC3LoggingOverSNMP(int SNMPRetry, int SNMPPort, int SNMPTimeout, String ServerIPAddress)
+        static public void TurnOffASC3LoggingOverSNMP(int SNMPRetry, int SNMPPort, int SNMPTimeout, String ServerIPAddress, string SignalId)
         {
             MOE.Common.Models.Repositories.IApplicationEventRepository errorRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
 
@@ -546,19 +558,18 @@ namespace MOE.Common.Business
                 }
                 catch (SnmpException ex)
                 {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " TurnOffASC3LoggingOverSNMP", Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
-                    Console.WriteLine(ex);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "TurnOffASC3LoggingOverSNMP_Set", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + ServerIPAddress + " - " + ex.Message);
+                    Console.WriteLine(SignalId + " @ " + ServerIPAddress + " - " + ex);
                 }
                 int SNMPState = 10;
                 try
                 {
-
                     SNMPState = SnmpGet(ServerIPAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "0", "i");
                 }
                 catch (SnmpException ex)
                 {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " TurnOffASC3LoggingOverSNMP", Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
-                    Console.WriteLine(ex);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "TurnOffASC3LoggingOverSNMP_Get", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + ServerIPAddress + " - " + ex.Message);
+                    Console.WriteLine(SignalId + " @ " + ServerIPAddress + " - " + ex);
                 }
                 if (SNMPState == 0)
                 {
@@ -568,7 +579,7 @@ namespace MOE.Common.Business
             }
         }
 
-        static public void TurnOnASC3LoggingOverSNMP(int SNMPRetry, int SNMPPort, int SNMPTimeout, String ServerIPAddress)
+        static public void TurnOnASC3LoggingOverSNMP(int SNMPRetry, int SNMPPort, int SNMPTimeout, String ServerIPAddress, string SignalId)
         {
             MOE.Common.Models.Repositories.IApplicationEventRepository errorRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
 
@@ -580,8 +591,8 @@ namespace MOE.Common.Business
                 }
                 catch (Exception ex)
                 {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " TurnOnASC3LoggingOverSNMP", Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
-                    Console.WriteLine(ex);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " TurnOnASC3LoggingOverSNMP_Set", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + ServerIPAddress + " - " + ex.Message);
+                    Console.WriteLine(SignalId + " @ " + ServerIPAddress + " - " + ex);
                 }
 
                 int SNMPState = 10;
@@ -591,8 +602,8 @@ namespace MOE.Common.Business
                 }
                 catch (Exception ex)
                 {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " TurnOnASC3LoggingOverSNMP", Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
-                    Console.WriteLine(ex);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " TurnOnASC3LoggingOverSNMP_Get", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + ServerIPAddress + " - " + ex.Message);
+                    Console.WriteLine(SignalId + " @ " + ServerIPAddress + " - " + ex);
                 }
                 if (SNMPState == 1)
                 {
@@ -602,7 +613,36 @@ namespace MOE.Common.Business
             }
         }
 
-                static public bool DecodeASC3File(string FileName, string signalId, BulkCopyOptions Options)
+        static public bool CheckASC3LoggingOverSNMP(int SNMPRetry, int SNMPPort, int SNMPTimeout, String ServerIPAddress, string SignalId)
+        {
+            MOE.Common.Models.Repositories.IApplicationEventRepository errorRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
+            bool success = false;
+            for (int counter = 0; counter < SNMPRetry; counter++)
+            {
+                int SNMPState = 10;
+                try
+                {
+                    SNMPState = SnmpGet(ServerIPAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "1", "i");
+                }
+                catch (Exception ex)
+                {
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " CheckASC3LoggingOverSNMP_Get", Models.ApplicationEvent.SeverityLevels.Medium, SignalId + " @ " + ServerIPAddress + " - " + ex.Message);
+                    Console.WriteLine(SignalId + " @ " + ServerIPAddress + " - " + ex);
+                }
+                if (SNMPState == 1)
+                {
+                    success = true;
+                    break;
+                }
+                Thread.Sleep(SNMPTimeout);
+            }
+            return success;
+        }
+
+
+
+
+        static public bool DecodeASC3File(string FileName, string signalId, BulkCopyOptions Options)
                 {
 
                     System.Text.Encoding encoding = System.Text.Encoding.ASCII;
@@ -847,8 +887,8 @@ namespace MOE.Common.Business
 
                
                 public static bool BulktoDB(DataTable elTable, BulkCopyOptions Options)
-               
                 {
+                    MOE.Common.Models.Repositories.IApplicationEventRepository errorRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
                     using (Options.Connection)
                     using (SqlBulkCopy bulkCopy = new SqlBulkCopy(Options.ConnectionString, SqlBulkCopyOptions.UseInternalTransaction))
                     {
@@ -868,7 +908,7 @@ namespace MOE.Common.Business
                             {
                                 if (Properties.Settings.Default.WriteToConsole)
                                 {
-                                    Console.WriteLine(" DB connection established");
+                                    Console.WriteLine("DB connection established");
                                 }
 
                                 break;
@@ -900,16 +940,10 @@ namespace MOE.Common.Business
                             {
                                 try
                                 {
-
                                     bulkCopy.WriteToServer(elTable);
                                     if (Properties.Settings.Default.WriteToConsole)
                                     {
-                                        
-                                        Console.WriteLine("                   !!!!!!!!!!!!!!!!!!!!!!!!          ");
-                                        Console.WriteLine("                   The bulk insert executed          ");
-                                        Console.WriteLine("                   !!For Signal "+sigID+" !!!!!!     ");
-                                        Console.WriteLine("                   !!!!!!!!!!!!!!!!!!!!!!!!          ");
-                                        Console.WriteLine("                   !!!!!!!!!!!!!!!!!!!!!!!!          ");
+                                        Console.WriteLine("!!!!!!!!! The bulk insert executed for Signal " + sigID + " !!!!!!!!!");
                                     }
                                     Options.Connection.Close();
                                     return true;
@@ -920,7 +954,8 @@ namespace MOE.Common.Business
                                     {
                                         if (Properties.Settings.Default.WriteToConsole)
                                         {
-                                            Console.WriteLine("****There is a permission error!*****");
+                                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "BulktoDB_SQL.ex", Models.ApplicationEvent.SeverityLevels.Medium, "There is a permission error - "+ sigID + " - " + ex.Message);
+                                            Console.WriteLine("**** There is a permission error - "+ sigID + " *****");
                                         }
                                     }
                                     else
@@ -928,7 +963,8 @@ namespace MOE.Common.Business
                                         if (Properties.Settings.Default.WriteToConsole)
                                         {
                                             //Console.WriteLine("****DATABASE ERROR*****");
-                                            Console.WriteLine(ex);
+                                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "BulktoDB_SQL.ex", Models.ApplicationEvent.SeverityLevels.Medium, "General Error - " + sigID + " - " + ex.Message );
+                                            Console.WriteLine("DATABASE ERROR - " + sigID + " - " + ex.Message);
                                         }
                                     }
                                     Options.Connection.Close();
@@ -937,6 +973,7 @@ namespace MOE.Common.Business
                                 }
                                 catch (Exception ex)
                                 {
+                                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "BulktoDB_Reg.ex", Models.ApplicationEvent.SeverityLevels.Medium, "General Error - " + sigID + " - " + ex.Message );
                                     Console.WriteLine(ex);
                                     return false;
                                 }
@@ -1140,20 +1177,20 @@ namespace MOE.Common.Business
             {
                Variable variable = Messenger.Get(version, receiver, new OctetString(community), vList, timeout).FirstOrDefault();
 
-                Console.WriteLine("Check state = {0}", variable.Data.ToString());
+                Console.WriteLine(ControllerAddress + " - Check state = {0}", variable.Data.ToString());
                 retrievedValue = Int32.Parse(variable.Data.ToString());
             }
             catch (SnmpException SNMPex)
             {
-                Console.Write(SNMPex.ToString());
+                Console.WriteLine(ControllerAddress + " - " + SNMPex.ToString());
             }
             catch (SocketException Socketex)
             {
-                Console.Write(Socketex.ToString());
+                Console.WriteLine(ControllerAddress + " - " + Socketex.ToString());
             }
             catch (Exception ex)
             {
-                Console.Write(ex.ToString());
+                Console.WriteLine(ControllerAddress + " - " + ex.ToString());
             }
 
             //foreach (Variable variable in
@@ -1189,15 +1226,15 @@ namespace MOE.Common.Business
             }
             catch (SnmpException SNMPex)
             {
-                Console.Write(SNMPex.ToString());
+                Console.WriteLine(ControllerAddress + " - " + SNMPex.ToString());
             }
             catch (SocketException Socketex)
             {
-                Console.Write(Socketex.ToString());
+                Console.WriteLine(ControllerAddress + " - " + Socketex.ToString());
             }
             catch (Exception ex)
             {
-                Console.Write(ex.ToString());
+                Console.WriteLine(ControllerAddress + " - " + ex.ToString());
             }
 
             //foreach (Variable variable in  Messenger.Set(version, receiver, new OctetString(community), vList, timeout))
@@ -1221,7 +1258,7 @@ namespace MOE.Common.Business
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+                    Console.WriteLine(IPAddress + " - " + ex);
                 }
                 int SNMPState = 10;
                 try
@@ -1230,7 +1267,7 @@ namespace MOE.Common.Business
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+                    Console.WriteLine(IPAddress + " - " + ex);
                 }
                 if (SNMPState == 0)
                 {
@@ -1251,7 +1288,7 @@ namespace MOE.Common.Business
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+                    Console.WriteLine(IPAddress + " - " + ex);
                 }
 
                 int SNMPState = 10;
@@ -1261,7 +1298,7 @@ namespace MOE.Common.Business
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+                    Console.WriteLine(IPAddress + " - " + ex);
                 }
                 if (SNMPState == 1)
                 {
