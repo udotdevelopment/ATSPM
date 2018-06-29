@@ -1300,6 +1300,8 @@ While each agency should consult with their IT department for specific guideline
                 userManager.AddToRole(user.Id, "Technician");
                 roleManager.Create(new IdentityRole("Data"));
                 userManager.AddToRole(user.Id, "Data");
+                roleManager.Create(new IdentityRole("Configuration"));
+                userManager.AddToRole(user.Id, "Configuration");
             }
             else
             {
@@ -1308,6 +1310,8 @@ While each agency should consult with their IT department for specific guideline
                 userManager.AddToRole(user.Id, "Technician");
                 roleManager.Create(new IdentityRole("Data"));
                 userManager.AddToRole(user.Id, "Data");
+                roleManager.Create(new IdentityRole("Configuration"));
+                userManager.AddToRole(user.Id, "Configuration");
             }
 
             context.SaveChanges();
