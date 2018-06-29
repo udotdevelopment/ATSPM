@@ -176,7 +176,7 @@ namespace MOE.Common.Models.Repositories
         {
             _db.Configuration.LazyLoadingEnabled = false;
 
-            var signals = GetLatestVersionOfAllSignals().Where(r => r.Enabled).ToList();
+            var signals = GetLatestVersionOfAllSignals().ToList();
             return signals;
         }
 

@@ -451,6 +451,7 @@
     <None Include="Service References\LinkPivotServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MetricGeneratorService\configuration91.svcinfo" />
     <None Include="Service References\MetricGeneratorService\configuration.svcinfo" />
@@ -466,6 +467,7 @@
     <None Include="Service References\MetricGeneratorService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </None>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
