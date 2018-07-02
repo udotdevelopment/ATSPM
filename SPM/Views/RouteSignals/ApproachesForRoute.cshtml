@@ -33,7 +33,8 @@
                     @Html.DisplayFor(modelItem => item.Item1.Phase)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Item1.IsOverlap)
+                    @*@Html.DisplayFor(modelItem => item.Item1.IsOverlap)*@
+                    @Html.CheckBoxFor(modelItem => item.Item1.IsOverlap, new { disabled = true, aria_label = "Overlap1" })
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Item2.Direction.Description)
@@ -42,7 +43,7 @@
                     @Html.DisplayFor(modelItem => item.Item2.Phase)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Item2.IsOverlap)
+                    @Html.CheckBoxFor(modelItem => item.Item2.IsOverlap, new { disabled = true, aria_label = "Overlap2" })
                 </td>
             </tr>
         }</tbody>
