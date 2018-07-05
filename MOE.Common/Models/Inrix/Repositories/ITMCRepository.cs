@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Models.Inrix.Repositories
 {
     public interface ITMCRepository
     {
-        List<Models.Inrix.TMC> GetMembersBySegmentID(int GroupID);
-        List<Models.Inrix.TMC> GetNonMembersBySegmentID(int GroupID);
+        List<TMC> GetMembersBySegmentID(int GroupID);
+        List<TMC> GetNonMembersBySegmentID(int GroupID);
     }
 }

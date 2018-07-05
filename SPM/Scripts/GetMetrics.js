@@ -30,6 +30,7 @@ function GetMetric(urlPath, tosend)
         },
         complete: function () {
             StopReportSpinner();
+            ShowMetricUrl();
         },
         error: function(xhr, status, error) {
             StopReportSpinner();
@@ -77,8 +78,8 @@ function GetCommonValues()
     tosend.EndDate = $("#EndDateDay").val() + " " + $("#EndTime").val() + " " + $("#EndAMPMddl").val();    
     tosend.YAxisMax = $("#YAxisMax").val();
     tosend.Y2AxisMax = $("#Y2AxisMax").val();
-    
-    
+    tosend.YAxisMin = $("#YAxisMin").val();
+    tosend.Y2AxisMin = $("#Y2AxisMin").val();
     return tosend;
 }
 
@@ -119,6 +120,7 @@ function GetPCDMetric(metricTypeID) {
     tosend.MetricTypeID = metricTypeID;
     tosend.SelectedBinSize = $("#SelectedBinSize").val();
     tosend.SelectedDotSize = $("#SelectedDotSize").val();
+    tosend.SelectedLineSize = $("#SelectedLineSize").val();
     tosend.ShowPlanStatistics = $("#ShowPlanStatistics").is(":checked");
     tosend.ShowVolumes = $("#ShowVolumes").is(":checked");
     GetMetric(urlpathPCD, tosend);
@@ -128,9 +130,10 @@ function GetApproachVolumeMetric(metricTypeID) {
     var tosend = GetCommonValues();
     tosend.MetricTypeID = metricTypeID;
     tosend.SelectedBinSize = $("#SelectedBinSize").val();
+    tosend.ShowTotalVolume = $("#ShowTotalVolume").is(":checked");
     tosend.ShowDirectionalSplits = $("#ShowDirectionalSplits").is(":checked");
-    tosend.ShowNBWBVolume = $("#ShowNBWBVolume").is(":checked");
-    tosend.ShowSBEBVolume = $("#ShowSBEBVolume").is(":checked");
+    tosend.ShowNbEbVolume = $("#ShowNbEbVolume").is(":checked");
+    tosend.ShowSbWbVolume = $("#ShowSbWbVolume").is(":checked");
     tosend.ShowTMCDetection = $("#ShowTMCDetection").is(":checked");
     tosend.ShowAdvanceDetection = $("#ShowAdvanceDetection").is(":checked");
     GetMetric(urlpathApproachVolume, tosend);
@@ -159,6 +162,7 @@ function GetApproachSpeedMetric(metricTypeID) {
     tosend.ShowPostedSpeed = $("#ShowPostedSpeed").is(":checked");
     tosend.ShowAverageSpeed = $("#ShowAverageSpeed").is(":checked");
     tosend.Show85Percentile = $("#Show85Percentile").is(":checked");
+    tosend.Show15Percentile = $("#Show15Percentile").is(":checked");
     GetMetric(urlpathApproachSpeed, tosend);
 }
 function GetYellowAndRedMetric(metricTypeID) {
@@ -185,6 +189,7 @@ function GetSplitFailMetric(metricTypeID) {
     GetMetric(urlpathSplitFail, tosend);
 }
 
+
 function GetSplitMonitorMetric(metricTypeID) {
     var tosend = GetCommonValues();
     tosend.MetricTypeID = metricTypeID;
@@ -198,7 +203,10 @@ function GetSplitMonitorMetric(metricTypeID) {
     GetMetric(urlpathSplitMonitor, tosend);
 }
 
-$('#CreateMetric').click(function () {
+$('#CreateMetric').click(function() { CreateMetric(); });
+
+function CreateMetric() {
+    var defer = $.Deferred();
     var form = $("#MainForm")[0];
     $.validator.unobtrusive.parse(form);
     if ($(form).valid()) {
@@ -237,10 +245,12 @@ $('#CreateMetric').click(function () {
             GetYellowAndRedMetric(11);
         }
         else if (selectedMetricID == 12) {
-            GetSplitFailMetric(12); 
+            GetSplitFailMetric(12);
         }
     }
-});
+    defer.resolve();
+    return defer.promise();
+}
 
 
 

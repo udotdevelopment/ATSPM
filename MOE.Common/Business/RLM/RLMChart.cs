@@ -1,51 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business.WCFServiceLibrary;
 
 namespace MOE.Common.Business
 {
     public class RLMChart
     {
-        public WCFServiceLibrary.YellowAndRedOptions Options { get; set; }
-        public RLMChart()
-        {
+        public YellowAndRedOptions Options { get; set; }
 
-        }
-
-        public Chart GetChart(RLMSignalPhase signalPhase, WCFServiceLibrary.YellowAndRedOptions options)
+        public Chart GetChart(RLMSignalPhase signalPhase, YellowAndRedOptions options)
         {
             Options = options;
-            Chart chart = new Chart();
-            TimeSpan reportTimespan = Options.EndDate - Options.StartDate;
+            var chart = new Chart();
+            var reportTimespan = Options.EndDate - Options.StartDate;
 
 
             //Set the chart properties
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 700;
-            chart.Width = 1100;
+            ChartFactory.SetImageProperties(chart);
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
             SetChartTitle(chart, signalPhase);
-            
+
             //Create the chart legend
-            Legend chartLegend = new Legend();
+            var chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
             chart.Legends.Add(chartLegend);
 
 
             //Create the chart area
-            ChartArea chartArea = new ChartArea();
+            var chartArea = new ChartArea();
             chartArea.Name = "ChartArea1";
             if (Options.YAxisMax != null)
-            {
                 chartArea.AxisY.Maximum = Options.YAxisMax.Value;
-            }
             chartArea.AxisY.Minimum = 0;
             chartArea.AxisY.Title = "Yellow Red Time (Seconds) ";
             chartArea.AxisY.MinorTickMark.Enabled = true;
@@ -58,7 +44,6 @@ namespace MOE.Common.Business
             chartArea.AxisX2.LabelStyle.Format = "HH";
             chartArea.AxisX.MajorGrid.Enabled = true;
             if (reportTimespan.Days < 1)
-            {
                 if (reportTimespan.Hours > 1)
                 {
                     chartArea.AxisX2.Interval = 1;
@@ -69,7 +54,6 @@ namespace MOE.Common.Business
                     chartArea.AxisX.LabelStyle.Format = "HH:mm";
                     chartArea.AxisX2.LabelStyle.Format = "HH:mm";
                 }
-            }
             //chartArea.AxisX.Minimum = 0;
 
             chartArea.AxisX2.Enabled = AxisEnabled.True;
@@ -81,17 +65,17 @@ namespace MOE.Common.Business
 
             chart.ChartAreas.Add(chartArea);
 
-            Color yelowish = Color.FromArgb(245, 237, 127);
-            Color blueish = Color.FromArgb(128, 10, 117, 182);
-            Color greenish = Color.FromArgb(64, 177, 14);
-            Color tanish = Color.FromArgb(220, 138, 78);
-            Color whiteish = Color.FromArgb(243, 240, 235);
-            Color redish = Color.FromArgb(128, 255, 0, 0);
-            Color darkRedish = Color.FromArgb(196, 222, 2, 2);
+            var yelowish = Color.FromArgb(245, 237, 127);
+            var blueish = Color.FromArgb(128, 10, 117, 182);
+            var greenish = Color.FromArgb(64, 177, 14);
+            var tanish = Color.FromArgb(220, 138, 78);
+            var whiteish = Color.FromArgb(243, 240, 235);
+            var redish = Color.FromArgb(128, 255, 0, 0);
+            var darkRedish = Color.FromArgb(196, 222, 2, 2);
             //Color redish = Color.FromArgb(163, 60, 62);
 
             //Add the red series
-            Series redSeries = new Series();
+            var redSeries = new Series();
             redSeries.ChartType = SeriesChartType.Area;
             redSeries.Color = redish;
             //redSeries.BackGradientStyle = GradientStyle.VerticalCenter;
@@ -101,7 +85,7 @@ namespace MOE.Common.Business
             chart.Series.Add(redSeries);
 
             //Add the yellow series
-            Series redClearanceSeries = new Series();
+            var redClearanceSeries = new Series();
             redClearanceSeries.ChartType = SeriesChartType.Area;
             redClearanceSeries.Color = darkRedish;
             redClearanceSeries.Name = "Red Clearance";
@@ -109,7 +93,7 @@ namespace MOE.Common.Business
             chart.Series.Add(redClearanceSeries);
 
             //Add the green series
-            Series yellowClearanceSeries = new Series();
+            var yellowClearanceSeries = new Series();
             yellowClearanceSeries.ChartType = SeriesChartType.Area;
             yellowClearanceSeries.Color = yelowish;
             //yellowClearanceSeries.BackGradientStyle = GradientStyle.DiagonalLeft;
@@ -119,7 +103,7 @@ namespace MOE.Common.Business
             chart.Series.Add(yellowClearanceSeries);
 
             //Add the point series
-            Series pointSeries = new Series();
+            var pointSeries = new Series();
             pointSeries.ChartType = SeriesChartType.Point;
             pointSeries.Color = Color.Black;
             pointSeries.Name = "Detector Activation";
@@ -127,11 +111,6 @@ namespace MOE.Common.Business
             pointSeries.MarkerSize = 3;
             chart.Series.Add(pointSeries);
 
-            
-
-            
-
-            
 
             //Add points at the start and and of the x axis to ensure
             //the graph covers the entire period selected by the user
@@ -147,16 +126,19 @@ namespace MOE.Common.Business
         {
             //Set the chart title
             chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
-            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(Options.SignalID, Options.StartDate, Options.EndDate));
-            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(signalPhase.Approach.ProtectedPhaseNumber, signalPhase.Approach.DirectionType.Description));
-            Dictionary<string, string> statistics = new Dictionary<string, string>();
-            statistics.Add("Total Violations", signalPhase.Violations.ToString() + " (" + signalPhase.PercentViolations.ToString() + "%)");
-            statistics.Add("Severe Violations", signalPhase.SevereRedLightViolations + " (" + signalPhase.PercentSevereViolations.ToString() + "%)");
-            statistics.Add("Yellow Light Occurrences", signalPhase.YellowOccurrences + " (" + signalPhase.PercentYellowOccurrences.ToString() + "%)");
+            chart.Titles.Add(
+                ChartTitleFactory.GetSignalLocationAndDateRange(Options.SignalID, Options.StartDate, Options.EndDate));
+            chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(signalPhase.Approach, signalPhase.GetPermissivePhase));
+            var statistics = new Dictionary<string, string>();
+            statistics.Add("Total Violations", signalPhase.Violations + " (" + signalPhase.PercentViolations + "%)");
+            statistics.Add("Severe Violations",
+                signalPhase.SevereRedLightViolations + " (" + signalPhase.PercentSevereViolations + "%)");
+            statistics.Add("Yellow Light Occurrences",
+                signalPhase.YellowOccurrences + " (" + signalPhase.PercentYellowOccurrences + "%)");
             chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
 
-        private void AddDataToChart(Chart chart, MOE.Common.Business.RLMSignalPhase signalPhase)
+        private void AddDataToChart(Chart chart, RLMSignalPhase signalPhase)
             //, DateTime startDate,
             //DateTime endDate, string signalId, bool showRlv, bool showSrlv,
             //bool showPrlv, bool showPsrlv, bool showAveTrlv, bool showYlo, bool showPylo, 
@@ -164,11 +146,9 @@ namespace MOE.Common.Business
         {
             decimal totalDetectorHits = 0;
 
-            foreach (MOE.Common.Business.RLMPlan plan in signalPhase.Plans.PlanList)
-            {
+            foreach (var plan in signalPhase.Plans.PlanList)
                 if (plan.RLMCycleCollection.Count > 0)
-                {
-                    foreach (MOE.Common.Business.RLMCycle rlm in plan.RLMCycleCollection)
+                    foreach (var rlm in plan.RLMCycleCollection)
                     {
                         chart.Series["Yellow Clearance"].Points.AddXY(
                             //pcd.StartTime,
@@ -183,56 +163,42 @@ namespace MOE.Common.Business
                             rlm.RedEndEvent,
                             rlm.RedEndY);
                         totalDetectorHits += rlm.DetectorCollection.Count;
-                        foreach (MOE.Common.Business.RLMDetectorDataPoint detectorPoint in rlm.DetectorCollection)
-                        {
+                        foreach (var detectorPoint in rlm.DetectorCollection)
                             chart.Series["Detector Activation"].Points.AddXY(
                                 //pcd.StartTime, 
                                 detectorPoint.TimeStamp,
                                 detectorPoint.YPoint);
-                            
-                        }
                     }
-                }
-            }
             SetPlanStrips(signalPhase.Plans.PlanList, chart);
             //, Options.StartDate,
             //    Options.ShowRedLightViolations, Options.showSrlv, showPrlv, showPsrlv, showAveTrlv, showYlo, showPylo, 
             //showTylo);
-            
-
-           
-
-
         }
 
 
         /// <summary>
-        /// Adds plan strips to the chart
+        ///     Adds plan strips to the chart
         /// </summary>
         /// <param name="planCollection"></param>
         /// <param name="chart"></param>
         /// <param name="graphStartDate"></param>
-        protected void SetPlanStrips(List<MOE.Common.Business.RLMPlan> planCollection,
-            Chart chart)
+        protected void SetPlanStrips(List<RLMPlan> planCollection,
+                Chart chart)
             //, DateTime graphStartDate, bool showRlv, bool showSrlv,
             //bool showPrlv, bool showPsrlv, bool showAveTrlv, bool showYlo, bool showPylo, 
             //bool showTylo)
         {
-            int backGroundColor = 1;
-            
-            foreach (MOE.Common.Business.RLMPlan plan in planCollection)
+            var backGroundColor = 1;
+
+            foreach (var plan in planCollection)
             {
-                int customLabelIndex = 1;
-                StripLine stripline = new StripLine();
+                var customLabelIndex = 1;
+                var stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans
                 if (backGroundColor % 2 == 0)
-                {
                     stripline.BackColor = Color.FromArgb(120, Color.LightGray);
-                }
                 else
-                {
                     stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
-                }
 
                 //Set the stripline properties
                 stripline.IntervalOffset = (plan.StartTime - Options.StartDate).TotalHours;
@@ -248,7 +214,7 @@ namespace MOE.Common.Business
 
                 if (Options.ShowRedLightViolations)
                 {
-                    CustomLabel violationLabel = new CustomLabel();
+                    var violationLabel = new CustomLabel();
                     violationLabel.FromPosition = plan.StartTime.ToOADate();
                     violationLabel.ToPosition = plan.EndTime.ToOADate();
 
@@ -257,12 +223,12 @@ namespace MOE.Common.Business
                     violationLabel.ForeColor = Color.Blue;
                     violationLabel.RowIndex = customLabelIndex;
                     customLabelIndex++;
-                    violationLabel.Text = "RLV-" + plan.Violations.ToString();
+                    violationLabel.Text = "RLV-" + plan.Violations;
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(violationLabel);
                 }
                 if (Options.ShowSevereRedLightViolations)
                 {
-                    CustomLabel srlvLabel = new CustomLabel();
+                    var srlvLabel = new CustomLabel();
                     srlvLabel.FromPosition = plan.StartTime.ToOADate();
                     srlvLabel.ToPosition = plan.EndTime.ToOADate();
 
@@ -270,13 +236,13 @@ namespace MOE.Common.Business
                     srlvLabel.LabelMark = LabelMarkStyle.LineSideMark;
                     srlvLabel.ForeColor = Color.Maroon;
                     srlvLabel.RowIndex = customLabelIndex;
-                    customLabelIndex++; 
-                    srlvLabel.Text = "SRLV-" + plan.SevereRedLightViolations.ToString();
+                    customLabelIndex++;
+                    srlvLabel.Text = "SRLV-" + plan.SevereRedLightViolations;
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(srlvLabel);
                 }
                 if (Options.ShowPercentRedLightViolations)
                 {
-                    CustomLabel percentViolationsLabel = new CustomLabel();
+                    var percentViolationsLabel = new CustomLabel();
                     percentViolationsLabel.FromPosition = plan.StartTime.ToOADate();
                     percentViolationsLabel.ToPosition = plan.EndTime.ToOADate();
 
@@ -285,12 +251,12 @@ namespace MOE.Common.Business
                     percentViolationsLabel.ForeColor = Color.Maroon;
                     percentViolationsLabel.RowIndex = customLabelIndex;
                     customLabelIndex++;
-                    percentViolationsLabel.Text = "%RLV-" + plan.PercentViolations.ToString();
+                    percentViolationsLabel.Text = "%RLV-" + plan.PercentViolations;
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(percentViolationsLabel);
                 }
                 if (Options.ShowPercentSevereRedLightViolations)
                 {
-                    CustomLabel percentSevereViolationsLabel = new CustomLabel();
+                    var percentSevereViolationsLabel = new CustomLabel();
                     percentSevereViolationsLabel.FromPosition = plan.StartTime.ToOADate();
                     percentSevereViolationsLabel.ToPosition = plan.EndTime.ToOADate();
 
@@ -299,12 +265,12 @@ namespace MOE.Common.Business
                     percentSevereViolationsLabel.ForeColor = Color.Maroon;
                     percentSevereViolationsLabel.RowIndex = customLabelIndex;
                     customLabelIndex++;
-                    percentSevereViolationsLabel.Text = "%SRLV-" + plan.PercentSevereViolations.ToString();
+                    percentSevereViolationsLabel.Text = "%SRLV-" + plan.PercentSevereViolations;
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(percentSevereViolationsLabel);
                 }
                 if (Options.ShowAverageTimeRedLightViolations)
                 {
-                    CustomLabel averageTRLV = new CustomLabel();
+                    var averageTRLV = new CustomLabel();
                     averageTRLV.FromPosition = plan.StartTime.ToOADate();
                     averageTRLV.ToPosition = plan.EndTime.ToOADate();
 
@@ -313,14 +279,14 @@ namespace MOE.Common.Business
                     averageTRLV.ForeColor = Color.Maroon;
                     averageTRLV.RowIndex = customLabelIndex;
                     customLabelIndex++;
-                    averageTRLV.Text = "Ave TRLV-" + plan.AverageTRLV.ToString();
+                    averageTRLV.Text = "Ave TRLV-" + plan.AverageTRLV;
 
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(averageTRLV);
                 }
 
                 if (Options.ShowYellowLightOccurrences)
                 {
-                    CustomLabel YellowOccurences = new CustomLabel();
+                    var YellowOccurences = new CustomLabel();
                     YellowOccurences.FromPosition = plan.StartTime.ToOADate();
                     YellowOccurences.ToPosition = plan.EndTime.ToOADate();
 
@@ -329,13 +295,13 @@ namespace MOE.Common.Business
                     YellowOccurences.ForeColor = Color.Maroon;
                     YellowOccurences.RowIndex = customLabelIndex;
                     customLabelIndex++;
-                    YellowOccurences.Text = "#YLO-" + plan.YellowOccurrences.ToString();
+                    YellowOccurences.Text = "#YLO-" + plan.YellowOccurrences;
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(YellowOccurences);
                 }
 
                 if (Options.ShowPercentYellowLightOccurrences)
                 {
-                    CustomLabel PercentYellowOccurences = new CustomLabel();
+                    var PercentYellowOccurences = new CustomLabel();
                     PercentYellowOccurences.FromPosition = plan.StartTime.ToOADate();
                     PercentYellowOccurences.ToPosition = plan.EndTime.ToOADate();
 
@@ -344,13 +310,13 @@ namespace MOE.Common.Business
                     PercentYellowOccurences.ForeColor = Color.Maroon;
                     PercentYellowOccurences.RowIndex = customLabelIndex;
                     customLabelIndex++;
-                    PercentYellowOccurences.Text = "%YLO-" + plan.PercentYellowOccurrences.ToString();
+                    PercentYellowOccurences.Text = "%YLO-" + plan.PercentYellowOccurrences;
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(PercentYellowOccurences);
                 }
 
                 if (Options.ShowAverageTimeYellowOccurences)
                 {
-                    CustomLabel AverageYellowTime = new CustomLabel();
+                    var AverageYellowTime = new CustomLabel();
                     AverageYellowTime.FromPosition = plan.StartTime.ToOADate();
                     AverageYellowTime.ToPosition = plan.EndTime.ToOADate();
 
@@ -359,11 +325,11 @@ namespace MOE.Common.Business
                     AverageYellowTime.ForeColor = Color.Maroon;
                     AverageYellowTime.RowIndex = customLabelIndex;
                     customLabelIndex++;
-                    AverageYellowTime.Text = "TYLO-" + plan.AverageTYLO.ToString();
+                    AverageYellowTime.Text = "TYLO-" + plan.AverageTYLO;
 
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(AverageYellowTime);
                 }
-                CustomLabel Plannumberlabel = new CustomLabel();
+                var Plannumberlabel = new CustomLabel();
                 Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
                 Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
                 switch (plan.PlanNumber)
@@ -378,7 +344,7 @@ namespace MOE.Common.Business
                         Plannumberlabel.Text = "Unknown";
                         break;
                     default:
-                        Plannumberlabel.Text = "Plans " + plan.PlanNumber.ToString();
+                        Plannumberlabel.Text = "Plan " + plan.PlanNumber;
 
                         break;
                 }
@@ -391,7 +357,6 @@ namespace MOE.Common.Business
 
                 //Change the background color counter for alternating color
                 backGroundColor++;
-
             }
         }
     }

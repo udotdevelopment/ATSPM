@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using MOE.Common.Models.Inrix.Repositories;
 
 namespace MOE.Common.Business.Inrix
 {
     public class GroupCollection
     {
-
-
-
         public List<Group> Items = new List<Group>();
-
 
 
         public GroupCollection()
         {
             GetGroups();
-
         }
 
         public void GetGroups()
@@ -29,15 +22,14 @@ namespace MOE.Common.Business.Inrix
 
             //groupsTA.Fill(groupsDT);
 
-            Models.Inrix.Repositories.GroupRepository gr = new Models.Inrix.Repositories.GroupRepository();
-            List<Models.Inrix.Group> groupsDT = gr.GetAll();
+            var gr = new GroupRepository();
+            var groupsDT = gr.GetAll();
 
-            foreach (Models.Inrix.Group row in groupsDT)
+            foreach (var row in groupsDT)
             {
-                MOE.Common.Business.Inrix.Group group = new Group(row.Group_ID, row.Group_Name, row.Group_Description);
+                var group = new Group(row.Group_ID, row.Group_Name, row.Group_Description);
 
-                this.Items.Add(group);
-
+                Items.Add(group);
             }
         }
     }

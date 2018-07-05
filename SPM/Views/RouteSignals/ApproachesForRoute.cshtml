@@ -1,12 +1,10 @@
 ﻿@model MOE.Common.Models.ViewModel.RouteEdit.ApproachesForRouteViewModel
 
-<div class="col-md-6">
-    Primary Approaches
-    <table class="table">
+<div>
+    <table class="table-condensed table-striped">
+        <thead>
+        <tr class=""><th rowspan="2">Signal</th><th colspan="3">Primary</th><th colspan="3">Opposing</th></tr>
         <tr>
-            <th>
-                Signal ID
-            </th>
             <th>
                 Direction
             </th>
@@ -14,62 +12,40 @@
                 Phase
             </th>
             <th>
-                Is Overlap
+                Overlap
             </th>
+            <th>Direction</th>
+            <th>Phase</th>
+            <th>Overlap</th>
         </tr>
-
-        @foreach (var item in Model.PrimaryApproaches) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RouteSignal.SignalId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Direction.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phase)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsOverlap)
-            </td>
-        </tr>
-        }
-    </table>
-</div>
-<div class="col-md-6">
-    Opposing Approaches
-    <table class="table">
-        <tr>
-            <th>
-                Signal ID
-            </th>
-            <th>
-                Direction
-            </th>
-            <th>
-                Phase
-            </th>
-            <th>
-                Is Overlap
-            </th>
-            <th></th>
-        </tr>
-        @foreach (var item in Model.OpposingApproaches)
+        </thead>
+        <tbody>
+        @foreach (var item in Model.PairedApproaches)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.RouteSignal.SignalId)
+                    @Html.DisplayFor(modelItem => item.Item1.RouteSignal.Signal.SignalDescription)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Direction.Description)
+                    @Html.DisplayFor(modelItem => item.Item1.Direction.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Phase)
+                    @Html.DisplayFor(modelItem => item.Item1.Phase)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IsOverlap)
+                    @*@Html.DisplayFor(modelItem => item.Item1.IsOverlap)*@
+                    @Html.CheckBoxFor(modelItem => item.Item1.IsOverlap, new { disabled = true, aria_label = "Overlap1" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item2.Direction.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item2.Phase)
+                </td>
+                <td>
+                    @Html.CheckBoxFor(modelItem => item.Item2.IsOverlap, new { disabled = true, aria_label = "Overlap2" })
                 </td>
             </tr>
-        }
+        }</tbody>
     </table>
 </div>

@@ -1,19 +1,15 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace MOE.Common.Business.SiteSecurity
 {
-    public class SPMUser: IdentityUser
+    public class SPMUser : IdentityUser
     {
-        [Display(Name="Receive Alerts")]
-        public bool ReceiveAlerts { get; set; }  
+        [Display(Name = "Receive Alerts")]
+        public bool ReceiveAlerts { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<SPMUser> manager)
         {

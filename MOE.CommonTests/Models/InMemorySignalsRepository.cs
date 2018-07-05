@@ -154,10 +154,22 @@ namespace MOE.CommonTests.Models
 
         public List<Signal> GetAllVersionsOfSignalBySignalID(string signalId)
         {
-            var signals = (from r in _db.Signals
-                           where r.SignalID == signalId
-                           && r.VersionActionId != 3
-                           select r).ToList();
+            var signals = _db.Signals.Where(s => s.SignalID == signalId && s.VersionActionId != 3);
+
+            foreach (var s in signals)
+            {
+                s.Approaches = _db.Approaches.Where(a => a.VersionID == s.VersionID).ToList();
+                foreach (var app in s.Approaches)
+                {
+                    app.Detectors = _db.Detectors.Where(d => d.ApproachID == app.ApproachID).ToList();
+
+                    foreach (var det in app.Detectors)
+                    {
+                        //TODO: Make this right.  Not every detector has every detetcion type
+                        det.DetectionTypes.Add(_db.DetectionTypes.First());
+                    }
+                }
+            }
 
             var orderedSignals = signals.OrderBy(d => d.Start).ToList();
 
@@ -270,6 +282,12 @@ namespace MOE.CommonTests.Models
             return _db.Signals;
         }
 
+        public string GetSignalDescription(string signalId)
+        {
+            var signal = _db.Signals.Where(s => s.SignalID == signalId).FirstOrDefault();
+            return signal.PrimaryName + "-" + signal.SecondaryName;
+        }
+
         public List<Common.Models.Signal> GetAllEnabledSignals()
         {
             return _db.Signals;
@@ -294,7 +312,6 @@ namespace MOE.CommonTests.Models
             var signal = (from r in _db.Signals
                           where r.SignalID == signalID
                           select r).OrderByDescending(x => x.Start).Take(1).FirstOrDefault();
-
 
 
             return signal;
@@ -408,10 +425,28 @@ namespace MOE.CommonTests.Models
                     .Where(signal => signal.VersionActionId != 3)
                     .ToList();
 
+                
+
                 var orderedSignals = signals.OrderByDescending(signal => signal.Start);
 
+                var returnSignal = orderedSignals.First();
 
-                return orderedSignals.First();
+                returnSignal.Approaches = _db.Approaches.Where(a => a.VersionID == returnSignal.VersionID).ToList();
+
+            foreach (var a in returnSignal.Approaches)
+            {
+                a.Detectors = _db.Detectors.Where(d => d.ApproachID == a.ApproachID).ToList();
+
+                foreach(var d in a.Detectors)
+                {
+
+                    d.DetectionTypes = _db.DetectionTypes.Where(dt => d.DetectionTypeIDs.Contains(dt.DetectionTypeID)).ToList();
+                }
+            }
+
+            
+
+            return orderedSignals.First();
         }
         
 
@@ -442,6 +477,40 @@ namespace MOE.CommonTests.Models
                 s.VersionActionId = 3;
             }
 
+        }
+
+        public List<Signal> GetSignalsBetweenDates(string signalId, DateTime startDate, DateTime endDate)
+        {
+            List<Common.Models.Signal> signals = new List<Signal>();
+            Common.Models.Signal signalBeforeStart = _db.Signals
+
+                .Where(signal => signal.SignalID == signalId
+                                 && signal.Start <= startDate
+                                 && signal.VersionActionId != 3).OrderByDescending(s => s.Start)
+                .Take(1)
+                .FirstOrDefault();
+            if (signalBeforeStart != null)
+            {
+                signals.Add(signalBeforeStart);
+            }
+            if (_db.Signals.Any(signal => signal.SignalID == signalId
+                                          && signal.Start > startDate
+                                          && signal.Start < endDate
+                                          && signal.VersionActionId != 3))
+            {
+                signals.AddRange(_db.Signals
+
+                    .Where(signal => signal.SignalID == signalId
+                                     && signal.Start > startDate
+                                     && signal.Start < endDate
+                                     && signal.VersionActionId != 3).ToList());
+            }
+            return signals;
+        }
+
+        public bool Exists(string signalId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

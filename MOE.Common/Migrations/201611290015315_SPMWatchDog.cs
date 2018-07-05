@@ -1,35 +1,33 @@
+using System.Data.Entity.Migrations;
+
 namespace MOE.Common.Migrations
 {
-    using System;
-    using System.Data.Entity.Migrations;
-    
     public partial class SPMWatchDog : DbMigration
     {
         public override void Up()
         {
             CreateTable(
-                "dbo.SPMWatchDogErrorEvents",
-                c => new
+                    "dbo.SPMWatchDogErrorEvents",
+                    c => new
                     {
-                        ID = c.Int(nullable: false, identity: true),
-                        TimeStamp = c.DateTime(nullable: false),
-                        SignalID = c.String(nullable: false, maxLength: 10),
+                        ID = c.Int(false, true),
+                        TimeStamp = c.DateTime(false),
+                        SignalID = c.String(false, 10),
                         DetectorID = c.String(),
-                        Direction = c.String(nullable: false),
-                        Phase = c.Int(nullable: false),
-                        ErrorCode = c.Int(nullable: false),
-                        Message = c.String(nullable: false),
+                        Direction = c.String(false),
+                        Phase = c.Int(false),
+                        ErrorCode = c.Int(false),
+                        Message = c.String(false)
                     })
                 .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.Signals", t => t.SignalID, cascadeDelete: true)
+                .ForeignKey("dbo.Signals", t => t.SignalID, true)
                 .Index(t => t.SignalID);
-            
         }
-        
+
         public override void Down()
         {
-            DropForeignKey("dbo.SPMWatchDogErrorEvents", "SignalId", "dbo.Signals");
-            DropIndex("dbo.SPMWatchDogErrorEvents", new[] { "SignalId" });
+            DropForeignKey("dbo.SPMWatchDogErrorEvents", "SignalID", "dbo.Signals");
+            DropIndex("dbo.SPMWatchDogErrorEvents", new[] {"SignalID"});
             DropTable("dbo.SPMWatchDogErrorEvents");
         }
     }

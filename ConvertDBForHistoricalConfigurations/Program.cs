@@ -12,6 +12,8 @@ using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using MOE = MOE.Common.Data.MOE;
 using System.Configuration;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Migrations.Infrastructure;
 
 namespace ConvertDBForHistoricalConfigurations
 {
@@ -35,12 +37,6 @@ namespace ConvertDBForHistoricalConfigurations
             UpdateApproachesWithVersionId();
             UpdateMetriCommentsWithVersionId();
             CreateRoutes();
-            
-            
-
-
-
-
         }
 
         private static void CreateRoutes()
@@ -65,25 +61,17 @@ namespace ConvertDBForHistoricalConfigurations
         private static List<RouteSignal> CreateRouteSignals(OldRoute oldRoute, Route newRoute, SPM db)
         {
             List<RouteSignal> signals = new List<RouteSignal>();
-
             IApproachRepository appRepo = ApproachRepositoryFactory.Create(db);
-
             foreach (var detail in oldRoute.Details)
             {
                 var approach = appRepo.GetApproachByApproachID(detail.ApproachId);
                 RouteSignal signal = new RouteSignal();
-
                 signal.Route = newRoute;
                 signal.Order = detail.Order;
                 signal.SignalId = approach.SignalID;
-                signal.Signal = approach.Signal;
                 signal.PhaseDirections = CreateRoutePhaseDirections(signal, detail, approach, db);
-
                 signals.Add(signal);
             }
-
-
-
             return signals;
         }
 
@@ -111,9 +99,15 @@ namespace ConvertDBForHistoricalConfigurations
         {
             UpdateMigrationsTable();
 
+           
 
             var config = new global::MOE.Common.Migrations.Configuration();
+            config.TargetDatabase = new DbConnectionInfo("SPM");
             var migrator = new DbMigrator(config);
+
+  
+
+
             migrator.Update();
 
         }
@@ -131,7 +125,7 @@ namespace ConvertDBForHistoricalConfigurations
 
             if (!reader.HasRows)
             {
-                throw new Exception("No routes found");
+                throw new Exception("No Migraitons found");
             }
 
             while (reader.Read())
@@ -198,23 +192,13 @@ namespace ConvertDBForHistoricalConfigurations
 
         private static SqlConnection GetDataBaseConnection()
         {
-            //SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
 
-            //builder.DataSource = "SRWTCNS54";
-            //builder.UserID = "SPM";
-            //builder.Password = "SPM";
-            //builder.InitialCatalog = "MOE1";
-
-
-
-            //builder.ConnectionString = ApplicationSettings.Connectionstring;
 
             SqlConnection sqlconn = new SqlConnection
             {
                 ConnectionString = ConfigurationManager.ConnectionStrings["SPM"].ToString()
             };
 
-            //sqlconn.ConnectionString = builder.ConnectionString;
 
             return sqlconn;
 

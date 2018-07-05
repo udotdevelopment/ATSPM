@@ -1,12 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace MOE.Common.Models.Inrix
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
-
-    public partial class Segment
+    public class Segment
     {
         [Key]
         public int Segment_ID { get; set; }

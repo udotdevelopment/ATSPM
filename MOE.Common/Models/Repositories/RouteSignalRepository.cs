@@ -1,60 +1,94 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Models.Repositories
 {
     public class RouteSignalsRepository : IRouteSignalsRepository
     {
-        MOE.Common.Models.SPM db = new SPM();
+        private readonly SPM db = new SPM();
 
-        public List<Models.RouteSignal> GetAllRoutesDetails()
+        public List<RouteSignal> GetAllRoutesDetails()
         {
-            List<Models.RouteSignal> routes = (from r in db.RouteSignals
-                                                        select r).ToList();
+            var routes = (from r in db.RouteSignals
+                select r).ToList();
             return routes;
         }
 
-        public List<Models.RouteSignal> GetByRouteID(int routeID)
+        public void MoveRouteSignalUp(int routeId, int routeSignalId)
         {
-            List<Models.RouteSignal> routes = (from r in db.RouteSignals
-                                                 where r.RouteId == routeID
-                                                 select r).ToList();
-
-            if (routes.Count > 0)
+            var route = db.Routes.Find(routeId);
+            var signal = route.RouteSignals.FirstOrDefault(r => r.Id == routeSignalId);
+            var order = signal.Order;
+            var swapSignal = route.RouteSignals.FirstOrDefault(r => r.Order == order - 1);
+            if (swapSignal != null)
             {
-                return routes;
-            }
-            {
-                MOE.Common.Models.Repositories.IApplicationEventRepository repository =
-                    MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                MOE.Common.Models.ApplicationEvent error = new ApplicationEvent();
-                error.ApplicationName = "MOE.Common";
-                error.Class = "Models.Repository.ApproachRouteDetailsRepository";
-                error.Function = "GetByRouteID";
-                error.Description = "No Route for ID.  Attempted ID# = " + routeID.ToString();
-                error.SeverityLevel = ApplicationEvent.SeverityLevels.High;
-                error.Timestamp = DateTime.Now;
-                repository.Add(error);
-                throw (new Exception("There is no ApproachRouteDetail for this ID"));
+                signal.Order--;
+                swapSignal.Order++;
+                db.SaveChanges();
             }
         }
 
-        public Models.RouteSignal GetByRouteSignalId(int id)
+        public void MoveRouteSignalDown(int routeId, int routeSignalId)
         {
-            var routeSignal = db.RouteSignals.Include("PhaseDirections").Where(r => r.Id ==id).FirstOrDefault();
-            var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            var route = db.Routes.Find(routeId);
+            var signal = route.RouteSignals.FirstOrDefault(r => r.Id == routeSignalId);
+            var order = signal.Order;
+            var swapSignal = route.RouteSignals.FirstOrDefault(r => r.Order == order + 1);
+            if (swapSignal != null)
+            {
+                signal.Order++;
+                swapSignal.Order--;
+                db.SaveChanges();
+            }
+        }
+
+        public List<RouteSignal> GetByRouteID(int routeID)
+        {
+            var routes = (from r in db.RouteSignals
+                where r.RouteId == routeID
+                select r).ToList();
+
+            if (routes.Count > 0)
+                return routes;
+            {
+                var repository =
+                    ApplicationEventRepositoryFactory.Create();
+                var error = new ApplicationEvent();
+                error.ApplicationName = "MOE.Common";
+                error.Class = "Models.Repository.ApproachRouteDetailsRepository";
+                error.Function = "GetByRouteID";
+                error.Description = "No Route for ID.  Attempted ID# = " + routeID;
+                error.SeverityLevel = ApplicationEvent.SeverityLevels.High;
+                error.Timestamp = DateTime.Now;
+                repository.Add(error);
+                throw new Exception("There is no ApproachRouteDetail for this ID");
+            }
+        }
+
+        public RouteSignal GetByRouteSignalId(int id)
+        {
+            var routeSignal = db.RouteSignals.Include("PhaseDirections").FirstOrDefault(r => r.Id == id);
+            var signalRepository = SignalsRepositoryFactory.Create();
             routeSignal.Signal = signalRepository.GetLatestVersionOfSignalBySignalID(routeSignal.SignalId);
             return routeSignal;
         }
 
+        public void DeleteById(int id)
+        {
+            var routeSignal = db.RouteSignals.Find(id);
+            if (routeSignal != null)
+            {
+                db.RouteSignals.Remove(routeSignal);
+                db.SaveChanges();
+            }
+        }
+
         public void DeleteByRouteID(int routeID)
         {
-            List<Models.RouteSignal> routes = (from r in db.RouteSignals
-                                                       where r.RouteId == routeID
-                                                       select r).ToList();
+            var routes = (from r in db.RouteSignals
+                where r.RouteId == routeID
+                select r).ToList();
 
             try
             {
@@ -63,9 +97,9 @@ namespace MOE.Common.Models.Repositories
             }
             catch (Exception ex)
             {
-                MOE.Common.Models.Repositories.IApplicationEventRepository repository =
-                        MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                MOE.Common.Models.ApplicationEvent error = new ApplicationEvent();
+                var repository =
+                    ApplicationEventRepositoryFactory.Create();
+                var error = new ApplicationEvent();
                 error.ApplicationName = "MOE.Common";
                 error.Class = "Models.Repository.ApproachRouteDetailsRepository";
                 error.Function = "DeleteByRouteID";
@@ -79,13 +113,13 @@ namespace MOE.Common.Models.Repositories
 
         public void UpdateByRouteAndApproachID(int routeID, string signalId, int newOrderNumber)
         {
-            Models.RouteSignal RouteDetail = (from r in db.RouteSignals
-                                                 where r.RouteId == routeID 
-                                                 && r.SignalId == signalId
-                                                      select r).FirstOrDefault();
+            var RouteDetail = (from r in db.RouteSignals
+                where r.RouteId == routeID
+                      && r.SignalId == signalId
+                select r).FirstOrDefault();
             if (RouteDetail != null)
             {
-                Models.RouteSignal newRouteDetail = new Models.RouteSignal();
+                var newRouteDetail = new RouteSignal();
                 newRouteDetail.Order = newOrderNumber;
 
                 try
@@ -95,9 +129,9 @@ namespace MOE.Common.Models.Repositories
                 }
                 catch (Exception ex)
                 {
-                    MOE.Common.Models.Repositories.IApplicationEventRepository repository =
-                            MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                    MOE.Common.Models.ApplicationEvent error = new ApplicationEvent();
+                    var repository =
+                        ApplicationEventRepositoryFactory.Create();
+                    var error = new ApplicationEvent();
                     error.ApplicationName = "MOE.Common";
                     error.Class = "Models.Repository.ApproachRouteDetailsRepository";
                     error.Function = "UpdateByRouteAndApproachID";
@@ -107,21 +141,25 @@ namespace MOE.Common.Models.Repositories
                     repository.Add(error);
                     throw;
                 }
-
             }
         }
-        public void Add(Models.RouteSignal newRouteDetail)
+
+        public void Add(RouteSignal newRouteDetail)
         {
             try
             {
-                db.RouteSignals.Add(newRouteDetail);
-                db.SaveChanges();
+                if (!db.RouteSignals.Any(s =>
+                    s.SignalId == newRouteDetail.SignalId && s.RouteId == newRouteDetail.RouteId))
+                {
+                    db.RouteSignals.Add(newRouteDetail);
+                    db.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
-                MOE.Common.Models.Repositories.IApplicationEventRepository repository =
-                        MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                MOE.Common.Models.ApplicationEvent error = new ApplicationEvent();
+                var repository =
+                    ApplicationEventRepositoryFactory.Create();
+                var error = new ApplicationEvent();
                 error.ApplicationName = "MOE.Common";
                 error.Class = "Models.Repository.ApproachRouteDetailsRepository";
                 error.Function = "UpdateByRouteAndApproachID";
@@ -134,4 +172,3 @@ namespace MOE.Common.Models.Repositories
         }
     }
 }
-

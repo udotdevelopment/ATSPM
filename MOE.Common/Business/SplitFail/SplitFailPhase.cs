@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
@@ -11,313 +8,186 @@ namespace MOE.Common.Business.SplitFail
 {
     public class SplitFailPhase
     {
-        public List<DateTime> SplitFails { get; }
-        public int TotalFails { get; set; } = 0;
-        public int PhaseNumber { get; }
-        public Phase Phase { get; }
-        public List<Tuple<DateTime, double>> GorGapOut { get; }
-        public List<Tuple<DateTime, double>> RorGapOut { get; }
-        public List<Tuple<DateTime, double>> GorForceOff { get; }
-        public List<Tuple<DateTime, double>> RorForceOff { get; }
-        public List<Tuple<DateTime, double>> PercentFails { get; }
-        public List<Tuple<DateTime, double>> AverageRors { get; }
-        public List<Tuple<DateTime, double>> AverageGors { get; }
+        private List<SplitFailDetectorActivation> _detectorActivations = new List<SplitFailDetectorActivation>();
+        public List<SplitFailBin> Bins { get; } = new List<SplitFailBin>();
+        public int TotalFails { get; }
+        public Approach Approach { get; }
+        public bool GetPermissivePhase { get; }
+        public List<CycleSplitFail> Cycles { get; }
+        public List<PlanSplitFail> Plans { get; }
         public Dictionary<string, string> Statistics { get; }
-        List<Tuple<int, List<MOE.Common.Models.Controller_Event_Log>>> _controllerEventLogs;
 
-
-        public SplitFailPhase(int phaseNumber, MOE.Common.Models.Approach approach, SplitFailOptions options,
-            Phase phase)
+        public SplitFailPhase(Approach approach, SplitFailOptions options, bool getPermissivePhase)
         {
-            PhaseNumber = phaseNumber;
-            Phase = phase;
-            _controllerEventLogs = new List<Tuple<int, List<MOE.Common.Models.Controller_Event_Log>>>();
-            RorGapOut = new List<Tuple<DateTime, double>>();
-            GorGapOut = new List<Tuple<DateTime, double>>();
-            GorForceOff = new List<Tuple<DateTime, double>>();
-            RorForceOff = new List<Tuple<DateTime, double>>();
-            PercentFails = new List<Tuple<DateTime, double>>();
-            AverageGors = new List<Tuple<DateTime, double>>();
-            AverageRors = new List<Tuple<DateTime, double>>();
+            Approach = approach;
+            GetPermissivePhase = getPermissivePhase;
+            Cycles = CycleFactory.GetSplitFailCycles(options, approach, getPermissivePhase);
+            SetDetectorActivations(options);
+            AddDetectorActivationsToCycles();
+            Plans = PlanFactory.GetSplitFailPlans(Cycles, options, Approach);
+            TotalFails = Cycles.Count(c => c.IsSplitFail);
             Statistics = new Dictionary<string, string>();
-            SplitFails = new List<DateTime>();
-            SetControllerEventLogs(phaseNumber, approach, options);
-            ProcessCycles(options);
+            Statistics.Add("Total Split Failures", TotalFails.ToString());
+            SetBinStatistics(options);
         }
 
-        public SplitFailPhase()
+        private void AddDetectorActivationsToCycles()
         {
-            _controllerEventLogs = new List<Tuple<int, List<MOE.Common.Models.Controller_Event_Log>>>();
-            RorGapOut = new List<Tuple<DateTime, double>>();
-            GorGapOut = new List<Tuple<DateTime, double>>();
-            GorForceOff = new List<Tuple<DateTime, double>>();
-            RorForceOff = new List<Tuple<DateTime, double>>();
-            PercentFails = new List<Tuple<DateTime, double>>();
-            AverageGors = new List<Tuple<DateTime, double>>();
-            AverageRors = new List<Tuple<DateTime, double>>();
-            Statistics = new Dictionary<string, string>();
-            SplitFails = new List<DateTime>();
-        }
-
-        private void ProcessCycles(SplitFailOptions options)
-        {
-            if (_controllerEventLogs.Count > 0)
-            {
-                foreach (var cycle in Phase.Cycles)
-                {
-                    ProcessDetectors(cycle);
-                    CheckActivations(cycle);
-                    SetRorGor(options, cycle);
-                }
-                Statistics.Add("Total Split Failures ", TotalFails.ToString());
-                SetBinStatistics(options);
-
-            }
+            foreach (var cycleSplitFail in Cycles)
+                cycleSplitFail.SetDetectorActivations(_detectorActivations);
         }
 
         private void SetBinStatistics(SplitFailOptions options)
         {
-            DateTime counterTime = options.StartDate;
+            var startTime = options.StartDate;
             do
             {
-                double binTotalGor = 0;
-                double binTotalRor = 0;
-                List<PhaseCycleBase> cycleBin = GetCycleBin(counterTime);
-                var binFails = SplitFails.Count(s => s >= counterTime && s <= counterTime.AddMinutes(15));
-                SetBinTotalRorGor(options, ref binTotalGor, ref binTotalRor, cycleBin);
-                SetPercentFails(counterTime, cycleBin, binFails);
-                SetAverageRorGorForCycleBin(counterTime, binTotalGor, binTotalRor, cycleBin);
-                counterTime = counterTime.AddMinutes(15);
-            } while (counterTime < options.EndDate.AddMinutes(15));
+                var endTime = startTime.AddMinutes(15);
+                var cycles = Cycles.Where(c => c.StartTime >= startTime && c.StartTime < endTime).ToList();
+                Bins.Add(new SplitFailBin(startTime, endTime, cycles));
+                startTime = startTime.AddMinutes(15);
+            } while (startTime < options.EndDate);
         }
 
-        private void SetAverageRorGorForCycleBin(DateTime counterTime, double binTotalGor, double binTotalRor, List<PhaseCycleBase> cycleBin)
+        private void CombineDetectorActivations()
         {
-            if (cycleBin.Any())
-            {
-                double avggor = binTotalGor / cycleBin.Count();
-                double avgror = binTotalRor / cycleBin.Count();
-                AverageGors.Add(new Tuple<DateTime, double>(counterTime, avggor));
-                AverageRors.Add(new Tuple<DateTime, double>(counterTime, avgror));
-            }
-            else
-            {
-                AverageGors.Add(new Tuple<DateTime, double>(counterTime, 0));
-                AverageRors.Add(new Tuple<DateTime, double>(counterTime, 0));
-            }
-        }
+            var tempDetectorActivations = new List<SplitFailDetectorActivation>();
 
-        private void SetPercentFails(DateTime counterTime, List<PhaseCycleBase> cycleBin, int binFails)
-        {
-            if (binFails > 0 && cycleBin.Any())
-            {
-                double binFailPercent = (binFails / Convert.ToDouble(cycleBin.Count()));
-                PercentFails.Add(new Tuple<DateTime, double>(counterTime, Convert.ToInt32(binFailPercent * 100)));
-            }
-            else
-            {
-                PercentFails.Add(new Tuple<DateTime, double>(counterTime, 0));
-            }
-        }
+            //look at every item in the original list
+            foreach (var current in _detectorActivations)
+                if (!current.ReviewedForOverlap)
+                {
+                    var overlapingActivations = _detectorActivations.Where(d => d.ReviewedForOverlap == false &&
+                        (
+                            //   if it starts after current starts  and    starts before current ends      and    end after current ends   
+                            d.DetectorOn >=
+                            current.DetectorOn &&
+                            d.DetectorOn <=
+                            current.DetectorOff &&
+                            d.DetectorOff >= current.DetectorOff
+                            //OR if it starts BEFORE curent starts  and ends AFTER current starts           and ends BEFORE current ends
+                            || d.DetectorOn <=
+                            current.DetectorOn &&
+                            d.DetectorOff >=
+                            current.DetectorOn &&
+                            d.DetectorOff <= current.DetectorOff
+                            //OR if it starts AFTER current starts   and it ends BEFORE current ends
+                            || d.DetectorOn >=
+                            current.DetectorOn &&
+                            d.DetectorOff <= current.DetectorOff
+                            //OR if it starts BEFORE current starts  and it ens AFTER current ends 
+                            || d.DetectorOn <=
+                            current.DetectorOn &&
+                            d.DetectorOff >= current.DetectorOff
+                        )
+                        //then add it to the overlap list
+                    ).ToList();
 
-        private static void SetBinTotalRorGor(SplitFailOptions options, ref double binTotalGor, ref double binTotalRor, List<PhaseCycleBase> cycleBin)
-        {
-            foreach (MOE.Common.Business.PhaseCycleBase c in cycleBin)
-            {
-                binTotalGor += c.Activations.GreenOccupancy(c) * 100;
-                binTotalRor += c.Activations.StartOfRedOccupancy(c, options.FirstSecondsOfRed) * 100;
-            }
-        }
-
-        private List<PhaseCycleBase> GetCycleBin(DateTime counterTime)
-        {
-            return Phase.Cycles
-                .Where(cur => cur.CycleStart >= counterTime && cur.CycleStart <= counterTime.AddMinutes(15))
-                .OrderBy(cur => cur.CycleStart)
-                .ToList();
-        }
-
-        private void SetRorGor(SplitFailOptions options, PhaseCycleBase cycle)
-        {
-            if (cycle.CycleStart > options.StartDate && cycle.CycleStart < options.EndDate)
-            {
-                double gor = cycle.Activations.GreenOccupancy(cycle) * 100;
-                double ror = cycle.Activations.StartOfRedOccupancy(cycle, options.FirstSecondsOfRed) * 100;
-                if (cycle.TerminationEvent == MOE.Common.Business.PhaseCycleBase.TerminationType.GapOut)
-                {
-                    GorGapOut.Add(new Tuple<DateTime, double>(cycle.CycleStart, gor));
-                    RorGapOut.Add(new Tuple<DateTime, double>(cycle.CycleStart, ror));
-                }
-                else
-                {
-                    GorForceOff.Add(new Tuple<DateTime, double>(cycle.CycleStart, gor));
-                    RorForceOff.Add(new Tuple<DateTime, double>(cycle.CycleStart, ror));
-                }
-                if ((gor > 79 && ror > 79))
-                {
-                    SplitFails.Add(cycle.CycleStart);
-                    TotalFails++;
-                }
-            }
-        }
-
-        private static void CheckActivations(PhaseCycleBase cycle)
-        {
-            for (int i = 0; i < cycle.Activations.Activations.Count - 1;)
-            {
-                SplitFailDetectorActivation current = cycle.Activations.Activations.ElementAt(i).Value;
-                SplitFailDetectorActivation next = cycle.Activations.Activations.ElementAt(i + 1).Value;
-
-                //if the next activaiton is between the previos one, remove the nextone and start again.
-                if (next.DetectorOn >= current.DetectorOn && next.DetectorOff <= current.DetectorOff)
-                {
-                    cycle.Activations.Activations.RemoveAt(i + 1);
-                    continue;
-                }
-                //if the next activaiton starts during the current, but ends later, atler current end time, and remove next, and start over. 
-                else if (next.DetectorOn >= current.DetectorOn && next.DetectorOn < current.DetectorOff &&
-                         next.DetectorOff > current.DetectorOff)
-                {
-                    current.DetectorOff = next.DetectorOff;
-                    cycle.Activations.Activations.RemoveAt(i + 1);
-                    continue;
-                }
-                else
-                {
-                    i++;
-                }
-            }
-        }
-
-        private void ProcessDetectors(PhaseCycleBase cycle)
-        {
-            foreach (var controllerEventLog in _controllerEventLogs)
-            {
-                //int channel =  controllerEventLog.First().EventParam;
-                var detectorHitsForCycle = controllerEventLog.Item2
-                    .Where(ce => ce.Timestamp >= cycle.CycleStart && ce.Timestamp <= cycle.CycleEnd)
-                    .OrderBy(r => r.Timestamp)
-                    .ToList();
-                if (detectorHitsForCycle.Count > 0)
-                {
-                    detectorHitsForCycle = detectorHitsForCycle.OrderBy(r => r.Timestamp).ToList();
-                    if (detectorHitsForCycle.Count() > 1)
+                    //if there are any in the list (and here should be at least one that matches current)
+                    if (overlapingActivations.Any())
                     {
-                        SetDetectorActivationsForCycleWithDetectorHits(cycle, detectorHitsForCycle);
-                    }
-                    else
-                    {
-                        SetDetectorActivationsForCycleWithLessThanOneDetectorHit(cycle, detectorHitsForCycle);
+                        //Then make a new activation that starts witht eh earliest start and ends with the latest end
+                        var tempDetectorActivation = new SplitFailDetectorActivation
+                        {
+                            DetectorOn = overlapingActivations.Min(o => o.DetectorOn),
+                            DetectorOff = overlapingActivations.Max(o => o.DetectorOff)
+                        };
+                        //and add the new one to a temp list
+                        tempDetectorActivations.Add(tempDetectorActivation);
+
+                        //mark everything in the  overlap list as Reviewed
+                        foreach (var splitFailDetectorActivation in overlapingActivations)
+                            splitFailDetectorActivation.ReviewedForOverlap = true;
                     }
                 }
-                //if there are no hits in the cycle, we need to determine if the a previous detector activaition lasts the entire cycle
-                else if (detectorHitsForCycle.Count <= 0)
-                {
-                    SetDetectorActivationsForCycleWithoutDetectorHits(cycle, controllerEventLog.Item1);
-                }
-            }
-        }
 
-        private void SetDetectorActivationsForCycleWithoutDetectorHits(PhaseCycleBase cycle, int channel)
-        {
-            SplitFailDetectorActivation splitFailDetectorActivation = new SplitFailDetectorActivation();
-            DateTime earlierTime = cycle.CycleStart.AddMinutes(-30);
-            List<int> li = new List<int> { 81, 82 };
-            ControllerEventLogs cs = new ControllerEventLogs(Phase.SignalID, earlierTime, cycle.CycleStart,
-                channel, li);
-            //if the last detecotr eventCodes was ON, and there is no matching off event, assume the detector was on for the whole cycle
-            if (cs.Events != null && cs.Events.Count > 0 && cs.Events.LastOrDefault().EventCode == 82)
+            //since we went through every item in the original list, if there were no overlaps, it shoudl equal the temp list
+            if (_detectorActivations.Count != tempDetectorActivations.Count)
             {
-                splitFailDetectorActivation.DetectorOn = cycle.CycleStart;
-                splitFailDetectorActivation.DetectorOff = cycle.CycleEnd;
-                cycle.Activations.AddActivation(splitFailDetectorActivation);
+                //if the counts do not match, we have to set the original list to the temp list and try the combinaitons again
+                _detectorActivations = tempDetectorActivations;
+                CombineDetectorActivations();
             }
         }
 
-        private static void SetDetectorActivationsForCycleWithLessThanOneDetectorHit(PhaseCycleBase cycle, List<Controller_Event_Log> detectorHitsForCycle)
-        {
-            SplitFailDetectorActivation da = new SplitFailDetectorActivation();
-            MOE.Common.Models.Controller_Event_Log current = detectorHitsForCycle.First();
-            switch (current.EventCode)
-            {
-                //if the only event is off
-                case 81:
-                    da.DetectorOn = cycle.CycleStart;
-                    da.DetectorOff = current.Timestamp;
-                    cycle.Activations.AddActivation(da);
-                    break;
-                //if the only event is on
-                case 82:
-                    da.DetectorOn = current.Timestamp;
-                    da.DetectorOff = cycle.CycleEnd;
-                    cycle.Activations.AddActivation(da);
-                    break;
-            }
-        }
-
-        private static void SetDetectorActivationsForCycleWithDetectorHits(PhaseCycleBase cycle, List<Controller_Event_Log> detectorHitsForCycle)
-        {
-            for (int i = 0; i < detectorHitsForCycle.Count() - 1; i++)
-            {
-                MOE.Common.Models.Controller_Event_Log current = detectorHitsForCycle.ElementAt(i);
-                MOE.Common.Models.Controller_Event_Log next = detectorHitsForCycle.ElementAt(i + 1);
-                if (current.Timestamp.Ticks == next.Timestamp.Ticks)
-                {
-                    continue;
-                }
-                //If the first event is 'Off', then set 'On' to cyclestart
-                if (i == 0 && current.EventCode == 81)
-                {
-                    SplitFailDetectorActivation da =
-                        new SplitFailDetectorActivation
-                        {
-                            DetectorOn = cycle.CycleStart,
-                            DetectorOff = current.Timestamp
-                        };
-                    cycle.Activations.AddActivation(da);
-                }
-                //This is the prefered sequence; an 'On'  followed by an 'off'
-                if (current.EventCode == 82 && next.EventCode == 81)
-                {
-                    SplitFailDetectorActivation da =
-                        new SplitFailDetectorActivation
-                        {
-                            DetectorOn = current.Timestamp,
-                            DetectorOff = next.Timestamp
-                        };
-                    cycle.Activations.AddActivation(da);
-                    continue;
-                }
-                //if we are at the penultimate event, and the last event is 'on', set 'off' as CycleEnd.
-                if (i + 2 == detectorHitsForCycle.Count() && next.EventCode == 82)
-                {
-                    SplitFailDetectorActivation da =
-                        new SplitFailDetectorActivation
-                        {
-                            DetectorOn = next.Timestamp,
-                            DetectorOff = cycle.CycleEnd
-                        };
-                    cycle.Activations.AddActivation(da);
-                    continue;
-                }
-            }
-        }
-
-        private void SetControllerEventLogs(int phaseNumber, Approach approach, SplitFailOptions options)
+        private void SetDetectorActivations(SplitFailOptions options)
         {
             var controllerEventsRepository = ControllerEventLogRepositoryFactory.Create();
-            var detectors = approach.Signal.GetDetectorsForSignalThatSupportAMetricByPhaseNumber(12, phaseNumber);
+            var phaseNumber = GetPermissivePhase ? Approach.PermissivePhaseNumber.Value : Approach.ProtectedPhaseNumber;
+            var detectors = Approach.GetAllDetectorsOfDetectionType(6);// .GetDetectorsForMetricType(12);
+
             foreach (var detector in detectors)
             {
-                var channelAndEventCodes = new Tuple<int, List<Controller_Event_Log>>(detector.DetChannel, 
-                    controllerEventsRepository.GetEventsByEventCodesParam(approach.SignalID,
-                    options.StartDate, options.EndDate, new List<int>() { 81, 82 }, detector.DetChannel));
-                _controllerEventLogs.Add(channelAndEventCodes);
+                //var lastCycle = Cycles.OrderBy(c => c.StartTime).LastOrDefault();
+                List<Models.Controller_Event_Log> events = controllerEventsRepository.GetEventsByEventCodesParamWithLatencyCorrection(Approach.SignalID,
+                    options.StartDate, options.EndDate, new List<int> {81, 82}, detector.DetChannel, detector.LatencyCorrection);
+                if (!events.Any())
+                {
+                    CheckForDetectorOnBeforeStart(options, controllerEventsRepository, detector);
+                }
+                else
+                {
+                    AddDetectorOnToBeginningIfNecessary(options, detector, events);
+                    AddDetectorOffToEndIfNecessary(options, detector, events);
+                    AddDetectorActivationsFromList(events);
+                }
             }
-            
+            CombineDetectorActivations();
+        }
+
+        private void AddDetectorActivationsFromList(List<Controller_Event_Log> events)
+        {
+            events = events.OrderBy(e => e.Timestamp).ToList();
+            for (var i = 0; i < events.Count - 2; i++)
+                if (events[i].EventCode == 82 && events[i + 1].EventCode == 81)
+                    _detectorActivations.Add(new SplitFailDetectorActivation
+                    {
+                        DetectorOn = events[i].Timestamp,
+                        DetectorOff = events[i + 1].Timestamp
+                    });
+        }
+
+        private static void AddDetectorOffToEndIfNecessary(SplitFailOptions options, Models.Detector detector,
+            List<Controller_Event_Log> events)
+        {
+            if (events.LastOrDefault()?.EventCode == 82)
+                events.Insert(0, new Controller_Event_Log
+                {
+                    Timestamp = options.EndDate,
+                    EventCode = 81,
+                    EventParam = detector.DetChannel,
+                    SignalID = options.SignalID
+                });
+        }
+
+        private static void AddDetectorOnToBeginningIfNecessary(SplitFailOptions options, Models.Detector detector,
+            List<Controller_Event_Log> events)
+        {
+            if (events.FirstOrDefault()?.EventCode == 81)
+                events.Insert(0, new Controller_Event_Log
+                {
+                    Timestamp = options.StartDate,
+                    EventCode = 82,
+                    EventParam = detector.DetChannel,
+                    SignalID = options.SignalID
+                });
+        }
+
+        private void CheckForDetectorOnBeforeStart(SplitFailOptions options,
+            IControllerEventLogRepository controllerEventsRepository, Models.Detector detector)
+        {
+            var eventOnBeforeStart = controllerEventsRepository.GetFirstEventBeforeDateByEventCodeAndParameter(
+                options.SignalID,
+                detector.DetChannel, 81, options.StartDate);
+            var eventOffBeforeStart = controllerEventsRepository.GetFirstEventBeforeDateByEventCodeAndParameter(
+                options.SignalID,
+                detector.DetChannel, 82, options.StartDate);
+            if (eventOnBeforeStart != null && eventOffBeforeStart == null)
+                _detectorActivations.Add(new SplitFailDetectorActivation
+                {
+                    DetectorOn = options.StartDate,
+                    DetectorOff = options.EndDate
+                });
         }
     }
 }
-
-        
-    

@@ -23,10 +23,10 @@
             @Html.HiddenFor(model => model.Id)
     
             <div class="form-group">
-                @Html.LabelFor(model => model.ApproachRouteDetailId, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.RouteSignalId, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.ApproachRouteDetailId, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.ApproachRouteDetailId, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.RouteSignalId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.RouteSignalId, "", new { @class = "text-danger" })
                 </div>
             </div>
     
@@ -39,11 +39,11 @@
             </div>
     
             <div class="form-group">
-                @Html.LabelFor(model => model.IsPhaseDirection1Overlap, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.IsOverlap, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <div class="checkbox">
-                        @Html.EditorFor(model => model.IsPhaseDirection1Overlap)
-                        @Html.ValidationMessageFor(model => model.IsPhaseDirection1Overlap, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.IsOverlap)
+                        @Html.ValidationMessageFor(model => model.IsOverlap, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
@@ -56,8 +56,5 @@
         </div>
     }
     
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
 </body>
 </html>

@@ -12,6 +12,7 @@ using MOE.Common.Models.ViewModel.RouteEdit;
 
 namespace SPM.Controllers
 {
+    [Authorize(Roles = "Configuration, Admin")]
     public class RoutesController : Controller
     {
         MOE.Common.Models.Repositories.IRouteRepository routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
@@ -34,7 +35,7 @@ namespace SPM.Controllers
             {
                 return HttpNotFound();
             }
-            return View(route);
+            return PartialView(route);
         }
 
         public ActionResult Create()

@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Business
 {
     /// <summary>
-    /// Default constructer for pin collection
+    ///     Default constructer for pin collection
     /// </summary>
     public class PinCollection
     {
         public List<Pin> Items = new List<Pin>();
 
         /// <summary>
-        /// Adds pin objects to the pin collecton
+        ///     Adds pin objects to the pin collecton
         /// </summary>
         /// <param name="pin"></param>
-        public void addItem(MOE.Common.Business.Pin pin)
+        public void addItem(Pin pin)
         {
             Items.Add(pin);
         }

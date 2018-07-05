@@ -1,12 +1,10 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace MOE.Common.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
-    
-    public partial class Route
+    public class Route
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -15,6 +13,6 @@ namespace MOE.Common.Models
         [Required]
         public string RouteName { get; set; }
 
-        public virtual ICollection<RouteSignal> RouteSignals { get; set; }
+        public virtual List<RouteSignal> RouteSignals { get; set; }
     }
 }

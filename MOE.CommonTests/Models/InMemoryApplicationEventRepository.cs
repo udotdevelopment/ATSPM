@@ -60,7 +60,7 @@ namespace MOE.CommonTests.Models
 
         public void Add(ApplicationEvent applicationEvent)
         {
-            _db.ApplicaitonEvents.Add(applicationEvent);
+            _db.ApplicationEvents.Add(applicationEvent);
         }
 
         public void Remove(ApplicationEvent applicationEvent)
@@ -76,7 +76,17 @@ namespace MOE.CommonTests.Models
         public void QuickAdd(string applicationName, string errorClass, string errorFunction, ApplicationEvent.SeverityLevels severity,
             string description)
         {
-            throw new NotImplementedException();
+            ApplicationEvent applicationEvent = new ApplicationEvent
+            {
+                ApplicationName = applicationName,
+                Timestamp = DateTime.Now,
+                Class = errorClass,
+                Description = description,
+                Function = errorFunction,
+                SeverityLevel = severity
+            };
+
+            _db.ApplicationEvents.Add(applicationEvent);
         }
 
         public List<ApplicationEvent> GetEventsByDateDescriptions(DateTime startDate, DateTime endDate, List<string> descriptions)

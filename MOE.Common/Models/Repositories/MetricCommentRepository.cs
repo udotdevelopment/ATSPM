@@ -2,86 +2,68 @@
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Models.Repositories
 {
-    public class MetricCommentRepository: IMetricCommentRepository
+    public class MetricCommentRepository : IMetricCommentRepository
     {
-        Models.SPM db = new SPM();
+        private readonly SPM db = new SPM();
 
 
         public MetricComment GetLatestCommentForReport(string signalID, int metricID)
         {
             var comments = (from r in db.MetricComments
-                            where r.Signal.SignalID == signalID
-                            orderby r.TimeStamp descending
-                            select r).ToList();
+                where r.Signal.SignalID == signalID
+                orderby r.TimeStamp descending
+                select r).ToList();
             var commentsForMetricType = new List<MetricComment>();
             if (comments != null)
-            {
-                foreach (MetricComment mc in comments)
-                {
-                    foreach(MetricType mt in mc.MetricTypes)
+                foreach (var mc in comments)
+                foreach (var mt in mc.MetricTypes)
+                    if (mt.MetricID == metricID)
                     {
-                        if(mt.MetricID == metricID)
-                        {
-                            commentsForMetricType.Add(mc);
-                            break;
-                        }
+                        commentsForMetricType.Add(mc);
+                        break;
                     }
-                }
-            }
 
             return commentsForMetricType.FirstOrDefault();
-                          //group r by r.CommentID into a
-                          //select a.OrderByDescending(g => g.TimeStamp).FirstOrDefault();
-
-            
-           
-
-
-                                     
+            //group r by r.CommentID into a
+            //select a.OrderByDescending(g => g.TimeStamp).FirstOrDefault();
         }
 
-        public List<Models.MetricComment> GetAllMetricComments()
+        public List<MetricComment> GetAllMetricComments()
         {
             db.Configuration.LazyLoadingEnabled = false;
-            List<Models.MetricComment> metricComments = (from r in db.MetricComments
-
-                                                             select r).ToList();
+            var metricComments = (from r in db.MetricComments
+                select r).ToList();
 
             return metricComments;
         }
 
-        public Models.MetricComment GetMetricCommentByMetricCommentID(int metricCommentID)
+        public MetricComment GetMetricCommentByMetricCommentID(int metricCommentID)
         {
-            var metricComment = (from r in db.MetricComments
-                                   where r.CommentID == metricCommentID
-                                   select r);
+            var metricComment = from r in db.MetricComments
+                where r.CommentID == metricCommentID
+                select r;
 
             return metricComment.FirstOrDefault();
         }
 
-        public List<Models.MetricType> GetMetricTypesByMetricComment(Models.MetricComment metricComment)
+        public List<MetricType> GetMetricTypesByMetricComment(MetricComment metricComment)
         {
             var metricTypes = (from r in db.MetricTypes
-                                 where metricComment.MetricTypeIDs.Contains(r.MetricID) 
-                                 select r).ToList();
+                where metricComment.MetricTypeIDs.Contains(r.MetricID)
+                select r).ToList();
 
             return metricTypes;
         }
 
-        public void AddOrUpdate(MOE.Common.Models.MetricComment metricComment)
+        public void AddOrUpdate(MetricComment metricComment)
         {
-
-
-            MOE.Common.Models.MetricComment g = (from r in db.MetricComments
-                                                   where r.CommentID == metricComment.CommentID
-                                                   select r).FirstOrDefault();
+            var g = (from r in db.MetricComments
+                where r.CommentID == metricComment.CommentID
+                select r).FirstOrDefault();
             if (g != null)
-            {
                 try
                 {
                     db.Entry(g).CurrentValues.SetValues(metricComment);
@@ -89,9 +71,9 @@ namespace MOE.Common.Models.Repositories
                 }
                 catch (Exception ex)
                 {
-                    MOE.Common.Models.Repositories.IApplicationEventRepository repository =
-                            MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                    MOE.Common.Models.ApplicationEvent error = new ApplicationEvent();
+                    var repository =
+                        ApplicationEventRepositoryFactory.Create();
+                    var error = new ApplicationEvent();
                     error.ApplicationName = "MOE.Common";
                     error.Class = "Models.Repository.MetricCommentRepository";
                     error.Function = "AddOrUpdate";
@@ -101,24 +83,18 @@ namespace MOE.Common.Models.Repositories
                     repository.Add(error);
                     throw;
                 }
-            }
             else
             {
                 db.MetricComments.Add(metricComment);
-               
-
+                db.SaveChanges();
             }
-
-
         }
 
-        public void Remove(MOE.Common.Models.MetricComment metricComment)
+        public void Remove(MetricComment metricComment)
         {
-
-
-            MOE.Common.Models.MetricComment g = (from r in db.MetricComments
-                                                   where r.CommentID == metricComment.CommentID
-                                                   select r).FirstOrDefault();
+            var g = (from r in db.MetricComments
+                where r.CommentID == metricComment.CommentID
+                select r).FirstOrDefault();
             if (g != null)
             {
                 db.MetricComments.Remove(g);
@@ -126,21 +102,16 @@ namespace MOE.Common.Models.Repositories
             }
         }
 
-        public void Add(MOE.Common.Models.MetricComment metricComment)
+        public void Add(MetricComment metricComment)
         {
-
-
-            MOE.Common.Models.MetricComment g = (from r in db.MetricComments
-                                                   where r.CommentID == metricComment.CommentID
-                                                   select r).FirstOrDefault();
+            var g = (from r in db.MetricComments
+                where r.CommentID == metricComment.CommentID
+                select r).FirstOrDefault();
             if (g == null)
             {
-
                 if (metricComment.MetricTypes == null)
-                {
                     metricComment.MetricTypes = db.MetricTypes
                         .Where(x => metricComment.MetricTypeIDs.Contains(x.MetricID)).ToList();
-                }
                 try
                 {
                     db.MetricComments.Add(metricComment);
@@ -148,35 +119,29 @@ namespace MOE.Common.Models.Repositories
                 }
                 catch (DbEntityValidationException e)
                 {
-                    MOE.Common.Models.Repositories.IApplicationEventRepository repository =
-                        MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                    string errorMessage = string.Empty;
+                    var repository =
+                        ApplicationEventRepositoryFactory.Create();
+                    var errorMessage = string.Empty;
                     foreach (var eve in e.EntityValidationErrors)
-                    {                        
-                        foreach (var ve in eve.ValidationErrors)
-                        {
-                            errorMessage += " Property:" + ve.PropertyName + " Error:" + ve.ErrorMessage;
-                        }
-                    }
-                    repository.QuickAdd("Moe.Common", "MetricCommentRepository", "Add", 
+                    foreach (var ve in eve.ValidationErrors)
+                        errorMessage += " Property:" + ve.PropertyName + " Error:" + ve.ErrorMessage;
+                    repository.QuickAdd("Moe.Common", "MetricCommentRepository", "Add",
                         ApplicationEvent.SeverityLevels.Medium, errorMessage);
                     throw new Exception(errorMessage);
                 }
                 catch (Exception ex)
                 {
-                    MOE.Common.Models.Repositories.IApplicationEventRepository repository =
-                        MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();                    
+                    var repository =
+                        ApplicationEventRepositoryFactory.Create();
                     repository.QuickAdd("Moe.Common", "MetricCommentRepository", "Add",
                         ApplicationEvent.SeverityLevels.Medium, ex.Message);
                     throw;
-                }      
+                }
             }
             else
             {
-                this.AddOrUpdate(metricComment);
+                AddOrUpdate(metricComment);
             }
-
         }
-
     }
 }

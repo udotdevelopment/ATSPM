@@ -11,7 +11,7 @@ using SPM.Filters;
 namespace SPM.Controllers
 {
 
-    [Authorize(Roles = "Technician")]
+    [Authorize(Roles = "Technician, Admin, Configuration")]
     public class SignalsController : Controller
     {
         private MOE.Common.Models.Repositories.IControllerTypeRepository _controllerTypeRepository; 
@@ -85,35 +85,58 @@ namespace SPM.Controllers
             return View(wctv);
         }
 
-        public ActionResult AddNewVersion(string id)
+        [Authorize(Roles = "Admin, Configuration")]
+        public int AddNewVersion(string id)
         {
             var existingSignal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
-            if (existingSignal == null)
-            {
-                return Content("<h1>" +"No Signal Matches this SignalId" + "</h1>");
-            }
+            //if (existingSignal == null)
+            //{
+            //    return Content("<h1>" +"No Signal Matches this SignalID" + "</h1>");
+            //}
 
             Signal signal = _signalsRepository.CopySignalToNewVersion(existingSignal);
-                try
+            signal.VersionList = _signalsRepository.GetAllVersionsOfSignalBySignalID(signal.SignalID);
+            
+            try
                 {
                     _signalsRepository.AddOrUpdate(signal);
+                    var commentRepository = MOE.Common.Models.Repositories.MetricCommentRepositoryFactory.Create();
+                    foreach (var origVersionComment in existingSignal.Comments)
+                    {
+                        MetricComment metricComment = new MetricComment
+                        {
+                            CommentText = origVersionComment.CommentText,
+                            VersionID = signal.VersionID,
+                            SignalID = existingSignal.SignalID,
+                            TimeStamp = origVersionComment.TimeStamp,
+                        };
+                        if (origVersionComment.MetricTypes != null)
+                        {
+                            metricComment.MetricTypeIDs = new List<int>();
+                            foreach (var metricType in origVersionComment.MetricTypes)
+                            {
+                                metricComment.MetricTypeIDs.Add(metricType.MetricID);
+                            }
+                        }
+                        commentRepository.AddOrUpdate(metricComment);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    return Content("<h1>" + ex.Message + "</h1>");
+                    return -1;
                 }
                 finally
                 {
                     AddSelectListsToViewBag(signal);
                 }
-                return PartialView("Edit", signal);
-            }
+            return signal.VersionID;
+        }
             
         
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Configuration")]
         public ActionResult AddApproach(string versionId)
         {
             int id = Convert.ToInt32(versionId);
@@ -126,7 +149,7 @@ namespace SPM.Controllers
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Configuration")]
         public ActionResult CopyApproach(int versionId, int approachID)
         {
             var signal = _signalsRepository.GetSignalVersionByVersionId(versionId);
@@ -134,7 +157,7 @@ namespace SPM.Controllers
             AddSelectListsToViewBag(signal);
             try
             {
-                Approach newApproach = MOE.Common.Models.Approach.CopyApproach(approachID);
+                Approach newApproach = Approach.CopyApproach(approachID);
                 _approachRepository.AddOrUpdate(newApproach);
                 return Content("<h1>Copy Successful!</h1>");
             }
@@ -143,8 +166,7 @@ namespace SPM.Controllers
                 return Content("<h1>" + ex.Message + "</h1>");
             }           
         }
-
-        [Authorize(Roles = "Technician")]
+        
         private string GetApproachIndex(Signal signal)
         {
             if (signal.Approaches != null)
@@ -172,7 +194,7 @@ namespace SPM.Controllers
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Configuration")]
         public ActionResult AddDetector(int versionId, int approachID, string approachIndex)
         {
             Signal signal = _signalsRepository.GetSignalVersionByVersionId(versionId);
@@ -188,10 +210,10 @@ namespace SPM.Controllers
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Configuration")]
         public ActionResult CopyDetector(int ID, int versionId, int approachID, string approachIndex)
         {
-            Detector newDetector = MOE.Common.Models.Detector.CopyDetector(ID, true); //need to increase DetChannel if not copying the whole signal.
+            Detector newDetector = Detector.CopyDetector(ID, true); //need to increase DetChannel if not copying the whole signal.
             Signal signal = _signalsRepository.GetSignalVersionByVersionId(versionId);
             Approach approach = signal.Approaches.Where(s => s.ApproachID == approachID).First();
             newDetector.ApproachID = approach.ApproachID;
@@ -204,7 +226,9 @@ namespace SPM.Controllers
             AddSelectListsToViewBag(signal);
             return PartialView("AddDetector", newDetector);
         }
-        
+
+
+        [Authorize(Roles = "Admin, Configuration")]
         private Detector CreateNewDetector(Approach approach, string approachIndex, string signalID)
         {
             Detector detector = new Detector();
@@ -224,7 +248,7 @@ namespace SPM.Controllers
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Configuration")]
         public ActionResult Create(string id)
         {
             var existingSignal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
@@ -250,6 +274,7 @@ namespace SPM.Controllers
         }
 
 
+        [Authorize(Roles = "Admin, Configuration")]
         private Signal CreateNewSignal(string id)
         {
             Signal signal = new Signal();
@@ -263,18 +288,18 @@ namespace SPM.Controllers
             signal.ControllerTypeID = 1;
             signal.Start = DateTime.MaxValue;          
             signal.Note = "Create New";
-            signal.VersionID = 1;
             signal.Enabled = true;
+            signal.VersionList = new List<Signal>();
             return signal;
         }
                 
         // POST: Signals/Copy
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Configuration")]
         public ActionResult Copy(string id, string newId)
         {           
-            MOE.Common.Models.Signal newSignal = new MOE.Common.Models.Signal();           
+            Signal newSignal = new Signal();           
             if (id == null)
             {
                 return Content("<h1>A signal ID is required</h1>");
@@ -282,10 +307,11 @@ namespace SPM.Controllers
             Signal signal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             if (signal != null)
             {
-                newSignal = MOE.Common.Models.Signal.CopySignal(signal, newId);
+                newSignal = Signal.CopySignal(signal, newId);
                 newSignal.VersionActionId = 1;
-                newSignal.Start = DateTime.MaxValue;
+                newSignal.Start = DateTime.Now;
                 newSignal.Note = "Copy of Signal " + id;
+                newSignal.VersionList = new List<Signal>{newSignal};
             }
             try
             {
@@ -304,22 +330,54 @@ namespace SPM.Controllers
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public ActionResult CopyVersion(int versionId)
+        [Authorize(Roles = "Admin, Configuration")]
+        public ActionResult CopyVersion(Signal signal)
         {
-            MOE.Common.Models.Signal copyVersion = new MOE.Common.Models.Signal();
 
-            Signal origVersion = _signalsRepository.GetSignalVersionByVersionId(versionId);
-            if (origVersion != null)
+            //originalSignalVersion = SetDetectionTypes(originalSignalVersion);
+            //MOE.Common.Models.Repositories.ISignalsRepository repository =
+            //    MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            //repository.AddOrUpdate(originalSignalVersion);
+            Signal copyVersion = new Signal();
+
+            Signal originalSignalVersion = _signalsRepository.GetLatestVersionOfSignalBySignalID(signal.SignalID);
+            if (originalSignalVersion != null)
             {
-                copyVersion = MOE.Common.Models.Signal.CopyVersion(origVersion);
+                copyVersion = Signal.CopyVersion(originalSignalVersion);
                 copyVersion.VersionActionId = 4;
-                copyVersion.Start = DateTime.Today;
-                copyVersion.Note = "Copy of Version " + origVersion.Note;
+                copyVersion.Start = DateTime.Now;
+                copyVersion.IPAddress = originalSignalVersion.IPAddress;
+                copyVersion.Note = "Copy of Version " + originalSignalVersion.Note;
             }
             try
             {
                 _signalsRepository.AddOrUpdate(copyVersion);
+                var commentRepository = MOE.Common.Models.Repositories.MetricCommentRepositoryFactory.Create();
+                foreach (var origVersionComment in originalSignalVersion.Comments)
+                {
+                    MetricComment metricComment = new MetricComment
+                    {
+                        CommentText = origVersionComment.CommentText,
+                        VersionID = copyVersion.VersionID,
+                        SignalID = originalSignalVersion.SignalID,
+                        TimeStamp = origVersionComment.TimeStamp,
+                    };
+                    if (origVersionComment.MetricTypes != null)
+                    {
+                        metricComment.MetricTypeIDs = new List<int>();
+                        foreach (var metricType in origVersionComment.MetricTypes)
+                        {
+                            metricComment.MetricTypeIDs.Add(metricType.MetricID);
+                        }
+                    }
+                    if (origVersionComment.MetricIDs != null)
+                        metricComment.MetricIDs = (int[])origVersionComment.MetricIDs.Clone();
+                    metricComment.MetricTypes = origVersionComment.MetricTypes;
+                    //commentRepository.Add(metricComment);
+                    copyVersion.Comments.Add(metricComment);
+                }
+                _signalsRepository.AddOrUpdate(copyVersion);
+                copyVersion = _signalsRepository.GetLatestVersionOfSignalBySignalID(copyVersion.SignalID);
             }
             catch (Exception ex)
             {
@@ -360,16 +418,16 @@ namespace SPM.Controllers
                     signal.Note = "";
                 }
 
-                List<MOE.Common.Models.DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
-                foreach (MOE.Common.Models.Approach a in signal.Approaches)
+                List<DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
+                foreach (Approach a in signal.Approaches)
                 {
-                    foreach (MOE.Common.Models.Detector gd in a.Detectors)
+                    foreach (Detector gd in a.Detectors)
                     {
                         gd.Index = a.Index + "Detector[" + a.Detectors.ToList().FindIndex(d => d.DetectorID == gd.DetectorID).ToString() + "].";
                         gd.AllDetectionTypes = allDetectionTypes;
                         gd.DetectionTypeIDs = new List<int>();
                         gd.DetectorComments = gd.DetectorComments.OrderByDescending(x => x.TimeStamp).ToList();
-                        foreach (MOE.Common.Models.DetectionType dt in gd.DetectionTypes)
+                        foreach (DetectionType dt in gd.DetectionTypes)
                         {
                             gd.DetectionTypeIDs.Add(dt.DetectionTypeID);
                         }
@@ -393,6 +451,7 @@ namespace SPM.Controllers
 
 
         // GET: Signals/Edit/5
+        [Authorize(Roles = "Admin, Configuration")]
         public ActionResult EditVersion(string Id)
         {
             if (Id == null)
@@ -401,59 +460,41 @@ namespace SPM.Controllers
             }
             Signal signal = _signalsRepository.GetSignalVersionByVersionId(Convert.ToInt32(Id));
             signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description).ToList();
-
             if (signal.Approaches == null)
             {
                 signal.Approaches = new List<Approach>();
             }
-
-
             foreach (Approach approach in signal.Approaches)
             {
                 approach.Detectors = approach.Detectors.OrderBy(d => d.DetectorID).ToList();
             }
-
             if (signal != null)
             {
                 if (signal.Note == null)
                 {
                     signal.Note = "";
                 }
-
-                List<MOE.Common.Models.DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
-                foreach (MOE.Common.Models.Approach a in signal.Approaches)
+                List<DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
+                foreach (Approach a in signal.Approaches)
                 {
-                    foreach (MOE.Common.Models.Detector gd in a.Detectors)
+                    foreach (Detector gd in a.Detectors)
                     {
                         gd.Index = a.Index + "Detector[" + a.Detectors.ToList().FindIndex(d => d.DetectorID == gd.DetectorID).ToString() + "].";
                         gd.AllDetectionTypes = allDetectionTypes;
                         gd.DetectionTypeIDs = new List<int>();
                         gd.DetectorComments = gd.DetectorComments.OrderByDescending(x => x.TimeStamp).ToList();
-                        foreach (MOE.Common.Models.DetectionType dt in gd.DetectionTypes)
+                        foreach (DetectionType dt in gd.DetectionTypes)
                         {
                             gd.DetectionTypeIDs.Add(dt.DetectionTypeID);
                         }
                     }
                     a.Index = "Approaches[" + signal.Approaches.ToList().FindIndex(app => app.ApproachID == a.ApproachID).ToString() + "].";
                 }
-                if (signal == null)
-                {
-                    return HttpNotFound();
-                }
-
                 signal.Comments = signal.Comments.OrderByDescending(s => s.TimeStamp).ToList();
+                signal.VersionList = _signalsRepository.GetAllVersionsOfSignalBySignalID(signal.SignalID);
                 AddSelectListsToViewBag(signal);
-                //foreach (MOE.Common.Models.MetricComment c in signal.Comments)
-                //{
-                //    c.MetricTypes = _metricTypeRepository.GetMetricTypesByMetricComment(c);
-                //}
             }
             return PartialView("Edit",signal);
-        }
-
-        public ActionResult _SignalPartial(Signal signal)
-        {
-            return PartialView(signal);
         }
 
         [AllowAnonymous]
@@ -471,16 +512,16 @@ namespace SPM.Controllers
             }
             if (signal != null)
             {
-                List<MOE.Common.Models.DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
-                foreach (MOE.Common.Models.Approach a in signal.Approaches)
+                List<DetectionType> allDetectionTypes = _detectionTypeRepository.GetAllDetectionTypesNoBasic();
+                foreach (Approach a in signal.Approaches)
                 {
-                    foreach (MOE.Common.Models.Detector gd in a.Detectors)
+                    foreach (Detector gd in a.Detectors)
                     {
                         gd.Index = a.Index + "Detector[" + a.Detectors.ToList().FindIndex(d => d.DetectorID == gd.DetectorID).ToString() + "].";
                         gd.AllDetectionTypes = allDetectionTypes;
                         gd.DetectionTypeIDs = new List<int>();
                         gd.DetectorComments = gd.DetectorComments.OrderByDescending(x => x.TimeStamp).ToList();
-                        foreach (MOE.Common.Models.DetectionType dt in gd.DetectionTypes)
+                        foreach (DetectionType dt in gd.DetectionTypes)
                         {
                             gd.DetectionTypeIDs.Add(dt.DetectionTypeID);
                         }
@@ -507,7 +548,7 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Configuration")]
         public ActionResult Edit(Signal signal)
         {
             try
@@ -543,11 +584,11 @@ namespace SPM.Controllers
         {
             if (signal.Approaches != null)
             {
-                foreach (MOE.Common.Models.Approach a in signal.Approaches)
+                foreach (Approach a in signal.Approaches)
                 {
                     if (a.Detectors != null)
                     {
-                        foreach (MOE.Common.Models.Detector gd in a.Detectors)
+                        foreach (Detector gd in a.Detectors)
                         {
                             gd.DetectorID = a.SignalID + gd.DetChannel.ToString("D2");
                             if (gd.DetectionTypeIDs == null)
@@ -568,22 +609,19 @@ namespace SPM.Controllers
             return signal;
         }
 
-        private void AddSelectListsToViewBag(MOE.Common.Models.Signal signal)
+        private void AddSelectListsToViewBag(Signal signal)
         {
-
-
-           
             ViewBag.ControllerType = new SelectList(_controllerTypeRepository.GetControllerTypes(), "ControllerTypeID", "Description", signal.ControllerTypeID);
             ViewBag.Region = new SelectList(_regionRepository.GetAllRegions(), "ID", "Description", signal.RegionID);
             ViewBag.DirectionType = new SelectList(_directionTypeRepository.GetAllDirections(), "DirectionTypeID", "Abbreviation");
             ViewBag.MovementType = new SelectList(_movementTypeRepository.GetAllMovementTypes(), "MovementTypeID", "Description");
             ViewBag.LaneType = new SelectList(_laneTypeRepository.GetAllLaneTypes(), "LaneTypeID", "Description");
             ViewBag.DetectionHardware = new SelectList(_detectionHardwareRepository.GetAllDetectionHardwares(), "ID", "Name");
-            signal.VersionList = _signalsRepository.GetAllVersionsOfSignalBySignalID(signal.SignalID);
+            
         }
 
         // GET: Signals/Delete/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Configuration")]
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -599,22 +637,6 @@ namespace SPM.Controllers
             return null;//View(wctv);
         }
 
-        // POST: Signals/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateJsonAntiForgeryToken]
-        //[Authorize(Roles = "Admin")]
-        //public string DeleteConfirmed(string id)
-        //{
-        //    try
-        //    {
-        //        _signalsRepository.Remove(id);
-        //        return id + " Removed";
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return ex.Message;
-        //    }
-        //}
 
         protected override void Dispose(bool disposing)
         {
@@ -626,7 +648,7 @@ namespace SPM.Controllers
 
         [HttpPost, ActionName("DeleteVersion")]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Configuration")]
         public ActionResult DeleteVersion(string versionId)
         {
             int _vid = Convert.ToInt32(versionId);
@@ -655,11 +677,8 @@ namespace SPM.Controllers
                 mostRecentVersion = _signalsRepository.GetLatestVersionOfSignalBySignalID(sigId);
                 AddSelectListsToViewBag(mostRecentVersion);
             }
-
-
-             
-
             return PartialView("Edit", mostRecentVersion);
+
         }
     }
 }

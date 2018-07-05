@@ -12,6 +12,8 @@ using SPM.Filters;
 
 namespace SPM.Controllers
 {
+
+    [Authorize(Roles = "Configuration, Admin")]
     public class RouteSignalsController : Controller
     {
         MOE.Common.Models.Repositories.IRouteSignalsRepository routeSignalsRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
@@ -22,15 +24,30 @@ namespace SPM.Controllers
         {
             MOE.Common.Models.ViewModel.RouteEdit.RouteCreateViewModel routeViewModel = new MOE.Common.Models.ViewModel.RouteEdit.RouteCreateViewModel();
             routeViewModel.Route = routeRepository.GetRouteByID(id);
+            var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
             foreach (var routeSignal in routeViewModel.Route.RouteSignals)
             {
-                if (routeSignal.Signal != null)
+                if (routeSignal.SignalId != null)
                 {
-                    Tuple<string, string> tuple = new Tuple<string, string>(routeSignal.Id.ToString(), routeSignal.Signal.SignalDescription);
+                    Tuple<string, string> tuple = new Tuple<string, string>(routeSignal.Id.ToString(), signalRepository.GetSignalDescription(routeSignal.SignalId));
                     routeViewModel.SignalSelectList.Add(tuple);
                 }
             }
             return View(routeViewModel);
+        }
+
+        // GET: RouteSignals
+        public ActionResult SignalsList(int id)
+        {
+            var routeSignalRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
+            List<RouteSignal> routeSignals = routeSignalRepository.GetByRouteID(id);
+            List<Signal> signals = new List<Signal>();
+            var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            foreach (var routeSignal in routeSignals)
+            {
+                signals.Add(signalRepository.GetLatestVersionOfSignalBySignalID(routeSignal.SignalId));
+            }
+            return PartialView(signals);
         }
 
         public ActionResult RouteInfoBox(string signalID)
@@ -73,7 +90,7 @@ namespace SPM.Controllers
         {
             var routeSignalRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
             var routeSignal = routeSignalRepository.GetByRouteSignalId(id);
-            if (routeSignal.Signal == null)
+            if (routeSignal == null)
             {
                 return Content("Signal Not Found");
             }
@@ -99,8 +116,7 @@ namespace SPM.Controllers
                 {
                     var primaryApproach = signal.PhaseDirections.Where(p => p.IsPrimaryApproach).DefaultIfEmpty(new RoutePhaseDirection()).FirstOrDefault();
                     var opposingApproach = signal.PhaseDirections.Where(p => p.IsPrimaryApproach == false).DefaultIfEmpty(new RoutePhaseDirection()).FirstOrDefault();
-                    viewModel.PrimaryApproaches.Add(primaryApproach);
-                    viewModel.OpposingApproaches.Add(opposingApproach);
+                    viewModel.PairedApproaches.Add(new Tuple<RoutePhaseDirection, RoutePhaseDirection>(primaryApproach, opposingApproach));
                 }
             }
             return PartialView(viewModel);
@@ -118,6 +134,22 @@ namespace SPM.Controllers
                 var routePhaseDirectionRepository = MOE.Common.Models.Repositories.RoutePhaseDirectionRepositoryFactory.Create();
                 routePhaseDirectionRepository.Update(routePhaseDirection);
             }
+        }
+
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        public void MoveSignalUp(int routeId, int signalId)
+        {
+            var routePhaseDirectionRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
+                routePhaseDirectionRepository.MoveRouteSignalUp(routeId, signalId);
+        }
+
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        public void MoveSignalDown(int routeId, int signalId)
+        {
+            var routePhaseDirectionRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
+            routePhaseDirectionRepository.MoveRouteSignalDown(routeId, signalId);
         }
 
         //// GET: RouteSignals/Details/5
@@ -176,39 +208,30 @@ namespace SPM.Controllers
         //    return View(routeSignal);
         //}
 
-        //// GET: RouteSignals/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    RouteSignal routeSignal = db.RouteSignals.Find(id);
-        //    if (routeSignal == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(routeSignal);
-        //}
+        // GET: RouteSignals/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var routeSignalRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
+            RouteSignal routeSignal = routeSignalRepository.GetByRouteSignalId(id.Value);
+            if (routeSignal == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView(routeSignal);
+        }
 
-        //// POST: RouteSignals/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    RouteSignal routeSignal = db.RouteSignals.Find(id);
-        //    db.RouteSignals.Remove(routeSignal);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
-
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        db.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
+        // POST: RouteSignals/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateJsonAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var routeSignalRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
+            routeSignalRepository.DeleteById(id);
+            return Content("Delete Successful!");
+        }
     }
 }

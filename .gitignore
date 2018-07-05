@@ -813,3 +813,9 @@ WcfVolumeExport/bin/
 WcfVolumeExport/obj/
 
 RepositoryTests/obj/Debug/
+
+*.cache
+
+*.ide
+
+MOEWcfServiceLibrary/MOEWcfServiceLibrary\.Publish\.xml

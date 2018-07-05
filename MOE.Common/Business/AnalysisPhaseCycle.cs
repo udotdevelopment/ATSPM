@@ -1,148 +1,93 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace MOE.Common.Business
 {
     public class AnalysisPhaseCycle
     {
-        public enum NextEventResponse{CycleOK, CycleMissingData, CycleComplete};
-        public enum TerminationType : int { 
+        public enum NextEventResponse
+        {
+            CycleOK,
+            CycleMissingData,
+            CycleComplete
+        }
+
+        public enum TerminationType
+        {
             GapOut = 4,
             MaxOut = 5,
-            ForceOff = 6, 
-            Unknown = 0};
-
-        private int phaseNumber;
-        public int PhaseNumber
-        {
-            get
-            {
-                return phaseNumber;
-            }
-        }
-
-        private string signalId;
-        public string SignalId
-        {
-            get
-            {
-                return signalId;
-            }
-        }
-
-        private DateTime startTime;
-        public DateTime StartTime
-        {
-            get
-            {
-                return startTime;
-            }
-        }
-
-        private DateTime endTime;
-        public DateTime EndTime
-        {
-            get
-            {
-                return endTime;
-            }
-        }
-
-        private DateTime pedStartTime;
-        public DateTime PedStartTime
-        {
-            get
-            {
-                return pedStartTime;
-            }
-        }
-
-        private DateTime pedEndTime;
-        public DateTime PedEndTime
-        {
-            get
-            {
-                return pedEndTime;
-            }
-        }
-
-        private int terminationEvent;
-        public int TerminationEvent
-        {
-            get
-            {
-                return terminationEvent;
-            }
-        }
-
-        private TimeSpan duration;
-        public TimeSpan Duration
-        {
-            get
-            {
-                return duration;
-            }
+            ForceOff = 6,
+            Unknown = 0
         }
 
         private double pedDuration;
-        public double PedDuration
-        {
-            get
-            {
-                if (pedDuration > 0)
-                {
-                    return pedDuration;
-                }
-                return 0;
-            }
-        }
-
-
-
-        public bool HasPed { get; set; }
-
-        public DateTime YellowEvent { get; set; }
 
         /// <summary>
-        /// Phase Objects primarily for the split monitor and terminaiton chart
+        ///     Phase Objects primarily for the split monitor and terminaiton chart
         /// </summary>
         /// <param name="signalid"></param>
         /// <param name="phasenumber"></param>
         /// <param name="starttime"></param>
         public AnalysisPhaseCycle(string signalid, int phasenumber, DateTime starttime)
         {
-            signalId = signalid;
-            phaseNumber = phasenumber;
-            startTime = starttime;
+            SignalId = signalid;
+            PhaseNumber = phasenumber;
+            StartTime = starttime;
             HasPed = false;
-            terminationEvent = 0;
-
+            TerminationEvent = 0;
         }
+
+        public int PhaseNumber { get; }
+
+        public string SignalId { get; }
+
+        public DateTime StartTime { get; }
+
+        public DateTime EndTime { get; private set; }
+
+        public DateTime PedStartTime { get; private set; }
+
+        public DateTime PedEndTime { get; private set; }
+
+        public int TerminationEvent { get; private set; }
+
+        public TimeSpan Duration { get; private set; }
+
+        public double PedDuration
+        {
+            get
+            {
+                if (pedDuration > 0)
+                    return pedDuration;
+                return 0;
+            }
+        }
+
+
+        public bool HasPed { get; set; }
+
+        public DateTime YellowEvent { get; set; }
 
         public void SetTerminationEvent(int terminatonCode)
         {
-            terminationEvent = terminatonCode;
+            TerminationEvent = terminatonCode;
         }
 
         public void SetEndTime(DateTime endtime)
         {
-            endTime = endtime;
-            duration = endTime.Subtract(startTime);
+            EndTime = endtime;
+            Duration = EndTime.Subtract(StartTime);
         }
 
         public void SetPedStart(DateTime starttime)
         {
-            pedStartTime = starttime;
+            PedStartTime = starttime;
             HasPed = true;
         }
 
         public void SetPedEnd(DateTime endtime)
         {
-            pedEndTime = endtime;
-            pedDuration = pedEndTime.Subtract(pedStartTime).TotalSeconds;
+            PedEndTime = endtime;
+            pedDuration = PedEndTime.Subtract(PedStartTime).TotalSeconds;
         }
-
     }
 }

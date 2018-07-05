@@ -1,28 +1,27 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+
 namespace MOE.Common.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
-
-    public partial class MetricComment:Comment
+    [DataContract]
+    public partial class MetricComment : Comment
     {
-        public MetricComment()
-        {
-          
-        }
-
-
         [Required]
-       public int VersionID { get; set; }
-        public virtual Models.Signal Signal { get; set; }
+        [DataMember]
+        public int VersionID { get; set; }
 
+        [DataMember]
+        public virtual Signal Signal { get; set; }
+
+        [DataMember]
         public string SignalID { get; set; }
 
 
+        [DataMember]
         public List<int> MetricTypeIDs { get; set; }
-        public virtual ICollection<MetricType> MetricTypes { get; set; }
 
+        [DataMember]
+        public virtual ICollection<MetricType> MetricTypes { get; set; }
     }
 }

@@ -13,7 +13,8 @@ namespace SPM.Controllers
     public class LinkPivotController : Controller
     {
         private MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
-        // GET: LinkPivot
+
+    // GET: LinkPivot
         public ActionResult Analysis()
         {
             var lp = new MOE.Common.Models.ViewModel.LinkPivotViewModel();
@@ -38,10 +39,11 @@ namespace SPM.Controllers
             var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
             var route = routeRepository.GetRouteByID(id);
             List <MOE.Common.Models.Signal> signals = new List<Signal>();
+            var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
             foreach (var routeSignal in route.RouteSignals)
             {
-                signals.Add(routeSignal.Signal);
-
+                var signal = signalRepository.GetLatestVersionOfSignalBySignalID(routeSignal.SignalId);
+                signals.Add(signal);
             }
             return PartialView("FillSignals", signals);
         }
@@ -50,9 +52,9 @@ namespace SPM.Controllers
         {
             if (ModelState.IsValid)
             {
-                DateTime _StartDate = Convert.ToDateTime(lpvm.StartDate.ToShortDateString() + " " + lpvm.StartTime +
+                DateTime startDate = Convert.ToDateTime(lpvm.StartDate.ToShortDateString() + " " + lpvm.StartTime +
                     " " + lpvm.StartAMPM);
-                DateTime _EndDate = Convert.ToDateTime(lpvm.EndDate.ToShortDateString() + " " + lpvm.EndTime +
+                DateTime endDate = Convert.ToDateTime(lpvm.EndDate.ToShortDateString() + " " + lpvm.EndTime +
                     " " + lpvm.EndAMPM);
 
                 LinkPivotServiceReference.LinkPivotServiceClient client =
@@ -71,10 +73,9 @@ namespace SPM.Controllers
                 {
                     adjustments = client.GetLinkPivot(
                         lpvm.SelectedRouteId,
-                        _StartDate,
-                        _EndDate,
+                        startDate,
+                        endDate,
                         lpvm.CycleLength,
-                        ConfigurationManager.AppSettings["LinkPivotImageLocation"],
                         "Downstream",
                         lpvm.Bias,
                         lpvm.BiasUpDownStream,
@@ -91,10 +92,9 @@ namespace SPM.Controllers
                 {
                     adjustments = client.GetLinkPivot(
                         lpvm.SelectedRouteId,
-                        _StartDate,
-                        _EndDate,
+                        startDate,
+                        endDate,
                         lpvm.CycleLength,
-                        ConfigurationManager.AppSettings["LinkPivotImageLocation"],
                         "Upstream",
                         lpvm.Bias,
                         lpvm.BiasUpDownStream,
@@ -198,11 +198,15 @@ namespace SPM.Controllers
                     pcdEndDate, pcdOptions.YAxis);
                 client.Close();
                 MOE.Common.Models.ViewModel.LinkPivotPCDsViewModel pcdModel = new MOE.Common.Models.ViewModel.LinkPivotPCDsViewModel();
-                string imagePath = ConfigurationManager.AppSettings["SPMImageLocation"] + "LinkPivot/";
-                pcdModel.ExistingChart = imagePath + display.UpstreamBeforePCDPath;
-                pcdModel.PredictedChart = imagePath + display.UpstreamAfterPCDPath;
-                pcdModel.ExistingDownChart = imagePath + display.DownstreamBeforePCDPath;
-                pcdModel.PredictedDownChart = imagePath + display.DownstreamAfterPCDPath;
+
+                var settingsRepository = MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
+                GeneralSettings settings = settingsRepository.GetGeneralSettings();
+                string imagePath = settings.ImagePath;
+
+                pcdModel.ExistingChart = display.UpstreamBeforePCDPath;
+                pcdModel.PredictedChart = display.UpstreamAfterPCDPath;
+                pcdModel.ExistingDownChart = display.DownstreamBeforePCDPath;
+                pcdModel.PredictedDownChart = display.DownstreamAfterPCDPath;
                 pcdModel.ExistingAog = Convert.ToInt32(display.ExistingAOG);
                 pcdModel.ExistingAogPercent = Math.Round(display.ExistingPAOG * 100);
                 pcdModel.PredictedAog = Convert.ToInt32(display.PredictedAOG);
@@ -216,80 +220,5 @@ namespace SPM.Controllers
             return View();
         }
 
-        // GET: LinkPivot/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: LinkPivot/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: LinkPivot/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-               
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: LinkPivot/Edit/5
-        [Authorize(Roles = "Admin")]
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: LinkPivot/Edit/5
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: LinkPivot/Delete/5
-        [Authorize(Roles = "Admin")]
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: LinkPivot/Delete/5
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

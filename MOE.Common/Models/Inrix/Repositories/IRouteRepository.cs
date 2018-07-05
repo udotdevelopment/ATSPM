@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Models.Inrix.Repositories
 {
     public interface IRouteRepository
     {
-        void Add(Models.Inrix.Route route);
-        
-        List<Models.Inrix.Route> GetRoutesByGroupID(int groupID);
+        void Add(Route route);
 
-        Models.Inrix.Route GetRouteByName(string name);
+        List<Route> GetRoutesByGroupID(int groupID);
+
+        Route GetRouteByName(string name);
     }
 }

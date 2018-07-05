@@ -1,59 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
+using MOE.Common.Business.WCFServiceLibrary;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business
 {
     public class SignalPhaseCollection
     {
-        
-
-        List<SignalPhase> signalPhaseList = new List<SignalPhase>();
-        public List<SignalPhase> SignalPhaseList
-        {
-            get { return signalPhaseList; }
-        }
-
         public SignalPhaseCollection(DateTime startDate, DateTime endDate, string signalID,
-            bool showVolume, int binSize, int metricTypeID)
+            bool showVolume, int binSize, int metricTypeId)
         {
-            MOE.Common.Models.Repositories.ISignalsRepository repository =
-                MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            var repository = SignalsRepositoryFactory.Create();
             var signal = repository.GetVersionOfSignalByDate(signalID, startDate);
-     
-            List<Models.Approach> approaches = signal.GetApproachesForSignalThatSupportMetric(metricTypeID);
+            var approaches = signal.GetApproachesForSignalThatSupportMetric(metricTypeId);
             if (signal.Approaches != null && approaches.Count > 0)
             {
-                Parallel.ForEach(approaches, approach =>
-                //foreach (Models.Approach approach in approaches)
+                //Parallel.ForEach(approaches, approach =>
+                foreach (Models.Approach approach in approaches)
                 {
-                    String direction = approach.DirectionType.Description;
-                    bool isOverlap = approach.IsProtectedPhaseOverlap;
-                    int phaseNumber = approach.ProtectedPhaseNumber;
-                    //double offset = approach.GetOffset();
-
-                    //Get the phase
-                    MOE.Common.Business.SignalPhase signalPhase = new MOE.Common.Business.SignalPhase(
-                        startDate, endDate, approach, showVolume, binSize, metricTypeID, false);
-
-                    //try not to add the same direction twice
-                    var ExsitingPhases = from MOE.Common.Business.SignalPhase phase in this.SignalPhaseList
-                                         where phase.Approach.DirectionType.Description == signalPhase.Approach.DirectionType.Description
-                                         select phase;
-
-                    if (ExsitingPhases.Count() < 1)
+                    var protectedSignalPhase = new SignalPhase(startDate, endDate, approach, showVolume, binSize,
+                        metricTypeId, false);
+                    SignalPhaseList.Add(protectedSignalPhase);
+                    if (approach.PermissivePhaseNumber.HasValue)
                     {
-                        this.SignalPhaseList.Add(signalPhase);
+                        var permissiveSignalPhase = new SignalPhase(startDate, endDate, approach, showVolume, binSize,
+                            metricTypeId, true);
+                        SignalPhaseList.Add(permissiveSignalPhase);
                     }
-
-                });
-                this.signalPhaseList = signalPhaseList.OrderBy(s => s.Approach.ProtectedPhaseNumber).ToList();
+                }//);
+                //TODO: Should we remove phases with no cycles?
+                SignalPhaseList = SignalPhaseList.OrderBy(s => s.Approach.ProtectedPhaseNumber).ToList();
             }
         }
 
- 
+        public SignalPhaseCollection(MetricOptions options, bool showVolume, int binSize)
+        {
+            var repository = SignalsRepositoryFactory.Create();
+            var signal = repository.GetVersionOfSignalByDate(options.SignalID, options.StartDate);
+            var approaches = signal.GetApproachesForSignalThatSupportMetric(options.MetricTypeID);
+            if (signal.Approaches != null && approaches.Count > 0)
+            {
+                //Parallel.ForEach(approaches, approach =>
+                foreach (Models.Approach approach in approaches)
+                {
+                    if (approach.ProtectedPhaseNumber != 0)
+                    {
+                        var protectedSignalPhase = new SignalPhase(options.StartDate, options.EndDate, approach, showVolume, binSize, options.MetricTypeID, false);
+                        SignalPhaseList.Add(protectedSignalPhase);
+                    }
+                }//);
+                //TODO: Should we remove phases with no cycles?
+                SignalPhaseList = SignalPhaseList.OrderBy(s => s.Approach.ProtectedPhaseNumber).ToList();
+            }
+        }
+
+        public List<SignalPhase> SignalPhaseList { get; } = new List<SignalPhase>();
     }
 }

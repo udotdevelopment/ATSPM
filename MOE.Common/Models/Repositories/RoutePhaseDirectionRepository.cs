@@ -1,31 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.Entity;
-using System.Data.Entity.Validation;
-using NuGet;
+using System.Reflection;
+using Microsoft.EntityFrameworkCore.Internal;
 
-namespace MOE.Common.Models.Repositories 
+namespace MOE.Common.Models.Repositories
 {
     public class RoutePhaseDirectionRepository : IRoutePhaseDirectionRepository
     {
-        MOE.Common.Models.SPM db = new SPM();
+        private readonly SPM db = new SPM();
 
-        public List<Models.RoutePhaseDirection> GetAll()
+        public List<RoutePhaseDirection> GetAll()
         {
             return db.RoutePhaseDirections.ToList();
         }
 
-        public Models.RoutePhaseDirection GetByID(int id)
+        public RoutePhaseDirection GetByID(int id)
         {
             return db.RoutePhaseDirections.Where(r => r.Id == id).FirstOrDefault();
         }
 
         public void DeleteByID(int id)
         {
-            Models.RoutePhaseDirection routePhaseDirection = db.RoutePhaseDirections.Where(r => r.Id == id).FirstOrDefault();
+            var routePhaseDirection = db.RoutePhaseDirections.Where(r => r.Id == id).FirstOrDefault();
             db.RoutePhaseDirections.Remove(routePhaseDirection);
             db.SaveChanges();
         }
@@ -33,10 +30,10 @@ namespace MOE.Common.Models.Repositories
         public void Update(RoutePhaseDirection newRoutePhaseDirection)
         {
             CheckForExistingApproach(newRoutePhaseDirection);
-            Models.RoutePhaseDirection routePhaseDirection = db.RoutePhaseDirections.Where(r => r.Id == newRoutePhaseDirection.Id).FirstOrDefault();
+            var routePhaseDirection =
+                db.RoutePhaseDirections.Where(r => r.Id == newRoutePhaseDirection.Id).FirstOrDefault();
 
-            if(routePhaseDirection != null)
-            {
+            if (routePhaseDirection != null)
                 try
                 {
                     db.Entry(routePhaseDirection).CurrentValues.SetValues(newRoutePhaseDirection);
@@ -46,29 +43,16 @@ namespace MOE.Common.Models.Repositories
                 catch (Exception e)
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
-                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().ToString(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    errorLog.QuickAdd(Assembly.GetExecutingAssembly().GetName().ToString(),
+                        GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        e.Message);
                     throw new Exception("");
                 }
-            
-            }
             else
-            {
                 Add(newRoutePhaseDirection);
-            }
         }
 
-        private void CheckForExistingApproach(RoutePhaseDirection newRoutePhaseDirection)
-        {
-            var routePhaseDirection = db.RoutePhaseDirections.Where(r => r.RouteSignalId == newRoutePhaseDirection.RouteSignalId && r.IsPrimaryApproach == newRoutePhaseDirection.IsPrimaryApproach).FirstOrDefault();
-            if (routePhaseDirection != null)
-            {
-                db.RoutePhaseDirections.Remove(routePhaseDirection);
-                db.SaveChanges();
-            }
-        }
-
-        public void Add(Models.RoutePhaseDirection newRoutePhaseDirection)
+        public void Add(RoutePhaseDirection newRoutePhaseDirection)
         {
             try
             {
@@ -77,10 +61,22 @@ namespace MOE.Common.Models.Repositories
             }
             catch (Exception e)
             {
-                    var errorLog = ApplicationEventRepositoryFactory.Create();
-                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().ToString(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
-                    throw new Exception("");
+                var errorLog = ApplicationEventRepositoryFactory.Create();
+                errorLog.QuickAdd(Assembly.GetExecutingAssembly().GetName().ToString(),
+                    GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                throw new Exception("");
+            }
+        }
+
+        private void CheckForExistingApproach(RoutePhaseDirection newRoutePhaseDirection)
+        {
+            var routePhaseDirection = db.RoutePhaseDirections.Where(r =>
+                r.RouteSignalId == newRoutePhaseDirection.RouteSignalId &&
+                r.IsPrimaryApproach == newRoutePhaseDirection.IsPrimaryApproach).FirstOrDefault();
+            if (routePhaseDirection != null)
+            {
+                db.RoutePhaseDirections.Remove(routePhaseDirection);
+                db.SaveChanges();
             }
         }
     }

@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.Spatial;
+using CsvHelper.Configuration;
 
 namespace MOE.Common.Models
 {
-    public class PreemptionAggregation
+    public class PreemptionAggregation : Aggregation
     {
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
+        public override int Id { get; set; }
 
         [Required]
-        public DateTime BinStartTime { get; set; }
+        public override DateTime BinStartTime { get; set; }
 
         [Required]
         [StringLength(10)]
@@ -22,6 +20,7 @@ namespace MOE.Common.Models
 
         [ForeignKey("Signal")]
         public int VersionId { get; set; }
+
         public virtual Signal Signal { get; set; }
 
         [Required]
@@ -32,5 +31,20 @@ namespace MOE.Common.Models
 
         [Required]
         public int PreemptServices { get; set; }
+        
+
+        public sealed class PreemptionAggregationClassMap : ClassMap<PreemptionAggregation>
+        {
+            public PreemptionAggregationClassMap()
+            {
+                Map(m => m.Signal).Ignore();
+                Map(m => m.Id).Name("Record Number");
+                Map(m => m.BinStartTime).Name("Bin Start Time");
+                Map(m => m.VersionId).Name("Version ID");
+                Map(m => m.PreemptNumber).Name("Preempt Number");
+                Map(m => m.PreemptRequests).Name("Preempt Requests");
+                Map(m => m.PreemptServices).Name("Preempt Services");
+            }
+        }
     }
 }

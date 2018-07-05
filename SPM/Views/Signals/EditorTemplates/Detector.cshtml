@@ -47,6 +47,13 @@
                         @Html.ValidationMessageFor(model => model.DetectionHardwareID, "", new { id = "DetectionHardwareID-error", @class = "text-danger" })
                     </div>
                 </div>
+                <div class="">
+                    @Html.LabelFor(model => model.LatencyCorrection, htmlAttributes: new { @class = "control-label" })
+                    <div class="">
+                        @Html.EditorFor(model => model.LatencyCorrection, new { htmlAttributes = new { @class = "form-control"} })
+                        @Html.ValidationMessageFor(model => model.LatencyCorrection, "", new { id = "LatencyCorrection-error", @class = "text-danger" })
+                    </div>
+                </div>
                 <div id="LaneNumber_@Model.ID" class="">
                     @Html.LabelFor(model => model.LaneNumber, htmlAttributes: new { @class = "control-label" })
                     <div class="">
@@ -68,7 +75,7 @@
                         @Html.ValidationMessageFor(model => model.LaneTypeID, "", new { id = "LaneTypeID-error", @class = "text-danger" })
                     </div>
                 </div>
-                @{
+                @*@{
                     bool shouldBeHidden = true;
 
                     foreach (var detTypeId in Model.DetectionTypeIDs)
@@ -82,10 +89,10 @@
                             shouldBeHidden = false;
                         }
                     }
-                }
+                }*@
 
-                @*<div id="MPHDiv_@Model.ID" class="@(Model.DetectionTypeIDs.Contains(2) ? "" : "hidden"), @(Model.DetectionTypeIDs.Contains(3) ? "" : "hidden")">*@
-                <div id="MPHDiv_@Model.ID" class="@(shouldBeHidden ? "" : "hidden"), )">
+                <div id="MPHDiv_@Model.ID" class="@(Model.DetectionTypeIDs.Contains(2) ? "" : "hidden"), @(Model.DetectionTypeIDs.Contains(3) ? "" : "hidden")">
+                @*<div id="MPHDiv_@Model.ID" class="@(shouldBeHidden ? "" : "hidden"), )">*@
                     <label for="mph_@Model.ID" class="control-label mph">MPH (Advanced Count, Advanced Speed)</label>
                     <input id="mph_@Model.ID" class="form-control mph_@Model.ApproachID" onkeyup="SyncText(this, @Model.ApproachID)" type="text" value="@Model.Approach.MPH" />
                 </div>

@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
     public interface IDetectionTypeRepository
     {
-        List<Models.DetectionType> GetAllDetectionTypes();
-        List<Models.DetectionType> GetAllDetectionTypesNoBasic();
+        List<DetectionType> GetAllDetectionTypes();
+
+        List<DetectionType> GetAllDetectionTypesNoBasic();
+
         //List<Models.Repositories.DetectionTypeRepository.DetectetorWithMetricAbbreviation> GetAllDetectionTypesWithSupportedMetricAbbreviations();
-        Models.DetectionType GetDetectionTypeByDetectionTypeID(int detectionTypeID);
-        void Update(MOE.Common.Models.DetectionType detectionType);
-        void Add(MOE.Common.Models.DetectionType detectionType);
-        void Remove(MOE.Common.Models.DetectionType detectionType);
+        DetectionType GetDetectionTypeByDetectionTypeID(int detectionTypeID);
+
+        void Update(DetectionType detectionType);
+        void Add(DetectionType detectionType);
+        void Remove(DetectionType detectionType);
     }
 }

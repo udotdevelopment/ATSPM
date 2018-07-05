@@ -51,12 +51,21 @@ namespace SPM.Controllers.Tests
         private MOE.Common.Models.Repositories.IMetricTypeRepository _metricTypeRepository =
             new InMemoryMetricTypeRepository(Db);
 
-                   
-    
 
-    [TestMethod()]
+        [TestInitialize]
+        public void Initialize()
+        {
+            MOE.Common.Models.Repositories.DetectorRepositoryFactory.SetDetectorRepository(_detectorRepository);
+            MOE.Common.Models.Repositories.DirectionTypeRepositoryFactory.SetDirectionsRepository(_directionTypeRepository);
+            MOE.Common.Models.Repositories.DetectionTypeRepositoryFactory.SetDetectionTypeRepository(_detectionTypeRepository);
+            MOE.Common.Models.Repositories.SignalsRepositoryFactory.SetSignalsRepository(_signalsRepository);
+        }
+
+        [TestMethod()]
         public void IndexTest()
         {
+            Db.ClearTables();
+
             var sc = new SignalsController(_controllerTypeRepository, _regionRepository, _directionTypeRepository,
                 _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
                 _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
@@ -71,6 +80,8 @@ namespace SPM.Controllers.Tests
         [TestMethod()]
         public void SignalDetailTest()
         {
+            Db.ClearTables();
+
             var sc = new SignalsController(_controllerTypeRepository, _regionRepository, _directionTypeRepository,
                 _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
                 _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
@@ -85,6 +96,8 @@ namespace SPM.Controllers.Tests
         [TestMethod()]
         public void AddApproachTest()
         {
+            Db.ClearTables();
+
             var sc = new SignalsController(_controllerTypeRepository, _regionRepository, _directionTypeRepository,
                 _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
                 _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
@@ -113,6 +126,8 @@ namespace SPM.Controllers.Tests
         [TestMethod()]
         public void CopyApproachTest()
         {
+            Db.ClearTables();
+
             var sc = new SignalsController(_controllerTypeRepository, _regionRepository, _directionTypeRepository,
                 _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
                 _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
@@ -121,7 +136,7 @@ namespace SPM.Controllers.Tests
 
             var sig = (Signal)sigresult.ViewData.Model;
 
-            var apprResult =  sc.AddApproach("1001") as PartialViewResult;
+            var apprResult =  sc.AddApproach(sig.VersionID.ToString()) as PartialViewResult;
             var appr = (Approach)apprResult.ViewData.Model;
 
             MOE.Common.Models.Repositories.ApproachRepositoryFactory.SetApproachRepository(_approachRepository);
@@ -169,7 +184,34 @@ namespace SPM.Controllers.Tests
         [TestMethod()]
         public void CopyDetectorTest()
         {
-            Assert.Fail();
+            Db.ClearTables();
+
+            var sc = new SignalsController(_controllerTypeRepository, _regionRepository, _directionTypeRepository,
+                _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
+                _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
+
+            MOE.Common.Models.Repositories.DetectorRepositoryFactory.SetDetectorRepository(_detectorRepository);
+            MOE.Common.Models.Repositories.DirectionTypeRepositoryFactory.SetDirectionsRepository(_directionTypeRepository);
+            MOE.Common.Models.Repositories.DetectionTypeRepositoryFactory.SetDetectionTypeRepository(_detectionTypeRepository);
+
+           var sigresult = sc.Create("1001") as PartialViewResult;
+
+            var sig = (Signal)sigresult.ViewData.Model;
+            sig.Approaches = new List<Approach>();
+            MOE.Common.Models.Repositories.ApproachRepositoryFactory.SetApproachRepository(_approachRepository);
+            var apprResult = sc.AddApproach(sig.VersionID.ToString()) as PartialViewResult;
+
+            var appr = (Approach)apprResult.ViewData.Model;
+
+            var detResult = sc.AddDetector(sig.VersionID, appr.ApproachID, appr.Index) as PartialViewResult;
+
+            var detOrig = (Detector)detResult.ViewData.Model;
+
+            var copyResult = sc.CopyDetector(detOrig.ID, sig.VersionID, appr.ApproachID, appr.Index) as PartialViewResult;
+
+            var detCopy = (Detector)copyResult.ViewData.Model;
+
+            Assert.IsTrue(detCopy.DetectorID== detOrig.DetectorID);
         }
 
         [TestMethod()]
@@ -263,7 +305,7 @@ namespace SPM.Controllers.Tests
 
 
         [TestMethod()]
-        public void CreateExistingSgnalIdShouldReturnErrorMessage()
+        public void CreateExistingSignalIdShouldReturnErrorMessage()
         {
 
             var sc = new SignalsController(_controllerTypeRepository, _regionRepository, _directionTypeRepository,
@@ -292,11 +334,43 @@ namespace SPM.Controllers.Tests
         [TestMethod()]
         public void AddNewVersionOfExistingSignal()
         {
+            Db.ClearTables();
             var sc = new SignalsController(_controllerTypeRepository, _regionRepository, _directionTypeRepository,
                 _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
                 _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
 
-            sc.Create("1001"); 
+            var createResults = sc.Create("1001");
+
+            var origversion = createResults;
+
+            var newVersionResults = sc.AddNewVersion("1001"); 
+
+            
+
+            //if (results != null)
+            //{
+            //        Assert.IsTrue(results.Count == 2);
+            //        Assert.AreEqual(results.First().SignalID, results.Last().SignalID);
+            //    Assert.AreNotEqual(results.First().VersionID, results.Last().VersionID);
+            //}
+            //else
+            //{
+
+            //    Assert.Fail();
+            //}
+
+
+        }
+
+        [TestMethod()]
+        public void AddNewVersionOfExistingSignalShouldCopyDetectionTypes()
+        {
+            Db.ClearTables();
+            var sc = new SignalsController(_controllerTypeRepository, _regionRepository, _directionTypeRepository,
+                _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
+                _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
+
+            sc.Create("1001");
 
             sc.AddNewVersion("1001");
 
@@ -304,9 +378,11 @@ namespace SPM.Controllers.Tests
 
             if (results != null)
             {
-                    Assert.IsTrue(results.Count == 2);
-                    Assert.AreEqual(results.First().SignalID, results.Last().SignalID);
+                Assert.IsTrue(results.Count == 2);
+                Assert.AreEqual(results.First().SignalID, results.Last().SignalID);
                 Assert.AreNotEqual(results.First().VersionID, results.Last().VersionID);
+
+                Assert.AreEqual(results.First().Approaches.First().Detectors.First().DetectionTypes, results.Last().Approaches.Last().Detectors.Last().DetectionTypes);
             }
             else
             {
@@ -336,19 +412,30 @@ namespace SPM.Controllers.Tests
         [TestMethod()]
         public void CopyTest()
         {
-            Assert.Fail();
+            var sc = new SignalsController(_controllerTypeRepository, _regionRepository, _directionTypeRepository,
+                _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
+                _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
+
+            sc.Create("1001");
+
+            var result = sc.Copy("1001", "2002") as PartialViewResult;
+
+            var sigCopy = result.Model as Signal;
+
+            Assert.IsTrue(sigCopy.SignalID == "2002");
         }
 
         [TestMethod()]
         public void EditTest()
         {
-            
+            Db.ClearTables();
 
             var sc = new SignalsController(_controllerTypeRepository, _regionRepository, _directionTypeRepository,
                 _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
                 _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
 
          
+            sc.ControllerContext = new ControllerContext();
 
             var signal = sc.Create("1001") as PartialViewResult;
 
@@ -366,23 +453,11 @@ namespace SPM.Controllers.Tests
             }
         }
 
-        [TestMethod()]
-        public void _SignalPartialTest()
-        {
-            Assert.Fail();
-        }
 
-        [TestMethod()]
-        public void SignalDetailResultTest()
-        {
-            Assert.Fail();
-        }
 
-        [TestMethod()]
-        public void EditTest1()
-        {
-            Assert.Fail();
-        }
+
+
+
 
         [TestMethod()]
         public void DeleteTest()
@@ -411,32 +486,9 @@ namespace SPM.Controllers.Tests
             Assert.IsTrue(results1.Count == 0);
         }
 
-        [TestMethod()]
-        public void DeleteConfirmedTest()
-        {
-            Assert.Fail();
-        }
 
-        [TestMethod()]
-        public void GetListOfVersionsTest()
-        {
-            var sc = new SignalsController(_controllerTypeRepository, _regionRepository, _directionTypeRepository,
-                _movementTypeRepository, _laneTypeRepository, _detectionHardwareRepository, _signalsRepository,
-                _detectorRepository, _detectionTypeRepository, _approachRepository, _metricTypeRepository);
 
-            sc.Create("1001");
 
-            var result = sc.AddNewVersion("1001") as PartialViewResult;
-
-            if (result != null)
-            {
-                SelectList versionList = result.ViewBag.VersionList;
-
-             
-
-                Assert.IsTrue(versionList.Count()>0);
-            }
-        }
     }
 
    

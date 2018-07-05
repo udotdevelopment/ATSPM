@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<MOE.Common.Models.Route>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Route Configuration";
 }
 
-<h2>Index</h2>
+<h2>Route Configuration</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -14,7 +14,7 @@
         <th>
             @Html.DisplayNameFor(model => model.RouteName)
         </th>
-        <th></th>
+        <th>Edit/Delete</th>
     </tr>
 
 @foreach (var item in Model) {

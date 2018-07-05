@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
     public interface IRouteSignalsRepository
     {
-        List<Models.RouteSignal> GetAllRoutesDetails();
-        List<Models.RouteSignal> GetByRouteID(int routeID);
+        List<RouteSignal> GetAllRoutesDetails();
+        List<RouteSignal> GetByRouteID(int routeID);
         void DeleteByRouteID(int routeID);
+        void DeleteById(int id);
         void UpdateByRouteAndApproachID(int routeID, string signalId, int newOrderNumber);
-        void Add(Models.RouteSignal newRouteDetail);
-        Models.RouteSignal GetByRouteSignalId(int id);
+        void Add(RouteSignal newRouteDetail);
+        RouteSignal GetByRouteSignalId(int id);
+        void MoveRouteSignalUp(int routeId, int routeSignalId);
+        void MoveRouteSignalDown(int routeId, int routeSignalId);
     }
-
 }

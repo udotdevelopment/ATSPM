@@ -1,29 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/MOE.Common.Business.WCFServiceLibrary" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.WCFServiceLibrary" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:complexType name="ApproachDelayOptions">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.FilterExtensions" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/System.Web.UI.DataVisualization.Charting" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.Bins" />
+  <xs:complexType name="PCDOptions">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:MetricOptions">
         <xs:sequence>
-          <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="BinSizeList" nillable="true" type="q1:ArrayOfint" />
           <xs:element minOccurs="0" name="SelectedBinSize" type="xs:int" />
-          <xs:element minOccurs="0" name="ShowDelayPerVehicle" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowPlansStatistics" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowTotalDelayPerHour" type="xs:boolean" />
+          <xs:element minOccurs="0" name="SelectedDotSize" type="xs:int" />
+          <xs:element minOccurs="0" name="SelectedLineSize" type="xs:int" />
+          <xs:element minOccurs="0" name="ShowArrivalsOnGreen" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowPlanStatistics" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowVolumes" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ApproachDelayOptions" nillable="true" type="tns:ApproachDelayOptions" />
+  <xs:element name="PCDOptions" nillable="true" type="tns:PCDOptions" />
   <xs:complexType name="MetricOptions">
     <xs:sequence>
       <xs:element minOccurs="0" name="EndDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="MetricFileLocation" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MetricTypeID" type="xs:int" />
       <xs:element minOccurs="0" name="MetricWebPath" nillable="true" type="xs:string" />
-      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ReturnList" nillable="true" type="q2:ArrayOfstring" />
-      <xs:element minOccurs="0" name="SignalId" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ReturnList" nillable="true" type="q1:ArrayOfstring" />
+      <xs:element minOccurs="0" name="SignalID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Y2AxisMax" nillable="true" type="xs:double" />
       <xs:element minOccurs="0" name="Y2AxisMin" type="xs:double" />
       <xs:element minOccurs="0" name="YAxisMax" nillable="true" type="xs:double" />
@@ -35,8 +39,9 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:MetricOptions">
         <xs:sequence>
-          <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="BinSizeList" nillable="true" type="q3:ArrayOfint" />
+          <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="BinSizeList" nillable="true" type="q2:ArrayOfint" />
           <xs:element minOccurs="0" name="SelectedBinSize" type="xs:int" />
+          <xs:element minOccurs="0" name="ShowDataTable" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowLaneVolumes" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowTotalVolumes" type="xs:boolean" />
         </xs:sequence>
@@ -48,7 +53,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:MetricOptions">
         <xs:sequence>
-          <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="BinSizeList" nillable="true" type="q4:ArrayOfint" />
+          <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="BinSizeList" nillable="true" type="q3:ArrayOfint" />
           <xs:element minOccurs="0" name="SelectedBinSize" type="xs:int" />
           <xs:element minOccurs="0" name="ShowPlansStatistics" type="xs:boolean" />
         </xs:sequence>
@@ -56,20 +61,20 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="AoROptions" nillable="true" type="tns:AoROptions" />
-  <xs:complexType name="PCDOptions">
+  <xs:complexType name="ApproachDelayOptions">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:MetricOptions">
         <xs:sequence>
+          <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="BinSizeList" nillable="true" type="q4:ArrayOfint" />
           <xs:element minOccurs="0" name="SelectedBinSize" type="xs:int" />
-          <xs:element minOccurs="0" name="SelectedDotSize" type="xs:int" />
-          <xs:element minOccurs="0" name="ShowArrivalsOnGreen" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowPlansStatistics" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowVolumes" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowDelayPerVehicle" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowPlanStatistics" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowTotalDelayPerHour" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="PCDOptions" nillable="true" type="tns:PCDOptions" />
+  <xs:element name="ApproachDelayOptions" nillable="true" type="tns:ApproachDelayOptions" />
   <xs:complexType name="PhaseTerminationOptions">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:MetricOptions">
@@ -133,6 +138,7 @@
         <xs:sequence>
           <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="BinSizeList" nillable="true" type="q6:ArrayOfint" />
           <xs:element minOccurs="0" name="SelectedBinSize" type="xs:int" />
+          <xs:element minOccurs="0" name="Show15Percentile" type="xs:boolean" />
           <xs:element minOccurs="0" name="Show85Percentile" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowAverageSpeed" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowPlansStatistics" type="xs:boolean" />
@@ -187,8 +193,8 @@
           <xs:element minOccurs="0" name="SelectedBinSize" type="xs:int" />
           <xs:element minOccurs="0" name="ShowAdvanceDetection" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowDirectionalSplits" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowNBWBVolume" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowSBEBVolume" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowNbEbVolume" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowSbWbVolume" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowTMCDetection" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowTotalVolume" type="xs:boolean" />
         </xs:sequence>
@@ -196,4 +202,169 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ApproachVolumeOptions" nillable="true" type="tns:ApproachVolumeOptions" />
+  <xs:complexType name="SignalAggregationMetricOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:MetricOptions">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AggregatedDataTypes" nillable="true" type="tns:ArrayOfAggregatedDataType" />
+          <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/MOE.Common.Business.FilterExtensions" minOccurs="0" name="FilterDirections" nillable="true" type="q8:ArrayOfFilterDirection" />
+          <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/MOE.Common.Business.FilterExtensions" minOccurs="0" name="FilterMovements" nillable="true" type="q9:ArrayOfFilterMovement" />
+          <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/MOE.Common.Business.FilterExtensions" minOccurs="0" name="FilterSignals" nillable="true" type="q10:ArrayOfFilterSignal" />
+          <xs:element minOccurs="0" name="SelectedAggregatedDataType" nillable="true" type="tns:AggregatedDataType" />
+          <xs:element minOccurs="0" name="SelectedAggregationType" type="tns:AggregationType" />
+          <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/System.Web.UI.DataVisualization.Charting" minOccurs="0" name="SelectedChartType" type="q11:SeriesChartType" />
+          <xs:element minOccurs="0" name="SelectedDimension" type="tns:Dimension" />
+          <xs:element minOccurs="0" name="SelectedSeries" type="tns:SeriesType" />
+          <xs:element minOccurs="0" name="SelectedXAxisType" type="tns:XAxisType" />
+          <xs:element minOccurs="0" name="SeriesWidth" type="xs:int" />
+          <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/MOE.Common.Business.Bins" minOccurs="0" name="TimeOptions" nillable="true" type="q12:BinFactoryOptions" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SignalAggregationMetricOptions" nillable="true" type="tns:SignalAggregationMetricOptions" />
+  <xs:complexType name="ArrayOfAggregatedDataType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AggregatedDataType" nillable="true" type="tns:AggregatedDataType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAggregatedDataType" nillable="true" type="tns:ArrayOfAggregatedDataType" />
+  <xs:complexType name="AggregatedDataType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DataName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AggregatedDataType" nillable="true" type="tns:AggregatedDataType" />
+  <xs:simpleType name="AggregationType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Sum" />
+      <xs:enumeration value="Average" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="AggregationType" nillable="true" type="tns:AggregationType" />
+  <xs:simpleType name="Dimension">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="TwoDimensional" />
+      <xs:enumeration value="ThreeDimensional" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Dimension" nillable="true" type="tns:Dimension" />
+  <xs:simpleType name="SeriesType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Signal" />
+      <xs:enumeration value="PhaseNumber" />
+      <xs:enumeration value="Direction" />
+      <xs:enumeration value="Route" />
+      <xs:enumeration value="Detector" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="SeriesType" nillable="true" type="tns:SeriesType" />
+  <xs:simpleType name="XAxisType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Time" />
+      <xs:enumeration value="TimeOfDay" />
+      <xs:enumeration value="Direction" />
+      <xs:enumeration value="Phase" />
+      <xs:enumeration value="Signal" />
+      <xs:enumeration value="Detector" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="XAxisType" nillable="true" type="tns:XAxisType" />
+  <xs:complexType name="ApproachAggregationMetricOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SignalAggregationMetricOptions">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ApproachAggregationMetricOptions" nillable="true" type="tns:ApproachAggregationMetricOptions" />
+  <xs:complexType name="ApproachSplitFailAggregationOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ApproachAggregationMetricOptions">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ApproachSplitFailAggregationOptions" nillable="true" type="tns:ApproachSplitFailAggregationOptions" />
+  <xs:complexType name="SignalPreemptionAggregationOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SignalAggregationMetricOptions">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SignalPreemptionAggregationOptions" nillable="true" type="tns:SignalPreemptionAggregationOptions" />
+  <xs:complexType name="SignalPriorityAggregationOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SignalAggregationMetricOptions">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SignalPriorityAggregationOptions" nillable="true" type="tns:SignalPriorityAggregationOptions" />
+  <xs:complexType name="ApproachPcdAggregationOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ApproachAggregationMetricOptions">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ApproachPcdAggregationOptions" nillable="true" type="tns:ApproachPcdAggregationOptions" />
+  <xs:complexType name="ApproachYellowRedActivationsAggregationOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ApproachAggregationMetricOptions">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ApproachYellowRedActivationsAggregationOptions" nillable="true" type="tns:ApproachYellowRedActivationsAggregationOptions" />
+  <xs:complexType name="DetectorAggregationMetricOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ApproachAggregationMetricOptions">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DetectorAggregationMetricOptions" nillable="true" type="tns:DetectorAggregationMetricOptions" />
+  <xs:complexType name="DetectorVolumeAggregationOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DetectorAggregationMetricOptions">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DetectorVolumeAggregationOptions" nillable="true" type="tns:DetectorVolumeAggregationOptions" />
+  <xs:complexType name="ApproachSpeedAggregationOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ApproachAggregationMetricOptions">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ApproachSpeedAggregationOptions" nillable="true" type="tns:ApproachSpeedAggregationOptions" />
+  <xs:complexType name="ApproachCycleAggregationOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ApproachAggregationMetricOptions">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ApproachCycleAggregationOptions" nillable="true" type="tns:ApproachCycleAggregationOptions" />
+  <xs:complexType name="SignalEventCountAggregationOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SignalAggregationMetricOptions">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SignalEventCountAggregationOptions" nillable="true" type="tns:SignalEventCountAggregationOptions" />
+  <xs:complexType name="ApproachEventCountAggregationOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ApproachAggregationMetricOptions">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ApproachEventCountAggregationOptions" nillable="true" type="tns:ApproachEventCountAggregationOptions" />
 </xs:schema>

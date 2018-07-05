@@ -33,6 +33,11 @@ namespace MOE.CommonTests.Models
             throw new NotImplementedException();
         }
 
+        public bool CheckReportAvialbilityByDetector(Detector gd, int metricID)
+        {
+            throw new NotImplementedException();
+        }
+
         public Detector GetDetectorByDetectorID(string DetectorID)
         {
             var det = _db.Detectors.Where(d => d.DetectorID == DetectorID).FirstOrDefault();
@@ -41,12 +46,14 @@ namespace MOE.CommonTests.Models
 
         public Detector GetDetectorByID(int ID)
         {
-            throw new NotImplementedException();
+            var det = _db.Detectors.Where(d => d.ID == ID).FirstOrDefault();
+            return det;
         }
 
         public List<Detector> GetDetectorsBySignalID(string SignalID)
         {
-            throw new NotImplementedException();
+            List < MOE.Common.Models.Detector > dets = _db.Signals.Find(s=> s.SignalID == SignalID).GetDetectorsForSignal();
+            return dets;
         }
 
         public List<Detector> GetDetectorsBySignalIDAndMetricType(string SignalID, int MetricID)
@@ -69,6 +76,11 @@ namespace MOE.CommonTests.Models
             return max;
         }
 
+        public List<Detector> GetDetectorsByIds(List<int> excludedDetectorIds)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Remove(Detector Detector)
         {
             throw new NotImplementedException();
@@ -80,6 +92,11 @@ namespace MOE.CommonTests.Models
         }
 
         public void Update(Detector Detector)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Common.Models.SPM GetContext()
         {
             throw new NotImplementedException();
         }

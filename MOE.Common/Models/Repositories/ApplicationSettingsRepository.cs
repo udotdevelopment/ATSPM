@@ -1,37 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Models.Repositories
 {
     public class ApplicationSettingsRepository : IApplicationSettingsRepository
     {
-        Models.SPM db = new Models.SPM();
+        private SPM db = new SPM();
 
         public ApplicationSettingsRepository()
         {
         }
-        public ApplicationSettingsRepository(Models.SPM context)
+
+        public ApplicationSettingsRepository(SPM context)
         {
             db = context;
         }
-        public void SetApplicationSettingsRepository(Models.SPM context)
-        {
-            db = context;
-        }
-        public Models.WatchDogApplicationSettings GetWatchDogSettings()
+
+        public WatchDogApplicationSettings GetWatchDogSettings()
         {
             return db.WatchdogApplicationSettings.First();
         }
-        public void Save(Models.WatchDogApplicationSettings watchDogApplicationSettings)
+
+        public DatabaseArchiveSettings GetDatabaseArchiveSettings()
+        {
+            var archiveSettings = db.DatabaseArchiveSettings.First();
+            return archiveSettings;
+        }
+
+        public GeneralSettings GetGeneralSettings()
+        {
+            return db.GeneralSettings.First();
+        }
+
+        public int GetRawDataLimit()
+        {
+            GeneralSettings gs = GetGeneralSettings();
+            int limit = 0;
+            if (gs.RawDataCountLimit != null)
+            {
+                limit = (int) gs.RawDataCountLimit;
+            }
+            return limit;
+        }
+
+        public void Save(DatabaseArchiveSettings databaseArchiveSettings)
+        {
+            db.Entry(databaseArchiveSettings).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+
+        public void Save(WatchDogApplicationSettings watchDogApplicationSettings)
         {
             db.Entry(watchDogApplicationSettings).State = EntityState.Modified;
-                db.SaveChanges();
+            db.SaveChanges();
         }
-        
 
+        public void Save(GeneralSettings generalSettings)
+        {
+            db.Entry(generalSettings).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+
+        public void SetApplicationSettingsRepository(SPM context)
+        {
+            db = context;
+        }
     }
 }

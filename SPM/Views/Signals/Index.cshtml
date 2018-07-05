@@ -1,14 +1,13 @@
 ﻿@model MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel
 
 @{
-    ViewBag.Title = "SPM Configuration Tool";
+    ViewBag.Title = "ATSPM Configuration Tool";
 }
 @Html.AntiForgeryToken()
-<h2>SPM Configuration Tool</h2>
+<h2>ATSPM Configuration Tool</h2>
 
 <p>
     <a href="javascript:CreateNewSignal()">Create New Signal</a>
-
 </p>
 
 @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
@@ -42,7 +41,7 @@
         var urlpathGetConfigurationTable = '@Url.Action("Index", "ConfigurationTable")';
         var urlpathGetConfigurationTableForVersion = '@Url.Action("IndexByVersion", "ConfigurationTable")';
         var urlpathGetVersionEdit = '@Url.Action("EditVersion", "Signals")';
-        var urlpathCopyVersion = '@Url.Action("CopyVersion", "Signals")';
+        var urlpathCopyVersion = '@Url.Action("AddNewVersion", "Signals")';
         var urlpathDeleteVersion = '@Url.Action("DeleteVersion", "Signals")';
     </script>
 }

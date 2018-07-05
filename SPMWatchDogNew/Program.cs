@@ -28,7 +28,7 @@ namespace SPMWatchDogNew
                 catch (Exception ex)
                 {
                     MOE.Common.Models.Repositories.IApplicationEventRepository errorRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "TransferFiles", MOE.Common.Models.ApplicationEvent.SeverityLevels.High, ex.Message);
+                    errorRepository.QuickAdd("SPMWatchdog", "WatchDog", "WatchDogScan with args", MOE.Common.Models.ApplicationEvent.SeverityLevels.High, ex.Message);
                 }
             }
             else
@@ -42,7 +42,7 @@ namespace SPMWatchDogNew
                 catch (Exception ex)
                 {
                     MOE.Common.Models.Repositories.IApplicationEventRepository errorRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "TransferFiles", MOE.Common.Models.ApplicationEvent.SeverityLevels.High, ex.Message);
+                    errorRepository.QuickAdd("SPMWatchdog", "WatchDog", "WatchDogScan no args", MOE.Common.Models.ApplicationEvent.SeverityLevels.High, ex.Message);
                 }
             }
 

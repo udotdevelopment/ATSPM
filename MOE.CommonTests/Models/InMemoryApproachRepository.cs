@@ -53,7 +53,14 @@ namespace MOE.CommonTests.Models
 
         public Approach FindAppoachByVersionIdPhaseOverlapAndDirection(int versionId, int phaseNumber, bool isOverlap, int directionTypeId)
         {
-            throw new NotImplementedException();
+            var g = (from r in _db.Approaches
+                where r.VersionID == versionId
+                      && r.ProtectedPhaseNumber == phaseNumber
+                      && r.IsProtectedPhaseOverlap == isOverlap
+                      && r.DirectionTypeID == directionTypeId
+                select r).FirstOrDefault();
+
+            return g;
         }
 
         public List<Approach> GetAllApproaches()
@@ -91,6 +98,11 @@ namespace MOE.CommonTests.Models
         public void Remove(int approachID)
         {
             throw new NotImplementedException();
+        }
+
+        public List<Approach> GetApproachesByIds(List<int> excludedApproachIds)
+        {
+            return _db.Approaches.Where(a => excludedApproachIds.Contains(a.ApproachID)).ToList();
         }
     }
 }
