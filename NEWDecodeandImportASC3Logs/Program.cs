@@ -138,7 +138,7 @@ namespace NEWDecodeandImportASC3Logs
                               {
 
 
-                                  if (MOE.Common.Business.Signal.BulktoDB(elTable, Options) && Properties.Settings.Default.DeleteFile)
+                                  if (MOE.Common.Business.Signal.BulktoDb(elTable, Options) && Properties.Settings.Default.DeleteFile)
                                   {
 
 

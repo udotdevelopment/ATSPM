@@ -31,7 +31,7 @@ namespace MOE.Common.Business
 
         public string Region { get; set; }
 
-        public string SignalID { get; set; }
+        public string SignalId { get; set; }
 
         public string Longitude { get; set; }
 
@@ -39,206 +39,171 @@ namespace MOE.Common.Business
 
         public int ControllerType { get; set; }
 
-        public string FTPPath { get; set; }
+        public string FtpPath { get; set; }
 
-        public int SNMPPort { get; set; }
+        public int SnmpPort { get; set; }
 
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType()) return false;
             var y = (Signal) obj;
-            return this != null && y != null && SignalID == y.SignalID;
+            return this != null && y != null && SignalId == y.SignalId;
         }
 
         public override int GetHashCode()
         {
-            return this == null ? 0 : SignalID.GetHashCode();
+            return this == null ? 0 : SignalId.GetHashCode();
         }
 
 
         public override string ToString()
         {
-            var signalName = SignalID + " : " + PrimaryName + " @ " + SecondaryName;
+            var signalName = SignalId + " : " + PrimaryName + " @ " + SecondaryName;
 
             return signalName;
             //return base.ToString();
         }
 
-        public static void TransferFiles(FTPSClient FTP, string FTPFile, string LocalDir, string RemoteDir,
-            string Server)
+        public static void TransferFiles(FTPSClient ftp, string ftpFile, string localDir, string remoteDir,
+            string server)
         {
-            FTP.SetCurrentDirectory("..");
-            FTP.SetCurrentDirectory(RemoteDir);
-            Console.WriteLine("Transfering " + FTPFile + " from " + RemoteDir + " on " + Server + " to " + LocalDir);
+            ftp.SetCurrentDirectory("..");
+            ftp.SetCurrentDirectory(remoteDir);
+            Console.WriteLine(@"Transfering " + ftpFile + @" from " + remoteDir + @" on " + server + @" to " + localDir);
             //chek to see if the local dir exists.
             //if not, make it.
-            if (Directory.Exists(LocalDir))
+            if (Directory.Exists(localDir))
             {
             }
             else
             {
-                Directory.CreateDirectory(LocalDir);
+                Directory.CreateDirectory(localDir);
             }
-            FTP.GetFile(FTPFile, LocalDir + FTPFile);
+            ftp.GetFile(ftpFile, localDir + ftpFile);
         }
 
 
-        public static bool GetCurrentRecords(string Server, string SignalId, string User, string Password,
-            string LocalDir, string RemoteDir, bool DeleteFilesAfterFTP, int SNMPRetry, int SNMPTimeout, int SNMPPort,
-            bool ImportAfterFTP, bool activemode, int waitbetweenrecords, BulkCopyOptions Options,
-            int FTPTimeout) //, CancellationToken Token)
+        public static bool GetCurrentRecords(string server, string signalId, string user, string password,
+            string localDir, string remoteDir, bool deleteFilesAfterFtp, int snmpRetry, int snmpTimeout, int snmpPort,
+            bool importAfterFtp, bool activemode, int waitbetweenrecords, BulkCopyOptions options,
+            int ftpTimeout) //, CancellationToken Token)
         {
             var recordsComplete = false;
-
             var errorRepository = ApplicationEventRepositoryFactory.Create();
-
+            bool skipCurrentLog = true;  // TODO: add to config file
 
             //Initialize the FTP object
-            var RetryFiles = new List<string>();
-            var FTP = new FTPSClient();
-            var Cred = new NetworkCredential(User, Password);
-            var SSLMode = ESSLSupportMode.ClearText;
-            var DM = EDataConnectionMode.Passive;
+            var retryFiles = new List<string>();
+            var ftp = new FTPSClient();
+            var cred = new NetworkCredential(user, password);
+            var sslMode = ESSLSupportMode.ClearText;
+            var dm = EDataConnectionMode.Passive;
             if (activemode)
-                DM = EDataConnectionMode.Active;
-
-
+                dm = EDataConnectionMode.Active;
             var connected = false;
-            var FilePattern = ".dat";
-
-
+            var filePattern = ".dat";
             try
             {
                 try
                 {
                     var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(30));
                     var token2 = tokenSource.Token;
-
                     Task task = Task.Factory.StartNew(
-                        () => FTP.Connect(Server, 21, Cred, SSLMode, null, null, 0, 0, 0, FTPTimeout, true, DM)
+                        () => ftp.Connect(server, 21, cred, sslMode, null, null, 0, 0, 0, ftpTimeout, true, dm)
                         , token2);
-
                     task.Wait(token2);
-
                     if (token2.IsCancellationRequested)
                         token2.ThrowIfCancellationRequested();
                 }
                 catch (AggregateException)
                 {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "ConnectToController",
-                        ApplicationEvent.SeverityLevels.Medium, "The connection task timed out for signal " + Server);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + "The connection task timed out");
+                    Console.WriteLine(signalId + " @ " + server + " - " + "The connection task timed out");
                 }
-                {
-                    Console.WriteLine("Connection Failure");
-                }
-
                 connected = true;
             }
             //If there is an error, Print the error and go on to the next file.
             catch (FTPException ex)
             {
-                errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "ConnectToController",
-                    ApplicationEvent.SeverityLevels.Medium, Server + " " + ex.Message);
-                Console.WriteLine(ex.Message);
+                errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + ex.Message);
+                Console.WriteLine(signalId + " @ " + server + " - " + ex.Message);
             }
             catch (AggregateException)
             {
-                Console.WriteLine("Connection Failure");
+                errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + "Connection Failure - One or more errors occured");
+                Console.WriteLine(signalId + " @ " + server + " - " + "Connection Failure - One or more errors occured before connection established");
             }
-
             catch (SocketException ex)
             {
-                errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "ConnectToController",
-                    ApplicationEvent.SeverityLevels.Medium, Server + " " + ex.Message);
-                Console.WriteLine(ex.Message);
+                errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + ex.Message);
+                Console.WriteLine(signalId + " @ " + server + " - " + ex.Message);
             }
             catch (IOException ex)
             {
-                errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "ConnectToController",
-                    ApplicationEvent.SeverityLevels.Medium, Server + " " + ex.Message);
-                Console.WriteLine(ex.Message);
+                errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + ex.Message);
+                Console.WriteLine(signalId + " @ " + server + " - " + ex.Message);
             }
             catch (Exception ex)
             {
-                errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "ConnectToController",
-                    ApplicationEvent.SeverityLevels.Medium, Server + " " + ex.Message);
-                Console.WriteLine(ex.Message);
+                errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + ex.Message);
+                Console.WriteLine(signalId + " @ " + server + " - " + ex.Message);
             }
 
             if (connected)
             {
                 try
                 {
-                    //if (Token.IsCancellationRequested)
-                    //{
-                    //    Token.ThrowIfCancellationRequested();
-                    //}
-
-                    FTP.SetCurrentDirectory("..");
-
-
-                    FTP.SetCurrentDirectory(RemoteDir);
+                    ftp.SetCurrentDirectory("..");
+                    ftp.SetCurrentDirectory(remoteDir);
                 }
                 catch (AggregateException)
                 {
-                    Console.WriteLine("Connection Failure for " + Server);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + "Connection Failure - One or more errors occured after connection established");
+                    Console.WriteLine(signalId + " @ " + server + " - " + "Connection Failure - One or more errors occured after connection established");
                 }
-
                 catch (Exception ex)
                 {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords",
-                        ApplicationEvent.SeverityLevels.Medium, Server + " " + ex.Message);
-                    Console.WriteLine(ex.Message);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + ex.Message);
+                    Console.WriteLine(signalId + " @ " + server + " - " + ex.Message);
                 }
-
-
                 try
                 {
-                    IList<DirectoryListItem> RemoteFiles = null;
+                    IList<DirectoryListItem> remoteFiles = null;
                     var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(30));
                     var token = tokenSource.Token;
-
-                    Task task = Task.Factory.StartNew(() => RemoteFiles = FTP.GetDirectoryList(RemoteDir)
-                        , token);
-
+                    Task task = Task.Factory.StartNew(() => remoteFiles = ftp.GetDirectoryList(remoteDir), token);
                     task.Wait(token);
-
                     if (token.IsCancellationRequested)
                         token.ThrowIfCancellationRequested();
-
-                    var RetrievedFiles = new List<string>();
-
-
-                    //errorRepository.QuickAdd("FTPFromAllcontrollers","Signal", "GetFTPFileList", Models.ApplicationEvent.SeverityLevels.Information, "Retrevied File list from " + Server);
-                    if (RemoteFiles != null)
-                        foreach (var FTPFile in RemoteFiles)
-                            if (!FTPFile.IsDirectory && FTPFile.Name.Contains(FilePattern))
+                    var retrievedFiles = new List<string>();
+                    if (remoteFiles != null)
+                    {
+                        DateTime localDate = DateTime.Now;
+                        if (skipCurrentLog)
+                        {
+                            localDate = localDate.AddMinutes(-16);
+                        }
+                        else
+                        {
+                            localDate = localDate.AddMinutes(120);
+                        }
+                        foreach (var ftpFile in remoteFiles)
+                        {
+                            if (!ftpFile.IsDirectory && ftpFile.Name.Contains(filePattern) && ftpFile.CreationTime < localDate)
                             {
                                 try
                                 {
-                                    //if (Token.IsCancellationRequested)
-                                    //{
-                                    //    Token.ThrowIfCancellationRequested();
-                                    //}
-
-                                    //If there are no errors, get the file, and add the filename to the retrieved files array for deletion later
-
-
                                     var token2 = tokenSource.Token;
-
                                     var task2 = Task.Factory.StartNew(
-                                        () => TransferFiles(FTP, FTPFile.Name, LocalDir, RemoteDir, Server)
-                                        , token2);
-
+                                        () => TransferFiles(ftp, ftpFile.Name, localDir, remoteDir, server), token2);
                                     task2.Wait(token2);
-
                                     if (token2.IsCancellationRequested)
                                     {
                                         token2.ThrowIfCancellationRequested();
                                     }
                                     else
                                     {
-                                        RetrievedFiles.Add(FTPFile.Name);
+                                        retrievedFiles.Add(ftpFile.Name);
 
                                         recordsComplete = true;
                                     }
@@ -246,104 +211,55 @@ namespace MOE.Common.Business
                                 //If there is an error, Print the error and try the file again.
                                 catch (AggregateException)
                                 {
-                                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "TransferFiles",
-                                        ApplicationEvent.SeverityLevels.Medium, "Transfer Task Timed Out");
+                                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_TransferFiles", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + "Transfer Task Timed Out");
                                 }
                                 catch (Exception ex)
                                 {
-                                    var errorMessage = "Exception:" + ex.Message + " While Transfering file: " +
-                                                       FTPFile + " from " + RemoteDir + " on " + Server + " to " +
-                                                       LocalDir;
+                                    string errorMessage = "Exception:" + ex.Message + " While Transfering file: " + ftpFile + " from signal" + signalId + " @ " + remoteDir + " on " + server + " to " + localDir;
                                     Console.WriteLine(errorMessage);
-                                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "TransferFiles",
-                                        ApplicationEvent.SeverityLevels.Medium, errorMessage);
-                                    RetryFiles.Add(FTPFile.Name);
+                                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_TransferFiles", Models.ApplicationEvent.SeverityLevels.Medium, errorMessage);
+                                    retryFiles.Add(ftpFile.Name);
                                 }
                                 Thread.Sleep(waitbetweenrecords);
                             }
+                        }
 
-                    //Delete the files we downloaded.  We don't want ot have to deal with the file more than once.  If we delete the file form the controller once we capture it, it will reduce redundancy.
+                        //Delete the files we downloaded.  We don't want ot have to deal with the file more than once.  If we delete the file form the controller once we capture it, it will reduce redundancy.
+                        if (deleteFilesAfterFtp)
+                            DeleteFilesFromFtpServer(ftp, retrievedFiles, waitbetweenrecords, remoteDir, server, signalId);//, Token);
 
-
-                    if (DeleteFilesAfterFTP)
-                        DeleteFilesFromFTPServer(FTP, RetrievedFiles, waitbetweenrecords, RemoteDir,
-                            Server); //, Token);
+                    }
                 }
-
                 catch (Exception ex)
                 {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "RetrieveFiles",
-                        ApplicationEvent.SeverityLevels.Medium, Server + " " + ex.Message);
-                    Console.WriteLine(ex.Message);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_RetrieveFiles", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + ex.Message);
+                    Console.WriteLine(signalId + " @ " + server + " - " + ex.Message);
                 }
-
-
-                FTP.Close();
-                FTP.Dispose();
-
-                //**********************************************************
-                //I don't think this is doing much good. -SJ 11-22-2016
-
-                //Try to get the missing files again with a new FTP connection
-
-                //if (RetryFiles.Count > 1) 
-                //{
-
-                //    foreach (string FTPFile in RetryFiles)
-                //    {
-                //        try
-                //        {
-
-                //            Thread.Sleep(waitbetweenrecords);
-
-                //            FTPSClient _FTP = new FTPSClient();  
-                //            _FTP.Connect(Server, 21, Cred, SSLMode, null, null, 0, 0, 0, 6000, false, DM);
-
-                //            TransferFiles(_FTP, FTPFile, LocalDir, RemoteDir, Server);
-
-
-                //            if (DeleteFilesAfterFTP)
-                //            {
-                //                try
-                //                {
-                //                    _FTP.DeleteFile(FTPFile);
-                //                }
-                //                catch (Exception ex)
-                //                {
-                //                    Console.WriteLine("Exception:" + ex.Message + " While Deleting file: " + FTPFile + " from " + RemoteDir + " on " + Server + " to " + LocalDir);
-
-                //                }
-                //            }
-                //            _FTP.Close();
-                //            _FTP.Dispose();
-
-
-                //        }
-                //        //If there is an error, Print the error and move on.
-                //        catch (Exception ex1)
-                //        {
-                //            Console.WriteLine("Exception:" + ex1.Message + " While Transfering file: " + FTPFile + " from " + RemoteDir + " on " + Server + " to " + LocalDir);
-                //        }
-
-                //    }
-
-                // }
-
-
-                // RetryFiles.Clear();
-                //**************************************
+                ftp.Close();
+                ftp.Dispose();
 
                 //Turn Logging off.
-                //The ASC3 controller stoploggin if the current file is removed.  to make sure logging comtinues, we must turn the loggin feature off on the 
+                //The ASC3 controller stoploggin if the current file is removed.  to make sure logging continues, we must turn the loggin feature off on the 
                 //controller, then turn it back on.
                 try
                 {
-                    TurnOffASC3LoggingOverSNMP(SNMPRetry, SNMPPort, SNMPTimeout, Server);
+                    if (skipCurrentLog && CheckAsc3LoggingOverSnmp(snmpRetry, snmpPort, snmpTimeout, server, signalId))
+                    {
+                        //Do Nothing
+                    }
+                    else
+                    {
+                        try
+                        {
+                            TurnOffAsc3LoggingOverSnmp(snmpRetry, snmpPort, snmpTimeout, server, signalId);
+                            Thread.Sleep(snmpTimeout);
+                            TurnOnAsc3LoggingOverSnmp(snmpRetry, snmpPort, snmpTimeout, server, signalId);
+                        }
+                        catch
+                        {
 
-                    Thread.Sleep(SNMPTimeout);
-
-
-                    TurnOnASC3LoggingOverSNMP(SNMPRetry, SNMPPort, SNMPTimeout, Server);
+                        }
+                    }
                 }
                 catch
                 {
@@ -352,126 +268,145 @@ namespace MOE.Common.Business
             return recordsComplete;
         }
 
-        public static void DeleteFilesFromFTPServer(FTPSClient FTP, List<string>FilesToDelete, int WaitBetweenRecords,
-            string RemoteDirectory, string Server) //, CancellationToken Token)
+        static public void DeleteFilesFromFtpServer(FTPSClient ftp, List<String> filesToDelete, int waitBetweenRecords, string remoteDirectory, string server, string signalId)//, CancellationToken Token)
         {
             var errorRepository = ApplicationEventRepositoryFactory.Create();
 
-            foreach (var FTPFile in FilesToDelete)
+            foreach (var ftpFile in filesToDelete)
             {
                 try
                 {
-                    FTP.DeleteFile(FTPFile);
+                    ftp.DeleteFile(ftpFile);
                 }
                 catch (FTPException ex)
                 {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " DeleteFilesFromFTPServer",
-                        ApplicationEvent.SeverityLevels.Medium, Server + " " + ex.Message);
-                    Console.WriteLine(ex.Message);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + ex.Message);
+                    Console.WriteLine(signalId + " @ " + server + " - " + ex.Message);
                 }
                 catch (AggregateException)
                 {
-                    Console.WriteLine("Connection Failure");
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + "Connection Failure one or more errors occured deleting the file via FTP");
+                    Console.WriteLine(signalId + " @ " + server + " - " + "Connection Failure one or more errors occured deleting the file via FTP");
                 }
-
                 catch (SocketException ex)
                 {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " DeleteFilesFromFTPServer",
-                        ApplicationEvent.SeverityLevels.Medium, Server + " " + ex.Message);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + ex.Message);
                     Console.WriteLine(ex.Message);
                 }
                 catch (IOException ex)
                 {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " DeleteFilesFromFTPServer",
-                        ApplicationEvent.SeverityLevels.Medium, Server + " " + ex.Message);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + ex.Message);
                     Console.WriteLine(ex.Message);
                 }
                 catch (Exception ex)
                 {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " DeleteFilesFromFTPServer",
-                        ApplicationEvent.SeverityLevels.Medium, Server + " " + ex.Message);
-                    Console.WriteLine("Exception:" + ex.Message + " While Deleting file: " + FTPFile + " from " +
-                                      RemoteDirectory + " on " + Server);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + server + " - " + ex.Message);
+                    Console.WriteLine("Exception:" + ex.Message + " While Deleting file: " + ftpFile + " from " + remoteDirectory + " on " + server);
                 }
-                Thread.Sleep(WaitBetweenRecords);
+                Thread.Sleep(waitBetweenRecords);
             }
         }
 
-        public static void TurnOffASC3LoggingOverSNMP(int SNMPRetry, int SNMPPort, int SNMPTimeout,
-            string ServerIPAddress)
+        static public void TurnOffAsc3LoggingOverSnmp(int snmpRetry, int snmpPort, int snmpTimeout, String serverIpAddress, string signalId)
         {
             var errorRepository = ApplicationEventRepositoryFactory.Create();
 
-            for (var counter = 0; counter < SNMPRetry; counter++)
+            for (var counter = 0; counter < snmpRetry; counter++)
             {
                 try
                 {
-                    SmnpSet(ServerIPAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "0", "i", SNMPPort);
+                    SmnpSet(serverIpAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "0", "i", snmpPort);
                 }
                 catch (SnmpException ex)
                 {
                     errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " TurnOffASC3LoggingOverSNMP",
-                        ApplicationEvent.SeverityLevels.Medium, ServerIPAddress + " " + ex.Message);
+                        ApplicationEvent.SeverityLevels.Medium, serverIpAddress + " " + ex.Message);
                     Console.WriteLine(ex);
                 }
-                var SNMPState = 10;
+                var snmpState = 10;
                 try
                 {
-                    SNMPState = SnmpGet(ServerIPAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "0", "i");
+                    snmpState = SnmpGet(serverIpAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "0", "i");
                 }
                 catch (SnmpException ex)
                 {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " TurnOffASC3LoggingOverSNMP",
-                        ApplicationEvent.SeverityLevels.Medium, ServerIPAddress + " " + ex.Message);
-                    Console.WriteLine(ex);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "TurnOffASC3LoggingOverSNMP_Get", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + serverIpAddress + " - " + ex.Message);
+                    Console.WriteLine(signalId + " @ " + serverIpAddress + " - " + ex);
                 }
-                if (SNMPState == 0)
+                if (snmpState == 0)
                     break;
-                Thread.Sleep(SNMPTimeout);
+                Thread.Sleep(snmpTimeout);
             }
         }
 
-        public static void TurnOnASC3LoggingOverSNMP(int SNMPRetry, int SNMPPort, int SNMPTimeout,
-            string ServerIPAddress)
+        public static void TurnOnAsc3LoggingOverSnmp(int snmpRetry, int snmpPort, int snmpTimeout, String serverIpAddress, string signalId)
         {
             var errorRepository = ApplicationEventRepositoryFactory.Create();
 
-            for (var counter = 0; counter < SNMPRetry; counter++)
+            for (var counter = 0; counter < snmpRetry; counter++)
             {
                 try
                 {
-                    SmnpSet(ServerIPAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "1", "i", SNMPPort);
+                    SmnpSet(serverIpAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "1", "i", snmpPort);
                 }
                 catch (Exception ex)
                 {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " TurnOnASC3LoggingOverSNMP",
-                        ApplicationEvent.SeverityLevels.Medium, ServerIPAddress + " " + ex.Message);
-                    Console.WriteLine(ex);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " TurnOnASC3LoggingOverSNMP_Set", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + serverIpAddress + " - " + ex.Message);
+                    Console.WriteLine(signalId + " @ " + serverIpAddress + " - " + ex);
                 }
-
-                var SNMPState = 10;
+                var snmpState = 10;
                 try
                 {
-                    SNMPState = SnmpGet(ServerIPAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "1", "i");
+                    snmpState = SnmpGet(serverIpAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "1", "i");
                 }
                 catch (Exception ex)
                 {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " TurnOnASC3LoggingOverSNMP",
-                        ApplicationEvent.SeverityLevels.Medium, ServerIPAddress + " " + ex.Message);
-                    Console.WriteLine(ex);
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " TurnOnASC3LoggingOverSNMP_Get", Models.ApplicationEvent.SeverityLevels.Medium, signalId + " @ " + serverIpAddress + " - " + ex.Message);
+                    Console.WriteLine(signalId + " @ " + serverIpAddress + " - " + ex);
                 }
-                if (SNMPState == 1)
+                if (snmpState == 1)
                     break;
-                Thread.Sleep(SNMPTimeout);
+                Thread.Sleep(snmpTimeout);
             }
         }
 
-        public static bool DecodeASC3File(string FileName, string signalId, BulkCopyOptions Options)
+        static public bool CheckAsc3LoggingOverSnmp(int snmpRetry, int snmpPort, int snmpTimeout,
+            String serverIpAddress, string signalId)
+        {
+            MOE.Common.Models.Repositories.IApplicationEventRepository errorRepository =
+                MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
+            bool success = false;
+            for (int counter = 0; counter < snmpRetry; counter++)
+            {
+                int snmpState = 10;
+                try
+                {
+                    snmpState = SnmpGet(serverIpAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "1", "i");
+                }
+                catch (Exception ex)
+                {
+
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", " CheckASC3LoggingOverSNMP_Get",
+                        Models.ApplicationEvent.SeverityLevels.Medium,
+                        signalId + " @ " + serverIpAddress + " - " + ex.Message);
+                    Console.WriteLine(signalId + " @ " + serverIpAddress + " - " + ex);
+                }
+                if (snmpState == 1)
+                {
+                    success = true;
+                    break;
+                }
+                Thread.Sleep(snmpTimeout);
+            }
+            return success;
+        }
+
+        public static bool DecodeAsc3File(string fileName, string signalId, BulkCopyOptions options)
         {
             var encoding = Encoding.ASCII;
             try
             {
-                using (var BR = new BinaryReader(File.Open(FileName, FileMode.Open), encoding))
+                using (var br = new BinaryReader(File.Open(fileName, FileMode.Open), encoding))
                 {
                     var elTable = new DataTable();
                     var custUnique =
@@ -485,20 +420,20 @@ namespace MOE.Common.Business
 
                     elTable.Constraints.Add(custUnique);
 
-                    if (BR.BaseStream.Position + 21 < BR.BaseStream.Length)
+                    if (br.BaseStream.Position + 21 < br.BaseStream.Length)
                     {
                         //Find the start Date
                         var dateString = "";
                         for (var i = 1; i < 21; i++)
                         {
-                            var c = BR.ReadChar();
+                            var c = br.ReadChar();
                             dateString += c;
                         }
 
                         //Console.WriteLine(dateString);
-                        var StartTime = new DateTime();
-                        if (DateTime.TryParse(dateString, out StartTime) &&
-                            BR.BaseStream.Position < BR.BaseStream.Length)
+                        var startTime = new DateTime();
+                        if (DateTime.TryParse(dateString, out startTime) &&
+                            br.BaseStream.Position < br.BaseStream.Length)
                         {
                             //find  line feed characters, that should take us to the end of the header.
                             // First line break is after Version
@@ -511,9 +446,9 @@ namespace MOE.Common.Business
 
                             var i = 0;
 
-                            while (i < 7 && BR.BaseStream.Position < BR.BaseStream.Length)
+                            while (i < 7 && br.BaseStream.Position < br.BaseStream.Length)
                             {
-                                var c = BR.ReadChar();
+                                var c = br.ReadChar();
                                 //Console.WriteLine(c.ToString());
                                 if (c == '\n')
                                     i++;
@@ -525,57 +460,57 @@ namespace MOE.Common.Business
                             var firstEventParam = new int();
 
 
-                            if (BR.BaseStream.Position + sizeof(char) < BR.BaseStream.Length)
-                                firstEventCode = Convert.ToInt32(BR.ReadChar());
+                            if (br.BaseStream.Position + sizeof(char) < br.BaseStream.Length)
+                                firstEventCode = Convert.ToInt32(br.ReadChar());
 
-                            if (BR.BaseStream.Position + sizeof(char) < BR.BaseStream.Length)
-                                firstEventParam = Convert.ToInt32(BR.ReadChar());
+                            if (br.BaseStream.Position + sizeof(char) < br.BaseStream.Length)
+                                firstEventParam = Convert.ToInt32(br.ReadChar());
 
                             var firstEventEntered = false;
                             //MOE.Common.Business.ControllerEvent firstEvent = new MOE.Common.Business.ControllerEvent(SignalID, StartTime, firstEventCode, firstEventParam);
 
 
                             //After that, we can probably start reading
-                            while (BR.BaseStream.Position + sizeof(byte) * 4 <= BR.BaseStream.Length
+                            while (br.BaseStream.Position + sizeof(byte) * 4 <= br.BaseStream.Length
                             ) //we need ot make sure we are more that 4 characters from the end
                             {
-                                var EventTime = new DateTime();
-                                var EventCode = new int();
-                                var EventParam = new int();
+                                var eventTime = new DateTime();
+                                var eventCode = new int();
+                                var eventParam = new int();
 
                                 //MOE.Common.Business.ControllerEvent controllerEvent = null;
-                                for (var EventPart = 1; EventPart < 4; EventPart++)
+                                for (var eventPart = 1; eventPart < 4; eventPart++)
                                 {
                                     //getting the time offset
-                                    if (EventPart == 1)
+                                    if (eventPart == 1)
                                     {
                                         var rawoffset = new byte[2];
                                         //char[] offset = new char[2];
-                                        rawoffset = BR.ReadBytes(2);
+                                        rawoffset = br.ReadBytes(2);
                                         Array.Reverse(rawoffset);
                                         int offset = BitConverter.ToInt16(rawoffset, 0);
 
                                         var tenths = Convert.ToDouble(offset) / 10;
 
-                                        EventTime = StartTime.AddSeconds(tenths);
+                                        eventTime = startTime.AddSeconds(tenths);
                                     }
 
                                     //getting the EventCode
-                                    if (EventPart == 2)
-                                        EventCode = Convert.ToInt32(BR.ReadByte());
+                                    if (eventPart == 2)
+                                        eventCode = Convert.ToInt32(br.ReadByte());
 
-                                    if (EventPart == 3)
-                                        EventParam = Convert.ToInt32(BR.ReadByte());
+                                    if (eventPart == 3)
+                                        eventParam = Convert.ToInt32(br.ReadByte());
                                 }
 
                                 //controllerEvent = new MOE.Common.Business.ControllerEvent(SignalID, EventTime, EventCode, EventParam);
 
-                                if (EventTime <= DateTime.Now && EventTime > Settings.Default.EarliestAcceptableDate)
+                                if (eventTime <= DateTime.Now && eventTime > Settings.Default.EarliestAcceptableDate)
                                     if (!firstEventEntered)
                                     {
                                         try
                                         {
-                                            elTable.Rows.Add(signalId, EventTime.AddMilliseconds(-1), firstEventCode,
+                                            elTable.Rows.Add(signalId, eventTime.AddMilliseconds(-1), firstEventCode,
                                                 firstEventParam);
                                         }
                                         catch
@@ -583,7 +518,7 @@ namespace MOE.Common.Business
                                         }
                                         try
                                         {
-                                            elTable.Rows.Add(signalId, EventTime, EventCode, EventParam);
+                                            elTable.Rows.Add(signalId, eventTime, eventCode, eventParam);
                                         }
                                         catch
                                         {
@@ -594,7 +529,7 @@ namespace MOE.Common.Business
                                     {
                                         try
                                         {
-                                            elTable.Rows.Add(signalId, EventTime, EventCode, EventParam);
+                                            elTable.Rows.Add(signalId, eventTime, eventCode, eventParam);
                                         }
                                         catch
                                         {
@@ -605,20 +540,20 @@ namespace MOE.Common.Business
                         //this is what we do when the datestring doesn't parse
                         else
                         {
-                            return TestNameAndLength(FileName);
+                            return TestNameAndLength(fileName);
                         }
                     }
 
 
                     else
                     {
-                        return TestNameAndLength(FileName);
+                        return TestNameAndLength(fileName);
                     }
 
 
-                    if (BulktoDB(elTable, Options))
+                    if (BulktoDb(elTable, options))
                         return true;
-                    return SplitBulkToDB(elTable, Options);
+                    return SplitBulkToDb(elTable, options);
                 }
             }
             catch
@@ -629,11 +564,11 @@ namespace MOE.Common.Business
 
         //If the file is tiny, it is likely empty, and we want to delte it (return true)
         //If the file has INT in the name, it is likely the old file version, and we want to delete it (return true)
-        public static bool TestNameAndLength(string FilePath)
+        public static bool TestNameAndLength(string filePath)
         {
             try
             {
-                var f = new FileInfo(FilePath);
+                var f = new FileInfo(filePath);
                 if (f.Name.Contains("INT") || f.Length < 367)
                     return true;
                 return false;
@@ -644,7 +579,7 @@ namespace MOE.Common.Business
             }
         }
 
-        public static bool SaveAsCSV(DataTable table, string Path)
+        public static bool SaveAsCsv(DataTable table, string path)
         {
             var sb = new StringBuilder();
 
@@ -657,43 +592,44 @@ namespace MOE.Common.Business
                 sb.AppendLine(string.Join(",", fields));
             }
 
-            File.WriteAllText(Path, sb.ToString());
+            File.WriteAllText(path, sb.ToString());
             return true;
         }
 
 
-        public static bool BulktoDB(DataTable elTable, BulkCopyOptions Options)
-
+        public static bool BulktoDb(DataTable elTable, BulkCopyOptions options)
         {
-            using (Options.Connection)
-            using (var bulkCopy = new SqlBulkCopy(Options.ConnectionString, SqlBulkCopyOptions.UseInternalTransaction))
+            MOE.Common.Models.Repositories.IApplicationEventRepository errorRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
+            using (options.Connection)
+            using (options.Connection)
+            using (var bulkCopy = new SqlBulkCopy(options.ConnectionString, SqlBulkCopyOptions.UseInternalTransaction))
             {
                 for (var i = 1;; i++)
                 {
                     try
                     {
-                        Options.Connection.Open();
+                        options.Connection.Open();
                     }
                     catch
                     {
                         Thread.Sleep(Settings.Default.SleepTime);
                     }
-                    if (Options.Connection.State == ConnectionState.Open)
+                    if (options.Connection.State == ConnectionState.Open)
                     {
                         if (Settings.Default.WriteToConsole)
-                            Console.WriteLine(" DB connection established");
+                            Console.WriteLine("DB connection established");
 
                         break;
                     }
                 }
-                var sigID = "";
+                var sigId = "";
                 if (elTable.Rows.Count > 0)
                 {
                     var row = elTable.Rows[0];
-                    sigID = row[0].ToString();
+                    sigId = row[0].ToString();
                 }
 
-                if (Options.Connection.State == ConnectionState.Open)
+                if (options.Connection.State == ConnectionState.Open)
                 {
                     bulkCopy.BulkCopyTimeout = Settings.Default.BulkCopyTimeout;
 
@@ -709,44 +645,58 @@ namespace MOE.Common.Business
                     bulkCopy.DestinationTableName = tablename;
 
                     if (elTable.Rows.Count > 0)
+                    {
                         try
                         {
                             bulkCopy.WriteToServer(elTable);
                             if (Settings.Default.WriteToConsole)
                             {
-                                Console.WriteLine("                   !!!!!!!!!!!!!!!!!!!!!!!!          ");
-                                Console.WriteLine("                   The bulk insert executed          ");
-                                Console.WriteLine("                   !!For Signal " + sigID + " !!!!!!     ");
-                                Console.WriteLine("                   !!!!!!!!!!!!!!!!!!!!!!!!          ");
-                                Console.WriteLine("                   !!!!!!!!!!!!!!!!!!!!!!!!          ");
+                                Console.WriteLine("!!!!!!!!! The bulk insert executed for Signal " + sigId + " !!!!!!!!!");
                             }
-                            Options.Connection.Close();
+                            options.Connection.Close();
                             return true;
                         }
                         catch (SqlException ex)
                         {
                             if (ex.Number == 2601)
                             {
-                                if (Settings.Default.WriteToConsole)
-                                    Console.WriteLine("****There is a permission error!*****");
+                                if (Properties.Settings.Default.WriteToConsole)
+                                {
+                                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "BulktoDB_SQL.ex",
+                                        Models.ApplicationEvent.SeverityLevels.Medium,
+                                        "There is a permission error - " + sigId + " - " + ex.Message);
+                                    Console.WriteLine("**** There is a permission error - " + sigId + " *****");
+                                }
                             }
                             else
                             {
-                                if (Settings.Default.WriteToConsole)
-                                    Console.WriteLine(ex);
+                                if (Properties.Settings.Default.WriteToConsole)
+                                {
+                                    //Console.WriteLine("****DATABASE ERROR*****");
+                                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "BulktoDB_SQL.ex",
+                                        Models.ApplicationEvent.SeverityLevels.Medium,
+                                        "General Error - " + sigId + " - " + ex.Message);
+                                    Console.WriteLine("DATABASE ERROR - " + sigId + " - " + ex.Message);
+                                }
                             }
-                            Options.Connection.Close();
+                            options.Connection.Close();
                             return false;
                         }
                         catch (Exception ex)
                         {
+                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "BulktoDB_Reg.ex", Models.ApplicationEvent.SeverityLevels.Medium, "General Error - " + sigId + " - " + ex.Message);
                             Console.WriteLine(ex);
                             return false;
                         }
-                    Options.Connection.Close();
-                    return false;
+                    }
+                    else
+                    {
+                        options.Connection.Close();
+                        return false;
+                    }
                 }
-                return false;
+                else
+                { return false; }
             }
         }
 
@@ -756,12 +706,12 @@ namespace MOE.Common.Business
             Console.WriteLine("Copied {0} so far...", e.RowsCopied);
         }
 
-        public static bool SplitBulkToDB(DataTable elTable, BulkCopyOptions Options)
+        public static bool SplitBulkToDb(DataTable elTable, BulkCopyOptions options)
         {
             if (elTable.Rows.Count > 0)
             {
-                var topDT = new DataTable();
-                var bottomDT = new DataTable();
+                var topDt = new DataTable();
+                var bottomDt = new DataTable();
 
                 var top = Convert.ToInt32(elTable.Rows.Count * .1);
 
@@ -780,19 +730,19 @@ namespace MOE.Common.Business
 
                 if (dtTop.Rows.Count > 0)
                 {
-                    topDT.Merge(dtTop);
+                    topDt.Merge(dtTop);
                     if (dtTop.Rows.Count > 0)
-                        if (BulktoDB(topDT, Options))
+                        if (BulktoDb(topDt, options))
                         {
                         }
                         else
                         {
                             var elTable2 = new DataTable();
-                            elTable2.Merge(topDT.Copy());
-                            LineByLineWriteToDB(elTable2);
+                            elTable2.Merge(topDt.Copy());
+                            LineByLineWriteToDb(elTable2);
                         }
-                    topDT.Clear();
-                    topDT.Dispose();
+                    topDt.Clear();
+                    topDt.Dispose();
                     dtTop.Clear();
                     dtTop.Dispose();
                 }
@@ -809,20 +759,20 @@ namespace MOE.Common.Business
                 }
                 if (dtBottom.Rows.Count > 0)
                 {
-                    bottomDT.Merge(dtBottom);
+                    bottomDt.Merge(dtBottom);
 
-                    if (bottomDT.Rows.Count > 0)
-                        if (BulktoDB(bottomDT, Options))
+                    if (bottomDt.Rows.Count > 0)
+                        if (BulktoDb(bottomDt, options))
                         {
                         }
                         else
                         {
                             var elTable2 = new DataTable();
-                            elTable2.Merge(bottomDT.Copy());
-                            LineByLineWriteToDB(elTable2);
+                            elTable2.Merge(bottomDt.Copy());
+                            LineByLineWriteToDb(elTable2);
                         }
-                    bottomDT.Clear();
-                    bottomDT.Dispose();
+                    bottomDt.Clear();
+                    bottomDt.Dispose();
                     dtBottom.Clear();
                     dtBottom.Dispose();
                 }
@@ -832,7 +782,7 @@ namespace MOE.Common.Business
             return false;
         }
 
-        public static bool LineByLineWriteToDB(DataTable elTable)
+        public static bool LineByLineWriteToDb(DataTable elTable)
         {
             //MOE.Common.Data.MOETableAdapters.QueriesTableAdapter moeTA = new MOE.Common.Data.MOETableAdapters.QueriesTableAdapter();
             using (var db = new SPM())
@@ -886,145 +836,126 @@ namespace MOE.Common.Business
         }
 
 
-        private static int SnmpGet(string ControllerAddress, string OID, string Value, string Type)
+        private static int SnmpGet(string controllerAddress, string objectIdentifier, string value, string type)
         {
-            var IPControllerAddress = IPAddress.Parse(ControllerAddress);
+            var ipControllerAddress = IPAddress.Parse(controllerAddress);
             var community = "public";
             var timeout = 1000;
             var version = VersionCode.V1;
-            var receiver = new IPEndPoint(IPControllerAddress, 161);
-            var oid = new ObjectIdentifier(OID);
+            var receiver = new IPEndPoint(ipControllerAddress, 161);
+            var oid = new ObjectIdentifier(objectIdentifier);
             var vList = new List<Variable>();
-            ISnmpData data = new Integer32(int.Parse(Value));
+            ISnmpData data = new Integer32(int.Parse(value));
             var oiddata = new Variable(oid, data);
             vList.Add(new Variable(oid));
-
             var retrievedValue = 0;
-
             try
             {
                 var variable = Messenger.Get(version, receiver, new OctetString(community), vList, timeout)
                     .FirstOrDefault();
 
-                Console.WriteLine("Check state = {0}", variable.Data.ToString());
+                Console.WriteLine(controllerAddress + " - Check state = {0}", variable.Data.ToString());
                 retrievedValue = int.Parse(variable.Data.ToString());
             }
-            catch (SnmpException SNMPex)
+            catch (SnmpException snmPex)
             {
-                Console.WriteLine(ControllerAddress + " - " + SNMPex.ToString());
+                Console.WriteLine(controllerAddress + " - " + snmPex.ToString());
             }
-            catch (SocketException Socketex)
+            catch (SocketException socketex)
             {
-                Console.WriteLine(ControllerAddress + " - " + Socketex.ToString());
+                Console.WriteLine(controllerAddress + " - " + socketex.ToString());
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ControllerAddress + " - " + ex.ToString());
+                Console.WriteLine(controllerAddress + " - " + ex.ToString());
             }
-
-            //foreach (Variable variable in
-            //    Messenger.Get(version, receiver, new OctetString(community), vList, timeout))
-            //{
-            //    Console.WriteLine("Check state = {0}", variable.Data.ToString());
-            //    retrievedValue = Int32.Parse(variable.Data.ToString());
-            //}
-
-
             return retrievedValue;
         }
 
 
-        private static void SmnpSet(string ControllerAddress, string OID, string Value, string Type, int SNMPPort)
+        private static void SmnpSet(string controllerAddress, string objectIdentifier, string value, string type, int snmpPort)
         {
-            var IPControllerAddress = IPAddress.Parse(ControllerAddress);
+            var ipControllerAddress = IPAddress.Parse(controllerAddress);
             var community = "public";
             var timeout = 1000;
             var version = VersionCode.V1;
-            var receiver = new IPEndPoint(IPControllerAddress, SNMPPort);
-            var oid = new ObjectIdentifier(OID);
+            var receiver = new IPEndPoint(ipControllerAddress, snmpPort);
+            var oid = new ObjectIdentifier(objectIdentifier);
             var vList = new List<Variable>();
-            ISnmpData data = new Integer32(int.Parse(Value));
+            ISnmpData data = new Integer32(int.Parse(value));
             var oiddata = new Variable(oid, data);
-
             vList.Add(oiddata);
-
             try
             {
                 Messenger.Set(version, receiver, new OctetString(community), vList, timeout);
                 Console.WriteLine(vList.FirstOrDefault());
             }
-            catch (SnmpException SNMPex)
+            catch (SnmpException snmPex)
             {
-                Console.WriteLine(ControllerAddress + " - " + SNMPex.ToString());
+                Console.WriteLine(controllerAddress + " - " + snmPex.ToString());
             }
-            catch (SocketException Socketex)
+            catch (SocketException socketex)
             {
-                Console.WriteLine(ControllerAddress + " - " + Socketex.ToString());
+                Console.WriteLine(controllerAddress + " - " + socketex.ToString());
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ControllerAddress + " - " + ex.ToString());
+                Console.WriteLine(controllerAddress + " - " + ex.ToString());
             }
-
-            //foreach (Variable variable in  Messenger.Set(version, receiver, new OctetString(community), vList, timeout))
-            //{
-            //    Console.WriteLine(variable);
-            //}
         }
 
-        public static void EnableLogging(string IPAddress, int SNMPRetry, int SNMPtimeout, int SNMPPort)
+        public static void EnableLogging(string ipAddress, int snmpRetry, int snmPtimeout, int snmpPort)
         {
-            for (var counter = 0; counter < SNMPRetry; counter++)
+            for (var counter = 0; counter < snmpRetry; counter++)
             {
                 try
                 {
-                    SmnpSet(IPAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "0", "i", SNMPPort);
+                    SmnpSet(ipAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "0", "i", snmpPort);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(IPAddress + " - " + ex);
+                    Console.WriteLine(ipAddress + " - " + ex);
                 }
-                var SNMPState = 10;
+                var snmpState = 10;
                 try
                 {
-                    SNMPState = SnmpGet(IPAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "0", "i");
+                    snmpState = SnmpGet(ipAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "0", "i");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(IPAddress + " - " + ex);
+                    Console.WriteLine(ipAddress + " - " + ex);
                 }
-                if (SNMPState == 0)
+                if (snmpState == 0)
                     break;
-                Thread.Sleep(SNMPtimeout);
+                Thread.Sleep(snmPtimeout);
             }
-
-            Thread.Sleep(SNMPtimeout);
+            Thread.Sleep(snmPtimeout);
 
 
             //turn logging on
-            for (var counter = 0; counter < SNMPRetry; counter++)
+            for (var counter = 0; counter < snmpRetry; counter++)
             {
                 try
                 {
-                    SmnpSet(IPAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "1", "i", SNMPPort);
+                    SmnpSet(ipAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "1", "i", snmpPort);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(IPAddress + " - " + ex);
+                    Console.WriteLine(ipAddress + " - " + ex);
                 }
 
-                var SNMPState = 10;
+                var snmpState = 10;
                 try
                 {
-                    SNMPState = SnmpGet(IPAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "1", "i");
+                    snmpState = SnmpGet(ipAddress, "1.3.6.1.4.1.1206.3.5.2.9.17.1.0", "1", "i");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(IPAddress + " - " + ex);
+                    Console.WriteLine(ipAddress + " - " + ex);
                 }
-                if (SNMPState == 1)
+                if (snmpState == 1)
                     break;
-                Thread.Sleep(SNMPtimeout);
+                Thread.Sleep(snmPtimeout);
             }
         }
     }

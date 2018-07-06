@@ -56,13 +56,13 @@ namespace FTPfromAllControllers
                     signal.PrimaryName = row.PrimaryName.ToString();
                     signal.SecondaryName = row.Secondary_Name.ToString();
                     signal.IpAddress = row.IP_Address.ToString();
-                    signal.SignalID = row.SignalID.ToString();
+                    signal.SignalId = row.SignalID.ToString();
 
 
 
                     string Username = row.User_Name;
                     string Password = row.Password;
-                    string LocalDir = Properties.Settings.Default.HostDir + signal.SignalID + "\\";
+                    string LocalDir = Properties.Settings.Default.HostDir + signal.SignalId + "\\";
                     string RemoteDir = row.FTP_Directory;
                     bool ActiveMode = row.ActiveFTP;
 
@@ -79,7 +79,7 @@ namespace FTPfromAllControllers
                         try
                         {
 
-                            MOE.Common.Business.Signal.GetCurrentRecords(signal.IpAddress, signal.SignalID, Username, Password, LocalDir, RemoteDir, DeleteAfterFTP,
+                            MOE.Common.Business.Signal.GetCurrentRecords(signal.IpAddress, signal.SignalId, Username, Password, LocalDir, RemoteDir, DeleteAfterFTP,
                                 SNMPRetry, SNMPTimeout, SNMPPort, ImportAfterFTP, ActiveMode, 0, Options, Properties.Settings.Default.FTPTimeout);
 
                         }

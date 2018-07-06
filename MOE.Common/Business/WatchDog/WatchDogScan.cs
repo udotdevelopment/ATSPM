@@ -128,12 +128,12 @@ namespace MOE.Common.Business.WatchDog
                 Settings.MinimumRecords)
             {
                 Console.WriteLine("Signal " + signal.SignalID + " Has Current records");
-                signalsWithRecords.Add(signal);
+                SignalsWithRecords.Add(signal);
             }
             else
             {
                 Console.WriteLine("Signal " + signal.SignalID + " Does Not Have Current records");
-                signalsNoRecords.Add(signal);
+                SignalsNoRecords.Add(signal);
                 MOE.Common.Models.SPMWatchDogErrorEvent error = new MOE.Common.Models.SPMWatchDogErrorEvent();
                 error.SignalID = signal.SignalID;
                 error.DetectorID = "0";

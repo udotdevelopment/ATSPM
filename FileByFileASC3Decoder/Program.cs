@@ -105,7 +105,7 @@ namespace FileByFileASC3Decoder
                             {
 
 
-                                if (MOE.Common.Business.Signal.BulktoDB(EventsTable, Options) && FileByFileASC3Decoder.Properties.Settings.Default.DeleteFile)
+                                if (MOE.Common.Business.Signal.BulktoDb(EventsTable, Options) && FileByFileASC3Decoder.Properties.Settings.Default.DeleteFile)
                                 {
 
                                     try

@@ -20,7 +20,7 @@ namespace FTPfromAllControllers.Tests
         public void Initialize()
         {
             _signal = new Signal();
-            _signal.SignalID = "9797";
+            _signal.SignalId = "9797";
         }
 
         [TestMethod()]
