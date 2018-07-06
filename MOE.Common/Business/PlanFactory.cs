@@ -206,7 +206,7 @@ namespace MOE.Common.Business
         //public void LinkPivotAddDetectorData(List<Models.Controller_Event_Log> detectorEvents)
         //{
 
-            var cleanedEvents = RemoveDuplicateEvents(events);
+         //   var cleanedEvents = RemoveDuplicateEvents(events);
 
         //public void GetSimplePlanCollection(DateTime startDate, DateTime endDate, string signalId)
         //{

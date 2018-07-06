@@ -1,13 +1,14 @@
-﻿using System;
+﻿
+using System;
 
 namespace MOE.Common.Business
 {
-    public class Plan: PlanBase
+    public class Plan
     {
         public Plan(DateTime start, DateTime end, int planNumber)
         {
-            PlanStart = start;
-            PlanEnd = end;
+            StartTime = start;
+            EndTime = end;
             PlanNumber = planNumber;
         }
 

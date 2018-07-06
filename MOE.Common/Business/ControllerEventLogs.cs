@@ -90,7 +90,7 @@ namespace MOE.Common.Business
         public void Add105Events(string signalId, DateTime startDate, DateTime endDate)
         {
             var events = (from s in db.Controller_Event_Log
-                where s.SignalID == signalID &&
+                where s.SignalID == signalId &&
                       s.Timestamp >= startDate &&
                       s.Timestamp <= endDate &&
                       (s.EventCode == 105 || s.EventCode == 111)

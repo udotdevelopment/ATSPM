@@ -85,12 +85,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
         private void SetPercentSplitsList()
         {
             PercentSplitsSelectList = new List<SelectListItem>();
-            PercentSplitsSelectList.Add(new SelectListItem {Value = "", Text = "No Percentile Split"});
-            PercentSplitsSelectList.Add(new SelectListItem {Value = "50", Text = "50"});
-            PercentSplitsSelectList.Add(new SelectListItem {Value = "75", Text = "75"});
-            PercentSplitsSelectList.Add(new SelectListItem {Value = "85", Text = "85", Selected = true});
-            PercentSplitsSelectList.Add(new SelectListItem {Value = "90", Text = "90"});
-            PercentSplitsSelectList.Add(new SelectListItem {Value = "95", Text = "95"});
+            PercentSplitsSelectList.Add(new SelectListItem { Value = "", Text = "No Percentile Split" });
+            PercentSplitsSelectList.Add(new SelectListItem { Value = "50", Text = "50" });
+            PercentSplitsSelectList.Add(new SelectListItem { Value = "75", Text = "75" });
+            PercentSplitsSelectList.Add(new SelectListItem { Value = "85", Text = "85", Selected = true });
+            PercentSplitsSelectList.Add(new SelectListItem { Value = "90", Text = "90" });
+            PercentSplitsSelectList.Add(new SelectListItem { Value = "95", Text = "95" });
         }
 
         public override List<string> CreateMetric()
@@ -180,7 +180,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 if (analysisPhaseCollection.Items.Count > 0)
                 {
                     var phasesInOrder = (from r in analysisPhaseCollection.Items
-                        select r).OrderBy(r => r.PhaseNumber);
+                                         select r).OrderBy(r => r.PhaseNumber);
                     foreach (var Phase in phasesInOrder)
                     {
                         var chart = GetNewSplitMonitorChart(StartDate, EndDate, SignalID, GetSignalLocation(),
@@ -213,9 +213,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var plan in plans)
             {
                 var Cycles = from cycle in phase.Cycles.Items
-                    where cycle.StartTime > plan.StartTime && cycle.EndTime < plan.EndTime
-                    orderby cycle.Duration
-                    select cycle;
+                             where cycle.StartTime > plan.StartTime && cycle.EndTime < plan.EndTime
+                             orderby cycle.Duration
+                             select cycle;
 
                 // find % Skips
                 if (ShowPercentSkip)
@@ -242,8 +242,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 if (ShowPercentGapOuts)
                 {
                     var GapOuts = from cycle in Cycles
-                        where cycle.TerminationEvent == 4
-                        select cycle;
+                                  where cycle.TerminationEvent == 4
+                                  select cycle;
 
                     double CycleCount = plan.CycleCount;
                     double gapouts = GapOuts.Count();
@@ -266,8 +266,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 if (ShowPercentMaxOutForceOff && plan.PlanNumber == 254)
                 {
                     var MaxOuts = from cycle in Cycles
-                        where cycle.TerminationEvent == 5
-                        select cycle;
+                                  where cycle.TerminationEvent == 5
+                                  select cycle;
 
                     double CycleCount = plan.CycleCount;
                     double maxouts = MaxOuts.Count();
@@ -291,8 +291,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 )
                 {
                     var ForceOffs = from cycle in Cycles
-                        where cycle.TerminationEvent == 6
-                        select cycle;
+                                    where cycle.TerminationEvent == 6
+                                    select cycle;
 
                     double CycleCount = plan.CycleCount;
                     double forceoffs = ForceOffs.Count();
@@ -532,7 +532,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         private void AddSplitMonitorDataToChart(Chart chart, AnalysisPhase phase, List<PlanSplitMonitor> plans)
         {
             //Table 
-            if (phase.Cycles.PhaseCycles.Count > 0)
+            if (phase.Cycles.Items.Count > 0)
             {
                 var maxSplitLength = 0;
                 foreach (var plan in plans)

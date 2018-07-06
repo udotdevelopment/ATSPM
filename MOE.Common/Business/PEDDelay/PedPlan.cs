@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MOE.Common.Business.PEDDelay
 {
-    public class PedPlan : PlanBase
+    public class PedPlan
     {
         public PedPlan(string signalID, int phaseNumber, DateTime startDate, DateTime endDate, int planNumber)
         {

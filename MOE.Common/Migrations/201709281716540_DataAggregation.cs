@@ -305,55 +305,55 @@ namespace MOE.Common.Migrations
         }
     }
 }
-            DropForeignKey("dbo.SPMWatchDogErrorEvents", "SignalID", "dbo.Signals");
-            DropForeignKey("dbo.MetricComments", "SignalID", "dbo.Signals");
-            DropForeignKey("dbo.Approaches", "SignalID", "dbo.Signals");
-            DropIndex("dbo.ActionLogs", new[] {"SignalID"});
-            DropIndex("dbo.MetricComments", new[] {"SignalID"});
-            DropIndex("dbo.Approaches", new[] {"SignalID"});
-            DropIndex("dbo.ApproachRouteDetail", new[] {"ApproachID"});
-            DropIndex("dbo.SPMWatchDogErrorEvents", new[] {"SignalID"});
-            DropPrimaryKey("dbo.Signals");
-            //try
-            //{
-            //    DropPrimaryKey("dbo.Signals", "PK_Signals");
-            //}
-            //catch (Exception e)
-            //{
-            //    DropPrimaryKey("dbo.Signals", "PK_dbo._Signals");
-            //}
-            //finally
-            //{
-            Sql("Insert into VersionActions(ID, Description) values (10, 'Initial')");
+            //DropForeignKey("dbo.SPMWatchDogErrorEvents", "SignalID", "dbo.Signals");
+            //DropForeignKey("dbo.MetricComments", "SignalID", "dbo.Signals");
+            //DropForeignKey("dbo.Approaches", "SignalID", "dbo.Signals");
+            //DropIndex("dbo.ActionLogs", new[] {"SignalID"});
+            //DropIndex("dbo.MetricComments", new[] {"SignalID"});
+            //DropIndex("dbo.Approaches", new[] {"SignalID"});
+            //DropIndex("dbo.ApproachRouteDetail", new[] {"ApproachID"});
+            //DropIndex("dbo.SPMWatchDogErrorEvents", new[] {"SignalID"});
+            //DropPrimaryKey("dbo.Signals");
+            ////try
+            ////{
+            ////    DropPrimaryKey("dbo.Signals", "PK_Signals");
+            ////}
+            ////catch (Exception e)
+            ////{
+            ////    DropPrimaryKey("dbo.Signals", "PK_dbo._Signals");
+            ////}
+            ////finally
+            ////{
+            //Sql("Insert into VersionActions(ID, Description) values (10, 'Initial')");
 
 
-            AddColumn("dbo.MetricComments", "VersionID", c => c.Int(false));
-            AddColumn("dbo.Signals", "VersionID", c => c.Int(false, true));
-            AddColumn("dbo.Signals", "VersionActionId", c => c.Int(false, defaultValue: 10));
-            AddColumn("dbo.Signals", "Note", c => c.String(false, defaultValue: "Initial"));
-            AddColumn("dbo.Signals", "Start", c => c.DateTime(false));
-            AddColumn("dbo.Approaches", "VersionID", c => c.Int(false));
-            AlterColumn("dbo.ActionLogs", "SignalID", c => c.String(false));
-            AlterColumn("dbo.MetricComments", "SignalID", c => c.String());
-            AlterColumn("dbo.Approaches", "SignalID", c => c.String());
-            AlterColumn("dbo.SPMWatchDogErrorEvents", "SignalID", c => c.String(false));
-            DropIndex("dbo.Approaches", new[] {"VersionID"});
-            DropIndex("dbo.Signals", new[] {"VersionActionId"});
-            DropIndex("dbo.MetricComments", new[] {"VersionID"});
-            DropIndex("dbo.ApproachRouteDetail", new[] {"DirectionType2_DirectionTypeID"});
-            DropIndex("dbo.ApproachRouteDetail", new[] {"DirectionType1_DirectionTypeID"});
-            AlterColumn("dbo.SPMWatchDogErrorEvents", "SignalID", c => c.String(false, 10));
-            AlterColumn("dbo.Approaches", "SignalID", c => c.String(false, 10));
-            AlterColumn("dbo.MetricComments", "SignalID", c => c.String(false, 10));
-            AlterColumn("dbo.ActionLogs", "SignalID", c => c.String(false, 10));
-            AddPrimaryKey("dbo.Signals", "SignalID");
-            CreateIndex("dbo.SPMWatchDogErrorEvents", "SignalID");
-            CreateIndex("dbo.Detectors", "DetectorID", true, "IX_DetectorIDUnique");
-            CreateIndex("dbo.Approaches", "SignalID");
-            CreateIndex("dbo.MetricComments", "SignalID");
-            CreateIndex("dbo.ActionLogs", "SignalID");
-            AddForeignKey("dbo.Approaches", "SignalID", "dbo.Signals", "SignalID", true);
-            AddForeignKey("dbo.MetricComments", "SignalID", "dbo.Signals", "SignalID", true);
-            AddForeignKey("dbo.SPMWatchDogErrorEvents", "SignalID", "dbo.Signals", "SignalID", true);
-            AddForeignKey("dbo.ApproachRouteDetail", "ApproachID", "dbo.Approaches", "ApproachID", true);
-            AddForeignKey("dbo.ActionLogs", "SignalID", "dbo.Signals", "SignalID");
+            //AddColumn("dbo.MetricComments", "VersionID", c => c.Int(false));
+            //AddColumn("dbo.Signals", "VersionID", c => c.Int(false, true));
+            //AddColumn("dbo.Signals", "VersionActionId", c => c.Int(false, defaultValue: 10));
+            //AddColumn("dbo.Signals", "Note", c => c.String(false, defaultValue: "Initial"));
+            //AddColumn("dbo.Signals", "Start", c => c.DateTime(false));
+            //AddColumn("dbo.Approaches", "VersionID", c => c.Int(false));
+            //AlterColumn("dbo.ActionLogs", "SignalID", c => c.String(false));
+            //AlterColumn("dbo.MetricComments", "SignalID", c => c.String());
+            //AlterColumn("dbo.Approaches", "SignalID", c => c.String());
+            //AlterColumn("dbo.SPMWatchDogErrorEvents", "SignalID", c => c.String(false));
+            //DropIndex("dbo.Approaches", new[] {"VersionID"});
+            //DropIndex("dbo.Signals", new[] {"VersionActionId"});
+            //DropIndex("dbo.MetricComments", new[] {"VersionID"});
+            //DropIndex("dbo.ApproachRouteDetail", new[] {"DirectionType2_DirectionTypeID"});
+            //DropIndex("dbo.ApproachRouteDetail", new[] {"DirectionType1_DirectionTypeID"});
+            //AlterColumn("dbo.SPMWatchDogErrorEvents", "SignalID", c => c.String(false, 10));
+            //AlterColumn("dbo.Approaches", "SignalID", c => c.String(false, 10));
+            //AlterColumn("dbo.MetricComments", "SignalID", c => c.String(false, 10));
+            //AlterColumn("dbo.ActionLogs", "SignalID", c => c.String(false, 10));
+            //AddPrimaryKey("dbo.Signals", "SignalID");
+            //CreateIndex("dbo.SPMWatchDogErrorEvents", "SignalID");
+            //CreateIndex("dbo.Detectors", "DetectorID", true, "IX_DetectorIDUnique");
+            //CreateIndex("dbo.Approaches", "SignalID");
+            //CreateIndex("dbo.MetricComments", "SignalID");
+            //CreateIndex("dbo.ActionLogs", "SignalID");
+            //AddForeignKey("dbo.Approaches", "SignalID", "dbo.Signals", "SignalID", true);
+            //AddForeignKey("dbo.MetricComments", "SignalID", "dbo.Signals", "SignalID", true);
+            //AddForeignKey("dbo.SPMWatchDogErrorEvents", "SignalID", "dbo.Signals", "SignalID", true);
+            //AddForeignKey("dbo.ApproachRouteDetail", "ApproachID", "dbo.Approaches", "ApproachID", true);
+            //AddForeignKey("dbo.ActionLogs", "SignalID", "dbo.Signals", "SignalID");

@@ -11,7 +11,7 @@ namespace MOE.Common.Business.Preempt
     public class PreemptRequestChart
     {
         public Chart PreemptServiceRequestChart { get; set; }
-       
+
         public PreemptRequestChart(PreemptServiceRequestOptions options, ControllerEventLogs dttb)
         {
             Options = options;
@@ -46,10 +46,10 @@ namespace MOE.Common.Business.Preempt
                 if (reportTimespan.Hours > 1)
                     PreemptServiceRequestChart.ChartAreas[0].AxisX.Interval = 1;
                 else
-            PreemptServiceRequestChart.ChartAreas[0].AxisX.LabelStyle.Format = "HH";
+                    PreemptServiceRequestChart.ChartAreas[0].AxisX.LabelStyle.Format = "HH";
             PreemptServiceRequestChart.ChartAreas[0].AxisX.Minimum = Options.StartDate.ToOADate();
             PreemptServiceRequestChart.ChartAreas[0].AxisX.Maximum = Options.EndDate.ToOADate();
-        
+
             //Add the point series
 
             var PreemptSeries = new Series();
@@ -147,7 +147,7 @@ namespace MOE.Common.Business.Preempt
                         Plannumberlabel.Text = "Unknown";
                         break;
                     default:
-                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+                        Plannumberlabel.Text = "Plan " + plan.PlanNumber;
 
                         break;
                 }
@@ -160,12 +160,10 @@ namespace MOE.Common.Business.Preempt
                 planPreemptsLabel.ToPosition = plan.EndTime.ToOADate();
 
                 var c = from Controller_Event_Log r in DTTB.Events
-                    where r.EventCode == 102 && r.Timestamp > plan.StartTime && r.Timestamp < plan.EndTime
-                    select r;
+                        where r.EventCode == 102 && r.Timestamp > plan.StartTime && r.Timestamp < plan.EndTime
+                        select r;
 
-
-
-                string premptCount = c.Count().ToString();
+                var premptCount = c.Count().ToString();
                 planPreemptsLabel.Text = "Preempts Requested During Plan: " + premptCount;
                 planPreemptsLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 planPreemptsLabel.ForeColor = Color.Red;
@@ -176,6 +174,3 @@ namespace MOE.Common.Business.Preempt
         }
     }
 }
-                        Plannumberlabel.Text = "Plan " + plan.PlanNumber;
-                var premptCount = c.Count().ToString();
-                planPreemptsLabel.Text = "Preempts Requested During Plan: " + premptCount;

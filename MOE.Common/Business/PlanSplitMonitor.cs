@@ -10,11 +10,6 @@ namespace MOE.Common.Business
 
         public PlanSplitMonitor(DateTime start, DateTime end, int planNumber) : base(start, end, planNumber)
         {
-            PlanStart = start;
-            PlanEnd = end;
-            PlanNumber = planNumber;
-            
-
         }
 
         public int CycleLength { get; set; }

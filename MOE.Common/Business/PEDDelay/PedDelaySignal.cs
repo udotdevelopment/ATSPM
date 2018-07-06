@@ -19,11 +19,11 @@ namespace MOE.Common.Business.PEDDelay
         public PedDelaySignal(string signalID, DateTime startDate,
             DateTime endDate)
         {
-            _SignalID = signalId;
+            _SignalID = signalID;
             _StartDate = startDate;
             _EndDate = endDate;
 
-            Plans =  PlanFactory.GetPlansFromDatabase(signalId, startDate, endDate);
+            _Plans = new PlansBase(signalID, startDate, endDate);
 
             var pedPhaseNumbers = ControllerEventLogs.GetPedPhases(signalID, startDate, endDate);
 

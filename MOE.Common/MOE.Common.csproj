@@ -332,6 +332,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\ActionLog\ChartData.cs" />
+    <Compile Include="Business\AnalysisPhaseCycle.cs" />
+    <Compile Include="Business\AnalysisPhaseCycleCollection.cs" />
     <Compile Include="Business\ApproachVolume\ApproachVolume.cs" />
     <Compile Include="Business\ApproachVolume\ApproachVolumeViewModel.cs" />
     <Compile Include="Business\ApproachVolume\MetricInfo.cs" />
@@ -344,6 +346,7 @@
     <Compile Include="Business\BulkCopyOptions.cs" />
     <Compile Include="Business\ChartFactory.cs" />
     <Compile Include="Business\ChartTitleFactory.cs" />
+    <Compile Include="Business\CycleFactory.cs" />
     <Compile Include="Business\Phase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -400,6 +403,8 @@
     <Compile Include="Business\FilterExtensions\FilterSignal.cs" />
     <Compile Include="Business\Helpers\ApproachVolumeTable.cs" />
     <Compile Include="Business\Helpers\ConfigurationRecord.cs" />
+    <Compile Include="Business\PhaseCycleBase.cs" />
+    <Compile Include="Business\PlanBase.cs" />
     <Compile Include="Business\PlanPCD.cs" />
     <Compile Include="Business\PlanSplitFail.cs" />
     <Compile Include="Business\PlanSplitMonitor.cs" />

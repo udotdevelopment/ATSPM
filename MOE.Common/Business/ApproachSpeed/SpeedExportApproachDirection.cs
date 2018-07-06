@@ -74,7 +74,7 @@ namespace MOE.Common.Business
             int movementDelay, int decisionPoint, string signalId, int phaseNumber)
         {
             var signaltable =
-                new ControllerEventLogs(signalId, startDate, endDate, eventData1, new List<int> {1, 8, 10});
+                new ControllerEventLogs(signalId, startDate, endDate, phaseNumber, new List<int> {1, 8, 10});
 
             AvgSpeeds = new SpeedExportAvgSpeedCollection(startDate, endDate, binSize,
                 minSpeedFilter, Cycles);
