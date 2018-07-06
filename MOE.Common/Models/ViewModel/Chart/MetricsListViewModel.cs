@@ -1,49 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Models.ViewModel.Chart
 {
     public class MetricsListViewModel
     {
-
-        [Display(Name = "Metrics List")]
-        public List<SelectListItem> MetricsList { get; set; }
-        public int? SelectedMetricID { get; set; }
-
         public MetricsListViewModel(string signalID, int? selectedMetricID)
         {
             SelectedMetricID = selectedMetricID;
             GetMetricsForSignal(signalID);
         }
 
+        [Display(Name = "Metrics List")]
+        public List<SelectListItem> MetricsList { get; set; }
+
+        public int? SelectedMetricID { get; set; }
+
         private void GetMetricsForSignal(string signalID)
         {
-            MOE.Common.Models.Repositories.ISignalsRepository repository =
-                MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            var signal = repository.GetSignalBySignalID(signalID);
+            var repository =
+                SignalsRepositoryFactory.Create();
+            var signal = repository.GetLatestVersionOfSignalBySignalID(signalID);
             MetricsList = new List<SelectListItem>();
+            var availableMetrics = signal.GetAvailableMetricsVisibleToWebsite().Where(m => m.ShowOnWebsite);
             if (signal != null)
-            {
-                foreach (Models.MetricType m in signal.GetAvailableMetricsVisibleToWebsite())
-                {
-                    if (m.ShowOnWebsite)
-                    {
-                        if (SelectedMetricID != null && SelectedMetricID == m.MetricID)
+                foreach (var m in availableMetrics)
+                    if (SelectedMetricID != null && SelectedMetricID == m.MetricID)
+                        MetricsList.Add(new SelectListItem
                         {
-                            MetricsList.Add(new SelectListItem { Value = m.MetricID.ToString(), Text = m.ChartName, Selected = true });
-                        }
-                        else
-                        {
-                            MetricsList.Add(new SelectListItem { Value = m.MetricID.ToString(), Text = m.ChartName });
-                        }
-                    }
-                }
-            }
+                            Value = m.MetricID.ToString(),
+                            Text = m.ChartName,
+                            Selected = true
+                        });
+                    else
+                        MetricsList.Add(new SelectListItem {Value = m.MetricID.ToString(), Text = m.ChartName});
         }
     }
 }

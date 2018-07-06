@@ -18,9 +18,15 @@
             @Html.ValidationMessageFor(model => model.SelectedBinSize, "", new { id = "SelectedBinSize-error", @class = "text-danger" })
         </div>
         <div class="">
+            @Html.LabelFor(model => model.SelectedLineSize, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.DropDownListFor(model => model.SelectedLineSize,
+                new SelectList(Model.DotSizeList, "ID", "Value", 1), new { @id = "SelectedLineSize", @class = "form-control col-md-6" })
+            @Html.ValidationMessageFor(model => model.SelectedLineSize, "", new { id = "SelectedLineSize-error", @class = "text-danger" })
+        </div>
+        <div class="">
             @Html.LabelFor(model => model.SelectedDotSize, new { htmlAttributes = new { @class = "control-label" } })
             @Html.DropDownListFor(model => model.SelectedDotSize,
-            new SelectList(Model.DotSizeList, "ID", "Value", 1), new { @id = "SelectedDotSize", @class = "form-control col-md-6" })
+                new SelectList(Model.DotSizeList, "ID", "Value", 1), new { @id = "SelectedDotSize", @class = "form-control col-md-6" })
             @Html.ValidationMessageFor(model => model.SelectedDotSize, "", new { id = "SelectedDotSize-error", @class = "text-danger" })
         </div>
         <div class="">

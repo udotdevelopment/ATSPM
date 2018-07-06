@@ -1,38 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.DataVisualization.Charting;
-using MOE.Common.Business;
-using MOE.Common.Models;
 using System.Runtime.Serialization;
-using System.ComponentModel.DataAnnotations;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business.SplitFail;
+using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
     [DataContract]
     public class SplitFailOptions : MetricOptions
     {
-        [Required]
-        [DataMember]
-        [Display(Name = "First Seconds Of Red")]
-        public int FirstSecondsOfRed { get; set; }
-        [DataMember]
-        [Display(Name = "Show Fail Lines")]
-        public bool ShowFailLines { get; set; }
-        [DataMember]
-        [Display(Name = "Show Average Lines")]
-        public bool ShowAvgLines { get; set; }
-        [DataMember]
-        [Display(Name = "Show Percent Fail Lines")]
-        public bool ShowPercentFailLines { get; set; }
-
-
         public SplitFailOptions(string signalID, DateTime startDate, DateTime endDate,
             int metricTypeID, int firstSecondsOfRed, bool showFailLines, bool showAvgLines, bool showPercentFailLine)
         {
@@ -45,11 +28,30 @@ namespace MOE.Common.Business.WCFServiceLibrary
             ShowAvgLines = showAvgLines;
             ShowPercentFailLines = showPercentFailLine;
         }
+
         public SplitFailOptions()
         {
             MetricTypeID = 12;
             SetDefaults();
         }
+
+        [Required]
+        [DataMember]
+        [Display(Name = "First Seconds Of Red")]
+        public int FirstSecondsOfRed { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Fail Lines")]
+        public bool ShowFailLines { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Average Lines")]
+        public bool ShowAvgLines { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Percent Fail Lines")]
+        public bool ShowPercentFailLines { get; set; }
+
         public void SetDefaults()
         {
             FirstSecondsOfRed = 5;
@@ -61,107 +63,71 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
-            List<string> returnString = new List<string>();
-
-
-
-            MOE.Common.Models.Repositories.ISignalsRepository sr = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            MOE.Common.Models.Signal signal = sr.GetSignalBySignalID(SignalID);
-
-
-
-            //for (int x = 1; x < maxPhase + 1; x++)
-            List<Approach> metricApproaches = signal.GetApproachesForSignalThatSupportMetric(this.MetricTypeID);
-
+            //EndDate = EndDate.AddSeconds(59);
+            var returnString = new List<string>();
+            var sr = SignalsRepositoryFactory.Create();
+            var signal = sr.GetVersionOfSignalByDate(SignalID, StartDate);
+            var metricApproaches = signal.GetApproachesForSignalThatSupportMetric(MetricTypeID);
             if (metricApproaches.Count > 0)
-            {
+                //Parallel.ForEach(metricApproaches, approach =>
                 foreach (Approach approach in metricApproaches)
                 {
-
-
-                
-                        //MOE.Common.Business.CustomReport.Phase phase = new MOE.Common.Business.CustomReport.Phase(detectors, x, SignalID, StartDate, EndDate, new List<int> { 1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64 }, 1);
-                        MOE.Common.Business.CustomReport.Phase phase = new MOE.Common.Business.CustomReport.Phase(approach, StartDate, EndDate, new List<int> { 1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64 }, 1, false);
-
-                        phase.ApproachDirection = approach.DirectionType.Description;
-
-                        string location = GetSignalLocation();
-                        string chartName = CreateFileName();
-
-
-                        if (phase.PhaseNumber > 0)
-                        {
-                            GetChart(StartDate, EndDate, phase, location, FirstSecondsOfRed,
-                                    ShowFailLines, ShowAvgLines, ShowPercentFailLines, YAxisMax, chartName, returnString, false);
-                        }
-
-                    if(approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
+                    if (approach.ProtectedPhaseNumber > 0)
                     {
-                        string permChartName = CreateFileName();
-
-                        MOE.Common.Business.CustomReport.Phase permPhase = new MOE.Common.Business.CustomReport.Phase(approach, StartDate, 
-                            EndDate, new List<int> { 1, 4, 5, 6, 7, 8, 9, 10, 61, 63, 64 }, 1, true);
-
-                        permPhase.ApproachDirection = approach.DirectionType.Description;
-
-                         GetChart(StartDate, EndDate, permPhase, location, FirstSecondsOfRed,
-                                ShowFailLines, ShowAvgLines, ShowPercentFailLines, YAxisMax, permChartName, returnString, true);
+                        var splitFailPhase = new SplitFailPhase(approach, this, false);
+                        var chartName = CreateFileName();
+                        GetChart(splitFailPhase, chartName, returnString, false, approach);
                     }
-
-                      
-                    
+                    if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
+                    {
+                            
+                        var splitFailPermissivePhase = new SplitFailPhase(approach, this, true);
+                        var permChartName = CreateFileName();
+                        GetChart(splitFailPermissivePhase, permChartName, returnString, true, approach);
+                    }
                 }
-            }
+                //);
             return returnString;
         }
 
-        private void GetChart(DateTime StartDate, DateTime EndDate, CustomReport.Phase phase, string location, int FirstSecondsOfRed, bool ShowFailLines, bool ShowAvgLines, bool ShowPercentFailLines, double? YAxisMax, string chartName, List<string> returnString, bool isPermissivePhase)
+        private void GetChart(SplitFailPhase splitFailPhase, string chartName, List<string> returnString,
+            bool getPermissivePhase, Approach approach)
         {
-            MOE.Common.Business.SplitFail.SplitFailChart sfChart = 
-                new MOE.Common.Business.SplitFail.SplitFailChart(this, phase);
-
-            if (isPermissivePhase)
+            var sfChart = new SplitFailChart(this, splitFailPhase, getPermissivePhase);
+            var detector = approach.GetDetectorsForMetricType(12).FirstOrDefault();
+            if (detector != null)
             {
-                sfChart.chart.BackColor = Color.LightGray;
-                sfChart.chart.Titles[2].Text = "Permissive " + sfChart.chart.Titles[2].Text + " " + phase.Approach.GetDetectorsForMetricType(12).FirstOrDefault().MovementType.Description;
-                
+                var direction = detector.MovementType.Description;
+                if (getPermissivePhase)
+                {
+                    sfChart.Chart.BackColor = Color.LightGray;
+                }
             }
-            else
-            {
-                sfChart.chart.Titles[2].Text = "Protected " + sfChart.chart.Titles[2].Text + " " + phase.Approach.GetDetectorsForMetricType(12).FirstOrDefault().MovementType.Description;
-            }
-
-            System.Threading.Thread.Sleep(300);
-
-            chartName = chartName.Replace(".", (phase.ApproachDirection + "."));
-
+            Thread.Sleep(300);
+            chartName = chartName.Replace(".", approach.DirectionType.Description + ".");
             try
             {
-                sfChart.chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
+                sfChart.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
             }
-            catch
+            catch (Exception ex)
             {
                 try
                 {
-                    sfChart.chart.SaveImage(MetricFileLocation + chartName, System.Web.UI.DataVisualization.Charting.ChartImageFormat.Jpeg);
+                    sfChart.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
                 }
                 catch
                 {
-                    Models.Repositories.IApplicationEventRepository appEventRepository =
-                     Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                    Models.ApplicationEvent applicationEvent = new ApplicationEvent();
+                    var appEventRepository =
+                        ApplicationEventRepositoryFactory.Create();
+                    var applicationEvent = new ApplicationEvent();
                     applicationEvent.ApplicationName = "SPM Website";
-                    applicationEvent.Description = MetricType.ChartName + " Failed While Saving File";
+                    applicationEvent.Description = MetricType.ChartName + ex.Message + " Failed While Saving File";
                     applicationEvent.SeverityLevel = ApplicationEvent.SeverityLevels.Medium;
                     applicationEvent.Timestamp = DateTime.Now;
                     appEventRepository.Add(applicationEvent);
                 }
             }
-
-
-
             returnString.Add(MetricWebPath + chartName);
         }
     }
 }
-

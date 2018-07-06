@@ -34,7 +34,7 @@ namespace SPM.Controllers
         }
 
         
-        // GET: Approaches/Create
+        // GET: RouteSignals/Create
          [Authorize(Roles = "Admin")]
         public ActionResult Create(string id)
         {
@@ -46,13 +46,13 @@ namespace SPM.Controllers
             return PartialView(approach);
         }
 
-        // POST: Approaches/Create
+        // POST: RouteSignals/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "SignalID,DirectionTypeID,Description,MPH,DecisionPoint,MovementDelay")] Approach approach)
+        public ActionResult Create([Bind(Include = "SignalId,DirectionTypeID,Description,MPH,DecisionPoint,MovementDelay")] Approach approach)
         {
             
             ViewBag.DirectionType = new SelectList(directionRepository.GetAllDirections(), "DirectionTypeID", "Abbreviation");            
@@ -60,7 +60,7 @@ namespace SPM.Controllers
             {
 
                 approachRepository.AddOrUpdate(approach);
-                approach.Signal = signalRepository.GetSignalBySignalID(approach.SignalID);
+                approach.Signal = signalRepository.GetLatestVersionOfSignalBySignalID(approach.SignalID);
                 return PartialView("~/Views/Signals/EditorTemplates/Approach.cshtml", approach);
             }
             return PartialView(approach);
@@ -68,7 +68,7 @@ namespace SPM.Controllers
 
         
 
-        // GET: Approaches/Delete/5
+        // GET: RouteSignals/Delete/5
          [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
@@ -84,7 +84,7 @@ namespace SPM.Controllers
             return View(approach);
         }
 
-        // POST: Approaches/Delete/5
+        // POST: RouteSignals/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]

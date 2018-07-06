@@ -16,7 +16,7 @@ namespace MOEWcfServiceLibrary
     public interface ILinkPivotService
     {
         [OperationContract]
-        AdjustmentObject[] GetLinkPivot(int routeId, DateTime startDate, DateTime endDate, int cycleTime, string chartLocation,
+        AdjustmentObject[] GetLinkPivot(int routeId, DateTime startDate, DateTime endDate, int cycleTime,
             string direction, double bias, string biasDirection, bool monday, bool tuesday, bool wednesday,
             bool thursday, bool friday, bool saturday, bool sunday);
 

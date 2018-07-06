@@ -69,6 +69,7 @@ namespace WavetronicsSpeedListener
 
         protected override void OnStop()
         {
+
             StopListening();
             isRunning = false;          
             th = null;

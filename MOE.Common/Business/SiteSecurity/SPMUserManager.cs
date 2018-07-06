@@ -2,11 +2,7 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MOE.Common.Models;
 
 namespace MOE.Common.Business.SiteSecurity
 {
@@ -22,7 +18,7 @@ namespace MOE.Common.Business.SiteSecurity
             IdentityFactoryOptions<SPMUserManager> options, IOwinContext context)
         {
             var manager = new SPMUserManager(
-                new UserStore<SPMUser>(context.Get<MOE.Common.Models.SPM>()));
+                new UserStore<SPMUser>(context.Get<SPM>()));
 
             manager.PasswordValidator = new PasswordValidator
             {
@@ -30,7 +26,7 @@ namespace MOE.Common.Business.SiteSecurity
                 RequireNonLetterOrDigit = false,
                 RequireDigit = true,
                 RequireLowercase = false,
-                RequireUppercase = false,
+                RequireUppercase = false
             };
 
             return manager;

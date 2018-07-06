@@ -77,8 +77,7 @@ namespace NEWDecodeandImportASC3Logs
                     }
                     if (finished)
                         yield break;
-                    else
-                        yield return toReturn;
+                    yield return toReturn;
                 }
             }
 

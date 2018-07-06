@@ -8,6 +8,33 @@
         </h4>
     </div>
 
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.SignalID, new { @id = "editSignalID" })
+    @Html.HiddenFor(model => model.VersionID)
+        
+    @{
+        List <SelectListItem>  versionList = new List<SelectListItem>();
+        foreach (var v in Model.VersionList)
+        {
+            if (v.VersionID == Model.VersionID)
+            {
+                versionList.Add(new SelectListItem { Text = v.SelectListName, Value = v.VersionID.ToString(), Selected = true });
+            }
+            else
+            {
+                versionList.Add(new SelectListItem { Text = v.SelectListName, Value = v.VersionID.ToString() });
+            }
+        }
+    }         
+                
+    <div class="form-group-configuration-tool  form-group col-md-6">
+        @Html.LabelFor(model => model.VersionID, htmlAttributes: new { @class = "control-label" })
+        <div class="">
+            @Html.DropDownList("versionDropDown", versionList, new {id = "versionDropDown", @class = "form-control", @onchange = "LoadVersionByVersionID(this.value)" })
+            @Html.ValidationMessageFor(model => model.VersionID, "", new { id = "Version-error", @class = "text-danger" })
+        </div>
+    </div>
+
     <div class="panel-body">
         <div class="form-horizontal">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -77,6 +104,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Approaches.First().IsProtectedPhaseOverlap)
                     </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Approaches.First().IsPermissivePhaseOverlap)
+                    </th>
                     <th></th>
                 </tr>
 
@@ -97,6 +127,9 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.IsProtectedPhaseOverlap)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsPermissivePhaseOverlap)
                         </td>
                     </tr>
                 }

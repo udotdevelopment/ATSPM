@@ -1,0 +1,19 @@
+﻿@model IEnumerable<MOE.Common.Models.Signal>
+
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SignalDescription)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.SignalDescription)
+        </td>
+    </tr>
+}
+
+</table>

@@ -118,7 +118,7 @@ namespace InrixConfigurationTool
             //    MOE.Common.Business.Inrix.Segment segment = new MOE.Common.Business.Inrix.Segment(row.Segment_ID, row.Segment_Name, row.Segment_Description);
             //    item.Text = segment.Name;
             //    item.Tag = segment;
-            //    uxSegmentsListView.Items.Add(item);
+            //    uxSegmentsListView.PhaseCycles.Add(item);
             //}
         }
 
@@ -134,7 +134,7 @@ namespace InrixConfigurationTool
             //    ListViewItem item = new ListViewItem();
             //    item.Text = route.Name;
             //    item.Tag = route;
-            //    uxRoutesListView.Items.Add(item);
+            //    uxRoutesListView.PhaseCycles.Add(item);
             //}
         }
 
@@ -144,12 +144,12 @@ namespace InrixConfigurationTool
             //groups.GetGroups();
             
             //uxGroupsListView.Clear();
-            //foreach (MOE.Common.Business.Inrix.Group group in groups.Items)
+            //foreach (MOE.Common.Business.Inrix.Group group in groups.PhaseCycles)
             //{
             //    ListViewItem item = new ListViewItem();
             //    item.Text = group.Name;
             //    item.Tag = group;
-            //    uxGroupsListView.Items.Add(item);
+            //    uxGroupsListView.PhaseCycles.Add(item);
             //}
         }
 
@@ -169,7 +169,7 @@ namespace InrixConfigurationTool
             //        item.Name = tmc.TMCCode;
             //        item.Text = tmc.Street + " " + tmc.Direction + " " + " From: " + tmc.Start + " To: " + tmc.Stop;
             //        item.Tag = tmc;
-            //        uxSegmentMembersListView.Items.Add(item);
+            //        uxSegmentMembersListView.PhaseCycles.Add(item);
             //    }
             //}
                 
@@ -190,7 +190,7 @@ namespace InrixConfigurationTool
             //        item.Name = tmc.TMCCode;
             //        item.Text = tmc.Street + " " + tmc.Direction + " " +  " From: " + tmc.Start + " To: " + tmc.Stop;
             //        item.Tag = tmc;
-            //        uxSegmentNonMembersListView.Items.Add(item);
+            //        uxSegmentNonMembersListView.PhaseCycles.Add(item);
             //    }
             //}
 
@@ -211,7 +211,7 @@ namespace InrixConfigurationTool
             //        string textName = segment.Name;
             //        item.Text = textName;
             //        item.Tag = segment;
-            //        uxRouteNonMembersListView.Items.Add(item);
+            //        uxRouteNonMembersListView.PhaseCycles.Add(item);
             //    }
             //}
         }
@@ -233,7 +233,7 @@ namespace InrixConfigurationTool
 
             //        item.Text = textName;
             //        item.Tag = route;
-            //        uxGroupMembersListView.Items.Add(item);
+            //        uxGroupMembersListView.PhaseCycles.Add(item);
             //    }
             //}
         }
@@ -255,7 +255,7 @@ namespace InrixConfigurationTool
 
             //        item.Text = textName;
             //        item.Tag = segment;
-            //        uxRouteMembersListView.Items.Add(item);
+            //        uxRouteMembersListView.PhaseCycles.Add(item);
             //    }
             //}
         }
@@ -276,7 +276,7 @@ namespace InrixConfigurationTool
 
             //        item.Text = textName;
             //        item.Tag = route;
-            //        uxGroupNonMembersListView.Items.Add(item);
+            //        uxGroupNonMembersListView.PhaseCycles.Add(item);
             //    }
             //}
         }

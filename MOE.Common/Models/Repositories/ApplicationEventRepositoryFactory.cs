@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MOE.Common.Models.Repositories
+﻿namespace MOE.Common.Models.Repositories
 {
     public class ApplicationEventRepositoryFactory
     {
@@ -13,9 +7,7 @@ namespace MOE.Common.Models.Repositories
         public static IApplicationEventRepository Create()
         {
             if (applicationEventRepository != null)
-            {
                 return applicationEventRepository;
-            }
             return new ApplicationEventRepository();
         }
 

@@ -88,8 +88,8 @@ namespace AlexPilotti.FTPS.Common
                 {
                     return EDirectoryListingStyle.UnixStyle;
                 }
-                else if (s.Length > 8
-                 && Regex.IsMatch(s.Substring(0, 8), "[0-9][0-9]-[0-9][0-9]-[0-9][0-9]"))
+                if (s.Length > 8
+                    && Regex.IsMatch(s.Substring(0, 8), "[0-9][0-9]-[0-9][0-9]-[0-9][0-9]"))
                 {
                     return EDirectoryListingStyle.WindowsStyle;
                 }
