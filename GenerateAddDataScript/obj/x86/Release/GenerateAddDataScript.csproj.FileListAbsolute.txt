@@ -43,3 +43,7 @@ C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\GenerateAddDataScript\obj\x
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\GenerateAddDataScript\obj\x86\Release\GenerateAddDataScript.application
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\GenerateAddDataScript\obj\x86\Release\GenerateAddDataScript.exe
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\GenerateAddDataScript\obj\x86\Release\GenerateAddDataScript.pdb
+E:\Repos\GenerateAddDataScript\obj\x86\Release\GenerateAddDataScript.csprojAssemblyReference.cache
+E:\Repos\GenerateAddDataScript\obj\x86\Release\GenerateAddDataScript.csproj.CoreCompileInputs.cache
+E:\Repos\GenerateAddDataScript\obj\x86\Release\GenerateAddDataScript.exe
+E:\Repos\GenerateAddDataScript\obj\x86\Release\GenerateAddDataScript.pdb

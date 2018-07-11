@@ -96,3 +96,102 @@ C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\obj\Release\RdlCompile.
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\obj\Release\RdlCompile.compiled
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\obj\Release\SPM.dll
 C:\Projects\Branches\SignalPerformanceMetrics\v4.0.1\SPM\obj\Release\SPM.pdb
+E:\Repos\SPM\bin\Images\ATSPM Logo-01.png
+E:\Repos\SPM\bin\Images\CheckSignalWithTitle.png
+E:\Repos\SPM\bin\Images\close.png
+E:\Repos\SPM\bin\Images\NewUDOTLogo.png
+E:\Repos\SPM\bin\Images\pointer_shadow.png
+E:\Repos\SPM\bin\Images\rightArrow.png
+E:\Repos\SPM\bin\Images\SignalPerformanceMetrics.jpg
+E:\Repos\SPM\bin\Images\SPMLogo.png
+E:\Repos\SPM\bin\Images\2014-9-10 World Congress Measuring performance.pdf
+E:\Repos\SPM\bin\Images\ActionsByMetric.pdf
+E:\Repos\SPM\bin\Images\ITE SPM Webinar Part 1 - April 9, 2014.pdf
+E:\Repos\SPM\bin\Images\ITE SPM Webinar Part 2 - May 7, 2014.pdf
+E:\Repos\SPM\bin\Images\ITE SPM Webinar Part 3 - June 11, 2014.pdf
+E:\Repos\SPM\bin\Images\SPM's - Arizona - September 26, 2014.pdf
+E:\Repos\SPM\bin\Images\SPM's - ITS 3 C  September 5, 2014.pdf
+E:\Repos\SPM\bin\Images\SPM's - ITS California - October 16, 2014.pdf
+E:\Repos\SPM\bin\Images\SPM's - Southern District ITE  March 31, 2014.pdf
+E:\Repos\SPM\bin\Images\ATSPM_CO-WY_ITE___ITS_Rocky_Mtn_10-20-16.pdf
+E:\Repos\SPM\bin\Images\ATSPM_EDC4_Minnesota_10-25-16.pdf
+E:\Repos\SPM\bin\Images\ATSPM_ITS_CA_9-21-16.pdf
+E:\Repos\SPM\bin\Images\ATSPM_UDOT_Conference_11-2-16.pdf
+E:\Repos\SPM\bin\Images\EmergencyTrafficSignalResponsePlanUDOT5-6-16.pdf
+E:\Repos\SPM\bin\Images\TSMP_UDOT_v1-2_2-5-16.pdf
+E:\Repos\SPM\bin\Reports\ActionDetail.rdlc
+E:\Repos\SPM\bin\Reports\ActionsByMetric.rdlc
+E:\Repos\SPM\bin\SPM.dll.config
+E:\Repos\SPM\bin\SPM.dll
+E:\Repos\SPM\bin\SPM.pdb
+E:\Repos\SPM\bin\Antlr3.Runtime.dll
+E:\Repos\SPM\bin\Caseiro.Mvc.PagedList.dll
+E:\Repos\SPM\bin\EntityFramework.dll
+E:\Repos\SPM\bin\EntityFramework.SqlServer.dll
+E:\Repos\SPM\bin\Microsoft.AspNet.Identity.Core.dll
+E:\Repos\SPM\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+E:\Repos\SPM\bin\Microsoft.AspNet.Identity.Owin.dll
+E:\Repos\SPM\bin\Microsoft.Owin.dll
+E:\Repos\SPM\bin\Microsoft.Owin.Host.SystemWeb.dll
+E:\Repos\SPM\bin\Microsoft.Owin.Security.Cookies.dll
+E:\Repos\SPM\bin\Microsoft.Owin.Security.dll
+E:\Repos\SPM\bin\Microsoft.Owin.Security.Facebook.dll
+E:\Repos\SPM\bin\Microsoft.Owin.Security.Google.dll
+E:\Repos\SPM\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+E:\Repos\SPM\bin\Microsoft.Owin.Security.OAuth.dll
+E:\Repos\SPM\bin\Microsoft.Owin.Security.Twitter.dll
+E:\Repos\SPM\bin\Microsoft.Threading.Tasks.dll
+E:\Repos\SPM\bin\Microsoft.Threading.Tasks.Extensions.Desktop.dll
+E:\Repos\SPM\bin\Microsoft.Threading.Tasks.Extensions.dll
+E:\Repos\SPM\bin\Microsoft.Web.Infrastructure.dll
+E:\Repos\SPM\bin\MOE.Common.dll
+E:\Repos\SPM\bin\MvcCheckBoxList.dll
+E:\Repos\SPM\bin\Newtonsoft.Json.dll
+E:\Repos\SPM\bin\Owin.dll
+E:\Repos\SPM\bin\System.Web.Helpers.dll
+E:\Repos\SPM\bin\System.Web.Mvc.dll
+E:\Repos\SPM\bin\System.Web.Optimization.dll
+E:\Repos\SPM\bin\System.Web.Razor.dll
+E:\Repos\SPM\bin\System.Web.WebPages.Deployment.dll
+E:\Repos\SPM\bin\System.Web.WebPages.dll
+E:\Repos\SPM\bin\System.Web.WebPages.Razor.dll
+E:\Repos\SPM\bin\WebGrease.dll
+E:\Repos\SPM\bin\AlexPilotti.FTPS.Client.dll
+E:\Repos\SPM\bin\SharpSnmpLib.Portable.dll
+E:\Repos\SPM\bin\SharpSnmpLib.Full.dll
+E:\Repos\SPM\bin\MOE.Common.pdb
+E:\Repos\SPM\bin\MOE.Common.dll.config
+E:\Repos\SPM\bin\Antlr3.Runtime.pdb
+E:\Repos\SPM\bin\Microsoft.Threading.Tasks.xml
+E:\Repos\SPM\bin\Microsoft.Threading.Tasks.Extensions.xml
+E:\Repos\SPM\bin\Microsoft.Threading.Tasks.Extensions.Desktop.xml
+E:\Repos\SPM\bin\Newtonsoft.Json.xml
+E:\Repos\SPM\bin\System.Web.Helpers.xml
+E:\Repos\SPM\bin\System.Web.Mvc.xml
+E:\Repos\SPM\bin\System.Web.Optimization.xml
+E:\Repos\SPM\bin\System.Web.Razor.xml
+E:\Repos\SPM\bin\System.Web.WebPages.xml
+E:\Repos\SPM\bin\System.Web.WebPages.Deployment.xml
+E:\Repos\SPM\bin\System.Web.WebPages.Razor.xml
+E:\Repos\SPM\bin\EntityFramework.xml
+E:\Repos\SPM\bin\EntityFramework.SqlServer.xml
+E:\Repos\SPM\bin\Microsoft.AspNet.Identity.Core.xml
+E:\Repos\SPM\bin\Microsoft.AspNet.Identity.Owin.xml
+E:\Repos\SPM\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+E:\Repos\SPM\bin\Microsoft.Owin.xml
+E:\Repos\SPM\bin\Microsoft.Owin.Host.SystemWeb.xml
+E:\Repos\SPM\bin\Microsoft.Owin.Security.xml
+E:\Repos\SPM\bin\Microsoft.Owin.Security.Facebook.xml
+E:\Repos\SPM\bin\Microsoft.Owin.Security.Cookies.xml
+E:\Repos\SPM\bin\Microsoft.Owin.Security.OAuth.xml
+E:\Repos\SPM\bin\Microsoft.Owin.Security.Google.xml
+E:\Repos\SPM\bin\Microsoft.Owin.Security.Twitter.xml
+E:\Repos\SPM\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+E:\Repos\SPM\bin\AlexPilotti.FTPS.Client.xml
+E:\Repos\SPM\bin\SharpSnmpLib.Portable.xml
+E:\Repos\SPM\bin\SharpSnmpLib.Full.xml
+E:\Repos\SPM\obj\Release\SPM.csprojAssemblyReference.cache
+E:\Repos\SPM\obj\Release\SPM.csproj.CoreCompileInputs.cache
+E:\Repos\SPM\obj\Release\SPM.csproj.CopyComplete
+E:\Repos\SPM\obj\Release\SPM.dll
+E:\Repos\SPM\obj\Release\SPM.pdb
