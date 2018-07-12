@@ -39,7 +39,7 @@ namespace MOE.Common.Business.DataAggregation
                             var volume = 0;
                             switch (options.SelectedAggregatedDataType.DataName)
                             {
-                                case "Volume":
+                                case "DetectorActivationCount":
                                     volume =
                                         detectorAggregations.Where(s =>
                                                 s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
@@ -74,5 +74,6 @@ namespace MOE.Common.Business.DataAggregation
                 BinsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
             }
         }
+        
     }
 }

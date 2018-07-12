@@ -853,7 +853,7 @@ While each agency should consult with their IT department for specific guideline
                 new MetricType
                 {
                     MetricID = 16,
-                    ChartName = "Detector Volume",
+                    ChartName = "Detector Activation Count",
                     Abbreviation = "DVA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
@@ -869,7 +869,7 @@ While each agency should consult with their IT department for specific guideline
                 new MetricType
                 {
                     MetricID = 18,
-                    ChartName = "ApproachPcd", //"Purdue Coodination",
+                    ChartName = "Approach Pcd", //"Purdue Coodination",
                     Abbreviation = "APCD", // "PCDA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
@@ -981,7 +981,6 @@ While each agency should consult with their IT department for specific guideline
                     case 4:
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(5));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(7));
-                        detectionType.MetricTypes.Add(context.MetricTypes.Find(9));
                         break;
                     case 5:
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(11));
@@ -1301,6 +1300,8 @@ While each agency should consult with their IT department for specific guideline
                 userManager.AddToRole(user.Id, "Technician");
                 roleManager.Create(new IdentityRole("Data"));
                 userManager.AddToRole(user.Id, "Data");
+                roleManager.Create(new IdentityRole("Configuration"));
+                userManager.AddToRole(user.Id, "Configuration");
             }
             else
             {
@@ -1309,6 +1310,8 @@ While each agency should consult with their IT department for specific guideline
                 userManager.AddToRole(user.Id, "Technician");
                 roleManager.Create(new IdentityRole("Data"));
                 userManager.AddToRole(user.Id, "Data");
+                roleManager.Create(new IdentityRole("Configuration"));
+                userManager.AddToRole(user.Id, "Configuration");
             }
 
             context.SaveChanges();

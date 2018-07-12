@@ -17,7 +17,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             MetricTypeID = 16;
             AggregatedDataTypes = new List<AggregatedDataType>();
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "Volume"});
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "DetectorActivationCount"});
         }
 
         public override string ChartTitle

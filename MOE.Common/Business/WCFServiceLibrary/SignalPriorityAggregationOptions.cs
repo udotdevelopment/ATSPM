@@ -20,8 +20,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 3, DataName = "PriorityServiceExtendedGreen"});
         }
 
-        public override string YAxisTitle => SelectedAggregationType + " of Priority " + Regex.Replace(
-                                                 SelectedAggregatedDataType.ToString(),
+        public override string YAxisTitle => SelectedAggregationType + " of " + Regex.Replace(
+                                                 SelectedAggregatedDataType.DataName,
                                                  @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1") + " " +
                                              TimeOptions.SelectedBinSize + " bins";
 

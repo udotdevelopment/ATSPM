@@ -19,8 +19,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 2, DataName = "PreemptServices"});
         }
 
-        public override string YAxisTitle => SelectedAggregationType + " of Preemption " + Regex.Replace(
-                                                 SelectedAggregatedDataType.ToString(),
+        public override string YAxisTitle => SelectedAggregationType + " of " + Regex.Replace(
+                                                 SelectedAggregatedDataType.DataName,
                                                  @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1") + " " +
                                              TimeOptions.SelectedBinSize + " bins";
 

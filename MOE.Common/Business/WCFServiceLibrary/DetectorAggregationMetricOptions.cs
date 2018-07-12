@@ -52,7 +52,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 case XAxisType.TimeOfDay:
                     GetTimeOfDayCharts();
                     break;
-                case XAxisType.Phase:
+                case XAxisType.Approach:
                     GetApproachCharts();
                     break;
                 case XAxisType.Direction:

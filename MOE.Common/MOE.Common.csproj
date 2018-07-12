@@ -533,6 +533,14 @@
     <Compile Include="Migrations\201806111534173_archiveProcessingTable.Designer.cs">
       <DependentUpon>201806111534173_archiveProcessingTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806201917329_PCDVolumeAggregation.cs" />
+    <Compile Include="Migrations\201806201917329_PCDVolumeAggregation.Designer.cs">
+      <DependentUpon>201806201917329_PCDVolumeAggregation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806211436552_RemoveLaneByLaneFromAOR.cs" />
+    <Compile Include="Migrations\201806211436552_RemoveLaneByLaneFromAOR.Designer.cs">
+      <DependentUpon>201806211436552_RemoveLaneByLaneFromAOR.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\PhasePedAggregation.cs" />
@@ -927,6 +935,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806111534173_archiveProcessingTable.resx">
       <DependentUpon>201806111534173_archiveProcessingTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806201917329_PCDVolumeAggregation.resx">
+      <DependentUpon>201806201917329_PCDVolumeAggregation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806211436552_RemoveLaneByLaneFromAOR.resx">
+      <DependentUpon>201806211436552_RemoveLaneByLaneFromAOR.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CreateIntegratedSwapAndMoveDataJob.sql" />
     <Content Include="Migrations\CustomStuffForExistingUpgrade.txt" />

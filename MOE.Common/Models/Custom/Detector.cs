@@ -109,6 +109,7 @@ namespace MOE.Common.Models
             newGD.DecisionPoint = detectorToCopy.DecisionPoint;
             newGD.MovementDelay = detectorToCopy.MovementDelay;
             newGD.DetectionHardwareID = detectorToCopy.DetectionHardwareID;
+            newGD.MovementDelay = detectorToCopy.MovementDelay;
             newGD.DetectorComments = new List<DetectorComment>();
 
 

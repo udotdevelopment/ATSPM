@@ -58,28 +58,28 @@ namespace MOE.Common.Business.SplitFail
                 if (!current.ReviewedForOverlap)
                 {
                     var overlapingActivations = _detectorActivations.Where(d => d.ReviewedForOverlap == false &&
-                                                                                (
-                                                                                    //   if it starts after current starts  and    starts before current ends      and    end after current ends   
-                                                                                    d.DetectorOn >=
-                                                                                    current.DetectorOn &&
-                                                                                    d.DetectorOn <=
-                                                                                    current.DetectorOff &&
-                                                                                    d.DetectorOff >= current.DetectorOff
-                                                                                    //OR if it starts BEFORE curent starts  and ends AFTER current starts           and ends BEFORE current ends
-                                                                                    || d.DetectorOn <=
-                                                                                    current.DetectorOn &&
-                                                                                    d.DetectorOff >=
-                                                                                    current.DetectorOn &&
-                                                                                    d.DetectorOff <= current.DetectorOff
-                                                                                    //OR if it starts AFTER current starts   and it ends BEFORE current ends
-                                                                                    || d.DetectorOn >=
-                                                                                    current.DetectorOn &&
-                                                                                    d.DetectorOff <= current.DetectorOff
-                                                                                    //OR if it starts BEFORE current starts  and it ens AFTER current ends 
-                                                                                    || d.DetectorOn <=
-                                                                                    current.DetectorOn &&
-                                                                                    d.DetectorOff >= current.DetectorOff
-                                                                                )
+                        (
+                            //   if it starts after current starts  and    starts before current ends      and    end after current ends   
+                            d.DetectorOn >=
+                            current.DetectorOn &&
+                            d.DetectorOn <=
+                            current.DetectorOff &&
+                            d.DetectorOff >= current.DetectorOff
+                            //OR if it starts BEFORE curent starts  and ends AFTER current starts           and ends BEFORE current ends
+                            || d.DetectorOn <=
+                            current.DetectorOn &&
+                            d.DetectorOff >=
+                            current.DetectorOn &&
+                            d.DetectorOff <= current.DetectorOff
+                            //OR if it starts AFTER current starts   and it ends BEFORE current ends
+                            || d.DetectorOn >=
+                            current.DetectorOn &&
+                            d.DetectorOff <= current.DetectorOff
+                            //OR if it starts BEFORE current starts  and it ens AFTER current ends 
+                            || d.DetectorOn <=
+                            current.DetectorOn &&
+                            d.DetectorOff >= current.DetectorOff
+                        )
                         //then add it to the overlap list
                     ).ToList();
 

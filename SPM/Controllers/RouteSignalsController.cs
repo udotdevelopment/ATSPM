@@ -12,6 +12,8 @@ using SPM.Filters;
 
 namespace SPM.Controllers
 {
+
+    [Authorize(Roles = "Configuration, Admin")]
     public class RouteSignalsController : Controller
     {
         MOE.Common.Models.Repositories.IRouteSignalsRepository routeSignalsRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();

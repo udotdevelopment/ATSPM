@@ -11,6 +11,7 @@ namespace MOE.Common.Models.ViewModel._MainMenu
             IsAdmin = HttpContext.Current.User.IsInRole("Admin");
             IsTechnician = HttpContext.Current.User.IsInRole("Technician");
             IsData = HttpContext.Current.User.IsInRole("Data");
+            IsConfiguration = HttpContext.Current.User.IsInRole("Configuration");
             SubMenuItems = new List<MenuItem>();
             MenuObject = menuItem;
 
@@ -35,5 +36,6 @@ namespace MOE.Common.Models.ViewModel._MainMenu
         public bool IsAdmin { get; set; }
         public bool IsTechnician { get; set; }
         public bool IsData { get; set; }
+        public bool IsConfiguration { get; set; }
     }
 }

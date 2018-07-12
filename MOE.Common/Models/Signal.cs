@@ -66,6 +66,7 @@ namespace MOE.Common.Models
         [Required]
         [Display(Name = "Version Start")]
         [DataMember]
+        [DataType(DataType.Date)]
         public DateTime Start { get; set; }
 
         [Required]

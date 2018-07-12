@@ -139,19 +139,18 @@ namespace MOE.Common.Business
                 //Set the end row to have zero for the ajustments. No adjustment can be made because 
                 //downstream is unknown. The end row is determined by the starting point seleceted by the user
                 if (direction == "Upstream")
-                    Adjustment.AddLinkPivotAdjustmentRow(PairedApproaches[0].SignalApproach.SignalID, 0, 0, 0, 0, 0, 0,
+                    Adjustment.AddLinkPivotAdjustmentRow(route.RouteSignals.FirstOrDefault().SignalId, 0, 0, 0, 0, 0, 0,
                         0,
                         0, 0, 0,
-                        PairedApproaches[0].SignalApproach.Signal.SignalDescription,
+                        route.RouteSignals.FirstOrDefault().Signal.SignalDescription,
                         "", "", "", "", "", 0, 0, 0, 0, 1, 0, 0);
                 else
                     Adjustment.AddLinkPivotAdjustmentRow(
-                        PairedApproaches[PairedApproaches.Count - 1].SignalApproach.SignalID, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0,
-                        PairedApproaches[PairedApproaches.Count - 1].SignalApproach.Signal.SignalDescription, "", "",
+                        route.RouteSignals.LastOrDefault().SignalId, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        0, route.RouteSignals.LastOrDefault().Signal.SignalDescription, "", "",
                         "",
                         "", "", 0, 0, 0, 0,
-                        PairedApproaches.Count, 0, 0);
+                        route.RouteSignals.Count , 0, 0);
 
                 var cumulativeChange = 0;
 

@@ -27,7 +27,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 case XAxisType.TimeOfDay:
                     GetTimeOfDayCharts();
                     break;
-                case XAxisType.Phase:
+                case XAxisType.Approach:
                     GetApproachCharts();
                     break;
                 case XAxisType.Direction:
@@ -139,6 +139,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         {
                             SetTimeXAxisSignalSeriesForEventCount(chart, signal);
                         }
+                        SaveChartImage(chart);
                     }
                     break;
                 case SeriesType.Direction:
@@ -153,6 +154,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                             Series series = eventCountOptions.GetTimeXAxisSignalSeries(signal);
                             chart.Series.Add(series);
                         }
+                        SaveChartImage(chart);
                     }
                     ;
                     break;
@@ -164,6 +166,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         SetTimeXAxisRouteSeriesForEventCount(Signals, chart);
 
                     }
+                    SaveChartImage(chart);
                     break;
                 case SeriesType.Route:
                     chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
@@ -171,13 +174,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     if (ShowEventCount)
                     {
                         SetTimeXAxisRouteSeriesForEventCount(Signals, chart);
-
                     }
+                        SaveChartImage(chart);
                     break;
                 default:
                     throw new Exception("Invalid X-Axis Series Combination");
             }
-            SaveChartImage(chart);
         }
 
 
@@ -526,7 +528,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var phaseDescription = GetPhaseDescription(approach, getProtectedPhase);
             var binsContainers = GetBinsContainersByApproach(approach, getProtectedPhase);
-            var series = CreateSeries(colorCode, approach.Description + phaseDescription);
+            var series = CreateSeries(colorCode,
+                approach.DirectionType.Abbreviation + " PH" + (getProtectedPhase ? approach.ProtectedPhaseNumber.ToString(): approach.PermissivePhaseNumber.Value.ToString())); //approach.Description + phaseDescription);
             if ((TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Month ||
                  TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Year) &&
                 TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)

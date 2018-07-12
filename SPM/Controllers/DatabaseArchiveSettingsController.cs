@@ -13,6 +13,8 @@ using SPM.Filters;
 
 namespace SPM.Controllers
 {
+
+    [Authorize(Roles = "Admin")]
     public class DatabaseArchiveSettingsController : Controller
     {
 
