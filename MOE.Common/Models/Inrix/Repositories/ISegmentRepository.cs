@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Models.Inrix.Repositories
 {
     public interface ISegmentRepository
     {
-        List<Models.Inrix.Segment> GetAll();
-        void Add(Models.Inrix.Segment segment);
+        List<Segment> GetAll();
+        void Add(Segment segment);
         void Update(int segmentID, string newSegmentName, string newSegmentDescription);
-        void Remove(Models.Inrix.Segment segment);
+        void Remove(Segment segment);
         void RemoveByID(int segmentID);
 
-        Models.Inrix.Segment SelectByID(int segmentID);
+        Segment SelectByID(int segmentID);
 
-        Models.Inrix.Segment SelectSegmentByName(string name);
+        Segment SelectSegmentByName(string name);
     }
 }

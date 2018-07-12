@@ -1,58 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Models.ViewModel
 {
     public class LinkPivotResultViewModel
     {
+        public LinkPivotResultViewModel()
+        {
+            Adjustments = new List<LinkPivotAdjustment>();
+            ApproachLinks = new List<LinkPivotApproachLink>();
+        }
+
         public List<LinkPivotAdjustment> Adjustments { get; set; }
         public List<LinkPivotApproachLink> ApproachLinks { get; set; }
 
         //Summary Info
-        public Double TotalAogDownstreamBefore { get; set; }
-        public Double TotalPaogDownstreamBefore { get; set; }
-        public Double TotalAogDownstreamPredicted { get; set; }
-        public Double TotalPaogDownstreamPredicted { get; set; }
-        public Double TotalAogUpstreamBefore { get; set; }
-        public Double TotalPaogUpstreamBefore { get; set; }
-        public Double TotalAogUpstreamPredicted { get; set; }
-        public Double TotalPaogUpstreamPredicted { get; set; }
-        public Double TotalAogBefore { get; set; }
-        public Double TotalPaogBefore { get; set; }
-        public Double TotalAogPredicted { get; set; }
-        public Double TotalPaogPredicted { get; set; }
+        public double TotalAogDownstreamBefore { get; set; }
+
+        public double TotalPaogDownstreamBefore { get; set; }
+        public double TotalAogDownstreamPredicted { get; set; }
+        public double TotalPaogDownstreamPredicted { get; set; }
+        public double TotalAogUpstreamBefore { get; set; }
+        public double TotalPaogUpstreamBefore { get; set; }
+        public double TotalAogUpstreamPredicted { get; set; }
+        public double TotalPaogUpstreamPredicted { get; set; }
+        public double TotalAogBefore { get; set; }
+        public double TotalPaogBefore { get; set; }
+        public double TotalAogPredicted { get; set; }
+        public double TotalPaogPredicted { get; set; }
 
         //Total change chart
         public double TotalChartExisting { get; set; }
+
         public double TotalChartPositiveChange { get; set; }
         public double TotalChartNegativeChange { get; set; }
         public double TotalChartRemaining { get; set; }
 
         //Total upstream change chart
         public double TotalUpstreamChartExisting { get; set; }
+
         public double TotalUpstreamChartPositiveChange { get; set; }
         public double TotalUpstreamChartNegativeChange { get; set; }
         public double TotalUpstreamChartRemaining { get; set; }
 
         //Total downstream change chart
         public double TotalDownstreamChartExisting { get; set; }
+
         public double TotalDownstreamChartPositiveChange { get; set; }
         public double TotalDownstreamChartNegativeChange { get; set; }
         public double TotalDownstreamChartRemaining { get; set; }
 
-        public LinkPivotResultViewModel()
-        {
-            Adjustments = new List<LinkPivotAdjustment>();
-            ApproachLinks = new List<LinkPivotApproachLink>();           
-        }
-
         public void SetSummary()
         {
             //Get the Total Summary Chart Settings
-            double tempChange = TotalPaogPredicted - TotalPaogBefore;
+            var tempChange = TotalPaogPredicted - TotalPaogBefore;
             if (tempChange < 0)
             {
                 TotalChartPositiveChange = 0;
@@ -81,7 +82,8 @@ namespace MOE.Common.Models.ViewModel
                 TotalUpstreamChartPositiveChange = tempChange;
                 TotalUpstreamChartExisting = TotalPaogUpstreamBefore;
             }
-            TotalUpstreamChartRemaining = 100 - (TotalUpstreamChartExisting + TotalUpstreamChartPositiveChange + TotalUpstreamChartNegativeChange);
+            TotalUpstreamChartRemaining = 100 - (TotalUpstreamChartExisting + TotalUpstreamChartPositiveChange +
+                                                 TotalUpstreamChartNegativeChange);
 
             //Get the Downstream Summary Chart Settings
             tempChange = TotalPaogDownstreamPredicted - TotalPaogDownstreamBefore;
@@ -97,11 +99,8 @@ namespace MOE.Common.Models.ViewModel
                 TotalDownstreamChartPositiveChange = tempChange;
                 TotalDownstreamChartExisting = TotalPaogDownstreamBefore;
             }
-            TotalDownstreamChartRemaining = 100 - (TotalDownstreamChartExisting + TotalDownstreamChartPositiveChange + TotalDownstreamChartNegativeChange);
-
-        
+            TotalDownstreamChartRemaining = 100 - (TotalDownstreamChartExisting + TotalDownstreamChartPositiveChange +
+                                                   TotalDownstreamChartNegativeChange);
         }
     }
-
-    
 }

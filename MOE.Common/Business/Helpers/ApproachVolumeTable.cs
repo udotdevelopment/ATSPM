@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MOE.Common.Business.Helpers
+﻿namespace MOE.Common.Business.Helpers
 {
     public class ApproachVolumeTable
     {
         public string TotalVolume { get; set; }
-        public string PeakHour  { get; set; }
+        public string PeakHour { get; set; }
         public string PeakHourVolume { get; set; }
         public string PeakHourKFactor { get; set; }
 
@@ -31,12 +25,9 @@ namespace MOE.Common.Business.Helpers
         public string D2PeakHourDFactor { get; set; }
 
 
-
-
-
         //public ApproachVolumeTable(MOE.Common.Models.Detector gd)
         //{
-           
+
         //    MOE.Common.Models.Repositories.IDetectorRepository gdr = MOE.Common.Models.Repositories.DetectorRepositoryFactory.Create();
         //    MOE.Common.Models.Repositories.IDetectorCommentRepository dcr = MOE.Common.Models.Repositories.DetectorCommentRepositoryFactory.Create();
 
@@ -49,11 +40,6 @@ namespace MOE.Common.Business.Helpers
         //    }
 
 
-
-
-
-            
         //}
-
     }
 }

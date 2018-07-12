@@ -1,0 +1,18 @@
+﻿@model MOE.Common.Business.FilterExtensions.FilterDetector
+
+<div class="panel panel-detector">
+<div class="panel-heading" >
+    <h4 class="panel-title">
+        <a id="Detector" data-toggle="collapse" href="#DetectorConfiguration_@Model.Id" >
+            Detector Channel @Html.DisplayFor(model => model.Description)
+        </a>
+        <a class="pull-right">
+            <span>@Html.LabelFor(model => model.Exclude)
+                @Html.CheckBoxFor(m => m.Exclude)</span>
+        </a>
+    </h4>
+</div>
+<div id="DetectorConfiguration_@Model.Id" class="panel-collapse panel-body collapse ControlHeader" role="tabpanel" aria-labelledby="headingOne">
+        @Html.HiddenFor(m => m.Id)
+        
+    </div></div>

@@ -36,15 +36,11 @@ namespace GetMaxTimeRecords
                 }
             }
 
-            List<MOE.Common.Models.Signal> signalsDT;
-            MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
-            using (db)
-            {
-                signalsDT = (from s in db.Signals
-                            where s.ControllerTypeID == 4
-                            select s).ToList();
-            }
+            MOE.Common.Models.Repositories.ISignalsRepository sr = 
+                MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
 
+            List<MOE.Common.Models.Signal> signalsDT = sr.GetLatestVerionOfAllSignalsByControllerType(4);
+           
          
 
                 Parallel.ForEach(signalsDT, options, row =>
@@ -115,12 +111,7 @@ namespace GetMaxTimeRecords
 
                 return (mostRecentEventTime);
             }
-            else
-            {
-                return (DateTime.Now.AddDays(-2));
-            }
-
-
+            return (DateTime.Now.AddDays(-2));
         }
 
        

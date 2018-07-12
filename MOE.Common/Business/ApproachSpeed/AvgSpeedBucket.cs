@@ -1,197 +1,103 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Reflection;
+using Microsoft.EntityFrameworkCore.Internal;
+using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business
 {
     public class AvgSpeedBucket
     {
-        //Xaxis is time
-        private DateTime xAxis;
-        public DateTime XAxis
+        private int _binSizeMultiplier;
+
+        public AvgSpeedBucket(DateTime startTime, DateTime endTime, int binSize, int movementdelay,
+            List<CycleSpeed> cycles)
         {
-            get
+            StartTime = startTime;
+            EndTime = endTime;
+            XAxis = startTime;
+            _binSizeMultiplier = 60 / binSize;
+            MovementDelay = movementdelay;
+            var speedsForBucket = new List<int>();
+
+            foreach (var cycle in cycles)
+                if (cycle.StartTime >= startTime && cycle.StartTime < endTime)
+                    speedsForBucket.AddRange(cycle.SpeedEvents.Select(s => s.MPH));
+
+            if (speedsForBucket.Count > 0)
             {
-                return xAxis; 
-            }
-            set
-            {
-                xAxis = value;
-            }
-        }
-
-        private DateTime totalHits;
-        public DateTime TotalHits
-        {
-            get
-            {
-                return totalHits;
-            }
-            set
-            {
-                totalHits = value;
-            }
-        }
-
-        private DateTime totalMPH;
-        public DateTime TotalMPH
-        {
-            get
-            {
-                return totalMPH;
-            }
-            set
-            {
-                totalMPH = value;
-            }
-        }
-
-        private DateTime startTime;
-        public DateTime StartTime
-        {
-            get
-            {
-                return startTime;
-            }
-            
-        }
-
-        private DateTime endTime;
-        public DateTime EndTime
-        {
-            get
-            {
-                return endTime;
-            }
-            
-        }
-
-        private int avgSpeed;
-        public int AvgSpeed
-        {
-            get
-            {
-                return avgSpeed;
-            }
-        }
-
-        private int eightyFifth;
-        public int EightyFifth
-        {
-            get
-            {
-                return eightyFifth;
-            }
-        }
-
-        private int minSpeedFilter;
-        public int MinSpeedFilter
-        {
-            get
-            {
-                return minSpeedFilter;
-            }
-        }
-
-        private int movementDelay;
-        public int MovementDelay
-        {
-            get
-            {
-                return movementDelay;
-            }
-        }
-
-
-
-        private int binSizeMultiplier;
-
-        public AvgSpeedBucket(DateTime startTime, DateTime endTime, List<Cycle> CycleCollection, int binSize, int minspeedfilter, int movementdelay)
-        {
-            this.startTime = startTime;
-            this.endTime = endTime;
-            this.xAxis = endTime;
-            this.binSizeMultiplier = 60 / binSize;
-            this.avgSpeed = AddspeedHitToAverage(CycleCollection).Item1;
-            this.eightyFifth = AddspeedHitToAverage(CycleCollection).Item2;
-            this.minSpeedFilter = minspeedfilter;
-            this.movementDelay = movementdelay;
-        }
-
-        public Tuple<int, int> AddspeedHitToAverage(List<Cycle> CycleCollection)
-        {
-            int AverageSpeed;
-            int TotalSpeed = 0;
-            int TotalHits = 0;
-            int Eightyfifth = 0;
-            int EighyFiveIndexInt = 0;
-            List<int> Speeds = new List<int>();
-            
-            
-
-                
-
-                var query = from cycle in CycleCollection
-                            where (cycle.StartTime > this.startTime && cycle.EndTime < this.endTime)
-                            select cycle;
-
-            foreach (var Cy in query)
-            {
-                
-                foreach (Models.Speed_Events SH in Cy.SpeedsForCycle)
-                {
-
-                        TotalSpeed = TotalSpeed + SH.MPH;
-                        Speeds.Add(SH.MPH);
-                        TotalHits++;
-                        //TotalHits = TotalHits + Cy.SpeedCollection.Items.Count;
-                    
-                }
-            }
-
-            if (TotalHits > 0)
-            {
-            double RawAverageSpeed = (TotalSpeed / TotalHits);
-            AverageSpeed = Convert.ToInt32( Math.Round(RawAverageSpeed));
-            double EighyFiveIndex =  ((TotalHits * .85) + .5);
-            Speeds.Sort();
-            if (Speeds.Count > 3)
-            {
-                if ((EighyFiveIndex % 1) == 0)
-                {
-                    EighyFiveIndexInt = Convert.ToInt16(EighyFiveIndex);
-                    Eightyfifth = Speeds.ElementAt(EighyFiveIndexInt - 2);
-                }
-                else
-                {
-                    double IndexMod = (EighyFiveIndex % 1);
-                    EighyFiveIndexInt = Convert.ToInt16(EighyFiveIndex);
-                    int Speed1 = Speeds.ElementAt(EighyFiveIndexInt - 2);
-                    int Speed2 = Speeds.ElementAt(EighyFiveIndexInt - 1);
-                    double RawEightyfifth = (1 - IndexMod) * Speed1 + IndexMod * Speed2;
-                    Eightyfifth = Convert.ToInt32(Math.Round(RawEightyfifth));
-                }
-            }
-            
-               
-                
-
- 
+                speedsForBucket.Sort();
+                SpeedVolume = speedsForBucket.Count();
+                SummedSpeed = speedsForBucket.Sum();
+                AvgSpeed = Convert.ToInt32(Math.Round(speedsForBucket.Average()));
+                EightyFifth = GetPercentile(speedsForBucket, .85);
+                FifteenthPercentile = GetPercentile(speedsForBucket, .15);
             }
             else
             {
-                AverageSpeed = 0;
-                Eightyfifth = 0;
+                SpeedVolume = 0;
+                SummedSpeed = 0;
+                AvgSpeed = 0;
+                EightyFifth = 0;
+                FifteenthPercentile = 0;
             }
-
-            return new Tuple<int, int>(AverageSpeed, Eightyfifth);
-
-                }
-
-        
-
-            }
-
-
         }
+
+        public DateTime XAxis { get; set; }
+
+        public DateTime TotalMph { get; set; }
+
+        public DateTime StartTime { get; }
+
+        public DateTime EndTime { get; }
+
+        public int AvgSpeed { get; }
+
+        public int EightyFifth { get; }
+
+        public int FifteenthPercentile { get; }
+
+
+        public int MovementDelay { get; }
+
+        public int SummedSpeed { get; }
+        public int SpeedVolume { get; }
+
+        private int GetPercentile(List<int> speeds, double percentile)
+        {
+            var percentileValue = 0;
+            try
+            {
+                var tempPercentileIndex = SpeedVolume * percentile - 1;
+
+                if (SpeedVolume > 3)
+                {
+                    var percentileIndex = 0;
+                    if (tempPercentileIndex % 1 > 0)
+                    {
+                        percentileIndex = Convert.ToInt32(Math.Round(tempPercentileIndex + .5));
+                        percentileValue = speeds[percentileIndex];
+                    }
+                    else
+                    {
+                        percentileIndex = Convert.ToInt32(tempPercentileIndex);
+                        var speed1 = speeds[percentileIndex];
+                        var speed2 = speeds[percentileIndex + 1];
+                        double rawEightyfifth = (speed1 + speed2) / 2;
+                        percentileValue = Convert.ToInt32(Math.Round(rawEightyfifth));
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                var errorLog = ApplicationEventRepositoryFactory.Create();
+                errorLog.QuickAdd(Assembly.GetExecutingAssembly().GetName().ToString(),
+                    GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                throw new Exception("Error creating Percentile");
+            }
+            return percentileValue;
+        }
+    }
+}

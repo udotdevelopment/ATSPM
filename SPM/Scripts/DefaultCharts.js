@@ -9,8 +9,134 @@
         }
     });
     $(".datepicker").datepicker();
+    LoadFromUrl();
 });
 
+function SetCommonValues(signalId, startDateDay, startTime, startAmPmDdl, endDateDay, endTime, endAmPmDdl, yAxisMax, y2AxisMax) {
+    $("#SignalID").val(signalId);
+    $("#StartDateDay").val(startDateDay);
+    $("#StartTime").val(startTime);
+    $("#StartAMPMddl").val(startAmPmDdl);
+    $("#EndDateDay").val(endDateDay);
+    $("#EndTime").val(endTime);
+    $("#EndAMPMddl").val(endAmPmDdl);
+   
+
+    if (yAxisMax != null) {
+        $("#YAxisMax").val(yAxisMax);
+    }
+    if (y2AxisMax != null) {
+        $("#Y2AxisMax").val(y2AxisMax);
+    }
+}
+
+
+
+function SetPhaseTerminationMetric(consecutiveCount, showPlans, showPed) {
+    $("#SelectedConsecutiveCount").val(consecutiveCount);
+    $("#ShowPlanStripes").prop('checked',showPlans);
+    $("#ShowPedActivity").prop('checked',showPed);
+}
+
+function SetSplitMonitorMetric(selectedPercentileSplit, showPlanStripes, showPedActivity, showAverageSplit, showPercentMaxOutForceOff,
+    showPercentGapOuts, showPercentSkip)
+{
+    $("#SelectedPercentileSplit").val(selectedPercentileSplit);
+    $("#ShowPlanStripes").prop('checked',showPlanStripes);
+    $("#ShowPedActivity").prop(showPedActivity);
+    $("#ShowAverageSplit").prop(showAverageSplit);
+    $("#ShowPercentMaxOutForceOff").prop(showPercentMaxOutForceOff);
+    $("#ShowPercentGapOuts").prop(showPercentGapOuts);
+    $("#ShowPercentSkip").prop(showPercentSkip);
+
+}
+
+function SetPedDelayMetric() {
+
+}
+
+function SetPreemptionDetailsMetric() {
+
+}
+
+function SetTMCMetric(selectedBinSize, showLaneVolumes, showTotalVolumes, showDataTable) {
+    $("#SelectedBinSize").val(selectedBinSize);
+    $("#ShowLaneVolumes").prop('checked',showLaneVolumes);
+    $("#ShowTotalVolumes").prop('checked',showTotalVolumes);
+    $("#ShowDataTable").prop('checked',showDataTable);
+}
+
+function SetPCDMetric(selectedBinSize, selectedDotSize, selectedLineSize, showPlanStatistics, showVolumes) {
+    $("#SelectedBinSize").val(selectedBinSize);
+    $("#SelectedDotSize").val(selectedDotSize);
+    $("#SelectedLineSize").val(selectedLineSize);
+    $("#ShowPlanStatistics").prop('checked',showPlanStatistics);
+    $("#ShowVolumes").prop('checked',showVolumes);
+}
+
+function SetApproachVolumeMetric(selectedBinSize, showDirectionalSplits, showTotalVolumes, ShowSbWbVolume, ShowNbEbVolume,
+    showTMCDetection, showAdvanceDetection) {
+    $("#SelectedBinSize").val(selectedBinSize);
+    $("#ShowDirectionalSplits").prop('checked',showDirectionalSplits);
+    $("#ShowTotalVolumes").prop('checked',showTotalVolumes);
+    $("#ShowSbWbVolume").prop('checked',ShowSbWbVolume);
+    $("#ShowNbEbVolume").prop('checked',ShowNbEbVolume);
+    $("#ShowTMCDetection").prop('checked',showTMCDetection);
+    $("#ShowAdvanceDetection").prop('checked',showAdvanceDetection);
+}
+
+function SetApproachDelayMetric(selectedBinSize, showPlanStatistics, showTotalDelayPerHour, showDelayPerVehicle) {
+    $("#SelectedBinSize").val(selectedBinSize);
+    $("#ShowPlanStatistics").prop('checked',showPlanStatistics);
+    $("#ShowTotalDelayPerHour").prop('checked',showTotalDelayPerHour);
+    $("#ShowDelayPerVehicle").prop('checked',showDelayPerVehicle);
+
+}
+
+function SetAoRMetric(selectedBinSize, showPlanStatistics) {
+    $("#SelectedBinSize").val(selectedBinSize);
+    $("#ShowPlanStatistics").prop('checked',showPlanStatistics);
+}
+
+function SetYRAMetric(severeLevelSeconds, showRedLightViolations, showSevereRedLightViolations, showPercentRedLightViolations,
+    showPercentSevereRedLightViolations, showAverageTimeRedLightViolations, showYellowLightOccurrences, showPercentYellowLightOccurrences, showAverageTimeYellowOccurences)
+{
+    $("#SevereLevelSeconds").val(severeLevelSeconds);
+    $("#ShowRedLightViolations").prop('checked',showRedLightViolations);
+    $("#ShowSevereRedLightViolations").prop('checked',showSevereRedLightViolations);
+    $("#ShowPercentRedLightViolations").prop('checked',showPercentRedLightViolations);
+    $("#ShowPercentSevereRedLightViolations").prop('checked',showPercentSevereRedLightViolations);
+    $("#ShowPercentRedLightViolations").prop('checked',showPercentRedLightViolations);
+    $("#ShowPercentSevereRedLightViolations").prop('checked',showPercentSevereRedLightViolations);
+    $("#ShowAverageTimeRedLightViolations").prop('checked',showAverageTimeRedLightViolations);
+    $("#ShowYellowLightOccurrences").prop('checked',showYellowLightOccurrences);
+    $("#ShowPercentYellowLightOccurrences").prop('checked',showPercentYellowLightOccurrences);
+    $("#ShowAverageTimeYellowOccurences").prop('checked',showAverageTimeYellowOccurences);
+}
+
+function SetSpeedMetric(selectedBinSize, showPlanStatistics, showAverageSpeed, showPostedSpeed, show85Percentile, show15Percentile)
+{
+    $("#SelectedBinSize").val(selectedBinSize);
+    $("#ShowPlanStatistics").prop('checked',showPlanStatistics);
+    $("#ShowAverageSpeed").prop('checked',showAverageSpeed);
+    $("#ShowPostedSpeed").prop('checked',showPostedSpeed);
+    $("#Show85Percentile").prop('checked',show85Percentile);
+    $("#Show15Percentile").prop('checked', show15Percentile);
+}
+
+function SetSplitFailMetric(firstSecondsOfRed, showFailLines, showAverageLines, showPercentLines) {
+    $("#FirstSecondsOfRed").val(firstSecondsOfRed);
+    $("#ShowFailLines").prop('checked', showFailLines);
+    $("#ShowAvgLines").prop('checked', showAverageLines);
+    $("#ShowPercentFailLines").prop('checked', showPercentLines);
+}
+
+
+function SetBaseOptions() {
+    $("#SignalID").val(7062);
+    $("#StartDateDay").val('10/17/2017');
+    $("#EndDateDay").val('10/17/2017');
+}
 
 function SetControlValues(signalID, selectedMetricID) {
     $("#SignalID").val(signalID);    
@@ -31,7 +157,7 @@ function GetMetricsList(signalID, selectedMetricID)
         url: urlpathGetMetricsList,
         type: "POST",
         cache: false,
-        async: true,
+        async: false,
         datatype: "json",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(tosend),
@@ -42,7 +168,6 @@ function GetMetricsList(signalID, selectedMetricID)
         },
         onerror: function () { alert("Error"); }
     });
-    
 }
 
 $("#ResetDate").click(function () { ResetDates(); });
@@ -103,9 +228,22 @@ function GetOptions() {
 
 function GetOptionsByID(selectedID) {
     
-    var metricPath = urlOptions + "/"+ selectedID;
-    $.get(metricPath, function (data) {
-    $('#Options').html(data);
-    $.validator.unobtrusive.parse($("#Options"));
+    var metricPath = urlOptions + "/" + selectedID;
+    $.ajax({
+        url: metricPath,
+        type: "POST",
+        cache: false,
+        async: false,
+        datatype: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            $('#Options').html(data);
+            $.validator.unobtrusive.parse($("#Options"));
+        },
+        onerror: function () { alert("Error"); }
     });
+    //$.get(metricPath, function (data) {
+    //$('#Options').html(data);
+    //$.validator.unobtrusive.parse($("#Options"));
+    //});
 }

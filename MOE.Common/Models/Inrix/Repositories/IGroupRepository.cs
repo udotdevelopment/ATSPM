@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Models.Inrix.Repositories
 {
     public interface IGroupRepository
     {
-        List<Models.Inrix.Group> GetAll();
-        void Add(Models.Inrix.Group group);
-        void Update(Models.Inrix.Group group);
-        void Remove(Models.Inrix.Group group);
+        List<Group> GetAll();
+        void Add(Group group);
+        void Update(Group group);
+        void Remove(Group group);
         void RemoveByID(int groupID);
 
-        Models.Inrix.Group SelectByID(int groupID);
+        Group SelectByID(int groupID);
 
-        Models.Inrix.Group SelectGroupByName(string name);
+        Group SelectGroupByName(string name);
     }
 }

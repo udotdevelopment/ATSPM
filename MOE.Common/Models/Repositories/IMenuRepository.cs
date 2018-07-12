@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
     public interface IMenuRepository
     {
-        List<Models.Menu> GetAll(string Application);
-        Models.Menu GetMenuItembyID(int id);
-        void Add(Models.Menu menuItem);
+        List<Menu> GetAll(string Application);
+        Menu GetMenuItembyID(int id);
+        void Add(Menu menuItem);
         void Remove(int id);
-        void Update(Models.Menu menuItem);
+        void Update(Menu menuItem);
         List<Menu> GetTopLevelMenuItems(string Application);
     }
 }

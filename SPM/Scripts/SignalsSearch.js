@@ -1,15 +1,15 @@
 ﻿$(function (ready) {
-    $("#SignalHeader").click(function () {
+    $("#SignalHeader").click(function() {
         GetSignals();
-    })
+    });
     //$.validator.unobtrusive.parse($("#SignalSearchContainer"));
     $.validator.unobtrusive.parse($('form'));
 });
 function AddEventsForSignalSearch() {
-    $("#FilterButton").click(function () { GetSignals(1); })
-    $("#ClearFilterButton").click(function () {
+    $("#FilterButton").click(function() { GetSignals(1); });
+    $("#ClearFilterButton").click(function() {
         ClearSignalSearch();
-    })
+    });
 }
 
 
@@ -19,12 +19,19 @@ function ClearSignalSearch() {
     GetSignals(1);
 }
 
-$("#SignalID").keypress(function (e) {
+//$("#SignalID").keypress(function (e) {
+//    if (e.which == 13) {
+//        e.preventDefault();
+//        GetSignalLocation();
+//    }
+//});
+
+function SignalIdPress(e) {
     if (e.which == 13) {
         e.preventDefault();
         GetSignalLocation();
     }
-});
+}
 
 function GetSignals(page) {
     var filterType = $("#Filters").val();

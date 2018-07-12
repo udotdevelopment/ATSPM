@@ -18,11 +18,11 @@ namespace MOE.Common.Models.ViewModel.RouteEdit
             return list;
         }
 
-        public List<Models.ApproachRouteDetail> GetRouteDetails(Models.ApproachRoute Route)
+        public List<Models.RouteSignal> GetRouteDetails(Models.ApproachRoute Route)
         {
             MOE.Common.Models.Repositories.IApproachRouteDetailRepository ardr = MOE.Common.Models.Repositories.ApproachRouteDetailRepositoryFactory.Create();
 
-            return ardr.GetByRouteID(Route.ApproachRouteId);
+            return ardr.GetByRouteID(Route.Id);
         }
     }
 }

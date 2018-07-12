@@ -2,67 +2,50 @@
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Models.Repositories
 {
-    public class DetectorCommentRepository: IDetectorCommentRepository
+    public class DetectorCommentRepository : IDetectorCommentRepository
     {
-        Models.SPM db = new SPM();
+        private readonly SPM db = new SPM();
 
 
-        public List<Models.DetectorComment> GetAllDetectorComments()
+        public List<DetectorComment> GetAllDetectorComments()
         {
             db.Configuration.LazyLoadingEnabled = false;
-            List<Models.DetectorComment> detectorComments = (from r in db.DetectorComments
-
-                                               select r).ToList();
+            var detectorComments = (from r in db.DetectorComments
+                select r).ToList();
 
             return detectorComments;
         }
 
-        public  Models.DetectorComment GetMostRecentDetectorCommentByDetectorID(int ID)
+        public DetectorComment GetMostRecentDetectorCommentByDetectorID(int ID)
         {
-            DetectorComment comment = db.DetectorComments.Where(r => r.ID == ID).OrderBy(r => r.TimeStamp).FirstOrDefault();
+            var comment = db.DetectorComments.Where(r => r.ID == ID).OrderBy(r => r.TimeStamp).FirstOrDefault();
 
-            if(comment != null)
-            {
+            if (comment != null)
                 return comment;
-            }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
-        public Models.DetectorComment GetDetectorCommentByDetectorCommentID(int detectorCommentID)
+        public DetectorComment GetDetectorCommentByDetectorCommentID(int detectorCommentID)
         {
-            var detectorComment = (from r in db.DetectorComments
-                            where r.CommentID == detectorCommentID
-                            select r);
+            var detectorComment = from r in db.DetectorComments
+                where r.CommentID == detectorCommentID
+                select r;
 
             return detectorComment.FirstOrDefault();
         }
 
-        public void AddOrUpdate(MOE.Common.Models.DetectorComment detectorComment)
+        public void AddOrUpdate(DetectorComment detectorComment)
         {
-
-
-            MOE.Common.Models.DetectorComment g = (from r in db.DetectorComments
-                            where r.CommentID == detectorComment.CommentID
-                                            select r).FirstOrDefault();
+            var g = (from r in db.DetectorComments
+                where r.CommentID == detectorComment.CommentID
+                select r).FirstOrDefault();
             if (g != null)
-            {
                 db.Entry(g).CurrentValues.SetValues(detectorComment);
-            }
             else
-            {
-            
                 db.DetectorComments.Add(detectorComment);
-                
-
-            }
 
             try
             {
@@ -75,25 +58,19 @@ namespace MOE.Common.Models.Repositories
                     Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
                         eve.Entry.Entity.GetType().Name, eve.Entry.State);
                     foreach (var ve in eve.ValidationErrors)
-                    {
                         Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
                             ve.PropertyName, ve.ErrorMessage);
-                    }
                 }
                 throw;
             }
-
         }
 
-        public void Remove(MOE.Common.Models.DetectorComment detectorComment)
+        public void Remove(DetectorComment detectorComment)
         {
-
-
-            MOE.Common.Models.DetectorComment g = (from r in db.DetectorComments
-                                            where r.CommentID == detectorComment.CommentID
-                                            select r).FirstOrDefault();
+            var g = (from r in db.DetectorComments
+                where r.CommentID == detectorComment.CommentID
+                select r).FirstOrDefault();
             if (g != null)
-            {
                 try
                 {
                     db.DetectorComments.Remove(g);
@@ -101,9 +78,9 @@ namespace MOE.Common.Models.Repositories
                 }
                 catch (Exception ex)
                 {
-                    MOE.Common.Models.Repositories.IApplicationEventRepository repository =
-                            MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                    MOE.Common.Models.ApplicationEvent error = new ApplicationEvent();
+                    var repository =
+                        ApplicationEventRepositoryFactory.Create();
+                    var error = new ApplicationEvent();
                     error.ApplicationName = "MOE.Common";
                     error.Class = "Models.Repository.DetectorCommentRepository";
                     error.Function = "Delete";
@@ -113,29 +90,25 @@ namespace MOE.Common.Models.Repositories
                     repository.Add(error);
                     throw;
                 }
-            }
         }
 
-        public void Add(MOE.Common.Models.DetectorComment detectorComment)
+        public void Add(DetectorComment detectorComment)
         {
-
-
-            MOE.Common.Models.DetectorComment g = (from r in db.DetectorComments
-                                            where r.CommentID == detectorComment.CommentID
-                                            select r).FirstOrDefault();
+            var g = (from r in db.DetectorComments
+                where r.CommentID == detectorComment.CommentID
+                select r).FirstOrDefault();
             if (g == null)
-            {
                 try
                 {
                     db.DetectorComments.Add(detectorComment);
                     db.SaveChanges();
                 }
-                                
+
                 catch (Exception ex)
                 {
-                    MOE.Common.Models.Repositories.IApplicationEventRepository repository =
-                            MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                    MOE.Common.Models.ApplicationEvent error = new ApplicationEvent();
+                    var repository =
+                        ApplicationEventRepositoryFactory.Create();
+                    var error = new ApplicationEvent();
                     error.ApplicationName = "MOE.Common";
                     error.Class = "Models.Repository.DetectorCommentRepository";
                     error.Function = "Add";
@@ -145,11 +118,6 @@ namespace MOE.Common.Models.Repositories
                     repository.Add(error);
                     throw;
                 }
-            }
-
         }
-
     }
 }
-
-

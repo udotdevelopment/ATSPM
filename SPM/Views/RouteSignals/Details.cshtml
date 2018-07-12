@@ -1,0 +1,50 @@
+﻿@model MOE.Common.Models.RouteSignal
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>RouteSignal</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Route.RouteName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Route.RouteName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Order)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Order)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.SignalId)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.SignalId)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |*@
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

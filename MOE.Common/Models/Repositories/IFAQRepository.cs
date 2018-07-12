@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
     public interface IFAQRepository
     {
-        List<Models.FAQ> GetAll();
-        Models.FAQ GetbyID(int id);
-        void Add(Models.FAQ item);
+        List<FAQ> GetAll();
+        FAQ GetbyID(int id);
+        void Add(FAQ item);
         void Remove(int id);
-        void Update(Models.FAQ item);
+        void Update(FAQ item);
     }
 }

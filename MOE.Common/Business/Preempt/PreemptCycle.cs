@@ -1,15 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Business.Preempt
 {
     public class PreemptCycle
     {
-       // public enum CycleState { InputOn, GateDown, InputOff, BeginTrackClearance, EntryStarted  };
-        
+        public List<DateTime> InputOff;
+        public List<DateTime> InputOn;
+        public List<DateTime> OtherPreemptStart;
+
+        public PreemptCycle()
+        {
+            InputOn = new List<DateTime>();
+            InputOff = new List<DateTime>();
+            OtherPreemptStart = new List<DateTime>();
+        }
+        // public enum CycleState { InputOn, GateDown, InputOff, BeginTrackClearance, EntryStarted  };
+
         public DateTime WarningInput { get; set; }
         public DateTime StartInputOn { get; set; }
         public DateTime CycleStart { get; set; }
@@ -26,154 +33,99 @@ namespace MOE.Common.Business.Preempt
         public DateTime TSPAdjustToEarlyGreen { get; set; }
         public DateTime TSPAdjustToExtendGreen { get; set; }
         public DateTime TSPCheckout { get; set; }
-        
+
         public bool HasDelay { get; set; }
-        public List<DateTime> InputOn;
-        public List<DateTime> InputOff;
-        public List<DateTime> OtherPreemptStart;
 
-        public PreemptCycle()
-        {
-            InputOn = new List<DateTime>();
-            InputOff = new List<DateTime>();
-            OtherPreemptStart = new List<DateTime>();
-        }
-
-        public Double Delay
+        public double Delay
         {
             get
             {
-                if(HasDelay && EntryStarted > DateTime.MinValue && CycleStart > DateTime.MinValue && EntryStarted > CycleStart)
-                {
+                if (HasDelay && EntryStarted > DateTime.MinValue && CycleStart > DateTime.MinValue &&
+                    EntryStarted > CycleStart)
                     return (EntryStarted - CycleStart).TotalSeconds;
-                }
-                                
-                else
-                {
-                    return 0;
-                }
+
+                return 0;
             }
         }
 
-      
-        public Double TimeToService{
-            get{
 
-                if (BeginTrackClearance > DateTime.MinValue && CycleStart > DateTime.MinValue && BeginTrackClearance >= CycleStart)
+        public double TimeToService
+        {
+            get
+            {
+                if (BeginTrackClearance > DateTime.MinValue && CycleStart > DateTime.MinValue &&
+                    BeginTrackClearance >= CycleStart)
                 {
                     if (HasDelay)
-                    {
                         return (BeginTrackClearance - EntryStarted).TotalSeconds;
-                    }
-                    else
-                    {
-                          return (BeginTrackClearance - CycleStart).TotalSeconds;
-                    }
+                    return (BeginTrackClearance - CycleStart).TotalSeconds;
                 }
 
-                else if (BeginDwellService > DateTime.MinValue && CycleStart > DateTime.MinValue && BeginDwellService >= CycleStart)
+                if (BeginDwellService > DateTime.MinValue && CycleStart > DateTime.MinValue &&
+                    BeginDwellService >= CycleStart)
                 {
-                      if (HasDelay)
-                    {
+                    if (HasDelay)
                         return (BeginDwellService - EntryStarted).TotalSeconds;
-                      }
-                      else
-                      {
                     return (BeginDwellService - CycleStart).TotalSeconds;
-                      }
                 }
 
-                else
-                {
-                    return 0;
-                }
-
-               }
+                return 0;
+            }
         }
 
-        public Double DwellTime
+        public double DwellTime
         {
             get
             {
-                if (CycleEnd > DateTime.MinValue && BeginDwellService > DateTime.MinValue && CycleEnd >= BeginDwellService)
-                {
+                if (CycleEnd > DateTime.MinValue && BeginDwellService > DateTime.MinValue &&
+                    CycleEnd >= BeginDwellService)
                     return (CycleEnd - BeginDwellService).TotalSeconds;
-                }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
-        
 
 
-
-
-        public Double TimeToCallMaxOut
+        public double TimeToCallMaxOut
         {
             get
             {
-
-                if (CycleStart > DateTime.MinValue && MaxPresenceExceeded > DateTime.MinValue && MaxPresenceExceeded > CycleStart)
-                {
+                if (CycleStart > DateTime.MinValue && MaxPresenceExceeded > DateTime.MinValue &&
+                    MaxPresenceExceeded > CycleStart)
                     return (MaxPresenceExceeded - CycleStart).TotalSeconds;
-                }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 
 
-        public Double TimeToEndOfEntryDelay
+        public double TimeToEndOfEntryDelay
         {
             get
             {
-
                 if (CycleStart > DateTime.MinValue && EntryStarted > DateTime.MinValue && EntryStarted > CycleStart)
-                {
                     return (EntryStarted - CycleStart).TotalSeconds;
-                }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 
-        public Double TimeToTrackClear
+        public double TimeToTrackClear
         {
             get
             {
-
-                if (BeginDwellService > DateTime.MinValue && BeginTrackClearance > DateTime.MinValue &&  BeginDwellService > BeginTrackClearance)
-                {
+                if (BeginDwellService > DateTime.MinValue && BeginTrackClearance > DateTime.MinValue &&
+                    BeginDwellService > BeginTrackClearance)
                     return (BeginDwellService - BeginTrackClearance).TotalSeconds;
-                }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 
-        public Double TimeToGateDown
+        public double TimeToGateDown
         {
             get
             {
-
                 if (CycleStart > DateTime.MinValue && GateDown > DateTime.MinValue && GateDown > CycleStart)
-                {
                     return (GateDown - CycleStart).TotalSeconds;
-                }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
-        
     }
 }

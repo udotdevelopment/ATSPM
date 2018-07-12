@@ -1,6 +1,6 @@
 ﻿function SetDatePicker() {
     $(".datepicker").attr('type', 'text');
-    $(".datepicker").datepicker();
+    $(".datepicker").datepicker({ constrainInput: false });
 }
 
 function SaveSuccesful()
@@ -16,10 +16,136 @@ function ClearActionMessage() {
 function SaveError() {
     $("#ActionMessage").text("Save Failed!");
 }
+function CreateJsonArray(formArray) {
+    var obj = {};
+    $.each(formArray, function (i, pair) {
+        var cObj = obj, pObj, cpName;
+        $.each(pair.name.split("."), function (i, pName) {
+            pObj = cObj;
+            cpName = pName;
+            cObj = cObj[pName] ? cObj[pName] : (cObj[pName] = {});
+        });
+        pObj[cpName] = pair.value;
+    });
+    return obj;
+}
+
+function AddNewVersion() {
+    var signalId = $("#editSignalID").val();
+    //var formData = $("#form0").serializeArray();
+    //var jsonForm = JSON.stringify(CreateJsonArray(formData));
+    //$.ajax({
+    //    url: urlpathGetSignalEdit,
+    //    headers: GetRequestVerificationTokenObject(),
+    //    type: "POST",
+    //    cache: false,
+    //    dataType: 'json',
+    //    data: formData,
+    //    async: true,
+    //    success: function (data) {
+    //    },
+    //    onerror: function () { alert("Error"); }
+    //});
+    var newVersionId;
+    $.ajax({
+        type: "POST",
+        cache: false,
+        async: true,
+        //headers: GetRequestVerificationTokenObject(),
+        //data: jsonForm,
+        //    dataType: 'json',
+        url: urlpathCopyVersion + "/" + signalId,
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            newVersionId = data;
+        },
+        complete:function() {
+            LoadVersionByVersionID(newVersionId);
+        },
+        statusCode: {
+            404: function (content) { alert('cannot find resource'); },
+            500: function (content) { alert('internal server error'); }
+        },
+        error: function (req, status, errorObj) {
+            alert(req.responseText);
+        }
+    });
+   
+}
+
+function DeleteVersion() {
+
+    if ($('#VersionID').children('option').length < 2) {
+        alert("Unable to delete version. You must have more than one version to delete.");
+    }
+    else {
+        var signalID = $("#SignalID").val();
+        var versionId = $("#VersionID option:selected").val();
+        var versionDescription = $("#VersionID option:selected").text();
+        var parameters = {};
+        parameters.ID = versionId;
+        if (confirm("Are you sure you want to delete the version " + versionDescription + " ?")) {
+            $.ajax({
+                type: "POST",
+                cache: false,
+                async: true,
+                headers: GetRequestVerificationTokenObject(),
+                data: JSON.stringify({ "versionId": versionId }),
+                url: urlpathDeleteVersion,
+                datatype: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function(data) {
+                    $('#SignalEdit').html(data);
+
+                },
+                statusCode: {
+                    404: function(content) { alert('cannot find resource'); },
+                    500: function(content) { alert('internal server error'); }
+                },
+                error: function(req, status, errorObj) {
+                    alert("Error");
+                }
+            });
+        }
+
+    }
+}
+
+function DeleteSignal() {
+    var signalID = $("#SignalID").val();
+
+    if (confirm("Are you sure you want to delete signal " + signalID + " ?")) {
+        $.ajax({
+            type: "POST",
+            cache: false,
+            async: true,
+            headers: GetRequestVerificationTokenObject(),
+            data: JSON.stringify({ "Id": signalID }),
+            url: urlpathDeleteSignal,
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function(data){window.location.reload(false)},
+                //(data) { $('#ConfigurationTableCollapse').html(data); },
+            statusCode: {
+                404: function (content) { alert('cannot find resource'); },
+                500: function (content) { alert('internal server error'); }
+            },
+            error: function (req, status, errorObj) {
+                alert("Error");
+            }
+        });
+    }
+
+
+}
+
+
 
 function GetCreateComment() {
-    var signalID = $("#editSignalID").val();
-    var metricPath = urlpathCreateMetricComments +'/' + signalID;
+    var signalID = $("#SignalID").val();
+   
+    var versionId =  $("#VersionID").val();
+    var metricPath = urlpathCreateMetricComments + '/' + versionId;
 
     $.ajax({
         url: metricPath,
@@ -33,8 +159,9 @@ function GetCreateComment() {
         }
     });
 }
-function GetConfigurationTable(signalID){
-   
+//function GetConfigurationTable(signalID) {
+    function GetConfigurationTable() {
+    var signalID = $("#SignalID").val();
     $.ajax({
         type: "Get",
         cache: false,
@@ -52,9 +179,41 @@ function GetConfigurationTable(signalID){
     });
 }
 
+function GetConfigurationTableForVersion(versionId) {
+
+    $.ajax({
+        type: "Get",
+        cache: false,
+        async: true,
+        data: { "VersionID": versionId },
+        url: urlpathGetConfigurationTableForVersion,
+        success: function (data) { $('#ConfigurationTableCollapse').html(data); },
+        statusCode: {
+            404: function (content) { alert('cannot find resource'); },
+            500: function (content) { alert(content.responseText); }
+        },
+        error: function (req, status, errorObj) {
+            alert("Error");
+        }
+    });
+}
+
+function UpdateVersionDropdown()
+{
+    var selIndex = $("#VersionID option:selected").index();
+    var dd = document.getElementById('VersionID');
+    var oldVersionDescription = $("#VersionID option:selected").text();
+    var note = $("#Note").val();
+    var date = $("#End").val();
+    var newVersionDescription = date + " - " + note;
+    dd.options[selIndex].text = newVersionDescription;
+}
+
 function PostCreateComment() {
     var tosend = {};
-    tosend.SignalID = $("#editSignalID").val();
+    
+    tosend.VersionID =  $("#VersionID").val();
+    tosend.SignalID = $("#SignalID").val();
     tosend.CommentText = $("#CommentText").val();
     tosend.MetricIDs = [];
     $("[name='MetricIDs']").each(function () {
@@ -90,6 +249,8 @@ function PostCreateComment() {
     }
 }
 
+
+
 function GetCreateDetectorComment(ID) {
     var metricPath = urlpathCreateDetectorComments+'/' + ID;
 
@@ -107,6 +268,7 @@ function GetCreateDetectorComment(ID) {
 }
 
 function PostCreateDetectorComment(ID) {
+   
     var tosend = {};
     tosend.ID = ID;
     tosend.CommentText = $("#CommentText").val();
@@ -154,13 +316,14 @@ function CreateNewSignal() {
         }
     });
 }
+
 function SetSignalID(newSignalID)
 {
     $("#SignalID").val(newSignalID);
 }
 
 function CopySignal() {    
-    var signalID = $("#editSignalID").val();
+    var signalID = $("#SignalID").val();
     var newSignalID = prompt("Please enter the new SignalID", "123456");
 
     var parameters = {};
@@ -192,7 +355,8 @@ function CopySignal() {
 function CopyApproach(approachID) {
     var parameters = {};
     parameters.approachID = approachID;
-    parameters.id = $("#editSignalID").val();
+   // parameters.id = $("#SignalID").val();
+    parameters.versionId =  $("#VersionID").val();
     $.ajax({
         type: "POST",
         cache: false,
@@ -229,13 +393,19 @@ function IsDuplicateChannel() {
     $(".detectorChannel").each(function (i, obj) {
         channelArray.push(obj.value);        
     });
-    var channelUniqueArray = channelArray.slice();
-    $.uniqueSort(channelUniqueArray);
+    var channelUniqueArray = unique(channelArray);
     return (channelArray.length != channelUniqueArray.length);    
 }
 
+function unique(array) {
+    return $.grep(array, function (el, index) {
+        return index == $.inArray(el, array);
+    });
+}
+
 function CopyDetector(ID, approachID) {
-    var signalID = $("#editSignalID").val();
+    var signalID = $("#SignalID").val();
+    var versionId =  $("#VersionID").val();
     var approachIndex = $("#Index" + approachID).val();
     var metricPath = urlpathCreateDetector;
     $.ajax({
@@ -243,7 +413,7 @@ function CopyDetector(ID, approachID) {
         cache: false,
         async: true,
         headers: GetRequestVerificationTokenObject(),
-        data: { "ID": ID,"signalID": signalID, "approachID": approachID, "approachIndex": approachIndex },
+        data: { "ID": ID, "versionId": versionId, "approachID": approachID, "approachIndex": approachIndex },
         url: urlpathCopyDetector,
         success: function (data) {
             $('#DetectorsList_' + approachID).append(data);
@@ -270,15 +440,16 @@ function GetRequestVerificationTokenObject()
 }
 
 function CreateNewApproach() {
-    var signalID = $("#editSignalID").val();
+    var signalID = $("#SignalID").val();
+    var versionId =  $("#VersionID").val();
         var metricPath = urlpathCreateApproach;
         $.ajax({
             type: "POST",
             cache: false,
             async: true,
-            //data: { "id": signalID },
+            data: { "versionId": versionId },
             headers: GetRequestVerificationTokenObject(),
-            url: metricPath + "/" + signalID,
+            url: metricPath,
             success: function (data) { $('#ApproachesList').append(data); },
             statusCode: {
                 404: function (content) { alert('cannot find resource'); },
@@ -292,7 +463,7 @@ function CreateNewApproach() {
 
 function PostCreateApproach() {
     var tosend = {};
-    tosend.SignalID = $("#editSignalID").val();
+    tosend.SignalID = $("#SignalID").val();
     tosend.DirectionTypeID= $("#DirectionTypeID").val();
     tosend.Description = $("#Description").val();
     tosend.MPH = $("#MPH").val();
@@ -374,9 +545,11 @@ function DeleteApproach(approachId, approachDescription) {
 }
 
 function GetCreateNewDetector(approachID) {
+        var versionID =  $("#VersionID").val();
         var approachIndex = $("#Index"+approachID).val();
         var tosend = {};
-        tosend.signalID = $("#editSignalID").val();
+        tosend.signalID = $("#SignalID").val();
+        tosend.versionId = versionID;
         tosend.approachID = approachID;
         tosend.approachIndex = $("#Index" + approachID).val();
         $.ajax({
@@ -399,11 +572,10 @@ function GetCreateNewDetector(approachID) {
                 });
 }
 
-function SyncText(e, approachID)
-{
-    $(".mph_" + approachID).each(function () {
+function SyncText(e, approachID) {
+    $(".mph_" + approachID).each(function() {
         $(this).val($(e).val());
-    })
+    });
 }
 
 function ShowHideDetectionTypeOptions(e,ID) {
