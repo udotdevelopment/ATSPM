@@ -342,8 +342,6 @@ While each agency should consult with their IT department for specific guideline
                     case 4:
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(5));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(7));
-                        detectionType.MetricTypes.Add(context.MetricTypes.Find(8));
-                        detectionType.MetricTypes.Add(context.MetricTypes.Find(9));
                         break;
                     case 5:
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(11));

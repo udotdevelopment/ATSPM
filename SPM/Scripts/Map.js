@@ -1,7 +1,7 @@
-﻿$(function (ready) {
-    Microsoft.Maps.loadModule('Microsoft.Maps.Overlays.Style', { callback: GetMap });
-});
-
+﻿//$(function (ready) {
+//    Microsoft.Maps.loadModule({ callback: GetMap });
+//});
+var infobox;
 function openWindow(url) {
     var w = window.open(url, '',
     'width=800,height=600,toolbar=0,status=0,location=0,menubar=0,directories=0,resizable=1,scrollbars=1');
@@ -19,16 +19,14 @@ function GetMap()
         showMapTypeSelector: false,
         zoom: 6,
         customizeOverlays: false
-
-
     });
-    dataLayer = new Microsoft.Maps.EntityCollection();
-    map.entities.push(dataLayer);
-    var infoboxLayer = new Microsoft.Maps.EntityCollection();
-    map.entities.push(infoboxLayer);
-    infobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), { visible: false, offset: new Microsoft.Maps.Point(0, 20) });
-    infoboxLayer.push(infobox);
+    dataLayer = [];
+    //var infoboxLayer = [];
+    //infobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), { visible: false, offset: new Microsoft.Maps.Point(0, 20) });
+    //infoboxLayer.push(infobox);
+    //map.entities.push(infoboxLayer);
     AddData();
+    map.entities.push(dataLayer);
 }
 
 
@@ -86,7 +84,7 @@ function GetMapWithCenter(lat, long, zoom) {
 
 
 function closeInfobox() {
-    infobox.setOptions({ visible: false });
+    infobox.setMap(null);
 }
 
 
@@ -186,11 +184,8 @@ function ZoomIn(e) {
 
 function displayInfobox(e) {
     if (e.targetType == 'pushpin') {
-        infobox.setLocation(e.target.getLocation());
         actionArray = new Array();
-        var incString = e.target.Actions.toString()
         var SignalID = e.target.SignalID.toString();
-        var Region = e.target.Region;
 
         var tosend = {};
         tosend.signalID = SignalID;
@@ -203,19 +198,15 @@ function displayInfobox(e) {
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(tosend),
             success: function (data) {
-                infobox.setOptions({
-                    visible: true,
-                    offset: new Microsoft.Maps.Point(-100, 20),
-                    htmlContent: data
-                });
+                if (infobox != null) {
+                    infobox.setMap(null);
+                }
+                infobox = new Microsoft.Maps.Infobox(e.target.getLocation(), { offset: new Microsoft.Maps.Point(-100, 0), htmlContent: data });
+                infobox.setMap(map);
                 SetControlValues(SignalID, null);
-            },
+            }
         });
-        
-
-        
-
-    }
+    } 
 }
 
 
