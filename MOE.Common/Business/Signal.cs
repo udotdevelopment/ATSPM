@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -15,6 +16,7 @@ using AlexPilotti.FTPS.Client;
 using AlexPilotti.FTPS.Common;
 using Lextm.SharpSnmpLib;
 using Lextm.SharpSnmpLib.Messaging;
+using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using MOE.Common.Properties;
@@ -67,30 +69,36 @@ namespace MOE.Common.Business
         public static void TransferFiles(FTPSClient ftp, string ftpFile, string localDir, string remoteDir,
             string server)
         {
-            ftp.SetCurrentDirectory("..");
-            ftp.SetCurrentDirectory(remoteDir);
-            Console.WriteLine(@"Transfering " + ftpFile + @" from " + remoteDir + @" on " + server + @" to " + localDir);
-            //chek to see if the local dir exists.
-            //if not, make it.
-            if (Directory.Exists(localDir))
+            try
             {
+                ftp.SetCurrentDirectory("..");
+                ftp.SetCurrentDirectory(remoteDir);
+                Console.WriteLine(@"Transfering " + ftpFile + @" from " + remoteDir + @" on " + server + @" to " + localDir);
+                //chek to see if the local dir exists.
+                //if not, make it.
+                if (!Directory.Exists(localDir))
+                {
+                    Directory.CreateDirectory(localDir);
+                }
+                ftp.GetFile(ftpFile, localDir + ftpFile);
             }
-            else
+            catch (Exception e)
             {
-                Directory.CreateDirectory(localDir);
+                Console.WriteLine(e);
+                var errorLog = ApplicationEventRepositoryFactory.Create();
+                errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                    "MOE.Common.Business.Signal", e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, remoteDir + " @ " + server + " - " + e.Message);
             }
-            ftp.GetFile(ftpFile, localDir + ftpFile);
         }
 
 
         public static bool GetCurrentRecords(string server, string signalId, string user, string password,
-            string localDir, string remoteDir, bool deleteFilesAfterFtp, int snmpRetry, int snmpTimeout, int snmpPort,
-            bool importAfterFtp, bool activemode, int waitbetweenrecords, BulkCopyOptions options,
+            string localDir, string remoteDir, bool deleteFilesAfterFtp, int snmpRetry, int snmpTimeout, int snmpPort, bool activemode, int waitbetweenrecords,
             int ftpTimeout) //, CancellationToken Token)
         {
             var recordsComplete = false;
             var errorRepository = ApplicationEventRepositoryFactory.Create();
-            bool skipCurrentLog = true;  // TODO: add to config file
+            bool skipCurrentLog = Convert.ToBoolean(ConfigurationManager.AppSettings["skipCurrentLog"]);
 
             //Initialize the FTP object
             var retryFiles = new List<string>();
@@ -169,7 +177,7 @@ namespace MOE.Common.Business
                 try
                 {
                     IList<DirectoryListItem> remoteFiles = null;
-                    var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+                    var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(3000));
                     var token = tokenSource.Token;
                     Task task = Task.Factory.StartNew(() => remoteFiles = ftp.GetDirectoryList(remoteDir), token);
                     task.Wait(token);
@@ -194,8 +202,7 @@ namespace MOE.Common.Business
                                 try
                                 {
                                     var token2 = tokenSource.Token;
-                                    var task2 = Task.Factory.StartNew(
-                                        () => TransferFiles(ftp, ftpFile.Name, localDir, remoteDir, server), token2);
+                                    var task2 = Task.Factory.StartNew(() => TransferFiles(ftp, ftpFile.Name, localDir, remoteDir, server), token2);
                                     task2.Wait(token2);
                                     if (token2.IsCancellationRequested)
                                     {
@@ -204,7 +211,6 @@ namespace MOE.Common.Business
                                     else
                                     {
                                         retrievedFiles.Add(ftpFile.Name);
-
                                         recordsComplete = true;
                                     }
                                 }
@@ -601,102 +607,109 @@ namespace MOE.Common.Business
         {
             MOE.Common.Models.Repositories.IApplicationEventRepository errorRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
             using (options.Connection)
-            using (options.Connection)
-            using (var bulkCopy = new SqlBulkCopy(options.ConnectionString, SqlBulkCopyOptions.UseInternalTransaction))
             {
-                for (var i = 1;; i++)
+                using (var bulkCopy =
+                    new SqlBulkCopy(options.ConnectionString, SqlBulkCopyOptions.UseInternalTransaction))
                 {
-                    try
-                    {
-                        options.Connection.Open();
-                    }
-                    catch
-                    {
-                        Thread.Sleep(Settings.Default.SleepTime);
-                    }
-                    if (options.Connection.State == ConnectionState.Open)
-                    {
-                        if (Settings.Default.WriteToConsole)
-                            Console.WriteLine("DB connection established");
-
-                        break;
-                    }
-                }
-                var sigId = "";
-                if (elTable.Rows.Count > 0)
-                {
-                    var row = elTable.Rows[0];
-                    sigId = row[0].ToString();
-                }
-
-                if (options.Connection.State == ConnectionState.Open)
-                {
-                    bulkCopy.BulkCopyTimeout = Settings.Default.BulkCopyTimeout;
-
-                    bulkCopy.BatchSize = Settings.Default.BulkCopyBatchSize;
-
-                    if (Settings.Default.WriteToConsole)
-                    {
-                        bulkCopy.SqlRowsCopied +=
-                            OnSqlRowsCopied;
-                        bulkCopy.NotifyAfter = Settings.Default.BulkCopyBatchSize;
-                    }
-                    var tablename = Settings.Default.EventLogTableName;
-                    bulkCopy.DestinationTableName = tablename;
-
-                    if (elTable.Rows.Count > 0)
+                    for (var i = 1;; i++)
                     {
                         try
                         {
-                            bulkCopy.WriteToServer(elTable);
+                            options.Connection.Open();
+                        }
+                        catch
+                        {
+                            Thread.Sleep(Settings.Default.SleepTime);
+                        }
+                        if (options.Connection.State == ConnectionState.Open)
+                        {
                             if (Settings.Default.WriteToConsole)
-                            {
-                                Console.WriteLine("!!!!!!!!! The bulk insert executed for Signal " + sigId + " !!!!!!!!!");
-                            }
-                            options.Connection.Close();
-                            return true;
+                                Console.WriteLine("DB connection established");
+
+                            break;
                         }
-                        catch (SqlException ex)
+                    }
+                    var sigId = "";
+                    if (elTable.Rows.Count > 0)
+                    {
+                        var row = elTable.Rows[0];
+                        sigId = row[0].ToString();
+                    }
+
+                    if (options.Connection.State == ConnectionState.Open)
+                    {
+                        bulkCopy.BulkCopyTimeout = Settings.Default.BulkCopyTimeout;
+
+                        bulkCopy.BatchSize = Settings.Default.BulkCopyBatchSize;
+
+                        if (Settings.Default.WriteToConsole)
                         {
-                            if (ex.Number == 2601)
-                            {
-                                if (Properties.Settings.Default.WriteToConsole)
-                                {
-                                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "BulktoDB_SQL.ex",
-                                        Models.ApplicationEvent.SeverityLevels.Medium,
-                                        "There is a permission error - " + sigId + " - " + ex.Message);
-                                    Console.WriteLine("**** There is a permission error - " + sigId + " *****");
-                                }
-                            }
-                            else
-                            {
-                                if (Properties.Settings.Default.WriteToConsole)
-                                {
-                                    //Console.WriteLine("****DATABASE ERROR*****");
-                                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "BulktoDB_SQL.ex",
-                                        Models.ApplicationEvent.SeverityLevels.Medium,
-                                        "General Error - " + sigId + " - " + ex.Message);
-                                    Console.WriteLine("DATABASE ERROR - " + sigId + " - " + ex.Message);
-                                }
-                            }
-                            options.Connection.Close();
-                            return false;
+                            bulkCopy.SqlRowsCopied +=
+                                OnSqlRowsCopied;
+                            bulkCopy.NotifyAfter = Settings.Default.BulkCopyBatchSize;
                         }
-                        catch (Exception ex)
+                        var tablename = Settings.Default.EventLogTableName;
+                        bulkCopy.DestinationTableName = tablename;
+
+                        if (elTable.Rows.Count > 0)
                         {
-                            errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "BulktoDB_Reg.ex", Models.ApplicationEvent.SeverityLevels.Medium, "General Error - " + sigId + " - " + ex.Message);
-                            Console.WriteLine(ex);
+                            try
+                            {
+                                bulkCopy.WriteToServer(elTable);
+                                if (Settings.Default.WriteToConsole)
+                                {
+                                    Console.WriteLine("!!!!!!!!! The bulk insert executed for Signal " + sigId +
+                                                      " !!!!!!!!!");
+                                }
+                                options.Connection.Close();
+                                return true;
+                            }
+                            catch (SqlException ex)
+                            {
+                                if (ex.Number == 2601)
+                                {
+                                    if (Properties.Settings.Default.WriteToConsole)
+                                    {
+                                        errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "BulktoDB_SQL.ex",
+                                            Models.ApplicationEvent.SeverityLevels.Medium,
+                                            "There is a permission error - " + sigId + " - " + ex.Message);
+                                        Console.WriteLine("**** There is a permission error - " + sigId + " *****");
+                                    }
+                                }
+                                else
+                                {
+                                    if (Properties.Settings.Default.WriteToConsole)
+                                    {
+                                        //Console.WriteLine("****DATABASE ERROR*****");
+                                        errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "BulktoDB_SQL.ex",
+                                            Models.ApplicationEvent.SeverityLevels.Medium,
+                                            "General Error - " + sigId + " - " + ex.Message);
+                                        Console.WriteLine("DATABASE ERROR - " + sigId + " - " + ex.Message);
+                                    }
+                                }
+                                options.Connection.Close();
+                                return false;
+                            }
+                            catch (Exception ex)
+                            {
+                                errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "BulktoDB_Reg.ex",
+                                    Models.ApplicationEvent.SeverityLevels.Medium,
+                                    "General Error - " + sigId + " - " + ex.Message);
+                                Console.WriteLine(ex);
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            options.Connection.Close();
                             return false;
                         }
                     }
                     else
                     {
-                        options.Connection.Close();
                         return false;
                     }
                 }
-                else
-                { return false; }
             }
         }
 

@@ -65,13 +65,18 @@ namespace MOE.Common.Business.DataAggregation
                                             .Sum(s => s.ArrivalsOnYellow);
                                     break;
                                 case "PercentArrivalsOnGreen":
-                                    pcdCount = Convert.ToInt32(Math.Round(GetPercentArrivalOnGreen(bin, pcdAggregations)));
+                                    pcdCount = Convert.ToInt32(Math.Round(GetPercentArrivalOnGreen(bin, pcdAggregations)*100));
                                     break;
                                 case "PlatoonRatio":
                                     double percentArrivalOnGreen = GetPercentArrivalOnGreen(bin, pcdAggregations);
                                     double greenTime = cycleAggregtaions.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.GreenTime);
                                     if (greenTime > 0)
                                         pcdCount = percentArrivalOnGreen / greenTime;
+                                    break;
+                                case "ApproachVolume":
+                                    pcdCount = pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.ArrivalsOnYellow)
+                                    + pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.ArrivalsOnGreen)
+                                    + pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.ArrivalsOnRed);
                                     break;
                                 default:
                                     throw new Exception("Unknown Aggregate Data Type for Split Failure");
@@ -106,14 +111,10 @@ namespace MOE.Common.Business.DataAggregation
         protected double GetPercentArrivalOnGreen(Bin bin, List<ApproachPcdAggregation> pcdAggregations)
         {
             double percentArrivalOnGreen = 0;
-            double arrivalsOnGreen = pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                .Sum(s => s.ArrivalsOnGreen);
-            int totalArrivals = pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                    .Sum(s => s.ArrivalsOnGreen) +
-                                pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                    .Sum(s => s.ArrivalsOnYellow) +
-                                pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                    .Sum(s => s.ArrivalsOnRed);
+            double arrivalsOnGreen = pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.ArrivalsOnGreen);
+            int totalArrivals = pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.ArrivalsOnGreen) +
+                                pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.ArrivalsOnYellow) +
+                                pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.ArrivalsOnRed);
             if (totalArrivals > 0)
             {
                 percentArrivalOnGreen = arrivalsOnGreen / totalArrivals;

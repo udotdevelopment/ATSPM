@@ -44,7 +44,7 @@ else
                     <ul class="dropdown-menu multi-level">
                         @foreach (var s in m.SubMenuItems)
                         {
-                            if (s.MenuObject.MenuName == "Signal Configuration")
+                            if (s.MenuObject.MenuName == "Signal Configuration" || s.MenuObject.MenuName == "Route Configuration")
                             {
                                 @RenderMenuItems(s)
                             }

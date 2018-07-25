@@ -72,6 +72,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateControllerEventLogObjectText", "GenerateControllerEventLogObjectText\GenerateControllerEventLogObjectText.csproj", "{52085102-1C77-4379-8130-C9EC574C2BD5}"
 EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
 		CD_ROM|Mixed Platforms = CD_ROM|Mixed Platforms
@@ -811,9 +818,11 @@ Global
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
 	EndGlobalSection
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Signal Performance Metrics.vsmdi

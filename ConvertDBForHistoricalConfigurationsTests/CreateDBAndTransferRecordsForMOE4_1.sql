@@ -1238,17 +1238,17 @@ GO
 USE [MOE_ORIG]
 
 
-insert into __MigrationHistory select * from SRWTCMOE.MOE.dbo.__MigrationHistory
+insert into __MigrationHistory select * from spmserver.MOE.dbo.__MigrationHistory
 
-insert into ControllerTypes select* from SRWTCMOE.MOE.dbo.ControllerTypes
+insert into ControllerTypes select* from spmserver.MOE.dbo.ControllerTypes
 
-insert into DirectionTypes select* from SRWTCMOE.MOE.dbo.DirectionTypes
+insert into DirectionTypes select* from spmserver.MOE.dbo.DirectionTypes
 
-insert into DetectionHardwares select * from SRWTCMOE.MOE.dbo.DetectionHardwares
+insert into DetectionHardwares select * from spmserver.MOE.dbo.DetectionHardwares
 
-insert into DetectionTypes select * from SRWTCMOE.MOE.dbo.DetectionTypes
+insert into DetectionTypes select * from spmserver.MOE.dbo.DetectionTypes
 
-insert into LaneTypes select * from SRWTCMOE.MOE.dbo.LaneTypes
+insert into LaneTypes select * from spmserver.MOE.dbo.LaneTypes
 
 SET IDENTITY_INSERT dbo.MetricTypes ON
 
@@ -1259,27 +1259,27 @@ insert into MetricTypes([MetricID]
 	   select [MetricID]
       ,[ChartName]
       ,[Abbreviation]
-      ,[ShowOnWebsite] from SRWTCMOE.MOE.dbo.MetricTypes
+      ,[ShowOnWebsite] from spmserver.MOE.dbo.MetricTypes
 
 SET IDENTITY_INSERT dbo.MetricTypes OFF
 
-insert into MovementTypes select * from SRWTCMOE.MOE.dbo.MovementTypes
+insert into MovementTypes select * from spmserver.MOE.dbo.MovementTypes
 
-insert into DetectionTypeMetricTypes select * from SRWTCMOE.MOE.dbo.DetectionTypeMetricTypes
+insert into DetectionTypeMetricTypes select * from spmserver.MOE.dbo.DetectionTypeMetricTypes
 
 
-insert into Region (id, Description) select ID, Description from SRWTCMOE.MOE.dbo.Region
+insert into Region (id, Description) select ID, Description from spmserver.MOE.dbo.Region
 
 
 Insert Into Signals(SignalID, PrimaryName, SecondaryName, IPAddress, ControllerTypeID, Enabled, Latitude, Longitude, RegionID)
-Select SignalID, PrimaryName, SecondaryName, IPAddress, ControllerTypeID, Enabled, Latitude, Longitude, RegionID From [srwtcmoe].[moe].dbo.Signals
+Select SignalID, PrimaryName, SecondaryName, IPAddress, ControllerTypeID, Enabled, Latitude, Longitude, RegionID From [spmserver].[moe].dbo.Signals
 
 Go
 
 SET IDENTITY_INSERT dbo.Approaches ON
 Go
 Insert into Approaches(ApproachID,SignalId, DirectionTypeID, Description, MPH, ProtectedPhaseNumber, IsProtectedPhaseOverlap, PermissivePhaseNumber)
-Select ApproachID,SignalId, DirectionTypeID, Description, MPH, ProtectedPhaseNumber, IsProtectedPhaseOverlap, PermissivePhaseNumber From [srwtcmoe].[moe].dbo.Approaches
+Select ApproachID,SignalId, DirectionTypeID, Description, MPH, ProtectedPhaseNumber, IsProtectedPhaseOverlap, PermissivePhaseNumber From [spmserver].[moe].dbo.Approaches
 
 
 SET IDENTITY_INSERT dbo.Approaches OFF
@@ -1290,36 +1290,36 @@ SET IDENTITY_INSERT dbo.Detectors ON
 Go
 
 Insert Into Detectors (ID, DetectorID, DetChannel, DistanceFromStopBar, MinSpeedFilter, DateAdded, DateDisabled, LaneNumber, MovementTypeID, LaneTypeID, DecisionPoint, MovementDelay, ApproachID, DetectionHardwareID)
-Select * From [srwtcmoe].[moe].dbo.Detectors
+Select * From [spmserver].[moe].dbo.Detectors
 
 Go
 
 SET IDENTITY_INSERT dbo.Detectors OFF
 Go
 
-insert into Accordian select AccHeader, AccContent, AccOrder, Application from SRWTCMOE.MOE.dbo.Accordian
+insert into Accordian select AccHeader, AccContent, AccOrder, Application from spmserver.MOE.dbo.Accordian
 
 SET IDENTITY_INSERT dbo.Agencies ON
 insert into Agencies([AgencyID]
       ,[Description])
 	   select [AgencyID]
-      ,[Description] from SRWTCMOE.MOE.dbo.Agencies
+      ,[Description] from spmserver.MOE.dbo.Agencies
 
 SET IDENTITY_INSERT dbo.Agencies OFF
 
 SET IDENTITY_INSERT ActionLogs ON 
-insert into ActionLogs(ActionLogID, DATE, AgencyID, Comment, signalID, Name) select ActionLogID, DATE, AgencyID, Comment, signalID, Name from SRWTCMOE.MOE.dbo.ActionLogs
+insert into ActionLogs(ActionLogID, DATE, AgencyID, Comment, signalID, Name) select ActionLogID, DATE, AgencyID, Comment, signalID, Name from spmserver.MOE.dbo.ActionLogs
 SET IDENTITY_INSERT ActionLogs OFF
 
-insert into ActionLogMetricTypes select * from SRWTCMOE.MOE.dbo.ActionLogMetricTypes
+insert into ActionLogMetricTypes select * from spmserver.MOE.dbo.ActionLogMetricTypes
 
 
 
-insert into Alert_Day_Types select * from SRWTCMOE.MOE.dbo.Alert_Day_Types
+insert into Alert_Day_Types select * from spmserver.MOE.dbo.Alert_Day_Types
 
 
 SET IDENTITY_INSERT ApproachRoute ON 
-insert into ApproachRoute(ApproachRouteId, RouteName) select ApproachRouteId, RouteName from SRWTCMOE.MOE.dbo.ApproachRoute
+insert into ApproachRoute(ApproachRouteId, RouteName) select ApproachRouteId, RouteName from spmserver.MOE.dbo.ApproachRoute
 SET IDENTITY_INSERT ApproachRoute Off
 
 
@@ -1331,38 +1331,38 @@ insert into ApproachRouteDetail([ApproachRouteId]
 	  select [ApproachRouteId]
       ,[ApproachOrder]
       ,[RouteDetailID]
-      ,[ApproachID] from SRWTCMOE.MOE.dbo.ApproachRouteDetail
+      ,[ApproachID] from spmserver.MOE.dbo.ApproachRouteDetail
 SET IDENTITY_INSERT ApproachRouteDetail OFF 
 
 
 
-insert into Archived_Metrics select top 10000 * from SRWTCMOE.MOE.dbo.Archived_Metrics
+insert into Archived_Metrics select top 10000 * from spmserver.MOE.dbo.Archived_Metrics
 
 
 
-insert into Controller_Event_Log select  top 10000 * from SRWTCMOE.MOE.dbo.Controller_Event_Log
+insert into Controller_Event_Log select  top 10000 * from spmserver.MOE.dbo.Controller_Event_Log
 
 
 
-insert into DetectorComments select ID,Timestamp, CommentText from SRWTCMOE.MOE.dbo.DetectorComments
-insert into DetectionTypeDetector select ID,DetectionTypeID from SRWTCMOE.MOE.dbo.DetectionTypeDetector
+insert into DetectorComments select ID,Timestamp, CommentText from spmserver.MOE.dbo.DetectorComments
+insert into DetectionTypeDetector select ID,DetectionTypeID from spmserver.MOE.dbo.DetectionTypeDetector
 
-insert into DownloadAgreements select CompanyName, Address, PhoneNumber, EmailAddress, Acknowledged, AgreementDate from SRWTCMOE.MOE.dbo.DownloadAgreements
+insert into DownloadAgreements select CompanyName, Address, PhoneNumber, EmailAddress, Acknowledged, AgreementDate from spmserver.MOE.dbo.DownloadAgreements
 
-insert into Menu(MenuId, MenuName, ParentId, Application, DisplayOrder) select MenuId, MenuName, ParentId, Application, DisplayOrder from SRWTCMOE.MOE.dbo.Menu
+insert into Menu(MenuId, MenuName, ParentId, Application, DisplayOrder) select MenuId, MenuName, ParentId, Application, DisplayOrder from spmserver.MOE.dbo.Menu
 
-insert into Program_Message select top 10000 Priority, Program, Message, Timestamp from SRWTCMOE.MOE.dbo.Program_Message
+insert into Program_Message select top 10000 Priority, Program, Message, Timestamp from spmserver.MOE.dbo.Program_Message
 
 
-insert into Program_Settings select top 10000 * from SRWTCMOE.MOE.dbo.Program_Settings
+insert into Program_Settings select top 10000 * from spmserver.MOE.dbo.Program_Settings
 
 
 SET IDENTITY_INSERT Route ON
-insert into Route (RouteID, Description, Region, Name) select  RouteID, Description, Region, Name from SRWTCMOE.MOE.dbo.Route
+insert into Route (RouteID, Description, Region, Name) select  RouteID, Description, Region, Name from spmserver.MOE.dbo.Route
 SET IDENTITY_INSERT Route OFF
 
 
-insert into Route_Detectors (DetectorID, RouteID, RouteOrder) select DetectorID, RouteID, RouteOrder from SRWTCMOE.MOE.dbo.Route_Detectors
+insert into Route_Detectors (DetectorID, RouteID, RouteOrder) select DetectorID, RouteID, RouteOrder from spmserver.MOE.dbo.Route_Detectors
 
 
-insert into Speed_Events select  top 10000 * from SRWTCMOE.MOE.dbo.Speed_Events
+insert into Speed_Events select  top 10000 * from spmserver.MOE.dbo.Speed_Events

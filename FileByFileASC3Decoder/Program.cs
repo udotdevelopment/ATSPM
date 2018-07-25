@@ -79,7 +79,7 @@ namespace FileByFileASC3Decoder
                     {
                         var mergedEventsTable = new BlockingCollection<MOE.Common.Data.MOE.Controller_Event_LogRow>();
 
-                        MOE.Common.Business.LogDecoder.ASC3Decoder.DecodeASC3File(s, sigid, mergedEventsTable);
+                        MOE.Common.Business.LogDecoder.Asc3Decoder.DecodeAsc3File(s, sigid, mergedEventsTable, FileByFileASC3Decoder.Properties.Settings.Default.EarliestAcceptableDate);
 
 
                         using (MOE.Common.Data.MOE.Controller_Event_LogDataTable EventsTable = new MOE.Common.Data.MOE.Controller_Event_LogDataTable())

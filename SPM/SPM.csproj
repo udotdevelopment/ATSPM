@@ -193,14 +193,12 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActionLogsController.cs" />
     <Compile Include="Controllers\AggregateDataExportController.cs" />
-    <Compile Include="Controllers\ApproachesController.cs" />
     <Compile Include="Controllers\ArchiveSettingsOldController.cs" />
     <Compile Include="Controllers\ConfigurationTableController.cs" />
     <Compile Include="Controllers\DatabaseArchiveSettingsController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\DefaultChartsController.cs" />
     <Compile Include="Controllers\DetectorCommentsController.cs" />
-    <Compile Include="Controllers\DetectorsController.cs" />
     <Compile Include="Controllers\FAQsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LinkPivotController.cs" />
@@ -585,7 +583,6 @@
     <Content Include="Views\AggregateDataExport\Index.cshtml" />
     <Content Include="Views\AggregateDataExport\GetRouteSignals.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterSignal.cshtml" />
-    <Content Include="Views\ArchiveSettings\IndexOld.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterApproach.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDetector.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDirection.cshtml" />

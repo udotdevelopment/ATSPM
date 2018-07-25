@@ -526,5 +526,21 @@ namespace MOE.Common.Models.Repositories
 
             return results.Count();
         }
+
+        public DateTime GetMostRecentRecordTimestamp(string signalID)
+        {
+            MOE.Common.Models.Controller_Event_Log row = (from r in _db.Controller_Event_Log
+                where r.SignalID == signalID
+                orderby r.Timestamp descending
+                select r).Take(1).FirstOrDefault();
+            if (row != null)
+            {
+                return row.Timestamp;
+            }
+            else
+            {
+                return new DateTime();
+            }
+        }
     }
 }

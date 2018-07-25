@@ -8,16 +8,14 @@ using MOE.Common.Properties;
 
 namespace MOE.Common.Business.LogDecoder
 {
-    public class ASC3Decoder
+    public class Asc3Decoder
     {
         //static public MOE.Common.Data.MOE.Controller_Event_LogDataTable DecodeASC3File(string FileName, string SignalId)
-        public static void DecodeASC3File(string FileName, string SignalId,
-            BlockingCollection<Data.MOE.Controller_Event_LogRow> RowBag)
+        public static void DecodeAsc3File(string fileName, string signalId,
+            BlockingCollection<Data.MOE.Controller_Event_LogRow> rowBag, DateTime earliestAcceptableDate)
         {
-            var EarliestAcceptableDate = Settings.Default.EarliestAcceptableDate;
-
             var encoding = Encoding.ASCII;
-            using (var BR = new BinaryReader(File.Open(FileName, FileMode.Open), encoding))
+            using (var br = new BinaryReader(File.Open(fileName, FileMode.Open), encoding))
             {
                 var elTable = new Data.MOE.Controller_Event_LogDataTable();
                 var custUnique =
@@ -31,19 +29,19 @@ namespace MOE.Common.Business.LogDecoder
 
                 elTable.Constraints.Add(custUnique);
 
-                if (BR.BaseStream.Position + 21 < BR.BaseStream.Length)
+                if (br.BaseStream.Position + 21 < br.BaseStream.Length)
                 {
                     //Find the start Date
                     var dateString = "";
                     for (var i = 1; i < 21; i++)
                     {
-                        var c = BR.ReadChar();
+                        var c = br.ReadChar();
                         dateString += c;
                     }
 
                     //Console.WriteLine(dateString);
-                    var StartTime = new DateTime();
-                    if (DateTime.TryParse(dateString, out StartTime) && BR.BaseStream.Position < BR.BaseStream.Length)
+                    var startTime = new DateTime();
+                    if (DateTime.TryParse(dateString, out startTime) && br.BaseStream.Position < br.BaseStream.Length)
                     {
                         //find  line feed characters, that should take us to the end of the header.
                         // First line break is after Version
@@ -56,9 +54,9 @@ namespace MOE.Common.Business.LogDecoder
 
                         var i = 0;
 
-                        while (i < 7 && BR.BaseStream.Position < BR.BaseStream.Length)
+                        while (i < 7 && br.BaseStream.Position < br.BaseStream.Length)
                         {
-                            var c = BR.ReadChar();
+                            var c = br.ReadChar();
                             //Console.WriteLine(c.ToString());
                             if (c == '\n')
                                 i++;
@@ -70,66 +68,66 @@ namespace MOE.Common.Business.LogDecoder
                         var firstEventParam = new int();
 
 
-                        if (BR.BaseStream.Position + sizeof(char) < BR.BaseStream.Length)
-                            firstEventCode = Convert.ToInt32(BR.ReadChar());
+                        if (br.BaseStream.Position + sizeof(char) < br.BaseStream.Length)
+                            firstEventCode = Convert.ToInt32(br.ReadChar());
 
-                        if (BR.BaseStream.Position + sizeof(char) < BR.BaseStream.Length)
-                            firstEventParam = Convert.ToInt32(BR.ReadChar());
+                        if (br.BaseStream.Position + sizeof(char) < br.BaseStream.Length)
+                            firstEventParam = Convert.ToInt32(br.ReadChar());
 
                         var firstEventEntered = false;
                         //MOE.Common.Business.ControllerEvent firstEvent = new MOE.Common.Business.ControllerEvent(SignalID, StartTime, firstEventCode, firstEventParam);
 
 
                         //After that, we can probably start reading
-                        while (BR.BaseStream.Position + sizeof(byte) * 4 <= BR.BaseStream.Length
+                        while (br.BaseStream.Position + sizeof(byte) * 4 <= br.BaseStream.Length
                         ) //we need ot make sure we are more that 4 characters from the end
                         {
-                            var EventTime = new DateTime();
-                            var EventCode = new int();
-                            var EventParam = new int();
+                            var eventTime = new DateTime();
+                            var eventCode = new int();
+                            var eventParam = new int();
 
                             //MOE.Common.Business.ControllerEvent controllerEvent = null;
-                            for (var EventPart = 1; EventPart < 4; EventPart++)
+                            for (var eventPart = 1; eventPart < 4; eventPart++)
                             {
                                 //getting the time offset
-                                if (EventPart == 1)
+                                if (eventPart == 1)
                                 {
                                     var rawoffset = new byte[2];
                                     //char[] offset = new char[2];
-                                    rawoffset = BR.ReadBytes(2);
+                                    rawoffset = br.ReadBytes(2);
                                     Array.Reverse(rawoffset);
                                     int offset = BitConverter.ToInt16(rawoffset, 0);
 
                                     var tenths = Convert.ToDouble(offset) / 10;
 
-                                    EventTime = StartTime.AddSeconds(tenths);
+                                    eventTime = startTime.AddSeconds(tenths);
                                 }
 
                                 //getting the EventCode
-                                if (EventPart == 2)
-                                    EventCode = Convert.ToInt32(BR.ReadByte());
+                                if (eventPart == 2)
+                                    eventCode = Convert.ToInt32(br.ReadByte());
 
-                                if (EventPart == 3)
-                                    EventParam = Convert.ToInt32(BR.ReadByte());
+                                if (eventPart == 3)
+                                    eventParam = Convert.ToInt32(br.ReadByte());
                             }
 
                             //controllerEvent = new MOE.Common.Business.ControllerEvent(SignalId, EventTime, EventCode, EventParam);
 
-                            if (EventTime <= DateTime.Now && EventTime > EarliestAcceptableDate)
+                            if (eventTime <= DateTime.Now && eventTime > earliestAcceptableDate)
                                 if (!firstEventEntered)
                                 {
                                     try
                                     {
                                         var eventrow = elTable.NewController_Event_LogRow();
-                                        eventrow.Timestamp = EventTime.AddMilliseconds(-1);
-                                        eventrow.SignalID = SignalId;
+                                        eventrow.Timestamp = eventTime.AddMilliseconds(-1);
+                                        eventrow.SignalID = signalId;
                                         eventrow.EventCode = firstEventCode;
                                         eventrow.EventParam = firstEventParam;
-                                        if (!RowBag.Contains(eventrow))
-                                            RowBag.Add(eventrow);
+                                        rowBag.Add(eventrow);
                                     }
-                                    catch
+                                    catch (Exception ex)
                                     {
+                                        Console.WriteLine(ex.Message);
                                     }
 
                                     firstEventEntered = true;
@@ -139,16 +137,15 @@ namespace MOE.Common.Business.LogDecoder
                                     try
                                     {
                                         var eventrow = elTable.NewController_Event_LogRow();
-                                        eventrow.Timestamp = EventTime;
-                                        eventrow.SignalID = SignalId;
-                                        eventrow.EventCode = EventCode;
-                                        eventrow.EventParam = EventParam;
-
-                                        if (!RowBag.Contains(eventrow))
-                                            RowBag.Add(eventrow);
+                                        eventrow.Timestamp = eventTime;
+                                        eventrow.SignalID = signalId;
+                                        eventrow.EventCode = eventCode;
+                                        eventrow.EventParam = eventParam;
+                                        rowBag.Add(eventrow);
                                     }
-                                    catch
+                                    catch (Exception ex)
                                     {
+                                        Console.WriteLine(ex.Message);
                                     }
                                 }
                         }

@@ -82,10 +82,10 @@ namespace SPM.Controllers
         //    return PartialView("MetricsList", dcv);
         //}
 
-        public ActionResult GetMetricProperties(MetricOptions options)
-        {
-            return PartialView("MetricProperties", options);
-        }
+        //public ActionResult GetMetricProperties(MetricOptions options)
+        //{
+        //    return PartialView("MetricProperties", options);
+        //}
 
         public ActionResult GetMap(DefaultChartsViewModel dcv)
         {
