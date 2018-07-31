@@ -509,10 +509,6 @@
     <Compile Include="Migrations\201803072127121_DatabaseArchiveChanges.Designer.cs">
       <DependentUpon>201803072127121_DatabaseArchiveChanges.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201803301713324_DatabaseArchiveProcessedPartitions.cs" />
-    <Compile Include="Migrations\201803301713324_DatabaseArchiveProcessedPartitions.Designer.cs">
-      <DependentUpon>201803301713324_DatabaseArchiveProcessedPartitions.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201804251748599_MetricTypeIdentityRemoval.cs" />
     <Compile Include="Migrations\201804251748599_MetricTypeIdentityRemoval.Designer.cs">
       <DependentUpon>201804251748599_MetricTypeIdentityRemoval.cs</DependentUpon>
@@ -659,15 +655,6 @@
     <Compile Include="Business\DetectorCollection.cs" />
     <Compile Include="Business\DetectorDataPoint.cs" />
     <Compile Include="Business\InfoBox.cs" />
-    <Compile Include="Business\Inrix\GraphLine.cs" />
-    <Compile Include="Business\Inrix\Segment.cs" />
-    <Compile Include="Business\Inrix\InrixCumulativeFreqChart.cs" />
-    <Compile Include="Business\Inrix\GroupCollection.cs" />
-    <Compile Include="Business\Inrix\Route.cs" />
-    <Compile Include="Business\Inrix\Group.cs" />
-    <Compile Include="Business\Inrix\TMC.cs" />
-    <Compile Include="Business\Inrix\TMCCollection.cs" />
-    <Compile Include="Business\Inrix\TravelTimeRecord.cs" />
     <Compile Include="Business\RedToRedCycle.cs" />
     <Compile Include="Business\LinkPivot.cs" />
     <Compile Include="Business\LinkPivotPair.cs" />
@@ -758,33 +745,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Detector.cs" />
-    <Compile Include="Models\Inrix\Datum.cs" />
-    <Compile Include="Models\Inrix\Group.cs" />
-    <Compile Include="Models\Inrix\Group_Members.cs" />
-    <Compile Include="Models\Inrix\Inrix.cs" />
-    <Compile Include="Models\Inrix\Repositories\DataRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\DataRepositoryFactory.cs" />
-    <Compile Include="Models\Inrix\Repositories\GroupMemberRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\GroupRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\IDataRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\IGroupMemberRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\IGroupRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\IRouteMembersRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\IRouteRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\ISegmentMembersRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\ISegmentRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\ITMCRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\RouteMembersRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\RouteRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\RouteRepositoryFactory.cs" />
-    <Compile Include="Models\Inrix\Repositories\SegmentMembersRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\SegmentRepository.cs" />
-    <Compile Include="Models\Inrix\Repositories\TMCRepository.cs" />
-    <Compile Include="Models\Inrix\Route.cs" />
-    <Compile Include="Models\Inrix\Route_Members.cs" />
-    <Compile Include="Models\Inrix\Segment.cs" />
-    <Compile Include="Models\Inrix\Segment_Members.cs" />
-    <Compile Include="Models\Inrix\TMC.cs" />
     <Compile Include="Models\LaneType.cs" />
     <Compile Include="Models\Menu.cs" />
     <Compile Include="Models\DetectorComment.cs" />
@@ -921,6 +881,9 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Migrations\CreateAndPopulateMOEDB.sql" />
+    <EmbeddedResource Include="Migrations\201709281716540_DataAggregation.resx">
+      <DependentUpon>201709281716540_DataAggregation.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804251748599_MetricTypeIdentityRemoval.resx">
       <DependentUpon>201804251748599_MetricTypeIdentityRemoval.cs</DependentUpon>
     </EmbeddedResource>
@@ -1005,9 +968,6 @@
     <EmbeddedResource Include="Migrations\201704032058572_Version4.0.1.resx">
       <DependentUpon>201704032058572_Version4.0.1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709281716540_DataAggregation.resx">
-      <DependentUpon>201709281716540_DataAggregation.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710062050286_RouteConfiguration1.resx">
       <DependentUpon>201710062050286_RouteConfiguration1.cs</DependentUpon>
     </EmbeddedResource>
@@ -1043,9 +1003,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803072127121_DatabaseArchiveChanges.resx">
       <DependentUpon>201803072127121_DatabaseArchiveChanges.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803301713324_DatabaseArchiveProcessedPartitions.resx">
-      <DependentUpon>201803301713324_DatabaseArchiveProcessedPartitions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

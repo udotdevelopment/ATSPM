@@ -9,10 +9,12 @@ namespace MOE.Common.Models.Repositories
     public class ControllerEventLogRepository : IControllerEventLogRepository
     {
         private readonly SPM _db = new SPM();
+        
 
         public ControllerEventLogRepository()
         {
             _db.Database.CommandTimeout = 180;
+            _db.Database.Connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MV_Events"].ConnectionString;
         }
 
         public int GetRecordCountByParameterAndEvent(string signalId, DateTime startTime, DateTime endTime,
