@@ -83,7 +83,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public SeriesType SelectedSeries { get; set; }
 
         [DataMember]
-        public Dimension SelectedDimension { get; set; }
+        public Dimension? SelectedDimension { get; set; }
 
         [DataMember]
         public List<FilterSignal> FilterSignals { get; set; } = new List<FilterSignal>();
@@ -479,20 +479,39 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var binsContainers = GetBinsContainersBySignal(signal);
             foreach (var container in binsContainers)
             {
-                foreach (var bin in container.Bins)
+                if (binsContainers.Count > 1)
                 {
                     DataPoint dataPoint;
-                    if (bin != null)
+                    if (container != null)
                     {
                         if (this.SelectedAggregationType == AggregationType.Sum)
                         {
-                            dataPoint = GetDataPointForSum(bin);
+                            dataPoint = GetContainerDataPointForSum(container);
                         }
                         else
                         {
-                            dataPoint = GetDataPointForAverage(bin);
+                            dataPoint = GetContainerDataPointForAverage(container);
                         }
                         series.Points.Add(dataPoint);
+                    }
+                }
+                else
+                {
+                    foreach (var bin in container.Bins)
+                    {
+                        DataPoint dataPoint;
+                        if (bin != null)
+                        {
+                            if (this.SelectedAggregationType == AggregationType.Sum)
+                            {
+                                dataPoint = GetDataPointForSum(bin);
+                            }
+                            else
+                            {
+                                dataPoint = GetDataPointForAverage(bin);
+                            }
+                            series.Points.Add(dataPoint);
+                        }
                     }
                 }
             }

@@ -150,9 +150,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         if (ShowEventCount)
                         {
                             SetTimeXAxisSignalSeriesForEventCount(chart, signal);
-                            var eventCountOptions = (ApproachEventCountAggregationOptions)this;
-                            Series series = eventCountOptions.GetTimeXAxisSignalSeries(signal);
-                            chart.Series.Add(series);
+                            //var eventCountOptions = (ApproachEventCountAggregationOptions)this;
+                            //Series series = eventCountOptions.GetTimeXAxisSignalSeries(signal);
+                            //chart.Series.Add(series);
                         }
                         SaveChartImage(chart);
                     }

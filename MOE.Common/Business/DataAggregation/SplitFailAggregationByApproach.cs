@@ -44,7 +44,7 @@ namespace MOE.Common.Business.DataAggregation
                             var splitFailCount = 0;
                             switch (dataType.DataName)
                             {
-                                case "SplitFails":
+                                case "SplitFailures":
                                     splitFailCount =
                                         splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.SplitFailures);

@@ -17,7 +17,7 @@ namespace MOE.Common.Models.ViewModel
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Start Date")]
-        public DateTime StartDateDay { get; set; }
+        public DateTime? StartDateDay { get; set; }
 
         [Required]
         [Display(Name = "Start Time")]
@@ -31,7 +31,7 @@ namespace MOE.Common.Models.ViewModel
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "End Date")]
-        public DateTime EndDateDay { get; set; }
+        public DateTime? EndDateDay { get; set; }
 
         [Required]
         [Display(Name = "End Time")]
@@ -49,7 +49,7 @@ namespace MOE.Common.Models.ViewModel
             if (!String.IsNullOrEmpty(StartTime) && StartDateDay != null && !String.IsNullOrEmpty(StartTime) &&
                 !String.IsNullOrEmpty(SelectedStartAMPM))
             {
-                return Convert.ToDateTime(StartDateDay.ToShortDateString() + " " + StartTime + " " +
+                return Convert.ToDateTime(StartDateDay.Value.ToShortDateString() + " " + StartTime + " " +
                                           SelectedStartAMPM);
             }
             else
@@ -63,7 +63,7 @@ namespace MOE.Common.Models.ViewModel
             if (!String.IsNullOrEmpty(EndTime) && EndDateDay != null && !String.IsNullOrEmpty(EndTime) &&
                 !String.IsNullOrEmpty(SelectedEndAMPM))
             {
-                return Convert.ToDateTime(EndDateDay.ToShortDateString() + " " + EndTime + " " +
+                return Convert.ToDateTime(EndDateDay.Value.ToShortDateString() + " " + EndTime + " " +
                                           SelectedEndAMPM);
             }
             else

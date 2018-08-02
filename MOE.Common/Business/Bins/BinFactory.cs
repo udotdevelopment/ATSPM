@@ -47,12 +47,23 @@ namespace MOE.Common.Business.Bins
         private static List<BinsContainer> GetDayBinsContainersForRange(BinFactoryOptions timeOptions)
         {
             var binsContainers = new List<BinsContainer>();
+            if (timeOptions.DaysOfWeek == null)
+                timeOptions.DaysOfWeek = new List<DayOfWeek>
+                {
+                    DayOfWeek.Sunday,
+                    DayOfWeek.Monday,
+                    DayOfWeek.Tuesday,
+                    DayOfWeek.Wednesday,
+                    DayOfWeek.Thursday,
+                    DayOfWeek.Friday,
+                    DayOfWeek.Saturday
+                };
             var binsContainer = new BinsContainer(timeOptions.Start, timeOptions.End);
             for (var startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month, timeOptions.Start.Day, 0,
                     0, 0);
                 startTime.Date < timeOptions.End.Date;
                 startTime = startTime.AddDays(1))
-                if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
+                if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd && timeOptions.DaysOfWeek.Contains(startTime.DayOfWeek))
                 {
                     binsContainer.Bins.Add(new Bin {Start = startTime, End = startTime.AddDays(1)});
                 }
@@ -60,6 +71,8 @@ namespace MOE.Common.Business.Bins
                 {
                     if (timeOptions.TimeOfDayStartHour != null && timeOptions.TimeOfDayStartMinute != null &&
                         timeOptions.TimeOfDayEndHour != null && timeOptions.TimeOfDayEndMinute != null)
+                        if(timeOptions.DaysOfWeek.Contains(startTime.DayOfWeek))
+                        { 
                         binsContainer.Bins.Add(new Bin
                         {
                             Start = startTime.AddHours(timeOptions.TimeOfDayStartHour.Value)
@@ -67,6 +80,7 @@ namespace MOE.Common.Business.Bins
                             End = startTime.AddHours(timeOptions.TimeOfDayEndHour.Value)
                                 .AddMinutes(timeOptions.TimeOfDayEndMinute.Value)
                         });
+                            }
                 }
             binsContainers.Add(binsContainer);
             return binsContainers;

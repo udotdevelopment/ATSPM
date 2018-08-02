@@ -39,7 +39,7 @@ namespace MOE.Common.Business.Tests
             AddEasyPlanEvents(DateTime.Now.AddDays(-1), DateTime.Now, "1001", _db);
             var plans = PlanFactory.GetBasicPlans(DateTime.Now.AddDays(-1), DateTime.Now, "1001");
 
-            Assert.IsTrue(plans.Count == 13);
+            Assert.IsTrue(plans.Count == 12);
 
 
 
@@ -93,7 +93,7 @@ namespace MOE.Common.Business.Tests
 
             var plans = PlanFactory.GetBasicPlans(DateTime.Now.AddDays(-1), DateTime.Now, "1001");
 
-            Assert.IsTrue(plans.Count == 13);
+            Assert.IsTrue(plans.Count == 14);
 
             bool adjDupPlans = false;
 

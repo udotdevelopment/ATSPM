@@ -204,13 +204,13 @@ namespace SPM.Controllers
 
         private static void SetCommonValues(AggDataExportViewModel aggDataExportViewModel, SignalAggregationMetricOptions options)
         {
-            aggDataExportViewModel.EndDateDay =aggDataExportViewModel.EndDateDay.AddDays(1);
-            options.StartDate = aggDataExportViewModel.StartDateDay;
-            options.EndDate = aggDataExportViewModel.EndDateDay;
-            options.SelectedAggregationType = aggDataExportViewModel.SelectedAggregationType;
-            options.SelectedXAxisType = aggDataExportViewModel.SelectedXAxisType;
+            aggDataExportViewModel.EndDateDay =aggDataExportViewModel.EndDateDay.Value.AddDays(1);
+            options.StartDate = aggDataExportViewModel.StartDateDay.Value;
+            options.EndDate = aggDataExportViewModel.EndDateDay.Value;
+            options.SelectedAggregationType = aggDataExportViewModel.SelectedAggregationType.Value;
+            options.SelectedXAxisType = aggDataExportViewModel.SelectedXAxisType.Value;
             options.SeriesWidth = aggDataExportViewModel.SelectedSeriesWidth;
-            options.SelectedSeries = aggDataExportViewModel.SelectedSeriesType;
+            options.SelectedSeries = aggDataExportViewModel.SelectedSeriesType.Value;
             options.SelectedDimension = aggDataExportViewModel.SelectedDimension;
             SetTimeOptionsFromViewModel(aggDataExportViewModel, options);
             options.FilterSignals = aggDataExportViewModel.FilterSignals;
@@ -282,8 +282,8 @@ namespace SPM.Controllers
             BinFactoryOptions.BinSize binSize = (BinFactoryOptions.BinSize)aggDataExportViewModel.SelectedBinSize;
 
             options.TimeOptions = new BinFactoryOptions(
-                aggDataExportViewModel.StartDateDay,
-                aggDataExportViewModel.EndDateDay,
+                aggDataExportViewModel.StartDateDay.Value,
+                aggDataExportViewModel.EndDateDay.Value,
                 startHour, startMinute, endHour, endMinute, daysOfWeek,
                 binSize,
                 timeOptions);

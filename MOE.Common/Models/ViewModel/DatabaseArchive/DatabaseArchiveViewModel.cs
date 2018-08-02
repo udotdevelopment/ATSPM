@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace MOE.Common.Models.ViewModel.DatabaseArchive
 
         public List<DatabaseArchiveExcludedSignal> ExcludedSignals { get; set; } = new List<DatabaseArchiveExcludedSignal>();
 
+        [Required]
         public SignalSearchViewModel SignalSearch { get; set; } = new SignalSearchViewModel();
 
         public ArchiveSettingsViewModel()

@@ -43,28 +43,28 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
 
 
         }
-        [TestMethod()]
-        public void CreateMetricTest()
-        {
-            string signalId = "7185";
-            DateTime start = Convert.ToDateTime("10/17/2017 17:00:00");
-            DateTime end = Convert.ToDateTime("10/17/2017 18:00:00");
+        //[TestMethod()]
+        //public void CreateMetricTest()
+        //{
+        //    string signalId = "7185";
+        //    DateTime start = Convert.ToDateTime("10/17/2017 17:00:00");
+        //    DateTime end = Convert.ToDateTime("10/17/2017 18:00:00");
 
-            SplitFailOptions sfo = new SplitFailOptions(signalId, start, end,12,5,true,true,false);
-            List<string> path = sfo.CreateMetric();
+        //    SplitFailOptions sfo = new SplitFailOptions(signalId, start, end,12,5,true,true,false);
+        //    List<string> path = sfo.CreateMetric();
 
-            Assert.IsTrue(path.Count > 0);
-        }
+        //    Assert.IsTrue(path.Count > 0);
+        //}
 
       
 
-        [TestMethod()]
-        public void SomeSpliTFailTest()
-        {
-            InMemoryMOEDatabase _db = new InMemoryMOEDatabase();
+        //[TestMethod()]
+        //public void SomeSpliTFailTest()
+        //{
+        //    InMemoryMOEDatabase _db = new InMemoryMOEDatabase();
 
 
-        }
+        //}
 
 
 

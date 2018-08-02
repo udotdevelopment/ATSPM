@@ -157,7 +157,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
-                null, null, null, null, null,
+                null, null, null, null, new List<DayOfWeek> { DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday },
                 BinFactoryOptions.BinSize.ThirtyMinute,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
@@ -235,18 +235,18 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                     Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
                     Assert.IsTrue(signalBinsContainer.SumValue == 12);
-                    Assert.IsTrue(signalBinsContainer.AverageValue == 24);
+                    Assert.IsTrue(signalBinsContainer.AverageValue == 6);
                     for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                     {
                         var bin = binsContainer.Bins[binIndex];
                         var signalBin = signalBinsContainer.Bins[binIndex];
                         Assert.IsTrue(bin.Start == signalBin.Start);
                         Assert.IsTrue(bin.End == signalBin.End);
-                        Assert.IsTrue(signalBin.Sum == 24);
+                        Assert.IsTrue(signalBin.Sum == 6);
                     }
                 }
                 Assert.IsTrue(splitAggregationBySignal.Total == 12);
-                Assert.IsTrue(splitAggregationBySignal.Average == 24);
+                Assert.IsTrue(splitAggregationBySignal.Average == 6);
             }
         }
 
@@ -762,7 +762,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal splitAggregationBySignal15Minute =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
-                int fifteenMinuteSum = 0;
+                double fifteenMinuteSum = 0;
                 foreach (var binsContainer in splitAggregationBySignal15Minute.BinsContainers)
                 {
                     fifteenMinuteSum += binsContainer.SumValue;
@@ -772,7 +772,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 binsContainers = BinFactory.GetBins(options.TimeOptions);
                 PreemptionAggregationBySignal splitAggregationBySignal30Minute =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
-                int thirtyMinuteSum = 0;
+                double thirtyMinuteSum = 0;
                 foreach (var binsContainer in splitAggregationBySignal30Minute.BinsContainers)
                 {
                     thirtyMinuteSum += binsContainer.SumValue;
@@ -783,7 +783,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 binsContainers = BinFactory.GetBins(options.TimeOptions);
                 PreemptionAggregationBySignal splitAggregationBySignalHour =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
-                int hourSum = 0;
+                double hourSum = 0;
                 foreach (var binsContainer in splitAggregationBySignalHour.BinsContainers)
                 {
                     hourSum += binsContainer.SumValue;
@@ -794,7 +794,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 binsContainers = BinFactory.GetBins(options.TimeOptions);
                 PreemptionAggregationBySignal splitAggregationBySignalDay =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
-                int daySum = 0;
+                double daySum = 0;
                 foreach (var binsContainer in splitAggregationBySignalDay.BinsContainers)
                 {
                     daySum += binsContainer.SumValue;
@@ -805,7 +805,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 binsContainers = BinFactory.GetBins(options.TimeOptions);
                 PreemptionAggregationBySignal splitAggregationBySignalMonth =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
-                int monthSum = 0;
+                double monthSum = 0;
                 foreach (var binsContainer in splitAggregationBySignalMonth.BinsContainers)
                 {
                     monthSum += binsContainer.SumValue;
@@ -816,7 +816,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 binsContainers = BinFactory.GetBins(options.TimeOptions);
                 PreemptionAggregationBySignal splitAggregationBySignalYear =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
-                int yearSum = 0;
+                double yearSum = 0;
                 foreach (var binsContainer in splitAggregationBySignalYear.BinsContainers)
                 {
                     yearSum += binsContainer.SumValue;

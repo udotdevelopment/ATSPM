@@ -40,17 +40,5 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.NonAggregateCharts.Approach
 
             Assert.IsTrue(testAverage == 30);
         }
-
-        [TestMethod()]
-        public void AddItemTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void GetAverageSpeedTest()
-        {
-            Assert.Fail();
-        }
     }
 }
