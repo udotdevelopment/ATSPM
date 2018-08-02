@@ -43,17 +43,16 @@ namespace ConvertDBForHistoricalConfigurations
             ClearMetricComments(); // Andre
             GetMetricCommentMetricTypes(); // Andre
             ClearMetricCommentMetricTypes(); // Derek
-            GetDetectionTypeMetricTypes();  //Andre
-            ClearDetectionTypeMetricTypes();  //Andre
-            GetActionLogMetricTypes();  //Andre
-            ClearActionLogMetricTypes();  //Andre
+            //GetDetectionTypeMetricTypes();  //Andre
+            //ClearDetectionTypeMetricTypes();  //Andre
+            //GetActionLogMetricTypes();  //Andre
+            //ClearActionLogMetricTypes();  //Andre
             GetActionLogs();  //Andre
             ClearActionLogs();  //Andre
 
             RunMigrations(); //orig
             UpdateSignalRecordsWithStartDateAndVersion(); // orig
             UpdateApproachesWithVersionId(); //Orig
-            PutMetricCommentsFromMemoryIntoDatabase(); // Derek
             UpdateMetriCommentsWithVersionId(); // orig
             CreateRoutes(); //orig
         }
@@ -181,12 +180,7 @@ namespace ConvertDBForHistoricalConfigurations
                 sqlconn.Dispose();
             }
         }
-
-
-        private static void PutMetricCommentsFromMemoryIntoDatabase()
-        {
-            //loop through in memory metric comments and Add objects to entity framework
-        }
+        
 
         private static void GetMetricComments()
         {
@@ -407,6 +401,26 @@ namespace ConvertDBForHistoricalConfigurations
             {
                 s.Start = s.FirstDate;
                 s.VersionAction = version;
+                if (s.Comments == null)
+                    s.Comments = new List<MetricComment>();
+                if (_oldMetricCommentsList.Any(m => m.SignalId == s.SignalID))
+                {
+                    var listComments = _oldMetricCommentsList.Where(m => m.SignalId == s.SignalID).ToList();
+                    foreach (var comment in listComments)
+                    {
+                        var metricTypeRelationships = _oldMetricCommentMetricTypesList
+                            .Where(t => t.MetricComment_CommentId == comment.CommentId).ToList();
+                        s.Comments.Add(
+                            new MetricComment
+                            {
+                                CommentText = comment.ComentText,
+                                SignalID = comment.SignalId,
+                                TimeStamp = comment.TimeStamp,
+                                VersionID = s.VersionID,
+                                MetricTypeIDs = metricTypeRelationships.Select(r => r.MetricType_MetricID).ToList()
+                            });
+                    }
+                }
             }
 
             db.SaveChanges();
