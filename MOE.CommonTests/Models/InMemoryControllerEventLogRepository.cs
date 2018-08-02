@@ -501,5 +501,9 @@ namespace MOE.CommonTests.Models
             throw new NotImplementedException();
         }
 
+        public DateTime GetMostRecentRecordTimestamp(string signalID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

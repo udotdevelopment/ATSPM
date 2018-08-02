@@ -1263,7 +1263,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.SelectedChartType = SeriesChartType.Column;
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal15Minute = new SplitFailAggregationBySignal(options, options.Signals[0]);
-            int fifteenMinuteSum = 0;
+            double fifteenMinuteSum = 0;
             foreach (var binsContainer in splitAggregationBySignal15Minute.BinsContainers)
             {
                 fifteenMinuteSum += binsContainer.SumValue;

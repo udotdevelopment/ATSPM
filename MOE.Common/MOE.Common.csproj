@@ -921,7 +921,19 @@
     <Content Include="App.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Migrations\CreateAndPopulateMOEDB.sql" />
+    <EmbeddedResource Include="Migrations\ReclaimFileSpaceForMoe.sql" />
+    <EmbeddedResource Include="Migrations\Verbose.sql" />
+    <EmbeddedResource Include="Migrations\UpperBoundary.sql" />
+    <EmbeddedResource Include="Migrations\TableName.sql" />
+    <EmbeddedResource Include="Migrations\StopDropping.sql" />
+    <EmbeddedResource Include="Migrations\StopCounter.sql" />
+    <EmbeddedResource Include="Migrations\Processtables.sql" />
+    <EmbeddedResource Include="Migrations\PreserveData.sql" />
+    <EmbeddedResource Include="Migrations\LowerBoundary.sql" />
+    <EmbeddedResource Include="Migrations\IndexNameColumns.sql" />
+    <EmbeddedResource Include="Migrations\IndexNameClustered.sql" />
+    <EmbeddedResource Include="Migrations\IndexName.sql" />
+    <EmbeddedResource Include="Migrations\CreateAndPopulateMOEDB.sql" />
     <EmbeddedResource Include="Migrations\201804251748599_MetricTypeIdentityRemoval.resx">
       <DependentUpon>201804251748599_MetricTypeIdentityRemoval.cs</DependentUpon>
     </EmbeddedResource>
@@ -944,8 +956,15 @@
       <DependentUpon>201806211436552_RemoveLaneByLaneFromAOR.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CreateIntegratedSwapAndMoveDataJob.sql" />
-    <Content Include="Migrations\CustomStuffForExistingUpgrade.txt" />
-    <Content Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
+    <EmbeddedResource Include="Migrations\CreateConstraints.sql" />
+    <EmbeddedResource Include="Migrations\CreateIndexes.sql" />
+    <EmbeddedResource Include="Migrations\CreateTable.sql" />
+    <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
+    <EmbeddedResource Include="Migrations\DoTheSwapTable.sql" />
+    <EmbeddedResource Include="Migrations\DropIndexes.sql" />
+    <EmbeddedResource Include="Migrations\DropOrCompressTable.sql" />
+    <EmbeddedResource Include="Migrations\FileGroup.sql" />
+    <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
     <None Include="Data\LinkPivot.xsc">

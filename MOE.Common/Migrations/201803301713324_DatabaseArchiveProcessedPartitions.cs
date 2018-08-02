@@ -125,10 +125,6 @@ namespace MOE.Common.Migrations
 
             string sqlResProcesstables = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".Processtables.sql";
             this.SqlResource(sqlResProcesstables);
-
-            string sqlResReclaimFileSpaceForMoe = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".ReclaimFileSpaceForMoe.sql";
-            this.SqlResource(sqlResReclaimFileSpaceForMoe);
-
             string sqlResStopCounter = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".StopCounter.sql";
             this.SqlResource(sqlResStopCounter);
 
@@ -144,6 +140,10 @@ namespace MOE.Common.Migrations
             string sqlResVerbose = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".Verbose.sql";
             this.SqlResource(sqlResVerbose);
 
+            string sqlResReclaimFileSpaceForMoe = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".ReclaimFileSpaceForMoe.sql";
+            this.SqlResource(sqlResReclaimFileSpaceForMoe);
+
+           
            // string sqlResName = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".CreateIntegratedSwapAndMoveDataJob.sql";
             //this.SqlResource(sqlResName);
         }
