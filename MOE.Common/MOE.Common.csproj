@@ -526,10 +526,6 @@
     <Compile Include="Migrations\201805251650242_PhaseTerminationAggregation.Designer.cs">
       <DependentUpon>201805251650242_PhaseTerminationAggregation.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201805311757143_DatabaseArchive.cs" />
-    <Compile Include="Migrations\201805311757143_DatabaseArchive.Designer.cs">
-      <DependentUpon>201805311757143_DatabaseArchive.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201806072115260_PhasePedDelayAggregation.cs" />
     <Compile Include="Migrations\201806072115260_PhasePedDelayAggregation.Designer.cs">
       <DependentUpon>201806072115260_PhasePedDelayAggregation.cs</DependentUpon>
@@ -939,9 +935,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805251650242_PhaseTerminationAggregation.resx">
       <DependentUpon>201805251650242_PhaseTerminationAggregation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805311757143_DatabaseArchive.resx">
-      <DependentUpon>201805311757143_DatabaseArchive.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806072115260_PhasePedDelayAggregation.resx">
       <DependentUpon>201806072115260_PhasePedDelayAggregation.cs</DependentUpon>

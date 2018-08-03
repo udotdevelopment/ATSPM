@@ -40,15 +40,15 @@ namespace ConvertDBForHistoricalConfigurations
             GetApproachRouteDetails(); // orig
 
             GetMetricComments(); // Derek
-            ClearMetricComments(); // Andre
             GetMetricCommentMetricTypes(); // Andre
-            ClearMetricCommentMetricTypes(); // Derek
+            ClearMetricComments(); // Andre
+            //ClearMetricCommentMetricTypes(); // Derek
             //GetDetectionTypeMetricTypes();  //Andre
-            //ClearDetectionTypeMetricTypes();  //Andre
-            //GetActionLogMetricTypes();  //Andre
-            //ClearActionLogMetricTypes();  //Andre
-            GetActionLogs();  //Andre
-            ClearActionLogs();  //Andre
+            ClearDetectionTypeMetricTypes();  //Andre
+            GetActionLogMetricTypes();  //Andre
+            ClearActionLogMetricTypes();  //Andre
+            //GetActionLogs();  //Andre
+            //ClearActionLogs();  //Andre
 
             RunMigrations(); //orig
             UpdateSignalRecordsWithStartDateAndVersion(); // orig
@@ -73,7 +73,14 @@ namespace ConvertDBForHistoricalConfigurations
                     actionLogs.ActionLogID = (int)reader["ActionLogID"];
                     actionLogs.Date = (DateTime)reader["Date"];
                     actionLogs.AgencyID = (int)reader["AgencyID"];
-                    actionLogs.Comment = (string)reader["Comment"];
+                    if (reader.IsDBNull(3))
+                    {
+                        actionLogs.Comment = "";
+                    }
+                    else
+                    {
+                        actionLogs.Comment = (string)reader["Comment"];
+                    }
                     actionLogs.SignalID = (string)reader["SignalID"];
                     _oldActionLogsList.Add(actionLogs);
                 }
@@ -124,41 +131,52 @@ namespace ConvertDBForHistoricalConfigurations
 
         private static void ClearActionLogs()
         {
-            SPM db = new SPM();
-            db.Database.ExecuteSqlCommand("DELETE FROM ActionLogs");
-            db.SaveChanges();
-            db.Dispose();
+            SqlConnection sqlconn = GetDataBaseConnection();
+            //sqlconn.ConnectionTimeout = 120; has no setter.  The default is 15.
+            var slqQuery = "DELETE  from ActionLogs";
+            sqlconn.Open();
+            var command = new SqlCommand(slqQuery, sqlconn);
+            var rowCount = command.ExecuteNonQuery();
+            sqlconn.Dispose();
         }
 
         private static void ClearActionLogMetricTypes()
         {
-            SPM db = new SPM();
-            db.Database.ExecuteSqlCommand("DELETE FROM ActionLogMetricTypes");
-            db.SaveChanges();
-            db.Dispose();
+            SqlConnection sqlconn = GetDataBaseConnection();
+            var slqQuery = "DELETE  from ActionLogMetricTypes";
+            sqlconn.Open();
+            var command = new SqlCommand(slqQuery, sqlconn);
+            var rowCount = command.ExecuteNonQuery();
+            sqlconn.Dispose();
         }
 
         private static void ClearDetectionTypeMetricTypes()
         {
-            SPM db = new SPM();
-            db.Database.ExecuteSqlCommand("DELETE FROM DetectionTypeMetricTypes");
-            db.SaveChanges();
-            db.Dispose();
+            SqlConnection sqlconn = GetDataBaseConnection();
+            var slqQuery = "DELETE  from DetectionTypeMetricTypes";
+            sqlconn.Open();
+            var command = new SqlCommand(slqQuery, sqlconn);
+            var rowCount = command.ExecuteNonQuery();
+            sqlconn.Dispose();
         }
         private static void ClearMetricComments()
         {
-            SPM db = new SPM();
-            db.Database.ExecuteSqlCommand("DELETE FROM MetricComments");
-            db.SaveChanges();
-            db.Dispose();
+            SqlConnection sqlconn = GetDataBaseConnection();
+            var slqQuery = "DELETE  from MetricComments";
+            sqlconn.Open();
+            var command = new SqlCommand(slqQuery, sqlconn);
+            var rowCount= command.ExecuteNonQuery();
+            sqlconn.Dispose();
         }
 
         private static void ClearMetricCommentMetricTypes()
         {
-            SPM db = new SPM();
-            db.Database.ExecuteSqlCommand("DELETE FROM MetricCommentMetricTypes");
-            db.SaveChanges();
-            db.Dispose();
+            SqlConnection sqlconn = GetDataBaseConnection();
+            var slqQuery = "DELETE  from MetricCommentMetricTypes";
+            sqlconn.Open();
+            var command = new SqlCommand(slqQuery, sqlconn);
+            var rowCount = command.ExecuteNonQuery();
+            sqlconn.Dispose();
         }
 
         private static void GetMetricCommentMetricTypes()

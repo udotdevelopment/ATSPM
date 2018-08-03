@@ -10,6 +10,19 @@ namespace MOE.Common.Migrations
         public override void Up()
         {
             CreateTable(
+                "dbo.ToBeProcessedTableIndexes",
+                c => new
+                {
+                    Id = c.Int(nullable: false, identity: true),
+                    TableId = c.Int(),
+                    IndexId = c.Int(),
+                    ClusteredText = c.String(),
+                    TextForIndex = c.String(),
+                    IndexName = c.String(),
+                })
+                .PrimaryKey(t => t.Id);
+
+            CreateTable(
                     "dbo.ShrinkFileGroups",
                     c => new
                     {
