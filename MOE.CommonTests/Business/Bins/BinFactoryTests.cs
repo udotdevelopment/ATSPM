@@ -113,7 +113,7 @@ namespace MOE.Common.Business.Bins.Tests
             BinFactoryOptions binFactoryOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017 12:00 AM"),
                 Convert.ToDateTime("10/5/2017 5:00 AM"),
-                null, null, null, null, null,
+                null, null, null, null, new List<DayOfWeek>{DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday}, 
                 BinFactoryOptions.BinSize.Day,
                 BinFactoryOptions.TimeOptions.StartToEnd);
             var binsContainers = BinFactory.GetBins(binFactoryOptions);

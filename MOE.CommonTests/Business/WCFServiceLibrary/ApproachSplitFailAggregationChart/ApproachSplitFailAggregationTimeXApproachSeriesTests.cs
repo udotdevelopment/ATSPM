@@ -38,7 +38,6 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachSplitFailAggregatio
 
         [TestMethod]
         public void CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest()
-
         {
             var options = new ApproachSplitFailAggregationOptions();
             base.CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest(options);

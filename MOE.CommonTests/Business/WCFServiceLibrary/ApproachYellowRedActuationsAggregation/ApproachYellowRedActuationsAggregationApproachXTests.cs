@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MOE.Common.Business.Bins;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Business.WCFServiceLibrary.Tests;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using MOE.CommonTests.Models;
+using System;
 
 namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachYellowRedActivationsAggregation
 {

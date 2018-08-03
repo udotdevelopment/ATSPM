@@ -91,7 +91,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public double Y2AxisMin { get; set; }
 
         [DataMember]
-        public string MetricFileLocation { get; set; }
+        public string MetricFileLocation { get;
+            set; }
 
         [DataMember]
         public string MetricWebPath { get; set; }

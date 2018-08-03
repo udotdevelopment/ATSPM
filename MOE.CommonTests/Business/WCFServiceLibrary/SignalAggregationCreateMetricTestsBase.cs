@@ -268,7 +268,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary
             if (!approvedXaxis.Contains(options.SelectedXAxisType))
                 return false;
 
-            if (options.SelectedXAxisType == XAxisType.Phase)
+            if (options.SelectedXAxisType == XAxisType.Approach)
                 return false;
 
             if(options.SelectedSeries == SeriesType.Route && options.SelectedXAxisType == XAxisType.Signal)
@@ -281,7 +281,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary
                 return false;
             if (options.SelectedXAxisType == XAxisType.Direction && options.SelectedSeries == SeriesType.PhaseNumber)
                 return false;
-            if (options.SelectedXAxisType == XAxisType.Phase && options.SelectedSeries == SeriesType.Direction)
+            if (options.SelectedXAxisType == XAxisType.Approach && options.SelectedSeries == SeriesType.Direction)
                 return false;
             if (options.SelectedXAxisType == XAxisType.Detector)
                 return false;
@@ -291,7 +291,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary
                 return false;
             if (options.SelectedSeries == SeriesType.Direction)
                 return false;
-            if ((options.SelectedXAxisType == XAxisType.Direction || options.SelectedXAxisType == XAxisType.Phase) &&
+            if ((options.SelectedXAxisType == XAxisType.Direction || options.SelectedXAxisType == XAxisType.Approach) &&
                 (options.SelectedSeries == SeriesType.Signal || options.SelectedSeries == SeriesType.Route))
                 return false;
 

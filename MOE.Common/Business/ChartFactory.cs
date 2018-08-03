@@ -342,7 +342,7 @@ namespace MOE.Common.Business
             //var reportTimespan = options.EndDate - options.StartDate;
             chartArea.AxisX.Title = "Time (Hour of Day)";
             chartArea.AxisX.LabelStyle.IsEndLabelVisible = false;
-            chartArea.AxisX.Interval = 1;
+            //chartArea.AxisX.Interval = 1;
             if (options.SelectedXAxisType ==
                 XAxisType.TimeOfDay)
             {

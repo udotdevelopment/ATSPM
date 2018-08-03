@@ -66,6 +66,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
@@ -115,24 +116,11 @@
     <Compile Include="Business\DataAggregation\PreemptionAggregationBySignalTests.cs" />
     <Compile Include="Business\DataAggregation\SplitFailAggregationBySignalTests.cs" />
     <Compile Include="Business\Export\ChartToCSVExporterTests.cs" />
-    <Compile Include="Business\Export\ExporterTests.cs" />
     <Compile Include="Business\PlanFactoryTests.cs" />
     <Compile Include="Business\SplitFail\SplitFailPhaseTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\AggregationTestHelper.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachAggregationCreateMetricTestBase.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationApproachXTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartPhaseXPhaseSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartSignalXDirectionSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartSignalXPhaseSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartSignalXSignalSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeOfDayDirectionSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeOfDayRouteSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeOfDaySignalSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeOfDayXPhaseSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXApprochSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXDirectionSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXRouteSeriesTests.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregation\ApproachCycleAggregationChartTimeXSignalSeriesTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\NonAggregateCharts\ApproachDelayOptionsTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\NonAggregateCharts\ApproachSpeed\ApproachSpeedOptionsTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\JustTimeXSeriesApproachTestsBase.cs" />
@@ -190,7 +178,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

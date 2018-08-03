@@ -2,6 +2,7 @@
 using MOE.Common.Business.WCFServiceLibrary;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -48,14 +49,13 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             options.SeriesWidth = 3;
             SetFilterSignal(options);
             options.ShowEventCount = true;
+            options.MetricFileLocation = ConfigurationManager.AppSettings["ImageLocation"];
+
         }
 
         
         public virtual void CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest(ApproachAggregationMetricOptions options )
         {
-
-            
-
             setOptionDefaults(options);
             foreach (var xAxisType in Enum.GetValues(typeof(XAxisType)).Cast<XAxisType>().ToList())
             {
@@ -243,13 +243,13 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 return false;
             if (options.SelectedXAxisType == XAxisType.Direction && options.SelectedSeries == SeriesType.PhaseNumber)
                 return false;
-            if (options.SelectedXAxisType == XAxisType.Phase && options.SelectedSeries == SeriesType.Direction)
+            if (options.SelectedXAxisType == XAxisType.Approach && options.SelectedSeries == SeriesType.Direction)
                 return false;
             if (options.SelectedXAxisType == XAxisType.Detector)
                 return false;
             if (options.SelectedSeries == SeriesType.Detector)
                 return false;
-            if ((options.SelectedXAxisType == XAxisType.Direction || options.SelectedXAxisType == XAxisType.Phase) &&
+            if ((options.SelectedXAxisType == XAxisType.Direction || options.SelectedXAxisType == XAxisType.Approach) &&
                 (options.SelectedSeries == SeriesType.Signal || options.SelectedSeries == SeriesType.Route))
                 return false;
             if (options.SelectedXAxisType == XAxisType.Signal && options.SelectedSeries == SeriesType.Route)

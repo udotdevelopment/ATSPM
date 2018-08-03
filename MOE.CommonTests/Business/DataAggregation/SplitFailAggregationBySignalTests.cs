@@ -64,6 +64,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
@@ -135,6 +136,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
@@ -207,6 +209,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
@@ -278,6 +281,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
@@ -349,6 +353,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
@@ -420,6 +425,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
@@ -491,6 +497,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
@@ -563,6 +570,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
@@ -634,6 +642,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
@@ -706,6 +715,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
@@ -777,6 +787,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
@@ -862,6 +873,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
@@ -943,6 +955,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], 2);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 1);
@@ -1009,6 +1022,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 4);
@@ -1075,6 +1089,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], options.Signals.FirstOrDefault().Approaches.FirstOrDefault().DirectionType);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 1);
@@ -1141,6 +1156,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0], options.Signals.FirstOrDefault().Approaches.FirstOrDefault().DirectionType);
             Assert.IsTrue(splitAggregationBySignal.ApproachSplitFailures.Count == 1);
@@ -1212,6 +1228,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.GetSplitFailsByDirection(options.Signals.FirstOrDefault().Approaches.FirstOrDefault().DirectionType) == 288);
@@ -1239,6 +1256,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "104", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("104"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType {DataName = "SplitFailures"};
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal = new SplitFailAggregationBySignal(options, options.Signals[0]);
             Assert.IsTrue(splitAggregationBySignal.GetAverageSplitFailsByDirection(options.Signals.FirstOrDefault().Approaches.FirstOrDefault().DirectionType) == 288);
@@ -1261,6 +1279,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal15Minute = new SplitFailAggregationBySignal(options, options.Signals[0]);
             double fifteenMinuteSum = 0;
@@ -1272,7 +1291,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.ThirtyMinute;
             binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal30Minute = new SplitFailAggregationBySignal(options, options.Signals[0]);
-            int thirtyMinuteSum = 0;
+            double thirtyMinuteSum = 0;
             foreach (var binsContainer in splitAggregationBySignal30Minute.BinsContainers)
             {
                 thirtyMinuteSum += binsContainer.SumValue;
@@ -1282,7 +1301,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.Hour;
             binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignalHour = new SplitFailAggregationBySignal(options, options.Signals[0]);
-            int hourSum = 0;
+            double hourSum = 0;
             foreach (var binsContainer in splitAggregationBySignalHour.BinsContainers)
             {
                 hourSum += binsContainer.SumValue;
@@ -1292,7 +1311,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.Day;
             binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignalDay = new SplitFailAggregationBySignal(options, options.Signals[0]);
-            int daySum = 0;
+            double daySum = 0;
             foreach (var binsContainer in splitAggregationBySignalDay.BinsContainers)
             {
                 daySum += binsContainer.SumValue;
@@ -1302,7 +1321,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.Month;
             binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignalMonth = new SplitFailAggregationBySignal(options, options.Signals[0]);
-            int monthSum = 0;
+            double monthSum = 0;
             foreach (var binsContainer in splitAggregationBySignalMonth.BinsContainers)
             {
                 monthSum += binsContainer.SumValue;
@@ -1312,7 +1331,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.Year;
             binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignalYear = new SplitFailAggregationBySignal(options, options.Signals[0]);
-            int yearSum = 0;
+            double yearSum = 0;
             foreach (var binsContainer in splitAggregationBySignalYear.BinsContainers)
             {
                 yearSum += binsContainer.SumValue;
@@ -1342,6 +1361,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             }
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
             List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             SplitFailAggregationBySignal splitAggregationBySignal15Minute =
                 new SplitFailAggregationBySignal(options, options.Signals[0]);

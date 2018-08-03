@@ -15,7 +15,7 @@ namespace MOE.Common.Models.Tests
         public void CopyDetectorTest()
         {
            var newDet = MOE.Common.Models.Detector.CopyDetector(30, false);
-            Assert.IsTrue(newDet.DetectionTypes.Count > 0);
+            Assert.IsTrue(newDet.DetectionTypeIDs.Any());
         }
     }
 }

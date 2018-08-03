@@ -7,6 +7,7 @@ using System.Net.NetworkInformation;
 using Lextm.SharpSnmpLib.Messaging;
 using System.Threading.Tasks;
 using System.Configuration;
+using System.Security;
 using MOE.Common.Data;
 using MOE.Common.Models.Repositories;
 
@@ -57,6 +58,9 @@ namespace FTPfromAllControllers
                     signal.SignalId = row.SignalID.ToString();
 
                     string username = row.User_Name;
+                    //SecureString password = new SecureString();
+                    //foreach (char c in row.Password)
+                    //    password.AppendChar(c);
                     string password = row.Password;
                     string localDir = hostDir + signal.SignalId + "\\";
                     string remoteDir = row.FTP_Directory;

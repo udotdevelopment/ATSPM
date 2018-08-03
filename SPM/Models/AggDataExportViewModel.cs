@@ -43,18 +43,18 @@ namespace SPM.Models
 
         [Required]
         [Display(Name = "Dimesion")]
-        public Dimension SelectedDimension { get; set; }
+        public Dimension? SelectedDimension { get; set; }
         [Required]
         [Display(Name = "Series Type")]
-        public SeriesType SelectedSeriesType { get; set; }
+        public SeriesType? SelectedSeriesType { get; set; }
 
         [Required]
         [Display(Name = "X-Axis")]
-        public  XAxisType SelectedXAxisType { get; set; }
+        public  XAxisType? SelectedXAxisType { get; set; }
 
         [Required]
         [Display(Name = "Aggregation Type")]
-        public AggregationType SelectedAggregationType { get; set; }
+        public AggregationType? SelectedAggregationType { get; set; }
 
         [Required]
         [Display(Name = "Metric Type")]
@@ -76,7 +76,7 @@ namespace SPM.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Start Date")]
-        public DateTime StartDateDay { get; set; }
+        public DateTime? StartDateDay { get; set; }
 
         [Display(Name = "Start Time")]
         public string StartTime { get; set; }
@@ -88,7 +88,7 @@ namespace SPM.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "End Date")]
-        public DateTime EndDateDay { get; set; }
+        public DateTime? EndDateDay { get; set; }
 
         [Display(Name = "End Time")]
         public string EndTime { get; set; }
@@ -100,7 +100,7 @@ namespace SPM.Models
         [Display(Name = "Series Width")]
         public int SelectedSeriesWidth { get; set; }
 
-
+        [Required]
         public MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel SignalSearch { get; set; } = new SignalSearchViewModel();
 
         private IMetricTypeRepository _metricRepository;

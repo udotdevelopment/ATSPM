@@ -48,13 +48,13 @@ namespace MOE.Common.Models.ViewModel
         [Display(Name = "Start Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [Required]
         [Display(Name = "End Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [Required]
         [Display(Name = "Start Time")]
@@ -110,7 +110,7 @@ namespace MOE.Common.Models.ViewModel
             if (PostedDays.DayIDs.Contains("6"))
                 daysList.Add(DayOfWeek.Saturday);
 
-            var dates = LinkPivot.GetDates(StartDate, EndDate, daysList);
+            var dates = LinkPivot.GetDates(StartDate.Value, EndDate.Value, daysList);
             return dates;
         }
     }

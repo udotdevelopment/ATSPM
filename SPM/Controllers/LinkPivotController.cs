@@ -52,9 +52,9 @@ namespace SPM.Controllers
         {
             if (ModelState.IsValid)
             {
-                DateTime startDate = Convert.ToDateTime(lpvm.StartDate.ToShortDateString() + " " + lpvm.StartTime +
+                DateTime startDate = Convert.ToDateTime(lpvm.StartDate.Value.ToShortDateString() + " " + lpvm.StartTime +
                     " " + lpvm.StartAMPM);
-                DateTime endDate = Convert.ToDateTime(lpvm.EndDate.ToShortDateString() + " " + lpvm.EndTime +
+                DateTime endDate = Convert.ToDateTime(lpvm.EndDate.Value.ToShortDateString() + " " + lpvm.EndTime +
                     " " + lpvm.EndAMPM);
 
                 LinkPivotServiceReference.LinkPivotServiceClient client =
@@ -173,7 +173,7 @@ namespace SPM.Controllers
                 options.SignalId = lpvm.SelectedSignalId;
                 options.DownSignalId = lpvm.SelectedDownSignalId;
                 options.Delta = lpvm.SelectedDelta;
-                options.EndDate = Convert.ToDateTime(lpvm.EndDate.ToShortDateString() + 
+                options.EndDate = Convert.ToDateTime(lpvm.EndDate.Value.ToShortDateString() + 
                     " " + lpvm.EndTime +
                     " " + lpvm.EndAMPM);
 
@@ -191,7 +191,7 @@ namespace SPM.Controllers
                 pcdOptions.SelectedEndDate = Convert.ToDateTime(pcdOptions.SelectedStartDate[0].ToShortDateString() + " " +
                     pcdOptions.EndDate.ToShortTimeString());
                 DateTime pcdEndDate = Convert.ToDateTime(pcdOptions.SelectedStartDate[0].ToShortDateString()
-                    + " " + pcdOptions.SelectedEndDate.TimeOfDay.ToString());                
+                    + " " + pcdOptions.SelectedEndDate.Value.TimeOfDay.ToString());                
                 client.Open();
                 display = client.DisplayLinkPivotPCD(pcdOptions.SignalId, pcdOptions.UpstreamDirection,
                     pcdOptions.DownSignalId, pcdOptions.DownDirection, pcdOptions.Delta, pcdOptions.SelectedStartDate[0],
