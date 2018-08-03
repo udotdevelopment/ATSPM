@@ -47,7 +47,7 @@ namespace ConvertDBForHistoricalConfigurations
             ClearDetectionTypeMetricTypes();  //Andre
             GetActionLogMetricTypes();  //Andre
             ClearActionLogMetricTypes();  //Andre
-            //GetActionLogs();  //Andre
+            GetActionLogs();  //Andre
             //ClearActionLogs();  //Andre
 
             RunMigrations(); //orig
@@ -55,6 +55,33 @@ namespace ConvertDBForHistoricalConfigurations
             UpdateApproachesWithVersionId(); //Orig
             UpdateMetriCommentsWithVersionId(); // orig
             CreateRoutes(); //orig
+            UpdateActionLogs();
+        }
+
+        private static void UpdateActionLogs()
+        {
+
+            SPM db = new SPM();
+            var allMetricTypes = db.MetricTypes.ToList();
+            foreach (var oldActionLog in _oldActionLogsList)
+            {
+                var currentActionLog = db.ActionLogs.Find(oldActionLog.ActionLogID);
+                var metricTypeRelationships = _oldActionLogMetricTypesList.Where(a => a.ActionLog_ActionLogID == currentActionLog.ActionLogID).Select(a => a.MetricType_MetricID).ToList();
+                List<MetricType> metricsToAddToActionLog = new List<MetricType>();
+                foreach (var metricType in allMetricTypes)
+                {
+                    if (metricTypeRelationships.Contains(metricType.MetricID))
+                    {
+                        metricsToAddToActionLog.Add(metricType);
+                    }
+                }
+                if (currentActionLog != null)
+                {
+                   
+                    currentActionLog.MetricTypes = metricsToAddToActionLog;
+                }
+            }
+            db.SaveChanges();
         }
 
         private static void GetActionLogs()
@@ -370,8 +397,8 @@ namespace ConvertDBForHistoricalConfigurations
         private static void UpdateMetriCommentsWithVersionId()
         {
             SPM db = new SPM();
-            db.Database.ExecuteSqlCommand(
-                "ALTER TABLE [dbo].[MetricComments] DROP CONSTRAINT [FK_dbo.MetricComments_dbo.Signals_VersionID] FOREIGN KEY ([VersionID]) REFERENCES [dbo].[Signals] ([VersionID])");
+            //db.Database.ExecuteSqlCommand(
+            //    "ALTER TABLE [dbo].[MetricComments] DROP CONSTRAINT [FK_dbo.MetricComments_dbo.Signals_VersionID] FOREIGN KEY ([VersionID]) REFERENCES [dbo].[Signals] ([VersionID])");
             var comments = (from r in db.MetricComments
                 select r).ToList();
             foreach (var c in comments)
@@ -390,8 +417,8 @@ namespace ConvertDBForHistoricalConfigurations
         private static void UpdateApproachesWithVersionId()
         {
             SPM db = new SPM();
-            db.Database.ExecuteSqlCommand(
-                "ALTER TABLE [dbo].[Approaches] DROP CONSTRAINT [FK_dbo.Approaches_dbo.Signals_VersionID] FOREIGN KEY ([VersionID]) REFERENCES [dbo].[Signals] ([VersionID]) ");
+            //db.Database.ExecuteSqlCommand(
+            //    "ALTER TABLE [dbo].[Approaches] DROP CONSTRAINT [FK_dbo.Approaches_dbo.Signals_VersionID] FOREIGN KEY ([VersionID]) REFERENCES [dbo].[Signals] ([VersionID]) ");
             var approaches = (from r in db.Approaches select r).ToList();
             foreach (var a in approaches)
             {
@@ -408,13 +435,13 @@ namespace ConvertDBForHistoricalConfigurations
         private static void UpdateSignalRecordsWithStartDateAndVersion()
         {
             SPM db = new SPM();
-            db.Database.ExecuteSqlCommand(
-                "ALTER TABLE [dbo].[Signals] DROP CONSTRAINT [FK_dbo.Signals_dbo.VersionActions_VersionAction_ID] FOREIGN KEY ([VersionActionId]) REFERENCES [dbo].[VersionActions] ([ID])");
+            //db.Database.ExecuteSqlCommand("ALTER TABLE [dbo].[Signals] DROP CONSTRAINT [FK_dbo.Signals_dbo.VersionActions_VersionAction_ID] FOREIGN KEY ([VersionActionId]) REFERENCES [dbo].[VersionActions] ([ID])");
             var signals = (from r in db.Signals
                 select r).ToList();
             var version = (from r in db.VersionActions
                 where r.ID == 10
                 select r).FirstOrDefault();
+            var allMetricTypes = db.MetricTypes.ToList();
             foreach (var s in signals)
             {
                 s.Start = s.FirstDate;
@@ -428,14 +455,22 @@ namespace ConvertDBForHistoricalConfigurations
                     {
                         var metricTypeRelationships = _oldMetricCommentMetricTypesList
                             .Where(t => t.MetricComment_CommentId == comment.CommentId).ToList();
+                        List<MetricType> metricsToAddToComment = new List<MetricType>();
+                        foreach (var metricType in allMetricTypes)
+                        {
+                            if (metricTypeRelationships.Select(r => r.MetricType_MetricID)
+                                .Contains(metricType.MetricID))
+                            {
+                                metricsToAddToComment.Add(metricType);
+                            }
+                        }
                         s.Comments.Add(
                             new MetricComment
                             {
                                 CommentText = comment.ComentText,
                                 SignalID = comment.SignalId,
                                 TimeStamp = comment.TimeStamp,
-                                VersionID = s.VersionID,
-                                MetricTypeIDs = metricTypeRelationships.Select(r => r.MetricType_MetricID).ToList()
+                                VersionID = s.VersionID, MetricTypes = metricsToAddToComment
                             });
                     }
                 }
