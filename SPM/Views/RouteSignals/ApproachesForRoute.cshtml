@@ -6,7 +6,7 @@
         <tr class=""><th rowspan="2">Signal</th><th colspan="3">Primary</th><th colspan="3">Opposing</th></tr>
         <tr>
             <th>
-                Direction
+                Dir.
             </th>
             <th>
                 Phase
@@ -14,7 +14,7 @@
             <th>
                 Overlap
             </th>
-            <th>Direction</th>
+            <th>Dir.</th>
             <th>Phase</th>
             <th>Overlap</th>
         </tr>
@@ -27,9 +27,9 @@
                     @Html.DisplayFor(modelItem => item.Item1.RouteSignal.Signal.SignalDescription)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Item1.Direction.Description)
+                    @Html.DisplayFor(modelItem => item.Item1.Direction.Abbreviation)
                 </td>
-                <td>
+                <td class="text-center">
                     @Html.DisplayFor(modelItem => item.Item1.Phase)
                 </td>
                 <td>
@@ -37,9 +37,9 @@
                     @Html.CheckBoxFor(modelItem => item.Item1.IsOverlap, new { disabled = true, aria_label = "Overlap1" })
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Item2.Direction.Description)
+                    @Html.DisplayFor(modelItem => item.Item2.Direction.Abbreviation)
                 </td>
-                <td>
+                <td class="text-center">
                     @Html.DisplayFor(modelItem => item.Item2.Phase)
                 </td>
                 <td>

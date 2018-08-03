@@ -762,7 +762,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 options.SelectedAggregatedDataType = preemptionData;
                 PreemptionAggregationBySignal splitAggregationBySignal15Minute =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
-                int fifteenMinuteSum = 0;
+                double fifteenMinuteSum = 0;
                 foreach (var binsContainer in splitAggregationBySignal15Minute.BinsContainers)
                 {
                     fifteenMinuteSum += binsContainer.SumValue;
@@ -772,7 +772,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 binsContainers = BinFactory.GetBins(options.TimeOptions);
                 PreemptionAggregationBySignal splitAggregationBySignal30Minute =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
-                int thirtyMinuteSum = 0;
+                double thirtyMinuteSum = 0;
                 foreach (var binsContainer in splitAggregationBySignal30Minute.BinsContainers)
                 {
                     thirtyMinuteSum += binsContainer.SumValue;
@@ -783,7 +783,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 binsContainers = BinFactory.GetBins(options.TimeOptions);
                 PreemptionAggregationBySignal splitAggregationBySignalHour =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
-                int hourSum = 0;
+                double hourSum = 0;
                 foreach (var binsContainer in splitAggregationBySignalHour.BinsContainers)
                 {
                     hourSum += binsContainer.SumValue;

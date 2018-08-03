@@ -1,10 +1,9 @@
 -- DROP Function StopCounter
 
-CREATE FUNCTION [dbo].[StopCounter] (@CurrentYear int, @CurentMonth int , @Verbose int)
+CREATE FUNCTION [dbo].[StopCounter]  (@CurrentYear int, @CurentMonth int , @Verbose int)
 Returns INT
 With EXECUTE as Caller
 AS
-
 BEGIN
 DECLARE @MonthToKeep int
 DECLARE @MonthsToKeepIndex int
@@ -48,6 +47,6 @@ SET @DiffMonth = @CurentMonth -@StartMonth
 SET @StopCounter = (@DiffYear *12) + @DiffMonth - @MonthsToKeepIndex 
 RETURN @StopCounter
 
-END
+END;
 
 -- SELECT [dbo].[StopCounter] (2018, 4,  1)

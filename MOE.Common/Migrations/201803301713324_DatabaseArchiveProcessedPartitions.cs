@@ -10,6 +10,19 @@ namespace MOE.Common.Migrations
         public override void Up()
         {
             CreateTable(
+                "dbo.ToBeProcessedTableIndexes",
+                c => new
+                {
+                    Id = c.Int(nullable: false, identity: true),
+                    TableId = c.Int(),
+                    IndexId = c.Int(),
+                    ClusteredText = c.String(),
+                    TextForIndex = c.String(),
+                    IndexName = c.String(),
+                })
+                .PrimaryKey(t => t.Id);
+
+            CreateTable(
                     "dbo.ShrinkFileGroups",
                     c => new
                     {
@@ -125,10 +138,6 @@ namespace MOE.Common.Migrations
 
             string sqlResProcesstables = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".Processtables.sql";
             this.SqlResource(sqlResProcesstables);
-
-            string sqlResReclaimFileSpaceForMoe = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".ReclaimFileSpaceForMoe.sql";
-            this.SqlResource(sqlResReclaimFileSpaceForMoe);
-
             string sqlResStopCounter = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".StopCounter.sql";
             this.SqlResource(sqlResStopCounter);
 
@@ -144,6 +153,10 @@ namespace MOE.Common.Migrations
             string sqlResVerbose = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".Verbose.sql";
             this.SqlResource(sqlResVerbose);
 
+            string sqlResReclaimFileSpaceForMoe = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".ReclaimFileSpaceForMoe.sql";
+            this.SqlResource(sqlResReclaimFileSpaceForMoe);
+
+           
            // string sqlResName = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".CreateIntegratedSwapAndMoveDataJob.sql";
             //this.SqlResource(sqlResName);
         }

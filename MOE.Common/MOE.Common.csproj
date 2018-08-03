@@ -526,10 +526,6 @@
     <Compile Include="Migrations\201805251650242_PhaseTerminationAggregation.Designer.cs">
       <DependentUpon>201805251650242_PhaseTerminationAggregation.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201805311757143_DatabaseArchive.cs" />
-    <Compile Include="Migrations\201805311757143_DatabaseArchive.Designer.cs">
-      <DependentUpon>201805311757143_DatabaseArchive.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201806072115260_PhasePedDelayAggregation.cs" />
     <Compile Include="Migrations\201806072115260_PhasePedDelayAggregation.Designer.cs">
       <DependentUpon>201806072115260_PhasePedDelayAggregation.cs</DependentUpon>
@@ -921,15 +917,24 @@
     <Content Include="App.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Migrations\CreateAndPopulateMOEDB.sql" />
+    <EmbeddedResource Include="Migrations\ReclaimFileSpaceForMoe.sql" />
+    <EmbeddedResource Include="Migrations\Verbose.sql" />
+    <EmbeddedResource Include="Migrations\UpperBoundary.sql" />
+    <EmbeddedResource Include="Migrations\TableName.sql" />
+    <EmbeddedResource Include="Migrations\StopDropping.sql" />
+    <EmbeddedResource Include="Migrations\StopCounter.sql" />
+    <EmbeddedResource Include="Migrations\Processtables.sql" />
+    <EmbeddedResource Include="Migrations\PreserveData.sql" />
+    <EmbeddedResource Include="Migrations\LowerBoundary.sql" />
+    <EmbeddedResource Include="Migrations\IndexNameColumns.sql" />
+    <EmbeddedResource Include="Migrations\IndexNameClustered.sql" />
+    <EmbeddedResource Include="Migrations\IndexName.sql" />
+    <EmbeddedResource Include="Migrations\CreateAndPopulateMOEDB.sql" />
     <EmbeddedResource Include="Migrations\201804251748599_MetricTypeIdentityRemoval.resx">
       <DependentUpon>201804251748599_MetricTypeIdentityRemoval.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805251650242_PhaseTerminationAggregation.resx">
       <DependentUpon>201805251650242_PhaseTerminationAggregation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805311757143_DatabaseArchive.resx">
-      <DependentUpon>201805311757143_DatabaseArchive.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806072115260_PhasePedDelayAggregation.resx">
       <DependentUpon>201806072115260_PhasePedDelayAggregation.cs</DependentUpon>
@@ -944,8 +949,15 @@
       <DependentUpon>201806211436552_RemoveLaneByLaneFromAOR.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CreateIntegratedSwapAndMoveDataJob.sql" />
-    <Content Include="Migrations\CustomStuffForExistingUpgrade.txt" />
-    <Content Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
+    <EmbeddedResource Include="Migrations\CreateConstraints.sql" />
+    <EmbeddedResource Include="Migrations\CreateIndexes.sql" />
+    <EmbeddedResource Include="Migrations\CreateTable.sql" />
+    <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
+    <EmbeddedResource Include="Migrations\DoTheSwapTable.sql" />
+    <EmbeddedResource Include="Migrations\DropIndexes.sql" />
+    <EmbeddedResource Include="Migrations\DropOrCompressTable.sql" />
+    <EmbeddedResource Include="Migrations\FileGroup.sql" />
+    <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
     <None Include="Data\LinkPivot.xsc">
