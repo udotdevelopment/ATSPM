@@ -32,12 +32,12 @@ namespace MOEWcfServiceLibrary.Tests
 
             var start = DateTime.Now.AddDays(-1);//Convert.ToDateTime("02/01/2018 00:01");
             var end = DateTime.Now;//Convert.ToDateTime("02/01/2018 23:59");
-            PhaseTerminationOptions options = new PhaseTerminationOptions(start, 8, end, "8",false, 1, true);
+            PhaseTerminationOptions options = new PhaseTerminationOptions(start, 8, end, "10",false, 1, true);
             options.StartDate = start;
             options.EndDate = end;
 
 
-            options.MetricFileLocation = "C:\\Temp\\ATSPMImages";
+            options.MetricFileLocation = "E:\\Temp\\ATSPMImages";
                 
 
             return options;
