@@ -11,8 +11,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     {
         public ApproachDelayOptions(string signalID, DateTime startDate, DateTime endDate, double yAxisMax,
             double y2AxisMax,
-            int binSize, bool showPlanStatistics, int metricTypeID, bool showDelayPerVehicle,
-            bool showTotalDelayPerHour)
+            int binSize, bool showPlanStatistics, bool showDelayPerVehicle)
         {
             SignalID = signalID;
             YAxisMax = yAxisMax;
@@ -67,8 +66,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
-            var location = GetSignalLocation();
-
             var signalphasecollection =
                 new SignalPhaseCollection(StartDate,
                     EndDate, SignalID,
@@ -79,7 +76,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 var delayChart = new DelayChart(this, signalPhase);
 
-                var chart = delayChart.chart;
+                var chart = delayChart.Chart;
 
                 var chartName = CreateFileName();
 

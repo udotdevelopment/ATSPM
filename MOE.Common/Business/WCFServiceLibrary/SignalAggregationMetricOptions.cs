@@ -713,36 +713,39 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 case -1:
                     return Color.Black;
                 case 0:
-                    return Color.FromArgb(33, 119, 242);
+                    return Color.FromArgb(27, 31, 80);
                 case 1:
-                    return Color.FromArgb(178, 4, 0);
+                    return Color.FromArgb(76, 153, 230);
 
                 case 2:
-                    return Color.FromArgb(235, 126, 110);
+                    return Color.FromArgb(184, 40, 40);
 
                 case 3:
-                    return Color.FromArgb(239, 160, 43);
+                    return Color.FromArgb(125, 212, 94);
 
                 case 4:
-                    return Color.FromArgb(253, 208, 125);
+                    return Color.FromArgb(113, 37, 100);
 
                 case 5:
-                    return Color.FromArgb(185, 204, 18);
+                    return Color.FromArgb(220, 179, 46);
 
                 case 6:
-                    return Color.FromArgb(95, 147, 23);
+                    return Color.FromArgb(50, 143, 149);
 
                 case 7:
-                    return Color.FromArgb(44, 92, 18);
+                    return Color.FromArgb(24, 69, 23);
 
                 case 8:
-                    return Color.FromArgb(101, 114, 148);
+                    return Color.FromArgb(227, 131, 35);
 
                 case 9:
-                    return Color.FromArgb(58, 61, 115);
+                    return Color.FromArgb(185, 65, 116);
 
                 case 10:
-                    return Color.FromArgb(25, 17, 64);
+                    return Color.FromArgb(232, 145, 176);
+
+                case 11:
+                    return Color.FromArgb(40, 131, 37);
 
                 default:
                     return Color.Black;

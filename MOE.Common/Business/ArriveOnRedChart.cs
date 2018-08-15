@@ -9,7 +9,7 @@ namespace MOE.Common.Business
 {
     public class ArriveOnRedChart
     {
-        public Chart chart = new Chart();
+        public Chart Chart;
         private double totalAoR;
         private double totalCars;
         private double totalPercentAoR;
@@ -17,54 +17,26 @@ namespace MOE.Common.Business
         public ArriveOnRedChart(AoROptions options, SignalPhase signalPhase)
         {
             Options = options;
-            var reportTimespan = Options.EndDate - Options.StartDate;
-
+            Chart = ChartFactory.CreateDefaultChart(options);
             //Set the chart properties
-            ChartFactory.SetImageProperties(chart);
+            ChartFactory.SetImageProperties(Chart);
 
             //Create the chart legend
             var chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
             chartLegend.Docking = Docking.Left;
-            chart.Legends.Add(chartLegend);
+            Chart.Legends.Add(chartLegend);
 
-
-            //Create the chart area
-            var chartArea = new ChartArea();
-            chartArea.Name = "ChartArea1";
             if (Options.YAxisMax != null)
-                chartArea.AxisY.Maximum = Options.YAxisMax.Value;
+                Chart.ChartAreas[0].AxisY.Maximum = Options.YAxisMax.Value;
 
-            chartArea.AxisY.Minimum = 0;
-            chartArea.AxisY.Title = "Volume (Vehicles Per Hour)";
-            chartArea.AxisY.Interval = 500;
-            chartArea.AxisY2.Title = "Percent AoR";
-            chartArea.AxisY2.Maximum = 100;
-            chartArea.AxisY2.Interval = 10;
-            chartArea.AxisY2.Enabled = AxisEnabled.True;
-
-
-            chartArea.AxisX.Title = "Time (Hour of Day)";
-            chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX.LabelStyle.Format = "HH";
-            chartArea.AxisX2.LabelStyle.Format = "HH";
-            if (reportTimespan.Days < 1)
-                if (reportTimespan.Hours > 1)
-                {
-                    chartArea.AxisX2.Interval = 1;
-                    chartArea.AxisX.Interval = 1;
-                }
-                else
-                {
-                    chartArea.AxisX.LabelStyle.Format = "HH:mm";
-                    chartArea.AxisX2.LabelStyle.Format = "HH:mm";
-                }
-            chartArea.AxisX2.Enabled = AxisEnabled.True;
-            chartArea.AxisX2.MajorTickMark.Enabled = true;
-            chartArea.AxisX2.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX2.LabelAutoFitStyle = LabelAutoFitStyles.None;
-
-            chart.ChartAreas.Add(chartArea);
+            Chart.ChartAreas[0].AxisY.Minimum = 0;
+            Chart.ChartAreas[0].AxisY.Title = "Volume (Vehicles Per Hour)";
+            Chart.ChartAreas[0].AxisY.Interval = 500;
+            Chart.ChartAreas[0].AxisY2.Title = "Percent AoR";
+            Chart.ChartAreas[0].AxisY2.Maximum = 100;
+            Chart.ChartAreas[0].AxisY2.Interval = 10;
+            Chart.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
 
 
             //Add the point series
@@ -100,31 +72,31 @@ namespace MOE.Common.Business
             pointSeries.IsVisibleInLegend = false;
 
 
-            chart.Series.Add(pointSeries);
-            chart.Series.Add(AoRSeries);
-            chart.Series.Add(PARSeries);
-            chart.Series.Add(TVSeries);
+            Chart.Series.Add(pointSeries);
+            Chart.Series.Add(AoRSeries);
+            Chart.Series.Add(PARSeries);
+            Chart.Series.Add(TVSeries);
 
 
             //Add points at the start and and of the x axis to ensure
             //the graph covers the entire period selected by the user
             //whether there is data or not
-            chart.Series["Posts"].Points.AddXY(Options.StartDate, 0);
-            chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
+            Chart.Series["Posts"].Points.AddXY(Options.StartDate, 0);
+            Chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
 
-            AddDataToChart(chart, signalPhase);
-            SetPlanStrips(signalPhase.Plans, chart, Options.StartDate, Options.ShowPlanStatistics);
+            AddDataToChart(Chart, signalPhase);
+            SetPlanStrips(signalPhase.Plans, Chart, Options.StartDate, Options.ShowPlanStatistics);
         }
 
         public AoROptions Options { get; set; }
 
         private void SetChartTitles(SignalPhase signalPhase, Dictionary<string, string> statistics)
         {
-            chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
-            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
+            Chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
+            Chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
                 Options.SignalID, Options.StartDate, Options.EndDate));
-                chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(signalPhase.Approach, signalPhase.GetPermissivePhase));
-            chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
+                Chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(signalPhase.Approach, signalPhase.GetPermissivePhase));
+            Chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
 
 

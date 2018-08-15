@@ -183,7 +183,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                                          select r).OrderBy(r => r.PhaseNumber);
                     foreach (var Phase in phasesInOrder)
                     {
-                        var chart = GetNewSplitMonitorChart(StartDate, EndDate, SignalID, GetSignalLocation(),
+                        var chart = GetNewSplitMonitorChart(StartDate, EndDate,
                             Phase.PhaseNumber);
                         AddSplitMonitorDataToChart(chart, Phase, analysisPhaseCollection.Plans);
                         if (ShowPlanStripes)
@@ -228,13 +228,17 @@ namespace MOE.Common.Business.WCFServiceLibrary
                             SkipPercent = SkippedPhases / CycleCount;
 
 
-                        var skipLabel = new CustomLabel();
-                        skipLabel.FromPosition = plan.StartTime.ToOADate();
-                        skipLabel.ToPosition = plan.EndTime.ToOADate();
-                        skipLabel.Text = string.Format("{0:0.0%} Skips", SkipPercent);
-                        skipLabel.LabelMark = LabelMarkStyle.LineSideMark;
-                        skipLabel.ForeColor = Color.Black;
-                        skipLabel.RowIndex = 1;
+                        var skipLabel = ChartTitleFactory.GetCustomLabelForTitle(
+                            $"{SkipPercent:0.0%} Skips", plan.StartTime.ToOADate(),
+                            plan.EndTime.ToOADate(), 1, Color.Black);
+
+                        //new CustomLabel();
+                        //skipLabel.FromPosition = plan.StartTime.ToOADate();
+                        //skipLabel.ToPosition = plan.EndTime.ToOADate();
+                        //skipLabel.Text = string.Format("{0:0.0%} Skips", SkipPercent);
+                        //skipLabel.LabelMark = LabelMarkStyle.LineSideMark;
+                        //skipLabel.ForeColor = Color.Black;
+                        //skipLabel.RowIndex = 1;
                         chart.ChartAreas[0].AxisX2.CustomLabels.Add(skipLabel);
                     }
 
@@ -427,20 +431,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        private Chart GetNewSplitMonitorChart(DateTime graphStartDate, DateTime graphEndDate, string signalId,
-            string location, int phase)
+        private Chart GetNewSplitMonitorChart(DateTime graphStartDate, DateTime graphEndDate, int phase)
         {
-            var repository =
-                SignalsRepositoryFactory.Create();
-            var signal = repository.GetLatestVersionOfSignalBySignalID(signalId);
-            var detectors = signal.GetDetectorsForSignalByPhaseNumber(phase);
-            var detID = "";
-            if (detectors.Count() > 0)
-                detID = detectors.First().ToString();
-            else
-                detID = "0";
-            var chart = ChartFactory.CreateDefaultChart(this);
-            var reportTimespan = graphEndDate - graphStartDate;
+            var chart = ChartFactory.CreateDefaultChartNoX2Axis(this);
+            chart.ChartAreas[0].AxisY.Interval = 5;
 
             //Set the chart properties
             ChartFactory.SetImageProperties(chart);

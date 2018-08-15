@@ -131,7 +131,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             base.CreateMetric();
             var location = GetSignalLocation();
-            var chart = ChartFactory.CreateDefaultChart(this);
+            var chart = ChartFactory.CreateDefaultChartNoX2Axis(this);
 
             CreateLegend();
             var analysisPhaseCollection =
@@ -169,7 +169,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             string signalId, string location, int consecutiveCount,
             int maxPhaseInUse, bool showPedWalkStartTime)
         {
-            var chart = ChartFactory.CreateDefaultChart(this);
+            var chart = ChartFactory.CreateDefaultChartNoX2Axis(this);
 
             
 

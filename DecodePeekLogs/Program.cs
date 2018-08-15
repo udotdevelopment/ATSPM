@@ -371,7 +371,7 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalId"],
                                   Properties.Settings.Default.EarliestAcceptableDate, Properties.Settings.Default.BulkCopyBatchSize, Properties.Settings.Default.BulkCopyTimeOut);
 
 
-                    MOE.Common.Business.Signal.BulktoDb(elTable, bulkOptions);
+                    MOE.Common.Business.SignalFtp.BulktoDb(elTable, bulkOptions);
 
                     elapsedTime = endTime - startTime;
 

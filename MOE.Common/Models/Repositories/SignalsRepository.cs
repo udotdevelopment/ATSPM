@@ -121,12 +121,12 @@ namespace MOE.Common.Models.Repositories
         {
             var newVersion = new Signal();
 
-            originalVersion.VersionAction = (from r in _db.VersionActions
-                where r.ID == 4
-                select r).FirstOrDefault();
+            //originalVersion.VersionAction = (from r in _db.VersionActions
+            //    where r.ID == 4
+            //    select r).FirstOrDefault();
 
             newVersion.VersionAction = (from r in _db.VersionActions
-                where r.ID == 5
+                where r.ID == 4
                 select r).FirstOrDefault();
 
 
@@ -430,6 +430,19 @@ namespace MOE.Common.Models.Repositories
                         a => a.Detectors.Select(d => d.DetectionTypes.Select(dt => dt.MetricTypes))))
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
                 .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                .GroupBy(r => r.SignalID)
+                .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).ToList();
+            return activeSignals;
+        }
+
+        public List<Signal> GetLatestVersionOfAllSignalsForFtp()
+        {
+            List<int> controllerTypes = new List<int>{4,5};
+            var activeSignals = _db.Signals.Where(r => r.VersionActionId != 3)
+                .Include(s => s.ControllerType)
+                .Where(s => !controllerTypes.Contains(s.ControllerTypeID))
+                .ToList();
+            activeSignals = activeSignals
                 .GroupBy(r => r.SignalID)
                 .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).ToList();
             return activeSignals;

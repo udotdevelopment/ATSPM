@@ -97,7 +97,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var detector = approach.GetDetectorsForMetricType(12).FirstOrDefault();
             if (detector != null)
             {
-                var direction = detector.MovementType.Description;
                 if (getPermissivePhase)
                 {
                     sfChart.Chart.BackColor = Color.LightGray;

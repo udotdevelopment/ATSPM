@@ -10,23 +10,24 @@ namespace MOE.Common.Business.TMC
 {
     public class TMCMetric
     {
-        public Chart chart = new Chart();
+        public Chart chart;
 
         public TMCMetric(DateTime graphStartDate, DateTime graphEndDate,
             Models.Signal signal, DirectionType direction, List<Models.Detector> detectorsByDirection,
             LaneType laneType, MovementType movementType,
             TMCOptions options, TMCInfo tmcInfo)
         {
+            chart = ChartFactory.CreateDefaultChart(options);
             Options = options;
             var extendedDirection = string.Empty;
             var reportTimespan = graphEndDate - graphStartDate;
             SetChartProperties();
             SetChartTitle(laneType, direction, movementType);
-            var chartArea = new ChartArea();
-            chartArea.Name = "ChartArea1";
-            AddXAxis(chartArea, reportTimespan);
-            AddYAxis(chartArea, movementType, options.YAxisMax, options.Y2AxisMax);
-            chart.ChartAreas.Add(chartArea);
+            //var chartArea = new ChartArea();
+            //chartArea.Name = "ChartArea1";
+            //AddXAxis(chartArea, reportTimespan);
+            //AddYAxis(chartArea, movementType, options.YAxisMax, options.Y2AxisMax);
+            //chart.ChartAreas.Add(chartArea);
             CreateAndAddSeries(graphStartDate, graphEndDate);
             CreatAndAddLegend(chart);
             AddDataToChart(graphStartDate, graphEndDate, direction, detectorsByDirection,

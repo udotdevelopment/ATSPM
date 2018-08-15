@@ -107,7 +107,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private Chart GetNewSpeedChart(Models.Detector detector)
         {
-            var chart = new Chart();
+            var chart = ChartFactory.CreateDefaultChart(this);
 
 
             ChartFactory.SetImageProperties(chart);
@@ -123,39 +123,25 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chart.Legends.Add(chartLegend);
 
             //Create the chart area
-            var chartArea = new ChartArea();
-            chartArea.Name = "ChartArea1";
+           
             if (YAxisMax > 0)
-                chartArea.AxisY.Maximum = YAxisMax.Value;
+                chart.ChartAreas[0].AxisY.Maximum = YAxisMax.Value;
             else
-                chartArea.AxisY.Maximum = 60;
+                chart.ChartAreas[0].AxisY.Maximum = 60;
 
             if (YAxisMin > 0)
-                chartArea.AxisY.Minimum = YAxisMin;
+                chart.ChartAreas[0].AxisY.Minimum = YAxisMin;
             else
-                chartArea.AxisY.Minimum = 0;
+                chart.ChartAreas[0].AxisY.Minimum = 0;
 
-            chartArea.AxisY.Title = "Average Speed";
+            chart.ChartAreas[0].AxisY.Title = "Average Speed";
 
 
-            chartArea.AxisX.Title = "Time (Hour of Day)";
-            chartArea.AxisX.Interval = 1;
-            chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX.LabelStyle.Format = "HH";
+            chart.ChartAreas[0].AxisY.Title = "MPH";
+            chart.ChartAreas[0].AxisY.IntervalAutoMode = IntervalAutoMode.FixedCount;
+            chart.ChartAreas[0].AxisY.Interval = 5;
+            chart.ChartAreas[0].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
 
-            chartArea.AxisX2.Enabled = AxisEnabled.True;
-            chartArea.AxisX2.MajorTickMark.Enabled = true;
-            chartArea.AxisX2.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX2.LabelStyle.Format = "HH";
-            chartArea.AxisX2.LabelAutoFitStyle = LabelAutoFitStyles.None;
-            chartArea.AxisX2.Interval = 1;
-
-            chartArea.AxisY.Title = "MPH";
-            chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.FixedCount;
-            chartArea.AxisY.Interval = 5;
-            chartArea.AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
-
-            chart.ChartAreas.Add(chartArea);
 
             if (ShowAverageSpeed)
             {

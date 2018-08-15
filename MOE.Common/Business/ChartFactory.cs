@@ -80,6 +80,22 @@ namespace MOE.Common.Business
             return chart;
         }
 
+        public static Chart CreateDefaultChartNoX2AxisNoY2Axis(MetricOptions options)
+        {
+            var chart = new Chart();
+            SetImageProperties(chart);
+            chart.ChartAreas.Add(CreateChartAreaNoX2AxisNoY2Axis(options));
+            return chart;
+        }
+
+        public static Chart CreateDefaultChartNoX2Axis(MetricOptions options)
+        {
+            var chart = new Chart();
+            SetImageProperties(chart);
+            chart.ChartAreas.Add(CreateChartAreaNoX2Axis(options));
+            return chart;
+        }
+
         public static Chart CreateDefaultChart(MetricOptions options)
         {
             var chart = new Chart();
@@ -429,7 +445,7 @@ namespace MOE.Common.Business
         {
             chart.ImageType = ChartImageType.Jpeg;
             chart.Height = 720;
-            chart.Width = 1280;
+            chart.Width = 1400;
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
         }
 
@@ -441,6 +457,26 @@ namespace MOE.Common.Business
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
         }
 
+        private static ChartArea CreateChartAreaNoX2AxisNoY2Axis(MetricOptions options)
+        {
+            var chartArea = new ChartArea();
+            chartArea.Name = "ChartArea1";
+            SetUpYAxis(chartArea, options);
+            SetUpXAxis(chartArea, options);
+            SetUpX2AxisNoLabels(chartArea, options);
+            return chartArea;
+        }
+
+        private static ChartArea CreateChartAreaNoX2Axis(MetricOptions options)
+        {
+            var chartArea = new ChartArea();
+            chartArea.Name = "ChartArea1";
+            SetUpYAxis(chartArea, options);
+            SetUpY2Axis(chartArea, options);
+            SetUpXAxis(chartArea, options);
+            SetUpX2AxisNoLabels(chartArea, options);
+            return chartArea;
+        }
 
         private static ChartArea CreateChartArea(MetricOptions options)
         {
@@ -451,6 +487,34 @@ namespace MOE.Common.Business
             SetUpXAxis(chartArea, options);
             SetUpX2Axis(chartArea, options);
             return chartArea;
+        }
+
+        private static void SetUpX2AxisNoLabels(ChartArea chartArea, MetricOptions options)
+        {
+            chartArea.AxisX2.Enabled = AxisEnabled.True;
+            chartArea.AxisX2.IntervalType = DateTimeIntervalType.Hours;
+            chartArea.AxisX2.Minimum = options.StartDate.ToOADate();
+            chartArea.AxisX2.Maximum = options.EndDate.ToOADate();
+            chartArea.AxisX2.CustomLabels.Add(options.StartDate.ToOADate(), options.EndDate.ToOADate(), "");
+            //var reportTimespan = options.EndDate - options.StartDate;
+            //double totalHoursRounded = Math.Round(reportTimespan.TotalHours);
+            //if (totalHoursRounded <= 2)
+            //{
+            //    chartArea.AxisX2.IntervalType = DateTimeIntervalType.Minutes;
+            //    chartArea.AxisX2.Interval = 15;
+            //}
+            //if (totalHoursRounded > 2 && totalHoursRounded <= 24)
+            //{
+            //    chartArea.AxisX2.Interval = 1;
+            //}
+            //else if (totalHoursRounded > 24 && totalHoursRounded <= 48)
+            //{
+            //    chartArea.AxisX2.Interval = 12;
+            //}
+            //else if (totalHoursRounded > 48)
+            //{
+            //    chartArea.AxisX2.Interval = 24;
+            //}
         }
 
         private static void SetUpX2Axis(ChartArea chartArea, MetricOptions options)

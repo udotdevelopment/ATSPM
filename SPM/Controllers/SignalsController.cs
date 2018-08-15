@@ -259,6 +259,7 @@ namespace SPM.Controllers
                 try
                 {
                     _signalsRepository.AddOrUpdate(signal);
+                    signal.VersionList = new List<Signal>{signal};
                 }
                 catch (Exception ex)
                 {
@@ -286,10 +287,11 @@ namespace SPM.Controllers
             signal.Longitude = "0";
             signal.RegionID = 2;
             signal.ControllerTypeID = 1;
-            signal.Start = DateTime.MaxValue;          
+            signal.Start = DateTime.Today;          
             signal.Note = "Create New";
             signal.Enabled = true;
             signal.VersionList = new List<Signal>();
+            signal.VersionID = 1;
             return signal;
         }
                 

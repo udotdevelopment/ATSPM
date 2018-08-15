@@ -32,7 +32,7 @@ namespace SPMWatchDogNew
             ErrorMessage = errorMessage;
         }
 
-        public ErrorRecord(List<MOE.Common.Business.Signal> signalsNoRecords)
+        public ErrorRecord(List<MOE.Common.Business.SignalFtp> signalsNoRecords)
         {
            
             

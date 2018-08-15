@@ -58,9 +58,6 @@ namespace MOE.Common.Business.DataAggregation
 
         public void StartAggregation(string[] args)
         {
-            var signalRep =
-                SignalsRepositoryFactory.Create();
-
             var appSettings = ConfigurationManager.AppSettings;
             var binSize = Convert.ToInt32(appSettings["BinSize"]);
             SetStartEndDate(args);
@@ -71,14 +68,9 @@ namespace MOE.Common.Business.DataAggregation
             var options = new ParallelOptions {MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"])};
             for (var dt = _startDate; dt < _endDate.AddDays(1); dt = dt.AddMinutes(binSize))
             {
-                var tempSignalIds = new List<string>
-                {
-                   "6146"
-                };
-
                 Console.WriteLine("Getting correct version of signals for time period");
                 var versionIds = db.Signals.Where(r =>
-                        r.VersionActionId != 3 && r.Start < dt && tempSignalIds.Contains(r.SignalID)
+                        r.VersionActionId != 3 && r.Start < dt && r.SignalID == "7064"
                         )
                     .GroupBy(r => r.SignalID)
                     .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).Select(s => s.VersionID).ToList();
@@ -96,8 +88,9 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     Console.WriteLine(signal.SignalID + " " + dt.ToString());
                     ProcessSignal(signal, dt, dt.AddMinutes(binSize));
+                    Console.WriteLine(signal.SignalID + " " + dt.ToString() + " - Complete");
                 });
-                BulkSaveAllAggregateDataInParallel();
+               //BulkSaveAllAggregateDataInParallel();
             }
             _startDate = _startDate.AddDays(1);
         }
@@ -756,12 +749,14 @@ namespace MOE.Common.Business.DataAggregation
                 try
                 {
                     var db = new SPM();
-                    _startDate = db.ApproachPcdAggregations.Select(s => s.BinStartTime).Max().AddMinutes(15);
+                    _startDate = db.ApproachPcdAggregations.Select(s => s.BinStartTime).Max();
+                    _startDate = _startDate.AddMinutes(15);
+                    _endDate = DateTime.Today.AddDays(-1); ;
                 }
                 catch (Exception)
                 {
                     _startDate = DateTime.Today.AddDays(-1);
-                    _endDate = DateTime.Today;
+                    _endDate = DateTime.Today.AddDays(-1);
                 }
             }
         }
@@ -775,6 +770,7 @@ namespace MOE.Common.Business.DataAggregation
             //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
             var preemptCodes = new List<int> {102, 105};
             var priorityCodes = new List<int> {112, 113, 114};
+
             Parallel.Invoke(
                 () =>
                 {
@@ -853,8 +849,17 @@ namespace MOE.Common.Business.DataAggregation
         {
 
             if (signal.Approaches != null)
+                //foreach (var signalApproach in signal.Approaches)
+                //{
+                //    if (signalApproach.Detectors != null && signalApproach.Detectors.Count > 0)
+                //    {
+                //        SetApproachSpeedAggregationData(startTime, endTime, signalApproach);
+                //        SetApproachAggregationData(startTime, endTime, records, signalApproach);
+                //        SetDetectorAggregationData(startTime, endTime, signalApproach);
+                //    }
+                //}
                 Parallel.ForEach(signal.Approaches, signalApproach =>
-                 //   foreach (var signalApproach in signal.Approaches)
+                //   foreach (var signalApproach in signal.Approaches)
                 {
                     if (signalApproach.Detectors != null && signalApproach.Detectors.Count > 0)
                         Parallel.Invoke(
@@ -898,6 +903,11 @@ namespace MOE.Common.Business.DataAggregation
             int eventCount =
                 controllerEventLogRepository.GetApproachEventsCountBetweenDates(approach.ApproachID,
                     startTime, endTime, approach.ProtectedPhaseNumber);
+
+            //SetApproachCycleData(signalPhase, startTime, approach, records, false); 
+            //SetApproachPcdData(signalPhase, startTime, approach); 
+            //SetSplitFailData(startTime, endTime, approach, false); 
+            //SetYellowRedActivationData(startTime, endTime, approach, false); 
             Parallel.Invoke(() => { SetApproachCycleData(signalPhase, startTime, approach, records, false); },
                 () => { SetApproachPcdData(signalPhase, startTime, approach); },
                 () => { SetSplitFailData(startTime, endTime, approach, false); },

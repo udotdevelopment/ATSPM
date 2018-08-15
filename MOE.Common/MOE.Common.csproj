@@ -62,6 +62,9 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FluentFTP, Version=19.2.2.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentFTP.19.2.2\lib\net45\FluentFTP.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -678,7 +681,7 @@
     <Compile Include="Business\PlanFactory.cs" />
     <Compile Include="Business\RLM\RLMSignalPhaseCollection.cs" />
     <Compile Include="Business\ScriptGenerator\GenerateAddData.cs" />
-    <Compile Include="Business\Signal.cs" />
+    <Compile Include="Business\SignalFtp.cs" />
     <Compile Include="Business\RLM\RLMSignalPhase.cs" />
     <Compile Include="Business\ControllerEventLogs.cs" />
     <Compile Include="Business\SignalControllers\BaseController.cs" />

@@ -20,6 +20,7 @@ namespace MOE.Common.Models.Repositories
         Signal CopySignalToNewVersion(Signal originalVersion);
         List<Signal> GetAllVersionsOfSignalBySignalID(string signalID);
         List<Signal> GetLatestVersionOfAllSignals();
+        List<Signal> GetLatestVersionOfAllSignalsForFtp();
         int CheckVersionWithFirstDate(string signalId);
         List<Signal> GetLatestVerionOfAllSignalsByControllerType(int controllerTypeId);
         Signal GetVersionOfSignalByDate(string signalId, DateTime startDate);

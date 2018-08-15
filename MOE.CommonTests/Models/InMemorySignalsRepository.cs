@@ -383,6 +383,10 @@ namespace MOE.CommonTests.Models
             return signals;
         }
 
+        public List<Signal> GetLatestVersionOfAllSignalsForFtp()
+        {
+            throw new NotImplementedException();
+        }
 
 
         public int CheckVersionWithFirstDate(string signalId)

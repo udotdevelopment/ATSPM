@@ -12,7 +12,6 @@ function LoadSignalEdit(signalID) {
         success: function (data) {
             $('#SignalEdit').html(data);
             $("#SignalConfigurationCollapseOne").addClass("in");
-            SetDatePicker();
             //HideBasicCheckBoxes();
             $("#ConfigurationTableHeader").click(function () {
                 GetConfigurationTable(signalID);
@@ -21,6 +20,10 @@ function LoadSignalEdit(signalID) {
         },
         complete: function() {
             RemoveHiddenInputFromCheckboxes();
+            var startDate = $("#Start")[0].defaultValue;
+            SetDatePicker();
+            $("#Start").val(startDate);
+
         },
         onerror: function () { alert("Error"); }
     });
@@ -43,12 +46,18 @@ function LoadVersionByVersionID(vId) {
         success: function (data) {
             $('#SignalEdit').html(data);
             $("#SignalConfigurationCollapseOne").addClass("in");
-            SetDatePicker();
+            //SetDatePicker();
             //HideBasicCheckBoxes();
             $("#ConfigurationTableHeader").click(function () {
                 GetConfigurationTableForVersion(vId);
             });
             $.validator.unobtrusive.parse($("#SignalEdit"));
+        },
+        complete: function() {
+            RemoveHiddenInputFromCheckboxes();
+            var startDate = $("#Start")[0].defaultValue;
+            SetDatePicker();
+            $("#Start").val(startDate);
         },
         onerror: function () { alert("Error"); }
     });

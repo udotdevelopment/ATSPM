@@ -9,81 +9,55 @@ namespace MOE.Common.Business
 {
     public class DelayChart
     {
-        public Chart chart = new Chart();
+        public Chart Chart;
 
 
         public DelayChart(ApproachDelayOptions options, SignalPhase signalPhase)
         {
             Options = options;
-            var reportTimespan = Options.EndDate - Options.StartDate;
-            var extendedDirection = signalPhase.Approach.DirectionType.Description;
             //Set the chart properties
-            ChartFactory.SetImageProperties(chart);
+            Chart = ChartFactory.CreateDefaultChart(options);
+            ChartFactory.SetImageProperties(Chart);
 
 
             //Create the chart legend
             var chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
             chartLegend.Docking = Docking.Left;
-            chart.Legends.Add(chartLegend);
+            Chart.Legends.Add(chartLegend);
 
 
-            //Create the chart area
-            var chartArea = new ChartArea();
-            chartArea.Name = "ChartArea1";
+            
 
             //Primary Y axis (delay per vehicle)
             if (Options.ShowDelayPerVehicle)
             {
                 if (Options.YAxisMax != null)
-                    chartArea.AxisY.Maximum = Options.YAxisMax.Value;
-                chartArea.AxisY.Minimum = 0;
-                chartArea.AxisY.Enabled = AxisEnabled.True;
-                chartArea.AxisY.MajorTickMark.Enabled = true;
-                chartArea.AxisY.MajorGrid.Enabled = true;
-                chartArea.AxisY.Interval = 5;
-                chartArea.AxisY.TitleForeColor = Color.Blue;
-                chartArea.AxisY.Title = "Delay Per Vehicle (Seconds) ";
+                    Chart.ChartAreas[0].AxisY.Maximum = Options.YAxisMax.Value;
+                Chart.ChartAreas[0].AxisY.Minimum = 0;
+                Chart.ChartAreas[0].AxisY.Enabled = AxisEnabled.True;
+                Chart.ChartAreas[0].AxisY.MajorTickMark.Enabled = true;
+                Chart.ChartAreas[0].AxisY.MajorGrid.Enabled = true;
+                Chart.ChartAreas[0].AxisY.Interval = 5;
+                Chart.ChartAreas[0].AxisY.TitleForeColor = Color.Blue;
+                Chart.ChartAreas[0].AxisY.Title = "Delay Per Vehicle (Seconds) ";
             }
 
             //secondary y axis (total delay)
             if (Options.ShowDelayPerVehicle)
             {
                 if (Options.Y2AxisMax != null && Options.Y2AxisMax > 0)
-                    chartArea.AxisY2.Maximum = Options.Y2AxisMax.Value;
+                    Chart.ChartAreas[0].AxisY2.Maximum = Options.Y2AxisMax.Value;
                 else
-                    chartArea.AxisY2.Maximum = 10;
-                chartArea.AxisY2.Minimum = 0;
-                chartArea.AxisY2.Enabled = AxisEnabled.True;
-                chartArea.AxisY2.MajorTickMark.Enabled = true;
-                chartArea.AxisY2.MajorGrid.Enabled = false;
-                chartArea.AxisY2.Interval = 5;
-                chartArea.AxisY2.Title = "Delay per Hour (hrs) ";
-                chartArea.AxisY2.TitleForeColor = Color.Red;
+                    Chart.ChartAreas[0].AxisY2.Maximum = 10;
+                Chart.ChartAreas[0].AxisY2.Minimum = 0;
+                Chart.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
+                Chart.ChartAreas[0].AxisY2.MajorTickMark.Enabled = true;
+                Chart.ChartAreas[0].AxisY2.MajorGrid.Enabled = false;
+                Chart.ChartAreas[0].AxisY2.Interval = 5;
+                Chart.ChartAreas[0].AxisY2.Title = "Delay per Hour (hrs) ";
+                Chart.ChartAreas[0].AxisY2.TitleForeColor = Color.Red;
             }
-
-            chartArea.AxisX.Title = "Time (Hour of Day)";
-            chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX.LabelStyle.Format = "HH";
-            chartArea.AxisX2.LabelStyle.Format = "HH";
-            if (reportTimespan.Days < 1)
-                if (reportTimespan.Hours > 1)
-                {
-                    chartArea.AxisX2.Interval = 1;
-                    chartArea.AxisX.Interval = 1;
-                }
-                else
-                {
-                    chartArea.AxisX.LabelStyle.Format = "HH:mm";
-                    chartArea.AxisX2.LabelStyle.Format = "HH:mm";
-                }
-            chartArea.AxisX2.Enabled = AxisEnabled.True;
-            chartArea.AxisX2.MajorTickMark.Enabled = true;
-            chartArea.AxisX2.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX2.LabelAutoFitStyle = LabelAutoFitStyles.None;
-
-            chart.ChartAreas.Add(chartArea);
-
 
             //Add the point series
 
@@ -110,37 +84,37 @@ namespace MOE.Common.Business
             pointSeries.IsVisibleInLegend = false;
 
 
-            chart.Series.Add(pointSeries);
-            chart.Series.Add(delaySeries);
-            chart.Series.Add(delayPerVehicleSeries);
+            Chart.Series.Add(pointSeries);
+            Chart.Series.Add(delaySeries);
+            Chart.Series.Add(delayPerVehicleSeries);
 
 
             //Add points at the start and and of the x axis to ensure
             //the graph covers the entire period selected by the user
             //whether there is data or not
-            chart.Series["Posts"].Points.AddXY(Options.StartDate, 0);
-            chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
+            Chart.Series["Posts"].Points.AddXY(Options.StartDate, 0);
+            Chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
 
-            AddDataToChart(chart, signalPhase, Options.SelectedBinSize, Options.ShowTotalDelayPerHour,
+            AddDataToChart(Chart, signalPhase, Options.SelectedBinSize, Options.ShowTotalDelayPerHour,
                 Options.ShowDelayPerVehicle);
             if (Options.ShowPlanStatistics)
-                SetPlanStrips(signalPhase.Plans, chart, Options.StartDate, Options.ShowPlanStatistics);
+                SetPlanStrips(signalPhase.Plans, Chart, Options.StartDate, Options.ShowPlanStatistics);
         }
 
         public ApproachDelayOptions Options { get; set; }
 
         private void SetChartTitles(SignalPhase signalPhase, Dictionary<string, string> statistics)
         {
-            chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
-            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
+            Chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
+            Chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
                 Options.SignalID, Options.StartDate, Options.EndDate));
-                chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(
+                Chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(
                     signalPhase.Approach, signalPhase.GetPermissivePhase));
-            chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
-            chart.Titles.Add(ChartTitleFactory.GetTitle(
+            Chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
+            Chart.Titles.Add(ChartTitleFactory.GetTitle(
                 "Simplified Approach Delay. Displays time between approach activation during the red phase and when the phase turns green."
                 + " \n Does NOT account for start up delay, deceleration, or queue length that exceeds the detection zone."));
-            chart.Titles.LastOrDefault().Docking = Docking.Bottom;
+            Chart.Titles.LastOrDefault().Docking = Docking.Bottom;
         }
 
 
