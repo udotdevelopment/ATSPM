@@ -9,7 +9,7 @@ namespace MOE.Common.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         public DateTime BinStartTime { get; set; }

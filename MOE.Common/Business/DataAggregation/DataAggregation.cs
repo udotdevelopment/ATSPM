@@ -66,7 +66,7 @@ namespace MOE.Common.Business.DataAggregation
             db.Configuration.LazyLoadingEnabled = false;
 
             var options = new ParallelOptions {MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"])};
-            for (var dt = _startDate; dt < _endDate.AddDays(1); dt = dt.AddMinutes(binSize))
+            for (var dt = _startDate; dt < _endDate; dt = dt.AddMinutes(binSize))
             {
                 Console.WriteLine("Getting correct version of signals for time period");
                 var versionIds = db.Signals.Where(r =>
@@ -751,12 +751,12 @@ namespace MOE.Common.Business.DataAggregation
                     var db = new SPM();
                     _startDate = db.ApproachPcdAggregations.Select(s => s.BinStartTime).Max();
                     _startDate = _startDate.AddMinutes(15);
-                    _endDate = DateTime.Today.AddDays(-1); ;
+                    _endDate = DateTime.Today; ;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     _startDate = DateTime.Today.AddDays(-1);
-                    _endDate = DateTime.Today.AddDays(-1);
+                    _endDate = DateTime.Today;
                 }
             }
         }

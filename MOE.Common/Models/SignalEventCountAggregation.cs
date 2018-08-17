@@ -9,7 +9,7 @@ namespace MOE.Common.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public override int Id { get; set; }
+        public override long Id { get; set; }
 
         [Required]
         public override DateTime BinStartTime { get; set; }

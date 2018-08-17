@@ -545,6 +545,15 @@
     <Compile Include="Migrations\201806211436552_RemoveLaneByLaneFromAOR.Designer.cs">
       <DependentUpon>201806211436552_RemoveLaneByLaneFromAOR.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808171744257_AggreationLongsForId.cs" />
+    <Compile Include="Migrations\201808171744257_AggreationLongsForId.Designer.cs">
+      <DependentUpon>201808171744257_AggreationLongsForId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Resource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource1.resx</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\PhasePedAggregation.cs" />
@@ -920,11 +929,18 @@
     <Content Include="App.config">
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Migrations\201808171744257_AggreationLongsForId.resx">
+      <DependentUpon>201808171744257_AggreationLongsForId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\DatabaseFileName.sql" />
     <EmbeddedResource Include="Migrations\ReclaimFileSpaceForMoe.sql" />
+    <EmbeddedResource Include="Migrations\Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Verbose.sql" />
     <EmbeddedResource Include="Migrations\UpperBoundary.sql" />
     <EmbeddedResource Include="Migrations\TableName.sql" />
-    <EmbeddedResource Include="Migrations\StopDropping.sql" />
     <EmbeddedResource Include="Migrations\StopCounter.sql" />
     <EmbeddedResource Include="Migrations\Processtables.sql" />
     <EmbeddedResource Include="Migrations\PreserveData.sql" />
@@ -951,14 +967,12 @@
     <EmbeddedResource Include="Migrations\201806211436552_RemoveLaneByLaneFromAOR.resx">
       <DependentUpon>201806211436552_RemoveLaneByLaneFromAOR.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\CreateIntegratedSwapAndMoveDataJob.sql" />
     <EmbeddedResource Include="Migrations\CreateConstraints.sql" />
     <EmbeddedResource Include="Migrations\CreateIndexes.sql" />
     <EmbeddedResource Include="Migrations\CreateTable.sql" />
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\DoTheSwapTable.sql" />
     <EmbeddedResource Include="Migrations\DropIndexes.sql" />
-    <EmbeddedResource Include="Migrations\DropOrCompressTable.sql" />
     <EmbeddedResource Include="Migrations\FileGroup.sql" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
     <None Include="ClassDiagram1.cd" />
