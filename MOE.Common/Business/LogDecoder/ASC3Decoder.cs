@@ -10,7 +10,6 @@ namespace MOE.Common.Business.LogDecoder
 {
     public class Asc3Decoder
     {
-        //static public MOE.Common.Data.MOE.Controller_Event_LogDataTable DecodeASC3File(string FileName, string SignalId)
         public static void DecodeAsc3File(string fileName, string signalId,
             BlockingCollection<Data.MOE.Controller_Event_LogRow> rowBag, DateTime earliestAcceptableDate)
         {
@@ -39,7 +38,6 @@ namespace MOE.Common.Business.LogDecoder
                         dateString += c;
                     }
 
-                    //Console.WriteLine(dateString);
                     var startTime = new DateTime();
                     if (DateTime.TryParse(dateString, out startTime) && br.BaseStream.Position < br.BaseStream.Length)
                     {
@@ -57,106 +55,59 @@ namespace MOE.Common.Business.LogDecoder
                         while (i < 7 && br.BaseStream.Position < br.BaseStream.Length)
                         {
                             var c = br.ReadChar();
-                            //Console.WriteLine(c.ToString());
                             if (c == '\n')
                                 i++;
                         }
 
-                        //The first record alwasy seems to be missing a timestamp.  Econolite assumes the first even occures at the same time
-                        // the second event occurs.  I am going to tag the first event with secondevet.timestamp - 1/10 second
-                        var firstEventCode = new int();
-                        var firstEventParam = new int();
-
-
-                        if (br.BaseStream.Position + sizeof(char) < br.BaseStream.Length)
-                            firstEventCode = Convert.ToInt32(br.ReadChar());
-
-                        if (br.BaseStream.Position + sizeof(char) < br.BaseStream.Length)
-                            firstEventParam = Convert.ToInt32(br.ReadChar());
-
-                        var firstEventEntered = false;
-                        //MOE.Common.Business.ControllerEvent firstEvent = new MOE.Common.Business.ControllerEvent(SignalID, StartTime, firstEventCode, firstEventParam);
-
-
-                        //After that, we can probably start reading
-                        while (br.BaseStream.Position + sizeof(byte) * 4 <= br.BaseStream.Length
-                        ) //we need ot make sure we are more that 4 characters from the end
+                        // after that, we start reading until we reach the end 
+                        while (br.BaseStream.Position + sizeof(byte) * 4 <= br.BaseStream.Length)
                         {
                             var eventTime = new DateTime();
                             var eventCode = new int();
                             var eventParam = new int();
 
-                            //MOE.Common.Business.ControllerEvent controllerEvent = null;
                             for (var eventPart = 1; eventPart < 4; eventPart++)
                             {
-                                //getting the time offset
+                                //getting the EventCode
                                 if (eventPart == 1)
+                                    eventCode = Convert.ToInt32(br.ReadByte());
+
+                                if (eventPart == 2)
+                                    eventParam = Convert.ToInt32(br.ReadByte());
+
+                                //getting the time offset
+                                if (eventPart == 3)
                                 {
                                     var rawoffset = new byte[2];
-                                    //char[] offset = new char[2];
                                     rawoffset = br.ReadBytes(2);
                                     Array.Reverse(rawoffset);
                                     int offset = BitConverter.ToInt16(rawoffset, 0);
-
                                     var tenths = Convert.ToDouble(offset) / 10;
-
                                     eventTime = startTime.AddSeconds(tenths);
                                 }
-
-                                //getting the EventCode
-                                if (eventPart == 2)
-                                    eventCode = Convert.ToInt32(br.ReadByte());
-
-                                if (eventPart == 3)
-                                    eventParam = Convert.ToInt32(br.ReadByte());
                             }
 
-                            //controllerEvent = new MOE.Common.Business.ControllerEvent(SignalId, EventTime, EventCode, EventParam);
-
                             if (eventTime <= DateTime.Now && eventTime > earliestAcceptableDate)
-                                if (!firstEventEntered)
+                            {
+                                try
                                 {
-                                    try
-                                    {
-                                        var eventrow = elTable.NewController_Event_LogRow();
-                                        eventrow.Timestamp = eventTime.AddMilliseconds(-1);
-                                        eventrow.SignalID = signalId;
-                                        eventrow.EventCode = firstEventCode;
-                                        eventrow.EventParam = firstEventParam;
-                                        rowBag.Add(eventrow);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Console.WriteLine(ex.Message);
-                                    }
-
-                                    firstEventEntered = true;
+                                    var eventrow = elTable.NewController_Event_LogRow();
+                                    eventrow.Timestamp = eventTime;
+                                    eventrow.SignalID = signalId;
+                                    eventrow.EventCode = eventCode;
+                                    eventrow.EventParam = eventParam;
+                                    rowBag.Add(eventrow);
                                 }
-                                else
+                                catch (Exception ex)
                                 {
-                                    try
-                                    {
-                                        var eventrow = elTable.NewController_Event_LogRow();
-                                        eventrow.Timestamp = eventTime;
-                                        eventrow.SignalID = signalId;
-                                        eventrow.EventCode = eventCode;
-                                        eventrow.EventParam = eventParam;
-                                        rowBag.Add(eventrow);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Console.WriteLine(ex.Message);
-                                    }
+                                    Console.WriteLine(ex.Message);
                                 }
+                            }
                         }
                     }
                     //this is what we do when the datestring doesn't parse
                 }
-
                 //this is what we do when the datestring doesn't parse
-
-
-                //return true;
             }
         }
     }
