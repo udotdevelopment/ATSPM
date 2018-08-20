@@ -61,7 +61,7 @@ namespace FileByFileASC3Decoder
                     try
                     {
                         FileInfo f = new FileInfo(s);
-                        if (f.Name.Contains("INT") || f.Name.Contains("_1970_") || f.Length < 367)
+                        if (f.Name.Contains("INT") || f.Name.Contains("_1970_"))
                         {
                             try
                             {
