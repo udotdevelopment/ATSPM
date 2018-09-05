@@ -1,17 +1,19 @@
--- DROP FUNCTION [dbo].[LowerBoundary]
 
+-- DROP FUNCTION [dbo].[LowerBoundary]
 
 CREATE FUNCTION [dbo].[LowerBoundary]  (@TableName varchar(40), @FirstIndexName varchar(100), @PartitionNumber int)
 Returns Datetime
 With EXECUTE as Caller
 AS
+
 BEGIN
 --		DECLARE @FileGroupName VARCHAR(50);
 		DECLARE @LowerBoundaryString varchar(50)
 		DECLARE @LowerBoundaryDateTime datetime2(7)
 --		DECLARE @UpperBoundaryString varchar(50)
 --		DECLARE @UpperBoundaryDateTime datetime2(7)
-		--DECLARE @UpperYear INT
+--		DECLARE @UpperYear INT
+	
 		SELECT 
 		--@FileGroupName = fg.name
 		@LowerBoundaryString   = CAST (prv_left.value AS varchar(50))
@@ -50,6 +52,8 @@ END;
 
 
 
-
 --SELECT   dbo.[LowerBoundary] ('Controller_event_log', 'IX_Clustered_Controller_Event_Log_Temp', 30)
+
+GO
+
 

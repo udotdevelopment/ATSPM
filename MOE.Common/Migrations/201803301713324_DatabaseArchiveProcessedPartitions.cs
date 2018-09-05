@@ -115,8 +115,8 @@ namespace MOE.Common.Migrations
             string sqlResDropIndexes = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".DropIndexes.sql";
             this.SqlResource(sqlResDropIndexes);
 
-            string sqlResDropOrCompressTable = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".DropOrCompressTable.sql";
-            this.SqlResource(sqlResDropOrCompressTable);
+            //string sqlResDropOrCompressTable = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".DropOrCompressTable.sql";
+            //this.SqlResource(sqlResDropOrCompressTable);
 
             string sqlResFileGroup = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".FileGroup.sql";
             this.SqlResource(sqlResFileGroup);
@@ -141,8 +141,8 @@ namespace MOE.Common.Migrations
             string sqlResStopCounter = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".StopCounter.sql";
             this.SqlResource(sqlResStopCounter);
 
-            string sqlResStopDropping = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".StopDropping.sql";
-            this.SqlResource(sqlResStopDropping);
+            //string sqlResStopDropping = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".StopDropping.sql";
+            //this.SqlResource(sqlResStopDropping);
 
             string sqlResTableName = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".TableName.sql";
             this.SqlResource(sqlResTableName);
@@ -153,8 +153,8 @@ namespace MOE.Common.Migrations
             string sqlResVerbose = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".Verbose.sql";
             this.SqlResource(sqlResVerbose);
 
-            string sqlResReclaimFileSpaceForMoe = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".ReclaimFileSpaceForMoe.sql";
-            this.SqlResource(sqlResReclaimFileSpaceForMoe);
+            //string sqlResReclaimFileSpaceForMoe = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".ReclaimFileSpaceForMoe.sql";
+            //this.SqlResource(sqlResReclaimFileSpaceForMoe);
 
            
            // string sqlResName = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".CreateIntegratedSwapAndMoveDataJob.sql";

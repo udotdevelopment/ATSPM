@@ -1,3 +1,4 @@
+
 -- DROP PROCEDURE [dbo].[CreateTable]
 
 CREATE PROCEDURE [dbo].[CreateTable]
@@ -8,7 +9,6 @@ CREATE PROCEDURE [dbo].[CreateTable]
 @PartitionMonth int,
 @Verbose int
 
-
 AS
 
 DECLARE @NumberOfTables int
@@ -17,7 +17,6 @@ DECLARE @Counter int
 DECLARE @FileGroup nvarchar(100)
 DECLARE @PartitionDate nvarchar(20)
 DECLARE @IndexName varchar(50)
-DECLARE @Dummy int
 DECLARE @SQLSTATEMENT     nvarchar(4000)
 DECLARE @TableCompressionType varchar(10)
 DECLARE @TableName varchar (100)
@@ -25,12 +24,14 @@ DECLARE @CreateTableColumns nvarchar (500)
 DECLARE @TableExists int
 DECLARE @TablePartitionProcessedsEntry int
 DECLARE @StartTime datetime2(7)
-DECLARE @CountOfFileGroupNeedShrinkRows int = 0
 
 BEGIN
 	SELECT @TableExists = Count (*) FROM INFORMATION_SCHEMA.TABLES 
            WHERE TABLE_NAME = @StagingTableName
-	
+	SET @TableName = [dbo].[TableName] (@TableNumber)
+	SET @IndexName = [dbo].[IndexName](@TableNumber, 1)
+	SET @FileGroup = [dbo].[FileGroup] (@TableName, @IndexName , @PartitionNumber)
+
 	IF (@TableExists > 0)
 	BEGIN
   		SELECT @TablePartitionProcessedsEntry = count(*)
@@ -76,10 +77,7 @@ BEGIN
 
 	IF (@TableExists = 0)
 	BEGIN
-		SET @TableName = [dbo].[TableName] (@TableNumber)
-		SET @IndexName = [dbo].[IndexName](@TableNumber, 1)
-		SET @FileGroup = [dbo].[FileGroup] (@TableName, @IndexName , @PartitionNumber)
-
+		
 		SELECT @CreateTableColumns = [CreateColumns4Table]
 		FROM [dbo].[ToBeProcessededTables] 
 		Where [TableId] = @TableNumber 
@@ -120,7 +118,7 @@ BEGIN
 						@FunctionOrProcedure = N'Create Table',
 						@Notes = N'Step 2 after compression'
 			END
-
+		EXEC sp_executesql @SQLSTATEMENT
 
 		SET @StartTime = getdate()
 		INSERT INTO [dbo].[TablePartitionProcesseds] (
@@ -144,55 +142,12 @@ BEGIN
 						, @StartTime 
 						, @StartTime )
 
-		SELECT @CountOfFileGroupNeedShrinkRows = Count(*)
-		FROM [dbo].[ShrinkFileGroups]
-		WHERE FileGroupName = @FileGroup
-
-		IF (@CountOfFileGroupNeedShrinkRows = 0)
-		BEGIN
-			INSERT INTO [dbo].[ShrinkFileGroups] (
-				[FileGroupName]
-				,[CreatedTimeStamp]
-				,[FileGroupNeedsShrink])
-			Values (
-				@FileGroup
-				,@StartTime 
-				,0 )
-		END
 	END
 
 SET @Status = 1
 Return @Status
-
 END
 
-/***
-
-DECLARE	@return_value int
-
-EXEC	@return_value = [dbo].[CreateTable]
-		@StagingTableName = N'Staging_Controller_Event_Log_Part-03-2014-02',
-		@TableNumber = 1,
-		@PArtitionNumber = 3,
-		@PartitionYear = 2014,
-		@PartitionMonth = 2,
-		@Verbose = 1
-
-SELECT	'Return Value' = @return_value
+GO
 
 
-
-DECLARE	@return_value int
-
-EXEC	@return_value = [dbo].[CreateTable]
-		@StagingTableName = N'Staging_Speed_Events_Part-03-2014-02',
-		@TableNumber = 2,
-		@PArtitionNumber = 3,
-		@PartitionYear = 2014,
-		@PartitionMonth = 2,
-		@Verbose = 1
-
-SELECT	'Return Value' = @return_value
-
-
-***/

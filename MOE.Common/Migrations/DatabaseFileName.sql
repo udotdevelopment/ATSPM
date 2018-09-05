@@ -1,4 +1,5 @@
-﻿--  DROP FUNCTION [dbo].[DatabaseFileName]
+
+--  DROP FUNCTION [dbo].[DatabaseFileName]
 
 CREATE FUNCTION [dbo].[DatabaseFileName](@TableName varchar(40), @FirstIndexName varchar(100), @PartitionNumber int)
 Returns varchar(40)
@@ -46,5 +47,8 @@ END;
 
 
 --SELECT   dbo.[DatabaseFileName] ('Controller_event_log', 'IX_Clustered_Controller_Event_Log_Temp', 5)
+
+
+GO
 
 

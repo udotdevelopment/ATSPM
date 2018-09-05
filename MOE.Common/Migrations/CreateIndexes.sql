@@ -1,3 +1,4 @@
+
 --  DROP PROCEDURE [dbo].[CreateIndexes]
 
 CREATE PROCEDURE [dbo].[CreateIndexes]
@@ -42,7 +43,7 @@ BEGIN
 		SET @ClusterOrNo = [dbo].[IndexNameClustered] (@TableNumber, @IndexCounter )
 		SET @TextForIndex = [dbo].[IndexNameColumns] (@TableNumber, @IndexCounter )
 
-		SET @SQLSTATEMENT = 'CREATE ' + @ClusterOrNo + 'INDEX [' + @IndexName + '] ON [dbo].[' + @StagingTableName + ']' + @TextForIndex + ' ON [' + @FileGroup + ']'
+		SET @SQLSTATEMENT = 'CREATE ' + @ClusterOrNo + ' INDEX [' + @IndexName + '] ON [dbo].[' + @StagingTableName + ']' + @TextForIndex + ' ON [' + @FileGroup + ']'
 
 		IF (@Verbose <>0)
 			BEGIN
@@ -56,47 +57,14 @@ BEGIN
 						@FunctionOrProcedure = N'Create Indexes',
 						@Notes = @MyNotes 
 			END
-
 		EXEC sp_executesql @SQLSTATEMENT
 
 		SET @IndexCounter = @IndexCounter + 1
 END
 
 SET @Status = 1
-
 Return @Status
-
 END
-
-/***
-
-DECLARE	@return_value int
-
-EXEC	@return_value = [dbo].[CreateIndexes]
-		@StagingTableName = N'Staging_Controller_Event_Log_Part-03-2014-02',
-		@TableNumber = 1,
-		@PArtitionNumber = 3,
-		@PartitionYear = 2014,
-		@PartitionMonth = 2,
-		@Verbose = 1
-
-SELECT	'Return Value' = @return_value
-
-DECLARE	@return_value int
-
-EXEC	@return_value = [dbo].[CreateIndexes]
-		@StagingTableName = N'Staging_Speed_Events_Part-03-2014-02',
-		@TableNumber = 2,
-		@PArtitionNumber = 3,
-		@PartitionYear = 2014,
-		@PartitionMonth = 2,
-		@Verbose = 1
-
-SELECT	'Return Value' = @return_value
-
-
-
-***/
-
+GO
 
 

@@ -70,7 +70,7 @@ namespace MOE.Common.Business.DataAggregation
             {
                 Console.WriteLine("Getting correct version of signals for time period");
                 var versionIds = db.Signals.Where(r =>
-                        r.VersionActionId != 3 && r.Start < dt && r.SignalID == "7064"
+                        r.VersionActionId != 3 && r.Start < dt //&& r.SignalID == "7064"
                         )
                     .GroupBy(r => r.SignalID)
                     .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).Select(s => s.VersionID).ToList();
@@ -90,7 +90,7 @@ namespace MOE.Common.Business.DataAggregation
                     ProcessSignal(signal, dt, dt.AddMinutes(binSize));
                     Console.WriteLine(signal.SignalID + " " + dt.ToString() + " - Complete");
                 });
-               //BulkSaveAllAggregateDataInParallel();
+               BulkSaveAllAggregateDataInParallel();
             }
             _startDate = _startDate.AddDays(1);
         }

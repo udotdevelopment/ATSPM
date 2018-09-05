@@ -1,3 +1,4 @@
+
 --  DROP FUNCTION [dbo].[FileGroup]
 
 CREATE FUNCTION [dbo].[FileGroup](@TableName varchar(40), @FirstIndexName varchar(100), @PartitionNumber int)
@@ -6,8 +7,12 @@ With EXECUTE as Caller
 AS
 BEGIN
 		DECLARE @FileGroupName VARCHAR(40);
-
+--		DECLARE @DataBaseFileName VARCHAR(40);
+--		DECLARE @PhysicalName VARCHAR(40);
 		SELECT 
+		--	, dbf.name dbf_name
+		--	, dbf.physical_name 
+
 		@FileGroupName = fg.name
 		--@LowerBoundary1   = CAST (prv_left.value AS varchar(50)),
 		--@UpperBoundary1 = CAST (prv_right.value  AS varchar(50)), 
@@ -41,6 +46,9 @@ BEGIN
 END;
 
 
---SELECT   dbo.[FileGroup] ('Controller_event_log', 'IX_Clustered_Controller_Event_Log_Temp', 40)
+--SELECT   dbo.[FileGroup] ('Controller_event_log', 'IX_Clustered_Controller_Event_Log_Temp', 38)
+
+
+GO
 
 

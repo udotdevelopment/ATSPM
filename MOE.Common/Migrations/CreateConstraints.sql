@@ -1,3 +1,4 @@
+
 --  DROP PROCEDURE [dbo].[CreateConstraints]
 
 CREATE PROCEDURE [dbo].[CreateConstraints]
@@ -7,7 +8,6 @@ CREATE PROCEDURE [dbo].[CreateConstraints]
 @PartitionYear int,
 @PartitionMonth int,
 @Verbose int
-
 
 AS
 
@@ -20,7 +20,7 @@ DECLARE @LowerMonth  int
 DECLARE @UpperBoundary datetime2(7)
 DECLARE @UpperYear int
 DECLARE @UpperMonth int
-DECLARE @FileGroup nvarchar(100)
+DECLARE @PartitionNumberString nvarchar(50)
 DECLARE @PartitionDate nvarchar(20)
 DECLARE @IndexName varchar(50)
 DECLARE @Dummy int
@@ -34,17 +34,14 @@ DECLARE @MyTime datetime2(7)
 Begin
 	SET @MainTable = [dbo].[TableName] (@TableNumber)
 	SET @IndexName = [dbo].[indexName] (@TableNumber , 1)
-
 	SET @LowerBoundary = [dbo].[LowerBoundary](@MainTable , @IndexName , @PartitionNumber ) 
 	SET @LowerYear = year (@LowerBoundary)
 	SET @LowerMonth = month (@LowerBoundary)
-
 	SET @UpperBoundary = [dbo].[UpperBoundary](@MainTable , @IndexName , @PartitionNumber )
 	SET @UpperYear = year (@UpperBoundary)
 	SET @UpperMonth = month (@UpperBoundary)
-	
 	set @CHK_Constrants = 'chk_' + @StagingTableName 
-	
+	SET @PartitionNumberString = 'Partition Number is ' + Convert (Varchar(5), @PartitionNumber)
 	SELECT @TableConstraintNumber = Count (*)
 	FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
 	WHERE CONSTRAINT_NAME = @CHK_Constrants 
@@ -58,40 +55,40 @@ Begin
 				+ 'AND [Timestamp]<N'''+ CAST (@UpperYear AS nvarchar (4)) + '-' 
 				+ CAST (@UpperMonth  AS nvarchar (2))
 				+ '-01T00:00:00'')'
-		EXEC sp_executesql @SQLSTATEMENT
 
 		IF (@Verbose <>0)
 		BEGIN
 			EXEC	@Status  = [dbo].[VerboseStatus]
 					@PartitionedTableName = @StagingTableName ,
-					@PartitionName = @FileGroup ,
+					@PartitionName = @PartitionNumberString ,
 					@PartitionYear = @PartitionYear ,
 					@PartitionMonth = @PartitionMonth ,
 					@SQLStatementOrMessage = @SQLSTATEMENT ,
 					@FunctionOrProcedure = N'Create Constraints',
 					@Notes = @CHK_Constrants 
 		END
+		EXEC sp_executesql @SQLSTATEMENT
 	
 		SET @SQLSTATEMENT = 'ALTER TABLE [dbo].[' + @StagingTableName + ']' +  
 					'CHECK CONSTRAINT [' + @CHK_Constrants + ']'
-		EXEC sp_executesql @SQLSTATEMENT
 
 		IF (@Verbose <>0)
 		BEGIN
 			EXEC	@Status  = [dbo].[VerboseStatus]
 					@PartitionedTableName = @StagingTableName ,
-					@PartitionName = @FileGroup ,
+					@PartitionName = @PartitionNumberString ,
 					@PartitionYear = @PartitionYear ,
 					@PartitionMonth = @PartitionMonth ,
 					@SQLStatementOrMessage = @SQLSTATEMENT ,
 					@FunctionOrProcedure = N'Create Constraints',
 					@Notes = @CHK_Constrants 
 		END
+		EXEC sp_executesql @SQLSTATEMENT
 	END
 	IF (@TableConstraintNumber <> 0)
 	BEGIN
 		SELECT count(*)
-		FROM [MOETestPartition].[dbo].[TablePartitionProcesseds]
+		FROM [dbo].[TablePartitionProcesseds]
 		WHERE SwapTableName = @StagingTableName 
 
 		SET @MyTime = getdate()
@@ -112,7 +109,7 @@ Begin
 						, @PartitionNumber
 						, @PartitionYear  
 						, @PartitionMonth  
-						, @FileGroup 
+						, @PartitionNumberString
 						, 1
 						, 0
 						, @myTime
@@ -128,7 +125,7 @@ Begin
 					AND PartitionNumber = @PartitionNumber
 					AND PartitionBeginYear = @PartitionYear  
 					AND PartitionBeginMonth = @PartitionMonth  
-					AND FileGroupName = @FileGroup 
+					AND FileGroupName = @PartitionNumberString
 		END
 	END	
 
@@ -136,49 +133,6 @@ SET @Status = 1
 Return @Status
 
 END
-
-/***
-
-DECLARE	@return_value int
-
-EXEC	@return_value = [dbo].[CreateConstraints]
-		@StagingTableName = N'Staging_Controller_Event_Log_Part-03-2014-02',
-		@TableNumber = 1,
-		@PArtitionNumber = 3,
-		@PartitionYear = 2014,
-		@PartitionMonth = 2,
-		@Verbose = 1
-
-SELECT	'Return Value' = @return_value
+GO
 
 
-
-DECLARE	@return_value int
-
-EXEC	@return_value = [dbo].[CreateConstraints]
-		@StagingTableName = N'Staging_Speed_Events_Part-03-2014-02',
-		@TableNumber = 2,
-		@PArtitionNumber = 3,
-		@PartitionYear = 2014,
-		@PartitionMonth = 2,
-		@Verbose = 1
-
-SELECT	'Return Value' = @return_value
-
-
-
-
-DECLARE	@return_value int
-
-EXEC	@return_value = [dbo].[CreateConstraints]
-		@StagingTableName = N'Staging_Speed_Events_Part-03-2014-02',
-		@TableNumber = 2,
-		@PArtitionNumber = 3,
-		@PartitionYear = 2014,
-		@PartitionMonth = 2,
-		@Verbose = 1
-
-SELECT	'Return Value' = @return_value
-
-
-***/

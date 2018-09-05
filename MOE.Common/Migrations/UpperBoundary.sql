@@ -11,6 +11,7 @@ BEGIN
 		DECLARE @UpperBoundaryString varchar(50)
 		DECLARE @UpperBoundaryDateTime datetime2(7)
 		--DECLARE @UpperYear INT
+
 		SELECT 
 		--@FileGroupName = fg.name
 --		@LowerBoundaryString   = CAST (prv_left.value AS varchar(50))
@@ -53,5 +54,8 @@ END;
 
 
 
---SELECT   dbo.[UpperBoundary] ('Controller_event_log', 'IX_Clustered_Controller_Event_Log_Temp', 30)
+--SELECT   dbo.[UpperBoundary] ('Controller_event_log', 'IX_Clustered_Controller_Event_Log_Temp', 5)
+
+GO
+
 

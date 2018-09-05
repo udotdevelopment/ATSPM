@@ -1146,7 +1146,7 @@ While each agency should consult with their IT department for specific guideline
                 }
             );
 
-            context.ToBeProcessededTables.AddOrUpdate(
+            context.ToBeProcessededTables.AddOrUpdate(t => t.PartitionedTableName,
                 new ToBeProcessededTable()
                 {
                     PartitionedTableName = "Controller_Event_Log",
@@ -1185,7 +1185,7 @@ While each agency should consult with their IT department for specific guideline
                 }
             );
 
-            context.ToBeProcessededIndexes.AddOrUpdate(
+            context.ToBeProcessededIndexes.AddOrUpdate(t => t.IndexName, 
                 new ToBeProcessedTableIndex()
                 {
                     TableId = 1,

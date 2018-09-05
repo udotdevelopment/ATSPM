@@ -1,7 +1,6 @@
 -- DROP FUNCTION [dbo].[TableName]
 
 CREATE FUNCTION [dbo].[TableName] (@TableId int)
---(@TableName varchar(100), @StaggingName varchar(100), @FiLeGroupName varchar(100), @PartitionNumber int, @LowerBoundaryYears int, @LowerBoundaryMonths int, @Verbose int)
 Returns varchar(100)
 With EXECUTE as Caller
 AS
@@ -28,5 +27,8 @@ END;
 
 -- SELECT [dbo].[TableName] (1)
 
+
+
+GO
 
 

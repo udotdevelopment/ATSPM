@@ -1,14 +1,13 @@
--- DROP Function StopCounter
+-- DROP Function [dbo].[StopCounter]
 
-CREATE FUNCTION [dbo].[StopCounter]  (@CurrentYear int, @CurentMonth int , @Verbose int)
+CREATE FUNCTION [dbo].[StopCounter] (@CurrentYear int, @CurentMonth int , @Verbose int)
 Returns INT
 With EXECUTE as Caller
 AS
+
 BEGIN
 DECLARE @MonthToKeep int
-DECLARE @MonthsToKeepIndex int
 DECLARE @MonthsToKeepData int
-DECLARE @SelectedDeleteOrMove int
 DECLARE @TableName nvarchar(50)
 DECLARE @StopCounter int
 DECLARE @StartYear int
@@ -19,34 +18,51 @@ DECLARE	@EndMonth int
 DECLARE	@EndYear int
 DECLARE @DiffYear int
 DECLARE @DiffMonth int
+DECLARE @TimeFork int
 
 Set @StopCounter = 120
 
-Select  
-	@MonthsToKeepIndex = [MonthsToKeepIndex]
-	,@MonthsToKeepData = [MonthsToKeepData]
-	,@SelectedDeleteOrMove = [SelectedDeleteOrMove] 
+Select 	@MonthsToKeepData = [MonthsToKeepData]
 FROM [dbo].[ApplicationSettings]
 Where ApplicationId = 3
 
 IF (@MonthsToKeepData IS NULL)
 	SET @MonthsToKeepData = 120  -- 10 years as a default
-IF (@MonthsToKeepIndex IS NULL) 
-	SET @MonthsToKeepIndex = 120 -- 10 years as a default
-IF (@SelectedDeleteOrMove IS NULL) 
-	SET @SelectedDeleteOrMove = 0 -- 0 Do Nothing, 1 is Delete, 2 is move
 
-SELECT @StartTime = Min ([Timestamp])   FROM [dbo].[Controller_Event_Log]
+SELECT @TimeFork = Count (*) 
+FROM [MOETestPartition].[dbo].[TablePartitionProcesseds]
+WHERE SwapTableName like '%Controller_event_log%'
 
-SET @StartYear = year (@StartTime )
-SET @StartMonth = month (@StartTime )
+IF @TimeFork = 0 
+BEGIN
+	SELECT @StartTime = Min ([Timestamp])
+	FROM [dbo].[Controller_Event_Log] 
+	SET @StartYear = year (@StartTime )
+	SET @StartMonth = month (@StartTime )
+END
+
+IF @TimeFork > 0  
+BEGIN
+	SELECT @StartYear = max (PartitionBeginYear) 
+	FROM [dbo].[TablePartitionProcesseds]
+	WHERE SwapTableName like '%Controller_event_log%'
+				
+	SELECT @StartMonth =  MAX (PartitionBeginMonth )
+	FROM [dbo].[TablePartitionProcesseds]
+	WHERE SwapTableName like '%Controller_event_log%'
+	AND PartitionBeginYear = @StartYear  
+	SET @CurentMonth = @CurentMonth + 1
+END
 
 SET @DiffYear = @CurrentYear - @StartYear 
 SET @DiffMonth = @CurentMonth -@StartMonth 
 
-SET @StopCounter = (@DiffYear *12) + @DiffMonth - @MonthsToKeepIndex 
+SET @StopCounter = (@DiffYear *12) + @DiffMonth - @MonthsToKeepData  
 RETURN @StopCounter
 
-END;
+END
 
 -- SELECT [dbo].[StopCounter] (2018, 4,  1)
+GO
+
+

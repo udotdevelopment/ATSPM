@@ -1,3 +1,4 @@
+
 --  DROP PROCEDURE[dbo].[DoTheSwapTable]
 
 CREATE PROCEDURE [dbo].[DoTheSwapTable]
@@ -34,8 +35,6 @@ SET @MainTable = [dbo].[TableName] (@TableNumber)
 SET @SQLSTATEMENT = 'ALTER TABLE [dbo].[' + @MainTable + ']
 	SWITCH PARTITION ' + CAST (@PartitionNumber AS nvarchar(4)) + 
 	' TO [dbo].[' + @StagingTableName + ']'
-EXEC sp_executesql @SQLSTATEMENT
-
 
 IF (@Verbose <>0)
 	BEGIN
@@ -50,6 +49,7 @@ IF (@Verbose <>0)
 				@Notes = N'End of the Procedure'
 
 	END
+EXEC sp_executesql @SQLSTATEMENT
 
 SET @Status = 1
 Return @Status
@@ -86,3 +86,6 @@ SELECT	'Return Value' = @return_value
 
 
 ***/
+GO
+
+

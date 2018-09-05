@@ -1,3 +1,4 @@
+
 -- DROP PROCEDURE[dbo].[PreserveData]
 
 CREATE PROCEDURE [dbo].[PreserveData]
@@ -15,9 +16,15 @@ DECLARE @FileGroup nvarchar(100)
 DECLARE @Dummy int
 DECLARE @SQLSTATEMENT     nvarchar(4000)
 DECLARE @MainTable nvarchar(200)
-DECLARE @PreserveDataWhere nvarchar (500)
-DECLARE @PreserveDataSelect nvarchar (500)
+DECLARE @PreserveDataWhere nvarchar (700)
+DECLARE @PreserveDataSelect nvarchar (400)
 DECLARE @InsertValues nvarchar (500)
+DECLARE @DatabaseName nvarchar (40)
+DECLARE @ArchivePath nvarchar (200)
+DECLARE @PartitionName nvarchar (200)
+DECLARE @PhysicalFileName nvarchar (200)
+DECLARE @FirstIndexName nvarchar (200)
+declare @NumberOfSwappedTablesProcessed int
 
 Begin
 	SELECT 
@@ -25,61 +32,77 @@ Begin
 		,@PreserveDataSelect = [PreserveDataSelect]
 		,@PreserveDataWhere = [PreserveDataWhere] 
 		,@InsertValues = [InsertValues] 
+		,@DatabaseName = [DataBaseName] 
 	FROM [dbo].[ToBeProcessededTables]
 	WHERE TableId = @TableNumber  
 
+	SELECT @ArchivePath = ArchivePath
+	FROM ApplicationSettings
+	WHERE ApplicationID = 3
+
+	SET @FirstIndexName = [DBO].[IndexName] (1,1)
+	SET @PhysicalFileName = [DBO].[PhysicalFileName] (@MainTable, @FirstIndexName, @PartitionNumber)
 	SET @SQLSTATEMENT = 'INSERT INTO [dbo].[' + @MainTable + ']  ' +@PreserveDataSelect 
 		+ '	FROM [dbo].[' + @StagingTableName  +']  ' + @PreserveDataWhere  
 
 	IF (@Verbose = 1)
 	BEGIN
-
+		SET @PartitionName = 'Partition Number is ' + Convert( varchar(4), @PartitionNumber) 
 		EXEC [dbo].[VerboseStatus]
-
-		@PartitionedTableName = @StagingTableName,
-		@PartitionName = 'Need to Work this out',
-		@PartitionYear = @PartitionYear,
-		@PartitionMonth = @PartitionMonth, 
-		@SQLStatementOrMessage = @SQLSTATEMENT ,
-		@FunctionOrProcedure = 'PreserveData ',
-		@Notes = 'End of Procedure'
-
+			@PartitionedTableName = @StagingTableName,
+			@PartitionName = @PartitionName,
+			@PartitionYear = @PartitionYear,
+			@PartitionMonth = @PartitionMonth, 
+			@SQLStatementOrMessage = @SQLSTATEMENT ,
+			@FunctionOrProcedure = 'PreserveData ',
+			@Notes = 'End of Procedure'
 	END
-
 	EXEC sp_executesql @SQLSTATEMENT
 
-SET @Status = 1
+	SET @SQLSTATEMENT = 'bcp [' +@DatabaseName +'].[dbo].[' + @StagingTableName 
+		+ '] OUT ' + @ArchivePath + @StagingTableName 
+		+ '-n.txt -T -n -o ' + @ArchivePath + 'status.txt'
 
-Return @Status
+	IF (@Verbose = 1)
+	BEGIN
+		EXEC [dbo].[VerboseStatus]
+			@PartitionedTableName = @StagingTableName,
+			@PartitionName = 'EXEC master..xp_cmdshell',
+			@PartitionYear = @PartitionYear,
+			@PartitionMonth = @PartitionMonth, 
+			@SQLStatementOrMessage = @SQLSTATEMENT ,
+			@FunctionOrProcedure = 'PreserveData ',
+			@Notes = 'Before bcp Command, plan about ten hours.'
+	END
+	EXEC master..xp_cmdshell @SQLSTATEMENT
 
+	SET @SQLSTATEMENT = 'DROP TABLE [dbo].[' + @StagingTableName  + ']'
+	IF (@Verbose = 1)
+	BEGIN
+		EXEC [dbo].[VerboseStatus]
+			@PartitionedTableName = @StagingTableName,
+			@PartitionName = @PartitionName,
+			@PartitionYear = @PartitionYear,
+			@PartitionMonth = @PartitionMonth, 
+			@SQLStatementOrMessage = @SQLSTATEMENT ,
+			@FunctionOrProcedure = 'PreserveData ',
+			@Notes = 'Dropping the stagging table'
+		END
+	EXEC sp_executesql @SQLSTATEMENT 
+	
+	UPDATE [dbo].[TablePartitionProcesseds] 
+		SET [SwappedTableRemoved] = 1
+				,[TimeIndexdropped] = getdate ()
+				,[TimeSwappedTableDropped] = getdate()
+				,[PhysicalFileName] = @PhysicalFileName
+		WHERE SwapTableName = @StagingTableName
+				AND PartitionNumber = @PartitionNumber
+				AND PartitionBeginYear = @PartitionYear  
+				AND PartitionBeginMonth = @PartitionMonth  
+
+	SET @Status = 1
+	Return @Status
 END
+GO
 
-/***
-DECLARE	@return_value int
-
-EXEC	@return_value = [dbo].[PreserveData]
-		@StagingTableName = N'Staging_ControllerEvent_Log_Part-03-2014-02',
-		@TableNumber = 1,
-		@PArtitionNumber = 3,
-		@PartitionYear = 2014,
-		@PartitionMonth = 2,
-		@Verbose = 1
-
-SELECT	'Return Value' = @return_value
-
-
-
-DECLARE	@return_value int
-
-EXEC	@return_value = [dbo].[PreserveData]
-		@StagingTableName = N'Staging_Speed_Events_Part-03-2014-02',
-		@TableNumber = 2,
-		@PArtitionNumber = 3,
-		@PartitionYear = 2014,
-		@PartitionMonth = 2,
-		@Verbose = 1
-
-SELECT	'Return Value' = @return_value
-
-***/
 
