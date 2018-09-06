@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Data;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using MOE.Common.Properties;
@@ -10,12 +11,34 @@ namespace MOE.Common.Business.LogDecoder
 {
     public class Asc3Decoder
     {
-        //static public MOE.Common.Data.MOE.Controller_Event_LogDataTable DecodeASC3File(string FileName, string SignalId)
+        // reference https://en.wikipedia.org/wiki/List_of_file_signatures
+        public static byte[] _ZlibHeaderNoCompression = { 0x78, 0x01 };
+        public static byte[] _ZlibHeaderDefaultCompression = { 0x78, 0x9C };
+        public static byte[] _ZlibHeaderBestCompression = { 0x78, 0xDA };
+        public static byte[] _GZipHeader = { 0x1f, 0x8b };
+
         public static void DecodeAsc3File(string fileName, string signalId,
             BlockingCollection<Data.MOE.Controller_Event_LogRow> rowBag, DateTime earliestAcceptableDate)
         {
             var encoding = Encoding.ASCII;
-            using (var br = new BinaryReader(File.Open(fileName, FileMode.Open), encoding))
+
+            // load the file into memory stream
+            var fileStream = File.Open(fileName, FileMode.Open);
+            var memoryStream = new MemoryStream();
+            fileStream.CopyTo(memoryStream);
+            fileStream.Close();
+
+            // set the memory position to beggining
+            memoryStream.Position = 0;
+
+            // first let's check to see if the data is compressed
+            if (IsCompressed(memoryStream))
+            {
+                // ok it is compressed, let's decompress it before we procced
+                memoryStream = DecompessedStream(memoryStream);
+            }
+
+            using (var br = new BinaryReader(memoryStream, encoding))
             {
                 var elTable = new Data.MOE.Controller_Event_LogDataTable();
                 //var custUnique =
@@ -39,7 +62,6 @@ namespace MOE.Common.Business.LogDecoder
                         dateString += c;
                     }
 
-                    //Console.WriteLine(dateString);
                     var startTime = new DateTime();
                     if (DateTime.TryParse(dateString, out startTime) && br.BaseStream.Position < br.BaseStream.Length)
                     {
@@ -57,107 +79,134 @@ namespace MOE.Common.Business.LogDecoder
                         while (i < 7 && br.BaseStream.Position < br.BaseStream.Length)
                         {
                             var c = br.ReadChar();
-                            //Console.WriteLine(c.ToString());
                             if (c == '\n')
                                 i++;
                         }
 
-                        //The first record alwasy seems to be missing a timestamp.  Econolite assumes the first even occures at the same time
-                        // the second event occurs.  I am going to tag the first event with secondevet.timestamp - 1/10 second
-                        var firstEventCode = new int();
-                        var firstEventParam = new int();
-
-
-                        if (br.BaseStream.Position + sizeof(char) < br.BaseStream.Length)
-                            firstEventCode = Convert.ToInt32(br.ReadChar());
-
-                        if (br.BaseStream.Position + sizeof(char) < br.BaseStream.Length)
-                            firstEventParam = Convert.ToInt32(br.ReadChar());
-
-                        var firstEventEntered = false;
-                        //MOE.Common.Business.ControllerEvent firstEvent = new MOE.Common.Business.ControllerEvent(SignalID, StartTime, firstEventCode, firstEventParam);
-
-
-                        //After that, we can probably start reading
-                        while (br.BaseStream.Position + sizeof(byte) * 4 <= br.BaseStream.Length
-                        ) //we need ot make sure we are more that 4 characters from the end
+                        // after that, we start reading until we reach the end 
+                        while (br.BaseStream.Position + sizeof(byte) * 4 <= br.BaseStream.Length)
                         {
                             var eventTime = new DateTime();
                             var eventCode = new int();
                             var eventParam = new int();
 
-                            //MOE.Common.Business.ControllerEvent controllerEvent = null;
                             for (var eventPart = 1; eventPart < 4; eventPart++)
                             {
-                                //getting the time offset
+                                //getting the EventCode
                                 if (eventPart == 1)
+                                    eventCode = Convert.ToInt32(br.ReadByte());
+
+                                if (eventPart == 2)
+                                    eventParam = Convert.ToInt32(br.ReadByte());
+
+                                //getting the time offset
+                                if (eventPart == 3)
                                 {
                                     var rawoffset = new byte[2];
-                                    //char[] offset = new char[2];
                                     rawoffset = br.ReadBytes(2);
                                     Array.Reverse(rawoffset);
                                     int offset = BitConverter.ToInt16(rawoffset, 0);
-
                                     var tenths = Convert.ToDouble(offset) / 10;
-
                                     eventTime = startTime.AddSeconds(tenths);
                                 }
-
-                                //getting the EventCode
-                                if (eventPart == 2)
-                                    eventCode = Convert.ToInt32(br.ReadByte());
-
-                                if (eventPart == 3)
-                                    eventParam = Convert.ToInt32(br.ReadByte());
                             }
 
-                            //controllerEvent = new MOE.Common.Business.ControllerEvent(SignalId, EventTime, EventCode, EventParam);
-
                             if (eventTime <= DateTime.Now && eventTime > earliestAcceptableDate)
-                                if (!firstEventEntered)
+                            {
+                                try
                                 {
-                                    try
-                                    {
-                                        var eventrow = elTable.NewController_Event_LogRow();
-                                        eventrow.Timestamp = eventTime.AddMilliseconds(-1);
-                                        eventrow.SignalID = signalId;
-                                        eventrow.EventCode = firstEventCode;
-                                        eventrow.EventParam = firstEventParam;
-                                        rowBag.Add(eventrow);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Console.WriteLine(ex.Message);
-                                    }
-
-                                    firstEventEntered = true;
+                                    var eventrow = elTable.NewController_Event_LogRow();
+                                    eventrow.Timestamp = eventTime;
+                                    eventrow.SignalID = signalId;
+                                    eventrow.EventCode = eventCode;
+                                    eventrow.EventParam = eventParam;
+                                    rowBag.Add(eventrow);
                                 }
-                                else
+                                catch (Exception ex)
                                 {
-                                    try
-                                    {
-                                        var eventrow = elTable.NewController_Event_LogRow();
-                                        eventrow.Timestamp = eventTime;
-                                        eventrow.SignalID = signalId;
-                                        eventrow.EventCode = eventCode;
-                                        eventrow.EventParam = eventParam;
-                                        rowBag.Add(eventrow);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Console.WriteLine(ex.Message);
-                                    }
+                                    Console.WriteLine(ex.Message);
                                 }
+                            }
                         }
                     }
                     //this is what we do when the datestring doesn't parse
                 }
-
                 //this is what we do when the datestring doesn't parse
-
-
-                //return true;
             }
+        }
+
+        /// <summary>
+        /// Determines if filestream passed in contains a hex signature of one of the known compression algorithms
+        /// </summary>
+        /// <param name="fileStream"></param>
+        /// <returns>true or false if compression is detected</returns>
+        public static bool IsCompressed(MemoryStream fileStream)
+        {
+            // read the magic header
+            byte[] header = new byte[2];
+            fileStream.Read(header, 0, 2);
+
+            // let seek to back of file
+            fileStream.Seek(0, SeekOrigin.Begin);
+
+            // let's check for zlib compression
+            if (AreEqual(header, _ZlibHeaderNoCompression) || AreEqual(header, _ZlibHeaderDefaultCompression) || AreEqual(header, _ZlibHeaderBestCompression))
+            {
+                return true;
+            }
+            // let's make sure it is not another compression 
+            else if (AreEqual(header, _GZipHeader))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Decompresses the passed in filestream using deflatestream
+        /// </summary>
+        /// <param name="fileStream"></param>
+        /// <returns>decompressed filestream</returns>
+        public static MemoryStream DecompessedStream(MemoryStream fileStream)
+        {
+            // read past the first two bytes of the zlib header
+            fileStream.Seek(2, SeekOrigin.Begin);
+
+            // decompress the file
+            using (DeflateStream deflateStream = new DeflateStream(fileStream, CompressionMode.Decompress))
+            {
+                // copy decompressed data into return stream
+                MemoryStream returnStream = new MemoryStream();
+                deflateStream.CopyTo(returnStream);
+                returnStream.Position = 0;
+
+                return returnStream;
+            }
+        }
+
+
+        /// <summary>
+        /// Compares if two byte arrays are equal
+        /// </summary>
+        /// <param name="a1"></param>
+        /// <param name="b1"></param>
+        /// <returns>returns true if they are equal and false if they are not equal</returns>
+        private static bool AreEqual(byte[] a1, byte[] b1)
+        {
+            if (a1.Length != b1.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < a1.Length; i++)
+            {
+                if (a1[i] != b1[i])
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
