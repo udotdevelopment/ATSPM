@@ -84,7 +84,6 @@ function CenterMap(region) {
 
 
 function GetMapWithCenter(lat, long, zoom) {
-
     map = new Microsoft.Maps.Map(document.getElementById('mapDiv'), {
         credentials: 'ArDqSVBgLAcobelrUlW6yVPIyL-UGPwVKTE0ce2_tAxvrZr5YFnSEFds7I1CNy5O',
         center: new Microsoft.Maps.Location(lat, long),
@@ -258,12 +257,13 @@ function displayInfobox(e) {
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(tosend),
             success: function (data) {
-                if (infobox != null) {
-                    infobox.setMap(null);
-                }
-                infobox = new Microsoft.Maps.Infobox(e.target.getLocation(), { offset: new Microsoft.Maps.Point(-100, 0), htmlContent: data });
+                infobox = new Microsoft.Maps.Infobox(e.target.getLocation(),
+                    { offset: new Microsoft.Maps.Point(-100, 0), htmlContent: data });
                 infobox.setMap(map);
                 SetControlValues(SignalID, null);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus);
             }
         });
     } 

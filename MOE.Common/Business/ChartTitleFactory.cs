@@ -79,7 +79,8 @@ namespace MOE.Common.Business
         {
             Title title;
             int phaseNumber = getPermissivePhase ? approach.PermissivePhaseNumber.Value : approach.ProtectedPhaseNumber;
-            if (approach.IsProtectedPhaseOverlap)
+            if ((approach.IsProtectedPhaseOverlap && !getPermissivePhase)||
+                (approach.IsPermissivePhaseOverlap && getPermissivePhase))
             {
                 title = new Title("Overlap " + phaseNumber + ": " + approach.Description);
             }

@@ -18,16 +18,16 @@ namespace MOE.Common.Business.LogDecoder
             using (var br = new BinaryReader(File.Open(fileName, FileMode.Open), encoding))
             {
                 var elTable = new Data.MOE.Controller_Event_LogDataTable();
-                var custUnique =
-                    new UniqueConstraint(new[]
-                    {
-                        elTable.Columns["SignalID"],
-                        elTable.Columns["Timestamp"],
-                        elTable.Columns["EventCode"],
-                        elTable.Columns["EventParam"]
-                    });
+                //var custUnique =
+                //    new UniqueConstraint(new[]
+                //    {
+                //        elTable.Columns["SignalID"],
+                //        elTable.Columns["Timestamp"],
+                //        elTable.Columns["EventCode"],
+                //        elTable.Columns["EventParam"]
+                //    });
 
-                elTable.Constraints.Add(custUnique);
+                //elTable.Constraints.Add(custUnique);
 
                 if (br.BaseStream.Position + 21 < br.BaseStream.Length)
                 {

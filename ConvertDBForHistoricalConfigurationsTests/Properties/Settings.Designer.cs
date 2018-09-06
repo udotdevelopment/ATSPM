@@ -26,7 +26,7 @@ namespace ConvertDBForHistoricalConfigurationsTests.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SPMServer;Initial Catalog=MOE1;Integrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=AtspmServer;Initial Catalog=MOE1;Integrated Security=True")]
         public string SPM {
             get {
                 return ((string)(this["SPM"]));

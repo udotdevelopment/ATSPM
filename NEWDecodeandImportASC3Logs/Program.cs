@@ -125,14 +125,14 @@ namespace NEWDecodeandImportASC3Logs
         private static MOE.Common.Data.MOE.Controller_Event_LogDataTable CreateDataTableForImport()
         {
             MOE.Common.Data.MOE.Controller_Event_LogDataTable elTable = new MOE.Common.Data.MOE.Controller_Event_LogDataTable();
-            UniqueConstraint custUnique =
-            new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalId"],
-                                        elTable.Columns["Timestamp"],
-                                        elTable.Columns["EventCode"],
-                                        elTable.Columns["EventParam"]
-                            });
+            //UniqueConstraint custUnique =
+            //new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalId"],
+            //                            elTable.Columns["Timestamp"],
+            //                            elTable.Columns["EventCode"],
+            //                            elTable.Columns["EventParam"]
+            //                });
 
-            elTable.Constraints.Add(custUnique);
+            //elTable.Constraints.Add(custUnique);
             return elTable;
         }
 

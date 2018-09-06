@@ -282,9 +282,9 @@ namespace MOE.Common.Models
                     approachesForMeticType.Add(a);
                     break;
                 }
-            return approachesForMeticType;
-            //return approachesForMeticType.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description)
-            //    .ToList();
+            //return approachesForMeticType;
+            return approachesForMeticType.OrderBy(a => a.PermissivePhaseNumber).ThenBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description)
+                .ToList();
         }
 
         public List<DirectionType> GetAvailableDirections()

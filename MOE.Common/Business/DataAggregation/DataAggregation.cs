@@ -90,7 +90,7 @@ namespace MOE.Common.Business.DataAggregation
                     ProcessSignal(signal, dt, dt.AddMinutes(binSize));
                     Console.WriteLine(signal.SignalID + " " + dt.ToString() + " - Complete");
                 });
-               //BulkSaveAllAggregateDataInParallel();
+               BulkSaveAllAggregateDataInParallel();
             }
             _startDate = _startDate.AddDays(1);
         }

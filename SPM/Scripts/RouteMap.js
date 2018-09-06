@@ -26,8 +26,10 @@ function SaveSignalToDatabase(signalId, signalLocation) {
         headers: GetRequestVerificationTokenObject(),
         data: JSON.stringify(tosend),
         success: function (data) {
-            var signalList = $('#SelectedSignalsList');
-            signalList.append(new Option(signalId + " - " + signalLocation, data, true, true));
+            if (data != "") {
+                var signalList = $('#SelectedSignalsList');
+                signalList.append(new Option(signalId + " - " + signalLocation, data, true, true));
+            }
         },
         statusCode: {
             404: function (content) { alert('cannot find resource'); },
