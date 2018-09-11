@@ -7,6 +7,8 @@ using System.Net.NetworkInformation;
 using Lextm.SharpSnmpLib.Messaging;
 using System.Threading.Tasks;
 using System.Configuration;
+using System.Security;
+using MOE.Common.Business;
 using MOE.Common.Data;
 using MOE.Common.Models.Repositories;
 
@@ -17,119 +19,78 @@ namespace FTPfromAllControllers
 
         static void Main(string[] args)
         {
-            MOE.Common.Models.Repositories.IApplicationEventRepository ErrorRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-            int MaxThreads = Properties.Settings.Default.MaxThreads;
-            int SNMPTimeout = Properties.Settings.Default.SNMPTimeout;
-            int SNMPRetry = Properties.Settings.Default.SNMPRetry;
-            int SNMPPort = Properties.Settings.Default.SNMPPort;
-            bool DeleteAfterFTP = Properties.Settings.Default.DeleteFilesAfterFTP;
-            bool ImportAfterFTP = Properties.Settings.Default.ImportAfterFTP;
-            int WaitBetweenFiles = Properties.Settings.Default.WaitBetweenFiles;
-            var connection = ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
-            MOE.Common.Business.BulkCopyOptions Options = new MOE.Common.Business.BulkCopyOptions(connection, Properties.Settings.Default.DestinationTableName,
-                               Properties.Settings.Default.WriteToConsole, Properties.Settings.Default.forceNonParallel, Properties.Settings.Default.MaxThreads, Properties.Settings.Default.DeleteFiles,
-                               Properties.Settings.Default.EarliestAcceptableDate, Properties.Settings.Default.BulkCopyBatchSize, Properties.Settings.Default.BulkCopyTimeOut);
+            IApplicationEventRepository errorRepository = ApplicationEventRepositoryFactory.Create();
+            SignalFtpOptions signalFtpOptions = new SignalFtpOptions(
+                Convert.ToInt32(ConfigurationManager.AppSettings["SNMPTimeout"]),
+                Convert.ToInt32(ConfigurationManager.AppSettings["SNMPRetry"]),
+                Convert.ToInt32(ConfigurationManager.AppSettings["SNMPPort"]),
+                Convert.ToBoolean(ConfigurationManager.AppSettings["DeleteFilesAfterFTP"]),
+                ConfigurationManager.AppSettings["LocalDirectory"],
+                Convert.ToInt32(ConfigurationManager.AppSettings["FTPConnectionTimeoutInSeconds"]),
+                Convert.ToInt32(ConfigurationManager.AppSettings["FTPReadTimeoutInSeconds"]),
+                Convert.ToBoolean(ConfigurationManager.AppSettings["skipCurrentLog"]),
+                Convert.ToBoolean(ConfigurationManager.AppSettings["RenameDuplicateFiles"]),
+                Convert.ToInt32(ConfigurationManager.AppSettings["waitBetweenFileDownloadMilliseconds"])
+                );
+            int maxThreads = Convert.ToInt32(ConfigurationManager.AppSettings["MaxThreads"]);
 
 
-
-
-            MOE.Common.Models.SPM _db = new MOE.Common.Models.SPM();
-
-            MOE.Common.Models.Repositories.ISignalsRepository _sr = SignalsRepositoryFactory.Create(_db);
-
-
-            var _signals = _sr.GetSignalFTPInfoForAllFTPSignals();
-
-
-
-            var options = new ParallelOptions { MaxDegreeOfParallelism = Properties.Settings.Default.MaxThreads };
-
-            Parallel.ForEach(_signals.AsEnumerable(), options, row =>
-            //foreach (var row in SignalsDT)
+            MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
+            ISignalsRepository signalsRepository = SignalsRepositoryFactory.Create(db);
+            var signals = signalsRepository.GetLatestVersionOfAllSignalsForFtp();
+            var options = new ParallelOptions { MaxDegreeOfParallelism = maxThreads };
+            Parallel.ForEach(signals.AsEnumerable(), options, signal =>
+            //foreach (var signal in signals)
             {
                 try
                 {
-                    MOE.Common.Business.Signal signal = new MOE.Common.Business.Signal();
+                    MOE.Common.Business.SignalFtp signalFtp = new MOE.Common.Business.SignalFtp(signal, signalFtpOptions);
 
-                    //Initialize the signal, because I didn't make a proper constructor
-
-                    signal.PrimaryName = row.PrimaryName.ToString();
-                    signal.SecondaryName = row.Secondary_Name.ToString();
-                    signal.IpAddress = row.IP_Address.ToString();
-                    signal.SignalID = row.SignalID.ToString();
-
-
-
-                    string Username = row.User_Name;
-                    string Password = row.Password;
-                    string LocalDir = Properties.Settings.Default.HostDir + signal.SignalID + "\\";
-                    string RemoteDir = row.FTP_Directory;
-                    bool ActiveMode = row.ActiveFTP;
-
-
-                    if (!Directory.Exists(LocalDir))
+                    if (!Directory.Exists(signalFtpOptions.LocalDirectory + signal.SignalID))
                     {
-                        Directory.CreateDirectory(LocalDir);
+                        Directory.CreateDirectory(signalFtpOptions.LocalDirectory + signal.SignalID);
                     }
-
 
                     //Get the records over FTP
                     if (CheckIfIPAddressIsValid(signal))
                     {
                         try
                         {
-
-                            MOE.Common.Business.Signal.GetCurrentRecords(signal.IpAddress, signal.SignalID, Username, Password, LocalDir, RemoteDir, DeleteAfterFTP,
-                                SNMPRetry, SNMPTimeout, SNMPPort, ImportAfterFTP, ActiveMode, 0, Options, Properties.Settings.Default.FTPTimeout);
-
+                            signalFtp.GetCurrentRecords();
                         }
                         catch (AggregateException ex)
                         {
                             Console.WriteLine("Error At Highest Level for signal " + ex.Message);
-                            ErrorRepository.QuickAdd("FTPFromAllControllers", "Main", "Main Loop", MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium, "Error At Highest Level for signal " + row.SignalID);
-
+                            errorRepository.QuickAdd("FTPFromAllControllers", "Main", "Main Loop", MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium, "Error At Highest Level for signal " + signal.SignalID);
                         }
-
-
                     }
-
-
-
                 }
                 catch (AggregateException ex)
                 {
                     Console.WriteLine("Error At Highest Level for signal " + ex.Message);
-                    ErrorRepository.QuickAdd("FTPFromAllControllers", "Main", "Main Loop", MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium, "Error At Highest Level for signal " + row.SignalID);
+                    errorRepository.QuickAdd("FTPFromAllControllers", "Main", "Main Loop", MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium, "Error At Highest Level for signal " + signal.SignalID);
 
                 }
             }
-
-    );
+            );
 
          }
 
-        public static bool CheckIfIPAddressIsValid(MOE.Common.Business.Signal signal)
+        public static bool CheckIfIPAddressIsValid(MOE.Common.Models.Signal signal)
         {
             bool hasValidIP = false;
-
             IPAddress ip;
-
-           
-
-            
-
-            if (signal.IpAddress == "0")
+            if (signal.IPAddress == "0")
             {
                 return false;
             }
-
-            if (signal.IpAddress == "0.0.0.0")
+            if (signal.IPAddress == "0.0.0.0")
             {
                 return false;
             }
 
             //test to see if the address is reachable
-            if (IPAddress.TryParse(signal.IpAddress, out ip))
+            if (IPAddress.TryParse(signal.IPAddress, out ip))
             {
                 Ping pingSender = new Ping();
                 PingOptions pingOptions = new PingOptions();
@@ -142,24 +103,22 @@ namespace FTPfromAllControllers
                 string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
                 byte[] buffer = Encoding.ASCII.GetBytes(data);
                 int timeout = 120;
-                PingReply reply = pingSender.Send(signal.IpAddress, timeout, buffer, pingOptions);
-                if (reply.Status != IPStatus.Success)
+                try
+                {
+                    PingReply reply = pingSender.Send(signal.IPAddress, timeout, buffer, pingOptions);
+                    if (reply != null && reply.Status == IPStatus.Success)
+                    {
+                        hasValidIP = true;
+                    }
+                }
+                catch 
                 {
                     hasValidIP = false;
                 }
-                else
-                {
-                    hasValidIP = true;
-                }
             }
-
             return hasValidIP;
         }
-
     }
-
-
-
 }
 
 

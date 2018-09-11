@@ -150,9 +150,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         if (ShowEventCount)
                         {
                             SetTimeXAxisSignalSeriesForEventCount(chart, signal);
-                            var eventCountOptions = (ApproachEventCountAggregationOptions)this;
-                            Series series = eventCountOptions.GetTimeXAxisSignalSeries(signal);
-                            chart.Series.Add(series);
+                            //var eventCountOptions = (ApproachEventCountAggregationOptions)this;
+                            //Series series = eventCountOptions.GetTimeXAxisSignalSeries(signal);
+                            //chart.Series.Add(series);
                         }
                         SaveChartImage(chart);
                     }
@@ -529,7 +529,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var phaseDescription = GetPhaseDescription(approach, getProtectedPhase);
             var binsContainers = GetBinsContainersByApproach(approach, getProtectedPhase);
             var series = CreateSeries(colorCode,
-                approach.DirectionType.Abbreviation + " PH" + (getProtectedPhase ? approach.ProtectedPhaseNumber.ToString(): approach.PermissivePhaseNumber.Value.ToString())); //approach.Description + phaseDescription);
+                //approach.DirectionType.Abbreviation 
+                approach.Description
+                + " - PH " + (getProtectedPhase ? approach.ProtectedPhaseNumber.ToString(): approach.PermissivePhaseNumber.Value.ToString())); //approach.Description + phaseDescription);
             if ((TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Month ||
                  TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Year) &&
                 TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod)

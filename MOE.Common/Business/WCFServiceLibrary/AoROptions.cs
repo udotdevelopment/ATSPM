@@ -62,7 +62,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 foreach (var signalPhase in signalphasecollection.SignalPhaseList)
                 {
                     var aorChart = new ArriveOnRedChart(this, signalPhase);
-                    var chart = aorChart.chart;
+                    var chart = aorChart.Chart;
                     var chartName = CreateFileName();
                     var removethese = new List<Title>();
                     foreach (var t in chart.Titles)

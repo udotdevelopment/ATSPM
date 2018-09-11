@@ -43,7 +43,7 @@ namespace MOE.Common.Models.Repositories
             return _db.PhaseTerminationAggregations.Where(p =>
                     p.SignalId == signal.SignalID && p.BinStartTime >= startDate &&
                     p.BinStartTime < endDate)
-                .Select(p => p.PhaseNumber).ToList();
+                .Select(p => p.PhaseNumber).Distinct().ToList();
         }
 
 

@@ -26,7 +26,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         {
             var start = Convert.ToDateTime("02/01/2018 00:01");
             var end = Convert.ToDateTime("02/01/2018 23:59");
-            ApproachDelayOptions options = new ApproachDelayOptions("7185", start, end, 15, 2000, 15, true,  8, true, true);
+            ApproachDelayOptions options = new ApproachDelayOptions("7185", start, end, 15, 2000, 15, true, true);
             Assert.IsTrue(options.CreateMetric().Count > 1);
         }
     }

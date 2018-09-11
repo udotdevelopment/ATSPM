@@ -41,6 +41,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(SignalEventCountAggregationOptions))]
     [KnownType(typeof(ApproachEventCountAggregationOptions))]
     [KnownType(typeof(PhaseTerminationAggregationOptions))]
+    [KnownType(typeof(PhasePedAggregationOptions))]
     [KnownType(typeof(string[]))]
     public class MetricOptions
     {
@@ -90,7 +91,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public double Y2AxisMin { get; set; }
 
         [DataMember]
-        public string MetricFileLocation { get; set; }
+        public string MetricFileLocation { get;
+            set; }
 
         [DataMember]
         public string MetricWebPath { get; set; }

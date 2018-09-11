@@ -28,8 +28,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void SetStartEndDateTest()
         {
-            dates[0] = dateOne;
-            dates[1] = dateTwo;
+            dates = new[] {dateOne, dateTwo};
 
             DataAggregation dag = new DataAggregation();
 

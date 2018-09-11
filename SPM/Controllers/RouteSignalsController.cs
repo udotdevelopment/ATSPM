@@ -13,7 +13,7 @@ using SPM.Filters;
 namespace SPM.Controllers
 {
 
-    [Authorize(Roles = "Configuration, Admin")]
+    [Authorize(Roles = "Configuration, Admin, Technician")]
     public class RouteSignalsController : Controller
     {
         MOE.Common.Models.Repositories.IRouteSignalsRepository routeSignalsRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
@@ -65,6 +65,7 @@ namespace SPM.Controllers
         // POST: RouteSignals/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Configuration, Admin")]
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         public ActionResult Create([Bind(Include = "RouteId,SignalId")] RouteSignal routeSignal)
@@ -125,6 +126,7 @@ namespace SPM.Controllers
         // POST: RouteSignals/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Configuration, Admin")]
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         public void UpdateApproach(RoutePhaseDirection routePhaseDirection)
@@ -138,6 +140,7 @@ namespace SPM.Controllers
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
+        [Authorize(Roles = "Configuration, Admin")]
         public void MoveSignalUp(int routeId, int signalId)
         {
             var routePhaseDirectionRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
@@ -146,6 +149,7 @@ namespace SPM.Controllers
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
+        [Authorize(Roles = "Configuration, Admin")]
         public void MoveSignalDown(int routeId, int signalId)
         {
             var routePhaseDirectionRepository = MOE.Common.Models.Repositories.RouteSignalsRepositoryFactory.Create();
@@ -209,6 +213,7 @@ namespace SPM.Controllers
         //}
 
         // GET: RouteSignals/Delete/5
+        [Authorize(Roles = "Configuration, Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -225,6 +230,7 @@ namespace SPM.Controllers
         }
 
         // POST: RouteSignals/Delete/5
+        [Authorize(Roles = "Configuration, Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateJsonAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

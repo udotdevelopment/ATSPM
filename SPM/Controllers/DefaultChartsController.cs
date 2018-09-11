@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using MOE.Common.Models.ViewModel.Chart;
 using MOE.Common.Business.WCFServiceLibrary;
@@ -82,10 +81,10 @@ namespace SPM.Controllers
         //    return PartialView("MetricsList", dcv);
         //}
 
-        public ActionResult GetMetricProperties(MetricOptions options)
-        {
-            return PartialView("MetricProperties", options);
-        }
+        //public ActionResult GetMetricProperties(MetricOptions options)
+        //{
+        //    return PartialView("MetricProperties", options);
+        //}
 
         public ActionResult GetMap(DefaultChartsViewModel dcv)
         {

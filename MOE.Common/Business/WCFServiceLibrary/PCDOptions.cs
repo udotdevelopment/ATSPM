@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Web.UI.DataVisualization.Charting;
-using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
@@ -94,9 +93,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 SignalsRepositoryFactory.Create();
             Signal = signalRepository.GetVersionOfSignalByDate(SignalID, StartDate);
             MetricTypeID = 6;
-
             var chart = new Chart();
-            var location = GetSignalLocation();
             var metricApproaches = Signal.GetApproachesForSignalThatSupportMetric(MetricTypeID);
 
             if (metricApproaches.Count > 0)
@@ -104,7 +101,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     var signalPhase = new SignalPhase(StartDate, EndDate, approach,
                         ShowVolumes, SelectedBinSize, MetricTypeID, false);
-                    chart = GetNewChart(approach);
+                    chart = GetNewChart();
                     AddDataToChart(chart, signalPhase);
                     var chartName = CreateFileName();
                     chart.ImageLocation = MetricFileLocation + chartName;
@@ -115,9 +112,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
         }
 
 
-        private Chart GetNewChart(Approach approach)
+        private Chart GetNewChart()
         {
-            var chart = ChartFactory.CreateDefaultChart(this);
+            var chart = ChartFactory.CreateDefaultChartNoX2Axis(this);
             chart.ChartAreas[0].AxisY2.Title = "Volume Per Hour";
             CreateChartLegend(chart);
             if (ShowVolumes)
@@ -262,7 +259,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var detectorPoint in cycle.DetectorEvents)
             {
                 chart.Series["Detector Activation"].Points.AddXY(
-                    //pcd.StartTime, 
+                    //cycle.StartTime, 
                     detectorPoint.TimeStamp,
                     detectorPoint.YPoint);
                 if (detectorPoint.YPoint > cycle.GreenLineY && detectorPoint.YPoint < cycle.RedLineY)

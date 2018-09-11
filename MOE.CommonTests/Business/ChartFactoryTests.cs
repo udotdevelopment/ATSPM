@@ -92,34 +92,7 @@ namespace MOE.Common.Business.Tests
             Assert.IsTrue(s.ChartType == SeriesChartType.StackedColumn);
         }
 
-        [TestMethod()]
-        public void CreatePurdueSplitFailureAggregationChartTest()
-        {
-            MOE.CommonTests.Models.InMemoryMOEDatabase _db = new InMemoryMOEDatabase();
-            _db.PopulateSignal();
-            _db.PopulateSignalsWithApproaches();
-            _db.PopulateApproachesWithDetectors();
-            //int apprId = _db.PopulateApproachSplitFailAggregationsWithRandomRecords();
-
-            MOE.CommonTests.Models.InMemoryApproachSplitFailAggregationRepository asfs = new InMemoryApproachSplitFailAggregationRepository(_db);
-
-
-
-
-            MOE.Common.Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.SetApplicationEventRepository(asfs);
-
-            //Chart chart = ChartFactory.CreatePurdueSplitFailureAggregationChart(options);
-
-            //Assert.IsNotNull(chart);
-
-            string path = @"c:\SPMImages\testchart" + DateTime.Now.Month.ToString() + "_" + DateTime.Now.Day.ToString()
-                + "_" + DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString() + ".jpeg";
-
-            //chart.SaveImage(path);
-
-            Assert.IsTrue(File.Exists(path));
-
-        }
+        
 
         [TestMethod()]
         public void CreateStringXIntYChartTest()
@@ -140,7 +113,7 @@ namespace MOE.Common.Business.Tests
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.SelectedAggregationType = AggregationType.Sum;
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Approach;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
                 Convert.ToDateTime("10/18/2017"),
@@ -150,142 +123,13 @@ namespace MOE.Common.Business.Tests
             options.FilterSignals.Add(new FilterSignal { SignalId = "7185", Exclude = false });
             options.FilterSignals.Add(new FilterSignal { SignalId = "5114", Exclude = false });
             options.SelectedChartType = SeriesChartType.Column;
+            options.SelectedAggregatedDataType = new AggregatedDataType { DataName = "SplitFailures" };
 
             return options;
 
         }
 
-        [TestMethod()]
-        public void GetBinsTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void AddSeriesToSeriesListTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void ChartInitializationTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void ChartInitializationTest1()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateDefaultChartTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateSplitFailureChartTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateTimeXIntYChartTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateLaneByLaneAggregationChartTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateAdvancedCountsAggregationChartTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateArrivalOnGreenAggregationChartTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreatePlatoonRatioAggregationChartTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void GetApproachAggregationRecordsTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreatePedestrianActuationAggregationChartTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void PreemptionAggregationChartTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateApproachDelayAggregationChartTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void TransitSignalPriorityAggregationChartTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void GetSeriesFromBinsTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateLineSeriesTest1()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateStackedAreaSeriesTest1()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateColumnSeriesTest1()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateStackedColumnSeriesTest1()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateStringXIntYChartTest1()
-        {
-            Assert.Fail();
-        }
+        
 
         private Chart CreateATestChart()
         {

@@ -251,7 +251,7 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ActionLogID,Date,AgencyID,Comment,SignalID,Name,CheckBoxListReturnActions,CheckBoxListReturnMetricTypes")] ActionLog actionLog)
+        public ActionResult Create([Bind(Include = "ActionLogID,Date,AgencyID,Comment,SignalId,Name,CheckBoxListReturnActions,CheckBoxListReturnMetricTypes")] ActionLog actionLog)
         {
             actionLog.CheckBoxListAllActions = actionRepository.GetAll().ToList();
             actionLog.CheckBoxListAllMetricTypes = metricTypeRepository.GetAllToDisplayMetrics();
@@ -287,7 +287,7 @@ namespace SPM.Controllers
         private void SetLists()
         {
             ViewBag.AgencyID = new SelectList(agencyRepository.GetAll(), "AgencyID", "Description");
-            ViewBag.SignalID = new SelectList(signalRepository.GetAllSignals(), "SignalID", "SignalDescription");
+            ViewBag.SignalID = new SelectList(signalRepository.GetAllSignals(), "SignalId", "SignalDescription");
         }
 
         //// GET: ActionLogs/Edit/5
@@ -303,7 +303,7 @@ namespace SPM.Controllers
         //        return HttpNotFound();
         //    }
         //    ViewBag.AgencyID = new SelectList(db.Agencies, "AgencyID", "Description", actionLog.AgencyID);
-        //    ViewBag.SignalID = new SelectList(db.Signals, "SignalID", "PrimaryName", actionLog.SignalID);
+        //    ViewBag.SignalId = new SelectList(db.Signals, "SignalId", "PrimaryName", actionLog.SignalId);
         //    return View(actionLog);
         //}
 
@@ -312,7 +312,7 @@ namespace SPM.Controllers
         //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "ActionLogID,Date,AgencyID,Comment,SignalID,Name")] ActionLog actionLog)
+        //public ActionResult Edit([Bind(Include = "ActionLogID,Date,AgencyID,Comment,SignalId,Name")] ActionLog actionLog)
         //{
         //    if (ModelState.IsValid)
         //    {
@@ -321,7 +321,7 @@ namespace SPM.Controllers
         //        return RedirectToAction("Index");
         //    }
         //    ViewBag.AgencyID = new SelectList(db.Agencies, "AgencyID", "Description", actionLog.AgencyID);
-        //    ViewBag.SignalID = new SelectList(db.Signals, "SignalID", "PrimaryName", actionLog.SignalID);
+        //    ViewBag.SignalId = new SelectList(db.Signals, "SignalId", "PrimaryName", actionLog.SignalId);
         //    return View(actionLog);
         //}
 

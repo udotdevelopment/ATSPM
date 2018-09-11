@@ -37,16 +37,16 @@ namespace MOE.Common.Models.Repositories
     //This method probably doesn't really belong here anymore.
         //public List<MOE.Common.Models.Detectors> GetDetectorsBySignalID(string SignalID)
         //{
-        //    MOE.Common.Business.ModelObjectHelpers.SignalModelHelper smh = new Business.ModelObjectHelpers.SignalModelHelper(SignalID);
+        //    MOE.Common.Business.ModelObjectHelpers.SignalModelHelper smh = new Business.ModelObjectHelpers.SignalModelHelper(SignalId);
 
         //    List<MOE.Common.Models.Detectors> detectors = smh.GetDetectorsForSignal();
 
         //    return detectors;
         //}
         //This method probably doesn't really belong here anymore.
-        //public List<MOE.Common.Models.Detectors> GetDetectorsBySignalIDAndPhase(string SignalID, int PhaseNumber)
+        //public List<MOE.Common.Models.Detectors> GetDetectorsBySignalIDAndPhase(string SignalId, int PhaseNumber)
         //{
-        //    MOE.Common.Business.ModelObjectHelpers.SignalModelHelper smh = new Business.ModelObjectHelpers.SignalModelHelper(SignalID);
+        //    MOE.Common.Business.ModelObjectHelpers.SignalModelHelper smh = new Business.ModelObjectHelpers.SignalModelHelper(SignalId);
 
         //    List<int> phases = smh.GetPhasesForSignal();
 

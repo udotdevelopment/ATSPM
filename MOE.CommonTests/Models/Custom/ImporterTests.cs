@@ -188,7 +188,7 @@ namespace MOE.CommonTests.Models.Custom
             if (hasUniqueConstraint)
             {
                 UniqueConstraint custUnique =
-                new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalID"],
+                new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalId"],
                                                     elTable.Columns["Timestamp"],
                                                     elTable.Columns["EventCode"],
                                                     elTable.Columns["EventParam"]

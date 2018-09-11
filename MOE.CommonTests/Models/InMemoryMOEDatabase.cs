@@ -239,11 +239,7 @@ namespace MOE.CommonTests.Models
                 var r = new ApproachSplitFailAggregation();
                 r.ApproachId = approach.ApproachID;
                 r.BinStartTime = startTime;
-                r.ForceOffs = 3;
-                r.GapOuts = 3;
-                r.MaxOuts = 3;
                 r.SplitFailures = 3;
-                r.UnknownTerminationTypes = 3;
                 r.IsProtectedPhase = true;
                 ApproachSplitFailAggregations.Add(r);
                 if (approach.PermissivePhaseNumber != null)
@@ -251,11 +247,7 @@ namespace MOE.CommonTests.Models
                     var approach2 = new ApproachSplitFailAggregation();
                     approach2.ApproachId = approach.ApproachID;
                     approach2.BinStartTime = startTime;
-                    approach2.ForceOffs = 3;
-                    approach2.GapOuts = 3;
-                    approach2.MaxOuts = 3;
                     approach2.SplitFailures = 3;
-                    approach2.UnknownTerminationTypes = 3;
                     approach2.IsProtectedPhase = false;
                     ApproachSplitFailAggregations.Add(approach2);
                 }
@@ -271,11 +263,7 @@ namespace MOE.CommonTests.Models
                 var r = new ApproachSplitFailAggregation();
                 r.ApproachId = approach.ApproachID;
                 r.BinStartTime = startTime;
-                r.ForceOffs = rnd.Next(1, 5);
-                r.GapOuts = rnd.Next(1, 5);
-                r.MaxOuts = rnd.Next(1, 5);
                 r.SplitFailures = rnd.Next(1, 5);
-                r.UnknownTerminationTypes = rnd.Next(1, 5);
                 r.IsProtectedPhase = true;
                 ApproachSplitFailAggregations.Add(r);
                 if (approach.PermissivePhaseNumber != null)
@@ -283,11 +271,7 @@ namespace MOE.CommonTests.Models
                     var approach2 = new ApproachSplitFailAggregation();
                     approach2.ApproachId = approach.ApproachID;
                     approach2.BinStartTime = startTime;
-                    approach2.ForceOffs = rnd.Next(1, 5);
-                    approach2.GapOuts = rnd.Next(1, 5);
-                    approach2.MaxOuts = rnd.Next(1, 5);
                     approach2.SplitFailures = rnd.Next(1, 5);
-                    approach2.UnknownTerminationTypes = rnd.Next(1, 5);
                     approach2.IsProtectedPhase = true;
                     ApproachSplitFailAggregations.Add(approach2);
                 }

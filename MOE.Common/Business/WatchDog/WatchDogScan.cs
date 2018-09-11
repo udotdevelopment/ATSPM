@@ -127,20 +127,20 @@ namespace MOE.Common.Business.WatchDog
             if (controllerEventLogRepository.GetRecordCount(signal.SignalID, dateToCheck.AddDays(-1), dateToCheck) >
                 Settings.MinimumRecords)
             {
-                Console.WriteLine("Signal " + signal.SignalID + "Has Current records");
+                Console.WriteLine("Signal " + signal.SignalID + " Has Current records");
                 SignalsWithRecords.Add(signal);
             }
             else
             {
-                Console.WriteLine("Signal " + signal.SignalID + "Does Not Have Current records");
+                Console.WriteLine("Signal " + signal.SignalID + " Does Not Have Current records");
                 SignalsNoRecords.Add(signal);
-                var error = new SPMWatchDogErrorEvent();
+                MOE.Common.Models.SPMWatchDogErrorEvent error = new MOE.Common.Models.SPMWatchDogErrorEvent();
                 error.SignalID = signal.SignalID;
                 error.DetectorID = "0";
                 error.Phase = 0;
                 error.Direction = "";
                 error.TimeStamp = ScanDate;
-                error.Message = "Missing Records";
+                error.Message = "Missing Records - IP: " + signal.IPAddress;
                 error.ErrorCode = 1;
                 MissingRecords.Add(error);
             }
@@ -281,7 +281,7 @@ namespace MOE.Common.Business.WatchDog
                         error.Phase = detector.Approach.ProtectedPhaseNumber;
                         error.TimeStamp = ScanDate;
                         error.Direction = detector.Approach.DirectionType.Description;
-                        error.Message = "Count: " + currentVolume;
+                        error.Message = "CH: " + channel.ToString() + " - Count: " + currentVolume.ToString();
                         error.ErrorCode = 2;
                         if (!LowHitCountErrors.Contains(error))
                             LowHitCountErrors.Add(error);

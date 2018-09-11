@@ -46,7 +46,7 @@ namespace SPM.Controllers
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "VersionID, SignalID,CommentText, MetricIDs")] MetricComment metricComment)
+        public ActionResult Create([Bind(Include = "VersionID, SignalId,CommentText, MetricIDs")] MetricComment metricComment)
         {
             metricComment.TimeStamp = DateTime.Now;
             ModelState.Clear();

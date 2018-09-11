@@ -62,6 +62,9 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FluentFTP, Version=19.2.2.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentFTP.19.2.2\lib\net45\FluentFTP.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -332,6 +335,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\ActionLog\ChartData.cs" />
+    <Compile Include="Business\AnalysisPhaseCycle.cs" />
+    <Compile Include="Business\AnalysisPhaseCycleCollection.cs" />
     <Compile Include="Business\ApproachVolume\ApproachVolume.cs" />
     <Compile Include="Business\ApproachVolume\ApproachVolumeViewModel.cs" />
     <Compile Include="Business\ApproachVolume\MetricInfo.cs" />
@@ -344,7 +349,8 @@
     <Compile Include="Business\BulkCopyOptions.cs" />
     <Compile Include="Business\ChartFactory.cs" />
     <Compile Include="Business\ChartTitleFactory.cs" />
-    <Compile Include="Business\CustomReport\CustomChart.cs">
+    <Compile Include="Business\CycleFactory.cs" />
+    <Compile Include="Business\Phase.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Business\CustomReport\Cycle.cs">
@@ -400,6 +406,8 @@
     <Compile Include="Business\FilterExtensions\FilterSignal.cs" />
     <Compile Include="Business\Helpers\ApproachVolumeTable.cs" />
     <Compile Include="Business\Helpers\ConfigurationRecord.cs" />
+    <Compile Include="Business\PhaseCycleBase.cs" />
+    <Compile Include="Business\PlanBase.cs" />
     <Compile Include="Business\PlanPCD.cs" />
     <Compile Include="Business\PlanSplitFail.cs" />
     <Compile Include="Business\PlanSplitMonitor.cs" />
@@ -509,6 +517,10 @@
     <Compile Include="Migrations\201803072127121_DatabaseArchiveChanges.Designer.cs">
       <DependentUpon>201803072127121_DatabaseArchiveChanges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803301713324_DatabaseArchiveProcessedPartitions.cs" />
+    <Compile Include="Migrations\201803301713324_DatabaseArchiveProcessedPartitions.Designer.cs">
+      <DependentUpon>201803301713324_DatabaseArchiveProcessedPartitions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201804251748599_MetricTypeIdentityRemoval.cs" />
     <Compile Include="Migrations\201804251748599_MetricTypeIdentityRemoval.Designer.cs">
       <DependentUpon>201804251748599_MetricTypeIdentityRemoval.cs</DependentUpon>
@@ -516,10 +528,6 @@
     <Compile Include="Migrations\201805251650242_PhaseTerminationAggregation.cs" />
     <Compile Include="Migrations\201805251650242_PhaseTerminationAggregation.Designer.cs">
       <DependentUpon>201805251650242_PhaseTerminationAggregation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805311757143_DatabaseArchive.cs" />
-    <Compile Include="Migrations\201805311757143_DatabaseArchive.Designer.cs">
-      <DependentUpon>201805311757143_DatabaseArchive.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201806072115260_PhasePedDelayAggregation.cs" />
     <Compile Include="Migrations\201806072115260_PhasePedDelayAggregation.Designer.cs">
@@ -536,6 +544,15 @@
     <Compile Include="Migrations\201806211436552_RemoveLaneByLaneFromAOR.cs" />
     <Compile Include="Migrations\201806211436552_RemoveLaneByLaneFromAOR.Designer.cs">
       <DependentUpon>201806211436552_RemoveLaneByLaneFromAOR.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808171744257_AggreationLongsForId.cs" />
+    <Compile Include="Migrations\201808171744257_AggreationLongsForId.Designer.cs">
+      <DependentUpon>201808171744257_AggreationLongsForId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Resource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
@@ -623,13 +640,10 @@
     </Compile>
     <Compile Include="Business\AnalysisPhase.cs" />
     <Compile Include="Business\AnalysisPhaseCollection.cs" />
-    <Compile Include="Business\AnalysisPhaseCycle.cs" />
-    <Compile Include="Business\AnalysisPhaseCycleCollection.cs" />
     <Compile Include="Business\ApproachVolume\Approach.cs" />
     <Compile Include="Business\ApproachVolume\ApproachVolumeChart.cs" />
     <Compile Include="Business\ApproachSpeed\AvgSpeedBucket.cs" />
     <Compile Include="Business\ApproachSpeed\AvgSpeedBucketCollection.cs" />
-    <Compile Include="Business\ControllerEvent.cs" />
     <Compile Include="Business\ArriveOnRedChart.cs" />
     <Compile Include="Business\ListToTableConverter.cs" />
     <Compile Include="Business\LogDecoder\ASC3Decoder.cs" />
@@ -639,7 +653,6 @@
     <Compile Include="Business\PEDDelay\PedDelaySignal.cs" />
     <Compile Include="Business\PEDDelay\PedPhase.cs" />
     <Compile Include="Business\PEDDelay\PedPlan.cs" />
-    <Compile Include="Business\PlanBase.cs" />
     <Compile Include="Business\Preempt\PreemptCycle.cs" />
     <Compile Include="Business\Preempt\PreemptCycleEngine.cs" />
     <Compile Include="Business\Preempt\PreemptDetailChart.cs" />
@@ -655,6 +668,15 @@
     <Compile Include="Business\DetectorCollection.cs" />
     <Compile Include="Business\DetectorDataPoint.cs" />
     <Compile Include="Business\InfoBox.cs" />
+    <Compile Include="Business\Inrix\GraphLine.cs" />
+    <Compile Include="Business\Inrix\Segment.cs" />
+    <Compile Include="Business\Inrix\InrixCumulativeFreqChart.cs" />
+    <Compile Include="Business\Inrix\GroupCollection.cs" />
+    <Compile Include="Business\Inrix\Route.cs" />
+    <Compile Include="Business\Inrix\Group.cs" />
+    <Compile Include="Business\Inrix\TMC.cs" />
+    <Compile Include="Business\Inrix\TMCCollection.cs" />
+    <Compile Include="Business\Inrix\TravelTimeRecord.cs" />
     <Compile Include="Business\RedToRedCycle.cs" />
     <Compile Include="Business\LinkPivot.cs" />
     <Compile Include="Business\LinkPivotPair.cs" />
@@ -668,7 +690,7 @@
     <Compile Include="Business\PlanFactory.cs" />
     <Compile Include="Business\RLM\RLMSignalPhaseCollection.cs" />
     <Compile Include="Business\ScriptGenerator\GenerateAddData.cs" />
-    <Compile Include="Business\Signal.cs" />
+    <Compile Include="Business\SignalFtp.cs" />
     <Compile Include="Business\RLM\RLMSignalPhase.cs" />
     <Compile Include="Business\ControllerEventLogs.cs" />
     <Compile Include="Business\SignalControllers\BaseController.cs" />
@@ -745,6 +767,33 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Detector.cs" />
+    <Compile Include="Models\Inrix\Datum.cs" />
+    <Compile Include="Models\Inrix\Group.cs" />
+    <Compile Include="Models\Inrix\Group_Members.cs" />
+    <Compile Include="Models\Inrix\Inrix.cs" />
+    <Compile Include="Models\Inrix\Repositories\DataRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\DataRepositoryFactory.cs" />
+    <Compile Include="Models\Inrix\Repositories\GroupMemberRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\GroupRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\IDataRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\IGroupMemberRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\IGroupRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\IRouteMembersRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\IRouteRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\ISegmentMembersRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\ISegmentRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\ITMCRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\RouteMembersRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\RouteRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\RouteRepositoryFactory.cs" />
+    <Compile Include="Models\Inrix\Repositories\SegmentMembersRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\SegmentRepository.cs" />
+    <Compile Include="Models\Inrix\Repositories\TMCRepository.cs" />
+    <Compile Include="Models\Inrix\Route.cs" />
+    <Compile Include="Models\Inrix\Route_Members.cs" />
+    <Compile Include="Models\Inrix\Segment.cs" />
+    <Compile Include="Models\Inrix\Segment_Members.cs" />
+    <Compile Include="Models\Inrix\TMC.cs" />
     <Compile Include="Models\LaneType.cs" />
     <Compile Include="Models\Menu.cs" />
     <Compile Include="Models\DetectorComment.cs" />
@@ -866,7 +915,7 @@
     <Compile Include="Models\ViewModel\_MainMenu\MenuItem.cs" />
     <Compile Include="Models\DatabaseArchiveSettings.cs" />
     <Compile Include="Models\WatchDogApplicationSettings.cs" />
-    <Compile Include="Business\CycleFactory.cs" />
+    <Compile Include="Business\PhaseCycleFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -880,18 +929,31 @@
     <Content Include="App.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Migrations\CreateAndPopulateMOEDB.sql" />
-    <EmbeddedResource Include="Migrations\201709281716540_DataAggregation.resx">
-      <DependentUpon>201709281716540_DataAggregation.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201808171744257_AggreationLongsForId.resx">
+      <DependentUpon>201808171744257_AggreationLongsForId.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\DatabaseFileName.sql" />
+    <EmbeddedResource Include="Migrations\ReclaimFileSpaceForMoe.sql" />
+    <EmbeddedResource Include="Migrations\Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Verbose.sql" />
+    <EmbeddedResource Include="Migrations\UpperBoundary.sql" />
+    <EmbeddedResource Include="Migrations\TableName.sql" />
+    <EmbeddedResource Include="Migrations\StopCounter.sql" />
+    <EmbeddedResource Include="Migrations\Processtables.sql" />
+    <EmbeddedResource Include="Migrations\PreserveData.sql" />
+    <EmbeddedResource Include="Migrations\LowerBoundary.sql" />
+    <EmbeddedResource Include="Migrations\IndexNameColumns.sql" />
+    <EmbeddedResource Include="Migrations\IndexNameClustered.sql" />
+    <EmbeddedResource Include="Migrations\IndexName.sql" />
+    <EmbeddedResource Include="Migrations\CreateAndPopulateMOEDB.sql" />
     <EmbeddedResource Include="Migrations\201804251748599_MetricTypeIdentityRemoval.resx">
       <DependentUpon>201804251748599_MetricTypeIdentityRemoval.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805251650242_PhaseTerminationAggregation.resx">
       <DependentUpon>201805251650242_PhaseTerminationAggregation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805311757143_DatabaseArchive.resx">
-      <DependentUpon>201805311757143_DatabaseArchive.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806072115260_PhasePedDelayAggregation.resx">
       <DependentUpon>201806072115260_PhasePedDelayAggregation.cs</DependentUpon>
@@ -905,9 +967,14 @@
     <EmbeddedResource Include="Migrations\201806211436552_RemoveLaneByLaneFromAOR.resx">
       <DependentUpon>201806211436552_RemoveLaneByLaneFromAOR.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\CreateIntegratedSwapAndMoveDataJob.sql" />
-    <Content Include="Migrations\CustomStuffForExistingUpgrade.txt" />
-    <Content Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
+    <EmbeddedResource Include="Migrations\CreateConstraints.sql" />
+    <EmbeddedResource Include="Migrations\CreateIndexes.sql" />
+    <EmbeddedResource Include="Migrations\CreateTable.sql" />
+    <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
+    <EmbeddedResource Include="Migrations\DoTheSwapTable.sql" />
+    <EmbeddedResource Include="Migrations\DropIndexes.sql" />
+    <EmbeddedResource Include="Migrations\FileGroup.sql" />
+    <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
     <None Include="Data\LinkPivot.xsc">
@@ -968,6 +1035,9 @@
     <EmbeddedResource Include="Migrations\201704032058572_Version4.0.1.resx">
       <DependentUpon>201704032058572_Version4.0.1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709281716540_DataAggregation.resx">
+      <DependentUpon>201709281716540_DataAggregation.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710062050286_RouteConfiguration1.resx">
       <DependentUpon>201710062050286_RouteConfiguration1.cs</DependentUpon>
     </EmbeddedResource>
@@ -1003,6 +1073,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803072127121_DatabaseArchiveChanges.resx">
       <DependentUpon>201803072127121_DatabaseArchiveChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803301713324_DatabaseArchiveProcessedPartitions.resx">
+      <DependentUpon>201803301713324_DatabaseArchiveProcessedPartitions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

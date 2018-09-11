@@ -88,17 +88,27 @@ function LoadDataAggregateTypes() {
 
 function LoadSignal() {
     var signalId = $("#SignalID").val();
+    var signalsContainer = $('#RouteSignals');
+    var index = signalsContainer[0].children.length;
+    var parameters = {};
+    parameters.signalId = signalId;
+    parameters.index = index;
     $.ajax({
-        url: urlpathGetSignal + "/" + signalId,
+        url: urlpathGetSignal,
         type: "GET",
         cache: false,
         async: true,
+        data: parameters,
         contentType: "application/json; charset=utf-8",
         success: function (data) {
-            $('#RouteSignals').append(data);
+            var newData = data.replaceAll("FilterSignals_0", "FilterSignals_" + index);
+            var newData2 = newData.replaceAll("FilterSignals[0]", "FilterSignals[" + index +"]");
+            $('#RouteSignals').append(newData2);
             $.validator.unobtrusive.parse($("#RouteSignals"));
         },
-        onerror: function () { alert("Error"); }
+        onerror: function() {
+             alert("Error");
+        }
     });
 }
 

@@ -56,7 +56,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.NonAggregateCharts.Approach
 
            Assert.IsTrue(options.SpeedDetectors.Count > 1);
 
-           Assert.IsTrue(options.SpeedDetectors[0].Cycles.Count == 29);
+           Assert.IsTrue(options.SpeedDetectors[0].Cycles.Count == 30);
 
            Assert.IsTrue(cycle.SpeedEvents.Count == 46);
 

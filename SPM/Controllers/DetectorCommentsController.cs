@@ -17,26 +17,26 @@ namespace SPM.Controllers
             MOE.Common.Models.Repositories.DetectorCommentRepositoryFactory.Create();
 
         // GET: DetectorComments
-        public ActionResult Index()
-        {
-            var detectorComments = detectorCommentRepository.GetAllDetectorComments();
-            return View(detectorComments.ToList());
-        }
+        //public ActionResult Index()
+        //{
+        //    var detectorComments = detectorCommentRepository.GetAllDetectorComments();
+        //    return View(detectorComments.ToList());
+        //}
 
         // GET: DetectorComments/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            DetectorComment detectorComment = detectorCommentRepository.GetDetectorCommentByDetectorCommentID(id.Value);
-            if (detectorComment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(detectorComment);
-        }
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    DetectorComment detectorComment = detectorCommentRepository.GetDetectorCommentByDetectorCommentID(id.Value);
+        //    if (detectorComment == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(detectorComment);
+        //}
 
         // GET: DetectorComments/Create
         [Authorize(Roles = "Admin")]
@@ -65,63 +65,63 @@ namespace SPM.Controllers
             return PartialView("~/Views/Signals/EditorTemplates/DetectorComment.cshtml", detectorComment);    
         }
 
-        // GET: DetectorComments/Edit/5
-        [Authorize(Roles = "Admin")]
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            DetectorComment detectorComment = detectorCommentRepository.GetDetectorCommentByDetectorCommentID(id.Value);
-            if (detectorComment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(detectorComment);
-        }
+        //// GET: DetectorComments/Edit/5
+        //[Authorize(Roles = "Admin")]
+        //public ActionResult Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    DetectorComment detectorComment = detectorCommentRepository.GetDetectorCommentByDetectorCommentID(id.Value);
+        //    if (detectorComment == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(detectorComment);
+        //}
 
-        // POST: DetectorComments/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public ActionResult Edit([Bind(Include = "CommentID,ID,TimeStamp,CommentText")] DetectorComment detectorComment)
-        {
-            if (ModelState.IsValid)
-            {
-                detectorCommentRepository.AddOrUpdate(detectorComment);
-                return RedirectToAction("Index");
-            }
-            return View(detectorComment);
-        }
+        //// POST: DetectorComments/Edit/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        //public ActionResult Edit([Bind(Include = "CommentID,ID,TimeStamp,CommentText")] DetectorComment detectorComment)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        detectorCommentRepository.AddOrUpdate(detectorComment);
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(detectorComment);
+        //}
 
-        // GET: DetectorComments/Delete/5
-        [Authorize(Roles = "Admin")]
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            DetectorComment detectorComment = detectorCommentRepository.GetDetectorCommentByDetectorCommentID(id.Value);
-            if (detectorComment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(detectorComment);
-        }
+        //// GET: DetectorComments/Delete/5
+        //[Authorize(Roles = "Admin")]
+        //public ActionResult Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    DetectorComment detectorComment = detectorCommentRepository.GetDetectorCommentByDetectorCommentID(id.Value);
+        //    if (detectorComment == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(detectorComment);
+        //}
 
-        // POST: DetectorComments/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            DetectorComment detectorComment = detectorCommentRepository.GetDetectorCommentByDetectorCommentID(id);
-            detectorCommentRepository.Remove(detectorComment);
-            return RedirectToAction("Index");
-        }
+        //// POST: DetectorComments/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        //public ActionResult DeleteConfirmed(int id)
+        //{
+        //    DetectorComment detectorComment = detectorCommentRepository.GetDetectorCommentByDetectorCommentID(id);
+        //    detectorCommentRepository.Remove(detectorComment);
+        //    return RedirectToAction("Index");
+        //}
     }
 }

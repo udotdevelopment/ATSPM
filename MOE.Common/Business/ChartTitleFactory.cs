@@ -19,15 +19,29 @@ namespace MOE.Common.Business
         {
             var metricType = metricTypesRepository.GetMetricsByID(metricId);
             var title = new Title(metricType.ChartName);
-            title.Font = new Font(title.Font.FontFamily, title.Font.Size, FontStyle.Bold);
+            title.Font = new Font(title.Font.FontFamily, 14.0f, FontStyle.Bold);
             return title;
         }
 
         internal static Title GetSignalLocationAndDateRange(string signalID, DateTime startDate, DateTime endDate)
         {
-            var title = signalsRepository.GetSignalLocation(signalID);
-            title += " - SIG#" + signalID + " \n" + startDate.ToString("f") + " - " + endDate.ToString("f");
-            return new Title(title);
+            var titleInfo = signalsRepository.GetSignalLocation(signalID);
+            titleInfo += " - SIG#" + signalID + " \n" + startDate.ToString("f") + " - " + endDate.ToString("f");
+            Title title = new Title(titleInfo);
+            title.Font = new Font(title.Font.FontFamily, 12.0f);
+            return title;
+        }
+
+        internal static CustomLabel GetCustomLabelForTitle(string text, double startPosition, double endPosition, int rowIndex, Color color)
+        {
+            var label = new CustomLabel();
+            label.FromPosition = startPosition;
+            label.ToPosition = endPosition;
+            label.Text = text;
+            label.LabelMark = LabelMarkStyle.LineSideMark;
+            label.ForeColor = color;
+            label.RowIndex = rowIndex;
+            return label;
         }
 
         internal static Title GetPhase(int phase)
@@ -65,7 +79,8 @@ namespace MOE.Common.Business
         {
             Title title;
             int phaseNumber = getPermissivePhase ? approach.PermissivePhaseNumber.Value : approach.ProtectedPhaseNumber;
-            if (approach.IsProtectedPhaseOverlap)
+            if ((approach.IsProtectedPhaseOverlap && !getPermissivePhase)||
+                (approach.IsPermissivePhaseOverlap && getPermissivePhase))
             {
                 title = new Title("Overlap " + phaseNumber + ": " + approach.Description);
             }

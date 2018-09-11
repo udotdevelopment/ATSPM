@@ -78,6 +78,36 @@ namespace DecodeSiemensLogs
             }
         }
 
+        // returns true if the filename indicates new data
+        // standard Sepac filename format such as SIEM_50.73.234.81_2017_09_11_1700
+        // and 60 minutes per file
+        private bool NewDataFile(string file, DateTime lastrecord)
+        {
+            string[] filename = file.Split('_');
+            var filetime = new DateTime(Int32.Parse(filename[2]),
+                                        Int32.Parse(filename[3]),
+                                        Int32.Parse(filename[4]),
+                                        Int32.Parse(filename[5].Substring(0, 2)),
+                                        59,
+                                        59,
+                                        999);
+            var newer = (lastrecord < filetime);
+            return (newer);
+        }
+        private int ExistingRecords(string signal, string file, MOE.Common.Models.Repositories.IControllerEventLogRepository celRepository)
+        {
+            string[] filename = file.Split('_');
+            var start = new DateTime(Int32.Parse(filename[2]),
+                                        Int32.Parse(filename[3]),
+                                        Int32.Parse(filename[4]),
+                                        Int32.Parse(filename[5].Substring(0, 2)),
+                                        0,
+                                        0,
+                                        0);
+            var end = start + new TimeSpan(0, 1, 59, 59, 999);
+            return celRepository.GetRecordCount(signal, start, end);
+        }
+
         private void DecodeSiemens(string dir)
         {
 
@@ -144,28 +174,6 @@ namespace DecodeSiemensLogs
             {
                 DeleteFiles(dir);
             }
-
-            //string filename = ""; //sigid.ToString();
-            //                      filename += "_";
-            //                      filename += DateTime.Now.Month.ToString();
-            //                      filename += "_";
-            //                      filename += DateTime.Now.Day.ToString();
-            //                      filename += "_";
-            //                      filename += DateTime.Now.Year.ToString();
-            //                      filename += "_";
-            //                      filename += DateTime.Now.Hour.ToString();
-            //                      filename += "_";
-            //                      filename += DateTime.Now.Minute.ToString();
-            //                      filename += "_";
-            //                      filename += DateTime.Now.Second.ToString();
-            //                      filename += ".csv";
-
-            //                      SaveAsCSV(EventsTable, Path.Combine(CSV, filename));
-            //if (Properties.Settings.Default.DeleteFile)
-            //{
-            //    DeleteFiles(ToDelete);
-            //}
-
         }
 
         private void DeleteFiles(string dir)
@@ -186,6 +194,13 @@ namespace DecodeSiemensLogs
                 }
             }
         }
+
+        private void WriteToConsole(string msg)
+        {
+            if (!Properties.Settings.Default.WriteToConsole)
+                return;
+            Console.WriteLine("{0}: {1}", DateTime.Now, msg);
+        }
         //subroutine to write the decoded log to the database.
         //this is where most of the work is done.
 
@@ -193,14 +208,9 @@ namespace DecodeSiemensLogs
         //static void WritetoDB(string dir, string file, MOEDataSetTableAdapters.QueriesTableAdapter MoeTA)
         private void SaveEvents()
         {
-
-
-
             int insertErrorCount = 0;
-            //int duplicateLineCount = 0;
             int insertedLinecount = 0;
             double errorRatio = 0;
-            bool fileHasBeenRead = false;
             DateTime startTime = new DateTime();
             DateTime endTime = new DateTime();
             TimeSpan elapsedTime = new TimeSpan();
@@ -208,179 +218,112 @@ namespace DecodeSiemensLogs
             List<string> dirList = new List<string>();
             List<string> fileList = new List<string>();
             ConcurrentQueue<string> FilesToDelete = new ConcurrentQueue<string>();
-
-
-            // MOEDataSetTableAdapters.QueriesTableAdapter MoeTA = new MOEDataSetTableAdapters.QueriesTableAdapter();
-
-
+            var lastrecords = new Dictionary<string, DateTime>();
+            var countrecords = new Dictionary<string, int>();
+            MOE.Common.Models.Repositories.IControllerEventLogRepository celRepository =
+            MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
 
             foreach (string s in Directory.GetDirectories(CWD))
             {
                 dirList.Add(s);
+                var signalID = s.Split(new char[] { '\\' }).Last();
+                lastrecords.Add(signalID, celRepository.GetMostRecentRecordTimestamp(signalID));
+                foreach (var file in Directory.GetFiles(s))
+                {
+                    countrecords.Add(file, ExistingRecords(signalID, file, celRepository));
+                }
             }
-
-
-
             var options = new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(Properties.Settings.Default.MaxThreads) };
             Parallel.ForEach(dirList.AsEnumerable(), options, dir =>
-            //Parallel.ForEach(dirList.AsEnumerable(), dir =>
-            //foreach (string dir in dirList)
+            //foreach (var dir in dirList.AsEnumerable())
             {
-
                 //get the name of the directory and casting it to an int
                 //This is the only way the program knows the signal number of the controller.
                 string[] strsplit = dir.Split(new char[] { '\\' });
                 string dirname = strsplit.Last();
                 string sigid = dirname;
-
-                Console.WriteLine("Starting signal " + dirname);
-
-
+                var dstOffset = Math.Abs(DateTimeOffset.Now.Offset.Hours);
+                WriteToConsole("Starting signal " + dirname);
                 var options1 = new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(Properties.Settings.Default.MaxThreads) };
-                Parallel.ForEach(Directory.GetFiles(dir, "*.csv"), options1, file =>
-                //Parallel.ForEach(Directory.GetFiles(dir, "*.csv"), file =>
-                //foreach (string file in Directory.GetFiles(dir, "*.csv"))
+                //Parallel.ForEach(Directory.GetFiles(dir, "*.csv").OrderBy(f => f), options1, file =>
+                foreach (var file in Directory.GetFiles(dir, "*.csv").OrderBy(f => f))
                 {
+                    if (countrecords[file] >= File.ReadAllLines(file).Length - 1)
+                    {
+                        var delete = Properties.Settings.Default.DeleteFiles;
+                        WriteToConsole(String.Format("Skipping {0} {1}, we already imported this.", (delete ? "and deleting" : ""), file));
+                        if (delete)
+                        {
+                            try
+                            {
+                                File.Delete(file);
+                            }
+                            catch (Exception e)
+                            {
+                                WriteToConsole(String.Format("Unable to delete {0}: {1}", file, e.Message));
+                            }
+                        }
+                        continue;
+                        //return;
+                    }
+                    int skippedrecords = 0;
                     DataTable elTable = new DataTable();
-                    //elTable.Rows.Add(sigid, timeStamp, eventCode, eventParam);
                     elTable.Columns.Add("sigid", System.Type.GetType("System.String"));
                     elTable.Columns.Add("timeStamp", System.Type.GetType("System.DateTime"));
                     elTable.Columns.Add("eventCode", System.Type.GetType("System.Int32"));
                     elTable.Columns.Add("eventParam", System.Type.GetType("System.Int32"));
-                    UniqueConstraint custUnique =
-new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
-                                        elTable.Columns[1], 
-                                           elTable.Columns[2],
-                                            elTable.Columns[3]
-                                            });
-
+                    UniqueConstraint custUnique = new UniqueConstraint(new DataColumn[] {
+                          elTable.Columns[0],
+                          elTable.Columns[1],
+                          elTable.Columns[2],
+                          elTable.Columns[3] });
                     elTable.Constraints.Add(custUnique);
-
-
                     startTime = DateTime.Now;
-
-
-
-
-                    foreach (string line in File.ReadAllLines(file))
+                    //Siemens decoder makes the first line the IP address, so skip it.
+                    foreach (string line in File.ReadAllLines(file).Skip(1))
                     {
-
                         //Every other line is blank.  We only care about the lines that have data, and 
                         //every data line has a comma
                         if (line.Contains(','))
                         {
-                            //the first five lines or so are header information.  They need to be filtered out.
-                            if (line.Contains(",T"))
+                            //split the line on commas and assign each split to a var
+                            string[] lineSplit = line.Split(new char[] { ',' });
+                            DateTime timeStamp = new DateTime();
+                            int eventCode = 0;
+                            int eventParam = 0;
+                            //it might happen that the character on the line are not quite right.
+                            //the Try/catch stuff is an attempt to deal with that.
+                            try
                             {
-                                //even if there is nothing but header in the file, we want it marked as being read
-                                //so we can delete is later.
-                                fileHasBeenRead = true;
+                                timeStamp = Convert.ToDateTime(lineSplit[0]);
+                                //Siemens decoder is converting to local time from UTC, so convert back to local time
+                                //Not perfect during DST transitions (at 2:00 AM twice per year)
+                                timeStamp = timeStamp + TimeSpan.FromHours(dstOffset);
+                                if (timeStamp < lastrecords[sigid])
+                                {
+                                    skippedrecords++;
+                                    continue;
+                                }
+                                eventCode = Convert.ToInt32(lineSplit[1]);
+                                eventParam = Convert.ToInt32(lineSplit[2]);
                             }
-                            else if (line.Contains(",Intersection#"))
+                            catch (Exception ex)
                             {
-                                fileHasBeenRead = true;
+                                WriteToConsole(String.Format("{0} while converting {1} to event.  Skipping line", ex, lineSplit[0]));
+                                continue;
                             }
-
-                            else if (line.Contains(",IP Address:"))
+                            try
                             {
-                                fileHasBeenRead = true;
+                                elTable.Rows.Add(sigid, timeStamp, eventCode, eventParam);
                             }
-                            else if (line.Contains(",MAC Address"))
+                            catch (Exception ex)
                             {
-                                fileHasBeenRead = true;
+                                WriteToConsole(String.Format("{0} while adding event to data table", ex.ToString()));
                             }
-                            else if (line.Contains(",ControllerType Data Log Beginning"))
-                            {
-                                fileHasBeenRead = true;
-                            }
-                            else if (line.Contains(",Phases in use"))
-                            {
-                                fileHasBeenRead = true;
-                            }
-                            else
-                            {
-                                //split the line on commas and assign each split to a var
-                                string[] lineSplit = line.Split(new char[] { ',' });
-                                DateTime timeStamp = new DateTime();
-                                int eventCode = 0;
-                                int eventParam = 0;
-                                bool lineError = false;
-                                //it might happen that the character on the line are not quite right.
-                                //the Try/catch stuff is an attempt to deal with that.
-                                try
-                                {
-                                    timeStamp = Convert.ToDateTime(lineSplit[0]);
-                                    timeStamp = timeStamp + TimeSpan.FromHours(5);
-                                    //    timeStamp = timeStamp.AddHours(5);
-                                }
-                                catch (Exception ex)
-                                {
-
-                                    Console.Write("Error converting {0} to Datetime.  Skipping line", lineSplit[0]);
-                                    lineError = true;
-                                }
-                                try
-                                {
-                                    eventCode = Convert.ToInt32(lineSplit[1]);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.Write("Error converting {0} to eventCode Interger.  Skipping line", lineSplit[0]);
-                                    lineError = true;
-                                }
-                                try
-                                {
-                                    eventParam = Convert.ToInt32(lineSplit[2]);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.Write("Error converting {0} to eventParam Interger.  Skipping line", lineSplit[0]);
-                                    lineError = true;
-                                }
-                                //If there were no errors on the line, then put the line into the bulk queue
-                                if (!lineError)
-                                {
-                                    try
-                                    {
-                                        elTable.Rows.Add(sigid, timeStamp, eventCode, eventParam);
-                                        //   elTable.Rows.Add(sigid, "01-04-2017", "84", "14");
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Console.WriteLine(ex.ToString());
-                                    }
-
-
-                                }
-
-                                //If it gets this far, the file has been opened
-                                fileHasBeenRead = true;
-
-
-
-                            }
-
-
-                        }
-
-                        if (Properties.Settings.Default.WriteToConsole)
-                        {
-                            Console.WriteLine("NEXT LINE");
 
                         }
                     }
-
-                    // Array.Clear(lines, 0, lines.Count());
-
-
-
-
-                    if (Properties.Settings.Default.WriteToConsole)
-                    {
-                        Console.WriteLine("$$$ Entire file has been read $$$");
-
-                    }
-
+                    WriteToConsole(String.Format("{0} has been parsed. Skipped {1} old records", file, skippedrecords));
 
                     //Do the Math to find out if the error ratio is intolerably high before deleting the file
                     if (insertErrorCount > 0)
@@ -392,10 +335,6 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
                         errorRatio = 0;
                     }
 
-                    if (file.Length == 0)
-                    {
-                        fileHasBeenRead = true;
-                    }
                     string connectionString = Properties.Settings.Default.SPM.ToString();
                     MOE.Common.Business.BulkCopyOptions bulkOptions = new MOE.Common.Business.BulkCopyOptions(connectionString, Properties.Settings.Default.DestinationTableName,
                                  Properties.Settings.Default.WriteToConsole, Properties.Settings.Default.forceNonParallel, Properties.Settings.Default.MaxThreads, Properties.Settings.Default.DeleteFile,
@@ -403,100 +342,41 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
 
                     endTime = DateTime.Now;
 
-                    //the Signal class has a static methos to insert the tableinto the DB.  We are using that.
-                    MOE.Common.Business.Signal.BulktoDB(elTable, bulkOptions);
-
+                    //the Signal class has a static methods to insert the table into the DB.  We are using that.
+                    MOE.Common.Business.SignalFtp.BulktoDb(elTable, bulkOptions);
                     elapsedTime = endTime - startTime;
 
                     if (Properties.Settings.Default.DeleteFiles)
                     {
                         try
                         {
-                            //if ((errorRatio < Properties.Settings.Default.ErrorRatio) && (fileHasBeenRead))
-                            //{
+                            File.Delete(file);
+                            WriteToConsole(String.Format("{0} Deleted", file));
+                        }
+                        catch (SystemException sysex)
+                        {
+                            WriteToConsole(String.Format("{0} while Deleting {1}, waiting 100 ms before trying again", sysex, file));
+                            Thread.Sleep(100);
                             try
                             {
                                 File.Delete(file);
-                                if (Properties.Settings.Default.WriteToConsole)
-                                {
-                                    Console.WriteLine("{0} Deleted", file);
-                                }
                             }
-                            catch (SystemException sysex)
+                            catch (SystemException sysex2)
                             {
-                                if (Properties.Settings.Default.WriteToConsole)
-                                {
-                                    Console.WriteLine("{0} while Deleting {1}, waiting 100 ms before trying again", sysex, file);
-                                }
-                                Thread.Sleep(100);
-                                try
-                                {
-                                    File.Delete(file);
-                                }
-                                catch (SystemException sysex2)
-                                {
-
-
-                                }
-
+                                WriteToConsole(String.Format("{0} while Deleting {1}, giving up", sysex2, file));
                             }
-
-
-                            try
-                            {
-                                // MoeTA.sp_ProgramMessageInsert("Low", "ProcessASC3Logs", DBMessage);
-                            }
-                            catch (SqlException ex)
-                            {
-                                Console.WriteLine(ex);
-                            }
-
-
-                            // }
-                            //else
-                            //{
-                            //    if (Properties.Settings.Default.WriteToConsole)
-                            //    {
-                            //        Console.WriteLine("Too many insertion errors to delete {0}", file);
-                            //    }
-                            //}
                         }
+
                         catch (Exception ex)
                         {
-                            if (Properties.Settings.Default.WriteToConsole)
-                            {
-                                Console.WriteLine("{0} while deleting file {1}", ex, file);
-                            }
-
+                            WriteToConsole(String.Format("{0} while deleting file {1}", ex, file));
                             FilesToDelete.Enqueue(file);
                         }
                     }
-
-                    if (Properties.Settings.Default.WriteToConsole)
-                    {
-                        Console.WriteLine("%%%Start of file Loop%%%");
-                        Thread.Sleep(100);
-                    }
                 }
-            );
-
-                if (Properties.Settings.Default.WriteToConsole)
-                {
-                    Console.WriteLine("%%%Start of DIRECTORY  Loop%%%");
-                    Thread.Sleep(100);
-                }
-                //CleanUpFiles(FilesToDelete);
-                //});
-
-                if (Properties.Settings.Default.WriteToConsole)
-                {
-                    Console.WriteLine("###Start of Queue Build Hit###");
-
-                }
-
-
+                //);  
             }
-             );
+            );
         }
     }
 }

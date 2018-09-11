@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Timers;
 using MOE.Common;
 
@@ -22,208 +23,148 @@ namespace NEWDecodeandImportASC3Logs
     {
         static void Main(string[] args)
         {
-
+            var appSettings = ConfigurationManager.AppSettings;
             List<string> dirList = new List<string>();
-            List<string> fileList = new List<string>();
-            string CWD = Properties.Settings.Default.ASC3LogsPath;
-            string CSV = Properties.Settings.Default.CSVOutPAth;
-
-            //var tableCollection = new BlockingCollection<DataTable>();
-
-            //DataTable mergedEventsTable = new DataTable();
-            ParallelOptions options;
-
-            if (!Properties.Settings.Default.forceNonParallel)
-            {
-                options = new ParallelOptions { MaxDegreeOfParallelism = -1 };
-            }
-            else
-            {
-                if (Properties.Settings.Default.MaxThreads < 2)
-                {
-                    options = new ParallelOptions { MaxDegreeOfParallelism = 1 };
-                }
-                else
-                {
-                    options = new ParallelOptions { MaxDegreeOfParallelism = Properties.Settings.Default.MaxThreads };
-                }
-            }
-
-            foreach (string s in Directory.GetDirectories(CWD))
+            string cwd = appSettings["ASC3LogsPath"];
+            foreach (string s in Directory.GetDirectories(cwd))
             {
                 dirList.Add(s);
             }
-
-
             SimplePartitioner<string> sp = new SimplePartitioner<string>(dirList);
-            //foreach (string dir in dirList)
-
-            ParallelOptions optionsMain = new ParallelOptions { MaxDegreeOfParallelism = Properties.Settings.Default.MaxThreadsMain };
+            ParallelOptions optionsMain = new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreadsMain"]) };
             Parallel.ForEach(sp, optionsMain, dir =>
-                      {
-                          var ToDelete = new ConcurrentBag<string>();
-
-                          if (Properties.Settings.Default.WriteToConsole)
-                          {
-                              Console.WriteLine("-----------------------------Starting Signal " + dir);
-                          }
-
-
-                          //get the name of the directory and casting it to an int
-                          //This is the only way the program knows the signal number of the controller.
-                          string[] strsplit = dir.Split(new char[] { '\\' });
-                          string dirname = strsplit.Last();
-                          string sigid = dirname;
-                          var mergedEventsTable = new BlockingCollection<MOE.Common.Data.MOE.Controller_Event_LogRow>();
-
-                          //SimplePartitioner<string> sp2 = new SimplePartitioner<string>(Directory.GetFiles(dir, "*.dat"));
-                          //Parallel.ForEach(sp2, options, s =>
-                          foreach(var s in Directory.GetFiles(dir, "*.dat"))
-                                {
-
-
-
-                                    try
-                                    {
-                                        MOE.Common.Business.LogDecoder.ASC3Decoder.DecodeASC3File(s, sigid, mergedEventsTable);
-
-                                        ToDelete.Add(s);
-
-                                    }
-
-                                    catch { }
-
-
-                                }
-                          //);
-
-
-
-
-                          MOE.Common.Data.MOE.Controller_Event_LogDataTable elTable = new MOE.Common.Data.MOE.Controller_Event_LogDataTable();
-
-                          UniqueConstraint custUnique =
-                          new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalID"],
-                                                    elTable.Columns["Timestamp"],
-                                                    elTable.Columns["EventCode"],
-                                                    elTable.Columns["EventParam"]
-                                            });
-
-                          elTable.Constraints.Add(custUnique);
-
-                          //mergedEventsTable.CopyToDataTable(elTable, LoadOption.PreserveChanges);
-
-                          foreach (var r in mergedEventsTable)
-                          {
-                              try
-                              {
-                                  elTable.AddController_Event_LogRow(r);
-                              }
-                              catch { }
-                          }
-
-                          mergedEventsTable.Dispose();
-
-                              string connectionString = Properties.Settings.Default.SPMConnectionString;
-                              string destTable = Properties.Settings.Default.DestinationTableNAme;
-
-
-                              MOE.Common.Business.BulkCopyOptions Options = new MOE.Common.Business.BulkCopyOptions(connectionString, destTable,
-                                  Properties.Settings.Default.WriteToConsole, Properties.Settings.Default.forceNonParallel, Properties.Settings.Default.MaxThreads, Properties.Settings.Default.DeleteFile,
-                                  Properties.Settings.Default.EarliestAcceptableDate, Properties.Settings.Default.BulkCopyBatchSize, Properties.Settings.Default.BulkCopyTimeOut);
-
-
-
-                              if (elTable.Count > 0)
-                              {
-
-
-                                  if (MOE.Common.Business.Signal.BulktoDB(elTable, Options) && Properties.Settings.Default.DeleteFile)
-                                  {
-
-
-                                      DeleteFiles(ToDelete);
-                                  }
-                                  //string filename = sigid.ToString();
-                                  //filename += "_";
-                                  //filename += DateTime.Now.Month.ToString();
-                                  //filename += "_";
-                                  //filename += DateTime.Now.Day.ToString();
-                                  //filename += "_";
-                                  //filename += DateTime.Now.Year.ToString();
-                                  //filename += "_";
-                                  //filename += DateTime.Now.Hour.ToString();
-                                  //filename += "_";
-                                  //filename += DateTime.Now.Minute.ToString();
-                                  //filename += "_";
-                                  //filename += DateTime.Now.Second.ToString();
-                                  //filename += ".csv";
-
-                                  //SaveAsCSV(EventsTable, Path.Combine(CSV, filename));
-                                  //if (Properties.Settings.Default.DeleteFile)
-                                  //{
-                                  //    DeleteFiles(ToDelete);
-                                  //}
-                              }
-
-                              else
-                              {
-
-                                  ConcurrentBag<String> td = new ConcurrentBag<String>();
-
-                                  foreach (string s in ToDelete)
-                                  {
-
-                                      if (s.Contains("1970_01_01"))
-                                      {
-                                          td.Add(s);
-                                      }
-                                  }
-
-                                  if (td.Count > 0)
-                                  {
-                                      DeleteFiles(td);
-                                  }
-
-
-                              }
-                          
-
-
-
-                      }
-
-                          );
-
-
-
+            {
+                var toDelete = new ConcurrentBag<string>();
+                var mergedEventsTable = new BlockingCollection<MOE.Common.Data.MOE.Controller_Event_LogRow>();
+                if (Convert.ToBoolean(appSettings["WriteToConsole"]))
+                {
+                    Console.WriteLine("-----------------------------Starting Signal " + dir);
+                }
+                string signalId;
+                string[] fileNames;
+                GetFileNamesAndSignalId(dir, out signalId, out fileNames);
+                foreach (var fileName in fileNames)
+                {
+                    try
+                    {
+                        MOE.Common.Business.LogDecoder.Asc3Decoder.DecodeAsc3File(fileName, signalId,
+                            mergedEventsTable, Convert.ToDateTime(appSettings["EarliestAcceptableDate"]));
+                        toDelete.Add(fileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+                MOE.Common.Data.MOE.Controller_Event_LogDataTable elTable = CreateDataTableForImport();
+                AddEventsToImportTable(mergedEventsTable, elTable);
+                mergedEventsTable.Dispose();
+                BulkImportRecordsAndDeleteFiles(appSettings, toDelete, elTable);
+            });
         }
 
+        private static void GetFileNamesAndSignalId(string dir, out string signalId, out string[] fileNames)
+        {
+            string[] strsplit = dir.Split(new char[] { '\\' });
+            signalId = strsplit.Last();
+            fileNames = Directory.GetFiles(dir, "*.dat");
+        }
 
+        private static void BulkImportRecordsAndDeleteFiles(NameValueCollection appSettings, ConcurrentBag<string> toDelete, MOE.Common.Data.MOE.Controller_Event_LogDataTable elTable)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+            string destTable = appSettings["DestinationTableNAme"];
+            MOE.Common.Business.BulkCopyOptions options = new MOE.Common.Business.BulkCopyOptions(connectionString, destTable,
+                Convert.ToBoolean(appSettings["WriteToConsole"]),
+                Convert.ToBoolean(appSettings["forceNonParallel"]),
+                Convert.ToInt32(appSettings["MaxThreads"]),
+                Convert.ToBoolean(appSettings["DeleteFile"]),
+                Convert.ToDateTime(appSettings["EarliestAcceptableDate"]),
+                Convert.ToInt32(appSettings["BulkCopyBatchSize"]),
+                Convert.ToInt32(appSettings["BulkCopyTimeOut"]));
+            if (elTable.Count > 0)
+            {
+                if (MOE.Common.Business.SignalFtp.BulktoDb(elTable, options) && Convert.ToBoolean(appSettings["DeleteFile"]))
+                {
+                    DeleteFiles(toDelete);
+                }
+            }
+            else
+            {
+                ConcurrentBag<String> td = new ConcurrentBag<String>();
+                foreach (string s in toDelete)
+                {
+                    if (s.Contains("1970_01_01"))
+                    {
+                        td.Add(s);
+                    }
+                }
+                if (td.Count > 0)
+                {
+                    DeleteFiles(td);
+                }
+            }
+        }
 
-        static public bool SaveAsCSV(DataTable Datatable, string Path)
+        private static void AddEventsToImportTable(BlockingCollection<MOE.Common.Data.MOE.Controller_Event_LogRow> mergedEventsTable, MOE.Common.Data.MOE.Controller_Event_LogDataTable elTable)
+        {
+            foreach (var r in mergedEventsTable)
+            {
+                try
+                {
+                    elTable.AddController_Event_LogRow(r.SignalID, r.Timestamp, r.EventCode,
+                        r.EventParam);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        private static MOE.Common.Data.MOE.Controller_Event_LogDataTable CreateDataTableForImport()
+        {
+            MOE.Common.Data.MOE.Controller_Event_LogDataTable elTable = new MOE.Common.Data.MOE.Controller_Event_LogDataTable();
+            //UniqueConstraint custUnique =
+            //new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalId"],
+            //                            elTable.Columns["Timestamp"],
+            //                            elTable.Columns["EventCode"],
+            //                            elTable.Columns["EventParam"]
+            //                });
+
+            //elTable.Constraints.Add(custUnique);
+            return elTable;
+        }
+
+        static public bool SaveAsCsv(DataTable datatable, string path)
         {
             StringBuilder sb = new StringBuilder();
-
-            IEnumerable<string> columnNames = Datatable.Columns.Cast<DataColumn>().
-                                  Select(column => column.ColumnName);
+            IEnumerable<string> columnNames = datatable.Columns.Cast<DataColumn>().Select(column => column.ColumnName);
             sb.AppendLine(string.Join(",", columnNames));
-
-            foreach (DataRow row in Datatable.Rows)
+            foreach (DataRow row in datatable.Rows)
             {
                 IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
                 sb.AppendLine(string.Join(",", fields));
             }
-
-            File.WriteAllText(Path, sb.ToString());
+            File.WriteAllText(path, sb.ToString());
             return true;
         }
 
-        public static void DeleteFiles(ConcurrentBag<string> Files)
+        public static void DeleteFiles(ConcurrentBag<string> files)
         {
-            foreach (string f in Files)
+            foreach (string f in files)
             {
-                File.Delete(f);
+                try
+                {
+                    if (File.Exists(f))
+                    {
+                        File.Delete(f);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
         }
     }

@@ -22,7 +22,7 @@ namespace MOE.Common.Business
         /// <summary>
         ///     Constructor used for Phase Termination Chart
         /// </summary>
-        /// <param name="phasenumber"></param>
+        /// <param name="phaseNumber"></param>
         /// <param name="terminationeventstable"></param>
         /// <param name="consecutiveCount"></param>
         public AnalysisPhase(int phasenumber, List<Controller_Event_Log> terminationeventstable, int consecutiveCount)

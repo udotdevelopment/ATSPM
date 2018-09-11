@@ -61,6 +61,7 @@ function AddNewVersion() {
         },
         complete:function() {
             LoadVersionByVersionID(newVersionId);
+            SetDatePicker();
         },
         statusCode: {
             404: function (content) { alert('cannot find resource'); },
@@ -304,9 +305,14 @@ function CreateNewSignal() {
         async: true,
         url: urlpathCreateSignal + "/" + newSignalID,
         headers: GetRequestVerificationTokenObject(),
-        success: function (data) {
+        success: function(data) {
             $('#SignalEdit').html(data);
             SetSignalID(newSignalID);
+        },
+        complete: function () {
+            var startDate = $("#Start")[0].defaultValue;
+            SetDatePicker();
+            $("#Start").val(startDate);
         },
         statusCode: {
             404: function (content) { alert('cannot find resource'); },

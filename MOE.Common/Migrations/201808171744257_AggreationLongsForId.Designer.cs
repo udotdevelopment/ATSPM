@@ -7,13 +7,13 @@ namespace MOE.Common.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class shrink : IMigrationMetadata
+    public sealed partial class AggreationLongsForId : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(shrink));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AggreationLongsForId));
         
         string IMigrationMetadata.Id
         {
-            get { return "201805112004498_shrink"; }
+            get { return "201808171744257_AggreationLongsForId"; }
         }
         
         string IMigrationMetadata.Source

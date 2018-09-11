@@ -616,7 +616,6 @@
     <Content Include="Views\AggregateDataExport\Index.cshtml" />
     <Content Include="Views\AggregateDataExport\GetRouteSignals.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterSignal.cshtml" />
-    <Content Include="Views\ArchiveSettings\IndexOld.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterApproach.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDetector.cshtml" />
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterDirection.cshtml" />

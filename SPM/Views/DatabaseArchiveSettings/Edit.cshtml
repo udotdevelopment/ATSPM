@@ -31,7 +31,7 @@
         <div id="EnabledArchiveSettings" class="">
             
 
-            <div class="form-group">
+            @*<div class="form-group">
                 @Html.LabelFor(model => model.DatabaseArchiveSettings.SelectedTableScheme, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.EnumDropDownListFor(model => model.DatabaseArchiveSettings.SelectedTableScheme, "Select a Table Scheme", new { @onchange = "ShowDeleteMoveOptions()", @class = "form-control"})
@@ -45,7 +45,7 @@
                     @Html.EditorFor(model => model.DatabaseArchiveSettings.MonthsToKeepIndex, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.MonthsToKeepIndex, "", new { @class = "text-danger" })
                 </div>
-            </div>
+            </div>*@
 
             <div class="form-group">
                 @Html.LabelFor(model => model.DatabaseArchiveSettings.MonthsToKeepData, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -57,7 +57,7 @@
 
                     
 
-            <div class="form-group">
+            @*<div class="form-group">
                 @Html.LabelFor(model => model.DatabaseArchiveSettings.SelectedDeleteOrMove, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.EnumDropDownListFor(model => model.DatabaseArchiveSettings.SelectedDeleteOrMove, "Select An Action", new { @onchange = "ShowDeleteMoveOptions()", @class = "form-control" })
@@ -72,8 +72,8 @@
                         @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.ArchivePath, "", new { @class = "text-danger" })
                     </div>
                 </div>
-            </div>
-            <div id="DeleteForStandardTable"class="hidden">
+            </div>*@
+            @*<div id="DeleteForStandardTable"class="hidden">
                 <div class="form-group">
                     @Html.LabelFor(model => model.DatabaseArchiveSettings.NumberOfRows, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -97,7 +97,7 @@
                         @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.TimeDuration, "", new { @class = "text-danger" })
                     </div>
                 </div>
-            </div>
+            </div>*@
         </div>
         <div class="col-md-6">
             @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
@@ -128,7 +128,7 @@
         var urlpathAddSignal = '@Url.Action("AddSignal", "DatabaseArchiveSettings")';
         var urlpathRemoveSignal = '@Url.Action("RemoveSignal", "DatabaseArchiveSettings")';
         var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';
-        var urlpathMapIcon = '@Url.Action("orangePin-Copy.png", "Images")';
+        var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';
 
     </script>
 }

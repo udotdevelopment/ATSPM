@@ -318,11 +318,11 @@ namespace MOE.Common.Migrations
             //    c => new
             //        {
             //            Timestamp = c.DateTime(nullable: false),
-            //            SignalID = c.String(nullable: false, maxLength: 10),
+            //            SignalId = c.String(nullable: false, maxLength: 10),
             //            EventCode = c.Int(nullable: false),
             //            EventParam = c.Int(nullable: false),
             //        })
-            //    .PrimaryKey(t => new { t.Timestamp, t.SignalID, t.EventCode, t.EventParam });
+            //    .PrimaryKey(t => new { t.Timestamp, t.SignalId, t.EventCode, t.EventParam });
 
             CreateTable(
                     "dbo.Controller_Type",
@@ -467,31 +467,31 @@ namespace MOE.Common.Migrations
 
         public override void Down()
         {
-            //DropForeignKey("dbo.Lastupdate", "SignalID", "dbo.Signals");
-            //DropForeignKey("dbo.Graph_Detectors", "SignalID", "dbo.Signals");
+            //DropForeignKey("dbo.Lastupdate", "SignalId", "dbo.Signals");
+            //DropForeignKey("dbo.Graph_Detectors", "SignalId", "dbo.Signals");
             //DropForeignKey("dbo.Route_Detectors", "DetectorID", "dbo.Graph_Detectors");
             //DropForeignKey("dbo.Detector_Error", "DetectorID", "dbo.Graph_Detectors");
             //DropForeignKey("dbo.Detector_Comment", "DetectorID", "dbo.Graph_Detectors");
-            //DropForeignKey("dbo.ApproachRouteDetail", "SignalID", "dbo.Signals");
+            //DropForeignKey("dbo.ApproachRouteDetail", "SignalId", "dbo.Signals");
             //DropForeignKey("dbo.ApproachRouteDetail", "RouteId", "dbo.Route");
-            //DropForeignKey("dbo.Action_Log", "SignalID", "dbo.Signals");
+            //DropForeignKey("dbo.Action_Log", "SignalId", "dbo.Signals");
             //DropForeignKey("dbo.Action_Log_Metrics", "Action_Log_Id", "dbo.Action_Log");
             //DropForeignKey("dbo.Action_Log_Metrics", "Metric_Id", "dbo.Action_Log_Metric_List");
             //DropForeignKey("dbo.Action_Log", "Agency", "dbo.Action_Log_Agency_List");
             //DropForeignKey("dbo.Action_Log_Actions", "Action_Log_Id", "dbo.Action_Log");
             //DropForeignKey("dbo.Action_Log_Actions", "Action_Id", "dbo.Action_Log_Action_List");
-            //DropIndex("dbo.Lastupdate", new[] { "SignalID" });
+            //DropIndex("dbo.Lastupdate", new[] { "SignalId" });
             //DropIndex("dbo.Route_Detectors", new[] { "DetectorID" });
             //DropIndex("dbo.Detector_Error", new[] { "DetectorID" });
             //DropIndex("dbo.Detector_Comment", new[] { "DetectorID" });
-            //DropIndex("dbo.Graph_Detectors", new[] { "SignalID" });
-            //DropIndex("dbo.ApproachRouteDetail", new[] { "SignalID" });
+            //DropIndex("dbo.Graph_Detectors", new[] { "SignalId" });
+            //DropIndex("dbo.ApproachRouteDetail", new[] { "SignalId" });
             //DropIndex("dbo.ApproachRouteDetail", new[] { "RouteId" });
             //DropIndex("dbo.Action_Log_Metrics", new[] { "Metric_Id" });
             //DropIndex("dbo.Action_Log_Metrics", new[] { "Action_Log_Id" });
             //DropIndex("dbo.Action_Log_Actions", new[] { "Action_Id" });
             //DropIndex("dbo.Action_Log_Actions", new[] { "Action_Log_Id" });
-            //DropIndex("dbo.Action_Log", new[] { "SignalID" });
+            //DropIndex("dbo.Action_Log", new[] { "SignalId" });
             //DropIndex("dbo.Action_Log", new[] { "Agency" });
             //DropTable("dbo.SPM_Error");
             //DropTable("dbo.Comment");

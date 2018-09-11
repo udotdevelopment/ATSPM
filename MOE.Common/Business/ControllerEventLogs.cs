@@ -9,9 +9,9 @@ namespace MOE.Common.Business
     {
         private readonly SPM db = new SPM();
 
-        public ControllerEventLogs(string signalID, DateTime startDate, DateTime endDate)
+        public ControllerEventLogs(string signalId, DateTime startDate, DateTime endDate)
         {
-            SignalId = signalID;
+            SignalId = signalId;
             StartDate = startDate;
             EndDate = endDate;
             EventCodes = new List<int>();
@@ -58,7 +58,8 @@ namespace MOE.Common.Business
                 select s;
 
             Events = events.ToList();
-            Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
+            Events = Events.OrderBy(e => e.Timestamp).ThenBy(e => e.EventCode).ToList();
+            //Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
         }
 
         public string SignalId { get; }
@@ -87,10 +88,10 @@ namespace MOE.Common.Business
             OrderEventsBytimestamp();
         }
 
-        public void Add105Events(string signalID, DateTime startDate, DateTime endDate)
+        public void Add105Events(string signalId, DateTime startDate, DateTime endDate)
         {
             var events = (from s in db.Controller_Event_Log
-                where s.SignalID == signalID &&
+                where s.SignalID == signalId &&
                       s.Timestamp >= startDate &&
                       s.Timestamp <= endDate &&
                       (s.EventCode == 105 || s.EventCode == 111)

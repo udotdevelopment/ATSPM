@@ -212,7 +212,7 @@ namespace DecodeTrafficwareLogs
                 {
                     DataTable elTable = new DataTable();
 
-                    elTable.Columns.Add("SignalID", typeof(String));
+                    elTable.Columns.Add("SignalId", typeof(String));
                     elTable.Columns.Add("Timestamp", typeof(DateTime));
                     elTable.Columns.Add("EventCode", typeof(Int32));
                     elTable.Columns.Add("EventParam", typeof(Int32));
@@ -377,7 +377,7 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
                                   
 
                     //the Signal class has a static methos to insert the tableinto the DB.  We are using that.
-                    MOE.Common.Business.Signal.BulktoDB(elTable, Options);
+                    MOE.Common.Business.SignalFtp.BulktoDb(elTable, Options);
 
                     elapsedTime = endTime - startTime;
 

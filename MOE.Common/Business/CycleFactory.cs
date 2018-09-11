@@ -66,6 +66,9 @@ namespace MOE.Common.Business
                 // overlap green
                 case 61:
                     return RedToRedCycle.EventType.ChangeToGreen;
+
+                case 66:
+                    return RedToRedCycle.EventType.ChangeToGreen;
                 case 8:
                     return RedToRedCycle.EventType.ChangeToYellow;
                 // overlap yellow
@@ -116,7 +119,7 @@ namespace MOE.Common.Business
             if (getPermissivePhase)
             {
                 var cycleEventNumbers = approach.IsPermissivePhaseOverlap
-                    ? new List<int> {61, 63, 64}
+                    ? new List<int> {61, 63, 64, 66}
                     : new List<int> {1, 8, 9};
                 cycleEvents = celRepository.GetEventsByEventCodesParam(approach.SignalID, startDate,
                     endDate, cycleEventNumbers, approach.PermissivePhaseNumber.Value);
@@ -127,7 +130,7 @@ namespace MOE.Common.Business
             else
             {
                 var cycleEventNumbers = approach.IsProtectedPhaseOverlap
-                    ? new List<int> {61, 63, 64}
+                    ? new List<int> {61, 63, 64,66}
                     : new List<int> {1, 8, 9};
                 cycleEvents = celRepository.GetEventsByEventCodesParam(approach.SignalID, startDate,
                     endDate, cycleEventNumbers, approach.ProtectedPhaseNumber);

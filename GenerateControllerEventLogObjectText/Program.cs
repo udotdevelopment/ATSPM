@@ -17,7 +17,7 @@ namespace GenerateControllerEventLogObjectText
             List<MOE.Common.Models.Controller_Event_Log> controllerEventLogs = new List<Controller_Event_Log>();
             System.Data.SqlClient.SqlConnectionStringBuilder builder =
                 new System.Data.SqlClient.SqlConnectionStringBuilder();
-            builder["Data Source"] = "srwtcmoe";
+            builder["Data Source"] = "spmserver";
             builder["Password"] = "dontshareme";
             builder["Persist Security Info"] = true;
             builder["User ID"] = "datareader";

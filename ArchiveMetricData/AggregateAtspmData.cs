@@ -1,15 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.Data;
-using System.Data.Entity.Core.Common.CommandTrees;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
-using MOE.Common.Models;
-using MOE.Common.Models.Repositories;
 
 namespace AggregateATSPMData
 {

@@ -23,7 +23,7 @@ namespace MOE.Common.Models.ViewModel
         public List<DateTime> SelectedStartDate { get; set; }
 
         [Required]
-        public DateTime SelectedEndDate { get; set; }
+        public DateTime? SelectedEndDate { get; set; }
 
         public DateTime EndDate { get; set; }
     }

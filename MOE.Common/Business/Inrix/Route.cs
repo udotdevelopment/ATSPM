@@ -150,7 +150,7 @@ namespace MOE.Common.Business.Inrix
             //routesTA.DeleteRouteFromRouteMembers(this.ID);
             //int x = 0;
             ////add new segmetns to DB in order
-            //foreach (Segment segment in this.Items)
+            //foreach (Segment segment in this.PhaseCycles)
             //{     
             //    x++;
             //   routesTA.InsertRouteMembers(this.ID, segment.ID, x);

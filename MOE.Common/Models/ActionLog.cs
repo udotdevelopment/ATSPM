@@ -10,7 +10,7 @@ namespace MOE.Common.Models
         public int ActionLogID { get; set; }
 
         [Required]
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         [Required]
         public int AgencyID { get; set; }

@@ -53,7 +53,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Approach;
             options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -96,7 +96,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Approach;
             options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -149,7 +149,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Approach;
             options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -192,7 +192,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Approach;
             options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -245,7 +245,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Approach;
             options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -288,7 +288,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Approach;
             options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/17/2017"),
@@ -342,7 +342,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("11/1/2017");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Approach;
             options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -385,7 +385,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("11/1/2017");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Approach;
             options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("10/1/2017"),
@@ -438,7 +438,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Approach;
             options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -481,7 +481,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Approach;
             options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2017"),
@@ -534,7 +534,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Approach;
             options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),
@@ -577,7 +577,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions(); options.SeriesWidth = 3;
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("1/1/2018");
-            options.SelectedXAxisType = XAxisType.Phase;
+            options.SelectedXAxisType = XAxisType.Approach;
             options.SelectedSeries = SeriesType.PhaseNumber;
             options.TimeOptions = new BinFactoryOptions(
                 Convert.ToDateTime("1/1/2016"),

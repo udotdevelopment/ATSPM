@@ -41,6 +41,8 @@ namespace MOE.Common.Business
 
             DistanceFromStopBar = distancefromstopbar;
 
+            DistanceFromStopBar = distancefromstopbar;
+
             GetSpeedTable(detID, startDate, endDate);
 
             GetAverageSpeeds(startDate, endDate, binSize, minspeedfilter, MovementDelay, decisionpoint, signalId,
@@ -69,10 +71,10 @@ namespace MOE.Common.Business
 
 
         private void GetAverageSpeeds(DateTime startDate, DateTime endDate, int binSize, int minSpeedFilter,
-            int movementDelay, int decisionPoint, string signalId, int eventData1)
+            int movementDelay, int decisionPoint, string signalId, int phaseNumber)
         {
             var signaltable =
-                new ControllerEventLogs(signalId, startDate, endDate, eventData1, new List<int> {1, 8, 10});
+                new ControllerEventLogs(signalId, startDate, endDate, phaseNumber, new List<int> {1, 8, 10});
 
             AvgSpeeds = new SpeedExportAvgSpeedCollection(startDate, endDate, binSize,
                 minSpeedFilter, Cycles);

@@ -35,6 +35,7 @@ namespace MOE.Common.Models.ViewModel
         public int? RecordCountLimit { get; set; }
         public string EnumerationsName { get; set; }
         public string EnumerationsUrl { get; set; }
+        [Required]
         public SignalSearchViewModel SignalSearch { get; set; }
         public string RecaptchaPublicKey { get; set; }
         public string RecaptchaMessage { get; set; }

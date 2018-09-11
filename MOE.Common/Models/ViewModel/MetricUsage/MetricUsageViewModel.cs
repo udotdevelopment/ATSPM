@@ -8,11 +8,11 @@ namespace MOE.Common.Models.ViewModel.MetricUsage
     {
         [Required]
         [DataType(DataType.Date)]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         public List<MetricType> MetricTypes { get; set; }
     }

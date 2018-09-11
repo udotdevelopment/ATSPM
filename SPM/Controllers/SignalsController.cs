@@ -259,6 +259,7 @@ namespace SPM.Controllers
                 try
                 {
                     _signalsRepository.AddOrUpdate(signal);
+                    signal.VersionList = new List<Signal>{signal};
                 }
                 catch (Exception ex)
                 {
@@ -286,10 +287,11 @@ namespace SPM.Controllers
             signal.Longitude = "0";
             signal.RegionID = 2;
             signal.ControllerTypeID = 1;
-            signal.Start = DateTime.MaxValue;          
+            signal.Start = DateTime.Today;          
             signal.Note = "Create New";
             signal.Enabled = true;
             signal.VersionList = new List<Signal>();
+            signal.VersionActionId = 1;
             return signal;
         }
                 
@@ -451,7 +453,7 @@ namespace SPM.Controllers
 
 
         // GET: Signals/Edit/5
-        [Authorize(Roles = "Admin, Configuration")]
+        [Authorize(Roles = "Admin, Configuration, Technician")]
         public ActionResult EditVersion(string Id)
         {
             if (Id == null)

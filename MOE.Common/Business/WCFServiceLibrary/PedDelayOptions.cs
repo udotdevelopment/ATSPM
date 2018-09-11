@@ -35,7 +35,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 if (p.Cycles.Count > 0)
                 {
                     var pdc = new PEDDelayChart(this, p);
-                    var chart = pdc.chart;
+                    var chart = pdc.Chart;
                     var chartName = CreateFileName();
                     chart.SaveImage(MetricFileLocation + chartName);
                     ReturnList.Add(MetricWebPath + chartName);
