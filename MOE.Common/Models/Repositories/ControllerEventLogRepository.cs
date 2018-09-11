@@ -10,7 +10,6 @@ namespace MOE.Common.Models.Repositories
     {
         private readonly SPM _db = new SPM();
 
-
         public ControllerEventLogRepository()
         {
             _db.Database.CommandTimeout = 180;
@@ -44,7 +43,7 @@ namespace MOE.Common.Models.Repositories
 
         public List<Controller_Event_Log> GetAllAggregationCodes(string signalId, DateTime startTime, DateTime endTime)
         {
-            var codes = new List<int> {150, 114, 113, 112, 105, 102, 1};
+            var codes = new List<int> { 150, 114, 113, 112, 105, 102, 1 };
             var records = _db.Controller_Event_Log
                 .Where(c => c.SignalID == signalId && c.Timestamp >= startTime && c.Timestamp <= endTime &&
                             codes.Contains(c.EventCode))
@@ -56,12 +55,12 @@ namespace MOE.Common.Models.Repositories
             DateTime startTime, DateTime endTime, int detectorChannel)
         {
             var count = (from cel in _db.Controller_Event_Log
-                where cel.Timestamp >= startTime
-                      && cel.Timestamp < endTime
-                      && cel.SignalID == signalId
-                      && cel.EventParam == detectorChannel
-                      && cel.EventCode == 82
-                select cel).Count();
+                         where cel.Timestamp >= startTime
+                               && cel.Timestamp < endTime
+                               && cel.SignalID == signalId
+                               && cel.EventParam == detectorChannel
+                               && cel.EventCode == 82
+                         select cel).Count();
             return count;
         }
 
@@ -74,9 +73,10 @@ namespace MOE.Common.Models.Repositories
 
             var tmcChannels = new List<int>();
             foreach (var gd in graphDetectors)
-            foreach (var dt in gd.DetectionTypes)
-                if (dt.DetectionTypeID == 4)
-                    tmcChannels.Add(gd.DetChannel);
+                foreach (var dt in gd.DetectionTypes)
+                    if (dt.DetectionTypeID == 4)
+                        tmcChannels.Add(gd.DetChannel);
+
 
             double count = (from cel in _db.Controller_Event_Log
                             where cel.Timestamp >= startDate
@@ -251,12 +251,12 @@ namespace MOE.Common.Models.Repositories
             try
             {
                 var events = (from s in _db.Controller_Event_Log
-                             where s.SignalID == signalId &&
-                                   s.Timestamp >= startTime &&
-                                   s.Timestamp <= endTime &&
-                                   s.EventParam == param &&
-                                   eventCodes.Contains(s.EventCode)
-                             select s).ToList();
+                              where s.SignalID == signalId &&
+                                    s.Timestamp >= startTime &&
+                                    s.Timestamp <= endTime &&
+                                    s.EventParam == param &&
+                                    eventCodes.Contains(s.EventCode)
+                              select s).ToList();
                 events = events.OrderBy(e => e.Timestamp).ThenBy(e => e.EventParam).ToList();
                 return events;
             }
@@ -533,54 +533,17 @@ namespace MOE.Common.Models.Repositories
         public DateTime GetMostRecentRecordTimestamp(string signalID)
         {
             MOE.Common.Models.Controller_Event_Log row = (from r in _db.Controller_Event_Log
-                where r.SignalID == signalID
-                orderby r.Timestamp descending
-                select r).Take(1).FirstOrDefault();
+                                                          where r.SignalID == signalID
+                                                          orderby r.Timestamp descending
+                                                          select r).Take(1).FirstOrDefault();
             if (row != null)
             {
-                var tempDate = date.AddDays(-1);
-                var lastEvent = _db.Controller_Event_Log.Where(c => c.SignalID == signalId &&
-                                                                    c.Timestamp >= tempDate &&
-                                                                    c.Timestamp < date &&
-                                                                    c.EventCode == eventCode &&
-                                                                    c.EventParam == eventParam)
-                    .OrderByDescending(c => c.Timestamp).FirstOrDefault();
-                return lastEvent;
+                return row.Timestamp;
             }
-            catch (Exception ex)
+            else
             {
-                var logRepository = ApplicationEventRepositoryFactory.Create();
-                var e = new ApplicationEvent();
-                e.ApplicationName = "MOE.Common";
-                e.Class = GetType().ToString();
-                e.Function = "GetEventsByEventCodesParamWithOffsetAndLatencyCorrection";
-                e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
-                e.Description = ex.Message;
-                e.Timestamp = DateTime.Now;
-                logRepository.Add(e);
-                return null;
+                return new DateTime();
             }
-        }
-
-        public int GetSignalEventsCountBetweenDates(string signalId, DateTime startTime, DateTime endTime)
-        {
-            return _db.Controller_Event_Log.Count(r => r.SignalID == signalId &&
-                                                r.Timestamp >= startTime
-                                                && r.Timestamp < endTime);
-        }
-
-        public int GetApproachEventsCountBetweenDates(int approachId, DateTime startTime, DateTime endTime,
-            int phaseNumber)
-        {
-            var approachCodes = new List<int> {1, 8, 10};
-            var ar = ApproachRepositoryFactory.Create();
-            Approach approach = ar.GetApproachByApproachID(approachId);
-
-            var results = _db.Controller_Event_Log.Where(r =>
-                r.SignalID == approach.SignalID && r.Timestamp > startTime && r.Timestamp < endTime
-                && approachCodes.Contains(r.EventCode) && r.EventParam == phaseNumber);
-
-            return results.Count();
         }
     }
 }
