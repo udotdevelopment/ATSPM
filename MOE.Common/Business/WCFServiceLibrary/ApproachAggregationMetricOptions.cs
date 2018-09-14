@@ -329,7 +329,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void GetTimeOfDayXAxisDirectionSeriesChart(Models.Signal signal, Chart chart)
         {
-            SetTimeOfDayXAxisMinimum(chart);
+            SetTimeXAxisAxisMinimum(chart);
             var availableDirections = signal.GetAvailableDirections();
             var seriesList = new ConcurrentBag<Series>();
             Parallel.For(0, availableDirections.Count, i => // foreach (var signal in signals)

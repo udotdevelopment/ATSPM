@@ -42,12 +42,13 @@ namespace MOE.Common.Business
             ActivationsDuringRed = detectorActivations.Where
                 //detStart AFTER redStart and Before red+AnalaysTime
                 (d => d.DetectorOn >= RedEvent && d.DetectorOn < redPeriodToAnalyze
+                || d.DetectorOn >= RedEvent && d.DetectorOff > redPeriodToAnalyze
 
                       //detOff After redStart and Before red+AnalaysTime
                       || d.DetectorOff >= RedEvent && d.DetectorOff < redPeriodToAnalyze
 
                       //DetStart BEFORE redStart and detOff after cycleEnd
-                      || d.DetectorOn <= RedEvent && d.DetectorOff >= EndTime).OrderBy(d => d.DetectorOn).ToList();
+                      || d.DetectorOn <= RedEvent && d.DetectorOff >= redPeriodToAnalyze).OrderBy(d => d.DetectorOn).ToList();
             if (ActivationsDuringRed.Count == 0)
             {
                 RedOccupancyTimeInMilliseconds = CheckForDetectorActivationBiggerThanPeriod(RedEvent, redPeriodToAnalyze, detectorActivations);
@@ -79,7 +80,7 @@ namespace MOE.Common.Business
             List<SplitFailDetectorActivation> detectorActivations)
         {
             if (detectorActivations.Count(d => d.DetectorOn < startTime &&  d.DetectorOff > endTime) > 0)
-                return (endTime - startTime).Milliseconds;
+                return (endTime - startTime).TotalMilliseconds;
             return 0;
         }
 
@@ -88,13 +89,17 @@ namespace MOE.Common.Business
         {
             double occupancy = 0;
             foreach (var detectorActivation in cycleDetectorActivations)
+                //Starts before period and ends after period
                 if (detectorActivation.DetectorOn <= start && detectorActivation.DetectorOff >= end)
                     occupancy += (end - start).TotalMilliseconds;
-                else if (detectorActivation.DetectorOn <= start && detectorActivation.DetectorOff <= end)
+                //Ends in period
+                else if (detectorActivation.DetectorOn <= start && detectorActivation.DetectorOff >= start && detectorActivation.DetectorOff <= end)
                     occupancy += (detectorActivation.DetectorOff - start).TotalMilliseconds;
-                else if (detectorActivation.DetectorOn >= start && detectorActivation.DetectorOff >= end)
+                //Starts in period ends after period
+                else if (detectorActivation.DetectorOn >= start && detectorActivation.DetectorOn <= end && detectorActivation.DetectorOff >= end)
                     occupancy += (end - detectorActivation.DetectorOn).TotalMilliseconds;
-                else
+                //Starts and ends within period and ends within period
+                else if (detectorActivation.DetectorOn >= start && detectorActivation.DetectorOn <= end)
                     occupancy += detectorActivation.DurationInMilliseconds;
             return occupancy;
         }

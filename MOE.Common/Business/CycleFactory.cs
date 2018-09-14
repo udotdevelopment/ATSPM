@@ -145,7 +145,7 @@ namespace MOE.Common.Business
             if (getPermissivePhase)
             {
                 var cycleEventNumbers = approach.IsPermissivePhaseOverlap
-                    ? new List<int> {61, 63, 64}
+                    ? new List<int> {61, 63, 64, 66}
                     : new List<int> {1, 8, 9};
                 var eventsAfterEndDate = celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
                     endDate, cycleEventNumbers, approach.PermissivePhaseNumber.Value, 3);
@@ -155,7 +155,7 @@ namespace MOE.Common.Business
             else
             {
                 var cycleEventNumbers = approach.IsProtectedPhaseOverlap
-                    ? new List<int> {61, 63, 64}
+                    ? new List<int> {61, 63, 64, 66}
                     : new List<int> {1, 8, 9};
                 var eventsAfterEndDate = celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
                     endDate, cycleEventNumbers, approach.ProtectedPhaseNumber, 3);
