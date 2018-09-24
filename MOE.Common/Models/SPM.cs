@@ -84,8 +84,8 @@ public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedAc
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
-            //modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            Database.SetInitializer<SPM>(null);
+           
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Signal>()

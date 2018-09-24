@@ -62,27 +62,49 @@ namespace MOE.Common.Business
             var tempPlanEvents = celRepository.GetSignalEventsByEventCode(signalId, startDate, endDate, 131)
                 .OrderBy(e => e.Timestamp).ToList();
 
-            for (var x = 0; x < tempPlanEvents.Count(); x++)
-                if (x + 2 < tempPlanEvents.Count())
+            if (tempPlanEvents.Count == 2)
+            {
+
+                if (tempPlanEvents[0].EventParam == tempPlanEvents[1].EventParam)
                 {
-                    if (tempPlanEvents[x].EventParam == tempPlanEvents[x + 1].EventParam)
-                    {
-                        planEvents.Add(tempPlanEvents[x]);
-                        x++;
-                    }
-                    else
-                    {
-                        planEvents.Add(tempPlanEvents[x]);
-                    }
+                    planEvents.Add(tempPlanEvents[0]);
+
                 }
+
                 else
                 {
-                    if (tempPlanEvents.Count >= 2 && tempPlanEvents.Last().EventCode ==
-                        tempPlanEvents[tempPlanEvents.Count() - 2].EventCode)
-                        planEvents.Add(tempPlanEvents[tempPlanEvents.Count() - 2]);
-                    else
-                        planEvents.Add(tempPlanEvents.Last());
+                    planEvents.Add(tempPlanEvents[0]);
+                    planEvents.Add(tempPlanEvents[1]);
+
                 }
+
+
+            }
+
+            else
+            {
+                for (var x = 0; x < tempPlanEvents.Count(); x++)
+                    if (x + 2 < tempPlanEvents.Count())
+                    {
+                        if (tempPlanEvents[x].EventParam == tempPlanEvents[x + 1].EventParam)
+                        {
+                            planEvents.Add(tempPlanEvents[x]);
+                            x++;
+                        }
+                        else
+                        {
+                            planEvents.Add(tempPlanEvents[x]);
+                        }
+                    }
+                    else
+                    {
+                        if (tempPlanEvents.Count >= 2 && tempPlanEvents.Last().EventCode ==
+                            tempPlanEvents[tempPlanEvents.Count() - 2].EventCode)
+                            planEvents.Add(tempPlanEvents[tempPlanEvents.Count() - 2]);
+                        else
+                            planEvents.Add(tempPlanEvents.Last());
+                    }
+            }
 
             return planEvents;
         }
