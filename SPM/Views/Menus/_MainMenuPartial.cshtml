@@ -19,7 +19,7 @@ else
     {
         if (m.MenuObject.MenuName != "Admin" || (m.MenuObject.MenuName == "Admin" && m.IsAdmin))
         {
-            <li>
+            @*<li>
                 <a href="#" class="dropdown-toggle menuItem" data-toggle="dropdown">@m.MenuObject.MenuName </a>
                 <ul class="dropdown-menu multi-level">
                     @foreach (var s in m.SubMenuItems)
@@ -35,7 +35,7 @@ else
                     }
                 </ul>
 
-            </li>
+            </li>*@
             }
             else
             {

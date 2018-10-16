@@ -25,14 +25,14 @@ namespace MOE.Common.Models.ViewModel._MainMenu
             foreach (var m in _children)
                 SubMenuItems.Add(new MenuItem(m));
 
-            ExternalLinks = new List<ExternalLink>();
+            ExternalLinks = new List<ATSPM_ExternalLink>();
             if (MenuObject.MenuName == "Links")
-                ExternalLinks = db.ExternalLinks.ToList();
+                ExternalLinks = db.ATSPM_ExternalLinks.ToList();
         }
 
         public Menu MenuObject { get; set; }
         public List<MenuItem> SubMenuItems { get; set; }
-        public List<ExternalLink> ExternalLinks { get; set; }
+        public List<ATSPM_ExternalLink> ExternalLinks { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsTechnician { get; set; }
         public bool IsData { get; set; }

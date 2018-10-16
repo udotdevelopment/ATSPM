@@ -14,7 +14,7 @@ namespace SPM.Controllers
 {
     public class ActionLogsController : Controller
     {
-        private MOE.Common.Models.Repositories.IGenericRepository<Agency> agencyRepository =
+        private MOE.Common.Models.Repositories.IGenericRepository<ATSPM_Agency> agencyRepository =
               MOE.Common.Models.Repositories.AgencyRepositoryFactory.Create();
         private MOE.Common.Models.Repositories.IGenericRepository<MOE.Common.Models.Action> actionRepository =
                 MOE.Common.Models.Repositories.ActionRepositoryFactory.Create();
@@ -138,7 +138,7 @@ namespace SPM.Controllers
             MOE.Common.Models.ViewModel.MetricUsage.ChartViewModel reportData = GetChartViewModel("Agency Usage",
                 "AgencyUsage", "# of Logs by Agency", "pie");
             List<string> descriptions = new List<string>();
-            foreach(MOE.Common.Models.Agency a in agencies)
+            foreach(MOE.Common.Models.ATSPM_Agency a in agencies)
             {
                 reportData.ChartData.Add(new MOE.Common.Business.ActionLog.ChartData
                 {
@@ -302,7 +302,7 @@ namespace SPM.Controllers
         //    {
         //        return HttpNotFound();
         //    }
-        //    ViewBag.AgencyID = new SelectList(db.Agencies, "AgencyID", "Description", actionLog.AgencyID);
+        //    ViewBag.AgencyID = new SelectList(db.ATSPM_Agencies, "AgencyID", "Description", actionLog.AgencyID);
         //    ViewBag.SignalId = new SelectList(db.Signals, "SignalId", "PrimaryName", actionLog.SignalId);
         //    return View(actionLog);
         //}
@@ -320,7 +320,7 @@ namespace SPM.Controllers
         //        db.SaveChanges();
         //        return RedirectToAction("Index");
         //    }
-        //    ViewBag.AgencyID = new SelectList(db.Agencies, "AgencyID", "Description", actionLog.AgencyID);
+        //    ViewBag.AgencyID = new SelectList(db.ATSPM_Agencies, "AgencyID", "Description", actionLog.AgencyID);
         //    ViewBag.SignalId = new SelectList(db.Signals, "SignalId", "PrimaryName", actionLog.SignalId);
         //    return View(actionLog);
         //}

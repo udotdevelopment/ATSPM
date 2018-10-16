@@ -2,16 +2,16 @@
 {
     public class AgencyRepositoryFactory
     {
-        private static IGenericRepository<Agency> genericRepository;
+        private static IGenericRepository<ATSPM_Agency> genericRepository;
 
-        public static IGenericRepository<Agency> Create()
+        public static IGenericRepository<ATSPM_Agency> Create()
         {
             if (genericRepository != null)
                 return genericRepository;
             return new AgencyRepository();
         }
 
-        public static void SetMetricsRepository(IGenericRepository<Agency> newRepository)
+        public static void SetMetricsRepository(IGenericRepository<ATSPM_Agency> newRepository)
         {
             genericRepository = newRepository;
         }

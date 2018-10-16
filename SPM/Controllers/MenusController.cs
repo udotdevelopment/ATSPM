@@ -51,7 +51,7 @@ namespace SPM.Controllers
         }
 
         // GET: Menus/Create
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult Create()
         {
             return View();
@@ -62,7 +62,7 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult Create([Bind(Include = "MenuId,MenuName,Controller,Action,MenuLocation,ParentId,Application,DisplayOrder")] Menu menu)
         {
             if (ModelState.IsValid)
@@ -75,7 +75,7 @@ namespace SPM.Controllers
         }
 
         // GET: Menus/Edit/5
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -95,7 +95,7 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult Edit([Bind(Include = "MenuId,MenuName,Controller,Action,MenuLocation,ParentId,Application,DisplayOrder")] Menu menu)
         {
             if (ModelState.IsValid)
@@ -107,7 +107,7 @@ namespace SPM.Controllers
         }
 
         // GET: Menus/Delete/5
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -125,7 +125,7 @@ namespace SPM.Controllers
         // POST: Menus/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult DeleteConfirmed(int id)
         {
             menuRepository.Remove(id);

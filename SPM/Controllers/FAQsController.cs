@@ -10,7 +10,7 @@ using MOE.Common.Models;
 
 namespace SPM.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [AllowAnonymous]
     public class FAQsController : Controller
     {
         MOE.Common.Models.Repositories.IFAQRepository faqRepository =

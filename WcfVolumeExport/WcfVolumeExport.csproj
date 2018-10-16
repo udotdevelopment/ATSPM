@@ -46,13 +46,8 @@
       <HintPath>..\packages\AlexFTPS.1.1.0.27735\lib\net20\AlexPilotti.FTPS.Client.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="SharpSnmpLib.Full, Version=9.0.20328.9, Culture=neutral, PublicKeyToken=4c00852d3788e005, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lextm.SharpSnmpLib.9.0.1\lib\net45\SharpSnmpLib.Full.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SharpSnmpLib.Portable, Version=9.0.20328.9, Culture=neutral, PublicKeyToken=4c00852d3788e005, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lextm.SharpSnmpLib.9.0.1\lib\net45\SharpSnmpLib.Portable.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SharpSnmpLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=4c00852d3788e005, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lextm.SharpSnmpLib.10.0.11\lib\net452\SharpSnmpLib.dll</HintPath>
     </Reference>
     <Reference Include="SnmpSharpNet">
       <HintPath>..\packages\SnmpSharpNet.0.9.4\lib\SnmpSharpNet.dll</HintPath>
@@ -60,6 +55,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />

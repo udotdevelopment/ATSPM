@@ -64,31 +64,19 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.2\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="SharpSnmpLib">
-      <HintPath>..\..\..\FTPfromasc3\FTPfromasc3\bin\Debug\SharpSnmpLib.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpSnmpLib.Full, Version=9.0.20811.1, Culture=neutral, PublicKeyToken=4c00852d3788e005, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lextm.SharpSnmpLib.9.0.2\lib\net45\SharpSnmpLib.Full.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SharpSnmpLib.Portable, Version=9.0.20811.1, Culture=neutral, PublicKeyToken=4c00852d3788e005, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lextm.SharpSnmpLib.9.0.2\lib\net45\SharpSnmpLib.Portable.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SharpSnmpLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=4c00852d3788e005, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lextm.SharpSnmpLib.10.0.11\lib\net452\SharpSnmpLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />

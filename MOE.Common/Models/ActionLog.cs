@@ -15,7 +15,7 @@ namespace MOE.Common.Models
         [Required]
         public int AgencyID { get; set; }
 
-        public Agency Agency { get; set; }
+        public ATSPM_Agency Agency { get; set; }
 
         [StringLength(255)]
         public string Comment { get; set; }

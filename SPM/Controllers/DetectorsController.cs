@@ -23,7 +23,7 @@ namespace SPM.Controllers
 
         //Use the one in SignalsController.cs!!
         //// GET: Detectors/Copy
-        //[Authorize(Roles = "Admin")]
+        // [AllowAnonymous]
         //public ActionResult Copy(string detectorID, string mvcPath)
         //{
         //    Detector newDetector = MOE.Common.Models.Detector.CopyDetector(detectorID);
@@ -31,7 +31,7 @@ namespace SPM.Controllers
         //}
         
         // GET: Detectors/Create
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult Create(int id)
         {
             MOE.Common.Models.Detector detector = new Detector();
@@ -53,7 +53,7 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
         //[ValidateJsonAntiForgeryToken]
-        //[Authorize(Roles = "Admin")]
+        // [AllowAnonymous]
         //public ActionResult Create([Bind(Include = "LaneID, LaneNumber, DetChannel, DetectorID, DistanceFromStopBar,MinSpeedFilter,Enabled,DateAdded,DetectionTypeIDs, DetectionIDs")] Detector detectors)
         //{
         //    ModelState.Clear();
@@ -95,7 +95,7 @@ namespace SPM.Controllers
 
 
         // GET: Detectors/Delete/5
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult Delete(int id)
         {
             if (id == null)
@@ -113,7 +113,7 @@ namespace SPM.Controllers
         // POST: Detectors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public void DeleteConfirmed(int id)
         {
             detectorRepository.Remove(id);

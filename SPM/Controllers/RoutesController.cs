@@ -12,7 +12,7 @@ using MOE.Common.Models.ViewModel.RouteEdit;
 
 namespace SPM.Controllers
 {
-    [Authorize(Roles = "Configuration, Admin, Technician")]
+     [AllowAnonymous]
     public class RoutesController : Controller
     {
         MOE.Common.Models.Repositories.IRouteRepository routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
@@ -38,7 +38,7 @@ namespace SPM.Controllers
             return PartialView(route);
         }
 
-        [Authorize(Roles = "Configuration, Admin")]
+         [AllowAnonymous]
         public ActionResult Create()
         {
             Route route = new Route();
@@ -48,7 +48,7 @@ namespace SPM.Controllers
         // POST: Routes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Configuration, Admin")]
+         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,RouteName")] Route route)
@@ -63,7 +63,7 @@ namespace SPM.Controllers
         }
 
         // GET: Routes/Edit/5
-        [Authorize(Roles = "Configuration, Admin")]
+         [AllowAnonymous]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -81,7 +81,7 @@ namespace SPM.Controllers
         // POST: Routes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Configuration, Admin")]
+         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,RouteName")] Route route)
@@ -95,7 +95,7 @@ namespace SPM.Controllers
         }
 
         // GET: Routes/Delete/5
-        [Authorize(Roles = "Configuration, Admin")]
+         [AllowAnonymous]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -111,7 +111,7 @@ namespace SPM.Controllers
         }
 
         // POST: Routes/Delete/5
-        [Authorize(Roles = "Configuration, Admin")]
+         [AllowAnonymous]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

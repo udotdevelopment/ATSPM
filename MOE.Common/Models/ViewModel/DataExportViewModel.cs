@@ -51,9 +51,9 @@ namespace MOE.Common.Models.ViewModel
             MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
             EnumerationsName = "";
             EnumerationsUrl = "";
-            List <ExternalLink> ExternalLinks = new List<ExternalLink>();
-            ExternalLinks = db.ExternalLinks.ToList();
-            foreach (ExternalLink e in ExternalLinks)
+            List <ATSPM_ExternalLink> ExternalLinks = new List<ATSPM_ExternalLink>();
+            ExternalLinks = db.ATSPM_ExternalLinks.ToList();
+            foreach (ATSPM_ExternalLink e in ExternalLinks)
             {
                 if (e.Name.ToUpper().Contains("ENUMERATIONS"))
                 {

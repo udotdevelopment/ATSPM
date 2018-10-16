@@ -14,7 +14,7 @@ using SPM.Filters;
 namespace SPM.Controllers
 {
 
-    [Authorize(Roles = "Admin")]
+    [AllowAnonymous]
     public class DatabaseArchiveSettingsController : Controller
     {
 

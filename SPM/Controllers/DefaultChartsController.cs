@@ -22,13 +22,24 @@ namespace SPM.Controllers
 
         private void InitializeDatabase()
         {
+            var db = new MOE.Common.Models.SPM();
+
+            //if (!db.Database.Exists())
+            //{
+            //    db.Database.Initialize(false);
+            //    MOE.Common.Models.Custom.Seeder.Seed(db);
+            //}
+
             var config = new MOE.Common.Migrations.Configuration();
             var migrator = new DbMigrator(config);
-            var _pendingMigrations = migrator.GetPendingMigrations();//.Any();
-
+            var _pendingMigrations = migrator.GetPendingMigrations();
+            
             if (_pendingMigrations.Count() > 0)
             {
                 migrator.Update();
+                MOE.Common.Models.Custom.Seeder.Seed(db);
+
+
             }
         }
 
