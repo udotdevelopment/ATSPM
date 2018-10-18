@@ -301,6 +301,7 @@
     <Content Include="Images\close.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\Intelight_Logo_Smaller.png" />
     <Content Include="Images\NewUDOTLogo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

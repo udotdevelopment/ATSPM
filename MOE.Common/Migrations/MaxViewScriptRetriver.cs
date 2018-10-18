@@ -142,11 +142,10 @@ namespace MOE.Common.Migrations
         public static string GetCreateCELView()
         {
             var script = @"
-            IF OBJECT_ID('Controller_Event_Log', 'V') IS NULL
-            CREATE VIEW[dbo].[Controller_Event_Log]
-             AS
-           SELECT        TimeStamp AS Timestamp, Cast(DeviceId AS nvarchar(10)) AS SignalID, Cast(EventId as int) AS EventCode, cast(Parameter as int) AS EventParam
-            FROM dbo.ASCEvents";
+            CREATE VIEW [dbo].[Controller_Event_Log]
+            AS
+            SELECT        TimeStamp AS Timestamp, Cast(DeviceId AS nvarchar(10)) AS SignalID, Cast(EventId as int) AS EventCode, cast(Parameter as int) AS EventParam
+            FROM            dbo.ASCEvents;";
              return script;
 
         }

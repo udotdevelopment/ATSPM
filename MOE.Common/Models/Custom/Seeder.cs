@@ -1051,6 +1051,11 @@ While each agency should consult with their IT department for specific guideline
                 {
                     ApplicationID = 4,
                     RawDataCountLimit = 1048576,
+
+                    //ImageUrl = @"http://localhost/atspm/chartimages",
+                    //ImagePath = @"E:\temp\spmimages"
+
+
                     ImageUrl = @"http://localhost/atspm/chartimages",
                     ImagePath = @"C:\Program Files (x86)\Intelight\MaxView Server\ATSPM\web-app\chartimages"
                 }
@@ -1358,20 +1363,20 @@ While each agency should consult with their IT department for specific guideline
             catch (Exception ex)
             { }
 
-            try
-            {
-                using (var sqlconn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MV_Events"].ConnectionString))
-                {
-                    sqlconn.Open();
-                    var command = MaxViewScriptRetriver.GetCreateCELView();
-                    SqlCommand cmd = new SqlCommand(command, sqlconn);
-                    cmd.ExecuteNonQuery();
-                    sqlconn.Close();
+            //try
+            //{
+            //    using (var sqlconn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MV_Events"].ConnectionString))
+            //    {
+            //        sqlconn.Open();
+            //        var command = MaxViewScriptRetriver.GetCreateCELView();
+            //        SqlCommand cmd = new SqlCommand(command, sqlconn);
+            //        cmd.ExecuteNonQuery();
+            //        sqlconn.Close();
 
-                }
-            }
-            catch (Exception ex)
-            { }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{ }
 
 
 

@@ -94,7 +94,7 @@ public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedAc
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //Database.SetInitializer<SPM>(null);
+            Database.SetInitializer<SPM>(null);
            
             base.OnModelCreating(modelBuilder);
 
