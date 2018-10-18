@@ -13,7 +13,7 @@ namespace MOE.Common.Models.Repositories
         public ControllerEventLogRepository()
         {
             _db.Database.CommandTimeout = 180;
-           // _db.Database.Connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MV_Events"].ConnectionString;
+            _db.Database.Connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MV_Events"].ConnectionString;
         }
 
         public int GetRecordCountByParameterAndEvent(string signalId, DateTime startTime, DateTime endTime,
