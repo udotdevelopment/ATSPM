@@ -22,19 +22,20 @@ namespace MOE.Common.Migrations
                 })
                 .PrimaryKey(t => t.Id);
 
-            CreateTable(
-                    "dbo.ShrinkFileGroups",
-                    c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        FileGroupName = c.String(),
-                        CreatedTimeStamp = c.DateTime(),
-                        StartedTimesStamp = c.DateTime(),
-                        CompletedTimeStamp = c.DateTime(),
-                        FileGroupNeedsShrink = c.Boolean(),
-                        Notes = c.String(),
-                    })
-                .PrimaryKey(t => t.Id);
+            // -- I don't think I need this table now that we are not shrinking filegroups or tables.  Andre 9/10/2018
+            //CreateTable(
+            //        "dbo.ShrinkFileGroups",
+            //        c => new
+            //        {
+            //            Id = c.Int(nullable: false, identity: true),
+            //            FileGroupName = c.String(),
+            //            CreatedTimeStamp = c.DateTime(),
+            //            StartedTimesStamp = c.DateTime(),
+            //            CompletedTimeStamp = c.DateTime(),
+            //            FileGroupNeedsShrink = c.Boolean(),
+            //            Notes = c.String(),
+            //        })
+            //    .PrimaryKey(t => t.Id);
 
             CreateTable(
                     "dbo.StatusOfProcessedTables",
@@ -100,6 +101,9 @@ namespace MOE.Common.Migrations
                     })
                 .PrimaryKey(t => t.Id);
 
+            string sqlResVerboseStatus = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".VerboseStatus.sql";
+            this.SqlResource(sqlResVerboseStatus);
+
             string sqlResCreateConstraints = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".CreateConstraints.sql";
             this.SqlResource(sqlResCreateConstraints);
 
@@ -109,14 +113,14 @@ namespace MOE.Common.Migrations
             string sqlResCreateTable = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".CreateTable.sql";
             this.SqlResource(sqlResCreateTable);
 
+            string sqlResDataBasefileName = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".DatabaseFileName.sql";
+            this.SqlResource(sqlResDataBasefileName);
+
             string sqlResDoTheSwapTable = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".DoTheSwapTable.sql";
             this.SqlResource(sqlResDoTheSwapTable);
 
             string sqlResDropIndexes = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".DropIndexes.sql";
             this.SqlResource(sqlResDropIndexes);
-
-            //string sqlResDropOrCompressTable = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".DropOrCompressTable.sql";
-            //this.SqlResource(sqlResDropOrCompressTable);
 
             string sqlResFileGroup = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".FileGroup.sql";
             this.SqlResource(sqlResFileGroup);
@@ -130,19 +134,26 @@ namespace MOE.Common.Migrations
             string sqlResIndexNameColumns = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".IndexNameColumns.sql";
             this.SqlResource(sqlResIndexNameColumns);
 
+            string sqlResInsertValues = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".InsertValues.sql";
+            this.SqlResource(sqlResInsertValues);
+
             string sqlResLowerBoundary = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".LowerBoundary.sql";
             this.SqlResource(sqlResLowerBoundary);
+
+            string sqlResPhysicalFileNmae = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".PhysicalFileName.sql";
+            this.SqlResource(sqlResPhysicalFileNmae);
 
             string sqlResPreserveData = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".PreserveData.sql";
             this.SqlResource(sqlResPreserveData);
 
             string sqlResProcesstables = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".Processtables.sql";
             this.SqlResource(sqlResProcesstables);
+
             string sqlResStopCounter = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".StopCounter.sql";
             this.SqlResource(sqlResStopCounter);
 
-            //string sqlResStopDropping = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".StopDropping.sql";
-            //this.SqlResource(sqlResStopDropping);
+            string sqlResScheduleReclaimFileSpaceFirstFriday = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".ScheduleReclaimFileSpaceFirstFriday.sql";
+            this.SqlResource(sqlResScheduleReclaimFileSpaceFirstFriday);
 
             string sqlResTableName = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".TableName.sql";
             this.SqlResource(sqlResTableName);
@@ -150,8 +161,7 @@ namespace MOE.Common.Migrations
             string sqlResUpperBoundary = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".UpperBoundary.sql";
             this.SqlResource(sqlResUpperBoundary);
 
-            string sqlResVerbose = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".Verbose.sql";
-            this.SqlResource(sqlResVerbose);
+            
 
             //string sqlResReclaimFileSpaceForMoe = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".ReclaimFileSpaceForMoe.sql";
             //this.SqlResource(sqlResReclaimFileSpaceForMoe);

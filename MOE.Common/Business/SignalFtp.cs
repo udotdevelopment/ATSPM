@@ -28,7 +28,7 @@ namespace MOE.Common.Business
     {
         private Models.Signal Signal { get; set; }
         private SignalFtpOptions SignalFtpOptions { get; set; }
-
+        private string FileToBeDeleted { get; set; }
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType()) return false;
@@ -78,13 +78,14 @@ namespace MOE.Common.Business
                     char[] fileExtension = new[] {'.', 'd', 'a', 't'};
                     string tempFileName = localFileName.TrimEnd(fileExtension);
                     localFileName = tempFileName + "-" + Convert.ToInt32(DateTime.Now.TimeOfDay.TotalSeconds) + ".dat";
+                    FileToBeDeleted = localFileName;
                 }
                 if(!ftpClient.DownloadFile(SignalFtpOptions.LocalDirectory + Signal.SignalID+ @"\" + localFileName, ".."+Signal.ControllerType.FTPDirectory +@"/" + ftpListItem.Name))
                 {
                     Console.WriteLine(@"Unable to download file "+ Signal.ControllerType.FTPDirectory + @"/" + ftpListItem.Name);
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd("FTPFromAllControllers",
-                        "MOE.Common.Business.Signal", "TransferFile", ApplicationEvent.SeverityLevels.High, Signal.ControllerType.FTPDirectory + " @ " + Signal.IPAddress + " - " + @"Unable to download file " + Signal.ControllerType.FTPDirectory + @"/" + ftpListItem.Name);
+                        "MOE.Common.Business.SignalFTP", "TransferFile", ApplicationEvent.SeverityLevels.High, Signal.ControllerType.FTPDirectory + " @ " + Signal.IPAddress + " - " + "Unable to download file " + Signal.ControllerType.FTPDirectory + @"/" + ftpListItem.Name);
                     return false;
                 }
                 return true;
@@ -94,7 +95,8 @@ namespace MOE.Common.Business
                 Console.WriteLine(e);
                 var errorLog = ApplicationEventRepositoryFactory.Create();
                 errorLog.QuickAdd("FTPFromAllControllers",
-                    "MOE.Common.Business.Signal", e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, Signal.ControllerType.FTPDirectory + " @ " + Signal.IPAddress + " - " + e.Message);
+                    "MOE.Common.Business.SignalFTP", "TransferFile", ApplicationEvent.SeverityLevels.High, "SignalID " + Signal.SignalID + " > " + Signal.ControllerType.FTPDirectory + @"/" + ftpListItem.Name  + " File can't be downloaded. Error Mesage " + e.Message);
+                File.Delete(SignalFtpOptions.LocalDirectory + Signal.SignalID + @"\" + FileToBeDeleted);
                 return false;
             }
         }

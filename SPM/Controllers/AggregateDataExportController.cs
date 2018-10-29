@@ -268,7 +268,7 @@ namespace SPM.Controllers
                     endHour += 12;
                 }
                 endMinute = endTime.Length > 1 ? Convert.ToInt32(endTime[1]) : 0;
-                timeOptions = BinFactoryOptions.TimeOptions.TimePeriod;
+                //timeOptions = BinFactoryOptions.TimeOptions.TimePeriod;
             }
             List<DayOfWeek> daysOfWeek = new List<DayOfWeek>();
             if (aggDataExportViewModel.Weekends)

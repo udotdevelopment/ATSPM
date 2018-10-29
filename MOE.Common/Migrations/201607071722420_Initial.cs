@@ -132,16 +132,6 @@ namespace MOE.Common.Migrations
                 .Index(t => t.ApproachRouteId)
                 .Index(t => t.SignalID);
 
-
-            //CreateTable(
-            //    "dbo.Route",
-            //    c => new
-            //        {
-            //            ApproachRouteId = c.Int(nullable: false, identity: true),
-            //            RouteName = c.String(nullable: false, unicode: false),
-            //        })
-            //    .PrimaryKey(t => t.ApproachRouteId);
-
             CreateTable(
                     "dbo.Graph_Detectors",
                     c => new
@@ -313,17 +303,7 @@ namespace MOE.Common.Migrations
                         EntityType = c.Int()
                     })
                 .PrimaryKey(t => t.CommentID);
-            //CreateTable(
-            //    "dbo.Controller_Event_Log",
-            //    c => new
-            //        {
-            //            Timestamp = c.DateTime(nullable: false),
-            //            SignalId = c.String(nullable: false, maxLength: 10),
-            //            EventCode = c.Int(nullable: false),
-            //            EventParam = c.Int(nullable: false),
-            //        })
-            //    .PrimaryKey(t => new { t.Timestamp, t.SignalId, t.EventCode, t.EventParam });
-
+            
             CreateTable(
                     "dbo.Controller_Type",
                     c => new

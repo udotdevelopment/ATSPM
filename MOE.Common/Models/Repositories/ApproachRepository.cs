@@ -37,8 +37,6 @@ namespace MOE.Common.Models.Repositories
             var approach = (from r in _db.Approaches
                 where r.ApproachID == approachId
                 select r).FirstOrDefault();
-            ;
-
             if (approach != null)
                 return approach;
             {

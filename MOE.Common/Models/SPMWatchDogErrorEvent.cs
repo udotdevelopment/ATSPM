@@ -3,6 +3,25 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MOE.Common.Models
 {
+    public class FtpErrorEvent
+    {
+        [Key]
+        public int Id { get; set; }
+        [Required]
+        public DateTime TimeStamp { get; set; }
+        [Required]
+        public string SignalId { get; set; }
+        public string DetectorId { get; set; }
+        [Required(AllowEmptyStrings = true)]
+        public string Direction { get; set; }
+        [Required]
+        public int Phase { get; set; }
+        [Required]
+        public int ErrorCode { get; set; }
+        [Required]
+        public string Message { get; set; }
+    }
+
     public class SPMWatchDogErrorEvent
     {
         [Key]

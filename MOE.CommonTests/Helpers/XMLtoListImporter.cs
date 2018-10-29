@@ -29,10 +29,7 @@ namespace MOE.CommonTests.Helpers
         {
 
             string localFilePath = filePath+ @"EventLogFiles\" + xmlFileName;
-
-           
             var doc = XElement.Load(localFilePath);
-
             // List<Controller_Event_Log> 
             var incomingEvents = doc.Elements("Controller_Event_Log").Select(x => new Controller_Event_Log
                 {
@@ -42,42 +39,29 @@ namespace MOE.CommonTests.Helpers
                     SignalID = x.Element("SignalID").Value.ToString()
                 }
             ).ToList();
-
-
-
                 db.Controller_Event_Log.AddRange(incomingEvents);
-
-            
         }
 
         public static void LoadControllerEventLogsFromMOEDB(InMemoryMOEDatabase db)
         {
             System.Data.SqlClient.SqlConnectionStringBuilder builder =
              new System.Data.SqlClient.SqlConnectionStringBuilder();
-            builder["Data Source"] = "srwtcmoe";
+            builder["Data Source"] = "moeSERVER";
             builder["Password"] = "dontshareme";
             builder["Persist Security Info"] = true;
             builder["User ID"] = "datareader";
             builder["Initial Catalog"] = "MOE";
             Console.WriteLine(builder.ConnectionString);
-
             SqlConnection sqlConnection1 = new SqlConnection(builder.ConnectionString);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
-
             cmd.CommandText = "select * from Controller_Event_Log"
                                +" Where Timestamp between '02/01/2018 00:00' and '02/01/2018 23:59'"
                                +" and SignalID = '7185'";
-
             cmd.CommandType = CommandType.Text;
             cmd.Connection = sqlConnection1;
-
             sqlConnection1.Open();
-
             reader = cmd.ExecuteReader();
-
-           
-
             if (reader.HasRows)
             {
                 while (reader.Read())
@@ -87,24 +71,17 @@ namespace MOE.CommonTests.Helpers
                     cel.Timestamp = reader.GetDateTime(1);
                     cel.EventCode = reader.GetInt32(2);
                     cel.EventParam = reader.GetInt32(3);
-
                     db.Controller_Event_Log.Add(cel);
                 }
             }
             reader.Close();
             sqlConnection1.Close();
-
-
         }
 
         public static void LoadSpeedEvents(string xmlFileName, InMemoryMOEDatabase db)
         {
-
             string localFilePath = filePath + @"SpeedEvents\" + xmlFileName;
-
-
             var doc = XElement.Load(localFilePath);
-
             var incomingEvents = doc.Elements("SpeedEvent").Select(x => new Speed_Events
             {
                 DetectorID = (String)(x.Element("DetectorID")),
@@ -112,22 +89,13 @@ namespace MOE.CommonTests.Helpers
                 KPH = (Int32)(x.Element("KPH")),
                 timestamp = (DateTime)(x.Element("Timestamp"))
             }).ToList();
-
              db.Speed_Events.AddRange(incomingEvents);
-
-
-
-
         }
 
         public static void LoadSignals(string xmlFileName, InMemoryMOEDatabase db)
         {
-
             string localFilePath = filePath + @"\Signals\" + xmlFileName;
-
-
             var doc = XElement.Load(localFilePath);
-
             // List<Controller_Event_Log> 
             var incoming = doc.Elements("Signal").Select(x => new Signal
                 {
@@ -149,22 +117,15 @@ namespace MOE.CommonTests.Helpers
 
             foreach (var e in incoming)
             {
-
                 db.Signals.Add(e);
-
             }
         }
 
         public static void LoadApproaches(string xmlFileName, InMemoryMOEDatabase db)
         {
-
             string localFilePath = filePath + "\\Approaches\\" + xmlFileName;
-
-
             var doc = XElement.Load(localFilePath);
-
             var incoming = new List<Approach>();
-
             foreach (var x in doc.Elements("Approach"))
             {
                 var appr = new Approach();
@@ -194,44 +155,32 @@ namespace MOE.CommonTests.Helpers
                 appr.IsPermissivePhaseOverlap = (x.Element("IsPermissivePhaseOverlap").Value).Equals("1");
                 incoming.Add(appr);
             }
-
-           
-
             foreach (var e in incoming)
             {
                 var signal = db.Signals.Where(s => s.SignalID == e.SignalID).FirstOrDefault();
-
                 if(signal!=null)
                 {
                     signal.Approaches = new List<Approach>();
                     signal.Approaches.Add(e);
                     e.Signal = signal;
-
                 }
-
                 var direction = db.DirectionTypes.Where(d => d.DirectionTypeID == e.DirectionTypeID).FirstOrDefault();
                 if (direction != null)
                 {
                     e.DirectionType = direction;
                 }
                 db.Approaches.Add(e);
-
             }
         }
 
         public static void LoadDetectors(string xmlFileName, InMemoryMOEDatabase db)
         {
-
             string localFilePath = filePath + "\\Detectors\\" + xmlFileName;
-
-
             var doc = XElement.Load(localFilePath);
             List<Detector> incoming = new List<Detector>();
-
             foreach(var x in doc.Elements("Detector"))
             {
                 var det = new Detector();
-
                 det.ID = (Int32)x.Element("ID");
                 det.DetectorID = (String)x.Element("DetectorID");
                 det.DetChannel = (Int32)x.Element("DetChannel");
@@ -247,44 +196,30 @@ namespace MOE.CommonTests.Helpers
                 det.ApproachID = (Int32)(x.Element("ApproachID") ?? emptyElement);
                 det.DetectionHardwareID = (Int32)(x.Element("DetectionHardwareID") ?? emptyElement);
                 det.LatencyCorrection = (Double)(x.Element("LatencyCorrection") ?? emptyElement.Element("integer"));
-
                 incoming.Add(det);
             }
-
-
-
             foreach (var e in incoming)
             {
                 var appr = db.Approaches.Where(s => s.ApproachID == e.ApproachID).FirstOrDefault();
-
                 if (appr != null)
                 {
                     appr.Detectors = new List<Detector>();
                     appr.Detectors.Add(e);
                     e.Approach = appr;
-
                 }
-
                 var hardware = db.DetectionHardwares.Where(h => h.ID == e.DetectionHardwareID).FirstOrDefault();
-
                 if (hardware != null)
                 {
                     e.DetectionHardware = hardware;
                 }
-
-
                 db.Detectors.Add(e);
-
             }
         }
 
         public static void AddDetectionTypesToDetectors(string xmlFileName, InMemoryMOEDatabase db)
         {
             string localFilePath = filePath + "\\DetectorToDetectionTypes\\" + xmlFileName;
-
-
             var doc = XElement.Load(localFilePath);
-
             foreach(var det in db.Detectors)
             {
                 det.DetectionTypeIDs = new List<int>();
@@ -293,15 +228,8 @@ namespace MOE.CommonTests.Helpers
                     {
                     if(t.Element("ID").Value == det.ID.ToString())
                     {
-                        //var detType = new DetectionType(
-                        //    ID = t.Element("ID").Value,
-                        //    t.Element("DetectionTypeID").Value
-                        //    );
-
                         det.DetectionTypeIDs.Add(Convert.ToInt32(t.Element("DetectionTypeID").Value));
-                           // det.DetectionTypes.Add(detType);
                     }
-
                 }
             }
         }
@@ -309,10 +237,7 @@ namespace MOE.CommonTests.Helpers
         public static void AddDetectionTypesToMetricTypes(string xmlFileName, InMemoryMOEDatabase db)
         {
             string localFilePath = filePath + "\\MetricTypeDetectorTypes\\" + xmlFileName;
-
-
             var doc = XElement.Load(localFilePath);
-
             foreach (var mt in db.MetricTypes)
             {
                 mt.DetectionTypes = new List<DetectionType>();
@@ -328,18 +253,12 @@ namespace MOE.CommonTests.Helpers
                             {
                                 detType.MetricTypes = new List<MetricType>();
                             }
-
                             mt.DetectionTypes.Add(detType);
                             detType.MetricTypes.Add(mt);
                         }
                     }
-
                 }
             }
         }
-
-
-
-
     }
 }

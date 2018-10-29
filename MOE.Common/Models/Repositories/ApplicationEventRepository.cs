@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AjaxControlToolkit.Design;
 
 namespace MOE.Common.Models.Repositories
 {
@@ -17,6 +18,15 @@ namespace MOE.Common.Models.Repositories
             return applicationEvents;
         }
 
+        public List<ApplicationEvent> GetApplicationEventsBetweenDatesForFtpFromAllControllersEvents  (DateTime StartDate, DateTime EndDate)
+        {
+            var applicationEvents = (from r in db.ApplicationEvents
+                where r.Timestamp > StartDate && r.Timestamp <= EndDate
+                && r.ApplicationName == "FTPFromAllcontrollers"
+                select r).ToList();
+            return applicationEvents;
+        }
+
         public List<ApplicationEvent> GetApplicationEventsBetweenDatesByApplication(DateTime StartDate,
             DateTime EndDate, string ApplicationName)
         {
@@ -26,7 +36,6 @@ namespace MOE.Common.Models.Repositories
 
             return applicationEvents;
         }
-
 
         public List<ApplicationEvent> GetApplicationEventsBetweenDatesByApplicationBySeverity(DateTime StartDate,
             DateTime EndDate, string ApplicationName, ApplicationEvent.SeverityLevels Severity)

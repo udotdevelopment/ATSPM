@@ -1,5 +1,5 @@
-USE [msdb]
-GO
+--USE [msdb]
+--GO
 
 /****** Object:  Job [Reclaim Data Space]    Script Date: 8/29/2018 10:35:09 PM ******/
 BEGIN TRANSACTION
@@ -154,7 +154,7 @@ BEGIN
 						@FunctionOrProcedure = N''Main - Reclaim File Space Bottom of main Loop'',
 						@Notes = N''Table <ApplicationSettings>''
 END', 
-		@database_name=N'MOE', 
+		@database_name=N'MOETestPartitionAndre', 
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
 EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id = @jobId, @start_step_id = 1

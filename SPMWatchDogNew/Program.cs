@@ -1,23 +1,14 @@
 ﻿using System;
-
-
-
-
-
 namespace SPMWatchDogNew
 {
     class Program
     {
-
-
-
         static void Main(string[] args)
         {
             DateTime startTime = DateTime.Today;
             // find the analysis timespan
             if (args.Length > 0)
             {
-
                 try
                 {
                     startTime = DateTime.Parse(args[0]);
@@ -45,12 +36,6 @@ namespace SPMWatchDogNew
                     errorRepository.QuickAdd("SPMWatchdog", "WatchDog", "WatchDogScan no args", MOE.Common.Models.ApplicationEvent.SeverityLevels.High, ex.Message);
                 }
             }
-
         }
     }
-    
 }
-
-    
-
-

@@ -1021,8 +1021,8 @@ While each agency should consult with their IT department for specific guideline
                     ApplicationID = 2,
                     ConsecutiveCount = 3,
                     DefaultEmailAddress = "dlowe@utah.gov",
-                    EmailServer = "send.state.ut.us",
-                    FromEmailAddress = "SPMWatchdog@utah.gov",
+                    EmailServer = "SEND.EMAIL.SERVER",
+                    FromEmailAddress = "ADMINISTRATOR@utah.gov",
                     LowHitThreshold = 50,
                     MaxDegreeOfParallelism = 4,
                     MinimumRecords = 500,
@@ -1058,8 +1058,8 @@ While each agency should consult with their IT department for specific guideline
                 {
                     ApplicationID = 4,
                     RawDataCountLimit = 1048576,
-                    ImageUrl = "http://udottraffic.utah.gov/spmimages/",
-                    ImagePath = @"\\UTSTSRTCNS53\C-LinkDynamicContent\SPMImages\"
+                    ImageUrl = "http://SPM.SERVER/spmimages/",
+                    ImagePath = @"\\SPM.SERVER\SPMImages\"
                 }
             );
 

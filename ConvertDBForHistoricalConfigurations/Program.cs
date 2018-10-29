@@ -36,25 +36,25 @@ namespace ConvertDBForHistoricalConfigurations
         //Update Metrics with version information
         static void Main()
         {
-            GetApproachRouteRecords(); // orig
-            GetApproachRouteDetails(); // orig
+            GetApproachRouteRecords(); 
+            GetApproachRouteDetails(); 
 
-            GetMetricComments(); // Derek
-            GetMetricCommentMetricTypes(); // Andre
-            ClearMetricComments(); // Andre
+            GetMetricComments(); 
+            GetMetricCommentMetricTypes();
+            ClearMetricComments(); 
             //ClearMetricCommentMetricTypes(); // Derek
             //GetDetectionTypeMetricTypes();  //Andre
-            ClearDetectionTypeMetricTypes();  //Andre
-            GetActionLogMetricTypes();  //Andre
-            ClearActionLogMetricTypes();  //Andre
-            GetActionLogs();  //Andre
+            ClearDetectionTypeMetricTypes();  
+            GetActionLogMetricTypes();  
+            ClearActionLogMetricTypes();
+            GetActionLogs();  
             //ClearActionLogs();  //Andre
 
-            RunMigrations(); //orig
-            UpdateSignalRecordsWithStartDateAndVersion(); // orig
-            UpdateApproachesWithVersionId(); //Orig
-            UpdateMetriCommentsWithVersionId(); // orig
-            CreateRoutes(); //orig
+            RunMigrations(); 
+            UpdateSignalRecordsWithStartDateAndVersion();
+            UpdateApproachesWithVersionId();
+            UpdateMetriCommentsWithVersionId();
+            CreateRoutes();
             UpdateActionLogs();
         }
 
@@ -261,7 +261,6 @@ namespace ConvertDBForHistoricalConfigurations
                 route.RouteSignals = CreateRouteSignals(oldRoute, route, db);
                 db.Routes.Add(route);
             }
-
             db.SaveChanges();
         }
 
@@ -279,7 +278,6 @@ namespace ConvertDBForHistoricalConfigurations
                 signal.PhaseDirections = CreateRoutePhaseDirections(signal, detail, approach, db);
                 signals.Add(signal);
             }
-
             return signals;
         }
 
