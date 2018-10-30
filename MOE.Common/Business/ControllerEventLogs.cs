@@ -58,7 +58,8 @@ namespace MOE.Common.Business
                 select s;
 
             Events = events.ToList();
-            Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
+            Events = Events.OrderBy(e => e.Timestamp).ThenBy(e => e.EventCode).ToList();
+            //Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
         }
 
         public string SignalId { get; }

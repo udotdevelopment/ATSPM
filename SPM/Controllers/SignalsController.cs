@@ -291,7 +291,7 @@ namespace SPM.Controllers
             signal.Note = "Create New";
             signal.Enabled = true;
             signal.VersionList = new List<Signal>();
-            signal.VersionID = 1;
+            signal.VersionActionId = 1;
             return signal;
         }
                 

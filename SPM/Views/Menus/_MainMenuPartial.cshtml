@@ -19,70 +19,57 @@ else
     {
         if (m.MenuObject.MenuName != "Admin" || (m.MenuObject.MenuName == "Admin" && m.IsAdmin))
         {
-                <li>
-                    <a href="#" class="dropdown-toggle menuItem" data-toggle="dropdown">@m.MenuObject.MenuName </a>
-                    <ul class="dropdown-menu multi-level">
-                        @foreach (var s in m.SubMenuItems)
+            <li>
+                <a href="#" class="dropdown-toggle menuItem" data-toggle="dropdown">@m.MenuObject.MenuName </a>
+                <ul class="dropdown-menu multi-level">
+                    @foreach (var s in m.SubMenuItems)
+                    {
+                        @RenderMenuItems(s)
+                    }
+                    @if (m.MenuObject.MenuName == "Links")
+                    {
+                        foreach (MOE.Common.Models.ExternalLink e in m.ExternalLinks.OrderBy(x => x.DisplayOrder).ToList())
+                        {
+                            <li><a href="@e.Url" class="menuItem">@e.Name</a></li>
+                        }
+                    }
+                </ul>
+
+            </li>
+            }
+            else
+            {
+                if ((m.MenuObject.MenuName == "Admin" && m.IsTechnician)|| (m.MenuObject.MenuName == "Admin" && m.IsConfiguration))
                 {
-                            @RenderMenuItems(s)
-                        }
-                        @if (m.MenuObject.MenuName == "Links")
-                        {
-                            foreach (MOE.Common.Models.ExternalLink e in m.ExternalLinks.OrderBy(x => x.DisplayOrder).ToList())
-                            {
-                                <li><a href="@e.Url" class="menuItem">@e.Name</a></li>
-                            }
-                        }
-                    </ul>
-
-                </li>
-            }
-            else if ((m.MenuObject.MenuName == "Admin" && m.IsTechnician))
-            {
                 <li>
                     <a href="#" class="dropdown-toggle menuItem" data-toggle="dropdown">@m.MenuObject.MenuName </a>
                     <ul class="dropdown-menu multi-level">
                         @foreach (var s in m.SubMenuItems)
                         {
-                            if (s.MenuObject.MenuName == "Signal Configuration" || s.MenuObject.MenuName == "Route Configuration")
+                            if (s.MenuObject.MenuName == "Signal Configuration" || s.MenuObject.MenuName == "Route Configuration" || (s.MenuObject.MenuName == "Raw Data Export" && m.IsData))
                             {
                                 @RenderMenuItems(s)
                             }
                         }
                     </ul>
                 </li>
-            }
-            else if ((m.MenuObject.MenuName == "Admin" && m.IsData))
-            {
-                <li>
-                    <a href="#" class="dropdown-toggle menuItem" data-toggle="dropdown">@m.MenuObject.MenuName </a>
-                    <ul class="dropdown-menu multi-level">
-                        @foreach (var s in m.SubMenuItems)
-                        {
-                            if (s.MenuObject.MenuName == "Raw Data Export")
+                }
+                else if (m.MenuObject.MenuName == "Admin" && m.IsData)
+                {
+                    <li>
+                        <a href="#" class="dropdown-toggle menuItem" data-toggle="dropdown">@m.MenuObject.MenuName </a>
+                        <ul class="dropdown-menu multi-level">
+                            @foreach (var s in m.SubMenuItems)
                             {
-                                @RenderMenuItems(s)
+                                if (s.MenuObject.MenuName == "Raw Data Export")
+                                {
+                                    @RenderMenuItems(s)
+                                }
                             }
-                        }
 
-                    </ul>
-                </li>
-            }
-            else if ((m.MenuObject.MenuName == "Admin" && m.IsConfiguration))
-            {
-                <li>
-                    <a href="#" class="dropdown-toggle menuItem" data-toggle="dropdown">@m.MenuObject.MenuName </a>
-                    <ul class="dropdown-menu multi-level">
-                        @foreach (var s in m.SubMenuItems)
-                        {
-                            if (s.MenuObject.MenuName == "Signal Configuration" || s.MenuObject.MenuName == "Route Configuration")
-                            {
-                                @RenderMenuItems(s)
-                            }
-                        }
-
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                }
         }
     }
     else

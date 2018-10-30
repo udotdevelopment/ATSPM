@@ -167,7 +167,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 var removethese = new List<Title>();
 
                 foreach (var t in dummychart.Titles)
-                    if (t.Text == "" || t.Text == null)
+                    if (string.IsNullOrEmpty(t.Text))
                         removethese.Add(t);
                 foreach (var t in removethese)
                     dummychart.Titles.Remove(t);
@@ -179,23 +179,22 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
                 if (analysisPhaseCollection.Items.Count > 0)
                 {
-                    var phasesInOrder = (from r in analysisPhaseCollection.Items
-                                         select r).OrderBy(r => r.PhaseNumber);
-                    foreach (var Phase in phasesInOrder)
+                    var phasesInOrder = (analysisPhaseCollection.Items.Select(r => r)).OrderBy(r => r.PhaseNumber);
+                    foreach (var phase in phasesInOrder)
                     {
                         var chart = GetNewSplitMonitorChart(StartDate, EndDate,
-                            Phase.PhaseNumber);
-                        AddSplitMonitorDataToChart(chart, Phase, analysisPhaseCollection.Plans);
+                            phase.PhaseNumber);
+                        AddSplitMonitorDataToChart(chart, phase, analysisPhaseCollection.Plans);
                         if (ShowPlanStripes)
                         {
                             SetSimplePlanStrips(analysisPhaseCollection.Plans, chart, StartDate);
-                            SetSplitMonitorStatistics(analysisPhaseCollection.Plans, Phase, chart);
+                            SetSplitMonitorStatistics(analysisPhaseCollection.Plans, phase, chart);
                         }
                         var chartFileName = CreateFileName();
                         removethese = new List<Title>();
 
                         foreach (var t in chart.Titles)
-                            if (t.Text == "" || t.Text == null)
+                            if (string.IsNullOrEmpty(t.Text))
                                 removethese.Add(t);
                         foreach (var t in removethese)
                             chart.Titles.Remove(t);
@@ -434,7 +433,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         private Chart GetNewSplitMonitorChart(DateTime graphStartDate, DateTime graphEndDate, int phase)
         {
             var chart = ChartFactory.CreateDefaultChartNoX2Axis(this);
-            chart.ChartAreas[0].AxisY.Interval = 5;
+            //chart.ChartAreas[0].AxisY.Interval = 5;
 
             //Set the chart properties
             ChartFactory.SetImageProperties(chart);
@@ -491,12 +490,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
 
             //Add the Posts series to ensure the chart is the size of the selected timespan
-            var testSeries = new Series();
-            testSeries.IsVisibleInLegend = false;
-            testSeries.ChartType = SeriesChartType.Point;
-            testSeries.Color = Color.White;
-            testSeries.Name = "Posts";
-            testSeries.XValueType = ChartValueType.DateTime;
+            //var testSeries = new Series();
+            //testSeries.IsVisibleInLegend = false;
+            //testSeries.ChartType = SeriesChartType.Point;
+            //testSeries.Color = Color.White;
+            //testSeries.Name = "Posts";
+            //testSeries.XValueType = ChartValueType.DateTime;
 
             chart.Series.Add(ProgramedSplit);
             chart.Series.Add(GapoutSeries);
@@ -504,13 +503,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chart.Series.Add(ForceOffSeries);
             chart.Series.Add(UnknownSeries);
             chart.Series.Add(PedActivity);
-            chart.Series.Add(testSeries);
+            //chart.Series.Add(testSeries);
 
             //Add points at the start and and of the x axis to ensure
             //the graph covers the entire period selected by the user
             //whether there is data or not
-            chart.Series["Posts"].Points.AddXY(graphStartDate, 0);
-            chart.Series["Posts"].Points.AddXY(graphEndDate.AddMinutes(5), 0);
+            //chart.Series["Posts"].Points.AddXY(graphStartDate, 0);
+            //chart.Series["Posts"].Points.AddXY(graphEndDate.AddMinutes(5), 0);
 
 
             return chart;
@@ -567,13 +566,38 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         chart.Series["PedActivity"].Points.AddXY(Cycle.PedStartTime, Cycle.PedDuration);
                     }
                 }
-                if (maxSplitLength > 0)
-                    if (maxSplitLength >= 50)
-                        chart.ChartAreas[0].AxisY.Maximum = 1.5 * maxSplitLength;
-                    else
-                        chart.ChartAreas[0].AxisY.Maximum = 2.5 * maxSplitLength;
-                if (YAxisMax != null)
-                    chart.ChartAreas[0].AxisY.Maximum = YAxisMax.Value;
+                SetYAxisMaxAndInterval(chart, phase, maxSplitLength);
+            }
+        }
+
+        private void SetYAxisMaxAndInterval(Chart chart, AnalysisPhase phase, int maxSplitLength)
+        {
+            if (YAxisMax != null)
+            {
+                chart.ChartAreas[0].AxisY.Maximum = YAxisMax.Value;
+            }
+            else if (maxSplitLength > 0)
+            {
+                if (maxSplitLength >= 50)
+                    chart.ChartAreas[0].AxisY.Maximum = 1.5 * maxSplitLength;
+                else
+                    chart.ChartAreas[0].AxisY.Maximum = 2.5 * maxSplitLength;
+            }
+            else
+            {
+                chart.ChartAreas[0].AxisY.Maximum = phase.Cycles.Items.Max(c => c.Duration).Seconds;
+            }
+            if (chart.ChartAreas[0].AxisY.Maximum <= 50)
+            {
+                chart.ChartAreas[0].AxisY.Interval = 10;
+            }
+            else if (chart.ChartAreas[0].AxisY.Maximum > 50 && chart.ChartAreas[0].AxisY.Maximum <= 200)
+            {
+                chart.ChartAreas[0].AxisY.Interval = 20;
+            }
+            else
+            {
+                chart.ChartAreas[0].AxisY.Interval = 50;
             }
         }
     }

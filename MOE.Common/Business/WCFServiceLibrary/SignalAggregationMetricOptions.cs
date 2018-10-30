@@ -386,7 +386,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void GetTimeOfDayXAxisRouteSeriesChart(List<Models.Signal> signals, Chart chart)
         {
-            SetTimeOfDayXAxisMinimum(chart);
+            SetTimeXAxisAxisMinimum(chart);
             var binsContainers = GetBinsContainersByRoute(signals);
             var series = CreateSeries(0, "Route");
             SetTimeAggregateSeries(series, binsContainers);
@@ -396,7 +396,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void GetTimeOfDayXAxisSignalSeriesChart(List<Models.Signal> signals, Chart chart)
         {
-            SetTimeOfDayXAxisMinimum(chart);
+            SetTimeXAxisAxisMinimum(chart);
             var seriesList = new ConcurrentBag<Series>();
             var binsContainers = new ConcurrentBag<BinsContainer>();
             Parallel.For(0, signals.Count, i => // foreach (var signal in signals)
@@ -417,21 +417,45 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        protected void SetTimeOfDayXAxisMinimum(Chart chart)
-        {
-            if (TimeOptions.TimeOfDayStartHour != null && TimeOptions.TimeOfDayStartMinute.Value != null)
-                chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                    new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day,
-                            TimeOptions.TimeOfDayStartHour.Value, TimeOptions.TimeOfDayStartMinute.Value, 0)
-                        .AddHours(-1).ToOADate();
-        }
 
         protected void SetTimeXAxisAxisMinimum(Chart chart)
         {
-            if (TimeOptions.TimeOfDayStartHour != null && TimeOptions.TimeOfDayStartMinute.Value != null)
-                chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                    this.StartDate
-                        .AddHours(-1).ToOADate();
+            if (TimeOptions.TimeOfDayStartHour != null && TimeOptions.TimeOfDayStartMinute != null)
+            {
+                switch (TimeOptions.SelectedBinSize)
+                {
+                    case BinFactoryOptions.BinSize.FifteenMinute:
+                        chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
+                            this.StartDate.AddHours(TimeOptions.TimeOfDayStartHour.Value)
+                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-15).ToOADate();
+                        break;
+                    case BinFactoryOptions.BinSize.ThirtyMinute:
+                        chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
+                            this.StartDate.AddHours(TimeOptions.TimeOfDayStartHour.Value)
+                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-30).ToOADate();
+                        break;
+                    case BinFactoryOptions.BinSize.Hour:
+                        chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
+                            this.StartDate.AddHours(TimeOptions.TimeOfDayStartHour.Value)
+                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-60).ToOADate();
+                        break;
+                    case BinFactoryOptions.BinSize.Day:
+                        chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
+                            this.StartDate.AddHours(TimeOptions.TimeOfDayStartHour.Value)
+                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddDays(-1).ToOADate();
+                        break;
+                    case BinFactoryOptions.BinSize.Month:
+                        chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
+                            this.StartDate.AddHours(TimeOptions.TimeOfDayStartHour.Value)
+                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMonths(-1).ToOADate();
+                        break;
+                    case BinFactoryOptions.BinSize.Year:
+                        chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
+                            this.StartDate.AddHours(TimeOptions.TimeOfDayStartHour.Value)
+                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddYears(-1).ToOADate();
+                        break;
+                }
+            }
         }
 
         protected void GetTimeXAxisSignalSeriesChart(List<Models.Signal> signals, Chart chart)

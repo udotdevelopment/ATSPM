@@ -138,7 +138,7 @@ namespace MOE.Common.Business.SplitFail
         private void AddDetectorActivationsFromList(List<Controller_Event_Log> events)
         {
             events = events.OrderBy(e => e.Timestamp).ToList();
-            for (var i = 0; i < events.Count - 2; i++)
+            for (var i = 0; i < events.Count - 1; i++)
                 if (events[i].EventCode == 82 && events[i + 1].EventCode == 81)
                     _detectorActivations.Add(new SplitFailDetectorActivation
                     {
@@ -151,7 +151,7 @@ namespace MOE.Common.Business.SplitFail
             List<Controller_Event_Log> events)
         {
             if (events.LastOrDefault()?.EventCode == 82)
-                events.Insert(0, new Controller_Event_Log
+                events.Insert(events.Count, new Controller_Event_Log
                 {
                     Timestamp = options.EndDate,
                     EventCode = 81,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
@@ -69,41 +70,42 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var signal = sr.GetVersionOfSignalByDate(SignalID, StartDate);
             var metricApproaches = signal.GetApproachesForSignalThatSupportMetric(MetricTypeID);
             if (metricApproaches.Count > 0)
-                //Parallel.ForEach(metricApproaches, approach =>
+            {
+                List<SplitFailPhase> splitFailPhases = new List<SplitFailPhase>();
                 foreach (Approach approach in metricApproaches)
                 {
                     if (approach.ProtectedPhaseNumber > 0)
                     {
-                        var splitFailPhase = new SplitFailPhase(approach, this, false);
-                        var chartName = CreateFileName();
-                        GetChart(splitFailPhase, chartName, returnString, false, approach);
+                        splitFailPhases.Add(new SplitFailPhase(approach, this, false));
                     }
                     if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
                     {
-                            
-                        var splitFailPermissivePhase = new SplitFailPhase(approach, this, true);
-                        var permChartName = CreateFileName();
-                        GetChart(splitFailPermissivePhase, permChartName, returnString, true, approach);
+                        splitFailPhases.Add(new SplitFailPhase(approach, this, true));
                     }
                 }
-                //);
+                splitFailPhases = splitFailPhases.OrderBy(s => s.Approach.Description).ToList();
+                foreach (var splitFailPhase in splitFailPhases)
+                {
+                    GetChart(splitFailPhase, returnString);
+                }
+            }
             return returnString;
         }
 
-        private void GetChart(SplitFailPhase splitFailPhase, string chartName, List<string> returnString,
-            bool getPermissivePhase, Approach approach)
+        private void GetChart(SplitFailPhase splitFailPhase, List<string> returnString)
         {
-            var sfChart = new SplitFailChart(this, splitFailPhase, getPermissivePhase);
-            var detector = approach.GetDetectorsForMetricType(12).FirstOrDefault();
+            var sfChart = new SplitFailChart(this, splitFailPhase, splitFailPhase.GetPermissivePhase);
+            var detector = splitFailPhase.Approach.GetDetectorsForMetricType(12).FirstOrDefault();
             if (detector != null)
             {
-                if (getPermissivePhase)
+                if (splitFailPhase.GetPermissivePhase)
                 {
                     sfChart.Chart.BackColor = Color.LightGray;
                 }
             }
-            Thread.Sleep(300);
-            chartName = chartName.Replace(".", approach.DirectionType.Description + ".");
+            //Thread.Sleep(300);
+            string chartName = CreateFileName();
+            chartName = chartName.Replace(".", splitFailPhase.Approach.DirectionType.Description + ".");
             try
             {
                 sfChart.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);

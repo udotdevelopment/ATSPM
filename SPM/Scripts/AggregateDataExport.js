@@ -5,8 +5,8 @@
 
 function SetDateTextBoxes (){
     $(".datepicker").attr('type', 'text');
-    $("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date("2/1/2018")));
-    $("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date("2/1/2018")));
+    $("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
+    $("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
     $("#StartEndDaySelector").datepicker({
         onSelect: function (dateText) {
             $("#StartDateDay").val(dateText);
@@ -88,17 +88,32 @@ function LoadDataAggregateTypes() {
 
 function LoadSignal() {
     var signalId = $("#SignalID").val();
+    var signalsContainer = $('#RouteSignals');
+    var index = signalsContainer[0].children.length;
+    var parameters = {};
+    parameters.signalId = signalId;
+    parameters.index = index;
     $.ajax({
-        url: urlpathGetSignal + "/" + signalId,
+        url: urlpathGetSignal,
         type: "GET",
         cache: false,
         async: true,
+        data: parameters,
         contentType: "application/json; charset=utf-8",
         success: function (data) {
-            $('#RouteSignals').append(data);
+            if (index > 0) {
+                var newData = data.replaceAll("FilterSignals_0", "FilterSignals_" + index);
+                var newData2 = newData.replaceAll("FilterSignals[0]", "FilterSignals[" + index + "]");
+                $('#RouteSignals').append(newData2);
+            }
+            else {
+                $('#RouteSignals').append(data);
+            }
             $.validator.unobtrusive.parse($("#RouteSignals"));
         },
-        onerror: function () { alert("Error"); }
+        onerror: function() {
+             alert("Error");
+        }
     });
 }
 

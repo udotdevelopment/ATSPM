@@ -310,7 +310,9 @@ function CreateNewSignal() {
             SetSignalID(newSignalID);
         },
         complete: function () {
+            var startDate = $("#Start")[0].defaultValue;
             SetDatePicker();
+            $("#Start").val(startDate);
         },
         statusCode: {
             404: function (content) { alert('cannot find resource'); },

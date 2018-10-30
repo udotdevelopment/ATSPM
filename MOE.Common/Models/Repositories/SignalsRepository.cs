@@ -182,9 +182,7 @@ namespace MOE.Common.Models.Repositories
 
         public string GetSignalLocation(string signalId)
         {
-            var signal = (from r in _db.Signals
-                where r.SignalID == signalId
-                select r).FirstOrDefault();
+            var signal = GetLatestVersionOfSignalBySignalID(signalId);
             var location = string.Empty;
             if (signal != null)
                 location = signal.PrimaryName + " @ " + signal.SecondaryName;

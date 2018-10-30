@@ -358,9 +358,8 @@ namespace MOE.Common.Business
             //var reportTimespan = options.EndDate - options.StartDate;
             chartArea.AxisX.Title = "Time (Hour of Day)";
             chartArea.AxisX.LabelStyle.IsEndLabelVisible = false;
-            //chartArea.AxisX.Interval = 1;
-            if (options.SelectedXAxisType ==
-                XAxisType.TimeOfDay)
+            chartArea.AxisX.Interval = 1;
+            if (options.SelectedXAxisType == XAxisType.TimeOfDay)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
                 chartArea.AxisX.LabelStyle.Format = "HH";
@@ -492,6 +491,8 @@ namespace MOE.Common.Business
         private static void SetUpX2AxisNoLabels(ChartArea chartArea, MetricOptions options)
         {
             chartArea.AxisX2.Enabled = AxisEnabled.True;
+            chartArea.AxisX2.MajorGrid.Enabled = false;
+            chartArea.AxisX2.MajorTickMark.Enabled = false;
             chartArea.AxisX2.IntervalType = DateTimeIntervalType.Hours;
             chartArea.AxisX2.Minimum = options.StartDate.ToOADate();
             chartArea.AxisX2.Maximum = options.EndDate.ToOADate();
@@ -618,6 +619,7 @@ namespace MOE.Common.Business
                 chartArea.AxisY.Maximum = options.YAxisMax.Value;
             chartArea.AxisY.Title = "Cycle Time (Seconds) ";
             chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.IntervalType = DateTimeIntervalType.Number;
         }
 
         public static Series CreateLineSeries(string seriesName, Color seriesColor)

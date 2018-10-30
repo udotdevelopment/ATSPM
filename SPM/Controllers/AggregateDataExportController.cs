@@ -42,11 +42,11 @@ namespace SPM.Controllers
             return PartialView(aggDataExportViewModel);
         }
 
-        public ActionResult GetSignal(string id)
+        public ActionResult GetSignal(string signalId, int index)
         {
             var signalRepository = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
             AggDataExportViewModel aggDataExportViewModel = new AggDataExportViewModel();
-            var signal = signalRepository.GetLatestVersionOfSignalBySignalID(id);
+            var signal = signalRepository.GetLatestVersionOfSignalBySignalID(signalId);
             aggDataExportViewModel.FilterSignals.Add(GetFilterSignal(signal));
             return PartialView("GetRouteSignals", aggDataExportViewModel);
         }
@@ -335,15 +335,6 @@ namespace SPM.Controllers
         public static List<int> StringToIntList(string str)
         {
             return str.Split(',').Select(int.Parse).ToList();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                //db.Dispose();
-            }
-            base.Dispose(disposing);
         }
 
         public ActionResult GetAggregateDataTypes(int id)
