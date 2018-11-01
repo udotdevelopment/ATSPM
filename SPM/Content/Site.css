@@ -457,10 +457,10 @@ textarea {
   }
 }
 
-.jumbotron {
-    background-image: url(../Images/PartnersLogo.jpg);
-    background-size: cover;
-    height: 100%
+
+.partners {
+    width: 100%;
+    min-width: 400px;
 }
 
 .navbar-brand {

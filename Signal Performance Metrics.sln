@@ -24,8 +24,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateAddDataScript", "Ge
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPMWatchDog", "SPMWatchDogNew\SPMWatchDog.csproj", "{AB47526A-AAB8-4048-A480-11C02805AD91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WcfVolumeExport", "WcfVolumeExport\WcfVolumeExport.csproj", "{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FTPFromOneController", "FTPFromOneController\FTPFromOneController.csproj", "{2D899A66-73A3-4F92-8C54-BA16E14EEA97}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FTPSClient", "FTPSClient\FTPSClient\FTPSClient.csproj", "{8271707D-0C08-460D-A332-6FDB8D0BB6D1}"
@@ -217,31 +215,6 @@ Global
 		{AB47526A-AAB8-4048-A480-11C02805AD91}.SingleImage|Mixed Platforms.Build.0 = Release|x86
 		{AB47526A-AAB8-4048-A480-11C02805AD91}.SingleImage|x86.ActiveCfg = Release|x86
 		{AB47526A-AAB8-4048-A480-11C02805AD91}.SingleImage|x86.Build.0 = Release|x86
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.CD_ROM|Mixed Platforms.Build.0 = Release|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.CD_ROM|x86.ActiveCfg = Release|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.DVD-5|x86.ActiveCfg = Debug|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.Release|x86.ActiveCfg = Release|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.SingleImage|Any CPU.Build.0 = Release|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
-		{CAA74DC7-7DA0-40E2-AD70-E1FEE8ABB4E0}.SingleImage|x86.ActiveCfg = Release|Any CPU
 		{2D899A66-73A3-4F92-8C54-BA16E14EEA97}.CD_ROM|Any CPU.ActiveCfg = Release|x86
 		{2D899A66-73A3-4F92-8C54-BA16E14EEA97}.CD_ROM|Mixed Platforms.ActiveCfg = Release|x86
 		{2D899A66-73A3-4F92-8C54-BA16E14EEA97}.CD_ROM|Mixed Platforms.Build.0 = Release|x86
@@ -840,6 +813,48 @@ Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
 		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

@@ -26,18 +26,18 @@ namespace MOE.Common.Business.DataAggregation
                 ApproachSplitFailAggregationRepositoryFactory.Create();
             var splitFails =
                 splitFailAggregationRepository.GetApproachSplitFailsAggregationByApproachIdAndDateRange(
-                    approach.ApproachID, options.StartDate, options.EndDate, getProtectedPhase);
+                    approach.ApproachID, options.TimeOptions.Start, options.TimeOptions.End, getProtectedPhase);
             if (splitFails != null)
             {
                 var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
-                //foreach (var binsContainer in binsContainers)
-                Parallel.ForEach(BinsContainers, binsContainer =>
+                foreach (var binsContainer in BinsContainers)
+                //Parallel.ForEach(BinsContainers, binsContainer =>
                 {
                     var tempBinsContainer =
                         new BinsContainer(binsContainer.Start, binsContainer.End);
                     var concurrentBins = new ConcurrentBag<Bin>();
-                    //foreach (var bin in binsContainer.Bins)
-                    Parallel.ForEach(binsContainer.Bins, bin =>
+                    foreach (var bin in binsContainer.Bins)
+                    //Parallel.ForEach(binsContainer.Bins, bin =>
                     {
                         if (splitFails.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
                         {
@@ -72,10 +72,10 @@ namespace MOE.Common.Business.DataAggregation
                                 Average = 0
                             });
                         }
-                    });
+                    }//);
                     tempBinsContainer.Bins = concurrentBins.OrderBy(c => c.Start).ToList();
                     concurrentBinContainers.Add(tempBinsContainer);
-                });
+                }//);
                 BinsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
             }
         }

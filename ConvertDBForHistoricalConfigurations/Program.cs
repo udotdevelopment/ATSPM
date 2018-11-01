@@ -244,7 +244,7 @@ namespace ConvertDBForHistoricalConfigurations
                     metricComments.SignalId = (string) reader["SignalID"];
                     metricComments.TimeStamp = (DateTime) reader["TimeStamp"];
                     metricComments.ComentText = (string) reader["CommentText"];
-                    metricComments.VersionId = (int) reader["VersionId"];
+                    //metricComments.VersionId = (int) reader["VersionId"];
                     _oldMetricCommentsList.Add(metricComments);
                 }
                 sqlconn.Dispose();

@@ -267,53 +267,54 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override void GetTimeOfDayCharts()
         {
-            Chart chart = null;
             switch (SelectedSeries)
             {
                 case SeriesType.PhaseNumber:
                     foreach (var signal in Signals)
                     {
-                        chart = ChartFactory.CreateTimeXIntYChart(this, new List<Models.Signal> {signal});
-                        GetTimeOfDayXAxisApproachSeriesChart(signal, chart);
+                        Chart phaseChart = ChartFactory.CreateTimeXIntYChart(this, new List<Models.Signal> {signal});
+                        GetTimeOfDayXAxisApproachSeriesChart(signal, phaseChart);
                         if (ShowEventCount)
                         {
-                            SetTimeofDayAxisSignalSeriesForEventCount(signal, chart);
+                            SetTimeofDayAxisSignalSeriesForEventCount(signal, phaseChart);
                         }
+                        SaveChartImage(phaseChart);
                     }
                     break;
                 case SeriesType.Direction:
                     foreach (var signal in Signals)
                     {
                         var signals = new List<Models.Signal> {signal};
-                        chart = ChartFactory.CreateTimeXIntYChart(this, signals);
-                        GetTimeOfDayXAxisDirectionSeriesChart(signal, chart);
+                        Chart directionChart = ChartFactory.CreateTimeXIntYChart(this, signals);
+                        GetTimeOfDayXAxisDirectionSeriesChart(signal, directionChart);
                         if (ShowEventCount)
                         {
-                            SetTimeofDayAxisSignalSeriesForEventCount(signal, chart);
+                            SetTimeofDayAxisSignalSeriesForEventCount(signal, directionChart);
                         }
+                    SaveChartImage(directionChart);
                     }
-                    ;
                     break;
                 case SeriesType.Signal:
-                    chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
-                    GetTimeOfDayXAxisSignalSeriesChart(Signals, chart);
+                    Chart signalChart = ChartFactory.CreateTimeXIntYChart(this, Signals);
+                    GetTimeOfDayXAxisSignalSeriesChart(Signals, signalChart);
                     if (ShowEventCount)
                     {
-                        SetTimeOfDayAxisRouteSeriesForEventCount(Signals, chart);
+                        SetTimeOfDayAxisRouteSeriesForEventCount(Signals, signalChart);
                     }
+                    SaveChartImage(signalChart);
                     break;
                 case SeriesType.Route:
-                    chart = ChartFactory.CreateTimeXIntYChart(this, Signals);
-                    GetTimeOfDayXAxisRouteSeriesChart(Signals, chart);
+                    Chart RouteChart = ChartFactory.CreateTimeXIntYChart(this, Signals);
+                    GetTimeOfDayXAxisRouteSeriesChart(Signals, RouteChart);
                     if (ShowEventCount)
                     {
-                        SetTimeOfDayAxisRouteSeriesForEventCount(Signals, chart);
+                        SetTimeOfDayAxisRouteSeriesForEventCount(Signals, RouteChart);
                     }
+                    SaveChartImage(RouteChart);
                     break;
                 default:
                     throw new Exception("Invalid X-Axis Series Combination");
             }
-            SaveChartImage(chart);
         }
         
 
@@ -354,11 +355,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected void GetTimeOfDayXAxisApproachSeriesChart(Models.Signal signal, Chart chart)
         {
-            if (TimeOptions.TimeOfDayStartHour != null && TimeOptions.TimeOfDayStartMinute.Value != null)
-                chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                    new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day,
-                            TimeOptions.TimeOfDayStartHour.Value, TimeOptions.TimeOfDayStartMinute.Value, 0)
-                        .AddHours(-1).ToOADate();
             var seriesList = new ConcurrentBag<Series>();
             var approaches = signal.Approaches.ToList();
             try

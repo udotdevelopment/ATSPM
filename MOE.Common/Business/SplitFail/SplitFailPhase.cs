@@ -16,11 +16,13 @@ namespace MOE.Common.Business.SplitFail
         public List<CycleSplitFail> Cycles { get; }
         public List<PlanSplitFail> Plans { get; }
         public Dictionary<string, string> Statistics { get; }
+        public string PhaseNumberSort { get; set; }
 
         public SplitFailPhase(Approach approach, SplitFailOptions options, bool getPermissivePhase)
         {
             Approach = approach;
             GetPermissivePhase = getPermissivePhase;
+            PhaseNumberSort = getPermissivePhase ? approach.PermissivePhaseNumber.Value.ToString()+"-1": approach.ProtectedPhaseNumber.ToString()+"-2";
             Cycles = CycleFactory.GetSplitFailCycles(options, approach, getPermissivePhase);
             SetDetectorActivations(options);
             AddDetectorActivationsToCycles();

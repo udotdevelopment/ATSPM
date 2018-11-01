@@ -249,13 +249,11 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
-                var events = (from s in _db.Controller_Event_Log
-                             where s.SignalID == signalId &&
+                var events = _db.Controller_Event_Log.Where(s => s.SignalID == signalId &&
                                    s.Timestamp >= startTime &&
                                    s.Timestamp <= endTime &&
                                    s.EventParam == param &&
-                                   eventCodes.Contains(s.EventCode)
-                             select s).ToList();
+                                   eventCodes.Contains(s.EventCode)).ToList();
                 events = events.OrderBy(e => e.Timestamp).ThenBy(e => e.EventParam).ToList();
                 return events;
             }
@@ -282,14 +280,14 @@ namespace MOE.Common.Models.Repositories
             {
                 var endDate = timestamp.AddDays(1);
                 var events = _db.Controller_Event_Log.Where(c =>
-                        c.SignalID == signalId &&
-                        c.Timestamp > timestamp &&
-                        c.Timestamp < endDate &&
-                        c.EventParam == param &&
-                        eventCodes.Contains(c.EventCode))
+                    c.SignalID == signalId &&
+                    c.Timestamp > timestamp &&
+                    c.Timestamp < endDate &&
+                    c.EventParam == param &&
+                    eventCodes.Contains(c.EventCode)).ToList();
+                return events
                     .OrderBy(s => s.Timestamp)
-                    .Take(top).ToList();
-                return events;
+                    .Take(top).ToList(); 
             }
             catch (Exception e)
             {

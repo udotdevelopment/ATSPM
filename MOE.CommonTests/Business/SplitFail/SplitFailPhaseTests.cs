@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MOE.Common.Business.Bins;
+using MOE.Common.Business.FilterExtensions;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models.Repositories;
 using MOE.CommonTests.Helpers;
@@ -69,5 +71,32 @@ namespace MOE.Common.Business.SplitFail.Tests
             Assert.IsTrue(splitFailPhase.Cycles[4].FirstSecondsOfRed == 5); 
             Assert.IsTrue(Math.Round(splitFailPhase.Cycles[4].GreenOccupancyPercent) == 60.0);
         }
+        [TestMethod()]
+        public void SplitFailDataAggregationTest()
+        {
+            var startTime = new DateTime(2014, 1, 1);
+            var endTime = new DateTime(2014, 1, 1, 0, 15, 0);
+            var splitFailAggregateRepository = MOE.Common.Models.Repositories.ApproachSplitFailAggregationRepositoryFactory.Create();
+            var splitFails = splitFailAggregateRepository.GetApproachSplitFailsAggregationByApproachIdAndDateRange(4971,
+                startTime, endTime, true);
+
+            var signalRepository = SignalsRepositoryFactory.Create();
+            var signal = signalRepository.GetLatestVersionOfSignalBySignalID("5078");
+            var approach = signal.Approaches.Where(s => s.ApproachID == 4971).FirstOrDefault();
+
+            var splitFailOptions = new SplitFailOptions
+            {
+                FirstSecondsOfRed = 5,
+                StartDate = startTime,
+                EndDate = endTime,
+                MetricTypeID = 12
+            };
+            var splitFailPhase = new SplitFailPhase(approach, splitFailOptions, true);
+
+            Assert.IsTrue(splitFails.FirstOrDefault().SplitFailures == splitFailPhase.TotalFails);
+
+        }
     }
+
+    
 }
