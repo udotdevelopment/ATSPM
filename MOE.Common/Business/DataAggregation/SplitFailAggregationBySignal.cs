@@ -92,8 +92,8 @@ namespace MOE.Common.Business.DataAggregation
             foreach (var approach in signal.Approaches)
             {
                 ApproachSplitFailures.Add(
-                    new SplitFailAggregationByApproach(approach, options, options.StartDate,
-                        options.EndDate,
+                    new SplitFailAggregationByApproach(approach, options, options.TimeOptions.Start,
+                        options.TimeOptions.End,
                         true, options.SelectedAggregatedDataType));
                 if (approach.PermissivePhaseNumber != null)
                     ApproachSplitFailures.Add(

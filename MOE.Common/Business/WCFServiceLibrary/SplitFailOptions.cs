@@ -74,16 +74,16 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 List<SplitFailPhase> splitFailPhases = new List<SplitFailPhase>();
                 foreach (Approach approach in metricApproaches)
                 {
-                    if (approach.ProtectedPhaseNumber > 0)
-                    {
-                        splitFailPhases.Add(new SplitFailPhase(approach, this, false));
-                    }
                     if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
                     {
                         splitFailPhases.Add(new SplitFailPhase(approach, this, true));
                     }
+                    if (approach.ProtectedPhaseNumber > 0)
+                    {
+                        splitFailPhases.Add(new SplitFailPhase(approach, this, false));
+                    }
                 }
-                splitFailPhases = splitFailPhases.OrderBy(s => s.Approach.Description).ToList();
+                splitFailPhases = splitFailPhases.OrderBy(s => s.PhaseNumberSort).ToList();
                 foreach (var splitFailPhase in splitFailPhases)
                 {
                     GetChart(splitFailPhase, returnString);

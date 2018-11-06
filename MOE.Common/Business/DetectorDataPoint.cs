@@ -14,21 +14,29 @@ namespace MOE.Common.Business
         public DetectorDataPoint(DateTime startDate, DateTime eventTime, DateTime greenEvent, DateTime yellowEvent)
         {
             TimeStamp = eventTime;
-            YPoint = (eventTime - startDate).TotalSeconds;
+            StartOfCycle = startDate;
+            YPoint = (TimeStamp - StartOfCycle).TotalSeconds;
+            YellowEvent = yellowEvent;
+            GreenEvent = greenEvent;
+            SetDataPointProperties();
+        }
+
+        private void SetDataPointProperties()
+        {
             //if the detector hit is before greenEvent
-            if (eventTime < greenEvent)
+            if (TimeStamp < GreenEvent)
             {
-                Delay = (greenEvent - eventTime).TotalSeconds;
+                Delay = (GreenEvent - TimeStamp).TotalSeconds;
                 ArrivalType = ArrivalType.ArrivalOnRed;
             }
             //if the detector hit is After green, but before yellow
-            else if (eventTime >= greenEvent && eventTime < yellowEvent)
+            else if (TimeStamp >= GreenEvent && TimeStamp < YellowEvent)
             {
                 Delay = 0;
                 ArrivalType = ArrivalType.ArrivalOnGreen;
             }
             //if the event time is after yellow
-            else if (eventTime >= yellowEvent)
+            else if (TimeStamp >= YellowEvent)
             {
                 Delay = 0;
                 ArrivalType = ArrivalType.ArrivalOnYellow;
@@ -36,18 +44,26 @@ namespace MOE.Common.Business
         }
 
         //Represents a time span from the start of the red to red cycle
-        public double YPoint { get; }
+        public double YPoint { get; private set; }
+
+        public DateTime StartOfCycle { get;}
 
         //The actual time of the detector activation
-        public DateTime TimeStamp { get; }
+        public DateTime TimeStamp { get; private set; }
 
-        public double Delay { get; }
+        public DateTime YellowEvent { get;}
 
-        public ArrivalType ArrivalType { get; }
+        public DateTime GreenEvent { get; }
+
+        public double Delay { get; set; }
+
+        public ArrivalType ArrivalType { get; set; }
 
         public void AddSeconds(int seconds)
         {
-            
+            TimeStamp = TimeStamp.AddSeconds(seconds);
+            YPoint = (TimeStamp - StartOfCycle).TotalSeconds;
+            SetDataPointProperties();
         }
     }
 }

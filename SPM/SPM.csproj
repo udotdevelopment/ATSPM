@@ -346,6 +346,10 @@
     <Content Include="Images\Signal Ops QIT Final Report Released.pdf" />
     <Content Include="Properties\DataSources\MOE.Common.Business.TMC.TMCInfo.datasource" />
     <Content Include="Properties\DataSources\System.Xml.Linq.XElement.datasource" />
+    <Content Include="Images\WavetronixMatrixLatencyInformation.pdf" />
+    <Content Include="Images\NEMA Phase # Convention UDOT.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />

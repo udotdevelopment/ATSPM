@@ -78,10 +78,10 @@ namespace MOE.Common.Business
         public void LinkPivotAddSeconds(int seconds)
         {
             Volume = null;
-            foreach (var row in DetectorEvents)
-                row.Timestamp = row.Timestamp.AddSeconds(seconds);
-            GetPlansCyclesAndEvents();
-            //Plans.LinkPivotAddDetectorData(this.DetectorEvents);
+            foreach (var cyclePcd in Cycles)
+            {
+                cyclePcd.AddSecondsToDetectorEvents(seconds);
+            }
         }
 
         private void GetSignalPhaseData()
@@ -106,7 +106,7 @@ namespace MOE.Common.Business
             var detectorsForMetric = Approach.GetDetectorsForMetricType(metricTypeId);
             foreach (var d in detectorsForMetric)
                 DetectorEvents.AddRange(celRepository.GetEventsByEventCodesParamWithOffsetAndLatencyCorrection(Approach.SignalID, StartDate,
-                    EndDate, new List<int> {81}, d.DetChannel, d.GetOffset(), d.LatencyCorrection));
+                    EndDate, new List<int> {82}, d.DetChannel, d.GetOffset(), d.LatencyCorrection));
         }
 
 

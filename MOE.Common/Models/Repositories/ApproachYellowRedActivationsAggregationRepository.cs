@@ -51,7 +51,8 @@ namespace MOE.Common.Models.Repositories
         {
             return _db.ApproachYellowRedActivationAggregations.Where(r => r.ApproachId == approachId
                                                                           && r.BinStartTime >= startDate &&
-                                                                          r.BinStartTime <= endDate).ToList();
+                                                                          r.BinStartTime <= endDate
+                                                                          && r.IsProtectedPhase == getProtectedPhase).ToList();
         }
 
 

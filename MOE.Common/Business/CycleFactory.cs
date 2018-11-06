@@ -66,9 +66,6 @@ namespace MOE.Common.Business
                 // overlap green
                 case 61:
                     return RedToRedCycle.EventType.ChangeToGreen;
-
-                case 66:
-                    return RedToRedCycle.EventType.ChangeToGreen;
                 case 8:
                     return RedToRedCycle.EventType.ChangeToYellow;
                 // overlap yellow
@@ -174,12 +171,11 @@ namespace MOE.Common.Business
             var terminationEvents =
                 GetTerminationEvents(getPermissivePhase, options.StartDate, options.EndDate, approach);
             var cycles = new List<CycleSplitFail>();
-            for (var i = 0; i < cycleEvents.Count; i++)
-                if (i < cycleEvents.Count - 3
-                    && GetEventType(cycleEvents[i].EventCode) == RedToRedCycle.EventType.ChangeToGreen
+            for (var i = 0; i < cycleEvents.Count - 3; i++)
+                if ( GetEventType(cycleEvents[i].EventCode) == RedToRedCycle.EventType.ChangeToGreen
                     && GetEventType(cycleEvents[i + 1].EventCode) == RedToRedCycle.EventType.ChangeToYellow
                     && GetEventType(cycleEvents[i + 2].EventCode) == RedToRedCycle.EventType.ChangeToRed
-                    && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToGreen)
+                    && (GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToGreen || cycleEvents[i + 3].EventCode == 66))
                 {
                     var termEvent = GetTerminationEventBetweenStartAndEnd(cycleEvents[i].Timestamp,
                         cycleEvents[i + 3].Timestamp, terminationEvents);

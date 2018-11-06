@@ -903,34 +903,40 @@ namespace MOE.Common.Business.DataAggregation
             int eventCount =
                 controllerEventLogRepository.GetApproachEventsCountBetweenDates(approach.ApproachID,
                     startTime, endTime, approach.ProtectedPhaseNumber);
-
-            //SetApproachCycleData(signalPhase, startTime, approach, records, false); 
-            //SetApproachPcdData(signalPhase, startTime, approach); 
-            //SetSplitFailData(startTime, endTime, approach, false); 
-            //SetYellowRedActivationData(startTime, endTime, approach, false); 
-            Parallel.Invoke(() => { SetApproachCycleData(signalPhase, startTime, approach, records, false); },
-                () => { SetApproachPcdData(signalPhase, startTime, approach); },
-                () => { SetSplitFailData(startTime, endTime, approach, false); },
-                () => { SetYellowRedActivationData(startTime, endTime, approach, false); });
-            if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
-            {
-                eventCount +=
-                    controllerEventLogRepository.GetApproachEventsCountBetweenDates(approach.ApproachID,
-                        startTime, endTime, (int)approach.PermissivePhaseNumber);
-                var permissiveSignalPhase = new SignalPhase(startTime, endTime, approach, false, 15, 6, true);
-                Parallel.Invoke(
-                    () => { SetApproachCycleData(permissiveSignalPhase, startTime, approach, records, true); },
-                    () => { SetApproachPcdData(permissiveSignalPhase, startTime, approach); },
-                    () => { SetSplitFailData(startTime, endTime, approach, true); },
-                    () => { SetYellowRedActivationData(startTime, endTime, approach, true); });
-            }
             _approachEventAggregationConcurrentQueue.Enqueue(new ApproachEventCountAggregation
             {
                 BinStartTime = startTime,
                 EventCount = eventCount,
                 ApproachId = approach.ApproachID,
-                IsProtectedPhase = approach.IsProtectedPhaseOverlap
+                IsProtectedPhase = true
             });
+            //SetApproachCycleData(signalPhase, startTime, approach, records, false); 
+            //SetApproachPcdData(signalPhase, startTime, approach); 
+            //SetSplitFailData(startTime, endTime, approach, false); 
+            //SetYellowRedActivationData(startTime, endTime, approach, false); 
+            Parallel.Invoke(() => { SetApproachCycleData(signalPhase, startTime, approach, records, false); },
+                () => { SetApproachPcdData(signalPhase, startTime, approach, false); },
+                () => { SetSplitFailData(startTime, endTime, approach, false); },
+                () => { SetYellowRedActivationData(startTime, endTime, approach, false); });
+            if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
+            {
+                var permissiveEventCount =
+                    controllerEventLogRepository.GetApproachEventsCountBetweenDates(approach.ApproachID,
+                        startTime, endTime, (int)approach.PermissivePhaseNumber);
+                var permissiveSignalPhase = new SignalPhase(startTime, endTime, approach, false, 15, 6, true);
+                Parallel.Invoke(
+                    () => { SetApproachCycleData(permissiveSignalPhase, startTime, approach, records, true); },
+                    () => { SetApproachPcdData(permissiveSignalPhase, startTime, approach, true); },
+                    () => { SetSplitFailData(startTime, endTime, approach, true); },
+                    () => { SetYellowRedActivationData(startTime, endTime, approach, true); });
+                _approachEventAggregationConcurrentQueue.Enqueue(new ApproachEventCountAggregation
+                {
+                    BinStartTime = startTime,
+                    EventCount = permissiveEventCount,
+                    ApproachId = approach.ApproachID,
+                    IsProtectedPhase = false
+                });
+            }
 
         }
 
@@ -954,13 +960,13 @@ namespace MOE.Common.Business.DataAggregation
                         BinStartTime = startTime,
                         SevereRedLightViolations = Convert.ToInt32(yellowRedAcuationsPhase.SevereRedLightViolations),
                         TotalRedLightViolations = Convert.ToInt32(yellowRedAcuationsPhase.Violations),
-                        IsProtectedPhase = approach.IsProtectedPhaseOverlap
+                        IsProtectedPhase = !isPermissivePhase
                     });
                 //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
             }
         }
 
-        private void SetApproachPcdData(SignalPhase signalPhase, DateTime startTime, Approach approach)
+        private void SetApproachPcdData(SignalPhase signalPhase, DateTime startTime, Approach approach, bool isPermissivePhase)
         {
             if (approach.GetDetectorsForMetricType(6).Any())
                 _approachPcdAggregationConcurrentQueue.Enqueue(new ApproachPcdAggregation
@@ -969,9 +975,9 @@ namespace MOE.Common.Business.DataAggregation
                     ArrivalsOnGreen = Convert.ToInt32(signalPhase.TotalArrivalOnGreen),
                     ArrivalsOnRed = Convert.ToInt32(signalPhase.TotalArrivalOnRed),
                     ArrivalsOnYellow = Convert.ToInt32(signalPhase.TotalArrivalOnYellow),
-                    Volume = Convert.ToInt32(signalPhase.TotalArrivalOnGreen+ signalPhase.TotalArrivalOnRed+ signalPhase.TotalArrivalOnYellow),
+                    Volume = Convert.ToInt32(signalPhase.TotalVolume),
                     BinStartTime = startTime,
-                    IsProtectedPhase = approach.IsProtectedPhaseOverlap
+                    IsProtectedPhase = !isPermissivePhase
                 });
         }
 
@@ -1000,7 +1006,7 @@ namespace MOE.Common.Business.DataAggregation
                 YellowTime = signalPhase.TotalYellowTime,
                 PedActuations = pedActuations,
                 TotalCycles = totalCycles,
-                IsProtectedPhase = approach.IsProtectedPhaseOverlap
+                IsProtectedPhase = !isPermissivePhase
             };
             _approachCycleAggregationConcurrentQueue.Enqueue(approachAggregation);
 
@@ -1025,7 +1031,7 @@ namespace MOE.Common.Business.DataAggregation
                 ApproachId = approach.ApproachID,
                 BinStartTime = startTime,
                 SplitFailures = splitFailPhase.TotalFails,
-                IsProtectedPhase = getPermissivePhase
+                IsProtectedPhase = !getPermissivePhase
             });
 
             //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
@@ -1050,7 +1056,7 @@ namespace MOE.Common.Business.DataAggregation
                                 Speed15Th = speedBucket.FifteenthPercentile,
                                 SpeedVolume = speedBucket.SpeedVolume,
                                 SummedSpeed = speedBucket.SummedSpeed,
-                                IsProtectedPhase = signalApproach.IsProtectedPhaseOverlap
+                                IsProtectedPhase = true
                             };
                         _approachSpeedAggregationConcurrentQueue.Enqueue(approachSpeedAggregation);
                     }

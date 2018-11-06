@@ -204,7 +204,7 @@ namespace SPM.Controllers
 
         private static void SetCommonValues(AggDataExportViewModel aggDataExportViewModel, SignalAggregationMetricOptions options)
         {
-            aggDataExportViewModel.EndDateDay =aggDataExportViewModel.EndDateDay.Value.AddDays(1);
+            //aggDataExportViewModel.EndDateDay =aggDataExportViewModel.EndDateDay.Value.AddDays(1);
             options.StartDate = aggDataExportViewModel.StartDateDay.Value;
             options.EndDate = aggDataExportViewModel.EndDateDay.Value;
             options.SelectedAggregationType = aggDataExportViewModel.SelectedAggregationType.Value;
@@ -256,6 +256,10 @@ namespace SPM.Controllers
             {
                 startTime = aggDataExportViewModel.StartTime.Split(':');
                 startHour = Convert.ToInt32(startTime[0]);
+                if (startHour == 12 && aggDataExportViewModel.SelectedStartAMPM.Contains("AM"))
+                {
+                    startHour = 0;
+                }
                 if (aggDataExportViewModel.SelectedStartAMPM.Contains("PM"))
                 {
                     startHour += 12;
@@ -263,12 +267,29 @@ namespace SPM.Controllers
                 startMinute = startTime.Length > 1 ? Convert.ToInt32(startTime[1]) : 0;
                 endTime = aggDataExportViewModel.EndTime.Split(':');
                 endHour = Convert.ToInt32(endTime[0]);
-                if (aggDataExportViewModel.SelectedEndAMPM.Contains("PM"))
+                if (endHour == 12 && aggDataExportViewModel.SelectedEndAMPM.Contains("AM"))
+                {
+                    endHour = 0;
+                }
+                if (aggDataExportViewModel.SelectedEndAMPM.Contains("PM") && endHour < 12)
                 {
                     endHour += 12;
                 }
                 endMinute = endTime.Length > 1 ? Convert.ToInt32(endTime[1]) : 0;
                 //timeOptions = BinFactoryOptions.TimeOptions.TimePeriod;
+                aggDataExportViewModel.StartDateDay = aggDataExportViewModel.StartDateDay.Value
+                    .AddHours(startHour.Value).AddMinutes(startMinute.Value);
+                aggDataExportViewModel.EndDateDay = aggDataExportViewModel.EndDateDay.Value
+                    .AddHours(endHour.Value).AddMinutes(endMinute.Value);
+            }
+            else
+            {
+                startHour = 0;
+                startMinute = 0;
+                endHour = 23;
+                endMinute = 59;
+                aggDataExportViewModel.EndDateDay = aggDataExportViewModel.EndDateDay.Value
+                    .AddHours(23).AddMinutes(59);
             }
             List<DayOfWeek> daysOfWeek = new List<DayOfWeek>();
             if (aggDataExportViewModel.Weekends)
@@ -280,6 +301,24 @@ namespace SPM.Controllers
                 daysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
             }
             BinFactoryOptions.BinSize binSize = (BinFactoryOptions.BinSize)aggDataExportViewModel.SelectedBinSize;
+            switch (aggDataExportViewModel.SelectedXAxisType)
+            {
+                case XAxisType.Time:
+                {
+                    timeOptions = BinFactoryOptions.TimeOptions.StartToEnd;
+                    break;
+                }
+                case XAxisType.TimeOfDay:
+                {
+                    timeOptions = BinFactoryOptions.TimeOptions.TimePeriod;
+                    break;
+                }
+                default:
+                {
+                    timeOptions = BinFactoryOptions.TimeOptions.StartToEnd;
+                    break;
+                }
+            }
 
             options.TimeOptions = new BinFactoryOptions(
                 aggDataExportViewModel.StartDateDay.Value,
