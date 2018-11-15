@@ -160,15 +160,6 @@ namespace MOE.Common.Migrations
 
             string sqlResUpperBoundary = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".UpperBoundary.sql";
             this.SqlResource(sqlResUpperBoundary);
-
-            
-
-            //string sqlResReclaimFileSpaceForMoe = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".ReclaimFileSpaceForMoe.sql";
-            //this.SqlResource(sqlResReclaimFileSpaceForMoe);
-
-           
-           // string sqlResName = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".CreateIntegratedSwapAndMoveDataJob.sql";
-            //this.SqlResource(sqlResName);
         }
 
 

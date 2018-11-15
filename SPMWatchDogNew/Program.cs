@@ -12,8 +12,7 @@ namespace SPMWatchDogNew
                 try
                 {
                     startTime = DateTime.Parse(args[0]);
-                    MOE.Common.Business.WatchDog.WatchDogScan scan =
-                        new MOE.Common.Business.WatchDog.WatchDogScan(startTime);
+                    MOE.Common.Business.WatchDog.WatchDogScan scan = new MOE.Common.Business.WatchDog.WatchDogScan(startTime);
                     scan.StartScan();
                 }
                 catch (Exception ex)
@@ -26,8 +25,7 @@ namespace SPMWatchDogNew
             {
                 try
                 {
-                    MOE.Common.Business.WatchDog.WatchDogScan scan =
-                        new MOE.Common.Business.WatchDog.WatchDogScan(startTime);
+                    MOE.Common.Business.WatchDog.WatchDogScan scan = new MOE.Common.Business.WatchDog.WatchDogScan(startTime);
                     scan.StartScan();
                 }
                 catch (Exception ex)

@@ -1021,8 +1021,8 @@ While each agency should consult with their IT department for specific guideline
                     ApplicationID = 2,
                     ConsecutiveCount = 3,
                     DefaultEmailAddress = "dlowe@utah.gov",
-                    EmailServer = "SEND.EMAIL.SERVER",
-                    FromEmailAddress = "ADMINISTRATOR@utah.gov",
+                    EmailServer = "send.state.ut.us",
+                    FromEmailAddress = "SPMWatchdog@utah.gov",
                     LowHitThreshold = 50,
                     MaxDegreeOfParallelism = 4,
                     MinimumRecords = 500,
@@ -1033,7 +1033,8 @@ While each agency should consult with their IT department for specific guideline
                     ScanDayEndHour = 5,
                     ScanDayStartHour = 1,
                     WeekdayOnly = true,
-                    MaximumPedestrianEvents = 200
+                    MaximumPedestrianEvents = 200,
+                    EmailAllErrors = false
                 }
             );
 
@@ -1058,8 +1059,8 @@ While each agency should consult with their IT department for specific guideline
                 {
                     ApplicationID = 4,
                     RawDataCountLimit = 1048576,
-                    ImageUrl = "http://SPM.SERVER/spmimages/",
-                    ImagePath = @"\\SPM.SERVER\SPMImages\"
+                    ImageUrl = "http://udottraffic.utah.gov/spmimages/",
+                    ImagePath = @"\\utstsrtcns53\C-LinkDynamicContent\SPMImages"
                 }
             );
 
@@ -1158,10 +1159,12 @@ While each agency should consult with their IT department for specific guideline
                     InsertValues = "INSERT INTO [SignalID], [Timestamp], [EventCode], [EventParam]",
                     DataBaseName = "MoePartition",
                     Verbose = true,
-                    CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, 
-                                            [Timestamp] [datetime2](7) NOT NULL, [EventCode] [int] NOT NULL, [EventParam] [int] NOT NULL"
-                },
 
+                    //CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, 
+                    //                        [Timestamp] [datetime2](7) NOT NULL, [EventCode] [int] NOT NULL, [EventParam] [int] NOT NULL"
+                    CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS, 
+                                            [Timestamp] [datetime2](7), [EventCode] [int], [EventParam] [int]"
+                },
                 new ToBeProcessededTable()
                 {
                     PartitionedTableName = "Speed_Events",

@@ -46,7 +46,7 @@ namespace MOE.CommonTests.Helpers
         {
             System.Data.SqlClient.SqlConnectionStringBuilder builder =
              new System.Data.SqlClient.SqlConnectionStringBuilder();
-            builder["Data Source"] = "moeSERVER";
+            builder["Data Source"] = "srwtcns54";
             builder["Password"] = "dontshareme";
             builder["Persist Security Info"] = true;
             builder["User ID"] = "datareader";

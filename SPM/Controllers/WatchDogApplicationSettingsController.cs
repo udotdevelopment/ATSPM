@@ -35,7 +35,7 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,ApplicationID,ConsecutiveCount,MinPhaseTerminations,PercentThreshold,MaxDegreeOfParallelism,ScanDayStartHour,ScanDayEndHour,PreviousDayPMPeakStart,PreviousDayPMPeakEnd,MinimumRecords,WeekdayOnly,DefaultEmailAddress,FromEmailAddress,LowHitThreshold,EmailServer,MaximumPedestrianEvents")] WatchDogApplicationSettings watchDogApplicationSettings)
+        public ActionResult Edit([Bind(Include = "ID,ApplicationID,ConsecutiveCount,MinPhaseTerminations,PercentThreshold,MaxDegreeOfParallelism,ScanDayStartHour,ScanDayEndHour,PreviousDayPMPeakStart,PreviousDayPMPeakEnd,MinimumRecords,WeekdayOnly,DefaultEmailAddress,FromEmailAddress,LowHitThreshold,EmailServer,MaximumPedestrianEvents,EmailAllErrors")] WatchDogApplicationSettings watchDogApplicationSettings)
         {
 
 

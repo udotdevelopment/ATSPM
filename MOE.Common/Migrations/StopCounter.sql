@@ -30,7 +30,7 @@ IF (@MonthsToKeepData IS NULL)
 	SET @MonthsToKeepData = 120  -- 10 years as a default
 
 SELECT @TimeFork = Count (*) 
-FROM [MOETestPartition].[dbo].[TablePartitionProcesseds]
+FROM [dbo].[TablePartitionProcesseds]
 WHERE SwapTableName like '%Controller_event_log%'
 
 IF @TimeFork = 0 

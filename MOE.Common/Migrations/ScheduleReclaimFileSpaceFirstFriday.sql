@@ -154,7 +154,7 @@ BEGIN
 						@FunctionOrProcedure = N''Main - Reclaim File Space Bottom of main Loop'',
 						@Notes = N''Table <ApplicationSettings>''
 END', 
-		@database_name=N'MOETestPartitionAndre', 
+		@database_name=N'MOE', 
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
 EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id = @jobId, @start_step_id = 1

@@ -16,8 +16,7 @@ namespace MOE.Common.Business.WatchDog
 {
     public class WatchDogScan
     {
-        private readonly ConcurrentBag<SPMWatchDogErrorEvent> ForceOffErrors =
-            new ConcurrentBag<SPMWatchDogErrorEvent>();
+        private readonly ConcurrentBag<SPMWatchDogErrorEvent> ForceOffErrors = new ConcurrentBag<SPMWatchDogErrorEvent>();
         //private readonly object eventRepository;
         public ConcurrentBag<SPMWatchDogErrorEvent> LowHitCountErrors = new ConcurrentBag<SPMWatchDogErrorEvent>();
         public ConcurrentBag<SPMWatchDogErrorEvent> MaxOutErrors = new ConcurrentBag<SPMWatchDogErrorEvent>();
@@ -67,8 +66,7 @@ namespace MOE.Common.Business.WatchDog
             var analysisStart = ScanDate.Date + startHour;
             var analysisEnd = ScanDate.Date + endHour;
             var options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism;  // maybe use less to start with, say 5 to 10
-            //options.MaxDegreeOfParallelism = 10;
+            options.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism;  
            MOE.Common.Models.Repositories.IApplicationEventRepository eventRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
             var events = eventRepository.GetApplicationEventsBetweenDatesByApplication(analysisStart, analysisEnd, "FTPFromAllcontrollers");
             Parallel.ForEach(signals, options, signal =>
@@ -147,11 +145,8 @@ namespace MOE.Common.Business.WatchDog
 
         private void CheckSignalRecordCount(DateTime dateToCheck, Models.Signal signal)
         {
-            var controllerEventLogRepository =
-                ControllerEventLogRepositoryFactory.Create();
-
-            if (controllerEventLogRepository.GetRecordCount(signal.SignalID, dateToCheck.AddDays(-1), dateToCheck) >
-                Settings.MinimumRecords)
+            var controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
+            if (controllerEventLogRepository.GetRecordCount(signal.SignalID, dateToCheck.AddDays(-1), dateToCheck) > Settings.MinimumRecords)
             {
                 Console.WriteLine("Signal " + signal.SignalID + " Has Current records");
                 SignalsWithRecords.Add(signal);
@@ -418,27 +413,27 @@ namespace MOE.Common.Business.WatchDog
 
         private string SortAndAddToMessage(ConcurrentBag<SPMWatchDogErrorEvent> errors)
         {
-            var watchDogErrorEventRepository =
-                SPMWatchDogErrorEventRepositoryFactory.Create();
-            var SortedErrors =
-                errors.OrderBy(x => x.SignalID).ThenBy(x => x.Phase).ToList();
+            var watchDogErrorEventRepository = SPMWatchDogErrorEventRepositoryFactory.Create();
+            var SortedErrors = errors.OrderBy(x => x.SignalID).ThenBy(x => x.Phase).ToList();
             var ErrorMessage = "";
             foreach (var error in SortedErrors)
             {
-                //List<SPMWatchDogErrorEvent> RecordsFromTheDayBefore = new List<SPMWatchDogErrorEvent>();
-                //compare to error log to see if this was failing yesterday
-                if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
-                    RecordsFromTheDayBefore =
-                        watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-3),
-                            ScanDate.AddDays(-2).AddMinutes(-1));
-                else
-                    RecordsFromTheDayBefore =
-                        watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-1),
-                            ScanDate.AddMinutes(-1));
-                if (FindMatchingErrorInErrorTable(error) == false)
+                if (!Settings.EmailAllErrors)
                 {
-                    var signalRepository =
-                        SignalsRepositoryFactory.Create();
+                    //List<SPMWatchDogErrorEvent> RecordsFromTheDayBefore = new List<SPMWatchDogErrorEvent>();
+                    //compare to error log to see if this was failing yesterday
+                    if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
+                        RecordsFromTheDayBefore =
+                            watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-3),
+                                ScanDate.AddDays(-2).AddMinutes(-1));
+                    else
+                        RecordsFromTheDayBefore =
+                            watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-1),
+                                ScanDate.AddMinutes(-1));
+                }
+                if (Settings.EmailAllErrors || FindMatchingErrorInErrorTable(error) == false )
+                {
+                    var signalRepository = SignalsRepositoryFactory.Create();
                     var signal = signalRepository.GetLatestVersionOfSignalBySignalID(error.SignalID);
                     //   Add to email if it was not failing yesterday
                     ErrorMessage += error.SignalID;
@@ -453,7 +448,6 @@ namespace MOE.Common.Business.WatchDog
                     }
                     ErrorMessage += " (" + error.Message + ")";
                     ErrorMessage += "\n";
-                    //}
                 }
             }
             try
