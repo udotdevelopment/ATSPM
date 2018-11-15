@@ -69,7 +69,7 @@ namespace SPM.Controllers
         
 
         // GET: RouteSignals/Delete/5
-         [Authorize(Roles = "Admin")]
+         [Authorize(Roles = "Admin, Configuration")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -87,7 +87,7 @@ namespace SPM.Controllers
         // POST: RouteSignals/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Configuration")]
         public void DeleteConfirmed(int id)
         {
             approachRepository.Remove(id);

@@ -104,6 +104,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Business\SignalPhase\SignalPhase24HrsVs15MinsTest.cs" />
+    <Compile Include="Business\PCD\UnitTest1.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachVolumeOptionsTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\NonAggregateCharts\AoROptionsTests.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationChart\ApproachSplitFailAggregationApproachXTests .cs" />

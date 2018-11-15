@@ -56,7 +56,7 @@ namespace MOE.Common.Business.DataAggregation
                 MOE.Common.Models.Repositories.ApproachEventCountAggregationRepositoryFactory.Create();
             return
                 approachEventCountAggregationRepository.GetPhaseEventCountAggregationByPhaseIdAndDateRange(
-                    Approach.ApproachID, options.StartDate, options.EndDate, getProtectedPhase);
+                    Approach.ApproachID, options.TimeOptions.Start, options.TimeOptions.End, getProtectedPhase);
         }
         
 

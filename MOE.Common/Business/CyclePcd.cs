@@ -32,7 +32,7 @@ namespace MOE.Common.Business
         {
             foreach (var detectorDataPoint in DetectorEvents)
             {
-                //detectorDataPoint.
+                detectorDataPoint.AddSeconds(seconds);
             }
         }
     }

@@ -30,7 +30,7 @@ namespace MOE.Common.Business.TMC
             //chart.ChartAreas.Add(chartArea);
             CreateAndAddSeries(graphStartDate, graphEndDate);
             CreatAndAddLegend(chart);
-            AddDataToChart(graphStartDate, graphEndDate, direction, detectorsByDirection,
+            AddDataToChart(graphStartDate, graphEndDate, detectorsByDirection,
                 laneType, movementType, options, tmcInfo);
         }
 
@@ -43,6 +43,7 @@ namespace MOE.Common.Business.TMC
             chartLegend.Docking = Docking.Left;
             chartLegend.Docking = Docking.Bottom;
             chart.Legends.Add(chartLegend);
+            chart.ChartAreas[0].AxisY.Title = "Volume (VPH)";
         }
 
         private void AddYAxis(ChartArea chartArea, MovementType movementType, double? thruMax, double? turnMax)
@@ -109,6 +110,8 @@ namespace MOE.Common.Business.TMC
             chart.Titles.Add(ChartTitleFactory.GetBoldTitle(direction.Description + " " +
                                                             movementType.Description + " " + laneType.Description +
                                                             " Lanes"));
+            if (movementType.MovementTypeID == 2 || movementType.MovementTypeID == 3)
+                chart.ChartAreas[0].AxisY.Maximum = Options.Y2AxisMax.Value;
         }
 
         private void SetChartProperties()
@@ -119,6 +122,7 @@ namespace MOE.Common.Business.TMC
             chart.BorderlineColor = Color.Black;
             chart.BorderlineWidth = 2;
             chart.BorderlineDashStyle = ChartDashStyle.Solid;
+            chart.ChartAreas[0].AxisY2.Enabled = AxisEnabled.False;
         }
 
         private void CreateAndAddSeries(DateTime graphStartDate, DateTime graphEndDate)
@@ -199,7 +203,7 @@ namespace MOE.Common.Business.TMC
             chart.Series["Posts"].Points.AddXY(graphEndDate.AddMinutes(5), 0);
         }
 
-        private void AddDataToChart(DateTime startDate, DateTime endDate, DirectionType direction,
+        private void AddDataToChart(DateTime startDate, DateTime endDate,
             List<Models.Detector> detectorsByDirection, LaneType laneType, MovementType movementType,
             TMCOptions options, TMCInfo tmcInfo)
         {

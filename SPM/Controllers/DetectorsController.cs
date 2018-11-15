@@ -95,7 +95,7 @@ namespace SPM.Controllers
 
 
         // GET: Detectors/Delete/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Configuration")]
         public ActionResult Delete(int id)
         {
             if (id == null)
@@ -113,7 +113,7 @@ namespace SPM.Controllers
         // POST: Detectors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Configuration")]
         public void DeleteConfirmed(int id)
         {
             detectorRepository.Remove(id);

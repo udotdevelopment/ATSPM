@@ -22,7 +22,6 @@ namespace MOE.Common.Models.ViewModel
         public string UpstreamDirection { get; set; }
         public List<DateTime> SelectedStartDate { get; set; }
 
-        [Required]
         public DateTime? SelectedEndDate { get; set; }
 
         public DateTime EndDate { get; set; }

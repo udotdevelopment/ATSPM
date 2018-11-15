@@ -61,7 +61,7 @@ namespace MOE.Common.Business.Bins
             var binsContainer = new BinsContainer(timeOptions.Start, timeOptions.End);
             for (var startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month, timeOptions.Start.Day, 0,
                     0, 0);
-                startTime.Date < timeOptions.End.Date;
+                startTime.Date <= timeOptions.End.Date;
                 startTime = startTime.AddDays(1))
                 if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd && timeOptions.DaysOfWeek.Contains(startTime.DayOfWeek))
                 {
@@ -149,7 +149,9 @@ namespace MOE.Common.Business.Bins
             var binsContainers = new List<BinsContainer>();
             var startTimeSpan = new TimeSpan();
             var endTimeSpan = new TimeSpan();
-            if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod &&
+            var tempStart = timeOptions.Start;
+            var tempEnd = timeOptions.End;
+            if (//timeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod &&
                 timeOptions.TimeOfDayStartHour != null &&
                 timeOptions.TimeOfDayStartMinute != null &&
                 timeOptions.TimeOfDayEndHour != null &&
@@ -161,8 +163,8 @@ namespace MOE.Common.Business.Bins
                     timeOptions.TimeOfDayEndMinute.Value, 0);
             }
             var binsContainer = new BinsContainer(timeOptions.Start, timeOptions.End);
-            for (var startTime = timeOptions.Start;
-                startTime < timeOptions.End;
+            for (var startTime = tempStart;
+                startTime < tempEnd;
                 startTime = startTime.AddMinutes(minutes))
                 switch (timeOptions.TimeOption)
                 {

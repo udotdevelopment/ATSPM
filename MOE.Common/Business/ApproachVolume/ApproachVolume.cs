@@ -24,6 +24,8 @@ namespace MOE.Common.Business.ApproachVolume
         public DetectionType DetectionType { get; set; }
         public List<Models.Detector> Detectors { get; set; } = new List<Models.Detector>();
         public MetricInfo MetricInfo { get; set; } = new MetricInfo();
+        public List<Controller_Event_Log> PrimaryDetectorEvents { get; set; } = new List<Controller_Event_Log>();
+        public List<Controller_Event_Log> OpposingDetectorEvents { get; set; } = new List<Controller_Event_Log>();
 
 
         public ApproachVolume(List<Models.Approach> primaryDirectionApproaches, List<Models.Approach> opposingDirectionApproaches, ApproachVolumeOptions approachVolumeOptions, 
@@ -44,14 +46,14 @@ namespace MOE.Common.Business.ApproachVolume
 
         public void SetVolume()
         {
-            PrimaryDirectionVolume = SetVolumeByDetection(_primaryDirectionApproaches);
-            OpposingDirectionVolume = SetVolumeByDetection(_opposingDirectionApproaches);
+            PrimaryDirectionVolume = SetVolumeByDetection(_primaryDirectionApproaches, PrimaryDetectorEvents);
+            OpposingDirectionVolume = SetVolumeByDetection(_opposingDirectionApproaches, OpposingDetectorEvents);
         }
 
-        private VolumeCollection SetVolumeByDetection(List<Models.Approach> approaches)
+        private VolumeCollection SetVolumeByDetection(List<Models.Approach> approaches, List<Controller_Event_Log> detectorEvents)
         {
             var controllerEventLogRepository = MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
-            var detectorEvents = new List<Controller_Event_Log>();
+            
             foreach (var approach in approaches)
             {
                 foreach (var detector in approach.Detectors)
