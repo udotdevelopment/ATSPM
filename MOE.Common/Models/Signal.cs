@@ -75,7 +75,7 @@ namespace MOE.Common.Models
         [StringLength(100)]
         public string PrimaryName { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [Display(Name = "Secondary Name")]
         [DataMember]
         [StringLength(100)]
