@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SPM</RootNamespace>
     <AssemblyName>SPM</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -88,9 +88,9 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -438,12 +438,6 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Scripts\Usage.js" />
-    <Content Include="Service References\LinkPivotServiceReference\SPM.LinkPivotServiceReference.AdjustmentObject.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\LinkPivotServiceReference\SPM.LinkPivotServiceReference.DisplayObject.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
@@ -459,19 +453,9 @@
     </None>
     <None Include="Service References\MetricGeneratorService\configuration91.svcinfo" />
     <None Include="Service References\MetricGeneratorService\configuration.svcinfo" />
-    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.Bins.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.FilterExtensions.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.TMC.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\MetricGeneratorService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </None>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -537,22 +521,6 @@
     <Content Include="Views\ActionLogs\Usage.cshtml" />
     <Content Include="Views\DefaultCharts\GetApproachVolumeMetric.cshtml" />
     <Content Include="Views\ActionLogs\Chart.cshtml" />
-    <None Include="Service References\MetricGeneratorService\Arrays.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.ApproachVolume.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.WCFServiceLibrary.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\MetricGeneratorService\service.wsdl" />
-    <None Include="Service References\MetricGeneratorService\service.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\MetricGeneratorService\service1.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Views\Signals\AddDetector.cshtml" />
     <Content Include="Views\DetectorComments\Create.cshtml" />
     <Content Include="Views\Signals\SignalDetail.cshtml" />
@@ -596,15 +564,46 @@
     <Content Include="Views\AggregateDataExport\DisplayTemplates\FilterMovement.cshtml" />
     <Content Include="Views\GeneralSettings\Edit.cshtml" />
     <Content Include="Views\DataExport\EditorTemplates\DateTimePickerViewModel.cshtml" />
+    <Content Include="Views\AggregateDataExport\MetricResult.cshtml" />
+    <Content Include="Views\DatabaseArchiveSettings\Edit.cshtml" />
+    <Content Include="Views\DatabaseArchiveSettings\EditorTemplates\DatabaseArchiveExcludedSignal.cshtml" />
+    <Content Include="Service References\LinkPivotServiceReference\SPM.LinkPivotServiceReference.AdjustmentObject.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\LinkPivotServiceReference\SPM.LinkPivotServiceReference.DisplayObject.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\MetricGeneratorService\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.ApproachVolume.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.Bins.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.FilterExtensions.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.TMC.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MetricGeneratorService\MOE.Common.Business.WCFServiceLibrary.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MetricGeneratorService\service.wsdl" />
+    <None Include="Service References\MetricGeneratorService\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MetricGeneratorService\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\MetricGeneratorService\System.Web.UI.DataVisualization.Charting.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MetricGeneratorService\System.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Views\AggregateDataExport\MetricResult.cshtml" />
-    <Content Include="Views\DatabaseArchiveSettings\Edit.cshtml" />
-    <Content Include="Views\DatabaseArchiveSettings\EditorTemplates\DatabaseArchiveExcludedSignal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -667,6 +666,10 @@
     <ProjectReference Include="..\MOE.Common\MOE.Common.csproj">
       <Project>{87951632-a7be-4e04-b62c-c4fc2fc0cd5a}</Project>
       <Name>MOE.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MOEWcfServiceLibrary\MOEWcfServiceLibrary.csproj">
+      <Project>{fefd5738-31f2-4097-b0f2-e2a247fe0ade}</Project>
+      <Name>MOEWcfServiceLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

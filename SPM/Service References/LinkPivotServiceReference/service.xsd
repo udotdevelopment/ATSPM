@@ -31,9 +31,9 @@
   <xs:element name="DisplayLinkPivotPCD">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="upstreamSignalId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="upstreamSignalID" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="upstreamDirection" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="downstreamSignalId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="downstreamSignalID" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="downstreamDirection" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="delta" type="xs:int" />
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />

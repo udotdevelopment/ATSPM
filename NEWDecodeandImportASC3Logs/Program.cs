@@ -84,7 +84,7 @@ namespace NEWDecodeandImportASC3Logs
                 Convert.ToInt32(appSettings["BulkCopyTimeOut"]));
             if (elTable.Count > 0)
             {
-                if (MOE.Common.Business.SignalFtp.BulktoDb(elTable, options) && Convert.ToBoolean(appSettings["DeleteFile"]))
+                if (MOE.Common.Business.SignalFtp.BulktoDb(elTable, options, destTable) && Convert.ToBoolean(appSettings["DeleteFile"]))
                 {
                     DeleteFiles(toDelete);
                 }

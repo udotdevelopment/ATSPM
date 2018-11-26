@@ -1,24 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.DataVisualization.Charting;
-using System.Xml;
-using Ionic.Zip;
-using MOE.Common.Business;
 using MOE.Common.Business.Bins;
 using MOE.Common.Business.FilterExtensions;
 using MOE.Common.Business.WCFServiceLibrary;
 using SPM.Models;
 using MOE.Common.Models;
-using MOE.Common.Models.ViewModel.Chart;
-using SPM.MetricGeneratorService;
 
 namespace SPM.Controllers
 {
@@ -62,7 +51,7 @@ namespace SPM.Controllers
             };
             foreach (var approach in signal.Approaches)
             {
-                var filterApproach = new FilterApproach
+                var filterApproach = new MOE.Common.Business.FilterExtensions.FilterApproach
                 {
                     ApproachId = approach.ApproachID,
                     Exclude = false,
@@ -70,7 +59,7 @@ namespace SPM.Controllers
                 };
                 foreach (var detector in approach.Detectors)
                 {
-                    var filterDetector = new FilterDetector
+                    var filterDetector = new MOE.Common.Business.FilterExtensions.FilterDetector
                     {
                         Id = detector.ID,
                         Exclude = false,
