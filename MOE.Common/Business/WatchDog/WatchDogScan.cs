@@ -418,37 +418,37 @@ namespace MOE.Common.Business.WatchDog
             var ErrorMessage = "";
             foreach (var error in SortedErrors)
             {
-                if (!Settings.EmailAllErrors)
-                {
-                    //List<SPMWatchDogErrorEvent> RecordsFromTheDayBefore = new List<SPMWatchDogErrorEvent>();
-                    //compare to error log to see if this was failing yesterday
-                    if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
-                        RecordsFromTheDayBefore =
-                            watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-3),
-                                ScanDate.AddDays(-2).AddMinutes(-1));
-                    else
-                        RecordsFromTheDayBefore =
-                            watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-1),
-                                ScanDate.AddMinutes(-1));
-                }
-                if (Settings.EmailAllErrors || FindMatchingErrorInErrorTable(error) == false )
-                {
-                    var signalRepository = SignalsRepositoryFactory.Create();
-                    var signal = signalRepository.GetLatestVersionOfSignalBySignalID(error.SignalID);
-                    //   Add to email if it was not failing yesterday
-                    ErrorMessage += error.SignalID;
-                    ErrorMessage += " - ";
-                    ErrorMessage += signal.PrimaryName;
-                    ErrorMessage += " & ";
-                    ErrorMessage += signal.SecondaryName;
-                    if (error.Phase > 0)
-                    {
-                        ErrorMessage += " - Phase ";
-                        ErrorMessage += error.Phase;
-                    }
-                    ErrorMessage += " (" + error.Message + ")";
-                    ErrorMessage += "\n";
-                }
+                //if (!Settings.EmailAllErrors)
+                //{
+                //    //List<SPMWatchDogErrorEvent> RecordsFromTheDayBefore = new List<SPMWatchDogErrorEvent>();
+                //    //compare to error log to see if this was failing yesterday
+                //    if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
+                //        RecordsFromTheDayBefore =
+                //            watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-3),
+                //                ScanDate.AddDays(-2).AddMinutes(-1));
+                //    else
+                //        RecordsFromTheDayBefore =
+                //            watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-1),
+                //                ScanDate.AddMinutes(-1));
+                //}
+                //if (Settings.EmailAllErrors || FindMatchingErrorInErrorTable(error) == false )
+                //{
+                //    var signalRepository = SignalsRepositoryFactory.Create();
+                //    var signal = signalRepository.GetLatestVersionOfSignalBySignalID(error.SignalID);
+                //    //   Add to email if it was not failing yesterday
+                //    ErrorMessage += error.SignalID;
+                //    ErrorMessage += " - ";
+                //    ErrorMessage += signal.PrimaryName;
+                //    ErrorMessage += " & ";
+                //    ErrorMessage += signal.SecondaryName;
+                //    if (error.Phase > 0)
+                //    {
+                //        ErrorMessage += " - Phase ";
+                //        ErrorMessage += error.Phase;
+                //    }
+                //    ErrorMessage += " (" + error.Message + ")";
+                //    ErrorMessage += "\n";
+                //}
             }
             try
             {

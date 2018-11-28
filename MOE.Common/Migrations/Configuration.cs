@@ -1034,7 +1034,7 @@ While each agency should consult with their IT department for specific guideline
                     ScanDayStartHour = 1,
                     WeekdayOnly = true,
                     MaximumPedestrianEvents = 200,
-                    EmailAllErrors = false
+                   // EmailAllErrors = false
                 }
             );
 
