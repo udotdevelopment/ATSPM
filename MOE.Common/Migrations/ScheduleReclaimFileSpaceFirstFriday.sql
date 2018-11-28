@@ -1,18 +1,19 @@
---USE [msdb]
---GO
 
-/****** Object:  Job [Reclaim Data Space]    Script Date: 8/29/2018 10:35:09 PM ******/
+
+/****** Object:  Job [Reclaim Data Space]    Script Date: 11/28/2018 Andre Sanchez ******/
 BEGIN TRANSACTION
 DECLARE @ReturnCode INT
 SELECT @ReturnCode = 0
 /****** Object:  JobCategory [Database Maintenance]    Script Date: 8/29/2018 10:35:09 PM ******/
 IF NOT EXISTS (SELECT name FROM msdb.dbo.syscategories WHERE name=N'Database Maintenance' AND category_class=1)
 BEGIN
-EXEC @ReturnCode = msdb.dbo.sp_add_category @class=N'JOB', @type=N'LOCAL', @name=N'Database Maintenance'
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-
+    EXEC @ReturnCode = msdb.dbo.sp_add_category @class=N'JOB', @type=N'LOCAL', @name=N'Database Maintenance'
+    IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
 END
-
+IF EXISTS (SELECT name FROM msdb.dbo.[sysjobs] WHERE name=N'Reclaim Data Space' )
+BEGIN
+    EXEC msdb.dbo.sp_delete_job @job_name='Reclaim Data Space', @delete_unused_schedule=1
+END
 DECLARE @jobId BINARY(16)
 EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name=N'Reclaim Data Space', 
 		@enabled=1, 
