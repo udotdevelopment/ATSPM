@@ -1056,8 +1056,8 @@ While each agency should consult with their IT department for specific guideline
                     //ImagePath = @"E:\temp\spmimages"
 
 
-                    ImageUrl = @"http://localhost/atspm/chartimages",
-                    ImagePath = @"C:\Program Files (x86)\Intelight\MaxView Server\ATSPM\web-app\chartimages"
+                    ImageUrl = @"http://localhost/atspm/chartimages/",
+                    ImagePath = @"C:\Program Files (x86)\Intelight\MaxView Server\ATSPM\web-app\chartimages\"
                 }
             );
 
