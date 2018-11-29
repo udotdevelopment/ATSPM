@@ -7,7 +7,10 @@ namespace MOE.Common.Business
 {
     public class ControllerEventLogs
     {
-        private readonly SPM db = new SPM();
+        //private readonly SPM db = new SPM();
+
+        MOE.Common.Models.Repositories.IControllerEventLogRepository CELRepo = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+
 
         public ControllerEventLogs(string signalId, DateTime startDate, DateTime endDate)
         {
@@ -30,15 +33,16 @@ namespace MOE.Common.Business
             EndDate = endDate;
             EventCodes = eventCodes;
 
-            var events = from s in db.Controller_Event_Log
-                where s.SignalID == signalID &&
-                      s.Timestamp >= startDate &&
-                      s.Timestamp <= endDate &&
-                      eventCodes.Contains(s.EventCode)
-                select s;
+            var events = CELRepo.GetSignalEventsByEventCodes(signalID, startDate, endDate, eventCodes);
+            //var events = from s in db.Controller_Event_Log
+            //    where s.SignalID == signalID &&
+            //          s.Timestamp >= startDate &&
+            //          s.Timestamp <= endDate &&
+            //          eventCodes.Contains(s.EventCode)
+            //    select s;
 
             Events = events.ToList();
-            Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
+            
         }
 
         public ControllerEventLogs(string signalID, DateTime startDate, DateTime endDate, int eventParam,
@@ -49,17 +53,18 @@ namespace MOE.Common.Business
             EndDate = endDate;
             EventCodes = eventCodes;
 
-            var events = from s in db.Controller_Event_Log
-                where s.SignalID == signalID &&
-                      s.Timestamp >= startDate &&
-                      s.Timestamp <= endDate &&
-                      eventCodes.Contains(s.EventCode) &&
-                      s.EventParam == eventParam
-                select s;
+            var events = CELRepo.GetEventsByEventCodesParam(signalID, startDate, endDate, eventCodes, eventParam);
+            //var events = from s in db.Controller_Event_Log
+            //    where s.SignalID == signalID &&
+            //          s.Timestamp >= startDate &&
+            //          s.Timestamp <= endDate &&
+            //          eventCodes.Contains(s.EventCode) &&
+            //          s.EventParam == eventParam
+            //    select s;
 
             Events = events.ToList();
             Events = Events.OrderBy(e => e.Timestamp).ThenBy(e => e.EventCode).ToList();
-            //Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
+            Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
         }
 
         public string SignalId { get; }
@@ -90,12 +95,10 @@ namespace MOE.Common.Business
 
         public void Add105Events(string signalId, DateTime startDate, DateTime endDate)
         {
-            var events = (from s in db.Controller_Event_Log
-                where s.SignalID == signalId &&
-                      s.Timestamp >= startDate &&
-                      s.Timestamp <= endDate &&
-                      (s.EventCode == 105 || s.EventCode == 111)
-                select s).ToList();
+            var codes = new List<int>();
+            codes.Add(105);
+            codes.Add(111);
+            var events = CELRepo.GetSignalEventsByEventCodes(signalId, startDate, endDate, codes);
             foreach (var v in events)
             {
                 v.EventCode = 99;

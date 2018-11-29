@@ -8,27 +8,23 @@ namespace MOE.Common.Migrations
         public static string GetImportScript()
         {
             var importSignalsFromMaxView = @"
-                Insert into Signals(signalid, latitude, longitude, primaryname, secondaryname, ipaddress, RegionID, controllertypeid,enabled, versionactionid, note, start)
-
-                SELECT      GroupableElements.ID as SignalID, 
-			                GroupableElements_Device.CenterLatitude AS Longitude, 
-			                GroupableElements_Device.CenterLongitude AS Latitude,           
-			                GroupableElements_IntersectionController.Intersection_MainStreetName AS PrimaryName,			
-			                GroupableElements_IntersectionController.Intersection_SideStreetName AS ScondaryName,             
-			                DeviceConnectionProperties_IpDeviceSettings.HostAddress AS IPADDRESS, 
-			                1 AS RegionId,
-			                4 As ControllerTypeID, 
-                            1 As Enabled,
-			                10 AS VersionActionID, 
-			                'Import From MaxView' AS Note, 
-			                SYSDATETIME() AS Start
-
-                FROM            [dbo].GroupableElements INNER JOIN
-                                [dbo].GroupableElements_IntersectionController ON GroupableElements.ID = GroupableElements_IntersectionController.ID INNER JOIN
-                                [dbo].GroupableElements_Device ON GroupableElements_IntersectionController.ID = GroupableElements_Device.ID INNER JOIN
-                                [dbo].DeviceConnectionProperties ON GroupableElements_Device.DeviceConnectionPropertiesID = DeviceConnectionProperties.ID INNER JOIN
-                                [dbo].DeviceConnectionProperties_IpDeviceSettings ON GroupableElements_Device.DeviceConnectivityTypeID = DeviceConnectionProperties_IpDeviceSettings.ID ";
-
+               INSERT INTO Signals (SignalID, Latitude, Longitude, PrimaryName, SecondaryName, IPAddress, RegionID, ControllerTypeID, Enabled, VersionActionId, Note, Start)
+SELECT        GroupableElements.ID AS SignalID, 
+GroupableElements_Device.CenterLatitude AS Longitude, 
+GroupableElements_Device.CenterLongitude AS Latitude, 
+                         GroupableElements_IntersectionController.Intersection_MainStreetName AS PrimaryName, 
+						 GroupableElements_IntersectionController.Intersection_SideStreetName AS ScondaryName, 
+                         DeviceConnectionProperties_IpDeviceSettings.HostAddress AS IPADDRESS, 
+						 1 AS RegionId, 
+						 4 AS ControllerTypeID, 
+						 1 AS Enabled,
+						  10 AS VersionActionID, 
+						  'Import From MaxView' AS Note, SYSDATETIME() AS Start
+FROM            GroupableElements INNER JOIN
+                         GroupableElements_IntersectionController ON GroupableElements.ID = GroupableElements_IntersectionController.ID INNER JOIN
+                         GroupableElements_Device ON GroupableElements_IntersectionController.ID = GroupableElements_Device.ID INNER JOIN
+                         DeviceConnectionProperties ON GroupableElements_Device.DeviceConnectionPropertiesID = DeviceConnectionProperties.ID INNER JOIN
+                         DeviceConnectionProperties_IpDeviceSettings ON DeviceConnectionProperties.ID = DeviceConnectionPrope%rties_IpDeviceSettings.ID";
 
             return importSignalsFromMaxView;
         }

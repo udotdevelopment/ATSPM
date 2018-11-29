@@ -1347,7 +1347,7 @@ While each agency should consult with their IT department for specific guideline
 
             try
             {
-                RunSQLCommand(MaxViewScriptRetriver.GetUpdateTriggerScript(), context);
+                //RunSQLCommand(MaxViewScriptRetriver.GetUpdateTriggerScript(), context);
 
 
             }
