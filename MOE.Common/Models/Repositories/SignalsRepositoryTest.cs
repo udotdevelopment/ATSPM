@@ -1,4 +1,4 @@
-﻿//using System;
+//using System;
 //using System.Collections.Generic;
 //using System.Linq;
 //using System.Text;
@@ -12,7 +12,7 @@
 //        Models.SPM db = new SPM();
 //        List<Models.MetricType> metrics = new List<MetricType>();
 
-//        public void AddList(List<MOE.Common.Models.Signal> signals)
+//        public void AddListAndSaveToDatabase(List<MOE.Common.Models.Signal> signals)
 //        {
 
 //        }
