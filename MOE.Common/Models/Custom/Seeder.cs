@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Extensions.Logging;
 using MOE.Common.Business.SiteSecurity;
 using MOE.Common.Migrations;
 using System;
@@ -1312,7 +1313,8 @@ While each agency should consult with their IT department for specific guideline
 
             context.SaveChanges();
 
-            var sig = context.Signals.Find(0);
+            var sig = (from r in context.Signals
+                       select r).FirstOrDefault();
 
             
             if (sig == null)
@@ -1323,8 +1325,11 @@ While each agency should consult with their IT department for specific guideline
 
                     
                 }
-                catch (Exception)
-                { }
+                catch (Exception ex)
+                {
+                    WriteEventLogEntry(ex.Message);
+
+                }
             }
 
             try
@@ -1334,7 +1339,10 @@ While each agency should consult with their IT department for specific guideline
           
             }
             catch (Exception ex)
-            { }
+            {
+                WriteEventLogEntry(ex.Message);
+
+            }
 
             try
             {
@@ -1343,7 +1351,10 @@ While each agency should consult with their IT department for specific guideline
 
             }
             catch (Exception ex)
-            { }
+            {
+                WriteEventLogEntry(ex.Message);
+
+            }
 
             try
             {
@@ -1352,7 +1363,10 @@ While each agency should consult with their IT department for specific guideline
 
             }
             catch (Exception ex)
-            { }
+            {
+                WriteEventLogEntry(ex.Message);
+
+            }
 
             try
             {
@@ -1361,7 +1375,10 @@ While each agency should consult with their IT department for specific guideline
 
             }
             catch (Exception ex)
-            { }
+            {
+                WriteEventLogEntry(ex.Message);
+
+            }
 
             //try
             //{
@@ -1395,6 +1412,32 @@ While each agency should consult with their IT department for specific guideline
             }
         }
 
-        
+        private static void WriteEventLogEntry(string message)
+        {
+            // Create an instance of EventLog
+            System.Diagnostics.EventLog eventLog = new System.Diagnostics.EventLog();
+
+            // Check if the event source exists. If not create it.
+            if (!System.Diagnostics.EventLog.SourceExists("MAXVIEW_ATSPM Setup"))
+            {
+                System.Diagnostics.EventLog.CreateEventSource("TestApplication", "Application");
+            }
+
+            // Set the source name for writing log entries.
+            eventLog.Source = "MAXVIEW_ATSPM Setup";
+
+            // Create an event ID to add to the event log
+            int eventID = 10;
+
+            // Write an entry to the event log.
+            eventLog.WriteEntry(message,
+                                System.Diagnostics.EventLogEntryType.Error,
+                                eventID);
+
+            // Close the Event Log
+            eventLog.Close();
+        }
+
+
     }
 }
