@@ -24,7 +24,7 @@ FROM            GroupableElements INNER JOIN
                          GroupableElements_IntersectionController ON GroupableElements.ID = GroupableElements_IntersectionController.ID INNER JOIN
                          GroupableElements_Device ON GroupableElements_IntersectionController.ID = GroupableElements_Device.ID INNER JOIN
                          DeviceConnectionProperties ON GroupableElements_Device.DeviceConnectionPropertiesID = DeviceConnectionProperties.ID INNER JOIN
-                         DeviceConnectionProperties_IpDeviceSettings ON DeviceConnectionProperties.ID = DeviceConnectionPrope%rties_IpDeviceSettings.ID";
+                         DeviceConnectionProperties_IpDeviceSettings ON DeviceConnectionProperties.ID = DeviceConnectionProperties_IpDeviceSettings.ID";
 
             return importSignalsFromMaxView;
         }
