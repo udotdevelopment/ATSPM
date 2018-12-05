@@ -392,6 +392,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Settings.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812051632020_initial.cs" />
+    <Compile Include="Migrations\201812051632020_initial.Designer.cs">
+      <DependentUpon>201812051632020_initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\MaxViewScriptRetriver.cs" />
     <Compile Include="Migrations\Resource1.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -734,6 +738,9 @@
     <Content Include="App.config">
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Migrations\201812051632020_initial.resx">
+      <DependentUpon>201812051632020_initial.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\DatabaseFileName.sql" />
     <EmbeddedResource Include="Migrations\ReclaimFileSpaceForMoe.sql" />
     <EmbeddedResource Include="Migrations\Resource1.resx">

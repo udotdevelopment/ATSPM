@@ -33,11 +33,16 @@ namespace SPM.Controllers
             var config = new MOE.Common.Migrations.Configuration();
             var migrator = new DbMigrator(config);
             var _pendingMigrations = migrator.GetPendingMigrations();
-            
+
             if (_pendingMigrations.Count() > 0)
             {
-                migrator.Update();
-                MOE.Common.Models.Custom.Seeder.Seed(db);
+                try
+                {
+                    migrator.Update();
+                    MOE.Common.Models.Custom.Seeder.Seed(db);
+                }
+                catch (Exception)
+                { }
 
 
             }

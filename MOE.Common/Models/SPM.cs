@@ -13,6 +13,8 @@ namespace MOE.Common.Models
         {
             //InitializeDatabase();
             Database.SetInitializer(new CreateDatabaseIfNotExists<SPM>());
+            Database.SetInitializer<SPM>(null);
+            
         }
 
         //protected virtual void InitializeDatabase()

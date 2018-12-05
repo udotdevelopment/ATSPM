@@ -3,7 +3,7 @@ namespace MOE.Common.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Inital : DbMigration
+    public partial class initial : DbMigration
     {
         public override void Up()
         {
@@ -19,7 +19,7 @@ namespace MOE.Common.Migrations
                         Name = c.String(nullable: false, maxLength: 100),
                     })
                 .PrimaryKey(t => t.ActionLogID)
-                .ForeignKey("dbo.ATSPM_Agency", t => t.AgencyID, cascadeDelete: true)
+                .ForeignKey("dbo.ATSPM_Agencies", t => t.AgencyID, cascadeDelete: true)
                 .Index(t => t.AgencyID);
             
             CreateTable(
@@ -32,7 +32,7 @@ namespace MOE.Common.Migrations
                 .PrimaryKey(t => t.ActionID);
             
             CreateTable(
-                "dbo.ATSPM_Agency",
+                "dbo.ATSPM_Agencies",
                 c => new
                     {
                         AgencyID = c.Int(nullable: false, identity: true),
@@ -397,7 +397,7 @@ namespace MOE.Common.Migrations
                 .Index(t => t.ApproachId);
             
             CreateTable(
-                "dbo.ATSPM_ExternalLink",
+                "dbo.ATSPM_ExternalLinks",
                 c => new
                     {
                         ExternalLinkID = c.Int(nullable: false, identity: true),
@@ -407,16 +407,16 @@ namespace MOE.Common.Migrations
                     })
                 .PrimaryKey(t => t.ExternalLinkID);
             
-            //CreateTable(
-                //"dbo.Controller_Event_Log",
-                //c => new
-                //    {
-                //        Timestamp = c.DateTime(nullable: false),
-                //        SignalID = c.String(nullable: false, maxLength: 10),
-                //        EventCode = c.Int(nullable: false),
-                //        EventParam = c.Int(nullable: false),
-                //    })
-                //.PrimaryKey(t => new { t.Timestamp, t.SignalID, t.EventCode, t.EventParam });
+            CreateTable(
+                "dbo.Controller_Event_Log",
+                c => new
+                    {
+                        Timestamp = c.DateTime(nullable: false),
+                        SignalID = c.Short(nullable: false),
+                        EventCode = c.Short(nullable: false),
+                        EventParam = c.Short(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.Timestamp, t.SignalID, t.EventCode, t.EventParam });
             
             CreateTable(
                 "dbo.DatabaseArchiveExcludedSignals",
@@ -861,7 +861,7 @@ namespace MOE.Common.Migrations
             DropForeignKey("dbo.Detectors", "DetectionHardwareID", "dbo.DetectionHardwares");
             DropForeignKey("dbo.MetricCommentMetricTypes", "MetricType_MetricID", "dbo.MetricTypes");
             DropForeignKey("dbo.MetricCommentMetricTypes", "MetricComment_CommentID", "dbo.MetricComments");
-            DropForeignKey("dbo.ActionLogs", "AgencyID", "dbo.ATSPM_Agency");
+            DropForeignKey("dbo.ActionLogs", "AgencyID", "dbo.ATSPM_Agencies");
             DropForeignKey("dbo.ActionLogActions", "Action_ActionID", "dbo.Actions");
             DropForeignKey("dbo.ActionLogActions", "ActionLog_ActionLogID", "dbo.ActionLogs");
             DropIndex("dbo.ActionLogMetricTypes", new[] { "MetricType_MetricID" });
@@ -936,7 +936,7 @@ namespace MOE.Common.Migrations
             DropTable("dbo.DetectorAggregations");
             DropTable("dbo.DatabaseArchiveExcludedSignals");
             DropTable("dbo.Controller_Event_Log");
-            DropTable("dbo.ATSPM_ExternalLink");
+            DropTable("dbo.ATSPM_ExternalLinks");
             DropTable("dbo.ApproachYellowRedActivationAggregations");
             DropTable("dbo.ApproachSplitFailAggregations");
             DropTable("dbo.ApproachSpeedAggregations");
@@ -960,7 +960,7 @@ namespace MOE.Common.Migrations
             DropTable("dbo.Signals");
             DropTable("dbo.MetricComments");
             DropTable("dbo.MetricTypes");
-            DropTable("dbo.ATSPM_Agency");
+            DropTable("dbo.ATSPM_Agencies");
             DropTable("dbo.Actions");
             DropTable("dbo.ActionLogs");
         }
