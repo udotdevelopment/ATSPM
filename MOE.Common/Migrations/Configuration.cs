@@ -1060,7 +1060,7 @@ While each agency should consult with their IT department for specific guideline
                     ApplicationID = 4,
                     RawDataCountLimit = 1048576,
                     ImageUrl = "http://udottraffic.utah.gov/spmimages/",
-                    ImagePath = @"\\utstsrtcns53\C-LinkDynamicContent\SPMImages"
+                    ImagePath = @"\\utstsrtcns53\C-LinkDynamicContent\SPMImages\"
                 }
             );
 
