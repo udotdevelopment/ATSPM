@@ -13,10 +13,10 @@ namespace MOE.Common.Business
             //if(this.Events.Count > 0)
             //{
             var tempEvent = new Controller_Event_Log();
-            tempEvent.SignalID = signalID;
+            tempEvent.SignalID = Convert.ToInt16(signalID);
             tempEvent.Timestamp = startDate;
             tempEvent.EventCode = 131;
-            tempEvent.EventParam = GetPreviousPlan(signalID, startDate);
+            tempEvent.EventParam = Convert.ToInt16(GetPreviousPlan(signalID, startDate));
 
             Events.Insert(0, tempEvent);
             //}

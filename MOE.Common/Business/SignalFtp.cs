@@ -786,10 +786,10 @@ namespace MOE.Common.Business
                     try
                     {
                         var r = new Controller_Event_Log();
-                        r.SignalID = row[0].ToString();
+                        r.SignalID = Convert.ToInt16(row[0]);
                         r.Timestamp = Convert.ToDateTime(row[1]);
-                        r.EventCode = Convert.ToInt32(row[2]);
-                        r.EventParam = Convert.ToInt32(row[3]);
+                        r.EventCode = Convert.ToInt16(row[2]);
+                        r.EventParam = Convert.ToInt16(row[3]);
 
 
                         if (Settings.Default.WriteToConsole)

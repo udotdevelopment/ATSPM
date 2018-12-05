@@ -55,7 +55,7 @@ namespace MOE.Common.Business
                     Timestamp = startDate,
                     EventCode = 131,
                     EventParam = 0,
-                    SignalID = signalId
+                    SignalID = Convert.ToInt16(signalId)
                 };
                 planEvents.Add(firstPlanEvent);
             }

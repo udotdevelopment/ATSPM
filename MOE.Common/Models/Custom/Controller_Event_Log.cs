@@ -15,8 +15,7 @@ namespace MOE.Common.Models
 
         [Column(Order = 1)]
         [Key]
-        [StringLength(10)]
-        public string SignalID { get; set; }
+        public Int16 SignalID { get; set; }
 
         [Column(Order = 0)]
         [Key]
@@ -24,11 +23,11 @@ namespace MOE.Common.Models
 
         [Column(Order = 2)]
         [Key]
-        public int EventCode { get; set; }
+        public Int16 EventCode { get; set; }
 
         [Column(Order = 3)]
         [Key]
-        public int EventParam { get; set; }
+        public Int16 EventParam { get; set; }
 
         public sealed class ControllerEventLogClassMap : ClassMap<Controller_Event_Log>
         {
