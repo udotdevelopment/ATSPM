@@ -517,9 +517,8 @@
     <Content Include="Scripts\ArchiveSettings.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\Chart.min.js.map">
-      <DependentUpon>Chart.min.js</DependentUpon>
-    </Content>
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\DefaultCharts.js" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -797,8 +796,6 @@
     <None Include="Properties\PublishProfiles\Test.pubxml">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Scripts\Chart.js" />
-    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\LinkPivot.js" />
     <Content Include="Scripts\Route.js" />
     <Content Include="Scripts\_references.js" />
