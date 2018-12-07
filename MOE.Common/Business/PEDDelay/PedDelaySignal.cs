@@ -26,7 +26,7 @@ namespace MOE.Common.Business.PEDDelay
             try
             {
                 _Plans = new PlansBase(signalID, startDate, endDate);
-                var pedPhaseNumbers = ControllerEventLogs.GetPedPhases(signalID, startDate, endDate);
+                var pedPhaseNumbers = GetPedPhases();
                 ConcurrentBag<PedPhase> pedPhases = new ConcurrentBag<PedPhase>();
                 Parallel.ForEach(pedPhaseNumbers, currentPhase =>
                 //foreach(int currentPhase in pedPhaseNumbers)
@@ -43,6 +43,26 @@ namespace MOE.Common.Business.PEDDelay
                     this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
                 
             }
+        }
+
+        private List<int> GetPedPhases()
+        {
+            var pedEventCodes = new List<int> { 21, 45, 90, 23 };
+            var CELRepo = MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            var events = CELRepo.GetSignalEventsByEventCodes(_SignalID, _StartDate, _EndDate, pedEventCodes);
+
+            var distinctEvents = (from i in events
+                                  select i.EventParam).Distinct();
+
+
+            List<int> converted = new List<int>();
+            foreach (var i in distinctEvents)
+            {
+                var c = Convert.ToInt32(i);
+                converted.Add(c);
+            }
+
+            return converted;
         }
 
         public string SignalID => _SignalID;

@@ -104,7 +104,8 @@ namespace GetMaxTimeRecords
         private static DateTime GetMostRecentRecordTime(string signalId)
         {
 
-            DateTime mostRecentEventTime = MOE.Common.Business.ControllerEventLogs.GetMostRecentRecordTimestamp(signalId);
+            var CELRepo = MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            DateTime mostRecentEventTime = CELRepo.GetMostRecentRecordTimestamp(signalId);
 
             if (mostRecentEventTime != null)
             {
