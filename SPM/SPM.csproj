@@ -302,6 +302,7 @@
     <Content Include="Images\close.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\DetectorAccuracyInformation.pdf" />
     <Content Include="Images\Intelight_Logo_Smaller.png" />
     <Content Include="Images\NewUDOTLogo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -335,11 +336,6 @@
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\DefaultCharts.js" />
-    <Content Include="Images\DetectorAccuracyInformation.pdf" />
-    <Content Include="Images\TTTDerekLoweShaneJohnson.pdf" />
-    <Content Include="Images\TTTJamieMackey.pdf" />
-    <Content Include="Images\TTTMarkTaylor.pdf" />
-    <Content Include="Images\Signal Ops QIT Final Report Released.pdf" />
     <Content Include="Properties\DataSources\MOE.Common.Business.TMC.TMCInfo.datasource" />
     <Content Include="Properties\DataSources\System.Xml.Linq.XElement.datasource" />
     <Content Include="Scripts\bootstrap.min.js.map" />
@@ -401,55 +397,7 @@
     <Content Include="Scripts\SignalEdit.js" />
     <Content Include="Scripts\SignalsSearch.js" />
     <Content Include="Scripts\GetMetrics.js" />
-    <Content Include="Images\2014-9-10 World Congress Measuring performance.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\ActionsByMetric.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\ITE SPM Webinar Part 1 - April 9, 2014.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\ITE SPM Webinar Part 2 - May 7, 2014.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\ITE SPM Webinar Part 3 - June 11, 2014.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\SPM%27s - Arizona - September 26, 2014.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\SPM%27s - ITS 3 C  September 5, 2014.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\SPM%27s - ITS California - October 16, 2014.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\SPM%27s - Southern District ITE  March 31, 2014.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Properties\DataSources\MOE.Common.Business.ApproachVolume.MetricInfo.datasource" />
-    <Content Include="Images\ATSPM_CO-WY_ITE___ITS_Rocky_Mtn_10-20-16.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\ATSPM_EDC4_Minnesota_10-25-16.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\ATSPM_ITS_CA_9-21-16.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\ATSPM_UDOT_Conference_11-2-16.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\EmergencyTrafficSignalResponsePlanUDOT5-6-16.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\TSMP_UDOT_v1-2_2-5-16.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\ATSPM_Component_Details.pdf" />
-    <Content Include="Images\ATSPM_Installation_Manual.pdf" />
-    <Content Include="Images\ATSPM_Reporting_Details.pdf" />
     <Content Include="Scripts\Map.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />

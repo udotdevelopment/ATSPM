@@ -14,7 +14,7 @@ namespace MOE.Common.Migrations
 
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
             CommandTimeout = int.MaxValue;
         }

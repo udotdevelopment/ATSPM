@@ -41,7 +41,7 @@ namespace SPM.Controllers
                     migrator.Update();
                     MOE.Common.Models.Custom.Seeder.Seed(db);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 { }
 
 

@@ -24,8 +24,9 @@ namespace MOE.Common.Models.Repositories
             List<int> eventParameters,
             List<int> eventCodes)
         {
+            var sig = Convert.ToInt16(signalId);
             var query = _db.Controller_Event_Log.Where(c =>
-                c.SignalID == Convert.ToInt16(signalId) && c.Timestamp >= startTime && c.Timestamp <= endTime);
+                c.SignalID == sig && c.Timestamp >= startTime && c.Timestamp <= endTime);
             if (eventParameters != null && eventParameters.Count > 0)
                 query = query.Where(c => eventParameters.Contains(c.EventParam));
             if (eventCodes != null && eventCodes.Count > 0)
@@ -36,8 +37,9 @@ namespace MOE.Common.Models.Repositories
         public List<Controller_Event_Log> GetRecordsByParameterAndEvent(string signalId, DateTime startTime,
             DateTime endTime, List<int> eventParameters, List<int> eventCodes)
         {
+            var sig = Convert.ToInt16(signalId);
             var query = _db.Controller_Event_Log.Where(c =>
-                c.SignalID == Convert.ToInt16(signalId) && c.Timestamp >= startTime && c.Timestamp <= endTime);
+                c.SignalID == sig && c.Timestamp >= startTime && c.Timestamp <= endTime);
             if (eventParameters != null && eventParameters.Count > 0)
                 query = query.Where(c => eventParameters.Contains(c.EventParam));
             if (eventCodes != null && eventCodes.Count > 0)
@@ -48,8 +50,9 @@ namespace MOE.Common.Models.Repositories
         public List<Controller_Event_Log> GetAllAggregationCodes(string signalId, DateTime startTime, DateTime endTime)
         {
             var codes = new List<int> { 150, 114, 113, 112, 105, 102, 1 };
+            var sig = Convert.ToInt16(signalId);
             var records = _db.Controller_Event_Log
-                .Where(c => c.SignalID == Convert.ToInt16(signalId) && c.Timestamp >= startTime && c.Timestamp <= endTime &&
+                .Where(c => c.SignalID == sig && c.Timestamp >= startTime && c.Timestamp <= endTime &&
                             codes.Contains(c.EventCode))
                 .ToList();
             return records;
@@ -58,10 +61,11 @@ namespace MOE.Common.Models.Repositories
         public int GetDetectorActivationCount(string signalId,
             DateTime startTime, DateTime endTime, int detectorChannel)
         {
+            var sig = Convert.ToInt16(signalId);
             var count = (from cel in _db.Controller_Event_Log
                          where cel.Timestamp >= startTime
                                && cel.Timestamp < endTime
-                               && cel.SignalID == Convert.ToInt16(signalId)
+                               && cel.SignalID == sig
                                && cel.EventParam == detectorChannel
                                && cel.EventCode == 82
                          select cel).Count();
@@ -70,6 +74,7 @@ namespace MOE.Common.Models.Repositories
 
         public double GetTmcVolume(DateTime startDate, DateTime endDate, string signalId, int phase)
         {
+            var sig = Convert.ToInt16(signalId);
             var repository =
                 SignalsRepositoryFactory.Create();
             var signal = repository.GetVersionOfSignalByDate(signalId, startDate);
@@ -85,7 +90,7 @@ namespace MOE.Common.Models.Repositories
             double count = (from cel in _db.Controller_Event_Log
                             where cel.Timestamp >= startDate
                                   && cel.Timestamp < endDate
-                                  && cel.SignalID == Convert.ToInt16(signalId)
+                                  && cel.SignalID == sig
                                   && tmcChannels.Contains(cel.EventParam)
                                   && cel.EventCode == 82
                             select cel).Count();
@@ -95,8 +100,9 @@ namespace MOE.Common.Models.Repositories
 
         public List<Controller_Event_Log> GetSplitEvents(string signalId, DateTime startTime, DateTime endTime)
         {
+            var sig = Convert.ToInt16(signalId);
             var results = (from r in _db.Controller_Event_Log
-                           where r.SignalID == Convert.ToInt16(signalId) && r.Timestamp > startTime && r.Timestamp < endTime
+                           where r.SignalID == sig && r.Timestamp > startTime && r.Timestamp < endTime
                                  && r.EventCode > 130 && r.EventCode < 150
                            select r).ToList();
 
@@ -108,8 +114,9 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
+                var sig = Convert.ToInt16(signalId);
                 return (from r in _db.Controller_Event_Log
-                        where r.SignalID == Convert.ToInt16(signalId)
+                        where r.SignalID == sig
                               && r.Timestamp >= startTime
                               && r.Timestamp < endTime
                         select r).ToList();
@@ -135,9 +142,10 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
+                var sig = Convert.ToInt16(signalId);
                 var events =
                 (from r in _db.Controller_Event_Log
-                 where r.SignalID == Convert.ToInt16(signalId)
+                 where r.SignalID == sig
                        && r.Timestamp >= startTime
                        && r.Timestamp < endTime
                  select r).Take(numberOfRecords).ToList();
@@ -167,9 +175,11 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
+                var sig = Convert.ToInt16(signalId);
                 return
+
                 (from r in _db.Controller_Event_Log
-                 where r.SignalID == Convert.ToInt16(signalId)
+                 where r.SignalID == sig
                        && r.Timestamp >= startTime
                        && r.Timestamp < endTime
                  select r).Count();
@@ -196,8 +206,9 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
+                var sig = Convert.ToInt16(signalId);
                 return (from r in _db.Controller_Event_Log
-                        where r.SignalID == Convert.ToInt16(signalId)
+                        where r.SignalID == sig
                               && r.Timestamp >= startTime
                               && r.Timestamp < endTime
                               && r.EventCode == eventCode
@@ -224,11 +235,18 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
+                var convertedCodes = new List<Int16>();
+
+                foreach(var i in eventCodes)
+                {
+                    convertedCodes.Add(Convert.ToInt16(i));
+                }
+                var sig = Convert.ToInt16(signalId);
                 var events = (from s in _db.Controller_Event_Log
-                              where s.SignalID == Convert.ToInt16(signalId) &&
+                              where s.SignalID == sig &&
                                     s.Timestamp >= startTime &&
                                     s.Timestamp <= endTime &&
-                                    eventCodes.Contains(s.EventCode)
+                                    convertedCodes.Contains(s.EventCode)
                               select s).ToList();
                 events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
                 return events;
@@ -254,8 +272,9 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
+                var sig = Convert.ToInt16(signalId);
                 var events = (from s in _db.Controller_Event_Log
-                              where s.SignalID == Convert.ToInt16(signalId) &&
+                              where s.SignalID == sig &&
                                     s.Timestamp >= startTime &&
                                     s.Timestamp <= endTime &&
                                     s.EventParam == param &&
@@ -286,8 +305,9 @@ namespace MOE.Common.Models.Repositories
             try
             {
                 var endDate = timestamp.AddDays(1);
+                var sig = Convert.ToInt16(signalId);
                 var events = _db.Controller_Event_Log.Where(c =>
-                        c.SignalID == Convert.ToInt16(signalId) &&
+                        c.SignalID == sig &&
                         c.Timestamp > timestamp &&
                         c.Timestamp < endDate &&
                         c.EventParam == param &&
@@ -312,9 +332,10 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
+                var sig = Convert.ToInt16(signalId);
                 return
                 (from s in _db.Controller_Event_Log
-                 where s.SignalID == Convert.ToInt16(signalId) &&
+                 where s.SignalID == sig &&
                        s.Timestamp >= startTime &&
                        s.Timestamp <= endTime &&
                        (s.Timestamp.Hour > startHour && s.Timestamp.Hour < endHour ||
@@ -352,8 +373,9 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
+                var sig = Convert.ToInt16(signalId);
                 var events = (from s in _db.Controller_Event_Log
-                              where s.SignalID == Convert.ToInt16(signalId) &&
+                              where s.SignalID == sig &&
                                     s.Timestamp >= startTime &&
                                     s.Timestamp <= endTime &&
                                     (s.Timestamp.Hour > startHour && s.Timestamp.Hour < endHour ||
@@ -393,8 +415,9 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
+                var sig = Convert.ToInt16(signalId);
                 var events = (from s in _db.Controller_Event_Log
-                              where s.SignalID == Convert.ToInt16(signalId) &&
+                              where s.SignalID == sig &&
                                     s.Timestamp >= startTime &&
                                     s.Timestamp <= endTime &&
                                     s.EventParam == param &&
@@ -429,7 +452,9 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
-                var events = _db.Controller_Event_Log.Where(s => s.SignalID == Convert.ToInt16(signalId) &&
+                var sig = Convert.ToInt16(signalId);
+                var events = _db.Controller_Event_Log.Where(
+                          s => s.SignalID == sig &&
                           s.Timestamp >= startTime &&
                           s.Timestamp <= endTime &&
                           s.EventParam == param &&
@@ -462,7 +487,8 @@ namespace MOE.Common.Models.Repositories
             try
             {
                 var tempDate = date.AddDays(-1);
-                var lastEvent = _db.Controller_Event_Log.Where(c => c.SignalID == Convert.ToInt16(signalId) &&
+                var sig = Convert.ToInt16(signalId);
+                var lastEvent = _db.Controller_Event_Log.Where(c => c.SignalID == sig &&
                                                                     c.Timestamp >= tempDate &&
                                                                     c.Timestamp < date &&
                                                                     c.EventCode == eventCode)
@@ -490,7 +516,8 @@ namespace MOE.Common.Models.Repositories
             try
             {
                 var tempDate = date.AddDays(-1);
-                var lastEvent = _db.Controller_Event_Log.Where(c => c.SignalID == Convert.ToInt16(signalId) &&
+                var sig = Convert.ToInt16(signalId);
+                var lastEvent = _db.Controller_Event_Log.Where(c => c.SignalID == sig &&
                                                                     c.Timestamp >= tempDate &&
                                                                     c.Timestamp < date &&
                                                                     c.EventCode == eventCode &&
@@ -515,7 +542,8 @@ namespace MOE.Common.Models.Repositories
 
         public int GetSignalEventsCountBetweenDates(string signalId, DateTime startTime, DateTime endTime)
         {
-            return _db.Controller_Event_Log.Count(r => r.SignalID == Convert.ToInt16(signalId) &&
+            var sig = Convert.ToInt16(signalId);
+            return _db.Controller_Event_Log.Count(r => r.SignalID == sig &&
                                                 r.Timestamp >= startTime
                                                 && r.Timestamp < endTime);
         }
@@ -536,8 +564,9 @@ namespace MOE.Common.Models.Repositories
 
         public DateTime GetMostRecentRecordTimestamp(string signalId)
         {
+            var sig = Convert.ToInt16(signalId);
             MOE.Common.Models.Controller_Event_Log row = (from r in _db.Controller_Event_Log
-                                                          where r.SignalID == Convert.ToInt16(signalId)
+                                                          where r.SignalID == sig
                                                           orderby r.Timestamp descending
                                                           select r).Take(1).FirstOrDefault();
             if (row != null)
