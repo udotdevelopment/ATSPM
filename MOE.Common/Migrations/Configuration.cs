@@ -1042,6 +1042,7 @@ While each agency should consult with their IT department for specific guideline
                 new DatabaseArchiveSettings
                 {
                     ApplicationID = 3,
+                    ArchivePath = @"\\srwtcnas\tcshare2\MOEFlatFiles\",
                     //EnableDatbaseArchive = false,
                     //SelectedTableScheme = TableScheme.Partitioned,
                     //MonthsToKeepIndex = 6,
