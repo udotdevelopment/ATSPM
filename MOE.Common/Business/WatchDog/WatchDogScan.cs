@@ -452,7 +452,7 @@ namespace MOE.Common.Business.WatchDog
             }
             try
             {
-                watchDogErrorEventRepository.AddList(errors.ToList());
+                watchDogErrorEventRepository.AddListAndSaveToDatabase(errors.ToList());
             }
             catch (DbEntityValidationException ex)
             {

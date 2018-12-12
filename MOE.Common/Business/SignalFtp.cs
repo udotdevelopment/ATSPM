@@ -12,8 +12,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using AlexPilotti.FTPS.Client;
-using AlexPilotti.FTPS.Common;
 using FluentFTP;
 using Lextm.SharpSnmpLib;
 using Lextm.SharpSnmpLib.Messaging;
@@ -117,13 +115,6 @@ namespace MOE.Common.Business
                 try
                 {
                     ftpClient.Connect();
-                }
-                //If there is an error, Print the error and go on to the next file.
-                catch (FTPException ex)
-                {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
-                    Console.WriteLine(Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
-                    return;
                 }
                 catch (AggregateException)
                 {
@@ -267,11 +258,6 @@ namespace MOE.Common.Business
                 try
                 {
                     ftpClient.DeleteFile(Signal.ControllerType.FTPDirectory +"/" + ftpFile);
-                }
-                catch (FTPException ex)
-                {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
-                    Console.WriteLine(Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
                 }
                 catch (AggregateException)
                 {
