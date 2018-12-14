@@ -99,7 +99,19 @@ textarea {
     text-align:center;
 }
 
-.panel-default > .panel-heading {
+.card-header {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: #1b6fce;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    color: white;
+}
+
+.card-header > a {
+    color: white;
+}
+
+.card > .card-heading {
     background-color:#1b6fce;
     color:white;
     border-color: #dddddd;
@@ -474,6 +486,7 @@ textarea {
 .menuItem{
     font-size: 14pt;
     font-weight:bold;
+    color: #000000 !important;
 }
 
 
@@ -700,4 +713,8 @@ caption {
 
 .leftAlign{
     text-align:left !important;
+}
+
+.bg-dark {
+    background-color: #1b6fce !important;
 }

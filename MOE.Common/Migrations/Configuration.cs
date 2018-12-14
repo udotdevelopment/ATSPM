@@ -241,33 +241,13 @@ While each agency should consult with their IT department for specific guideline
                 },
                 new Menu
                 {
-                    MenuId = 30,
-                    MenuName = "ATSPM Documents",
-                    Controller = "#",
-                    Action = "#",
-                    ParentId = 4,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 1
-                },
-                new Menu
-                {
                     MenuId = 34,
                     MenuName = "GDOT ATSPM Component Details",
                     Controller = "Images",
                     Action = "ATSPM_Component_Details.pdf",
-                    ParentId = 30,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 1
-                },
-                new Menu
-                {
-                    MenuId = 31,
-                    MenuName = "ATSPM Presentations",
-                    Controller = "#",
-                    Action = "#",
                     ParentId = 4,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 2
+                    DisplayOrder = 1
                 },
                 new Menu
                 {
@@ -275,7 +255,7 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "ATSPM UDOT Conference 11-2-16",
                     Controller = "Images",
                     Action = "ATSPM_UDOT_Conference_11-2-16.pdf",
-                    ParentId = 31,
+                    ParentId = 4,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 1
                 },
@@ -285,7 +265,7 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "ATSPM EDC4 Minnesota 10-25-16",
                     Controller = "Images",
                     Action = "ATSPM_EDC4_Minnesota_10-25-16.pdf",
-                    ParentId = 31,
+                    ParentId = 4,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 2
                 },
@@ -295,7 +275,7 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "ATSPM CO WY ITE & Rocky Mtn 10-20-16",
                     Controller = "Images",
                     Action = "ATSPM_CO-WY_ITE___ITS_Rocky_Mtn_10-20-16.pdf",
-                    ParentId = 31,
+                    ParentId = 4,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 1
                 },
@@ -305,19 +285,9 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "ATSPM ITS California 9-21-16",
                     Controller = "Images",
                     Action = "ATSPM_ITS_CA_9-21-16.pdf",
-                    ParentId = 31,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 2
-                },
-                new Menu
-                {
-                    MenuId = 32,
-                    MenuName = "UDOT Traffic Signal Documents",
-                    Controller = "#",
-                    Action = "#",
                     ParentId = 4,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 3
+                    DisplayOrder = 2
                 },
                 new Menu
                 {
@@ -325,7 +295,7 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "TSMP UDOT V1-2 2-5-16",
                     Controller = "Images",
                     Action = "TSMP_UDOT_v1-2_2-5-16.pdf",
-                    ParentId = 32,
+                    ParentId = 4,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 1
                 },
@@ -335,7 +305,7 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "Emergency Traffic Signal Response Plan UDOT 5-6-16",
                     Controller = "Images",
                     Action = "EmergencyTrafficSignalResponsePlanUDOT5-6-16.pdf",
-                    ParentId = 32,
+                    ParentId = 4,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 1
                 },
@@ -411,21 +381,11 @@ While each agency should consult with their IT department for specific guideline
                 },
                 new Menu
                 {
-                    MenuId = 14,
-                    MenuName = "Security",
-                    Controller = "#",
-                    Action = "#",
-                    ParentId = 11,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 4
-                },
-                new Menu
-                {
                     MenuId = 15,
                     MenuName = "Roles",
                     Controller = "Account",
                     Action = "RoleAddToUser",
-                    ParentId = 14,
+                    ParentId = 11,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 2
                 },
@@ -455,7 +415,7 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "GDOT ATSPM Installation Manual",
                     Controller = "Images",
                     Action = "ATSPM_Installation_Manual.pdf",
-                    ParentId = 30,
+                    ParentId = 4,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 2
                 },
@@ -465,7 +425,7 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "GDOT ATSPM Reporting Details",
                     Controller = "Images",
                     Action = "ATSPM_Reporting_Details.pdf",
-                    ParentId = 30,
+                    ParentId = 4,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 3
                 },
@@ -501,21 +461,11 @@ While each agency should consult with their IT department for specific guideline
                 },
                 new Menu
                 {
-                    MenuId = 53,
-                    MenuName = "Application Settings",
-                    Controller = "#",
-                    Action = "#",
-                    ParentId = 11,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 5
-                },
-                new Menu
-                {
                     MenuId = 54,
                     MenuName = "Watch Dog",
                     Controller = "WatchDogApplicationSettings",
                     Action = "Edit",
-                    ParentId = 53,
+                    ParentId = 11,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 1
                 },
@@ -525,19 +475,9 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "Detector Accuracy Information",
                     Controller = "Images",
                     Action = "DetectorAccuracyInformation.pdf",
-                    ParentId = 30,
+                    ParentId = 4,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 4
-                },
-                new Menu
-                {
-                    MenuId = 44,
-                    MenuName = "Train the Trainer",
-                    Controller = "#",
-                    Action = "#",
-                    ParentId = 31,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 5
                 },
                 new Menu
                 {
@@ -545,7 +485,7 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "Mark Taylor",
                     Controller = "Images",
                     Action = "TTTMarkTaylor.pdf",
-                    ParentId = 44,
+                    ParentId = 4,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 3
                 },
@@ -555,7 +495,7 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "Jamie Mackey",
                     Controller = "Images",
                     Action = "TTTJamieMackey.pdf",
-                    ParentId = 44,
+                    ParentId = 4,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 2
                 },
@@ -565,7 +505,7 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "Derek Lowe & Shane Johnson",
                     Controller = "Images",
                     Action = "TTTDerekLoweShaneJohnson.pdf",
-                    ParentId = 44,
+                    ParentId = 4,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 1
                 },
@@ -595,7 +535,7 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "Database Archive Settings",
                     Controller = "DatabaseArchiveSettings",
                     Action = "edit",
-                    ParentId = 53,
+                    ParentId = 11,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 2
                 },
@@ -605,7 +545,7 @@ While each agency should consult with their IT department for specific guideline
                     MenuName = "General Settings",
                     Controller = "GeneralSettings",
                     Action = "Edit",
-                    ParentId = 53,
+                    ParentId = 11,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 2
                 }
