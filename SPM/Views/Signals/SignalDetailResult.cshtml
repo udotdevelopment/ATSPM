@@ -1,11 +1,9 @@
 ﻿@model MOE.Common.Models.Signal
 
 @Html.AntiForgeryToken()
-<div class="panel panel-signal col-xs-12">
-    <div class="panel-heading">
-        <h4>
+<div class="card panel-signal col-12">
+    <div class="card-header">
             Signal @Model.SignalID
-        </h4>
     </div>
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -30,12 +28,12 @@
     <div class="form-group-configuration-tool  form-group col-md-6">
         @Html.LabelFor(model => model.VersionID, htmlAttributes: new { @class = "control-label" })
         <div class="">
-            @Html.DropDownList("versionDropDown", versionList, new {id = "versionDropDown", @class = "form-control", @onchange = "LoadVersionByVersionID(this.value)" })
+            @Html.DropDownList("versionDropDown", versionList, new {id = "versionDropDown", aria_labelledby = "VersionID", @class = "form-control", @onchange = "LoadVersionByVersionID(this.value)" })
             @Html.ValidationMessageFor(model => model.VersionID, "", new { id = "Version-error", @class = "text-danger" })
         </div>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="form-horizontal">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <table class="table">
@@ -59,7 +57,7 @@
                         @Html.DisplayNameFor(model => model.Longitude)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Enabled)
+                        @Html.LabelFor(model => model.Enabled, new{id="EnabledHeader"})
                     </th>
                 </tr>
                 <tr>
@@ -82,7 +80,7 @@
                         @Html.DisplayFor(model => model.Longitude)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => model.Enabled)
+                        @Html.CheckBoxFor(model => model.Enabled, new { aria_labelledby="EnabledHeader" })
                     </td>
                 </tr>
             </table>
@@ -102,12 +100,11 @@
                         @Html.DisplayNameFor(model => model.Approaches.First().PermissivePhaseNumber)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Approaches.First().IsProtectedPhaseOverlap)
+                        @Html.LabelFor(model => model.Approaches.First().IsProtectedPhaseOverlap, new { id = "IsProtectedPhaseOverlapHeader",  })
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Approaches.First().IsPermissivePhaseOverlap)
+                        @Html.LabelFor(model => model.Approaches.First().IsPermissivePhaseOverlap, new { id = "IsPermissivePhaseOverlapHeader" })
                     </th>
-                    <th></th>
                 </tr>
 
                 @foreach (var item in Model.Approaches)
@@ -126,10 +123,10 @@
                             @Html.DisplayFor(modelItem => item.PermissivePhaseNumber)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.IsProtectedPhaseOverlap)
+                            @Html.CheckBoxFor(modelItem => item.IsProtectedPhaseOverlap, new { aria_labelledby = "IsProtectedPhaseOverlapHeader" })
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.IsPermissivePhaseOverlap)
+                            @Html.CheckBoxFor(modelItem => item.IsPermissivePhaseOverlap, new { aria_labelledby = "IsPermissivePhaseOverlapHeader" })
                         </td>
                     </tr>
                 }

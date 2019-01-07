@@ -4,21 +4,18 @@
 
    
     @Html.AntiForgeryToken()
-    <div class="panel panel-signal">
-        <div class="panel-heading">
-            
-            <h4>
-                <button type="submit" class="pull-right btn btn-success" onclick="javascript:UpdateVersionDropdown()" value="Save">Save &nbsp;<span class="glyphicon glyphicon-save" aria-hidden="true"></span></button>
-                <button type="button" class="pull-right btn btn-danger" onclick="DeleteSignal()">Delete This Signal &nbsp;<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                <button type="button" class="pull-right btn btn-default" onclick="CopySignal()">Copy Signal&nbsp;<span class="glyphicon glyphicon-paste" aria-hidden="true"></span></button>
-                Signal @Model.SignalID
-                <Button type="button"onclick="AddNewVersion()" class="pull-right btn btn-info">Add New Verson &nbsp;<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></Button>
-                <Button type="button" onclick="DeleteVersion()" class="pull-right btn btn-warning">Delete This Version &nbsp;<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></Button>
+    <div class="card panel-signal">
+        <div class="card-header">
+            Signal @Model.SignalID
+                <button type="submit" class="float-right btn btn-success" onclick="javascript:UpdateVersionDropdown()" value="Save">Save &nbsp;<span class="" aria-hidden="true"></span></button>
+                <button type="button" class="float-right btn btn-danger" onclick="DeleteSignal()">Delete This Signal &nbsp;<span class="" aria-hidden="true"></span></button>
+                <button type="button" class="float-right btn btn-dark" onclick="CopySignal()">Copy Signal&nbsp;<span class="" aria-hidden="true"></span></button>
+                <Button type="button" onclick="AddNewVersion()" class="float-right btn btn-info">Add New Version &nbsp;<span class="" aria-hidden="true"></span></Button>
+                <Button type="button" onclick="DeleteVersion()" class="float-right btn btn-warning">Delete This Version &nbsp;<span class="" aria-hidden="true"></span></Button>
                 <span class="pull-right" id="ActionMessage"></span>
-            </h4>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
             <div class="form-horizontal">
                 @{
                     var selectList = new SelectList(Model.VersionList, "VersionId", "SelectListName", Model.VersionID);
@@ -53,47 +50,48 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="form-group-configuration-tool  form-group col-md-3">
+                        @Html.LabelFor(model => model.PrimaryName, htmlAttributes: new {@class = "control-label"})
+                        <div class="">
+                            @Html.EditorFor(model => model.PrimaryName, new {htmlAttributes = new {@class = "form-control"}})
+                            @Html.ValidationMessageFor(model => model.PrimaryName, "", new {id = "PrimaryName-error", @class = "text-danger"})
+                        </div>
+                    </div>
 
-                <div class="form-group-configuration-tool  form-group col-md-3">
-                    @Html.LabelFor(model => model.PrimaryName, htmlAttributes: new {@class = "control-label"})
-                    <div class="">
-                        @Html.EditorFor(model => model.PrimaryName, new {htmlAttributes = new {@class = "form-control"}})
-                        @Html.ValidationMessageFor(model => model.PrimaryName, "", new {id = "PrimaryName-error", @class = "text-danger"})
+                    <div class="form-group-configuration-tool  form-group col-md-3">
+                        @Html.LabelFor(model => model.SecondaryName, htmlAttributes: new {@class = "control-label"})
+                        <div class="">
+                            @Html.EditorFor(model => model.SecondaryName, new {htmlAttributes = new {@class = "form-control"}})
+                            @Html.ValidationMessageFor(model => model.SecondaryName, "", new {id = "SecondaryName-error", @class = "text-danger"})
+                        </div>
+                    </div>
+
+                    <div class="form-group-configuration-tool  form-group col-md-2">
+                        @Html.LabelFor(model => model.IPAddress, htmlAttributes: new {@class = "control-label"})
+                        <div class="">
+                            @Html.EditorFor(model => model.IPAddress, new {htmlAttributes = new {@class = "form-control"}})
+                            @Html.ValidationMessageFor(model => model.IPAddress, "", new {id = "IPAddress-error", @class = "text-danger"})
+                        </div>
+                    </div>
+
+                    <div class="form-group-configuration-tool  form-group col-md-2">
+                        @Html.LabelFor(model => model.Latitude, htmlAttributes: new {@class = "control-label"})
+                        <div class="">
+                            @Html.EditorFor(model => model.Latitude, new {htmlAttributes = new {@class = "form-control"}})
+                            @Html.ValidationMessageFor(model => model.Latitude, "", new {id = "Latitude-error", @class = "text-danger"})
+                        </div>
+                    </div>
+
+                    <div class="form-group-configuration-tool  form-group col-md-2">
+                        @Html.LabelFor(model => model.Longitude, htmlAttributes: new {@class = "control-label"})
+                        <div class="">
+                            @Html.EditorFor(model => model.Longitude, new {htmlAttributes = new {@class = "form-control"}})
+                            @Html.ValidationMessageFor(model => model.Longitude, "", new {id = "Longitude-error", @class = "text-danger"})
+                        </div>
                     </div>
                 </div>
-
-                <div class="form-group-configuration-tool  form-group col-md-3">
-                    @Html.LabelFor(model => model.SecondaryName, htmlAttributes: new {@class = "control-label"})
-                    <div class="">
-                        @Html.EditorFor(model => model.SecondaryName, new {htmlAttributes = new {@class = "form-control"}})
-                        @Html.ValidationMessageFor(model => model.SecondaryName, "", new {id = "SecondaryName-error", @class = "text-danger"})
-                    </div>
-                </div>
-
-                <div class="form-group-configuration-tool  form-group col-md-2">
-                    @Html.LabelFor(model => model.IPAddress, htmlAttributes: new {@class = "control-label"})
-                    <div class="">
-                        @Html.EditorFor(model => model.IPAddress, new {htmlAttributes = new {@class = "form-control"}})
-                        @Html.ValidationMessageFor(model => model.IPAddress, "", new {id = "IPAddress-error", @class = "text-danger"})
-                    </div>
-                </div>
-
-                <div class="form-group-configuration-tool  form-group col-md-2">
-                    @Html.LabelFor(model => model.Latitude, htmlAttributes: new {@class = "control-label"})
-                    <div class="">
-                        @Html.EditorFor(model => model.Latitude, new {htmlAttributes = new {@class = "form-control"}})
-                        @Html.ValidationMessageFor(model => model.Latitude, "", new {id = "Latitude-error", @class = "text-danger"})
-                    </div>
-                </div>
-
-                <div class="form-group-configuration-tool  form-group col-md-2">
-                    @Html.LabelFor(model => model.Longitude, htmlAttributes: new {@class = "control-label"})
-                    <div class="">
-                        @Html.EditorFor(model => model.Longitude, new {htmlAttributes = new {@class = "form-control"}})
-                        @Html.ValidationMessageFor(model => model.Longitude, "", new {id = "Longitude-error", @class = "text-danger"})
-                    </div>
-                </div>
-
+                <div class="row">
                 <div class="form-group-configuration-tool  form-group col-md-2">
                     @Html.LabelFor(model => model.RegionID, htmlAttributes: new {@class = "control-label"})
                     <div class="">
@@ -118,33 +116,35 @@
                     </div>
 
                 </div>
-                <div class="col-md-6">
-                    @Html.LabelFor(model => model.Comments, htmlAttributes: new {@class = "control-label"})
-                    <span onclick="GetCreateComment()" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                    <div id="NewComment"></div>
-                    <div class="comments">
-                        <div id="AddedComment"></div>
-                        @Html.EditorFor(model => model.Comments, new {htmlAttributes = new {@class = "form-control"}})
-                        @Html.ValidationMessageFor(model => model.Comments, "", new {id = "Comments-error", @class = "text-danger"})
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Comments, htmlAttributes: new {@class = "control-label"})
+                        <span onclick="GetCreateComment()" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                        <div id="NewComment"></div>
+                        <div class="comments">
+                            <div id="AddedComment"></div>
+                            @Html.EditorFor(model => model.Comments, new {htmlAttributes = new {@class = "form-control"}})
+                            @Html.ValidationMessageFor(model => model.Comments, "", new {id = "Comments-error", @class = "text-danger"})
+                        </div>
                     </div>
                 </div>
                 <div id="ConfigurationTable" role="tablist" aria-multiselectable="true" class="col-md-12">
-                    <div class="panel panel-configuration-table">
-                        <div class="panel-heading" role="tab" id="ConfigurationTableHeading">
-                            <h5 class="panel-title">
-                                <a id="ConfigurationTableHeader" data-toggle="collapse" data-parent="#ConfigurationTable" href="#ConfigurationTableCollapse" aria-expanded="false" aria-controls="ConfigurationTableCollapse">
-                                    Configuration Table
-                                </a>
+                    <div class="card">
+                        <div class="card-header bg-warning" role="tab" id="ConfigurationTableHeading">
 
-                            </h5>
+                            <a id="ConfigurationTableHeader" data-toggle="collapse" data-parent="#ConfigurationTable" href="#ConfigurationTableCollapse" aria-expanded="false" aria-controls="ConfigurationTableCollapse">
+                                Configuration Table
+                            </a>
                         </div>
-                        <div id="ConfigurationTableCollapse" class="panel-collapse collapse panel-body" role="tabpanel">
+                        <div id="ConfigurationTableCollapse" class="collapse card-body" role="tabpanel">
                         </div>
                     </div>
                 </div>
-                <div id="ApproachesList" class="center-block col-md-12">
-                    @Html.LabelFor(model => model.Approaches, htmlAttributes: new {@class = "control-label"})
-                    <span onclick="CreateNewApproach()" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                <div id="ApproachesList" class="col-12">
+                    
+                        @Html.LabelFor(model => model.Approaches, htmlAttributes: new { @class = "control-label" })
+                    <a href="javascript:CreateNewApproach()">
+                        <span class="fa fa-plus" style='font-size:14px' aria-hidden="true"> Add Phase/Direction</span>
+                    </a>
                     @Html.EditorFor(model => model.Approaches)
                 </div>
 

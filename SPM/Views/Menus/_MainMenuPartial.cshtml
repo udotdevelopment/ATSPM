@@ -27,8 +27,8 @@
                 if (m.MenuObject.MenuName != "Admin" || (m.MenuObject.MenuName == "Admin" && m.IsAdmin))
                 {
             <li nav-item dropdown>
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@m.MenuObject.MenuName </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">@m.MenuObject.MenuName </a>
+                <div class="dropdown-menu">
                     @foreach (var s in m.SubMenuItems)
                     {
                         @RenderMenuItems(s)

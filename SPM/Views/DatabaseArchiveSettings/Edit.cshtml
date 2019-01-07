@@ -64,7 +64,7 @@
                     @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.SelectedDeleteOrMove, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <div id="MoveOption" class="hidden">
+            <div id="MoveOption" class="invisible">
                 <div class="form-group">
                     @Html.LabelFor(model => model.DatabaseArchiveSettings.ArchivePath, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -73,7 +73,7 @@
                     </div>
                 </div>
             </div>*@
-            @*<div id="DeleteForStandardTable"class="hidden">
+            @*<div id="DeleteForStandardTable"class="invisible">
                 <div class="form-group">
                     @Html.LabelFor(model => model.DatabaseArchiveSettings.NumberOfRows, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">

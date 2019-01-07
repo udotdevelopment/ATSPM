@@ -212,11 +212,11 @@ function ResetDates()
 }
 
 function StartReportSpinner() {
-    $("#RunReportSpinner").addClass("glyphicon-refresh spinning");
+    $("#RunReportSpinner").addClass("fa fa-circle-o-notch fa-spin");
 }
 
 function StopReportSpinner() {
-    $("#RunReportSpinner").removeClass("glyphicon-refresh spinning");
+    $("#RunReportSpinner").removeClass("fa fa-circle-o-notch fa-spin");
 }
 
 

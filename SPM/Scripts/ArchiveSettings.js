@@ -6,10 +6,10 @@
 function ShowArchiveSettings() {
     var archiveEnabled = $("#DatabaseArchiveSettings_EnableDatbaseArchive").is(":checked");;
     if (archiveEnabled == true) {
-        $('#EnabledArchiveSettings').removeClass("hidden");
+        $('#EnabledArchiveSettings').removeClass("invisible");
     }
     else {
-        $('#EnabledArchiveSettings').addClass("hidden");
+        $('#EnabledArchiveSettings').addClass("invisible");
     }
 }
 
@@ -31,21 +31,21 @@ function RemoveSignal(signalId) {
 function ShowDeleteMoveOptions() {
     var deleteOrMove = $("#DatabaseArchiveSettings_SelectedDeleteOrMove").val();
     if (deleteOrMove == 2) {
-        $('#MoveOption').removeClass("hidden");
+        $('#MoveOption').removeClass("invisible");
         var tableType = $("#DatabaseArchiveSettings_SelectedTableScheme").val();
         if (tableType == 2) {
-            $('#DatabaseArchiveSettings_DeleteForStandardTable').removeClass("hidden");
+            $('#DatabaseArchiveSettings_DeleteForStandardTable').removeClass("invisible");
         } else {
-            $('#DatabaseArchiveSettings_DeleteForStandardTable').addClass("hidden");
+            $('#DatabaseArchiveSettings_DeleteForStandardTable').addClass("invisible");
         }
     }
     else {
-        $('#MoveOption').addClass("hidden");
+        $('#MoveOption').addClass("invisible");
         var tableType = $("#DatabaseArchiveSettings_SelectedTableScheme").val();
         if (tableType == 2) {
-            $('#DatabaseArchiveSettings_DeleteForStandardTable').removeClass("hidden");
+            $('#DatabaseArchiveSettings_DeleteForStandardTable').removeClass("invisible");
         } else {
-            $('#DatabaseArchiveSettings_DeleteForStandardTable').addClass("hidden");
+            $('#DatabaseArchiveSettings_DeleteForStandardTable').addClass("invisible");
         }
     }
 }
@@ -53,9 +53,9 @@ function ShowDeleteMoveOptions() {
 function PartitionTablesOptions() {
     var thisIsPartitionTable = document.getElementById("IsPartitionTables").checked;
     if (thisIsPartitionTable == true) {
-        $('#DivOff').removeClass("hidden");
-        $('#DivMonthsToRemoveIndex').removeClass("hidden");
-        $('#DivEndTime').addClass("hidden");
+        $('#DivOff').removeClass("invisible");
+        $('#DivMonthsToRemoveIndex').removeClass("invisible");
+        $('#DivEndTime').addClass("invisible");
     }
 }
 

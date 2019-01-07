@@ -617,23 +617,23 @@ function ShowHideMPH(control1, control2, ID)
     var mph = $("#MPHDiv_" + ID);
     if ($(control1).is(':checked') || $(control2).is(':checked'))
     {
-        $(mph).removeClass("hidden");
+        $(mph).removeClass("invisible");
     }
     else if (!$(control1).is(':checked') && !$(control2).is(':checked'))
     {
-        $(mph).addClass("hidden");
+        $(mph).addClass("invisible");
     }
 }
 
 function ShowHideControl(obj, checked) {
     if (checked) {
-        if ($(obj).hasClass("hidden")) {
-            $(obj).removeClass("hidden");
+        if ($(obj).hasClass("invisible")) {
+            $(obj).removeClass("invisible");
         }
     }
     else {
-        if (!$(obj).hasClass("hidden")) {
-            $(obj).addClass("hidden");
+        if (!$(obj).hasClass("invisible")) {
+            $(obj).addClass("invisible");
         }
     }
 }
