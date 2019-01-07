@@ -76,6 +76,20 @@ Begin
 	END
 	EXEC master..xp_cmdshell @SQLSTATEMENT
 
+	SET @SQLSTATEMENT = 'Truncate TABLE [dbo].[' + @StagingTableName  + ']'
+		IF (@Verbose = 1)
+	BEGIN
+		EXEC [dbo].[VerboseStatus]
+			@PartitionedTableName = @StagingTableName,
+			@PartitionName = @PartitionName,
+			@PartitionYear = @PartitionYear,
+			@PartitionMonth = @PartitionMonth, 
+			@SQLStatementOrMessage = @SQLSTATEMENT ,
+			@FunctionOrProcedure = 'PreserveData ',
+			@Notes = 'Before Truncating the stagging table'
+		END
+	EXEC sp_executesql @SQLSTATEMENT
+	
 	SET @SQLSTATEMENT = 'DROP TABLE [dbo].[' + @StagingTableName  + ']'
 	IF (@Verbose = 1)
 	BEGIN
@@ -86,7 +100,7 @@ Begin
 			@PartitionMonth = @PartitionMonth, 
 			@SQLStatementOrMessage = @SQLSTATEMENT ,
 			@FunctionOrProcedure = 'PreserveData ',
-			@Notes = 'Dropping the stagging table'
+			@Notes = 'Before Dropping the stagging table'
 		END
 	EXEC sp_executesql @SQLSTATEMENT 
 	
