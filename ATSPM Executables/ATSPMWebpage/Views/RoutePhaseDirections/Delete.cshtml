@@ -1,0 +1,55 @@
+﻿@model MOE.Common.Models.RoutePhaseDirection
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>RoutePhaseDirection</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.RouteSignalId)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.RouteSignalId)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Phase)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Phase)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.IsOverlap)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.IsOverlap)
+            </dd>
+    
+        </dl>
+    
+        @using (Html.BeginForm()) {
+            @Html.AntiForgeryToken()
+    
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" /> |
+            </div>
+        }
+    </div>
+</body>
+</html>

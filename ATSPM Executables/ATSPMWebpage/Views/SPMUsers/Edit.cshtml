@@ -1,0 +1,82 @@
+﻿@model SPM.Models.UserViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>SPMUser</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.User.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.User.Email, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.User.Email, new { htmlAttributes = new {@name="Email", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.User.Email, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.User.ReceiveAlerts)
+                @Html.LabelFor(model => model.User.ReceiveAlerts, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-1 left">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="panel panel-default col-md-7">
+                <div class="panel-heading">Roles</div>
+                <div class="panel-body">
+                    <div class="col-md-1">
+                        <ul id="RolesContainer" class="list-group" >
+
+                            @foreach (string role in Model.Roles.OrderBy(r=>r))
+                            {
+                                <li id="@role">@Html.DisplayFor(modelItem => role) </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="col-md-12">
+                        @Html.Hidden("UserName", Model.User.UserName)
+                        @Html.DropDownList("RoleName", ViewBag.Roles as SelectList, htmlAttributes: new { @class = "form-control col-md-2", title = "Role Name"})
+                        <div class="col-md-4">
+                            <input type="button" onclick="AddRoleToUser('@Model.User.UserName')" value="Add Role" class="btn btn-primary" />
+                            <input type="button" onclick="RemoveRoleFromUser('@Model.User.UserName')" value="Delete Role" class="btn btn-warning" />
+                        </div>
+                        <div class="col-md-5" id="EditRoleResult"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+
+        </div>
+    </div>
+}
+
+
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript" src="~/Scripts/User.js"></script>
+    <script>
+        var urlpathAddRoleToUser = '@Url.Action("AddRoleToUser", "SPMUsers")';
+        var urlpathRemoveRoleFromUser = '@Url.Action("RemoveRoleFromUser", "SPMUsers")';
+    </script>
+}

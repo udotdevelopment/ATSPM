@@ -1,0 +1,13 @@
+﻿@model MOE.Common.Models.ViewModel.Chart.SignalInfoBoxViewModel
+
+<div>
+    <div class="infobox">
+        <a class="infobox_close" href="javascript:closeInfobox()"><img src="@Url.Content("~/images/close.png")" /></a><br/><div class="infobox_content">
+        <div class='infobox_title'>Signal #@Model.SignalID</div>
+        <div >@Model.Description</div>
+        <a href="javascript:AddSignalToList(@Model.SignalID)">Select</a>
+        </div>
+    </div><div class="infobox_pointer"><img src="@Url.Content("~/images/pointer_shadow.png")"></div>
+</div>
+
+

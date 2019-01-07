@@ -1,0 +1,13 @@
+﻿@model MOE.Common.Models.DetectorComment
+
+            @Html.HiddenFor(model => model.CommentID)
+            @Html.HiddenFor(model => model.ID)
+    <div class="row">
+    <div class="col-md-6">
+                    @Model.TimeStamp -
+                </div>
+    
+    <div class="col-md-6">
+                    @Model.CommentText
+                </div>
+</div>

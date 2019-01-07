@@ -1,0 +1,32 @@
+﻿@model IEnumerable<MOE.Common.Models.Route>
+
+@{
+    ViewBag.Title = "Route Configuration";
+}
+
+<h2>Route Configuration</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RouteName)
+        </th>
+        <th>Edit/Delete</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RouteName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Index", "RouteSignals", new { id=item.Id }, new { }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>
