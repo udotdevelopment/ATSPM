@@ -866,6 +866,7 @@
     <Content Include="Views\Menus\Edit.cshtml" />
     <Content Include="Views\Menus\Index.cshtml" />
     <Content Include="Views\Menus\_MainMenuPartial.cshtml" />
+    <Content Include="Views\DefaultCharts\TimingAndActuationsOptions.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

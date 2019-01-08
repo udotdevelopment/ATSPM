@@ -664,7 +664,8 @@ While each agency should consult with their IT department for specific guideline
                 new DetectionType {DetectionTypeID = 3, Description = "Advanced Speed"},
                 new DetectionType {DetectionTypeID = 4, Description = "Lane-by-lane Count"},
                 new DetectionType {DetectionTypeID = 5, Description = "Lane-by-lane with Speed Restriction"},
-                new DetectionType {DetectionTypeID = 6, Description = "Stop Bar Presence"}
+                new DetectionType {DetectionTypeID = 6, Description = "Stop Bar Presence"},
+                new DetectionType { DetectionTypeID = 7, Description = "Advance Presence" }
             );
 
 
@@ -798,14 +799,14 @@ While each agency should consult with their IT department for specific guideline
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
                 },
-                //new MetricType
-                //{
-                //    MetricID = 17,
-                //    ChartName = "Advanced Counts",
-                //    Abbreviation = "ACA",
-                //    ShowOnWebsite = false,
-                //    ShowOnAggregationSite = true
-                //},
+                new MetricType
+                {
+                    MetricID = 17,
+                    ChartName = "Timing And Actuation",
+                    Abbreviation = "TAA",
+                    ShowOnWebsite = true,
+                    ShowOnAggregationSite = false
+                },
                 new MetricType
                 {
                     MetricID = 18,
@@ -927,6 +928,9 @@ While each agency should consult with their IT department for specific guideline
                         break;
                     case 6:
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(12));
+                        break;
+                    case 7:
+                        detectionType.MetricTypes.Add(context.MetricTypes.Find(17));
                         break;
                 }
             context.SaveChanges();
