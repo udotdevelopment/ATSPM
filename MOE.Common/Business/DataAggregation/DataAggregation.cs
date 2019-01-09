@@ -389,6 +389,7 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["Volume"] = detectorAggregationData.Volume;
                 detectorAggregationTable.Rows.Add(dataRow);
             }
+            
             var connectionString =
                 ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
