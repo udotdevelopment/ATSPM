@@ -1,8 +1,7 @@
 ﻿@model MOE.Common.Business.WCFServiceLibrary.TimingAndActuationsOptions
-<div class="card">
-    <div class="card-header">Purdue Coordination Diagram Options</div>
+<div class="card options-selection-min-width">
+    <div class="card-header">Timing and Actuations Options</div>
     <div class="card-body">
-
         <div class="">
             @Html.LabelFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "control-label" } })
             @Html.EditorFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
@@ -11,5 +10,69 @@
             @Html.LabelFor(model => model.Y2AxisMax, new { htmlAttributes = new { @class = "control-label" } })
             @Html.EditorFor(model => model.Y2AxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
         </div>
-    </div>
+        <div class="">
+            @Html.LabelFor(model => model.ShowPlans, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.ShowPlans, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.ShowVehicleSignalDisplay, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.ShowVehicleSignalDisplay, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.ShowPedestrianIntervals, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.ShowPedestrianIntervals, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.ShowBeginOfMaxGreen, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.ShowBeginOfMaxGreen, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.ShowStopBarPresence, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.ShowStopBarPresence, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.ShowLaneByLaneCount, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.ShowLaneByLaneCount, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.ShowAdvancedCount, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.ShowAdvancedCount, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.ShowAdvancedDilemmaZone, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.ShowAdvancedDilemmaZone, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.ShowPedestrianActuation, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.ShowPedestrianActuation, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.CombineLanesForEachGroup, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.CombineLanesForEachGroup, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.ShowPhaseCustom, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.ShowPhaseCustom, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.DotAndBarSize, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.DotAndBarSize, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.PhaseCustomCode1, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.PhaseCustomCode1, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.PhaseCustomCode2, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.PhaseCustomCode2, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.GlobalCustomCode1, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.GlobalCustomCode1, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.GlobalCustomCode2, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.GlobalCustomCode2, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
+        </div>
+       </div>
 </div>

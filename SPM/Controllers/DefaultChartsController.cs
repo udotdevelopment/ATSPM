@@ -157,6 +157,11 @@ namespace SPM.Controllers
                         new YellowAndRedOptions();
                     yellowAndRedOptions.SetDefaults();
                     return PartialView("YellowAndRedOptions", yellowAndRedOptions);
+                case 17:
+                    TimingAndActuationsOptions timingAndActuationsOptions =
+                        new TimingAndActuationsOptions();
+                    timingAndActuationsOptions.SetDefaults();
+                    return PartialView("TimingAndActuationsOptions", timingAndActuationsOptions);
 
                 case 12: default:
                     SplitFailOptions splitFailOptions =
@@ -168,8 +173,6 @@ namespace SPM.Controllers
 
         }
 
-
-
         public ActionResult GetPhaseTerminationMetricByUrl(PhaseTerminationOptions metricOptions)
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
@@ -178,6 +181,33 @@ namespace SPM.Controllers
                                                           "SetPhaseTerminationMetric(" + metricOptions.SelectedConsecutiveCount.ToString() + "," +
                                                           metricOptions.ShowPlanStripes.ToString().ToLower() + "," +
                                                           metricOptions.ShowPedActivity.ToString().ToLower() +                                                       
+                                                          "); CreateMetric();";
+            return View("Index", defaultChartsViewModel);
+        }
+        //Andre Sanchez for Timing and Actuations
+        public ActionResult TimingAndActionResultByUrl(TimingAndActuationsOptions  metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 17); " +
+                                                          "SetTimingAndActuationsMetric(" + 
+                                                          metricOptions.ShowPlans.ToString().ToLower() + "," +
+                                                          metricOptions.ShowVehicleSignalDisplay.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPedestrianIntervals.ToString().ToLower() + "," +
+                                                          metricOptions.ShowBeginOfMaxGreen.ToString().ToLower() + "," +
+                                                          metricOptions.ShowStopBarPresence.ToString().ToLower() + "," +
+                                                          metricOptions.ShowLaneByLaneCount.ToString().ToLower() + "," +
+                                                          metricOptions.ShowAdvancedCount.ToString().ToLower() + "," +
+                                                          metricOptions.ShowAdvancedDilemmaZone.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPedestrianActuation.ToString().ToLower() + "," +
+                                                          metricOptions.CombineLanesForEachGroup.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPhaseCustom.ToString().ToLower() + "," +
+                                                          metricOptions.ShowGlobalCustom.ToString().ToLower() + "," +
+                                                          metricOptions.DotAndBarSize.ToString() + "," +
+                                                          metricOptions.PhaseCustomCode1.ToString() + "," +
+                                                          metricOptions.PhaseCustomCode2.ToString() + "," +
+                                                          metricOptions.GlobalCustomCode1.ToString() + "," +
+                                                          metricOptions.GlobalCustomCode2.ToString() +
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
@@ -703,10 +733,8 @@ namespace SPM.Controllers
             {
                 MetricGeneratorService.MetricGeneratorClient client =
                     new MetricGeneratorService.MetricGeneratorClient();
-
                 try
                 {
-
                     client.Open();
                     result.ChartPaths = client.CreateMetric(metricOptions);
                     client.Close();
@@ -718,37 +746,81 @@ namespace SPM.Controllers
                 }
             }
 
-
-
             StringBuilder sb = new StringBuilder();
-
             sb.Append("/DefaultCharts/GetPhaseTerminationMetricByUrl?");
-
-
             sb.Append("&SelectedConsecutiveCount=" + metricOptions.SelectedConsecutiveCount.ToString());
             sb.Append("&ShowPlanStripes=" + metricOptions.ShowPlanStripes.ToString().ToLower());
             sb.Append("&ShowPedActivity=" + metricOptions.ShowPedActivity.ToString().ToLower());
-
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();
             _endDate = _endDate.Replace(" ", "%20");
-
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
-
             string fullUri = Request.Url.AbsoluteUri;
             int placeCounter = fullUri.IndexOf("/DefaultCharts/");
             string hostname = fullUri.Substring(0, placeCounter);
-
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" +hostname.Trim() + sb + "\");";
-
-
             return PartialView("MetricResult", result);
         }
+        
+        
+        //Andre Sanchez for Timing and Actuations
 
+        public ActionResult GetTimingAndActuations (TimingAndActuationsOptions  metricOptions)
+        {
+            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
+            if (ModelState.IsValid)
+            {
+                MetricGeneratorService.MetricGeneratorClient client =
+                    new MetricGeneratorService.MetricGeneratorClient();
+                try
+                {
+                    client.Open();
+                    result.ChartPaths = client.CreateMetric(metricOptions);
+                    client.Close();
+                }
+                catch (Exception ex)
+                {
+                    client.Close();
+                    return Content("<h1>" + ex.Message + "</h1>");
+                }
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.Append("/DefaultCharts/TimingAndActuationsByUrl?");
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            //sb.Append("&ShowPlans=") + metricOptions.ShowPlans.ToString( );
+            //sb.Append("&ShowVehicleSignalDisplay=") + metricOptions.ShowVehicleSignalDisplay.ToString();
+            //sb.Append("&ShowPedestrianIntervals=") + metricOptions.ShowPedestrianIntervals.ToString();
+            //sb.Append("&ShowBeginOfMaxGreen=") + metricOptions.ShowBeginOfMaxGreen.ToString();
+            //sb.Append("&ShowStopBarPresence=") + metricOptions.ShowStopBarPresence.ToString();
+            //sb.Append("&ShowLaneByLaneCount=") + metricOptions.ShowLaneByLaneCount.ToString();
+            //sb.Append("&ShowAdvancedCount=") + metricOptions.ShowAdvancedCount.ToString();
+            //sb.Append("&ShowAdvancedDilemmaZone=") + metricOptions.ShowAdvancedDilemmaZone.ToString();
+            //sb.Append("&ShowPedestrianActuation=") + metricOptions.ShowPedestrianActuation.ToString();
+            //sb.Append("&CombineLanesForEachGroup=") + metricOptions.CombineLanesForEachGroup.ToString();
+            //sb.Append("&ShowPhaseCustom=") + metricOptions.ShowPhaseCustom.ToString();
+            //sb.Append("&ShowGlobalCustom=") + metricOptions.ShowGlobalCustom.ToString();
+            //sb.Append("&DotAndBarSize=") + metricOptions.DotAndBarSize.ToString();
+            //sb.Append("&PhaseCustomCode1=") + metricOptions.PhaseCustomCode1.ToString();
+            //sb.Append("&PhaseCustomCode2=") + metricOptions.PhaseCustomCode2.ToString();
+            //sb.Append("&GlobalCustomCode1=") + metricOptions.GlobalCustomCode1.ToString();
+            //sb.Append("&GlobalCustomCode2=") + metricOptions.GlobalCustomCode2.ToString();
+
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
+            return PartialView("MetricResult", result);
+        }
 
         public ActionResult GetPreemptMetric(MetricOptions metricOptions)
         {

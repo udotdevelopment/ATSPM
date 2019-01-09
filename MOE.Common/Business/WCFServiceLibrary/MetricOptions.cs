@@ -42,6 +42,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(ApproachEventCountAggregationOptions))]
     [KnownType(typeof(PhaseTerminationAggregationOptions))]
     [KnownType(typeof(PhasePedAggregationOptions))]
+    [KnownType(typeof(TimingAndActuationsOptions))]
     [KnownType(typeof(string[]))]
     public class MetricOptions
     {

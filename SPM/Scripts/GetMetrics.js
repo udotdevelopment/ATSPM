@@ -138,6 +138,28 @@ function GetApproachVolumeMetric(metricTypeID) {
     tosend.ShowAdvanceDetection = $("#ShowAdvanceDetection").is(":checked");
     GetMetric(urlpathApproachVolume, tosend);
 }
+function GetTimingAndActuationsMetric(metricTypeID) {
+    var tosend = GetCommonValues();
+    tosend.MetricTypeID = metricTypeID;
+    tosend.ShowPlans = $("#ShowPlans").is("checked");
+    tosend.ShowVehicleSignalDisplay = $("#ShowVehicleSignalDisplay").is(":checked");
+    tosend.ShowPedestrianIntervals = $("#ShowPedestrianIntervals").is(":checked");
+    tosend.ShowBeginOfMaxGreen = $("#ShowBeginOfMaxGreen").is(":checked");
+    tosend.ShowStopBarPresence = $("#ShowStopBarPresence").is(":checked");
+    tosend.ShowLaneByLaneCount = $("#ShowLaneByLaneCount").is(":checked");
+    tosend.ShowAdvancedCount = $("#ShowAdvancedCount").is(":checked");
+    tosend.ShowAdvancedDilemmaZone = $("#ShowAdvancedDilemmaZone").is(":checked");
+    tosend.ShowPedestrianActuation = $("#ShowPedestrianActuation").is(":checked");
+    tosend.CombineLanesForEachGroup = $("#CombineLanesForEachGroup").is(":checked");
+    tosend.ShowPhaseCustom = $("#ShowPhaseCustom").is(":checked");
+    tosend.ShowGlobalCustom = $("#ShowGlobalCustom").is(":checked");
+    tosend.DotAndBarSize = $("#DotAndBarSize").val();
+    tosend.PhaseCustomCode1 = $("#PhaseCustomCode1").val();
+    tosend.PhaseCustomCode2 = $("#PhaseCustomCode2").val();
+    tosend.GlobalCustomCode1 = $("#GlobalCustomCode1").val();
+    tosend.GlobalCustomCode2 = $("#GlobalCustomCode2").val();
+    GetMetric(urlpathTimingAndActuations, tosend);
+}
 function GetApproachDelayMetric(metricTypeID) {
     var tosend = GetCommonValues();
     tosend.MetricTypeID = metricTypeID;

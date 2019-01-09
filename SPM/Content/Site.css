@@ -218,7 +218,7 @@ textarea {
 }
 
 .options-div{
-    max-width:300px;
+    max-width:400px;
 }
 
 .PhaseBoxLightBlue{
@@ -430,7 +430,10 @@ textarea {
 
 .chart-selection-min-width
 {
-    min-width:100px;
+    min-width:285px;
+}
+.options-selection-min-width {
+    min-width: 285px;
 }
 
 .location-nowrap{
@@ -455,7 +458,7 @@ textarea {
 }
 .input-group-custom
 {
-    min-width:280px;
+    min-width:580px;
 }
 .input-group-custom .form-control {
     display:inline-block;
@@ -477,7 +480,7 @@ textarea {
 
 .partners {
     width: 100%;
-    min-width: 400px;
+    min-width: 800px;
 }
 
 /*.navbar-brand {
