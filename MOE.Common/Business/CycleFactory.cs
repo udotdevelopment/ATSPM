@@ -57,12 +57,34 @@ namespace MOE.Common.Business
             return cycles;
         }
 
+        public static List<TimingAndActuationCycle> GetTimingAndActuationCycles(DateTime startDate, DateTime endDate, Approach approach, bool getPermissivePhase)
+        {
+            var cycleEvents = GetDetailedCycleEvents(getPermissivePhase, startDate, endDate, approach);
+            if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) != RedToRedCycle.EventType.ChangeToRed)
+                GetEventsToCompleteCycle(getPermissivePhase, endDate, approach, cycleEvents);
+            var cycles = new List<TimingAndActuationCycle>();
+            for (var i = 0; i < cycleEvents.Count; i++)
+                if (i < cycleEvents.Count - 3
+                    && GetEventType(cycleEvents[i].EventCode) == RedToRedCycle.EventType.ChangeToGreen
+                    && GetEventType(cycleEvents[i + 1].EventCode) == RedToRedCycle.EventType.ChangeToEndMinGreen
+                    && GetEventType(cycleEvents[i + 2].EventCode) == RedToRedCycle.EventType.ChangeToYellow
+                    && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToRed
+                    && GetEventType(cycleEvents[i + 4].EventCode) == RedToRedCycle.EventType.ChangeToEndOfRedClearance
+                    && GetEventType(cycleEvents[i + 5].EventCode) == RedToRedCycle.EventType.ChangeToGreen
+                    )
+                    cycles.Add(new TimingAndActuationCycle(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp,
+                        cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp, cycleEvents[i + 4].Timestamp, cycleEvents[i + 5].Timestamp));
+            return cycles;
+        }
+
         private static RedToRedCycle.EventType GetEventType(int eventCode)
         {
             switch (eventCode)
             {
                 case 1:
                     return RedToRedCycle.EventType.ChangeToGreen;
+                case 3:
+                    return RedToRedCycle.EventType.ChangeToEndMinGreen;
                 // overlap green
                 case 61:
                     return RedToRedCycle.EventType.ChangeToGreen;
@@ -73,6 +95,8 @@ namespace MOE.Common.Business
                     return RedToRedCycle.EventType.ChangeToYellow;
                 case 9:
                     return RedToRedCycle.EventType.ChangeToRed;
+                case 11:
+                    return RedToRedCycle.EventType.ChangeToEndOfRedClearance;
                 // overlap red
                 case 64:
                     return RedToRedCycle.EventType.ChangeToRed;
@@ -129,6 +153,30 @@ namespace MOE.Common.Business
                 var cycleEventNumbers = approach.IsProtectedPhaseOverlap
                     ? new List<int> {61, 63, 64,66}
                     : new List<int> {1, 8, 9};
+                cycleEvents = celRepository.GetEventsByEventCodesParam(approach.SignalID, startDate,
+                    endDate, cycleEventNumbers, approach.ProtectedPhaseNumber);
+            }
+            return cycleEvents;
+        }
+
+        private static List<Controller_Event_Log> GetDetailedCycleEvents(bool getPermissivePhase, DateTime startDate,
+            DateTime endDate, Approach approach)
+        {
+            var celRepository = ControllerEventLogRepositoryFactory.Create();
+            List<Controller_Event_Log> cycleEvents;
+            if (getPermissivePhase)
+            {
+                var cycleEventNumbers = approach.IsPermissivePhaseOverlap
+                    ? new List<int> { 61, 63, 64, 66 }
+                    : new List<int> { 1, 3, 8, 9, 11 };
+                cycleEvents = celRepository.GetEventsByEventCodesParam(approach.SignalID, startDate,
+                    endDate, cycleEventNumbers, approach.PermissivePhaseNumber.Value);
+            }
+            else
+            {
+                var cycleEventNumbers = approach.IsProtectedPhaseOverlap
+                    ? new List<int> { 61, 63, 64, 66 }
+                    : new List<int> { 1, 3, 8, 9, 11 };
                 cycleEvents = celRepository.GetEventsByEventCodesParam(approach.SignalID, startDate,
                     endDate, cycleEventNumbers, approach.ProtectedPhaseNumber);
             }

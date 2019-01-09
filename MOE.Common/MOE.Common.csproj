@@ -335,6 +335,7 @@
     <Compile Include="Business\ChartFactory.cs" />
     <Compile Include="Business\ChartTitleFactory.cs" />
     <Compile Include="Business\CycleFactory.cs" />
+    <Compile Include="Business\TimingAndActuationCycle.cs" />
     <Compile Include="Business\Phase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -403,6 +404,8 @@
     <Compile Include="Business\Speed\DetectorSpeed.cs" />
     <Compile Include="Business\SplitFail\SplitFailBin.cs" />
     <Compile Include="Business\SplitFail\SplitFailPhase.cs" />
+    <Compile Include="Business\TimingAndActuations\TimingAndActuationsChartForPhase.cs" />
+    <Compile Include="Business\TimingAndActuations\TimingAndActuationsForPhase.cs" />
     <Compile Include="Business\TMC\TMCData.cs" />
     <Compile Include="Business\TMC\TMCInfo.cs" />
     <Compile Include="Business\PCD\Phase.cs" />
