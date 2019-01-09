@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business.TimingAndActuations;
 using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
@@ -105,6 +106,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             base.CreateMetric();
             var signalRepository = SignalsRepositoryFactory.Create();
+            var signal = signalRepository.GetVersionOfSignalByDate(SignalID, StartDate);
+            List<Plan> plans = new List<Plan>();
+            foreach (var approach in signal.Approaches)
+            {
+                var timingAndActuationsPhase = new TimingAndActuationsForPhase(approach, plans, false, this);
+                var timingAndActuationsChartForPhase = new TimingAndActuationsChartForPhase(timingAndActuationsPhase);
+            }
            
             return ReturnList;
         }
