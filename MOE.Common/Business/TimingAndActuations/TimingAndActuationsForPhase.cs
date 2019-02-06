@@ -31,6 +31,16 @@ namespace MOE.Common.Business.TimingAndActuations
             Plans = plans;
             Options = options;
             Cycles = CycleFactory.GetTimingAndActuationCycles(Options.StartDate, Options.EndDate, approach, getPermissivePhase);
+
+            GetPedestrianEvents();
+        }
+
+        private void GetPedestrianEvents()
+        {
+            var controllerEventLogRepository = MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            PedestrianEvents = controllerEventLogRepository.GetEventsByEventCodesParam(Approach.SignalID, Options.StartDate, Options.EndDate, new List<int> { 21, 22, 23, 89, 90 })
+
+
         }
     }
 }
