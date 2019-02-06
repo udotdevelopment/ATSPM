@@ -549,6 +549,10 @@
     <Compile Include="Migrations\201808171744257_AggreationLongsForId.Designer.cs">
       <DependentUpon>201808171744257_AggreationLongsForId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810301701213_WatchDogEmailAllErrors.cs" />
+    <Compile Include="Migrations\201810301701213_WatchDogEmailAllErrors.Designer.cs">
+      <DependentUpon>201810301701213_WatchDogEmailAllErrors.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\PhasePedAggregation.cs" />
@@ -924,6 +928,9 @@
     <Content Include="App.config">
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Migrations\201810301701213_WatchDogEmailAllErrors.resx">
+      <DependentUpon>201810301701213_WatchDogEmailAllErrors.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\VerboseStatus.sql" />
     <EmbeddedResource Include="Migrations\InsertValues.sql" />
     <EmbeddedResource Include="Migrations\PhysicalFileName.sql" />
