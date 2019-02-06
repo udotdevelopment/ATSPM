@@ -101,6 +101,7 @@ namespace MOE.Common.Migrations
                     })
                 .PrimaryKey(t => t.Id);
 
+
             string sqlResVerboseStatus = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".VerboseStatus.sql";
             this.SqlResource(sqlResVerboseStatus);
 

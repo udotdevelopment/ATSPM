@@ -1,9 +1,12 @@
 using System;
+using System.IO;
 using System.Data.Entity.Migrations;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using MOE.Common.Business.SiteSecurity;
 using MOE.Common.Models;
+using System.Configuration;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Action = MOE.Common.Models.Action;
 
 namespace MOE.Common.Migrations
@@ -24,7 +27,6 @@ namespace MOE.Common.Migrations
         protected override void Seed(SPM context)
         {
             //  This method will be called after migrating to the latest version.
-
 
             context.FAQs.AddOrUpdate(
                 f => f.FAQID,
@@ -162,23 +164,15 @@ namespace MOE.Common.Migrations
                     OrderNumber = 19,
                     Header = @"<b>What are the System Requirements?</b>",
                     Body = @"<b>System Requirements:</b>
-
 <b>Operating Systems and Software:</b>
-
 The UDOT Signal Performance Metrics system runs on Microsoft Windows Servers.
-
 The web components are hosted by Microsoft Internet Information Server (IIS).
-
 The database server is a Microsoft SQL 2008 server.
-
 <b>Storage and Processing:</b>
-
 Detector data uses about 40% of the storage space of the UDOT system, so the number of detectors attached to a controller will have a huge impact on the amount of storage space required.  Detector data is also the most important information we collect.
-
 We estimate that each signal will generate 11.4 MB of data per day.
 
 The amount of processing power required is highly dependant on how many signals are on the system, how many servers will be part of the system, and how many people will be using the system.  It is possible to host all of the system functions on one powerful server, or split them out into multiple, less expensive servers.  If your agency decided to make the performance metrics available to the public, it might be best to have a web server separate from the database server.  Much of the heavy processing for the charts is done by web services, and it is possible to host these services on a dedicated computer.  
-
 While each agency should consult with their IT department for specific guidelines on how to best deliver a secure, stable and responsive solution, we can estimate that most mid-range to high-end servers will be able to handle the task of hosting and creating metrics for most agencies."
                 },
                 new FAQ
@@ -196,7 +190,6 @@ While each agency should consult with their IT department for specific guideline
                     Body = @"You can download the source code <a href=''>here</a>."
                 }
             );
-
             context.Menus.AddOrUpdate(
                 m => m.MenuId,
                 new Menu
@@ -727,7 +720,6 @@ While each agency should consult with their IT department for specific guideline
                 new DetectionType {DetectionTypeID = 6, Description = "Stop Bar Presence"}
             );
 
-
             context.MetricTypes.AddOrUpdate(
                 c => c.MetricID,
                 new MetricType
@@ -1050,6 +1042,7 @@ While each agency should consult with their IT department for specific guideline
                     //StartTime = 22,
                     //TimeDuration = 8,
                     //NumberOfRows = 10000
+                    ArchivePath = @"\\srwtcnas\tcshare2\MOEFlatFiles\"
                 }
             );
 
@@ -1159,9 +1152,6 @@ While each agency should consult with their IT department for specific guideline
                     InsertValues = "INSERT INTO [SignalID], [Timestamp], [EventCode], [EventParam]",
                     DataBaseName = "MoePartition",
                     Verbose = true,
-
-                    //CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, 
-                    //                        [Timestamp] [datetime2](7) NOT NULL, [EventCode] [int] NOT NULL, [EventParam] [int] NOT NULL"
                     CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS, 
                                             [Timestamp] [datetime2](7), [EventCode] [int], [EventParam] [int]"
                 },
@@ -1235,7 +1225,6 @@ While each agency should consult with their IT department for specific guideline
                     IndexName = "ByTimestampByDetID"
                 }
             );
-
             context.Regions.AddOrUpdate(
                 new Region {ID = 1, Description = "Region 1"},
                 new Region {ID = 2, Description = "Region 2"},
@@ -1243,7 +1232,6 @@ While each agency should consult with their IT department for specific guideline
                 new Region {ID = 4, Description = "Region 4"},
                 new Region {ID = 10, Description = "Other"}
             );
-
             context.Agencies.AddOrUpdate(
                 new Agency {AgencyID = 1, Description = "Academics"},
                 new Agency {AgencyID = 2, Description = "City Government"},
@@ -1271,7 +1259,6 @@ While each agency should consult with their IT department for specific guideline
                 new Action {ActionID = 14, Description = "Split Adjustment"},
                 new Action {ActionID = 15, Description = "Manual Command"}
             );
-
             context.DetectionHardwares.AddOrUpdate(
                 new DetectionHardware {ID = 0, Name = "Unknown"},
                 new DetectionHardware {ID = 1, Name = "Wavetronix Matrix"},
@@ -1280,7 +1267,6 @@ While each agency should consult with their IT department for specific guideline
                 new DetectionHardware {ID = 4, Name = "Sensys"},
                 new DetectionHardware {ID = 5, Name = "Video"}
             );
-
             //These are default values.  They need to be changed before the system goes into production.
 
             var roleStore = new RoleStore<IdentityRole>(context);
@@ -1316,8 +1302,55 @@ While each agency should consult with their IT department for specific guideline
                 roleManager.Create(new IdentityRole("Configuration"));
                 userManager.AddToRole(user.Id, "Configuration");
             }
+            // Added this 1/16/2019 Andre
+            //ADD FileGroups, Files, PF, PS, Drop Indexes and create new clustered indexes on aggregation tables.
+            string shouldPartitionTablesBePartition = ConfigurationManager.AppSettings["PartitionAggregrationTables"];
+            string locationOfAggregationPartitionFiles = ConfigurationManager.AppSettings["LocationOfAggregationPartitionFiles"];
+            string intialFileSize = ConfigurationManager.AppSettings["IntialFileSizeSize"];
+            string startYear = ConfigurationManager.AppSettings["StartYear"];
+            int.TryParse(startYear, out int intStartYear);
+            string endYear = ConfigurationManager.AppSettings["EndYear"];
+            int.TryParse(endYear, out int intendYear);
+            string dbName = ConfigurationManager.AppSettings["DBName"];
+            if (!Directory.Exists(@"C:\Temp\Partitions"))
+            {
+                Directory.CreateDirectory(@"C:\Temp\Partitions");
+            }
+            using (StreamWriter writetext = new StreamWriter(@"c:\temp\Partitions\TestAndre.txt"))
+            {
+                writetext.WriteLine(shouldPartitionTablesBePartition);
+                writetext.WriteLine(locationOfAggregationPartitionFiles);
+                writetext.WriteLine(intialFileSize);
+                writetext.WriteLine(startYear);
+                writetext.WriteLine(endYear);
+                writetext.WriteLine(dbName);
+               //writetext.WriteLine(sqlCommand);
+                writetext.WriteLine("That is a wrap");
+                writetext.Close();
+                //using (StreamWriter writetext = new StreamWriter(@"c:\temp\Partitions\SQLCommands.sql"))
+                //{
+                //    string sqlCommand = @"ALter Database [" + dbName + @"] Add FileGroup [" + dbName + @"_Aggregation_PreGroup]";
+                //    //context.Database.ExecuteSqlCommand(sqlCommand);
+                //    writetext.WriteLine(sqlCommand);
+                //    sqlCommand = "Alter Database [" + dbName + "] Add File (Name = N'" + dbName + "Moe_Aggregation_Pre' " +
+                //                 "FILENAME = N'" + locationOfAggregationPartitionFiles + "Moe_Aggregation_Pre.ndf', " +
+                //                 "SIZE = " + intialFileSize +", FILEGROWTH = 10MB) TO FILEGROUP [" + dbName + "_Aggregation_Pre]";
+                //    //context.Database.ExecuteSqlCommand(sqlCommand);
+                //    //writetext.WriteLine(sqlCommand);
+                //    //writetext.Close();
+                //    //ExcuteSqlFile(sqlcommand);
+
+                //}
+                
+               // string sqlPartitionStatus = (@"c:\temp\Partitions\SQLCommands.sql");
+             // context.Database.ExecuteSqlCommand(sqlPartitionStatus);
+
+            }
 
             context.SaveChanges();
+
+            //string sqlResVerboseStatus = typeof(PartitionAggregationTables).Namespace + ".Createpf.sql";
+            //PartitionAggregationTables.SqlResource(sqlResVerboseStatus);
         }
     }
 }
