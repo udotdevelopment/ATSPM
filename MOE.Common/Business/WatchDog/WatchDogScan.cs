@@ -99,8 +99,8 @@ namespace MOE.Common.Business.WatchDog
             var options = new ParallelOptions();
             options.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism;
 
-            Parallel.ForEach(signals, options, signal =>
-                //foreach(var signal in signals)
+            //Parallel.ForEach(signals, options, signal =>
+                foreach(var signal in signals)
             {
                 var APcollection =
                     new AnalysisPhaseCollection(signal.SignalID,
@@ -109,12 +109,36 @@ namespace MOE.Common.Business.WatchDog
                 foreach (var phase in APcollection.Items)
                     //Parallel.ForEach(APcollection.Items, options,phase =>
                 {
-                    CheckForMaxOut(phase, signal);
-                    CheckForForceOff(phase, signal);
-                    CheckForStuckPed(phase, signal);
+                    try
+                    {
+                        CheckForMaxOut(phase, signal);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Max Out Error " + e.Message);
+                    }
+
+                    try
+                    {
+
+                        CheckForForceOff(phase, signal);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Force Off Error " + e.Message);
+                    }
+
+                    try
+                    {
+                        CheckForStuckPed(phase, signal);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Stuck Ped Error " + e.Message);
+                    }
                 }
-                // );
-            });
+                 //);
+            }//);
         }
 
         private void CheckSignalsWithData()
@@ -133,14 +157,27 @@ namespace MOE.Common.Business.WatchDog
         private void CheckForRecords(List<Models.Signal> signals)
         {
             var options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism;
-            Parallel.ForEach(signals, options, signal =>
+            //options.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism;
+           // Parallel.ForEach(signals, options, signal =>
+            foreach (var signal in signals)
             {
-                if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
-                    CheckSignalRecordCount(ScanDate.AddDays(-2), signal);
-                else
-                    CheckSignalRecordCount(ScanDate, signal);
-            });
+                try
+                {
+                    GetRecordCountForWeekDayAndWeekend(signal);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(signal.SignalID + " - " + e.Message);
+                }
+            }//);
+        }
+
+        private void GetRecordCountForWeekDayAndWeekend(Signal signal)
+        {
+            if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
+                CheckSignalRecordCount(ScanDate.AddDays(-2), signal);
+            else
+                CheckSignalRecordCount(ScanDate, signal);
         }
 
         private void CheckSignalRecordCount(DateTime dateToCheck, Models.Signal signal)

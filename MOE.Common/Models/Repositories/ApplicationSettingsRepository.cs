@@ -18,7 +18,8 @@ namespace MOE.Common.Models.Repositories
 
         public WatchDogApplicationSettings GetWatchDogSettings()
         {
-            return db.WatchdogApplicationSettings.First();
+            var watchDogApplicationSettings = db.WatchdogApplicationSettings.First();
+            return watchDogApplicationSettings;
         }
 
         public DatabaseArchiveSettings GetDatabaseArchiveSettings()

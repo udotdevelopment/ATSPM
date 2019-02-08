@@ -34,22 +34,27 @@
                 </div>
                 <div id="collapseTwo" class="collapse show" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
                     <div class="card-body">
-                        <div class="col-md-6">
-                            <label class="control-label" for="Regions" id="Regions-error">Region</label>
-                            @Html.DropDownListFor(model => model.SelectedRegionID,
-                                new SelectList(Model.Regions, "ID", "Description"),
-                                "--Select Region--", new {@id = "Regions", @class = "form-control", @onchange = "RegionChange(this)"})
-                            @Html.ValidationMessageFor(model => model.SelectedRegionID, "", new { id = "SelectedRegionID-error", @class = "text-danger" })
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label" for="Regions" id="Regions-error">Region</label>
+                                @Html.DropDownListFor(model => model.SelectedRegionID,
+                                    new SelectList(Model.Regions, "ID", "Description"),
+                                    "--Select Region--", new {@id = "Regions", @class = "form-control", @onchange = "RegionChange(this)"})
+                                @Html.ValidationMessageFor(model => model.SelectedRegionID, "", new { id = "SelectedRegionID-error", @class = "text-danger" })
+                            </div>
+                            <div class="col-md-6">
+                                <label class="control-label" for="MetricTypes">Metric Type</label>
+                                @Html.DropDownList("MetricTypes", Model.MapMetricsList, "--Select a Metric--", new { @id = "MetricTypes", @class = "form-control", @onchange = "ReportTypeChange()" })
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="control-label" for="MetricTypes">Metric Type</label>
-                            @Html.DropDownList("MetricTypes", Model.MapMetricsList, "--Select a Metric--", new { @id = "MetricTypes", @class = "form-control", @onchange = "ReportTypeChange()" })
+
+                        <div class="row">
+                            <div class="Flexible-container col-md-12">
+                                <div id="mapDiv" class="MapDiv"></div>
+                            </div>
                         </div>
-                        <div class="Flexible-container col-md-12">
-                            <div id="mapDiv" class="MapDiv"></div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>

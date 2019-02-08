@@ -162,12 +162,9 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
-                return
-                (from r in _db.Controller_Event_Log
-                 where r.SignalID == signalId
-                       && r.Timestamp >= startTime
-                       && r.Timestamp < endTime
-                 select r).Count();
+                return _db.Controller_Event_Log.Count(r => r.SignalID == signalId
+                                                           && r.Timestamp >= startTime
+                                                           && r.Timestamp < endTime);
             }
             catch (Exception ex)
             {
@@ -177,6 +174,30 @@ namespace MOE.Common.Models.Repositories
                 e.ApplicationName = "MOE.Common";
                 e.Class = GetType().ToString();
                 e.Function = "GetRecordCount";
+                e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
+                e.Timestamp = DateTime.Now;
+                e.Description = signalId + " - " +ex.Message;
+                logRepository.Add(e);
+                throw ex;
+            }
+        }
+
+        public bool CheckForRecords(string signalId, DateTime startTime, DateTime endTime)
+        {
+            try
+            {
+                return _db.Controller_Event_Log.Any(r => r.SignalID == signalId
+                                                         && r.Timestamp >= startTime
+                                                         && r.Timestamp < endTime);
+            }
+            catch (Exception ex)
+            {
+                var logRepository =
+                    ApplicationEventRepositoryFactory.Create();
+                var e = new ApplicationEvent();
+                e.ApplicationName = "MOE.Common";
+                e.Class = GetType().ToString();
+                e.Function = "CheckForRecords";
                 e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
                 e.Timestamp = DateTime.Now;
                 e.Description = ex.Message;
@@ -238,9 +259,9 @@ namespace MOE.Common.Models.Repositories
                 e.Function = "GetSignalEventsByEventCodes";
                 e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
                 e.Timestamp = DateTime.Now;
-                e.Description = ex.Message;
+                e.Description = signalId + " - " + ex.Message;
                 logRepository.Add(e);
-                throw;
+                throw ex;
             }
         }
 

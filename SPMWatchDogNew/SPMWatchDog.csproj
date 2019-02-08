@@ -80,15 +80,6 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SharpSnmpLib.Full">
-      <HintPath>..\packages\Lextm.SharpSnmpLib.9.0.0\lib\net45\SharpSnmpLib.Full.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpSnmpLib.Portable">
-      <HintPath>..\packages\Lextm.SharpSnmpLib.9.0.0\lib\net45\SharpSnmpLib.Portable.dll</HintPath>
-    </Reference>
-    <Reference Include="SnmpSharpNet">
-      <HintPath>..\packages\SnmpSharpNet.0.9.4\lib\SnmpSharpNet.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
