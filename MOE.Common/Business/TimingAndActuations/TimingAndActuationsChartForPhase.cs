@@ -34,15 +34,15 @@ namespace MOE.Common.Business.TimingAndActuations
                 minGreenStripline.StripWidthType = DateTimeIntervalType.Hours;
                 Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(minGreenStripline);
 
-                var GreenStripline = new StripLine();
-                minGreenStripline.BackColor = Color.FromArgb(120, Color.DarkGreen);
-                minGreenStripline.IntervalOffset = (cycle.EndMinGreen - cycle.StartGreen).TotalHours;
-                minGreenStripline.IntervalOffsetType = DateTimeIntervalType.Hours;
-                minGreenStripline.Interval = 1;
-                minGreenStripline.IntervalType = DateTimeIntervalType.Days;
-                minGreenStripline.StripWidth = (cycle.EndMinGreen - cycle.StartGreen).TotalHours;
-                minGreenStripline.StripWidthType = DateTimeIntervalType.Hours;
-                Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(GreenStripline);
+                //var GreenStripline = new StripLine();
+                //minGreenStripline.BackColor = Color.FromArgb(120, Color.DarkGreen);
+                //minGreenStripline.IntervalOffset = (cycle.EndMinGreen - cycle.StartGreen).TotalHours;
+                //minGreenStripline.IntervalOffsetType = DateTimeIntervalType.Hours;
+                //minGreenStripline.Interval = 1;
+                //minGreenStripline.IntervalType = DateTimeIntervalType.Days;
+                //minGreenStripline.StripWidth = (cycle.EndMinGreen - cycle.StartGreen).TotalHours;
+                //minGreenStripline.StripWidthType = DateTimeIntervalType.Hours;
+                //Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(GreenStripline);
             }
         }
     }
