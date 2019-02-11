@@ -269,6 +269,9 @@ function CreateMetric() {
         else if (selectedMetricID == 12) {
             GetSplitFailMetric(12);
         }
+        else if (selectedMetricID == 17) {
+            GetTimingAndActuationsMetric(17);
+        }
     }
     defer.resolve();
     return defer.promise();

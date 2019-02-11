@@ -112,8 +112,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 var timingAndActuationsPhase = new TimingAndActuationsForPhase(approach, plans, false, this);
                 var timingAndActuationsChartForPhase = new TimingAndActuationsChartForPhase(timingAndActuationsPhase);
+
+                var chartName = CreateFileName();
+                timingAndActuationsChartForPhase.Chart.ImageLocation = MetricFileLocation + chartName;
+                timingAndActuationsChartForPhase.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
+                ReturnList.Add(MetricWebPath + chartName);
             }
-           
             return ReturnList;
         }
 

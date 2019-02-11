@@ -64,7 +64,7 @@ namespace MOE.Common.Business
                 GetEventsToCompleteCycle(getPermissivePhase, endDate, approach, cycleEvents);
             var cycles = new List<TimingAndActuationCycle>();
             for (var i = 0; i < cycleEvents.Count; i++)
-                if (i < cycleEvents.Count - 3
+                if (i < cycleEvents.Count - 5
                     && GetEventType(cycleEvents[i].EventCode) == RedToRedCycle.EventType.ChangeToGreen
                     && GetEventType(cycleEvents[i + 1].EventCode) == RedToRedCycle.EventType.ChangeToEndMinGreen
                     && GetEventType(cycleEvents[i + 2].EventCode) == RedToRedCycle.EventType.ChangeToYellow
