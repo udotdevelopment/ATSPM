@@ -220,6 +220,9 @@ textarea {
 .options-div{
     max-width:400px;
 }
+.TimingAndAcuationsDotWidth {
+    max-width: 50px;
+}
 
 .PhaseBoxLightBlue{
     /*height:36px;*/

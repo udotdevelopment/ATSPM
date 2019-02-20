@@ -153,11 +153,14 @@ function GetTimingAndActuationsMetric(metricTypeID) {
     tosend.CombineLanesForEachGroup = $("#CombineLanesForEachGroup").is(":checked");
     tosend.ShowPhaseCustom = $("#ShowPhaseCustom").is(":checked");
     tosend.ShowGlobalCustom = $("#ShowGlobalCustom").is(":checked");
+    tosend.ShowAllLanes = $("#ShowAllLanes").is(":checked");
+    tosend.MakeExtraStrip = $("#MakeExtraStrip").is(":checked");
     tosend.DotAndBarSize = $("#DotAndBarSize").val();
     tosend.PhaseCustomCode1 = $("#PhaseCustomCode1").val();
     tosend.PhaseCustomCode2 = $("#PhaseCustomCode2").val();
     tosend.GlobalCustomCode1 = $("#GlobalCustomCode1").val();
     tosend.GlobalCustomCode2 = $("#GlobalCustomCode2").val();
+    tosend.PhaseFilter = $("#PhaseFilter").val();
     GetMetric(urlpathTimingAndActuations, tosend);
 }
 function GetApproachDelayMetric(metricTypeID) {

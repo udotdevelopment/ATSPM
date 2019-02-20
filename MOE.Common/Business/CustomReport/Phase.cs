@@ -23,6 +23,7 @@ namespace MOE.Common.Business.CustomReport
         public Phase(Approach approach,
             DateTime startDate, DateTime endDate, List<int> eventCodes, int StartofCycleEvent, bool UsePermissivePhase)
         {
+            
             startDate = startDate.AddMinutes(-1);
             endDate = endDate.AddMinutes(+1);
             Approach = approach;

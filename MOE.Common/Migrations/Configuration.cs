@@ -908,6 +908,7 @@ While each agency should consult with their IT department for specific guideline
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(4));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(14));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(15));
+                        detectionType.MetricTypes.Add(context.MetricTypes.Find(17));
                         break;
                     case 2:
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(6));
@@ -928,9 +929,6 @@ While each agency should consult with their IT department for specific guideline
                         break;
                     case 6:
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(12));
-                        break;
-                    case 7:
-                        detectionType.MetricTypes.Add(context.MetricTypes.Find(17));
                         break;
                 }
             context.SaveChanges();
