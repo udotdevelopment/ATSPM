@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
+using System.Data.Entity.Core.Objects;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
+using System.Web.Management;
 using Microsoft.EntityFrameworkCore.Internal;
 
 namespace MOE.Common.Models.Repositories
@@ -12,7 +16,8 @@ namespace MOE.Common.Models.Repositories
 
         public ControllerEventLogRepository()
         {
-            _db.Database.CommandTimeout = 180;
+            //_db.Database.CommandTimeout = 180;
+            _db.Database.ExecuteSqlCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;");
         }
 
         public int GetRecordCountByParameterAndEvent(string signalId, DateTime startTime, DateTime endTime,
@@ -166,7 +171,7 @@ namespace MOE.Common.Models.Repositories
                                                            && r.Timestamp >= startTime
                                                            && r.Timestamp < endTime);
             }
-            catch (Exception ex)
+             catch (Exception ex)
             {
                 var logRepository =
                     ApplicationEventRepositoryFactory.Create();
@@ -249,6 +254,11 @@ namespace MOE.Common.Models.Repositories
                 events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
                 return events;
             }
+            //catch (EntityCommandExecutionException ex)
+            //{
+                
+            //}
+            
             catch (Exception ex)
             {
                 var logRepository =

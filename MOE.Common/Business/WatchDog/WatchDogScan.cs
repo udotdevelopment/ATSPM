@@ -101,43 +101,58 @@ namespace MOE.Common.Business.WatchDog
 
             //Parallel.ForEach(signals, options, signal =>
                 foreach(var signal in signals)
-            {
-                var APcollection =
-                    new AnalysisPhaseCollection(signal.SignalID,
-                        AnalysisStart, AnalysisEnd, Settings.ConsecutiveCount);
-
-                foreach (var phase in APcollection.Items)
-                    //Parallel.ForEach(APcollection.Items, options,phase =>
                 {
-                    try
-                    {
-                        CheckForMaxOut(phase, signal);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Max Out Error " + e.Message);
-                    }
-
-                    try
-                    {
-
-                        CheckForForceOff(phase, signal);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Force Off Error " + e.Message);
-                    }
-
-                    try
-                    {
-                        CheckForStuckPed(phase, signal);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Stuck Ped Error " + e.Message);
-                    }
+                    AnalysisPhaseCollection APcollection = null;
+                try
+                {
+                     APcollection =
+                        new AnalysisPhaseCollection(signal.SignalID,
+                            AnalysisStart, AnalysisEnd, Settings.ConsecutiveCount);
                 }
-                 //);
+                catch (Exception e)
+                {
+                    Console.WriteLine("Unable to get analysis phase for signal " + signal.SignalID);
+                }
+
+                    if (APcollection != null)
+                    {
+                        foreach (var phase in APcollection.Items)
+                            //Parallel.ForEach(APcollection.Items, options,phase =>
+                        {
+                            try
+                            {
+                                CheckForMaxOut(phase, signal);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Max Out Error " +
+                                                  e.Message);
+                            }
+
+                            try
+                            {
+
+                                CheckForForceOff(phase, signal);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Force Off Error " +
+                                                  e.Message);
+                            }
+
+                            try
+                            {
+                                CheckForStuckPed(phase, signal);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Stuck Ped Error " +
+                                                  e.Message);
+                            }
+                        }
+                    }
+
+                    //);
             }//);
         }
 
