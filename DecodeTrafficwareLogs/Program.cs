@@ -212,6 +212,11 @@ namespace DecodeTrafficwareLogs
                 {
                     DataTable elTable = new DataTable();
 
+                    elTable.Columns.Add("SignalId", typeof(String));
+                    elTable.Columns.Add("Timestamp", typeof(DateTime));
+                    elTable.Columns.Add("EventCode", typeof(Int32));
+                    elTable.Columns.Add("EventParam", typeof(Int32));
+
                     UniqueConstraint custUnique =
 new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
                                         elTable.Columns[1], 
@@ -315,10 +320,6 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
 
 
                                 }
-                                else
-                                {
-                                    //insertErrorCount++;
-                                }
 
                                 //If it gets this far, the file has been opened
                                 fileHasBeenRead = true;
@@ -376,7 +377,7 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
                                   
 
                     //the Signal class has a static methos to insert the tableinto the DB.  We are using that.
-                    MOE.Common.Business.Signal.BulktoDB(elTable, Options);
+                    MOE.Common.Business.SignalFtp.BulktoDb(elTable, Options);
 
                     elapsedTime = endTime - startTime;
 
@@ -446,7 +447,7 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
 
                     if (Properties.Settings.Default.WriteToConsole)
                     {
-                        Console.WriteLine("%%%End of file Loop%%%");
+                        Console.WriteLine("%%%Start of file Loop%%%");
                         Thread.Sleep(100);
                     }
                 }
@@ -454,7 +455,7 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
 
                 if (Properties.Settings.Default.WriteToConsole)
                 {
-                    Console.WriteLine("%%%End of DIRECTORY  Loop%%%");
+                    Console.WriteLine("%%%Start of DIRECTORY  Loop%%%");
                     Thread.Sleep(100);
                 }
                 //CleanUpFiles(FilesToDelete);
@@ -462,7 +463,7 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
 
                 if (Properties.Settings.Default.WriteToConsole)
                 {
-                    Console.WriteLine("###End of Queue Build Hit###");
+                    Console.WriteLine("###Start of Queue Build Hit###");
 
                 }
 

@@ -1,7 +1,4 @@
-﻿//$(function (ready) {
-//    Microsoft.Maps.loadModule({ callback: GetMap });
-//});
-var infobox;
+﻿var infobox;
 function openWindow(url) {
     var w = window.open(url, '',
     'width=800,height=600,toolbar=0,status=0,location=0,menubar=0,directories=0,resizable=1,scrollbars=1');
@@ -20,24 +17,50 @@ function GetMap()
         zoom: 6,
         customizeOverlays: false
     });
-    dataLayer = [];
-    //var infoboxLayer = [];
-    //infobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), { visible: false, offset: new Microsoft.Maps.Point(0, 20) });
-    //infoboxLayer.push(infobox);
-    //map.entities.push(infoboxLayer);
-    AddData();
-    map.entities.push(dataLayer);
+    var dataLayer = AddData();
+    //map.entities.push(dataLayer);
+    Microsoft.Maps.loadModule("Microsoft.Maps.Clustering", function () {
+        var clusterLayer = new Microsoft.Maps.ClusterLayer(dataLayer, {
+            clusteredPinCallback: customizeClusteredPin
+        });
+        map.layers.insert(clusterLayer);
+
+    });
+}
+
+function GetRouteMap() {
+    map = new Microsoft.Maps.Map(document.getElementById('mapDiv'), {
+        credentials: 'ArDqSVBgLAcobelrUlW6yVPIyL-UGPwVKTE0ce2_tAxvrZr5YFnSEFds7I1CNy5O',
+        center: new Microsoft.Maps.Location(39.50, -111.00),
+        mapTypeId: Microsoft.Maps.MapTypeId.road,
+        showDashboard: true,
+        showScalebar: false,
+        enableSearchLogo: false,
+        showMapTypeSelector: false,
+        zoom: 6,
+        customizeOverlays: false
+    });
+    var dataLayer = AddData();
+    //map.entities.push(dataLayer);
+    Microsoft.Maps.loadModule("Microsoft.Maps.Clustering", function () {
+        var clusterLayer = new Microsoft.Maps.ClusterLayer(dataLayer, {
+            clusteredPinCallback: customizeClusteredPin
+        });
+        map.layers.insert(clusterLayer);
+
+    });
 }
 
 
 function ReportTypeChange() {
     var regionDdl = $("#Regions")[0];
+    var regionMy = document.getElementById('Regions');
     CenterMap(regionDdl.options[regionDdl.selectedIndex].value);
 }
 
 function RegionChange(e) {
-
     CenterMap(e.options[e.selectedIndex].value);
+    var metricsMy = document.getElementById('MetricTypes');
 
 }
 
@@ -59,33 +82,59 @@ function CenterMap(region) {
     }
 }
 
+
 function GetMapWithCenter(lat, long, zoom) {
-    map = new Microsoft.Maps.Map(document.getElementById('mapDiv'), { credentials: 'ArDqSVBgLAcobelrUlW6yVPIyL-UGPwVKTE0ce2_tAxvrZr5YFnSEFds7I1CNy5O',
+    map = new Microsoft.Maps.Map(document.getElementById('mapDiv'), {
+        credentials: 'ArDqSVBgLAcobelrUlW6yVPIyL-UGPwVKTE0ce2_tAxvrZr5YFnSEFds7I1CNy5O',
         center: new Microsoft.Maps.Location(lat, long),
         mapTypeId: Microsoft.Maps.MapTypeId.road,
-        showDashboard: false,
+        showDashboard: true,
         showScalebar: false,
         enableSearchLogo: false,
         showMapTypeSelector: false,
-        zoom: zoom
+        zoom: zoom,
+        customizeOverlays: false
     });
+    var dataLayer = AddData();
+    //map.entities.push(dataLayer);
+    Microsoft.Maps.loadModule("Microsoft.Maps.Clustering", function () {
+        var clusterLayer = new Microsoft.Maps.ClusterLayer(dataLayer, {
+            clusteredPinCallback: customizeClusteredPin
+        });
+        map.layers.insert(clusterLayer);
 
-    dataLayer = new Microsoft.Maps.EntityCollection();
-    map.entities.push(dataLayer);
-
-    var infoboxLayer = new Microsoft.Maps.EntityCollection();
-    map.entities.push(infoboxLayer);
-
-    infobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), { visible: false, offset: new Microsoft.Maps.Point(0, 20) });
-    infoboxLayer.push(infobox);
-
-    AddData();
+    });
 }
 
+
+function customizeClusteredPin(cluster) {
+    //Add click event to clustered pushpin
+    Microsoft.Maps.Events.addHandler(cluster, 'click', clusterClicked);
+}
+
+function clusterClicked(e) {
+    if (e.target.containedPushpins) {
+        var locs = [];
+        for (var i = 0, len = e.target.containedPushpins.length; i < len; i++) {
+            //Get the location of each pushpin.
+            locs.push(e.target.containedPushpins[i].getLocation());
+        }
+
+        //Create a bounding box for the pushpins.
+        var bounds = Microsoft.Maps.LocationRect.fromLocations(locs);
+
+        //Zoom into the bounding box of the cluster. 
+        //Add a padding to compensate for the pixel area of the pushpins.
+        map.setView({ bounds: bounds, padding: 100 });
+    }
+}
 
 function closeInfobox() {
-    infobox.setMap(null);
+    if (infobox != null) {
+        infobox.setMap(null);
+    }
 }
+
 
 
 
@@ -182,6 +231,16 @@ function ZoomIn(e) {
     }
 }
 
+function AddSignalFromPin(e) {
+    if (e.targetType == 'pushpin') {
+        var signalId = e.target.SignalID.toString();
+        AddSignalToList(signalId);
+    }
+}
+
+
+
+
 function displayInfobox(e) {
     if (e.targetType == 'pushpin') {
         actionArray = new Array();
@@ -199,26 +258,20 @@ function displayInfobox(e) {
             data: JSON.stringify(tosend),
             success: function (data) {
                 if (infobox != null) {
-                    infobox.setMap(null);
+                    infobox.setOptions({ visible: false });
                 }
-                infobox = new Microsoft.Maps.Infobox(e.target.getLocation(), { offset: new Microsoft.Maps.Point(-100, 0), htmlContent: data });
+                infobox = new Microsoft.Maps.Infobox(e.target.getLocation(),
+                    { offset: new Microsoft.Maps.Point(-100, 0), htmlContent: data });
                 infobox.setMap(map);
                 SetControlValues(SignalID, null);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus);
             }
         });
     } 
 }
 
-
-
-
-
-//function rowClick(signalId) {
-////    document.forms[0].AccordionPane1_content$uxEntityTextBox.value = signalId;
-////    document.forms[0].AccordionPane1_content$uxEntityTextBox.value = "";
-////    document.forms[0].AccordionPane1_content$uxEntityTextBox.value = signalId;
-//   // return false;
-//}
 
 
 function CancelAsyncPostBack() {

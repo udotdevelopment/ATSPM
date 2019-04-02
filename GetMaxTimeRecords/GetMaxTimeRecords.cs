@@ -9,7 +9,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Net;
 using System.Net.NetworkInformation;
-
+using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 
 namespace GetMaxTimeRecords
@@ -36,15 +37,11 @@ namespace GetMaxTimeRecords
                 }
             }
 
-            List<MOE.Common.Models.Signal> signalsDT;
-            MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
-            using (db)
-            {
-                signalsDT = (from s in db.Signals
-                            where s.ControllerTypeID == 4
-                            select s).ToList();
-            }
+            MOE.Common.Models.Repositories.ISignalsRepository sr = 
+                MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
 
+            List<MOE.Common.Models.Signal> signalsDT = sr.GetLatestVerionOfAllSignalsByControllerType(4);
+           
          
 
                 Parallel.ForEach(signalsDT, options, row =>
@@ -75,35 +72,52 @@ namespace GetMaxTimeRecords
             IPAddress ip ;
             bool hasValidIP = true;
             hasValidIP = IPAddress.TryParse(Signal.IPAddress, out ip);
-            
 
             if (Signal.IPAddress == "0")
-                        {
-                            hasValidIP = false;
-                        }
+            {
+                hasValidIP = false;
+            }
 
-                        //test to see if the address is reachable
-                        if (hasValidIP)
-                        {
-                            Ping pingSender = new Ping ();
-                            PingOptions pingOptions = new PingOptions ();
+            //test to see if the address is reachable
+            if (hasValidIP)
+            {
+                Ping pingSender = new Ping();
+                PingOptions pingOptions = new PingOptions();
 
-                            // Use the default Ttl value which is 128, 
-                            // but change the fragmentation behavior.
-                            pingOptions.DontFragment = true;
+                // Use the default Ttl value which is 128, 
+                // but change the fragmentation behavior.
+                pingOptions.DontFragment = true;
 
-                        // Create a buffer of 32 bytes of data to be transmitted. 
-                        string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-                         byte[] buffer = Encoding.ASCII.GetBytes (data);
-                                     int timeout = 120;
-                                     PingReply reply = pingSender.Send(Signal.IPAddress, timeout, buffer, pingOptions);
-                            if (reply.Status != IPStatus.Success)
-                            {
-                                hasValidIP = false;
-                            }
-                        }
-                        return hasValidIP;
+                // Create a buffer of 32 bytes of data to be transmitted. 
+                string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+                byte[] buffer = Encoding.ASCII.GetBytes(data);
+                int timeout = 120;
+                PingReply reply = null;
+                try
+                {
+                    reply = pingSender.Send(Signal.IPAddress, timeout, buffer, pingOptions);
+                    if (reply.Status != IPStatus.Success)
+                    {
+                        var errorLog = ApplicationEventRepositoryFactory.Create();
+                        errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                            "GetMaxTimeRecords", "TestIPAddress", ApplicationEvent.SeverityLevels.High, "Signal - " + Signal.SignalID + " IP Address - " + Signal.IPAddress + " - Invalid IP Address");
+                        hasValidIP = false;
                     }
+                }
+                catch( Exception e)
+                {
+                    if (reply == null || reply.Status != IPStatus.Success)
+                    {
+                        var errorLog = ApplicationEventRepositoryFactory.Create();
+                        errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                            "GetMaxTimeRecords", e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, "Signal - " + Signal.SignalID + " IP Address - " + Signal.IPAddress + " - " + e.Message);
+
+                        hasValidIP = false;
+                    }
+                }
+            }
+            return hasValidIP;
+        }
 
         private static DateTime GetMostRecentRecordTime(string signalId)
         {
@@ -115,12 +129,7 @@ namespace GetMaxTimeRecords
 
                 return (mostRecentEventTime);
             }
-            else
-            {
-                return (DateTime.Now.AddDays(-2));
-            }
-
-
+            return (DateTime.Now.AddDays(-2));
         }
 
        
@@ -170,7 +179,7 @@ namespace GetMaxTimeRecords
                                   Properties.Settings.Default.WriteToConsole,Properties.Settings.Default.forceNonParallel, Properties.Settings.Default.MaxThreads, false, 
                                   Properties.Settings.Default.EarliestAcceptableDate, Properties.Settings.Default.BulkCopyBatchSize, Properties.Settings.Default.BulkCopyTimeOut);
 
-             MOE.Common.Business.Signal.BulktoDB(elTable, Options);
+             MOE.Common.Business.SignalFtp.BulktoDb(elTable, Options);
             
 
         }

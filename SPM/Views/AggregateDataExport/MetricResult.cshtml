@@ -1,0 +1,14 @@
+﻿@model SPM.Models.MetricAndXmlResultViewModel
+
+<script type="text/javascript">
+    function ShowMetricUrl() {
+    @Html.Raw(Model.ShowMetricUrlJavascript)
+}</script>
+
+@{
+    foreach (Tuple<string, string> chartPath in Model.ChartPaths)
+    {
+        <div col-md-12><img src="@chartPath.Item1" alt="Chart" /></div>
+        <div col-md-12><a href="@chartPath.Item2" alt="Chart Xml" download="ChartData">Download Chart Data</a></div>
+            }
+            }

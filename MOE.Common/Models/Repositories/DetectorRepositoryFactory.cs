@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MOE.Common.Models.Repositories
+﻿namespace MOE.Common.Models.Repositories
 {
     public class DetectorRepositoryFactory
     {
-       private static IDetectorRepository graphDetectorRepository;
+        private static IDetectorRepository detectorRepository;
 
         public static IDetectorRepository Create()
         {
-            if (graphDetectorRepository != null)
-            {
-                return graphDetectorRepository;
-            }
+            if (detectorRepository != null)
+                return detectorRepository;
             return new DetectorRepository();
         }
 
-        public static void SetArchivedMetricsRepository(IDetectorRepository newRepository)
+        public static IDetectorRepository Create(SPM context)
         {
-            graphDetectorRepository = newRepository;
+            if (detectorRepository != null)
+                return detectorRepository;
+            return new DetectorRepository(context);
+        }
+
+        public static void SetDetectorRepository(IDetectorRepository newRepository)
+        {
+            detectorRepository = newRepository;
         }
     }
-    
 }

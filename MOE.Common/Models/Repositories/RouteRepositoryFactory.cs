@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MOE.Common.Models.Repositories
+﻿namespace MOE.Common.Models.Repositories
 {
     public class RouteRepositoryFactory
     {
-        private static IRouteRepository routeRepository;
+        private static IRouteRepository approachRouteRepository;
 
         public static IRouteRepository Create()
         {
-            if (routeRepository != null)
-            {
-                return routeRepository;
-            }
+            if (approachRouteRepository != null)
+                return approachRouteRepository;
             return new RouteRepository();
         }
 
-        public static void SetRouteRepository(IRouteRepository newRepository)
+        public static void SetApproachRouteRepository(IRouteRepository newRepository)
         {
-            routeRepository = newRepository;
+            approachRouteRepository = newRepository;
         }
     }
 }

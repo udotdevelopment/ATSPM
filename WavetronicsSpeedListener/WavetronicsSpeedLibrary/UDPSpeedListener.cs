@@ -37,6 +37,9 @@ namespace WavetronicsSpeedLibrary
         private UpdateStatusDelegate updateStatusDelegate = null;
 
         #endregion
+        
+            MOE.Common.Models.Repositories.IApplicationEventRepository applicationEventRepository =
+                MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
         public UDPSpeedListener()
         {
             IsRunning = true;
@@ -72,10 +75,8 @@ namespace WavetronicsSpeedLibrary
                             ref epSender, new AsyncCallback(ReceiveData), epSender);
                 }
                 catch(Exception ex)
-                {
-                    MOE.Common.Models.Repositories.IApplicationEventRepository eventRepository =
-                    MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                    eventRepository.QuickAdd("SpeedListener", this.GetType().ToString(), "StartListening",
+            { 
+                    applicationEventRepository.QuickAdd("SpeedListener", this.GetType().ToString(), "StartListening",
                         MOE.Common.Models.ApplicationEvent.SeverityLevels.High, ex.Message);
                 }
             //}
@@ -106,9 +107,8 @@ namespace WavetronicsSpeedLibrary
             }
             catch (Exception ex)
             {
-                MOE.Common.Models.Repositories.IApplicationEventRepository eventRepository =
-                    MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                eventRepository.QuickAdd("SpeedListener", this.GetType().ToString(), "RecieveData",
+
+                applicationEventRepository.QuickAdd("SpeedListener", this.GetType().ToString(), "RecieveData",
                     MOE.Common.Models.ApplicationEvent.SeverityLevels.High, ex.Message);
             }
                 

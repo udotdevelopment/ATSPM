@@ -1,81 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Web.UI.DataVisualization.Charting;
-
+using MOE.Common.Business.WCFServiceLibrary;
+using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.Preempt
 {
     public class PreemptServiceMetric
     {
-        public Chart chart = new Chart();
-        public WCFServiceLibrary.PreemptServiceMetricOptions Options { get; set; }
-
-        public PreemptServiceMetric(WCFServiceLibrary.PreemptServiceMetricOptions options,
-            MOE.Common.Business.ControllerEventLogs  DTTB)
+        public Chart ServiceChart { get; set; }
+    
+        public PreemptServiceMetric(PreemptServiceMetricOptions options,
+            ControllerEventLogs DTTB)
         {
-            this.Options = options;
+            Options = options;
+            ServiceChart = ChartFactory.CreateDefaultChart(options);
+        
             //Set the chart properties
-            chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 200;
-            chart.Width = 1100;
-            chart.BorderSkin.SkinStyle = BorderSkinStyle.None;
-            chart.BorderSkin.BorderColor = Color.Black;
-            chart.BorderSkin.BorderWidth = 1;
-            TimeSpan reportTimespan = Options.EndDate - Options.StartDate;
+            ServiceChart.BorderSkin.SkinStyle = BorderSkinStyle.None;
+            ServiceChart.BorderSkin.BorderColor = Color.Black;
+            ServiceChart.BorderSkin.BorderWidth = 1;
+            var reportTimespan = Options.EndDate - Options.StartDate;
 
             SetChartTitle();
 
             //Create the chart legend
-            Legend chartLegend = new Legend();
+            var chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
             chartLegend.Docking = Docking.Left;
-            chart.Legends.Add(chartLegend);
-
-
-            //Create the chart area
-            ChartArea chartArea = new ChartArea();
-            chartArea.Name = "ChartArea1";
-            //if (double.TryParse(yAxisMax, out y))
-            //{
-            //    chartArea.AxisY.Maximum = y;
-            //}
-            //else
-            //{
-            chartArea.AxisY.Maximum = 10;
-            //}
-            chartArea.AxisY.Minimum = 0;
-            chartArea.AxisY.Title = "Preempt Number";
-            chartArea.AxisY.Interval = 1;
-            chartArea.AxisX.Title = "Time (Hour of Day)";
-            chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX.LabelStyle.Format = "HH";
-            if (reportTimespan.Days < 1)
-            {
-                if (reportTimespan.Hours > 1)
-                {
-                    chartArea.AxisX.Interval = 1;
-                }
-                else
-                {
-                    chartArea.AxisX.LabelStyle.Format = "HH:mm";
-                }
-            }
-
-
-            chart.ChartAreas.Add(chartArea);
-
+            ServiceChart.Legends.Add(chartLegend);
+            ServiceChart.ChartAreas[0].AxisY.Maximum = 10;
+            ServiceChart.ChartAreas[0].AxisY.Minimum = 0;
+            ServiceChart.ChartAreas[0].AxisY.Title = "Preempt Number";
+            ServiceChart.ChartAreas[0].AxisY.Interval = 1;
+            ServiceChart.ChartAreas[0].AxisX2.Enabled = AxisEnabled.False;
 
             //Add the point series
-
-            Series PreemptSeries = new Series();
+            var PreemptSeries = new Series();
             PreemptSeries.ChartType = SeriesChartType.Point;
             PreemptSeries.BorderDashStyle = ChartDashStyle.Dash;
             PreemptSeries.MarkerStyle = MarkerStyle.Diamond;
@@ -83,85 +47,119 @@ namespace MOE.Common.Business.Preempt
             PreemptSeries.Name = "Preempt Service";
             PreemptSeries.XValueType = ChartValueType.DateTime;
 
-            
-
             //Add the Posts series to ensure the chart is the size of the selected timespan
-            Series posts = new Series();
+            var posts = new Series();
             posts.IsVisibleInLegend = false;
             posts.ChartType = SeriesChartType.Point;
             posts.Color = Color.White;
             posts.Name = "Posts";
             posts.XValueType = ChartValueType.DateTime;
 
-            chart.Series.Add(posts);
-            chart.Series.Add(PreemptSeries);
+            ServiceChart.Series.Add(posts);
+            ServiceChart.Series.Add(PreemptSeries);
+            ServiceChart.Height = 200;
+            AddDataToChart(ServiceChart, Options.StartDate, Options.EndDate, DTTB, Options.SignalID);
+            var plans = PlanFactory.GetBasicPlans(Options.StartDate, Options.EndDate, Options.SignalID);
+            SetSimplePlanStrips(plans, ServiceChart, Options.StartDate, DTTB);
+        }
 
-            //Add points at the start and and of the x axis to ensure
-            //the graph covers the entire period selected by the user
-            //whether there is data or not
-            chart.Series["Posts"].Points.AddXY(Options.StartDate, 0);
-            chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
+        public PreemptServiceMetricOptions Options { get; set; }
 
-            AddDataToChart(chart, Options.StartDate, Options.EndDate, DTTB, Options.SignalID);
-            PlanCollection plans = new PlanCollection(Options.StartDate, Options.EndDate, Options.SignalID);
-            PlanCollection.SetSimplePlanStrips(plans, chart, Options.StartDate, DTTB);
+        public static void SetSimplePlanStrips(List<Plan> plans, Chart Chart, DateTime StartDate,
+            ControllerEventLogs EventLog)
+        {
+            var backGroundColor = 1;
+            foreach (var plan in plans)
+            {
+                var stripline = new StripLine();
+                //Creates alternating backcolor to distinguish the plans
+                if (backGroundColor % 2 == 0)
+                    stripline.BackColor = Color.FromArgb(120, Color.LightGray);
+                else
+                    stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
 
+                //Set the stripline properties
+                stripline.IntervalOffsetType = DateTimeIntervalType.Hours;
+                stripline.Interval = 1;
+                stripline.IntervalOffset = (plan.StartTime - StartDate).TotalHours;
+                stripline.StripWidth = (plan.EndTime - plan.StartTime).TotalHours;
+                stripline.StripWidthType = DateTimeIntervalType.Hours;
+
+                Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
+
+                //Add a corrisponding custom label for each strip
+                var Plannumberlabel = new CustomLabel();
+                Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
+                Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
+                switch (plan.PlanNumber)
+                {
+                    case 254:
+                        Plannumberlabel.Text = "Free";
+                        break;
+                    case 255:
+                        Plannumberlabel.Text = "Flash";
+                        break;
+                    case 0:
+                        Plannumberlabel.Text = "Unknown";
+                        break;
+                    default:
+                        Plannumberlabel.Text = "Plan " + plan.PlanNumber;
+
+                        break;
+                }
+                Plannumberlabel.LabelMark = LabelMarkStyle.LineSideMark;
+                Plannumberlabel.ForeColor = Color.Black;
+                Plannumberlabel.RowIndex = 0;
+
+                var planPreemptsLabel = new CustomLabel();
+                planPreemptsLabel.FromPosition = plan.StartTime.ToOADate();
+                planPreemptsLabel.ToPosition = plan.EndTime.ToOADate();
+
+                var c = from Controller_Event_Log r in EventLog.Events
+                    where r.EventCode == 107 && r.Timestamp > plan.StartTime && r.Timestamp < plan.EndTime
+                    select r;
+
+                var premptCount = c.Count().ToString();
+                planPreemptsLabel.Text = "Preempts Serviced During Plan: " + premptCount;
+                planPreemptsLabel.LabelMark = LabelMarkStyle.LineSideMark;
+                planPreemptsLabel.ForeColor = Color.Red;
+                planPreemptsLabel.RowIndex = 1;
+                backGroundColor++;
+            }
         }
 
         private void SetChartTitle()
         {
-            chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
-            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(Options.SignalID, Options.StartDate, Options.EndDate));
+            ServiceChart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
+            ServiceChart.Titles.Add(
+                ChartTitleFactory.GetSignalLocationAndDateRange(Options.SignalID, Options.StartDate, Options.EndDate));
         }
 
         private string GetSignalLcation(string SignalID)
         {
-            MOE.Common.Models.Repositories.ISignalsRepository sr = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
+            var sr = SignalsRepositoryFactory.Create();
 
-            string location = sr.GetSignalLocation(SignalID);
+            var location = sr.GetSignalLocation(SignalID);
 
             return location;
-            
         }
 
-        protected void AddDataToChart(Chart chart,  DateTime startDate,
-     DateTime endDate, MOE.Common.Business.ControllerEventLogs DTTB, string signalid)
+        protected void AddDataToChart(Chart chart, DateTime startDate,
+            DateTime endDate, ControllerEventLogs DTTB, string signalid)
         {
-            int maxprempt = 0;
-            foreach (MOE.Common.Models.Controller_Event_Log row in DTTB.Events)
-            {
+            var maxprempt = 0;
+            foreach (var row in DTTB.Events)
                 if (row.EventCode == 105)
                 {
                     chart.Series["Preempt Service"].Points.AddXY(row.Timestamp, row.EventParam);
                     if (row.EventParam > maxprempt)
-                    {
                         maxprempt = row.EventParam;
-                    }
-
-
                 }
-            }
 
             if (maxprempt > 10)
-            {
                 chart.ChartAreas[0].AxisY.Maximum = maxprempt;
-            }
             else
-            {
                 chart.ChartAreas[0].AxisY.Maximum = 10;
-            }
-
-            
-            
-
-            
-
         }
-
-
-
-
-
-
     }
 }

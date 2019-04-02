@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/MOE.Common.Business.FilterExtensions" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.FilterExtensions" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfFilterDirection">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FilterDirection" nillable="true" type="tns:FilterDirection" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfFilterDirection" nillable="true" type="tns:ArrayOfFilterDirection" />
+  <xs:complexType name="FilterDirection">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DirectionTypeId" type="xs:int" />
+      <xs:element minOccurs="0" name="Include" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FilterDirection" nillable="true" type="tns:FilterDirection" />
+  <xs:complexType name="ArrayOfFilterMovement">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FilterMovement" nillable="true" type="tns:FilterMovement" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfFilterMovement" nillable="true" type="tns:ArrayOfFilterMovement" />
+  <xs:complexType name="FilterMovement">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Include" type="xs:boolean" />
+      <xs:element minOccurs="0" name="MovementTypeId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FilterMovement" nillable="true" type="tns:FilterMovement" />
+  <xs:complexType name="ArrayOfFilterSignal">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FilterSignal" nillable="true" type="tns:FilterSignal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfFilterSignal" nillable="true" type="tns:ArrayOfFilterSignal" />
+  <xs:complexType name="FilterSignal">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Exclude" type="xs:boolean" />
+      <xs:element minOccurs="0" name="FilterApproaches" nillable="true" type="tns:ArrayOfFilterApproach" />
+      <xs:element minOccurs="0" name="SignalId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="VersionId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FilterSignal" nillable="true" type="tns:FilterSignal" />
+  <xs:complexType name="ArrayOfFilterApproach">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FilterApproach" nillable="true" type="tns:FilterApproach" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfFilterApproach" nillable="true" type="tns:ArrayOfFilterApproach" />
+  <xs:complexType name="FilterApproach">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ApproachId" type="xs:int" />
+      <xs:element minOccurs="0" name="Exclude" type="xs:boolean" />
+      <xs:element minOccurs="0" name="FilterDetectors" nillable="true" type="tns:ArrayOfFilterDetector" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FilterApproach" nillable="true" type="tns:FilterApproach" />
+  <xs:complexType name="ArrayOfFilterDetector">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FilterDetector" nillable="true" type="tns:FilterDetector" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfFilterDetector" nillable="true" type="tns:ArrayOfFilterDetector" />
+  <xs:complexType name="FilterDetector">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Exclude" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FilterDetector" nillable="true" type="tns:FilterDetector" />
+</xs:schema>

@@ -1,68 +1,70 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Data;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.Net;
-using System.Net.Security;
-using System.Net.Sockets;
-using AlexPilotti;
-using AlexPilotti.FTPS.Client;
-using AlexPilotti.FTPS.Common;
-using Lextm.SharpSnmpLib;
-using Lextm.SharpSnmpLib.Messaging;
-using System.Data.Common;
-using System.Threading;
-using System.Diagnostics;
-using System.Data.SqlClient;
-using System.Collections.Concurrent;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.Data;
-using System.ComponentModel;
-using System.Timers;
+using MOE.Common.Properties;
 
 namespace MOE.Common.Business.LogDecoder
 {
-    public class ASC3Decoder
+    public class Asc3Decoder
     {
-        //static public MOE.Common.Data.MOE.Controller_Event_LogDataTable DecodeASC3File(string FileName, string SignalId)
-            static public void DecodeASC3File(string FileName, string SignalId, BlockingCollection<MOE.Common.Data.MOE.Controller_Event_LogRow> RowBag)
+        // reference https://en.wikipedia.org/wiki/List_of_file_signatures
+        public static byte[] _ZlibHeaderNoCompression = { 0x78, 0x01 };
+        public static byte[] _ZlibHeaderDefaultCompression = { 0x78, 0x9C };
+        public static byte[] _ZlibHeaderBestCompression = { 0x78, 0xDA };
+        public static byte[] _GZipHeader = { 0x1f, 0x8b };
+
+        public static void DecodeAsc3File(string fileName, string signalId,
+            BlockingCollection<Data.MOE.Controller_Event_LogRow> rowBag, DateTime earliestAcceptableDate)
         {
-            DateTime EarliestAcceptableDate = Properties.Settings.Default.EarliestAcceptableDate;
+            var encoding = Encoding.ASCII;
 
-            System.Text.Encoding encoding = System.Text.Encoding.ASCII;
-            using (BinaryReader BR = new BinaryReader(File.Open(FileName, FileMode.Open), encoding))
+            // load the file into memory stream
+            var fileStream = File.Open(fileName, FileMode.Open);
+            var memoryStream = new MemoryStream();
+            fileStream.CopyTo(memoryStream);
+            fileStream.Close();
+
+            // set the memory position to beggining
+            memoryStream.Position = 0;
+
+            // first let's check to see if the data is compressed
+            if (IsCompressed(memoryStream))
             {
+                // ok it is compressed, let's decompress it before we procced
+                memoryStream = DecompessedStream(memoryStream);
+            }
 
+            using (var br = new BinaryReader(memoryStream, encoding))
+            {
+                var elTable = new Data.MOE.Controller_Event_LogDataTable();
+                //var custUnique =
+                //    new UniqueConstraint(new[]
+                //    {
+                //        elTable.Columns["SignalID"],
+                //        elTable.Columns["Timestamp"],
+                //        elTable.Columns["EventCode"],
+                //        elTable.Columns["EventParam"]
+                //    });
 
-                MOE.Common.Data.MOE.Controller_Event_LogDataTable elTable = new MOE.Common.Data.MOE.Controller_Event_LogDataTable();
-                UniqueConstraint custUnique =
-                new UniqueConstraint(new DataColumn[] { elTable.Columns["SignalID"],
-                                                    elTable.Columns["Timestamp"], 
-                                                    elTable.Columns["EventCode"],
-                                                    elTable.Columns["EventParam"]
-                                            });
+                //elTable.Constraints.Add(custUnique);
 
-                elTable.Constraints.Add(custUnique);
-
-                if (BR.BaseStream.Position + 21 < BR.BaseStream.Length)
+                if (br.BaseStream.Position + 21 < br.BaseStream.Length)
                 {
                     //Find the start Date
-                    String dateString = "";
-                    for (int i = 1; i < 21; i++)
+                    var dateString = "";
+                    for (var i = 1; i < 21; i++)
                     {
-
-                        Char c = BR.ReadChar();
+                        var c = br.ReadChar();
                         dateString += c;
                     }
 
-                    //Console.WriteLine(dateString);
-                    DateTime StartTime = new DateTime();
-                    if (DateTime.TryParse(dateString, out StartTime) && (BR.BaseStream.Position < BR.BaseStream.Length))
+                    var startTime = new DateTime();
+                    if (DateTime.TryParse(dateString, out startTime) && br.BaseStream.Position < br.BaseStream.Length)
                     {
-
                         //find  line feed characters, that should take us to the end of the header.
                         // First line break is after Version
                         // Second LF is after FileName
@@ -72,166 +74,139 @@ namespace MOE.Common.Business.LogDecoder
                         // Sixth is after "Controller data log beginning:," and then the date
                         // Seven is after "Phases in use:," and then the list of phases, seperated by commas
 
-                        int i = 0;
+                        var i = 0;
 
-                        while (i < 7 && (BR.BaseStream.Position < BR.BaseStream.Length))
+                        while (i < 7 && br.BaseStream.Position < br.BaseStream.Length)
                         {
-                            Char c = BR.ReadChar();
-                            //Console.WriteLine(c.ToString());
+                            var c = br.ReadChar();
                             if (c == '\n')
-                            {
                                 i++;
-
-                            }
-
                         }
 
-                        //The first record alwasy seems to be missing a timestamp.  Econolite assumes the first even occures at the same time
-                        // the second event occurs.  I am going to tag the first event with secondevet.timestamp - 1/10 second
-                        int firstEventCode = new Int32();
-                        int firstEventParam = new Int32();
-
-
-                        if (BR.BaseStream.Position + sizeof(char) < BR.BaseStream.Length)
+                        // after that, we start reading until we reach the end 
+                        while (br.BaseStream.Position + sizeof(byte) * 4 <= br.BaseStream.Length)
                         {
-                            firstEventCode = Convert.ToInt32(BR.ReadChar());
-                        }
+                            var eventTime = new DateTime();
+                            var eventCode = new int();
+                            var eventParam = new int();
 
-                        if (BR.BaseStream.Position + sizeof(char) < BR.BaseStream.Length)
-                        {
-                            firstEventParam = Convert.ToInt32(BR.ReadChar());
-                        }
-
-                        bool firstEventEntered = false;
-                        //MOE.Common.Business.ControllerEvent firstEvent = new MOE.Common.Business.ControllerEvent(SignalID, StartTime, firstEventCode, firstEventParam);
-
-
-                        //After that, we can probably start reading
-                        while ((BR.BaseStream.Position + (sizeof(byte) * 4)) <= BR.BaseStream.Length)  //we need ot make sure we are more that 4 characters from the end
-                        {
-                            DateTime EventTime = new DateTime();
-                            int EventCode = new Int32();
-                            int EventParam = new Int32();
-
-                            //MOE.Common.Business.ControllerEvent controllerEvent = null;
-                            for (int EventPart = 1; EventPart < 4; EventPart++)
+                            for (var eventPart = 1; eventPart < 4; eventPart++)
                             {
+                                //getting the EventCode
+                                if (eventPart == 1)
+                                    eventCode = Convert.ToInt32(br.ReadByte());
+
+                                if (eventPart == 2)
+                                    eventParam = Convert.ToInt32(br.ReadByte());
 
                                 //getting the time offset
-                                if (EventPart == 1)
+                                if (eventPart == 3)
                                 {
-                                    byte[] rawoffset = new byte[2];
-                                    //char[] offset = new char[2];
-                                    rawoffset = BR.ReadBytes(2);
+                                    var rawoffset = new byte[2];
+                                    rawoffset = br.ReadBytes(2);
                                     Array.Reverse(rawoffset);
                                     int offset = BitConverter.ToInt16(rawoffset, 0);
-
-                                    double tenths = Convert.ToDouble(offset) / 10;
-
-                                    EventTime = StartTime.AddSeconds(tenths);
+                                    var tenths = Convert.ToDouble(offset) / 10;
+                                    eventTime = startTime.AddSeconds(tenths);
                                 }
-
-                                //getting the EventCode
-                                if (EventPart == 2)
-                                {
-                                    //Char EventCodeChar = BR.ReadChar();
-                                    //EventCode = Convert.ToInt32(BR.ReadChar());
-                                    EventCode = Convert.ToInt32(BR.ReadByte());
-                                }
-
-                                if (EventPart == 3)
-                                {
-                                    //Char EventParamChar = BR.ReadChar();
-                                    //EventParam = Convert.ToInt32(BR.ReadChar());
-                                    EventParam = Convert.ToInt32(BR.ReadByte());
-                                }
-
-
                             }
 
-                            //controllerEvent = new MOE.Common.Business.ControllerEvent(SignalID, EventTime, EventCode, EventParam);
-
-                            if ((EventTime) <= DateTime.Now && (EventTime > EarliestAcceptableDate))
+                            if (eventTime <= DateTime.Now && eventTime > earliestAcceptableDate)
                             {
-                               
-                                
-                                if (!firstEventEntered)
+                                try
                                 {
-                                    try
-                                    {
-
-                                        MOE.Common.Data.MOE.Controller_Event_LogRow eventrow = elTable.NewController_Event_LogRow();
-                                        eventrow.Timestamp = EventTime.AddMilliseconds(-1);
-                                        eventrow.SignalID = SignalId;
-                                        eventrow.EventCode = firstEventCode;
-                                        eventrow.EventParam = firstEventParam;
-                                        if (!RowBag.Contains(eventrow))
-                                        {
-                                            RowBag.Add(eventrow);
-                                        }
-                                        //elTable.AddController_Event_LogRow(SignalID, EventTime.AddMilliseconds(-1), firstEventCode, firstEventParam);
-                                    }
-                                    catch
-                                    {
-                                    }
-
-                                    firstEventEntered = true;
+                                    var eventrow = elTable.NewController_Event_LogRow();
+                                    eventrow.Timestamp = eventTime;
+                                    eventrow.SignalID = signalId;
+                                    eventrow.EventCode = eventCode;
+                                    eventrow.EventParam = eventParam;
+                                    rowBag.Add(eventrow);
                                 }
-                                else
+                                catch (Exception ex)
                                 {
-
-                                    try
-                                    {
-                                        MOE.Common.Data.MOE.Controller_Event_LogRow eventrow = elTable.NewController_Event_LogRow();
-                                        eventrow.Timestamp = EventTime;
-                                        eventrow.SignalID = SignalId;
-                                        eventrow.EventCode = EventCode;
-                                        eventrow.EventParam = EventParam;
-
-                                        if (!RowBag.Contains(eventrow))
-                                        {
-                                            RowBag.Add(eventrow);
-                                        }
-                                        //elTable.AddController_Event_LogRow(Convert.ToInt32(SignalID), EventTime, EventCode, EventParam);
-                                    }
-                                    catch
-                                    {
-
-                                    }
+                                    Console.WriteLine(ex.Message);
                                 }
-
-
                             }
                         }
-
-
                     }
                     //this is what we do when the datestring doesn't parse
-                    else
-                    {
-                       // return false;
-                        
-                    }
-
-
-
                 }
+                //this is what we do when the datestring doesn't parse
+            }
+        }
 
-                    //this is what we do when the datestring doesn't parse
-                else
-                {
-                    //return false;
-                }
+        /// <summary>
+        /// Determines if filestream passed in contains a hex signature of one of the known compression algorithms
+        /// </summary>
+        /// <param name="fileStream"></param>
+        /// <returns>true or false if compression is detected</returns>
+        public static bool IsCompressed(MemoryStream fileStream)
+        {
+            // read the magic header
+            byte[] header = new byte[2];
+            fileStream.Read(header, 0, 2);
 
+            // let seek to back of file
+            fileStream.Seek(0, SeekOrigin.Begin);
 
-
-
-                //return true;
-
-
-
+            // let's check for zlib compression
+            if (AreEqual(header, _ZlibHeaderNoCompression) || AreEqual(header, _ZlibHeaderDefaultCompression) || AreEqual(header, _ZlibHeaderBestCompression))
+            {
+                return true;
+            }
+            // let's make sure it is not another compression 
+            else if (AreEqual(header, _GZipHeader))
+            {
+                return true;
             }
 
+            return false;
+        }
+
+        /// <summary>
+        /// Decompresses the passed in filestream using deflatestream
+        /// </summary>
+        /// <param name="fileStream"></param>
+        /// <returns>decompressed filestream</returns>
+        public static MemoryStream DecompessedStream(MemoryStream fileStream)
+        {
+            // read past the first two bytes of the zlib header
+            fileStream.Seek(2, SeekOrigin.Begin);
+
+            // decompress the file
+            using (DeflateStream deflateStream = new DeflateStream(fileStream, CompressionMode.Decompress))
+            {
+                // copy decompressed data into return stream
+                MemoryStream returnStream = new MemoryStream();
+                deflateStream.CopyTo(returnStream);
+                returnStream.Position = 0;
+
+                return returnStream;
+            }
+        }
+
+
+        /// <summary>
+        /// Compares if two byte arrays are equal
+        /// </summary>
+        /// <param name="a1"></param>
+        /// <param name="b1"></param>
+        /// <returns>returns true if they are equal and false if they are not equal</returns>
+        private static bool AreEqual(byte[] a1, byte[] b1)
+        {
+            if (a1.Length != b1.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < a1.Length; i++)
+            {
+                if (a1[i] != b1[i])
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

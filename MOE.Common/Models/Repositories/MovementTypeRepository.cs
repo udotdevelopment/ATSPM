@@ -1,42 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Models.Repositories
 {
     public class MovementTypeRepository : IMovementTypeRepository
     {
-        Models.SPM db = new SPM();
+        private readonly SPM db = new SPM();
 
 
-        public List<Models.MovementType> GetAllMovementTypes()
+        public List<MovementType> GetAllMovementTypes()
         {
             db.Configuration.LazyLoadingEnabled = false;
-            List<Models.MovementType> movementTypes = (from r in db.MovementTypes
-                                                       orderby r.DisplayOrder
-                                         select r).ToList();
+            var movementTypes = (from r in db.MovementTypes
+                orderby r.DisplayOrder
+                select r).ToList();
 
             return movementTypes;
         }
 
-        public Models.MovementType GetMovementTypeByMovementTypeID(int movementTypeID)
+        public MovementType GetMovementTypeByMovementTypeID(int movementTypeID)
         {
-            var movementType = (from r in db.MovementTypes
-                         where r.MovementTypeID == movementTypeID
-                         select r);
+            var movementType = from r in db.MovementTypes
+                where r.MovementTypeID == movementTypeID
+                select r;
 
             return movementType.FirstOrDefault();
         }
 
-        public void Update(MOE.Common.Models.MovementType movementType)
+        public void Update(MovementType movementType)
         {
-
-
-            MOE.Common.Models.MovementType g = (from r in db.MovementTypes
-                                         where r.MovementTypeID == movementType.MovementTypeID
-                                         select r).FirstOrDefault();
+            var g = (from r in db.MovementTypes
+                where r.MovementTypeID == movementType.MovementTypeID
+                select r).FirstOrDefault();
             if (g != null)
             {
                 db.Entry(g).CurrentValues.SetValues(movementType);
@@ -46,19 +41,14 @@ namespace MOE.Common.Models.Repositories
             {
                 db.MovementTypes.Add(movementType);
                 db.SaveChanges();
-
             }
-
-
         }
 
-        public void Remove(MOE.Common.Models.MovementType movementType)
+        public void Remove(MovementType movementType)
         {
-
-
-            MOE.Common.Models.MovementType g = (from r in db.MovementTypes
-                                         where r.MovementTypeID == movementType.MovementTypeID
-                                         select r).FirstOrDefault();
+            var g = (from r in db.MovementTypes
+                where r.MovementTypeID == movementType.MovementTypeID
+                select r).FirstOrDefault();
             if (g != null)
             {
                 db.MovementTypes.Remove(g);
@@ -66,20 +56,16 @@ namespace MOE.Common.Models.Repositories
             }
         }
 
-        public void Add(MOE.Common.Models.MovementType movementType)
+        public void Add(MovementType movementType)
         {
-
-
-            MOE.Common.Models.MovementType g = (from r in db.MovementTypes
-                                         where r.MovementTypeID == movementType.MovementTypeID
-                                         select r).FirstOrDefault();
+            var g = (from r in db.MovementTypes
+                where r.MovementTypeID == movementType.MovementTypeID
+                select r).FirstOrDefault();
             if (g == null)
             {
                 db.MovementTypes.Add(g);
                 db.SaveChanges();
             }
-
         }
-
     }
 }

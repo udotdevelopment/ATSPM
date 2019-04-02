@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
     public interface IApproachRepository
     {
-         List<Models.Approach> GetAllApproaches();
-         Models.Approach GetApproachByApproachID(int approachID);
-         void AddOrUpdate(MOE.Common.Models.Approach approach);
-         //Approach Add(MOE.Common.Models.Approach approach);
-         void Remove(MOE.Common.Models.Approach approach);
-         void Remove(int approachID);
+        List<Approach> GetAllApproaches();
+        Approach GetApproachByApproachID(int approachID);
+        void AddOrUpdate(Approach approach);
+
+        Approach FindAppoachByVersionIdPhaseOverlapAndDirection(int versionId, int phaseNumber, bool isOverlap,
+            int directionTypeId);
+
+        void Remove(Approach approach);
+        void Remove(int approachID);
+        List<Approach> GetApproachesByIds(List<int> excludedApproachIds);
     }
 }

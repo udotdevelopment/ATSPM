@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Reflection;
+using MOE.Common.Models;
 
 namespace MOE.Common.Business
 {
     public class Signals
     {
         /// <summary>
-        /// Gets all the signals based on the region
+        ///     Gets all the signals based on the region
         /// </summary>
         /// <param name="region"></param>
         /// <returns>Data.Signals.MasterDataTable</returns>
-
-
         public static List<Models.Signal> GetSignals()
         {
-            MOE.Common.Models.SPM db = new Models.SPM();
+            var db = new SPM();
 
-            var table = (from r in db.Signals select r).ToList();         
+            var table = (from r in db.Signals select r).ToList();
 
             return table;
         }
@@ -33,11 +27,11 @@ namespace MOE.Common.Business
         //public static List<Models.Detectors> GetDistinctPhases(string signalId)//, string region)
         //{
         //    MOE.Common.Models.Repositories.GraphDetectorRepository gdr = new Models.Repositories.GraphDetectorRepository();
-            
+
         //        var table = gdr.GetPCDPhases(signalId);
 
         //        return table;
-            
+
         //    //Data.MOE.DistinctSignalPhaseDataTable table =
         //    //    new MOE.Common.Data.MOE.DistinctSignalPhaseDataTable();
         //    //Data.MOETableAdapters.DistinctSignalPhaseTableAdapter adapter =
@@ -46,7 +40,6 @@ namespace MOE.Common.Business
         //    //return table;
         //}
 
-        
 
         /// <summary>
         /// Gets the Appraoches for a given signal filtered by report type
@@ -59,7 +52,7 @@ namespace MOE.Common.Business
         //    using (MOE.Common.Models.SPM db = new Models.SPM())
         //    {
         //        var table = (from r in db.Detectors
-        //                     where r.SignalID == signalId && r.CheckReportAvialbility(reporttype) == true                            
+        //                     where r.SignalId == signalId && r.CheckReportAvialbility(reporttype) == true                            
         //                     select r).ToList();
 
         //        return table;
@@ -71,10 +64,5 @@ namespace MOE.Common.Business
         //    //adapter.Fill(table, signalId.ToString(), reporttype);
         //    //return table;
         //}
-
-        
-
-        
-       
     }
 }

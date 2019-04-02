@@ -1223,7 +1223,7 @@ namespace MOE.Common.Data {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
-                this.columnSignalID = base.Columns["SignalID"];
+                this.columnSignalID = base.Columns["SignalId"];
                 this.columnTimestamp = base.Columns["Timestamp"];
                 this.columnEventCode = base.Columns["EventCode"];
                 this.columnEventParam = base.Columns["EventParam"];
@@ -1232,7 +1232,7 @@ namespace MOE.Common.Data {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             private void InitClass() {
-                this.columnSignalID = new global::System.Data.DataColumn("SignalID", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnSignalID = new global::System.Data.DataColumn("SignalId", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSignalID);
                 this.columnTimestamp = new global::System.Data.DataColumn("Timestamp", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTimestamp);
@@ -1899,7 +1899,7 @@ namespace MOE.Common.Data {
                         return ((string)(this[this.tableController_Event_Log.SignalIDColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'SignalID\' in table \'Controller_Event_Log\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'SignalId\' in table \'Controller_Event_Log\' is DBNull.", e);
                     }
                 }
                 set {

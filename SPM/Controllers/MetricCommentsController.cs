@@ -22,11 +22,11 @@ namespace SPM.Controllers
 
         // GET: MetricComments/Create
         [Authorize(Roles = "Admin")]
-        public ActionResult Create(string id)
+        public ActionResult Create(string versionId)
         {
             MOE.Common.Models.Repositories.ISignalsRepository signalsRepository =
                 MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
-            Signal signal = signalsRepository.GetSignalBySignalID(id);
+            Signal signal = signalsRepository.GetSignalVersionByVersionId(Convert.ToInt32(versionId));
             List<MOE.Common.Models.MetricType> allMetricTypes = metricTyperepository.GetAllToDisplayMetrics();
             MOE.Common.Models.MetricComment mc =
                 new MetricComment();
@@ -46,7 +46,7 @@ namespace SPM.Controllers
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "SignalID,CommentText, MetricIDs")] MetricComment metricComment)
+        public ActionResult Create([Bind(Include = "VersionID, SignalId,CommentText, MetricIDs")] MetricComment metricComment)
         {
             metricComment.TimeStamp = DateTime.Now;
             ModelState.Clear();

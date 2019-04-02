@@ -1,126 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MOE.Common
 {
-    class RouteConsistencyCheck
+    internal class RouteConsistencyCheck
     {
-        private DateTime startdate;
-        public DateTime StartDate
+        public RouteConsistencyCheck(DateTime startDate, DateTime endDate, string startHour, string endHour,
+            string dayTypes, int routeID)
         {
-            get
-            {
-                return startdate;
-            }
-            set
-            {
-                startdate = value;
-            }
+            StartDate = startDate;
+            EndDate = endDate;
+            StartHour = startHour;
+            EndHour = endHour;
+            DayTypes = dayTypes;
+            RouteID = routeID;
         }
 
-        private DateTime enddate;
-        public DateTime EndDate
-        {
-            get
-            {
-                return enddate;
-            }
-            set
-            {
-                enddate = value;
-            }
-        }
+        public DateTime StartDate { get; set; }
 
-        private String endhour;
-        public String EndHour
-        {
-            get
-            {
-                return endhour;
-            }
-            set
-            {
-                endhour = value;
-            }
-        }
+        public DateTime EndDate { get; set; }
 
-        private String starthour;
-        public String StartHour
-        {
-            get
-            {
-                return starthour;
-            }
-            set
-            {
-                starthour = value;
-            }
-        }
+        public string EndHour { get; set; }
 
-        private String daytypes;
-        public String DayTypes
-        {
-            get
-            {
-                return daytypes;
-            }
-            set
-            {
-                daytypes = value;
-            }
-        }
+        public string StartHour { get; set; }
 
-        private int routeid;
-        public int RouteID
-        {
-            get
-            {
-                return routeid;
-            }
-            set
-            {
-                routeid = value;
-            }
-        }
+        public string DayTypes { get; set; }
 
-        public RouteConsistencyCheck(DateTime startDate, DateTime endDate, String startHour, String endHour, string dayTypes, int routeID)
-        {
-            startdate = startDate;
-            enddate = endDate;
-            starthour = startHour;
-            endhour = endHour;
-            daytypes = dayTypes;
-            routeid = routeID;
-
-
-        }
+        public int RouteID { get; set; }
 
         public SortedDictionary<int, int> CycleLengthCheck(DateTime startDate, DateTime endDate, int routeID)
         {
-            SortedDictionary<int, int> CycleLengths = new SortedDictionary<int, int>();
+            var CycleLengths = new SortedDictionary<int, int>();
 
             return CycleLengths;
-
         }
 
-        public bool PatternCycleLenghtConsitencyCheck(DateTime startDate, DateTime endDate, String signalId, int patternNumber)
+        public bool PatternCycleLenghtConsitencyCheck(DateTime startDate, DateTime endDate, string signalId,
+            int patternNumber)
         {
-            bool PatternIsConsitent = true;
+            var PatternIsConsitent = true;
 
 
-                return PatternIsConsitent;
+            return PatternIsConsitent;
         }
 
         private void GetRouteMembers(int routeID)
         {
-
         }
 
         private void GetPAtternInfo(DateTime startDate, DateTime endDate, string signalId)
         {
         }
-
     }
 }

@@ -1,100 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
-using System.Web.UI.DataVisualization.Charting;
 using System.Drawing;
+using System.Linq;
+using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Business.WCFServiceLibrary;
 
 namespace MOE.Common.Business
 {
     public class ArriveOnRedChart
     {
-        public Chart chart = new Chart();
-        private double totalAoR = 0;
-        private double totalPercentAoR = 0;
-        private double totalCars = 0;
-        private int MetricTypeID = 9;
-        public WCFServiceLibrary.AoROptions Options { get; set; }
-        public ArriveOnRedChart(WCFServiceLibrary.AoROptions options, 
-            MOE.Common.Business.SignalPhase signalPhase)
+        public Chart Chart;
+        private double totalAoR;
+        private double totalCars;
+        private double totalPercentAoR;
+
+        public ArriveOnRedChart(AoROptions options, SignalPhase signalPhase)
         {
             Options = options;
-            TimeSpan reportTimespan = Options.EndDate - Options.StartDate;
-
+            Chart = ChartFactory.CreateDefaultChart(options);
             //Set the chart properties
-            chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
-            chart.ImageType = ChartImageType.Jpeg;
-            chart.Height = 550;
-            chart.Width = 1100;
-            
+            ChartFactory.SetImageProperties(Chart);
+
             //Create the chart legend
-            Legend chartLegend = new Legend();
+            var chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
             chartLegend.Docking = Docking.Left;
-            chart.Legends.Add(chartLegend);
+            Chart.Legends.Add(chartLegend);
 
-
-            //Create the chart area
-            ChartArea chartArea = new ChartArea();
-            chartArea.Name = "ChartArea1";
             if (Options.YAxisMax != null)
-            {
-                chartArea.AxisY.Maximum = Options.YAxisMax.Value;
-            }
+                Chart.ChartAreas[0].AxisY.Maximum = Options.YAxisMax.Value;
 
-            chartArea.AxisY.Minimum = 0;
-            chartArea.AxisY.Title = "Volume (Vehicles Per Hour)";
-            chartArea.AxisY.Interval = 500;
-            chartArea.AxisY2.Title = "Percent AoR";
-            chartArea.AxisY2.Maximum = 100;
-            chartArea.AxisY2.Interval = 10;
-            chartArea.AxisY2.Enabled = AxisEnabled.True;
-            
- 
-
-            chartArea.AxisX.Title = "Time (Hour of Day)";
-            chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX.LabelStyle.Format = "HH";
-            chartArea.AxisX2.LabelStyle.Format = "HH";
-            if (reportTimespan.Days < 1)
-            {
-                if (reportTimespan.Hours > 1)
-                {
-                    chartArea.AxisX2.Interval = 1;
-                    chartArea.AxisX.Interval = 1;
-                }
-                else
-                {
-                    chartArea.AxisX.LabelStyle.Format = "HH:mm";
-                    chartArea.AxisX2.LabelStyle.Format = "HH:mm";
-                }
-            }
-            chartArea.AxisX2.Enabled = AxisEnabled.True;
-            chartArea.AxisX2.MajorTickMark.Enabled = true;
-            chartArea.AxisX2.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX2.LabelAutoFitStyle = LabelAutoFitStyles.None;
-
-            chart.ChartAreas.Add(chartArea);
+            Chart.ChartAreas[0].AxisY.Minimum = 0;
+            Chart.ChartAreas[0].AxisY.Title = "Volume (Vehicles Per Hour)";
+            Chart.ChartAreas[0].AxisY.Interval = 500;
+            Chart.ChartAreas[0].AxisY2.Title = "Percent AoR";
+            Chart.ChartAreas[0].AxisY2.Maximum = 100;
+            Chart.ChartAreas[0].AxisY2.Interval = 10;
+            Chart.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
 
 
             //Add the point series
 
-            Series AoRSeries = new Series();
-            AoRSeries.ChartType = SeriesChartType.Line;            
+            var AoRSeries = new Series();
+            AoRSeries.ChartType = SeriesChartType.Line;
             AoRSeries.BorderDashStyle = ChartDashStyle.Dash;
             AoRSeries.Color = Color.Red;
             AoRSeries.Name = "Arrivals on Red";
             AoRSeries.XValueType = ChartValueType.DateTime;
 
-            Series TVSeries = new Series();
+            var TVSeries = new Series();
             TVSeries.ChartType = SeriesChartType.Line;
             TVSeries.BorderDashStyle = ChartDashStyle.Dash;
             TVSeries.Color = Color.Black;
             TVSeries.Name = "Total Vehicles";
             TVSeries.XValueType = ChartValueType.DateTime;
 
-            Series PARSeries = new Series();
+            var PARSeries = new Series();
             PARSeries.ChartType = SeriesChartType.Line;
             PARSeries.Color = Color.Red;
             PARSeries.Name = "Percent Arrivals on Red";
@@ -103,110 +64,86 @@ namespace MOE.Common.Business
             PARSeries.YAxisType = AxisType.Secondary;
 
 
-            Series pointSeries = new Series();
+            var pointSeries = new Series();
             pointSeries.ChartType = SeriesChartType.Point;
             pointSeries.Color = Color.White;
             pointSeries.Name = "Posts";
             pointSeries.XValueType = ChartValueType.DateTime;
             pointSeries.IsVisibleInLegend = false;
-            
-            
-            chart.Series.Add(pointSeries);
-            chart.Series.Add(AoRSeries);
-            chart.Series.Add(PARSeries);
-            chart.Series.Add(TVSeries);
 
 
+            Chart.Series.Add(pointSeries);
+            Chart.Series.Add(AoRSeries);
+            Chart.Series.Add(PARSeries);
+            Chart.Series.Add(TVSeries);
 
 
             //Add points at the start and and of the x axis to ensure
             //the graph covers the entire period selected by the user
             //whether there is data or not
-            chart.Series["Posts"].Points.AddXY(Options.StartDate, 0);
-            chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
+            Chart.Series["Posts"].Points.AddXY(Options.StartDate, 0);
+            Chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
 
-            AddDataToChart(chart, signalPhase);
-            SetPlanStrips(signalPhase.Plans.PlanList, chart, Options.StartDate, Options.ShowPlanStatistics);
+            AddDataToChart(Chart, signalPhase);
+            SetPlanStrips(signalPhase.Plans, Chart, Options.StartDate, Options.ShowPlanStatistics);
         }
+
+        public AoROptions Options { get; set; }
 
         private void SetChartTitles(SignalPhase signalPhase, Dictionary<string, string> statistics)
         {
-            chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
-            chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
+            Chart.Titles.Add(ChartTitleFactory.GetChartName(Options.MetricTypeID));
+            Chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
                 Options.SignalID, Options.StartDate, Options.EndDate));
-            if (!signalPhase.Approach.IsProtectedPhaseOverlap)
-            {
-                chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(signalPhase.Approach.ProtectedPhaseNumber, signalPhase.Approach.DirectionType.Description));
-            }
-            else
-            {
-                chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(signalPhase.Approach.ProtectedPhaseNumber, " Overlap"));
-            }
-            chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));            
+                Chart.Titles.Add(ChartTitleFactory.GetPhaseAndPhaseDescriptions(signalPhase.Approach, signalPhase.GetPermissivePhase));
+            Chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
 
 
-        protected void AddDataToChart(Chart chart, MOE.Common.Business.SignalPhase signalPhase)
+        protected void AddDataToChart(Chart chart, SignalPhase signalPhase)
         {
-           
             double totalDetectorHits = 0;
-            int yAxisHolder = 0;
-
-
-
-            foreach (MOE.Common.Business.Plan plan in signalPhase.Plans.PlanList)
+            var yAxisHolder = 0;
+            if (signalPhase.Cycles.Count > 0)
             {
-                if (plan.CycleCollection.Count > 0)
+                var dt = signalPhase.StartDate;
+                while (dt < signalPhase.EndDate)
                 {
-
-                    DateTime dt = plan.StartTime;
-
-                    while (dt < plan.EndTime)
+                    double binTotalStops = 0;
+                    double binPercentAoR = 0;
+                    double binDetectorHits = 0;
+                    var cycles = signalPhase.Cycles.Where(c =>
+                        c.StartTime >= dt && c.EndTime < dt.AddMinutes(Options.SelectedBinSize));
+                    foreach (var cycle in cycles)
                     {
-                        double binTotalStops = 0;
-                        double binPercentAoR = 0;
-                        double binDetectorHits = 0;
-                        var pcds = from item in plan.CycleCollection
-                                   where item.StartTime > dt && item.EndTime < dt.AddMinutes(Options.SelectedBinSize)
-                                   select item;
-                        foreach (MOE.Common.Business.Cycle pcd in pcds)
-                        {
-                            totalDetectorHits += pcd.DetectorCollection.Count;
-                            binDetectorHits += pcd.DetectorCollection.Count;
-                            foreach (MOE.Common.Business.DetectorDataPoint detectorPoint in pcd.DetectorCollection)
+                        totalDetectorHits += cycle.DetectorEvents.Count;
+                        binDetectorHits += cycle.DetectorEvents.Count;
+                        foreach (var detectorPoint in cycle.DetectorEvents)
+                            if (detectorPoint.YPoint < cycle.GreenLineY)
                             {
-                                if (detectorPoint.YPoint < pcd.GreenLineY) //&& detectorPoint.YPoint < pcd.RedLineY)
-                                {
-                                    binTotalStops++;
-                                    totalAoR++;
-                                }
+                                binTotalStops++;
+                                totalAoR++;
                             }
-
-                            if (binDetectorHits > 0)
-                            {
-                                binPercentAoR = ((binTotalStops / binDetectorHits) * 100);
-                            }
-                        }
-                        chart.Series["Percent Arrivals on Red"].Points.AddXY(dt, binPercentAoR);
-                        chart.Series["Total Vehicles"].Points.AddXY(dt, (binDetectorHits * (60 / Options.SelectedBinSize)));
-                        chart.Series["Arrivals on Red"].Points.AddXY(dt, (binTotalStops * (60 / Options.SelectedBinSize)));
-                        dt = dt.AddMinutes(Options.SelectedBinSize);
-                        if (yAxisHolder < (binTotalStops * (60 / Options.SelectedBinSize)) && Options.YAxisMax == null)
-                        {
-                            yAxisHolder = Convert.ToInt16(binDetectorHits * (60 / Options.SelectedBinSize));
-                            yAxisHolder = RoundToNearest(yAxisHolder, 100);
-                            chart.ChartAreas[0].AxisY.Maximum = yAxisHolder + 250;
-                        }
+                        if (binDetectorHits > 0)
+                            binPercentAoR = binTotalStops / binDetectorHits * 100;
+                    }
+                    chart.Series["Percent Arrivals on Red"].Points.AddXY(dt, binPercentAoR);
+                    chart.Series["Total Vehicles"].Points.AddXY(dt, binDetectorHits * (60 / Options.SelectedBinSize));
+                    chart.Series["Arrivals on Red"].Points.AddXY(dt, binTotalStops * (60 / Options.SelectedBinSize));
+                    dt = dt.AddMinutes(Options.SelectedBinSize);
+                    if (yAxisHolder < binTotalStops * (60 / Options.SelectedBinSize) && Options.YAxisMax == null)
+                    {
+                        yAxisHolder = Convert.ToInt16(binDetectorHits * (60 / Options.SelectedBinSize));
+                        yAxisHolder = RoundToNearest(yAxisHolder, 100);
+                        chart.ChartAreas[0].AxisY.Maximum = yAxisHolder + 250;
                     }
                 }
             }
             totalCars = totalDetectorHits;
 
             if (totalDetectorHits > 0)
-            {
-                totalPercentAoR = ((totalAoR / totalCars) * 100);
-            }
-            Dictionary<string, string> statistics = new Dictionary<string, string>();
+                totalPercentAoR = totalAoR / totalCars * 100;
+            var statistics = new Dictionary<string, string>();
             statistics.Add("Total Detector Hits", totalCars.ToString());
             statistics.Add("Total AoR", totalAoR.ToString());
             statistics.Add("Percent AoR for the select period", Math.Round(totalPercentAoR).ToString());
@@ -214,21 +151,18 @@ namespace MOE.Common.Business
         }
 
 
-        protected void SetPlanStrips(List<Plan> planCollection, Chart chart, DateTime graphStartDate, bool showPlanStatistics)
+        protected void SetPlanStrips(List<PlanPcd> planCollection, Chart chart, DateTime graphStartDate,
+            bool showPlanStatistics)
         {
-            int backGroundColor = 1;
-            foreach (MOE.Common.Business.Plan plan in planCollection)
+            var backGroundColor = 1;
+            foreach (var plan in planCollection)
             {
-                StripLine stripline = new StripLine();
+                var stripline = new StripLine();
                 //Creates alternating backcolor to distinguish the plans
                 if (backGroundColor % 2 == 0)
-                {
                     stripline.BackColor = Color.FromArgb(120, Color.LightGray);
-                }
                 else
-                {
                     stripline.BackColor = Color.FromArgb(120, Color.LightBlue);
-                }
 
                 //Set the stripline properties
                 stripline.IntervalOffsetType = DateTimeIntervalType.Hours;
@@ -240,7 +174,7 @@ namespace MOE.Common.Business
                 chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
 
                 //Add a corrisponding custom label for each strip
-                CustomLabel Plannumberlabel = new CustomLabel();
+                var Plannumberlabel = new CustomLabel();
                 Plannumberlabel.FromPosition = plan.StartTime.ToOADate();
                 Plannumberlabel.ToPosition = plan.EndTime.ToOADate();
                 switch (plan.PlanNumber)
@@ -255,7 +189,7 @@ namespace MOE.Common.Business
                         Plannumberlabel.Text = "Unknown";
                         break;
                     default:
-                        Plannumberlabel.Text = "Plan " + plan.PlanNumber.ToString();
+                        Plannumberlabel.Text = "Plan " + plan.PlanNumber;
 
                         break;
                 }
@@ -267,56 +201,54 @@ namespace MOE.Common.Business
 
                 if (showPlanStatistics)
                 {
-                    CustomLabel aogLabel = new CustomLabel();
+                    var aogLabel = new CustomLabel();
                     aogLabel.FromPosition = plan.StartTime.ToOADate();
                     aogLabel.ToPosition = plan.EndTime.ToOADate();
-                    aogLabel.Text = (100 - plan.PercentArrivalOnGreen).ToString() + "% AoR\n";
+                    aogLabel.Text = 100 - plan.PercentArrivalOnGreen + "% AoR\n";
                     aogLabel.LabelMark = LabelMarkStyle.LineSideMark;
                     aogLabel.ForeColor = Color.Blue;
                     aogLabel.RowIndex = 2;
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(aogLabel);
 
-                    CustomLabel statisticlabel = new CustomLabel();
+                    var statisticlabel = new CustomLabel();
                     statisticlabel.FromPosition = plan.StartTime.ToOADate();
                     statisticlabel.ToPosition = plan.EndTime.ToOADate();
-                    statisticlabel.Text = (100 - plan.PercentGreen).ToString() + "% RT";
+                    statisticlabel.Text = 100 - plan.PercentGreenTime + "% RT";
                     statisticlabel.ForeColor = Color.Red;
                     statisticlabel.RowIndex = 1;
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(statisticlabel);
                 }
                 //Change the background color counter for alternating color
                 backGroundColor++;
-
             }
         }
 
         private static int RoundToNearest(int iNumberToRound, int iToNearest)
         {
             //int iToNearest = 100;
-            int iNearest = 0;
-            bool bIsUpper = false;
+            var iNearest = 0;
+            var bIsUpper = false;
 
-            int iRest = iNumberToRound % iToNearest;
+            var iRest = iNumberToRound % iToNearest;
             if (iNumberToRound == 550) bIsUpper = true;
 
-            if (bIsUpper == true)
+            if (bIsUpper)
             {
-                iNearest = (iNumberToRound - iRest) + iToNearest;
+                iNearest = iNumberToRound - iRest + iToNearest;
                 return iNearest;
             }
-            else if (iRest > (iToNearest / 2))
+            if (iRest > iToNearest / 2)
             {
-                iNearest = (iNumberToRound - iRest) + iToNearest;
+                iNearest = iNumberToRound - iRest + iToNearest;
                 return iNearest;
             }
-            else if (iRest < (iToNearest / 2))
+            if (iRest < iToNearest / 2)
             {
-                iNearest = (iNumberToRound - iRest);
+                iNearest = iNumberToRound - iRest;
                 return iNearest;
             }
 
             return 0;
         }
-
     }
 }

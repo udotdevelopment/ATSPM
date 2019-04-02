@@ -17,6 +17,7 @@
             <input type="hidden" name="@(Model.Index)ID" id="ID_@Model.ID" value="@Model.ID" />
                    @Html.HiddenFor(model => model.DetectorID, new { Name = Model.Index + "DetectorID" })
                    @Html.HiddenFor(model => model.ApproachID, new { Name = Model.Index + "ApproachID" })<div class="form-group col-md-4">
+                   @Html.HiddenFor(model => model.Approach.VersionID, new { Name = "versionId" })
                 <div class="">
                     @Html.LabelFor(model => model.DetChannel, htmlAttributes: new { @class = "control-label" })
                     <div class="">
@@ -44,6 +45,13 @@
                     <div class="">
                         @Html.DropDownListFor(model => model.DetectionHardwareID, (SelectList)ViewBag.DetectionHardware, htmlAttributes: new { Name = Model.Index + "DetectionHardwareID", @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.DetectionHardwareID, "", new { id = "DetectionHardwareID-error", @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="">
+                    @Html.LabelFor(model => model.LatencyCorrection, htmlAttributes: new { @class = "control-label" })
+                    <div class="">
+                        @Html.EditorFor(model => model.LatencyCorrection, new { htmlAttributes = new { Name = Model.Index + "LatencyCorrection", @class = "form-control"} })
+                        @Html.ValidationMessageFor(model => model.LatencyCorrection, "", new { id = "LatencyCorrection-error", @class = "text-danger" })
                     </div>
                 </div>
                 <div id="LaneNumber_@Model.ID" class="">

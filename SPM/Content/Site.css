@@ -28,6 +28,11 @@
     vertical-align:middle;
 }
 
+.center-check {
+    text-align: center;
+    position: center;
+}
+
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
@@ -100,6 +105,12 @@ textarea {
     border-color: #dddddd;
 }
 
+.panel-default > .panel-heading-black {
+    background-color: #000000;
+    color: white;
+    border-color: #000000;
+}
+
 .panel-signal > .panel-heading {
     background-color:#1b6fce;
     color:white;
@@ -108,6 +119,10 @@ textarea {
 
 .panel-signal{
     border-color: #1b6fce;
+}
+
+.panel-black {
+    border-color: #000000;
 }
 
 .PageTitle{
@@ -442,10 +457,10 @@ textarea {
   }
 }
 
-.jumbotron {
-  background-image: url(../Images/SignalPerformanceMetrics.jpg);
-background-size: cover;
-height: 100%
+
+.partners {
+    width: 100%;
+    min-width: 400px;
 }
 
 .navbar-brand {

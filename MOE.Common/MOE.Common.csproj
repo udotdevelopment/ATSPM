@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\MSTest.TestAdapter.1.1.18\build\net45\MSTest.TestAdapter.props" Condition="Exists('..\packages\MSTest.TestAdapter.1.1.18\build\net45\MSTest.TestAdapter.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -18,6 +19,8 @@
     <SccProvider>SubversionScc</SccProvider>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +51,9 @@
       <HintPath>..\packages\AlexFTPS.1.1.0.27735\lib\net20\AlexPilotti.FTPS.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CsvHelper, Version=6.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.6.1.0\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -55,6 +61,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentFTP, Version=19.2.2.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentFTP.19.2.2\lib\net45\FluentFTP.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -208,6 +217,12 @@
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTest.TestFramework.1.1.18\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTest.TestFramework.1.1.18\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
@@ -320,11 +335,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\ActionLog\ChartData.cs" />
+    <Compile Include="Business\AnalysisPhaseCycle.cs" />
+    <Compile Include="Business\AnalysisPhaseCycleCollection.cs" />
+    <Compile Include="Business\ApproachVolume\ApproachVolume.cs" />
+    <Compile Include="Business\ApproachVolume\ApproachVolumeViewModel.cs" />
     <Compile Include="Business\ApproachVolume\MetricInfo.cs" />
+    <Compile Include="Business\ArchiveMetric.cs" />
+    <Compile Include="Business\Bins\BinFactoryOptions.cs" />
+    <Compile Include="Business\Bins\BinsContainer.cs" />
+    <Compile Include="Business\Bins\Bin.cs" />
+    <Compile Include="Business\Bins\BinFactory.cs" />
+    <Compile Include="Business\Bins\LargeBinsContainer.cs" />
     <Compile Include="Business\BulkCopyOptions.cs" />
     <Compile Include="Business\ChartFactory.cs" />
     <Compile Include="Business\ChartTitleFactory.cs" />
-    <Compile Include="Business\CustomReport\CustomChart.cs">
+    <Compile Include="Business\CycleFactory.cs" />
+    <Compile Include="Business\Phase.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Business\CustomReport\Cycle.cs">
@@ -342,18 +368,78 @@
     <Compile Include="Business\CustomReport\Signal.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Business\CycleSplitFail.cs" />
+    <Compile Include="Business\CycleSpeed.cs" />
+    <Compile Include="Business\DataAggregation\AggregationByPhase.cs" />
+    <Compile Include="Business\DataAggregation\AggregationByDetector.cs" />
+    <Compile Include="Business\DataAggregation\AggregationByApproach.cs" />
+    <Compile Include="Business\DataAggregation\DetectorAggregationByDetector.cs" />
+    <Compile Include="Business\DataAggregation\CycleAggregationByApproach.cs" />
+    <Compile Include="Business\DataAggregation\DetectorAggregationByApproach.cs" />
+    <Compile Include="Business\DataAggregation\PcdAggregationByApproach.cs" />
+    <Compile Include="Business\DataAggregation\PcdAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\CycleAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\PhasePedAggregationByPhase.cs" />
+    <Compile Include="Business\DataAggregation\PhasePedAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\SignalEventCountAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\SpeedAggregationByApproach.cs" />
+    <Compile Include="Business\DataAggregation\SpeedAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\EventCountAggregationByApproach.cs" />
+    <Compile Include="Business\DataAggregation\EventCountAggregationBySignal .cs" />
+    <Compile Include="Business\DataAggregation\PhaseTerminationAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\PhaseTerminationAggregationByPhase.cs" />
+    <Compile Include="Business\DataAggregation\YellowRedActivationsAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\YellowRedActivationsAggregationByApproach.cs" />
+    <Compile Include="Business\DataAggregation\SplitFailAggregationByApproach.cs" />
+    <Compile Include="Business\DataAggregation\DataAggregation.cs" />
+    <Compile Include="Business\DataAggregation\AggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\PriorityAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\PreemptionAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\DetectorAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\SplitFailAggregationBySignal.cs" />
+    <Compile Include="Business\Export\ChartToCSVExporter.cs" />
+    <Compile Include="Business\Export\Exporter.cs" />
+    <Compile Include="Business\FilterExtensions\FilterApproach.cs" />
+    <Compile Include="Business\FilterExtensions\FilterDetector.cs" />
+    <Compile Include="Business\FilterExtensions\FilterMovement.cs" />
+    <Compile Include="Business\FilterExtensions\FilterDirection.cs" />
+    <Compile Include="Business\FilterExtensions\FilterSignal.cs" />
     <Compile Include="Business\Helpers\ApproachVolumeTable.cs" />
     <Compile Include="Business\Helpers\ConfigurationRecord.cs" />
+    <Compile Include="Business\PhaseCycleBase.cs" />
+    <Compile Include="Business\PlanBase.cs" />
+    <Compile Include="Business\PlanPCD.cs" />
+    <Compile Include="Business\PlanSplitFail.cs" />
+    <Compile Include="Business\PlanSplitMonitor.cs" />
+    <Compile Include="Business\PlanSpeed.cs" />
+    <Compile Include="Business\CyclePcd.cs" />
+    <Compile Include="Business\GreenToGreenCycle.cs" />
+    <Compile Include="Business\ColorFactory.cs" />
+    <Compile Include="Business\Speed\DetectorSpeed.cs" />
+    <Compile Include="Business\SplitFail\SplitFailBin.cs" />
+    <Compile Include="Business\SplitFail\SplitFailPhase.cs" />
     <Compile Include="Business\TMC\TMCData.cs" />
     <Compile Include="Business\TMC\TMCInfo.cs" />
-    <Compile Include="Business\PCD\Cycle.cs" />
-    <Compile Include="Business\PCD\PCDMetric.cs" />
     <Compile Include="Business\PCD\Phase.cs" />
-    <Compile Include="Business\PCD\PhaseFactory.cs" />
     <Compile Include="Business\PCD\Plan.cs" />
-    <Compile Include="Business\PCD\PlanFactory.cs" />
     <Compile Include="Business\TMC\TMCViewModel.cs" />
     <Compile Include="Business\WatchDog\WatchDogScan.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PhaseAggregationMetricOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachSpeedAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachEventCountAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PhasePedAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PhaseTerminationAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachYellowRedActivationsAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachPcdAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\DetectorVolumeAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\DetectorAggregationMetricOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\SignalEventCountAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\SignalPriorityAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\SignalAggregationMetricOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachAggregationMetricOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptions.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>
     </Compile>
@@ -379,15 +465,161 @@
     <Compile Include="Migrations\201704032058572_Version4.0.1.Designer.cs">
       <DependentUpon>201704032058572_Version4.0.1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709281716540_DataAggregation.cs" />
+    <Compile Include="Migrations\201709281716540_DataAggregation.Designer.cs">
+      <DependentUpon>201709281716540_DataAggregation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710062050286_RouteConfiguration1.cs" />
+    <Compile Include="Migrations\201710062050286_RouteConfiguration1.Designer.cs">
+      <DependentUpon>201710062050286_RouteConfiguration1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710062056336_RouteConfiguration2.cs" />
+    <Compile Include="Migrations\201710062056336_RouteConfiguration2.Designer.cs">
+      <DependentUpon>201710062056336_RouteConfiguration2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710272056348_DataAggregationUI.cs" />
+    <Compile Include="Migrations\201710272056348_DataAggregationUI.Designer.cs">
+      <DependentUpon>201710272056348_DataAggregationUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712142113595_LatencyCorrection.cs" />
+    <Compile Include="Migrations\201712142113595_LatencyCorrection.Designer.cs">
+      <DependentUpon>201712142113595_LatencyCorrection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801231846598_PermissivePhasesCanBeOverlaps.cs" />
+    <Compile Include="Migrations\201801231846598_PermissivePhasesCanBeOverlaps.Designer.cs">
+      <DependentUpon>201801231846598_PermissivePhasesCanBeOverlaps.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802072056202_DataArchive.cs" />
+    <Compile Include="Migrations\201802072056202_DataArchive.Designer.cs">
+      <DependentUpon>201802072056202_DataArchive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802160023347_GeneralSettings.cs" />
+    <Compile Include="Migrations\201802160023347_GeneralSettings.Designer.cs">
+      <DependentUpon>201802160023347_GeneralSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802231745557_EventCountAggregationTable.cs" />
+    <Compile Include="Migrations\201802231745557_EventCountAggregationTable.Designer.cs">
+      <DependentUpon>201802231745557_EventCountAggregationTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802271715081_ReCaptchaKeys.cs" />
+    <Compile Include="Migrations\201802271715081_ReCaptchaKeys.Designer.cs">
+      <DependentUpon>201802271715081_ReCaptchaKeys.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802282114224_EventCounts.cs" />
+    <Compile Include="Migrations\201802282114224_EventCounts.Designer.cs">
+      <DependentUpon>201802282114224_EventCounts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803051955275_ApproachEventCountAggregation.cs" />
+    <Compile Include="Migrations\201803051955275_ApproachEventCountAggregation.Designer.cs">
+      <DependentUpon>201803051955275_ApproachEventCountAggregation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803072127121_DatabaseArchiveChanges.cs" />
+    <Compile Include="Migrations\201803072127121_DatabaseArchiveChanges.Designer.cs">
+      <DependentUpon>201803072127121_DatabaseArchiveChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803301713324_DatabaseArchiveProcessedPartitions.cs" />
+    <Compile Include="Migrations\201803301713324_DatabaseArchiveProcessedPartitions.Designer.cs">
+      <DependentUpon>201803301713324_DatabaseArchiveProcessedPartitions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804251748599_MetricTypeIdentityRemoval.cs" />
+    <Compile Include="Migrations\201804251748599_MetricTypeIdentityRemoval.Designer.cs">
+      <DependentUpon>201804251748599_MetricTypeIdentityRemoval.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805251650242_PhaseTerminationAggregation.cs" />
+    <Compile Include="Migrations\201805251650242_PhaseTerminationAggregation.Designer.cs">
+      <DependentUpon>201805251650242_PhaseTerminationAggregation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806072115260_PhasePedDelayAggregation.cs" />
+    <Compile Include="Migrations\201806072115260_PhasePedDelayAggregation.Designer.cs">
+      <DependentUpon>201806072115260_PhasePedDelayAggregation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806111534173_archiveProcessingTable.cs" />
+    <Compile Include="Migrations\201806111534173_archiveProcessingTable.Designer.cs">
+      <DependentUpon>201806111534173_archiveProcessingTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806201917329_PCDVolumeAggregation.cs" />
+    <Compile Include="Migrations\201806201917329_PCDVolumeAggregation.Designer.cs">
+      <DependentUpon>201806201917329_PCDVolumeAggregation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806211436552_RemoveLaneByLaneFromAOR.cs" />
+    <Compile Include="Migrations\201806211436552_RemoveLaneByLaneFromAOR.Designer.cs">
+      <DependentUpon>201806211436552_RemoveLaneByLaneFromAOR.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808171744257_AggreationLongsForId.cs" />
+    <Compile Include="Migrations\201808171744257_AggreationLongsForId.Designer.cs">
+      <DependentUpon>201808171744257_AggreationLongsForId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
+    <Compile Include="Models\PhasePedAggregation.cs" />
+    <Compile Include="Models\PhaseTerminationAggregation.cs" />
+    <Compile Include="Models\PhaseEventCountAggregation.cs" />
+    <Compile Include="Models\DetectorEventCountAggregation.cs" />
+    <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\Repositories\IPhasePedAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\PhasePedAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\PhaseTerminationAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\PhasePedAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\PhaseTerminationAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\IPhaseTerminationAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\IDetectorEventCountAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\IApproachEventCountAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\ISignalEventCountAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\DetectorEventCountAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\PhaseEventCountAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\DetectorEventCountAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\PhaseEventCountAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\SignalEventCountAggregation.cs" />
+    <Compile Include="Models\ApproachPcdAggregation.cs" />
+    <Compile Include="Models\ApproachYellowRedActivationsAggregation.cs" />
+    <Compile Include="Models\ApproachSplitFailAggregation.cs" />
+    <Compile Include="Models\ApproachSpeedAggregation.cs" />
+    <Compile Include="Models\ApproachCycleAggregation.cs" />
     <Compile Include="Models\Custom\ActionLog.cs" />
-    <Compile Include="Models\Custom\ApproachRoute.cs" />
+    <Compile Include="Models\Custom\Aggregation.cs" />
+    <Compile Include="Models\DatabaseArchiveExcludedSignal.cs" />
+    <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Models\DatabaseInitializer.cs" />
     <Compile Include="Models\DetectionHardware.cs" />
+    <Compile Include="Models\DetectorAggregation.cs" />
     <Compile Include="Models\ExternalLink.cs" />
     <Compile Include="Models\FAQ.cs" />
+    <Compile Include="Models\PreemptionAggregation.cs" />
+    <Compile Include="Models\PriorityAggregation.cs" />
     <Compile Include="Models\Repositories\ActionChart.cs" />
+    <Compile Include="Models\Repositories\SignalEventCountAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\ApproachCycleAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\SignalEventCountAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\ApproachCycleAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\ApproachPcdAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\ApproachPcdAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\ApproachYellowRedActivationsAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\ApproachYellowRedActivationsAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\DetectorAggregationsRepository.cs" />
+    <Compile Include="Models\Repositories\DetectorAggregationsRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\IApproachCycleAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\IApproachPcdAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\IApproachYellowRedActivationsAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\IDetectorAggregationsRepository.cs" />
+    <Compile Include="Models\Repositories\IRoutePhaseDirectionRepository.cs" />
+    <Compile Include="Models\Repositories\IApproachSplitFailAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\IDatabaseArchiveExcludedSignalsRepository.cs" />
+    <Compile Include="Models\Repositories\RoutePhaseDirectionRepository.cs" />
+    <Compile Include="Models\Repositories\RoutePhaseDirectionRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\RouteSignalRepository.cs" />
+    <Compile Include="Models\Repositories\RouteSignalRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\RouteRepository.cs" />
+    <Compile Include="Models\Repositories\RouteRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\ApproachSpeedAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\ApproachSpeedAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\IRouteSignalRepository.cs" />
+    <Compile Include="Models\Repositories\IRouteRepository.cs" />
+    <Compile Include="Models\Repositories\IApproachSpeedAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\ISpeedEventRepository.cs" />
+    <Compile Include="Models\Repositories\DatabaseArchiveExcludedSignalsRepository.cs" />
+    <Compile Include="Models\Repositories\DatabaseArchiveExcludedSignalsRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\SpeedEventRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\SpeedEventRepository.cs" />
     <Compile Include="Models\Repositories\ApplicationSettingsRepository.cs" />
     <Compile Include="Models\Repositories\ActionLogRepository.cs" />
     <Compile Include="Models\Repositories\ApplicationSettingsRepositoryFactory.cs" />
@@ -403,15 +635,11 @@
     </Compile>
     <Compile Include="Business\AnalysisPhase.cs" />
     <Compile Include="Business\AnalysisPhaseCollection.cs" />
-    <Compile Include="Business\AnalysisPhaseCycle.cs" />
-    <Compile Include="Business\AnalysisPhaseCycleCollection.cs" />
     <Compile Include="Business\ApproachVolume\Approach.cs" />
     <Compile Include="Business\ApproachVolume\ApproachVolumeChart.cs" />
     <Compile Include="Business\ApproachSpeed\AvgSpeedBucket.cs" />
     <Compile Include="Business\ApproachSpeed\AvgSpeedBucketCollection.cs" />
-    <Compile Include="Business\ControllerEvent.cs" />
     <Compile Include="Business\ArriveOnRedChart.cs" />
-    <Compile Include="Business\CycleEngine.cs" />
     <Compile Include="Business\ListToTableConverter.cs" />
     <Compile Include="Business\LogDecoder\ASC3Decoder.cs" />
     <Compile Include="Business\PEDDelay\PedHourlyTotal.cs" />
@@ -420,7 +648,6 @@
     <Compile Include="Business\PEDDelay\PedDelaySignal.cs" />
     <Compile Include="Business\PEDDelay\PedPhase.cs" />
     <Compile Include="Business\PEDDelay\PedPlan.cs" />
-    <Compile Include="Business\PlanBase.cs" />
     <Compile Include="Business\Preempt\PreemptCycle.cs" />
     <Compile Include="Business\Preempt\PreemptCycleEngine.cs" />
     <Compile Include="Business\Preempt\PreemptDetailChart.cs" />
@@ -435,8 +662,6 @@
     <Compile Include="Business\Detector.cs" />
     <Compile Include="Business\DetectorCollection.cs" />
     <Compile Include="Business\DetectorDataPoint.cs" />
-    <Compile Include="Business\Export\AdvancedExport.cs" />
-    <Compile Include="Business\Export\Detectors.cs" />
     <Compile Include="Business\InfoBox.cs" />
     <Compile Include="Business\Inrix\GraphLine.cs" />
     <Compile Include="Business\Inrix\Segment.cs" />
@@ -447,7 +672,7 @@
     <Compile Include="Business\Inrix\TMC.cs" />
     <Compile Include="Business\Inrix\TMCCollection.cs" />
     <Compile Include="Business\Inrix\TravelTimeRecord.cs" />
-    <Compile Include="Business\Cycle.cs" />
+    <Compile Include="Business\RedToRedCycle.cs" />
     <Compile Include="Business\LinkPivot.cs" />
     <Compile Include="Business\LinkPivotPair.cs" />
     <Compile Include="Business\LinkPivotPCDDisplay.cs" />
@@ -457,11 +682,10 @@
     <Compile Include="Business\RLM\RLMPlan.cs" />
     <Compile Include="Business\Plan.cs" />
     <Compile Include="Business\RLM\RLMPlanCollection.cs" />
-    <Compile Include="Business\PlanCollection.cs" />
+    <Compile Include="Business\PlanFactory.cs" />
     <Compile Include="Business\RLM\RLMSignalPhaseCollection.cs" />
-    <Compile Include="Business\Route.cs" />
     <Compile Include="Business\ScriptGenerator\GenerateAddData.cs" />
-    <Compile Include="Business\Signal.cs" />
+    <Compile Include="Business\SignalFtp.cs" />
     <Compile Include="Business\RLM\RLMSignalPhase.cs" />
     <Compile Include="Business\ControllerEventLogs.cs" />
     <Compile Include="Business\SignalControllers\BaseController.cs" />
@@ -523,26 +747,20 @@
     <Compile Include="Models\ActionLog.cs" />
     <Compile Include="Models\Action.cs" />
     <Compile Include="Models\Agency.cs" />
-    <Compile Include="Models\Alert_Day_Types.cs" />
     <Compile Include="Models\ApplicationEvent.cs" />
     <Compile Include="Models\Approach.cs" />
-    <Compile Include="Models\ApproachRoute.cs" />
-    <Compile Include="Models\ApproachRouteDetail.cs" />
-    <Compile Include="Models\Archived_Metrics.cs" />
     <Compile Include="Models\ControllerType.cs" />
     <Compile Include="Models\Custom\MetricComment.cs" />
     <Compile Include="Models\Custom\Approach.cs" />
     <Compile Include="Models\Custom\Controller_Event_Log.cs" />
-    <Compile Include="Models\Custom\Detectors.cs" />
+    <Compile Include="Models\Custom\Detector.cs" />
     <Compile Include="Models\Custom\Signal.cs" />
-    <Compile Include="Models\Custom\SignalWithDetection.cs" />
     <Compile Include="Models\DetectionType.cs" />
     <Compile Include="Models\DetectionTypeGraph_Detectors.cs" />
     <Compile Include="Models\DetectorMetrics.cs" />
     <Compile Include="Models\DirectionType.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\DownloadAgreement.cs" />
     <Compile Include="Models\Detector.cs" />
     <Compile Include="Models\Inrix\Datum.cs" />
     <Compile Include="Models\Inrix\Group.cs" />
@@ -572,13 +790,15 @@
     <Compile Include="Models\Inrix\Segment_Members.cs" />
     <Compile Include="Models\Inrix\TMC.cs" />
     <Compile Include="Models\LaneType.cs" />
-    <Compile Include="Models\LastUpdate.cs" />
     <Compile Include="Models\Menu.cs" />
     <Compile Include="Models\DetectorComment.cs" />
     <Compile Include="Models\Repositories\ApplicationEventRepositoryFactory.cs" />
-    <Compile Include="Models\Repositories\ApproachRouteDetailsRepository.cs" />
-    <Compile Include="Models\Repositories\ApproachRouteDetailsRepositoryFactory.cs" />
-    <Compile Include="Models\Repositories\ApproachRouteRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\IPreemptAggregationDatasRepository.cs" />
+    <Compile Include="Models\Repositories\IPriorityAggregationDatasRepository.cs" />
+    <Compile Include="Models\Repositories\PreemptAggregationDatasRepository.cs" />
+    <Compile Include="Models\Repositories\PriorityAggregationDatasRepository.cs" />
+    <Compile Include="Models\Repositories\PreemptAggregationDatasRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\PriorityAggregationDatasRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\ControllerTypeRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\DetectionHardwareRepository.cs" />
     <Compile Include="Models\Repositories\DetectionHardwareRepositoryFactory.cs" />
@@ -587,7 +807,6 @@
     <Compile Include="Models\Repositories\IApplicationEventRepository.cs" />
     <Compile Include="Models\Repositories\IDetectionHardwareRepository.cs" />
     <Compile Include="Models\Repositories\IGenericRepository.cs" />
-    <Compile Include="Models\Repositories\IApproachRouteDetailsRepository.cs" />
     <Compile Include="Models\Repositories\IDirectionTypeRepository.cs" />
     <Compile Include="Models\Repositories\ILaneTypeRepository.cs" />
     <Compile Include="Models\Repositories\IDetectionTypeRepository.cs" />
@@ -600,14 +819,8 @@
     <Compile Include="Models\MetricsFilterType.cs" />
     <Compile Include="Models\MetricType.cs" />
     <Compile Include="Models\MovementType.cs" />
-    <Compile Include="Models\Program_Message.cs" />
-    <Compile Include="Models\Program_Settings.cs" />
-    <Compile Include="Models\Region.cs" />
     <Compile Include="Models\Repositories\ApproachRepository.cs" />
     <Compile Include="Models\Repositories\ApproachRepositoryFactory.cs" />
-    <Compile Include="Models\Repositories\ApproachRouteRepository.cs" />
-    <Compile Include="Models\Repositories\ArchivedMetricsRepository.cs" />
-    <Compile Include="Models\Repositories\ArchivedMetricsRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\ControllerTypeRepository.cs" />
     <Compile Include="Models\Repositories\ControllerEventLogRepository.cs" />
     <Compile Include="Models\Repositories\ControllerEventLogRepositoryFactory.cs" />
@@ -616,8 +829,6 @@
     <Compile Include="Models\Repositories\DetectorRepository.cs" />
     <Compile Include="Models\Repositories\DetectorRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\IApproachRepository.cs" />
-    <Compile Include="Models\Repositories\IApproachRouteRepository.cs" />
-    <Compile Include="Models\Repositories\IArchivedMetricsRepository.cs" />
     <Compile Include="Models\Repositories\IControllerTypeRepository.cs" />
     <Compile Include="Models\Repositories\IControllerEventLogRepository.cs" />
     <Compile Include="Models\Repositories\IDetectorCommentRepository.cs" />
@@ -628,8 +839,6 @@
     <Compile Include="Models\Repositories\IMovementTypeRepository.cs" />
     <Compile Include="Models\Repositories\IMetricTypeRepository.cs" />
     <Compile Include="Models\Repositories\IRegionsRepository.cs" />
-    <Compile Include="Models\Repositories\IRouteDetectorsRepository.cs" />
-    <Compile Include="Models\Repositories\IRouteRepository.cs" />
     <Compile Include="Models\Repositories\ISignalsRepository.cs" />
     <Compile Include="Models\Repositories\ISPMMenuRepository.cs" />
     <Compile Include="Models\Repositories\MetricCommentRepository.cs" />
@@ -646,6 +855,8 @@
     <Compile Include="Models\Repositories\DetectionTypeRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\MovementTypeRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\MenuRepository.cs" />
+    <Compile Include="Models\Repositories\ApproachSplitFailAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\ApproachSplitFailAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\SPMMenuRepository.cs" />
     <Compile Include="Models\Repositories\SPMMenuRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\SignalsRepositoryTest.cs" />
@@ -655,28 +866,33 @@
     <Compile Include="Models\Repositories\RegionsRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\MetricTypeRepository.cs" />
     <Compile Include="Models\Repositories\RegionsRepository.cs" />
-    <Compile Include="Models\Repositories\RouteDetectorRepository.cs" />
-    <Compile Include="Models\Repositories\RouteDetectorRepositoryFactory.cs" />
-    <Compile Include="Models\Repositories\RouteRepository.cs" />
     <Compile Include="Models\Repositories\SignalsRepositoryFactory.cs" />
-    <Compile Include="Models\Repositories\RouteRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\SignalFTPInfo.cs" />
     <Compile Include="Models\Repositories\SignalsRepository.cs" />
     <Compile Include="Business\WCFServiceLibrary\MetricOptions.cs" />
     <Compile Include="Models\Route.cs" />
-    <Compile Include="Models\Route_Detectors.cs" />
+    <Compile Include="Models\RoutePhaseDirection.cs" />
+    <Compile Include="Models\RouteSignal.cs" />
     <Compile Include="Models\Signal.cs" />
     <Compile Include="Models\Speed_Events.cs" />
     <Compile Include="Models\SPM.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\MetricComment.cs" />
     <Compile Include="Models\SPMWatchDogErrorEvent.cs" />
+    <Compile Include="Models\StatusOfProcessedTable.cs" />
+    <Compile Include="Models\TablePartitionProcessed.cs" />
+    <Compile Include="Models\ToBeProcessedTable.cs" />
+    <Compile Include="Models\ToBeProcessedTableIndex.cs" />
+    <Compile Include="Models\VersionAction.cs" />
     <Compile Include="Models\ViewModel\Chart\FillSignalsViewModel.cs" />
     <Compile Include="Models\ViewModel\Chart\SignalSearchViewModel.cs" />
     <Compile Include="Models\ViewModel\Chart\DefaultChartsViewModel.cs" />
     <Compile Include="Models\ViewModel\Chart\MetricsListViewModel.cs" />
     <Compile Include="Models\ViewModel\Chart\PreemptViewModel.cs" />
     <Compile Include="Models\ViewModel\Chart\SignalInfoBoxViewModel.cs" />
+    <Compile Include="Models\ViewModel\DatabaseArchive\DatabaseArchiveViewModel.cs" />
+    <Compile Include="Models\ViewModel\DataExportViewModel.cs" />
+    <Compile Include="Models\ViewModel\DateTimePickerViewModel.cs" />
     <Compile Include="Models\ViewModel\Day.cs" />
     <Compile Include="Models\ViewModel\LinkPivotAdjustment.cs" />
     <Compile Include="Models\ViewModel\LinkPivotApproachLink.cs" />
@@ -686,11 +902,15 @@
     <Compile Include="Models\ViewModel\LinkPivotViewModel.cs" />
     <Compile Include="Models\ViewModel\MetricUsage\ChartViewModel.cs" />
     <Compile Include="Models\ViewModel\MetricUsage\MetricUsageViewModel.cs" />
+    <Compile Include="Models\ViewModel\RouteEdit\ApproachesForRouteViewModel.cs" />
     <Compile Include="Models\ViewModel\RouteEdit\ApproachRouteDetailViewModel.cs" />
-    <Compile Include="Models\ViewModel\RouteEdit\RouteListViewModel.cs" />
+    <Compile Include="Models\ViewModel\RouteEdit\RouteCreateViewModel.cs" />
+    <Compile Include="Models\ViewModel\RouteEdit\RouteMapViewModel.cs" />
     <Compile Include="Models\ViewModel\WebConfigTool\WebConfigToolViewModel.cs" />
     <Compile Include="Models\ViewModel\_MainMenu\MenuItem.cs" />
+    <Compile Include="Models\DatabaseArchiveSettings.cs" />
     <Compile Include="Models\WatchDogApplicationSettings.cs" />
+    <Compile Include="Business\PhaseCycleFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -704,10 +924,51 @@
     <Content Include="App.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Migrations\CreateAndPopulateMOEDB.sql" />
-    <Content Include="Migrations\CustomStuffForExistingUpgrade.txt" />
-    <Content Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
+    <EmbeddedResource Include="Migrations\VerboseStatus.sql" />
+    <EmbeddedResource Include="Migrations\InsertValues.sql" />
+    <EmbeddedResource Include="Migrations\PhysicalFileName.sql" />
+    <EmbeddedResource Include="Migrations\ScheduleReclaimFileSpaceFirstFriday.sql" />
+    <EmbeddedResource Include="Migrations\201808171744257_AggreationLongsForId.resx">
+      <DependentUpon>201808171744257_AggreationLongsForId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\DatabaseFileName.sql" />
+    <EmbeddedResource Include="Migrations\UpperBoundary.sql" />
+    <EmbeddedResource Include="Migrations\TableName.sql" />
+    <EmbeddedResource Include="Migrations\StopCounter.sql" />
+    <EmbeddedResource Include="Migrations\Processtables.sql" />
+    <EmbeddedResource Include="Migrations\PreserveData.sql" />
+    <EmbeddedResource Include="Migrations\LowerBoundary.sql" />
+    <EmbeddedResource Include="Migrations\IndexNameColumns.sql" />
+    <EmbeddedResource Include="Migrations\IndexNameClustered.sql" />
+    <EmbeddedResource Include="Migrations\IndexName.sql" />
+    <EmbeddedResource Include="Migrations\201804251748599_MetricTypeIdentityRemoval.resx">
+      <DependentUpon>201804251748599_MetricTypeIdentityRemoval.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805251650242_PhaseTerminationAggregation.resx">
+      <DependentUpon>201805251650242_PhaseTerminationAggregation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806072115260_PhasePedDelayAggregation.resx">
+      <DependentUpon>201806072115260_PhasePedDelayAggregation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806111534173_archiveProcessingTable.resx">
+      <DependentUpon>201806111534173_archiveProcessingTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806201917329_PCDVolumeAggregation.resx">
+      <DependentUpon>201806201917329_PCDVolumeAggregation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806211436552_RemoveLaneByLaneFromAOR.resx">
+      <DependentUpon>201806211436552_RemoveLaneByLaneFromAOR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\CreateConstraints.sql" />
+    <EmbeddedResource Include="Migrations\CreateIndexes.sql" />
+    <EmbeddedResource Include="Migrations\CreateTable.sql" />
+    <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
+    <EmbeddedResource Include="Migrations\DoTheSwapTable.sql" />
+    <EmbeddedResource Include="Migrations\DropIndexes.sql" />
+    <EmbeddedResource Include="Migrations\FileGroup.sql" />
+    <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="Data\LinkPivot.xsc">
       <DependentUpon>LinkPivot.xsd</DependentUpon>
     </None>
@@ -766,6 +1027,48 @@
     <EmbeddedResource Include="Migrations\201704032058572_Version4.0.1.resx">
       <DependentUpon>201704032058572_Version4.0.1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709281716540_DataAggregation.resx">
+      <DependentUpon>201709281716540_DataAggregation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710062050286_RouteConfiguration1.resx">
+      <DependentUpon>201710062050286_RouteConfiguration1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710062056336_RouteConfiguration2.resx">
+      <DependentUpon>201710062056336_RouteConfiguration2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710272056348_DataAggregationUI.resx">
+      <DependentUpon>201710272056348_DataAggregationUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712142113595_LatencyCorrection.resx">
+      <DependentUpon>201712142113595_LatencyCorrection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801231846598_PermissivePhasesCanBeOverlaps.resx">
+      <DependentUpon>201801231846598_PermissivePhasesCanBeOverlaps.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802072056202_DataArchive.resx">
+      <DependentUpon>201802072056202_DataArchive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802160023347_GeneralSettings.resx">
+      <DependentUpon>201802160023347_GeneralSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802231745557_EventCountAggregationTable.resx">
+      <DependentUpon>201802231745557_EventCountAggregationTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802271715081_ReCaptchaKeys.resx">
+      <DependentUpon>201802271715081_ReCaptchaKeys.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802282114224_EventCounts.resx">
+      <DependentUpon>201802282114224_EventCounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803051955275_ApproachEventCountAggregation.resx">
+      <DependentUpon>201803051955275_ApproachEventCountAggregation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803072127121_DatabaseArchiveChanges.resx">
+      <DependentUpon>201803072127121_DatabaseArchiveChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803301713324_DatabaseArchiveProcessedPartitions.resx">
+      <DependentUpon>201803301713324_DatabaseArchiveProcessedPartitions.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\Caseiro.Mvc.PagedList.csproj">
@@ -774,6 +1077,14 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.1.18\build\net45\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.1.18\build\net45\MSTest.TestAdapter.props'))" />
+    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.1.18\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.1.18\build\net45\MSTest.TestAdapter.targets'))" />
+  </Target>
+  <Import Project="..\packages\MSTest.TestAdapter.1.1.18\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.1.18\build\net45\MSTest.TestAdapter.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

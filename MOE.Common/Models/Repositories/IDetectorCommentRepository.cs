@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
     public interface IDetectorCommentRepository
     {
-        List<Models.DetectorComment> GetAllDetectorComments();
-        Models.DetectorComment GetDetectorCommentByDetectorCommentID(int detectorCommentID);
-        Models.DetectorComment GetMostRecentDetectorCommentByDetectorID(int ID);
-        void AddOrUpdate(MOE.Common.Models.DetectorComment detectorComment);
-        void Add(MOE.Common.Models.DetectorComment detectorComment);
-        void Remove(MOE.Common.Models.DetectorComment detectorComment);
+        List<DetectorComment> GetAllDetectorComments();
+        DetectorComment GetDetectorCommentByDetectorCommentID(int detectorCommentID);
+        DetectorComment GetMostRecentDetectorCommentByDetectorID(int ID);
+        void AddOrUpdate(DetectorComment detectorComment);
+        void Add(DetectorComment detectorComment);
+        void Remove(DetectorComment detectorComment);
     }
 }

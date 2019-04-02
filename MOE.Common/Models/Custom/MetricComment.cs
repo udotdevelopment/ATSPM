@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MOE.Common.Models
 {
@@ -12,9 +7,8 @@ namespace MOE.Common.Models
     {
         [NotMapped]
         public List<MetricType> AllMetricTypes { get; set; }
+
         [NotMapped]
         public int[] MetricIDs { get; set; }
-        
-
     }
 }

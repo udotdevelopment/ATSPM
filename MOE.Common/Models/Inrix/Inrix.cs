@@ -1,11 +1,8 @@
+using System.Data.Entity;
+
 namespace MOE.Common.Models.Inrix
 {
-    using System;
-    using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
-
-    public partial class Inrix : DbContext
+    public class Inrix : DbContext
     {
         public Inrix()
             : base("name=Inrix")

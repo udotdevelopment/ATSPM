@@ -1,12 +1,12 @@
-﻿namespace MOE.Common.Data {
-    
-    
-    public partial class LinkPivot {
+﻿namespace MOE.Common.Data
+{
+    public partial class LinkPivot
+    {
         partial class LinkPivotAdjustmentDataTable
         {
         }
 
-        partial class ApproachRouteDetail_DisabledDataTable
+        private class ApproachRouteDetail_DisabledDataTable
         {
         }
     }

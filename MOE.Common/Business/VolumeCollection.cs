@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using MOE.Common.Models;
 
 namespace MOE.Common.Business
 {
@@ -9,36 +9,32 @@ namespace MOE.Common.Business
     {
         public List<Volume> Items = new List<Volume>();
 
-        public VolumeCollection(DateTime startTime, DateTime endTime, List<Models.Controller_Event_Log> detectorEvents,
+        public VolumeCollection(VolumeCollection primaryDirectionVolume, VolumeCollection opposingDirectionVolume, int binSize)
+        {
+            if (primaryDirectionVolume != null && opposingDirectionVolume != null)
+            {
+                for (int i = 0; i < primaryDirectionVolume.Items.Count; i++)
+                {
+                    Volume primaryBin = primaryDirectionVolume.Items[i];
+                    Volume opposingBin = opposingDirectionVolume.Items[i];
+                    Volume totalBin = new Volume(primaryBin.StartTime, primaryBin.EndTime, binSize);
+                    totalBin.DetectorCount = primaryBin.DetectorCount + opposingBin.DetectorCount;
+                    Items.Add(totalBin);
+                }
+            }
+        }
+
+        public VolumeCollection(DateTime startTime, DateTime endTime, List<Controller_Event_Log> detectorEvents,
             int binSize)
         {
-            DateTime dt = startTime;
-            
-            while(dt.AddMinutes(binSize) <= endTime)
+            for (DateTime start = startTime; start < endTime; start = start.AddMinutes(binSize))
             {
-                Volume v = new Volume(dt, dt.AddMinutes(binSize), binSize);
+                var v = new Volume(start, start.AddMinutes(binSize), binSize);
+                v.DetectorCount = detectorEvents.Count(d => d.Timestamp >= v.StartTime && d.Timestamp < v.EndTime);
                 Items.Add(v);
-                dt = dt.AddMinutes(binSize);
-            }
-
-            foreach (MOE.Common.Models.Controller_Event_Log row in detectorEvents)
-            {
-                var query = from item in Items
-                            where item.StartTime < row.Timestamp && item.EndTime > row.Timestamp
-                            select item;
-
-
-                foreach (var volume in query)
-                {
-                    volume.AddDetectorToVolume();
-                }
-
             }
         }
 
-        public void AddItem(Volume volume)
-        {
-            Items.Add(volume);
-        }
+
     }
 }

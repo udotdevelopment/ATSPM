@@ -20,18 +20,18 @@
 //        public List<Models.Signal> GetAllSignals()
 //        {
 //            List<Models.Signal> signals = new List<Signal>();
-//            signals.Add(new Signal { SignalID = "1", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "2", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "3", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "4", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "5", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "6", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "7", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "8", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "9", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "10", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "11", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "12", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "1", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "2", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "3", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "4", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "5", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "6", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "7", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "8", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "9", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "10", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "11", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "12", PrimaryName = "Test", SecondaryName = "Test" });
 
 //            return signals;
 //        }
@@ -39,18 +39,18 @@
 //        public List<Models.Signal> GetAllEnabledSignals()
 //        {
 //            List<Models.Signal> signals = new List<Signal>();
-//            signals.Add(new Signal { SignalID = "1", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "2", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "3", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "4", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "5", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "6", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "7", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "8", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "9", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "10", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "11", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "12", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "1", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "2", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "3", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "4", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "5", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "6", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "7", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "8", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "9", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "10", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "11", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "12", PrimaryName = "Test", SecondaryName = "Test" });
 
 //            return signals;
 //        }
@@ -58,18 +58,18 @@
 //        public List<Models.Signal> EagerLoadAllSignals()
 //        {
 //            List<Models.Signal> signals = new List<Signal>();
-//            signals.Add(new Signal { SignalID = "1", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "2", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "3", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "4", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "5", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "6", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "7", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "8", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "9", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "10", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "11", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "12", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "1", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "2", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "3", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "4", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "5", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "6", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "7", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "8", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "9", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "10", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "11", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "12", PrimaryName = "Test", SecondaryName = "Test" });
 
 //            return signals;
 //        }
@@ -77,26 +77,26 @@
 //        public List<Models.Signal> GetAllSignalsWithChildrenObjects()
 //        {
 //            List<Models.Signal> signals = new List<Signal>();
-//            signals.Add(new Signal { SignalID = "1", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "2", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "3", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "4", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "5", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "6", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "7", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "8", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "9", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "10", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "11", PrimaryName = "Test", SecondaryName = "Test" });
-//            signals.Add(new Signal { SignalID = "12", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "1", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "2", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "3", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "4", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "5", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "6", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "7", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "8", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "9", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "10", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "11", PrimaryName = "Test", SecondaryName = "Test" });
+//            signals.Add(new Signal { SignalId = "12", PrimaryName = "Test", SecondaryName = "Test" });
 
 //            return signals;
 //        }
 
-//        public string GetSignalLocation(string SignalID)
+//        public string GetSignalLocation(string SignalId)
 //        {
 //            Models.Signal signal = (from r in db.Signals
-//                                     where r.SignalID == SignalID
+//                                     where r.SignalId == SignalId
 //                                     select r).FirstOrDefault();
 //            string location = string.Empty;
 //            if (signal != null)
@@ -129,13 +129,13 @@
 //            //    .Include(s =>
 //            //        s.Directions
 //            //            .Select(dir =>
-//            //                dir.Approaches
+//            //                dir.RouteSignals
 //            //                .Select(a => a.LaneGroups
 //            //                .Select(lg2 => lg2.Lanes
 //            //                    .Select(l => l.Detectors.
-//            //                        Select(d => d.DetectionType.MetricTypes)))))).Where(s => s.SignalID == signalID);
+//            //                        Select(d => d.DetectionType.MetricTypes)))))).Where(s => s.SignalId == signalID);
 //            var signal = (from r in db.Signals
-//                          where r.SignalID == signalID
+//                          where r.SignalId == signalID
 //                          select r);
 
 //            return signal.FirstOrDefault();
@@ -143,10 +143,10 @@
 
 //        public void AddOrUpdate(MOE.Common.Models.Signal signal)
 //    {
-        
+
 
 //        MOE.Common.Models.Signal g = (from r in db.Signals
-//                                      where r.SignalID == signal.SignalID
+//                                      where r.SignalId == signal.SignalId
 //                                    select r).FirstOrDefault();
 //            if (g != null)
 //            {
@@ -160,33 +160,33 @@
 
 //            }
 
-            
+
 //    }
 //        public List<MOE.Common.Business.Pin> GetPinInfo()
 //        {
 //            metrics = db.MetricTypes.Select(s => s).ToList();
 
 //            //var sigs = (from s in db.Signals
-//            //            join gd in db.Detectors on s.SignalID equals gd.SignalID
+//            //            join gd in db.Detectors on s.SignalId equals gd.SignalId
 //            //            join dd in db.DetectionTypeDetectors on gd.DetectorID equals dd.Detectors_DetectorID
 //            //            join dt in db.DetectionTypes on dd.DetectionType_DetectionTypeID equals dt.DetectionTypeID
-//            //            select new { s.SignalID, s.PrimaryName, s.Secondary_Name, s.Latitude, s.Longitude, s.Region, dt.DetectionTypeID }).ToList();
+//            //            select new { s.SignalId, s.PrimaryName, s.Secondary_Name, s.Latitude, s.Longitude, s.Region, dt.DetectionTypeID }).ToList();
 
-//            List<MOE.Common.Models.Custom.SignalWithDetection> sigs = db.SignalsWithDetection.SqlQuery(@"select s.SignalID, s.PrimaryName, s.Secondary_Name, s.Latitude, s.Longitude, s.Region, dt.DetectionTypeID
+//            List<MOE.Common.Models.Custom.SignalWithDetection> sigs = db.SignalsWithDetection.SqlQuery(@"select s.SignalId, s.PrimaryName, s.Secondary_Name, s.Latitude, s.Longitude, s.Region, dt.DetectionTypeID
 //from Signals s
-//join Detector gd on s.SignalID = gd.SignalID
+//join Detector gd on s.SignalId = gd.SignalId
 //join DetectionTypeDetectors dd on gd.ID = dd.Detectors_DetectorID
 //join DetectionTypes dt on dd.DetectionType_DetectionTypeID = dd.DetectionType_DetectionTypeID").ToList();
 
 
 //            var distinctsignalinfo = (from s in sigs
-//                                      select new MOE.Common.Business.Pin(s.SignalID, s.Latitude, s.Longitude, s.PrimaryName + " " + s.Secondary_Name, s.Region)).Distinct().ToList();
+//                                      select new MOE.Common.Business.Pin(s.SignalId, s.Latitude, s.Longitude, s.PrimaryName + " " + s.Secondary_Name, s.Region)).Distinct().ToList();
 
 
 //            foreach (MOE.Common.Business.Pin p in distinctsignalinfo)
 //            {
 //                var detections = (from s in sigs
-//                                  where p.SignalID == s.SignalID
+//                                  where p.SignalId == s.SignalId
 //                                  select s.DetectionTypeID).Distinct().ToList();
 
 //                foreach (int i in detections)
@@ -196,7 +196,6 @@
 
 
 //            }
-
 
 
 //            return (distinctsignalinfo);
@@ -220,7 +219,7 @@
 
 
 //            MOE.Common.Models.Signal g = (from r in db.Signals
-//                                          where r.SignalID == signal.SignalID
+//                                          where r.SignalId == signal.SignalId
 //                                          select r).FirstOrDefault();
 //            if (g == null)
 //            {
@@ -235,7 +234,7 @@
 
 
 //            MOE.Common.Models.Signal g = (from r in db.Signals
-//                                          where r.SignalID == signal.SignalID
+//                                          where r.SignalId == signal.SignalId
 //                                          select r).FirstOrDefault();
 //            if (g != null)
 //            {
@@ -248,9 +247,9 @@
 //        {
 //            var signal = (from r in db.Signals
 //                          join ftp in db.ControllerType on r.ControllerTypeID equals ftp.ControllerTypeID
-//                          where r.SignalID == signalID
+//                          where r.SignalId == signalID
 //                          select new SignalFTPInfo
-//                          { SignalID = r.SignalID,
+//                          { SignalId = r.SignalId,
 //                            PrimaryName = r.PrimaryName,
 //                            Secondary_Name = r.SecondaryName,
 //                            User_Name = ftp.UserName,
@@ -277,5 +276,6 @@
 //        }
 //    }
 
-    
+
 //}
+

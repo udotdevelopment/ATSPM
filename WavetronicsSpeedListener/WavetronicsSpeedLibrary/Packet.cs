@@ -86,6 +86,9 @@ namespace WavetronicsSpeedLibrary
             set { goodChecksum = value; }
         }
 
+        MOE.Common.Models.Repositories.IApplicationEventRepository applicationEventRepository =
+            MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
+
         #endregion
 
         #region Methods
@@ -151,24 +154,23 @@ namespace WavetronicsSpeedLibrary
                 }
                 catch (DbUpdateException ex)
                 {
+                //NOTE: I think trying to write to the applicaiton log when the DB is unavailbe is making the serivce crash more than it needs too.
                     SqlException innerException = ex.InnerException.InnerException as SqlException;
                     if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
                     {
                     }
                     else
                     {
-                        MOE.Common.Models.Repositories.IApplicationEventRepository eventRepository =
-                        MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                        eventRepository.QuickAdd("SpeedListener", this.GetType().ToString(), "Save",
-                            MOE.Common.Models.ApplicationEvent.SeverityLevels.High, ex.HResult.ToString() + ex.Message + ex.InnerException);
+
+                        //applicationEventRepository.QuickAdd("SpeedListener", this.GetType().ToString(), "Save",
+                        //    MOE.Common.Models.ApplicationEvent.SeverityLevels.High, ex.HResult.ToString() + ex.Message + ex.InnerException);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MOE.Common.Models.Repositories.IApplicationEventRepository eventRepository =
-                    MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-                    eventRepository.QuickAdd("SpeedListener", this.GetType().ToString(), "Save",
-                        MOE.Common.Models.ApplicationEvent.SeverityLevels.High, ex.HResult.ToString() + ex.Message + ex.InnerException);
+
+                    //applicationEventRepository.QuickAdd("SpeedListener", this.GetType().ToString(), "Save",
+                    //    MOE.Common.Models.ApplicationEvent.SeverityLevels.High, ex.HResult.ToString() + ex.Message + ex.InnerException);
                 }
             
 
