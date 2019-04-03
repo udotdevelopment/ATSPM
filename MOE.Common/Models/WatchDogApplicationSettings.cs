@@ -48,12 +48,12 @@ namespace MOE.Common.Models
 
         [Display(Name = "Ped Actuations Threshold (Ped Alarm)")]
         public int MaximumPedestrianEvents { get; set; }
-        //[Display(Name = "Email All Watch Dog Errors")]
-        //public bool EmailAllErrors { get; set; }
+        [Display(Name = "Email All Watch Dog Errors")]
+        public bool EmailAllErrors { get; set; }
 
-        //public WatchDogApplicationSettings()
-        //{
-        //    EmailAllErrors = false;
-        //}
+        public WatchDogApplicationSettings()
+        {
+            EmailAllErrors = false;
+        }
     }
 }

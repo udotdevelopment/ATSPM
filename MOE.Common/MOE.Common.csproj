@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\MSTest.TestAdapter.1.1.18\build\net45\MSTest.TestAdapter.props" Condition="Exists('..\packages\MSTest.TestAdapter.1.1.18\build\net45\MSTest.TestAdapter.props')" />
   <PropertyGroup>
@@ -549,6 +549,10 @@
     <Compile Include="Migrations\201808171744257_AggreationLongsForId.Designer.cs">
       <DependentUpon>201808171744257_AggreationLongsForId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810301701213_WatchDogEmailAllErrors.cs" />
+    <Compile Include="Migrations\201810301701213_WatchDogEmailAllErrors.Designer.cs">
+      <DependentUpon>201810301701213_WatchDogEmailAllErrors.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\PhasePedAggregation.cs" />
@@ -924,6 +928,9 @@
     <Content Include="App.config">
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Migrations\201810301701213_WatchDogEmailAllErrors.resx">
+      <DependentUpon>201810301701213_WatchDogEmailAllErrors.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\VerboseStatus.sql" />
     <EmbeddedResource Include="Migrations\InsertValues.sql" />
     <EmbeddedResource Include="Migrations\PhysicalFileName.sql" />
@@ -1068,6 +1075,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803301713324_DatabaseArchiveProcessedPartitions.resx">
       <DependentUpon>201803301713324_DatabaseArchiveProcessedPartitions.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
