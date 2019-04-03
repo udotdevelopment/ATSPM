@@ -29,5 +29,6 @@ namespace MOE.Common.Models.Repositories
         void SetAllVersionsOfASignalToDeleted(string id);
         List<Signal> GetSignalsBetweenDates(string signalId, DateTime startDate, DateTime endDate);
         bool Exists(string signalId);
+        Signal GetVersionOfSignalByDateWithDetectionTypes(string signalId, DateTime startDate);
     }
 }

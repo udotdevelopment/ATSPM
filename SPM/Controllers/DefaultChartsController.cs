@@ -25,7 +25,6 @@ namespace SPM.Controllers
             var config = new MOE.Common.Migrations.Configuration();
             var migrator = new DbMigrator(config);
             var _pendingMigrations = migrator.GetPendingMigrations();//.Any();
-
             if (_pendingMigrations.Count() > 0)
             {
                 migrator.Update();
@@ -69,23 +68,11 @@ namespace SPM.Controllers
             return PartialView("FillSignals", fsv);
         }
 
-
         public ActionResult GetMetricsList(int? selectedMetricID, string signalID)
         {
             MetricsListViewModel mlv = new MetricsListViewModel(signalID, selectedMetricID);
             return PartialView("GetMetricsList", mlv);
         }
-
-        //public ActionResult GetAvailableMetricsForSignal(string signalID)
-        //{
-        //    return PartialView("MetricsList", dcv);
-        //}
-
-        //public ActionResult GetMetricProperties(MetricOptions options)
-        //{
-        //    return PartialView("MetricProperties", options);
-        //}
-
         public ActionResult GetMap(DefaultChartsViewModel dcv)
         {
             return PartialView("Map", dcv);
@@ -96,81 +83,56 @@ namespace SPM.Controllers
             switch (id)
             {
                 case 1:
-                    PhaseTerminationOptions phaseTerminationOptions =
-                        new PhaseTerminationOptions();
+                    PhaseTerminationOptions phaseTerminationOptions = new PhaseTerminationOptions();
                     phaseTerminationOptions.SetDefaults();
                     return PartialView("PhaseTerminationOptions", phaseTerminationOptions);
-
                 case 2:
-                    SplitMonitorOptions SplitMonitorOptions =
-                        new SplitMonitorOptions();
+                    SplitMonitorOptions SplitMonitorOptions = new SplitMonitorOptions();
                     return PartialView("SplitMonitorOptions", SplitMonitorOptions);
-                
                 case 3:
-                    PedDelayOptions pedDelayOptions =
-                        new PedDelayOptions();
+                    PedDelayOptions pedDelayOptions = new PedDelayOptions();
                     pedDelayOptions.SetDefaults();
                     return PartialView("PedDelayOptions", pedDelayOptions);
-
-                case 5:
-                    TMCOptions tMCOptions =
-                        new TMCOptions();
-                    tMCOptions.SetDefaults();
-                    return PartialView("TMCOptions", tMCOptions);
-
                 case 4:
-                    MetricOptions preemptOptions =
-                        new MetricOptions();
+                    MetricOptions preemptOptions = new MetricOptions();
                     preemptOptions.YAxisMax = 3;
                     preemptOptions.Y2AxisMax = 10;
                     return PartialView("PreemptOptions", preemptOptions);
+                case 5:
+                    TMCOptions tMCOptions = new TMCOptions();
+                    tMCOptions.SetDefaults();
+                    return PartialView("TMCOptions", tMCOptions);
                 case 6:
-                    PCDOptions pcdOptions =
-                        new PCDOptions();
+                    PCDOptions pcdOptions = new PCDOptions();
                     return PartialView("PCDOptions", pcdOptions);
-
                 case 7:
-                    ApproachVolumeOptions approachVolumeOptions =
-                        new ApproachVolumeOptions();
+                    ApproachVolumeOptions approachVolumeOptions = new ApproachVolumeOptions();
                     return PartialView("ApproachVolumeOptions", approachVolumeOptions);
-
                 case 8:
-                    ApproachDelayOptions approachDelayOptions =
-                        new ApproachDelayOptions();
+                    ApproachDelayOptions approachDelayOptions = new ApproachDelayOptions();
                     approachDelayOptions.SetDefaults();
                     return PartialView("ApproachDelayOptions", approachDelayOptions);
-
                 case 9:
-                    AoROptions aoROptions =
-                        new AoROptions();
+                    AoROptions aoROptions = new AoROptions();
                     aoROptions.SetDefaults();
                     return PartialView("AoROptions", aoROptions);
-
                 case 10:
-                    ApproachSpeedOptions approachSpeedOptions =
-                        new ApproachSpeedOptions();
+                    ApproachSpeedOptions approachSpeedOptions = new ApproachSpeedOptions();
                     approachSpeedOptions.SetDefaults();
                     return PartialView("ApproachSpeedOptions", approachSpeedOptions);
-
                 case 11:
-                    YellowAndRedOptions yellowAndRedOptions =
-                        new YellowAndRedOptions();
+                    YellowAndRedOptions yellowAndRedOptions = new YellowAndRedOptions();
                     yellowAndRedOptions.SetDefaults();
                     return PartialView("YellowAndRedOptions", yellowAndRedOptions);
                 case 17:
-                    TimingAndActuationsOptions timingAndActuationsOptions =
-                        new TimingAndActuationsOptions();
+                    TimingAndActuationsOptions timingAndActuationsOptions = new TimingAndActuationsOptions();
                     timingAndActuationsOptions.SetDefaults();
                     return PartialView("TimingAndActuationsOptions", timingAndActuationsOptions);
-
                 case 12: default:
-                    SplitFailOptions splitFailOptions =
-                        new SplitFailOptions();
+                    SplitFailOptions splitFailOptions = new SplitFailOptions();
                     splitFailOptions.SetDefaults();
                     return PartialView("SplitFailOptions", splitFailOptions);
-
             }
-
         }
 
         public ActionResult GetPhaseTerminationMetricByUrl(PhaseTerminationOptions metricOptions)
@@ -184,7 +146,6 @@ namespace SPM.Controllers
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
-        //Andre Sanchez for Timing and Actuations
         public ActionResult TimingAndActionResultByUrl(TimingAndActuationsOptions  metricOptions)
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
@@ -194,7 +155,6 @@ namespace SPM.Controllers
                                                           metricOptions.ShowPlans.ToString().ToLower() + "," +
                                                           metricOptions.ShowVehicleSignalDisplay.ToString().ToLower() + "," +
                                                           metricOptions.ShowPedestrianIntervals.ToString().ToLower() + "," +
-                                                          metricOptions.ShowBeginOfMaxGreen.ToString().ToLower() + "," +
                                                           metricOptions.ShowStopBarPresence.ToString().ToLower() + "," +
                                                           metricOptions.ShowLaneByLaneCount.ToString().ToLower() + "," +
                                                           metricOptions.ShowAdvancedCount.ToString().ToLower() + "," +
@@ -207,7 +167,11 @@ namespace SPM.Controllers
                                                           metricOptions.PhaseCustomCode1.ToString() + "," +
                                                           metricOptions.PhaseCustomCode2.ToString() + "," +
                                                           metricOptions.GlobalCustomCode1.ToString() + "," +
-                                                          metricOptions.GlobalCustomCode2.ToString() +
+                                                          metricOptions.GlobalCustomCode2.ToString() + "," +
+                                                          metricOptions.ShowAllLanes.ToString().ToLower() + "," +
+                                                          metricOptions.MakeExtraStrip.ToString() + "," +
+                                                          metricOptions.PhaseFilter.ToString() +
+
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
@@ -228,7 +192,6 @@ namespace SPM.Controllers
             return View("Index", defaultChartsViewModel);
         }
 
-
         public ActionResult GetPedDelayMetricByUrl(PedDelayOptions metricOptions)
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
@@ -238,7 +201,6 @@ namespace SPM.Controllers
             return View("Index", defaultChartsViewModel);
         }
 
-
         public ActionResult GetPreemptMetricByUrl(MetricOptions metricOptions)
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
@@ -246,8 +208,6 @@ namespace SPM.Controllers
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 4); " +
                                                           "CreateMetric();";
             return View("Index", defaultChartsViewModel);
-
-
         }
 
         public ActionResult GetTMCMetricByUrl(TMCOptions metricOptions)
@@ -263,7 +223,6 @@ namespace SPM.Controllers
             return View("Index", defaultChartsViewModel);
         }
 
-
         public ActionResult GetPCDMetricByUrl(PCDOptions metricOptions)
         {
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
@@ -277,9 +236,6 @@ namespace SPM.Controllers
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
-
-
-
 
         public ActionResult GetApproachVolumeMetricByUrl(ApproachVolumeOptions metricOptions)
         {
@@ -296,10 +252,6 @@ namespace SPM.Controllers
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
-
-
-
-
 
         public ActionResult GetApproachDelayMetricByUrl(ApproachDelayOptions metricOptions)
         {
@@ -370,9 +322,6 @@ namespace SPM.Controllers
             return View("Index", defaultChartsViewModel);
         }
 
-
-
-
         private string GetCommonJavascriptProperties(MetricOptions metricOptions)
         {
             return @"SetCommonValues('" + metricOptions.SignalID + @"','" + metricOptions.StartDate.ToShortDateString() +
@@ -382,10 +331,6 @@ namespace SPM.Controllers
                    metricOptions.EndDate.ToString("tt") + "'," + "null, null); ";
             //endDateDay, endTime, endAmPmDdl, yAxisMax, y2AxisMax);
         }
-
-
-
-
 
         public ActionResult YellowAndRedOptions(int id)
         {
@@ -398,40 +343,25 @@ namespace SPM.Controllers
         public ActionResult GetYellowAndRedMetric(YellowAndRedOptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
-
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
-
             if (ModelState.IsValid)
             {
                 MetricGeneratorService.MetricGeneratorClient client =
                     new MetricGeneratorService.MetricGeneratorClient();
                 try
                 {
-
                     client.Open();
                     result.ChartPaths = client.CreateMetric(metricOptions);
                     client.Close();
                 }
-
-
-
                 catch (Exception ex)
                 {
                     client.Close();
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
-
-           
-
             StringBuilder sb = new StringBuilder();
-
-           
-
             sb.Append("/DefaultCharts/GetYRAMetricByUrl?");
-
-           
-
             sb.Append("&SevereLevelSeconds=" + metricOptions.SevereLevelSeconds.ToString());
             sb.Append("&ShowRedLightViolations=" + metricOptions.ShowRedLightViolations.ToString().ToLower());
             sb.Append("&ShowPercentRedLightViolations=" +
@@ -445,31 +375,23 @@ namespace SPM.Controllers
             sb.Append("&ShowPercentYellowLightOccurrences=" +
                       metricOptions.ShowPercentYellowLightOccurrences.ToString().ToLower());
             sb.Append("&ShowAverageTimeYellowOccurences="+ metricOptions.ShowAverageTimeYellowOccurences.ToString().ToLower());
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
-
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();
             _endDate = _endDate.Replace(" ", "%20");
-
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
-
             string fullUri = Request.Url.AbsoluteUri;
             int placeCounter = fullUri.IndexOf("/DefaultCharts/");
             string hostname = fullUri.Substring(0, placeCounter);
-
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
-
-
             return PartialView("MetricResult", result);
         }
 
         public ActionResult SplitFailOptions(int id)
         {
-            SplitFailOptions splitFailOptions =
-                new SplitFailOptions();
+            SplitFailOptions splitFailOptions = new SplitFailOptions();
             splitFailOptions.SetDefaults();
             return PartialView("SplitFailOptions", splitFailOptions);
         }
@@ -477,13 +399,10 @@ namespace SPM.Controllers
         public ActionResult GetSplitFailMetric(SplitFailOptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
-
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
-
             if (ModelState.IsValid)
             {
-                MetricGeneratorService.MetricGeneratorClient client =
-                    new MetricGeneratorService.MetricGeneratorClient();
+                MetricGeneratorService.MetricGeneratorClient client = new MetricGeneratorService.MetricGeneratorClient();
                 try
                 {
                     client.Open();
@@ -496,38 +415,24 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
-
-
-           
-
             StringBuilder sb = new StringBuilder();
-
-
             sb.Append("/DefaultCharts/GetSplitFailMetricByUrl?");
-
             sb.Append("&FirstSecondsOfRed=" + metricOptions.FirstSecondsOfRed.ToString());
             sb.Append("&ShowFailLines="+metricOptions.ShowFailLines.ToString().ToLower());
             sb.Append("&ShowAvgLines=" +metricOptions.ShowAvgLines.ToString().ToLower());
             sb.Append("&ShowPercentFailLines=" + metricOptions.ShowPercentFailLines.ToString().ToLower());
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();
             _endDate = _endDate.Replace(" ", "%20");
-
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
-
             string fullUri = Request.Url.AbsoluteUri;
             int placeCounter = fullUri.IndexOf("/DefaultCharts/");
             string hostname = fullUri.Substring(0, placeCounter);
-
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
-
-
             return PartialView("MetricResult", result);
-
         }
 
         public ActionResult ApproachSpeedOptions(int id)
@@ -544,11 +449,9 @@ namespace SPM.Controllers
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             if (ModelState.IsValid)
             {
-                MetricGeneratorService.MetricGeneratorClient client =
-                    new MetricGeneratorService.MetricGeneratorClient();
+                MetricGeneratorService.MetricGeneratorClient client = new MetricGeneratorService.MetricGeneratorClient();
                 try
                 {
-
                     client.Open();
                     result.ChartPaths = client.CreateMetric(metricOptions);
                     client.Close();
@@ -559,45 +462,31 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
-
-            
-
             StringBuilder sb = new StringBuilder();
-
-
             sb.Append("/DefaultCharts/GetApproachSpeedMetricByUrl?");
-
-
             sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
             sb.Append("&ShowPlanStatistics=" + metricOptions.ShowPlanStatistics.ToString().ToLower());
             sb.Append("&ShowAverageSpeed=" + metricOptions.ShowAverageSpeed.ToString().ToLower());
             sb.Append("&ShowPostedSpeed=" + metricOptions.ShowPostedSpeed.ToString().ToLower());
             sb.Append("&Show85Percentile=" + metricOptions.Show85Percentile.ToString().ToLower());
             sb.Append("&Show15Percentile=" + metricOptions.Show15Percentile.ToString().ToLower());
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();
             _endDate = _endDate.Replace(" ", "%20");
-
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
-
             string fullUri = Request.Url.AbsoluteUri;
             int placeCounter = fullUri.IndexOf("/DefaultCharts/");
             string hostname = fullUri.Substring(0, placeCounter);
-
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
-
-
             return PartialView("MetricResult", result);
         }
 
         public ActionResult AoROptions(int id)
         {
-            AoROptions aoROptions =
-                new AoROptions();
+            AoROptions aoROptions = new AoROptions();
             aoROptions.SetDefaults();
             return PartialView("AoROptions", aoROptions);
         }
@@ -606,14 +495,12 @@ namespace SPM.Controllers
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
-       
             if (ModelState.IsValid)
             {
                 MetricGeneratorService.MetricGeneratorClient client =
                     new MetricGeneratorService.MetricGeneratorClient();
                 try
                 {
-
                     client.Open();
                     result.ChartPaths = client.CreateMetric(metricOptions);
                     client.Close();
@@ -624,40 +511,27 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
-
-          
-
             StringBuilder sb = new StringBuilder();
-
             sb.Append("/DefaultCharts/GetAoRMetricByUrl?");
-
             sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
             sb.Append("&ShowPlanStatistics=" + metricOptions.ShowPlanStatistics.ToString().ToLower());
-
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();
             _endDate = _endDate.Replace(" ", "%20");
-
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
-
             string fullUri = Request.Url.AbsoluteUri;
             int placeCounter = fullUri.IndexOf("/DefaultCharts/");
             string hostname = fullUri.Substring(0, placeCounter);
-
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
-
-
             return PartialView("MetricResult", result);
         }
 
         public ActionResult ApproachDelayOptions(int id)
         {
-            ApproachDelayOptions approachDelayOptions =
-                new ApproachDelayOptions();
+            ApproachDelayOptions approachDelayOptions = new ApproachDelayOptions();
             approachDelayOptions.SetDefaults();
             return PartialView("ApproachDelayOptions", approachDelayOptions);
         }
@@ -668,11 +542,9 @@ namespace SPM.Controllers
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             if (ModelState.IsValid)
             {
-                MetricGeneratorService.MetricGeneratorClient client =
-                    new MetricGeneratorService.MetricGeneratorClient();
+                MetricGeneratorService.MetricGeneratorClient client = new MetricGeneratorService.MetricGeneratorClient();
                 try
                 {
-
                     client.Open();
                     result.ChartPaths = client.CreateMetric(metricOptions);
                     client.Close();
@@ -683,44 +555,29 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
-
-         
-
             StringBuilder sb = new StringBuilder();
-
             sb.Append("/DefaultCharts/GetApproachDelayMetricByUrl?");
-
-
-
             sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
             sb.Append("&ShowPlanStatistics=" + metricOptions.ShowPlanStatistics.ToString().ToLower());
             sb.Append("&ShowTotalDelayPerHour=" + metricOptions.ShowTotalDelayPerHour.ToString().ToLower());
             sb.Append("&ShowDelayPerVehicle=" + metricOptions.ShowDelayPerVehicle.ToString().ToLower());
-
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();
             _endDate = _endDate.Replace(" ", "%20");
-
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
-
             string fullUri = Request.Url.AbsoluteUri;
             int placeCounter = fullUri.IndexOf("/DefaultCharts/");
             string hostname = fullUri.Substring(0, placeCounter);
-
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
-
-
             return PartialView("MetricResult", result);
         }
 
         public ActionResult PhaseTerminationOptions(int id)
         {
-            PhaseTerminationOptions phaseTerminationOptions =
-                new PhaseTerminationOptions(); 
+            PhaseTerminationOptions phaseTerminationOptions = new PhaseTerminationOptions(); 
             phaseTerminationOptions.SetDefaults();
             return PartialView("PhaseTerminationOptions", phaseTerminationOptions);
         }
@@ -745,7 +602,6 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
-
             StringBuilder sb = new StringBuilder();
             sb.Append("/DefaultCharts/GetPhaseTerminationMetricByUrl?");
             sb.Append("&SelectedConsecutiveCount=" + metricOptions.SelectedConsecutiveCount.ToString());
@@ -765,9 +621,6 @@ namespace SPM.Controllers
             return PartialView("MetricResult", result);
         }
         
-        
-        //Andre Sanchez for Timing and Actuations
-
         public ActionResult GetTimingAndActuations (TimingAndActuationsOptions  metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
@@ -791,24 +644,6 @@ namespace SPM.Controllers
             StringBuilder sb = new StringBuilder();
             sb.Append("/DefaultCharts/TimingAndActuationsByUrl?");
             sb.Append("&SignalID=" + metricOptions.SignalID);
-            //sb.Append("&ShowPlans=") + metricOptions.ShowPlans.ToString( );
-            //sb.Append("&ShowVehicleSignalDisplay=") + metricOptions.ShowVehicleSignalDisplay.ToString();
-            //sb.Append("&ShowPedestrianIntervals=") + metricOptions.ShowPedestrianIntervals.ToString();
-            //sb.Append("&ShowBeginOfMaxGreen=") + metricOptions.ShowBeginOfMaxGreen.ToString();
-            //sb.Append("&ShowStopBarPresence=") + metricOptions.ShowStopBarPresence.ToString();
-            //sb.Append("&ShowLaneByLaneCount=") + metricOptions.ShowLaneByLaneCount.ToString();
-            //sb.Append("&ShowAdvancedCount=") + metricOptions.ShowAdvancedCount.ToString();
-            //sb.Append("&ShowAdvancedDilemmaZone=") + metricOptions.ShowAdvancedDilemmaZone.ToString();
-            //sb.Append("&ShowPedestrianActuation=") + metricOptions.ShowPedestrianActuation.ToString();
-            //sb.Append("&CombineLanesForEachGroup=") + metricOptions.CombineLanesForEachGroup.ToString();
-            //sb.Append("&ShowPhaseCustom=") + metricOptions.ShowPhaseCustom.ToString();
-            //sb.Append("&ShowGlobalCustom=") + metricOptions.ShowGlobalCustom.ToString();
-            //sb.Append("&DotAndBarSize=") + metricOptions.DotAndBarSize.ToString();
-            //sb.Append("&PhaseCustomCode1=") + metricOptions.PhaseCustomCode1.ToString();
-            //sb.Append("&PhaseCustomCode2=") + metricOptions.PhaseCustomCode2.ToString();
-            //sb.Append("&GlobalCustomCode1=") + metricOptions.GlobalCustomCode1.ToString();
-            //sb.Append("&GlobalCustomCode2=") + metricOptions.GlobalCustomCode2.ToString();
-
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();
@@ -824,26 +659,19 @@ namespace SPM.Controllers
 
         public ActionResult GetPreemptMetric(MetricOptions metricOptions)
         {
-
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
 
             if (ModelState.IsValid)
             {
-
-
-                PreemptServiceRequestOptions requestOptions =
-                    new PreemptServiceRequestOptions(metricOptions.SignalID,
+                PreemptServiceRequestOptions requestOptions = new PreemptServiceRequestOptions(metricOptions.SignalID,
                         metricOptions.StartDate, metricOptions.EndDate);
                 requestOptions.MetricTypeID = 14; 
-                PreemptServiceMetricOptions serviceOptions =
-                    new PreemptServiceMetricOptions(metricOptions.SignalID,
+                PreemptServiceMetricOptions serviceOptions = new PreemptServiceMetricOptions(metricOptions.SignalID,
                         metricOptions.StartDate, metricOptions.EndDate, metricOptions.YAxisMax??0);
                 serviceOptions.MetricTypeID = 15; 
-                PreemptDetailOptions detailOptions =
-                    new PreemptDetailOptions(metricOptions.SignalID,
+                PreemptDetailOptions detailOptions = new PreemptDetailOptions(metricOptions.SignalID,
                         metricOptions.StartDate, metricOptions.EndDate);
                 detailOptions.MetricTypeID = metricOptions.MetricTypeID; 
-
                 MetricGeneratorService.MetricGeneratorClient client =
                     new MetricGeneratorService.MetricGeneratorClient();
                 client.Open();
@@ -851,60 +679,44 @@ namespace SPM.Controllers
                 string[] tempResult2 = client.CreateMetric(serviceOptions);
                 string[] tempResult3 = client.CreateMetric(detailOptions);
                 client.Close();
-
                 List<string> finalList = new List<string>();
                 finalList.AddRange(tempResult1);
                 finalList.AddRange(tempResult2);
                 finalList.AddRange(tempResult3);
-
                 result.ChartPaths = finalList.ToArray();
             }
-
-           
-
             StringBuilder sb = new StringBuilder();
-
             sb.Append("/DefaultCharts/GetPreemptMetricByUrl?");
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();
             _endDate = _endDate.Replace(" ", "%20");
-
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
-
             string fullUri = Request.Url.AbsoluteUri;
             int placeCounter = fullUri.IndexOf("/DefaultCharts/");
             string hostname = fullUri.Substring(0, placeCounter);
-
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
-
             return PartialView("MetricResult", result);
-
         }
 
         public ActionResult TMCOptions(int id)
         {
-            TMCOptions tMCOptions =
-                new TMCOptions();
+            TMCOptions tMCOptions = new TMCOptions();
             tMCOptions.SetDefaults();
             return PartialView("TMCOptions", tMCOptions);
         }
 
-
         public ActionResult GetTMCMetric(TMCOptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
-            //string[] result = new string[1] { "" };
             MOE.Common.Business.TMC.TMCInfo tmcInfo = new MOE.Common.Business.TMC.TMCInfo();
             MOE.Common.Business.TMC.TMCViewModel tmcvm = new MOE.Common.Business.TMC.TMCViewModel(
                 metricOptions.ShowLaneVolumes, metricOptions.ShowDataTable);
             if (ModelState.IsValid)
             {
-                MetricGeneratorService.MetricGeneratorClient client =
-                    new MetricGeneratorService.MetricGeneratorClient();
+                MetricGeneratorService.MetricGeneratorClient client = new MetricGeneratorService.MetricGeneratorClient();
                 try
                 {
                     client.Open();
@@ -922,63 +734,45 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
-
-           
-
             StringBuilder sb = new StringBuilder();
-
             sb.Append("/DefaultCharts/GetTMCMetricByUrl?");
-
-
-
             sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
             sb.Append("&ShowLaneVolumes=" + metricOptions.ShowLaneVolumes.ToString().ToLower());
             sb.Append("&ShowTotalVolumes=" + metricOptions.ShowTotalVolumes.ToString().ToLower());
             sb.Append("&ShowDataTable=" + metricOptions.ShowDataTable.ToString().ToLower());
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();
             _endDate = _endDate.Replace(" ", "%20");
-
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
-
             string fullUri = Request.Url.AbsoluteUri;
             int placeCounter = fullUri.IndexOf("/DefaultCharts/");
             string hostname = fullUri.Substring(0, placeCounter);
-
             tmcvm.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
-            
             return PartialView("GetTMCMetric", tmcvm);
         }
 
         public ActionResult ApproachVolumeOptions(int id)
         {
-            ApproachVolumeOptions approachVolumeOptions =
-                new ApproachVolumeOptions();
+            ApproachVolumeOptions approachVolumeOptions = new ApproachVolumeOptions();
             approachVolumeOptions.SetDefaults();
             return PartialView("ApproachVolumeOptions", approachVolumeOptions);
         }
 
         public ActionResult GetApproachVolumeMetric(ApproachVolumeOptions metricOptions)
         {
-            MOE.Common.Models.Repositories.IApplicationEventRepository logRepository =
-                MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
+            MOE.Common.Models.Repositories.IApplicationEventRepository logRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
             MOE.Common.Business.ApproachVolume.ApproachVolumeViewModel viewModel = new ApproachVolumeViewModel();
-            //metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID); 
-            //string[] result = new string[1] { "" };
             if (ModelState.IsValid)
             {
-                MetricGeneratorService.MetricGeneratorClient client =
-                        new MetricGeneratorService.MetricGeneratorClient();
+                MetricGeneratorService.MetricGeneratorClient client = new MetricGeneratorService.MetricGeneratorClient();
                 try
                 {                    
                     client.Open();
                     viewModel.InfoList = client.CreateMetricWithDataTable((ApproachVolumeOptions)metricOptions);
                     client.Close();
-                   
                 }
                 catch (Exception ex)
                 {
@@ -986,13 +780,8 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 } 
             }
-
-           
-
             StringBuilder sb = new StringBuilder();
-
             sb.Append("/DefaultCharts/GetApproachVolumeMetricByUrl?");
-
             sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
             sb.Append("&ShowDirectionalSplits=" + metricOptions.ShowDirectionalSplits.ToString());
             sb.Append("&ShowTotalVolume=" + metricOptions.ShowTotalVolume.ToString().ToLower());
@@ -1000,36 +789,27 @@ namespace SPM.Controllers
             sb.Append("&ShowNbEbVolume=" + metricOptions.ShowNbEbVolume.ToString().ToLower());
             sb.Append("&ShowTMCDetection=" + metricOptions.ShowTMCDetection.ToString().ToLower());
             sb.Append("&ShowAdvanceDetection=" + metricOptions.ShowAdvanceDetection.ToString().ToLower());
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();
             _endDate = _endDate.Replace(" ", "%20");
-
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
-
             string fullUri = Request.Url.AbsoluteUri;
             int placeCounter = fullUri.IndexOf("/DefaultCharts/");
             string hostname = fullUri.Substring(0, placeCounter);
-
             viewModel.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
-
-
             return PartialView("GetApproachVolumeMetric", viewModel);
         }
-
 
         public ActionResult GetSplitMonitorMetric(SplitMonitorOptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
-
             if (ModelState.IsValid)
             {
-                MetricGeneratorService.MetricGeneratorClient client =
-                        new MetricGeneratorService.MetricGeneratorClient();
+                MetricGeneratorService.MetricGeneratorClient client = new MetricGeneratorService.MetricGeneratorClient();
                 try
                 {
                     client.Open();
@@ -1042,13 +822,8 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
-
-           
-
             StringBuilder sb = new StringBuilder();
-
             sb.Append("/DefaultCharts/GetSplitMonitorMetricByUrl?");
-
             sb.Append("&SelectedPercentileSplit=" + metricOptions.SelectedPercentileSplit.ToString());
             sb.Append("&ShowPlanStripes=" + metricOptions.ShowPlanStripes.ToString().ToLower());
             sb.Append("&ShowPedActivity=" + metricOptions.ShowPedActivity.ToString().ToLower());
@@ -1056,31 +831,23 @@ namespace SPM.Controllers
             sb.Append("&ShowPercentMaxOutForceOff=" + metricOptions.ShowPercentMaxOutForceOff.ToString().ToLower());
             sb.Append("&ShowPercentGapOuts=" + metricOptions.ShowPercentGapOuts.ToString().ToLower());
             sb.Append("&ShowPercentSkip=" + metricOptions.ShowPercentSkip.ToString().ToLower());
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();
             _endDate = _endDate.Replace(" ", "%20");
-
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
-
             string fullUri = Request.Url.AbsoluteUri;
             int placeCounter = fullUri.IndexOf("/DefaultCharts/");
             string hostname = fullUri.Substring(0, placeCounter);
-
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
-            
-
             return PartialView("MetricResult", result);
         }
 
-
         public ActionResult PedDelayOptions(int id)
         {
-            PedDelayOptions pedDelayOptions =
-                new PedDelayOptions();
+            PedDelayOptions pedDelayOptions = new PedDelayOptions();
             pedDelayOptions.SetDefaults();
             return PartialView("PedDelayOptions", pedDelayOptions);
         }
@@ -1091,8 +858,7 @@ namespace SPM.Controllers
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             if (ModelState.IsValid)
             {
-                MetricGeneratorService.MetricGeneratorClient client =
-                        new MetricGeneratorService.MetricGeneratorClient();
+                MetricGeneratorService.MetricGeneratorClient client = new MetricGeneratorService.MetricGeneratorClient();
                 try
                 {
                     client.Open();
@@ -1105,28 +871,19 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 }
             }
-
             StringBuilder sb = new StringBuilder();
-
             sb.Append("/DefaultCharts/GetPedDelayMetricByUrl?");
-
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();
             _endDate = _endDate.Replace(" ", "%20");
-
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
-
             string fullUri = Request.Url.AbsoluteUri;
             int placeCounter = fullUri.IndexOf("/DefaultCharts/");
             string hostname = fullUri.Substring(0, placeCounter);
-
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
-
-
             return PartialView("MetricResult", result);
         }
 
@@ -1136,8 +893,7 @@ namespace SPM.Controllers
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
             if (ModelState.IsValid)
             {
-                MetricGeneratorService.MetricGeneratorClient client =
-                        new MetricGeneratorService.MetricGeneratorClient();
+                MetricGeneratorService.MetricGeneratorClient client = new MetricGeneratorService.MetricGeneratorClient();
                 try
                 {                    
                     client.Open();
@@ -1150,44 +906,31 @@ namespace SPM.Controllers
                     return Content("<h1>" + ex.Message + "</h1>");
                 } 
             }
-            
-
             StringBuilder sb = new StringBuilder();
-
-
             sb.Append("/DefaultCharts/GetPCDMetricByUrl?");
-
             sb.Append("&SelectedBinSize=" + metricOptions.SelectedBinSize.ToString());
             sb.Append("&SelectedDotSize=" + metricOptions.SelectedDotSize.ToString().ToLower());
             sb.Append("&SelectedLineSize=" + metricOptions.SelectedLineSize.ToString().ToLower());
             sb.Append("&ShowPlanStatistics=" + metricOptions.ShowPlanStatistics.ToString().ToLower());
             sb.Append("&ShowVolumes=" + metricOptions.ShowVolumes.ToString().ToLower());
-
             sb.Append("&SignalID=" + metricOptions.SignalID);
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();
             _endDate = _endDate.Replace(" ", "%20");
-
             sb.Append("&StartDate=" + _startDate);
             sb.Append("&EndDate=" + _endDate);
-
             string fullUri = Request.Url.AbsoluteUri;
             int placeCounter = fullUri.IndexOf("/DefaultCharts/");
             string hostname = fullUri.Substring(0, placeCounter);
-
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
- 
-
             return PartialView("MetricResult", result);
         }
 
         public string GetChartComment(string SignalID, int MetricID)
         {
             MOE.Common.Models.Repositories.IMetricCommentRepository mcr = MOE.Common.Models.Repositories.MetricCommentRepositoryFactory.Create();
-
             MOE.Common.Models.Comment comment = mcr.GetLatestCommentForReport(SignalID, MetricID);
-
             if (comment != null)
             {
                 return comment.CommentText;
@@ -1197,10 +940,8 @@ namespace SPM.Controllers
 
         private MOE.Common.Models.MetricType GetMetricType(int id)
         {
-            MOE.Common.Models.Repositories.IMetricTypeRepository metricRepository =
-                MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
+            MOE.Common.Models.Repositories.IMetricTypeRepository metricRepository = MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
             return  metricRepository.GetMetricsByID(id);
         }
-
     }
 }

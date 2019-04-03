@@ -333,6 +333,7 @@
     <Compile Include="Business\Bins\LargeBinsContainer.cs" />
     <Compile Include="Business\BulkCopyOptions.cs" />
     <Compile Include="Business\ChartFactory.cs" />
+    <Compile Include="Business\ChartOptions\ChartOptions.cs" />
     <Compile Include="Business\ChartTitleFactory.cs" />
     <Compile Include="Business\CycleFactory.cs" />
     <Compile Include="Business\TimingAndActuationCycle.cs" />
@@ -404,8 +405,10 @@
     <Compile Include="Business\Speed\DetectorSpeed.cs" />
     <Compile Include="Business\SplitFail\SplitFailBin.cs" />
     <Compile Include="Business\SplitFail\SplitFailPhase.cs" />
+    <Compile Include="Business\TimingAndActuations\TimingAndActuationsChartForGlobalEvents.cs" />
     <Compile Include="Business\TimingAndActuations\TimingAndActuationsChartForPhase.cs" />
     <Compile Include="Business\TimingAndActuations\TimingAndActuationsForPhase.cs" />
+    <Compile Include="Business\TimingAndActuations\TimingAndActuationsGlobalGetData.cs" />
     <Compile Include="Business\TMC\TMCData.cs" />
     <Compile Include="Business\TMC\TMCInfo.cs" />
     <Compile Include="Business\PCD\Phase.cs" />
@@ -997,6 +1000,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201607071722420_Initial.resx">
       <DependentUpon>201607071722420_Initial.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201611101941171_Version4.0.resx">
       <DependentUpon>201611101941171_Version4.0.cs</DependentUpon>

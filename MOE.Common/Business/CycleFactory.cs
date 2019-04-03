@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
@@ -63,7 +64,18 @@ namespace MOE.Common.Business
             if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) != RedToRedCycle.EventType.ChangeToRed)
                 GetEventsToCompleteCycle(getPermissivePhase, endDate, approach, cycleEvents);
             var cycles = new List<TimingAndActuationCycle>();
+            using (System.IO.StreamWriter file = new StreamWriter(@"C:\Temp\CycleEvents.csv", true))
+            {    file.WriteLine("TimeStamp, EventCode, EventParam, SignalID");
+            
+                foreach (var cycle in cycleEvents)
+                {
+                    file.WriteLine(cycle.Timestamp.ToString() + ", " +cycle.EventCode + ", "+ cycle.EventParam +", " + cycle.SignalID);
+                }
+            }
+            var dummyTime = new DateTime();
             for (var i = 0; i < cycleEvents.Count; i++)
+            {
+                dummyTime = new DateTime(1900, 1, 1);
                 if (i < cycleEvents.Count - 5
                     && GetEventType(cycleEvents[i].EventCode) == RedToRedCycle.EventType.ChangeToGreen
                     && GetEventType(cycleEvents[i + 1].EventCode) == RedToRedCycle.EventType.ChangeToEndMinGreen
@@ -71,9 +83,39 @@ namespace MOE.Common.Business
                     && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToRed
                     && GetEventType(cycleEvents[i + 4].EventCode) == RedToRedCycle.EventType.ChangeToEndOfRedClearance
                     && GetEventType(cycleEvents[i + 5].EventCode) == RedToRedCycle.EventType.ChangeToGreen
-                    )
+                )
                     cycles.Add(new TimingAndActuationCycle(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp,
-                        cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp, cycleEvents[i + 4].Timestamp, cycleEvents[i + 5].Timestamp));
+                        cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp, cycleEvents[i + 4].Timestamp,
+                        cycleEvents[i + 5].Timestamp, dummyTime));
+            }
+            //// If there are no 5 part cycles, Try to get a 3 or 4 part cycle.
+            //get 4 part series is 61, 63,64 and maybe 66
+            if (cycles.Count != 0) return cycles;
+            {
+                var overlapDarkTime = new DateTime();
+                var endRedEvent = new DateTime();
+                dummyTime = new DateTime(1900, 1, 1);
+                for (var i = 0; i < cycleEvents.Count; i++)
+                {
+                    overlapDarkTime = new DateTime(1900, 1, 1);
+                    if (i < cycleEvents.Count - 5
+                        && GetEventType(cycleEvents[i].EventCode) == RedToRedCycle.EventType.ChangeToGreen
+                        && GetEventType(cycleEvents[i + 1].EventCode) == RedToRedCycle.EventType.ChangeToYellow
+                        && GetEventType(cycleEvents[i + 2].EventCode) == RedToRedCycle.EventType.ChangeToRed
+                    )
+                    {
+                        overlapDarkTime = cycleEvents[i + 3].Timestamp;
+                        endRedEvent = cycleEvents[i + 4].Timestamp;
+
+                        if (GetEventType(cycleEvents[i + 3].EventCode) != RedToRedCycle.EventType.OverLapDark)
+                        {
+                            endRedEvent = cycleEvents[i + 3].Timestamp;
+                        }
+                        cycles.Add(new TimingAndActuationCycle(cycleEvents[i].Timestamp, dummyTime, cycleEvents[i + 1].Timestamp,
+                            dummyTime, cycleEvents[i+2].Timestamp, endRedEvent, overlapDarkTime));
+                    }
+                }
+            }
             return cycles;
         }
 
@@ -85,21 +127,20 @@ namespace MOE.Common.Business
                     return RedToRedCycle.EventType.ChangeToGreen;
                 case 3:
                     return RedToRedCycle.EventType.ChangeToEndMinGreen;
-                // overlap green
                 case 61:
                     return RedToRedCycle.EventType.ChangeToGreen;
                 case 8:
                     return RedToRedCycle.EventType.ChangeToYellow;
-                // overlap yellow
                 case 63:
                     return RedToRedCycle.EventType.ChangeToYellow;
                 case 9:
                     return RedToRedCycle.EventType.ChangeToRed;
                 case 11:
                     return RedToRedCycle.EventType.ChangeToEndOfRedClearance;
-                // overlap red
                 case 64:
                     return RedToRedCycle.EventType.ChangeToRed;
+                case 66:
+                    return RedToRedCycle.EventType.OverLapDark;
                 default:
                     return RedToRedCycle.EventType.Unknown;
             }
@@ -164,6 +205,8 @@ namespace MOE.Common.Business
         {
             var celRepository = ControllerEventLogRepositoryFactory.Create();
             List<Controller_Event_Log> cycleEvents;
+            
+            
             if (getPermissivePhase)
             {
                 var cycleEventNumbers = approach.IsPermissivePhaseOverlap

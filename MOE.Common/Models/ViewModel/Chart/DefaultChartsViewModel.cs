@@ -59,6 +59,10 @@ namespace MOE.Common.Models.ViewModel.Chart
             EndDateDay = DateTime.Today;
             StartTime = "12:00";
             EndTime = "11:59";
+            //StartDateDay = new DateTime(2018, 11, 29);
+            //EndDateDay = new DateTime(2018, 11, 29);
+            //StartTime = "11:30";
+            //EndTime = "1:00";
             StartAMPMList = new List<SelectListItem>();
             StartAMPMList.Add(new SelectListItem {Value = "AM", Text = "AM", Selected = true});
             StartAMPMList.Add(new SelectListItem {Value = "PM", Text = "PM"});
