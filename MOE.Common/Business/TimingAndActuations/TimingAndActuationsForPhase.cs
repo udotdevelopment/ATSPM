@@ -145,14 +145,25 @@ namespace MOE.Common.Business.TimingAndActuations
                     }
                     if (stopEvents.Count != 0) continue;
                     //if (!Options.ShowAllLanes) continue;
-                    ForceEventsForAllLanes[0].SignalID = Options.SignalID;
-                    ForceEventsForAllLanes[0].EventCode = 82;
-                    ForceEventsForAllLanes[0].EventParam = -1;
-                    ForceEventsForAllLanes[0].Timestamp = Options.StartDate.AddMinutes(-10);
-                    ForceEventsForAllLanes[1].SignalID = Options.SignalID;
-                    ForceEventsForAllLanes[1].EventCode = 82;
-                    ForceEventsForAllLanes[1].EventParam = -1;
-                    ForceEventsForAllLanes[1].Timestamp = Options.StartDate.AddMinutes(-9);
+
+        //ForceEventsForAllLanes[0].SignalID = Options.SignalID;
+        //            ForceEventsForAllLanes[0].EventCode = 82;
+        //            ForceEventsForAllLanes[0].EventParam = -1;
+        //            ForceEventsForAllLanes[0].Timestamp = Options.StartDate.AddMinutes(-10);
+        //            ForceEventsForAllLanes[1].SignalID = Options.SignalID;
+        //            ForceEventsForAllLanes[1].EventCode = 82;
+        //            ForceEventsForAllLanes[1].EventParam = -1;
+        //            ForceEventsForAllLanes[1].Timestamp = Options.StartDate.AddMinutes(-9);
+
+                    var ForceEventsForAllLanes = new List<Controller_Event_Log>();
+                    var tempEvent = new Controller_Event_Log();
+                    tempEvent.SignalID = Options.SignalID;
+                    tempEvent.EventCode = 82;
+                    tempEvent.EventParam = -1;
+                    tempEvent.Timestamp = Options.StartDate.AddMinutes(-10);
+                    ForceEventsForAllLanes.Add(tempEvent);
+                    tempEvent.Timestamp = Options.StartDate.AddMinutes(-9);
+                    ForceEventsForAllLanes.Add(tempEvent);
 
                     StopBarEvents.Add("Stop Bar Presence, for lane Number" + detector.LaneNumber.Value, ForceEventsForAllLanes);
                 }
