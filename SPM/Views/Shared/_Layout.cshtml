@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Automated Signal Peformance Metrics show real-time and historical functionality at signalized intersections. This allows traffic engineers to directly measure what previously could only be estimated and modeled.">
-    <title>@ViewBag.Title - Automated Traffic Signal Performance Metrics</title>
+    @*@ViewBag.Title = Automated Traffic Signal Performance Metrics*@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
@@ -47,7 +47,7 @@
             <img class="img-responsive BrandImage" src="~/Images/ATSPM Logo-01.png" title="Automated Traffic Signal Performance Measures" alt="Automated Traffic Signal Performance Measures icon" />
         </div>
         <div class="col-md-6 col-sm-6">
-                  <a href="http://intelight-its.com" class="udotDiv navbar-brand pull-right" title="Intelight">
+                  <a href="http://intelight-its.com" class="navbar-brand pull-right" title="Intelight">
                       <img src="~/Images/Intelight_Logo_Smaller.png" alt="Intelight Logo" />
                   </a>
 </div>
@@ -64,7 +64,7 @@
                     </button>
 
                 </div>
-                <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
+               @* <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         @{Html.RenderAction("_MainMenuPartial", "Menus");}
                     </ul>
@@ -89,7 +89,7 @@
                             <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "menuItem" })</li>
                         </ul>
                     }
-                </div>
+                </div>*@
             </div>
         </nav>
     </div>

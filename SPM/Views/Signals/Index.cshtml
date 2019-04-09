@@ -1,8 +1,6 @@
 ﻿@model MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel
 
-@{
-    ViewBag.Title = "ATSPM Configuration Tool";
-}
+
 @Html.AntiForgeryToken()
 <h2>ATSPM Configuration Tool</h2>
 
@@ -15,8 +13,8 @@
 <div id="SignalEdit"></div>
 @section Scripts
     {
-    <script type="text/javascript" src="~/Scripts/Map.js"></script>
-    <script type="text/javascript" src="~/Scripts/AddData.js"></script>
+    @*<script type="text/javascript" src="~/Scripts/Map.js"></script>*@
+    @*<script type="text/javascript" src="~/Scripts/AddData.js"></script>*@
     <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
     <script type="text/javascript" src="~/Scripts/SPMConfigurationTool.js"></script>
     <script type="text/javascript" src="~/Scripts/SignalEdit.js"></script>
