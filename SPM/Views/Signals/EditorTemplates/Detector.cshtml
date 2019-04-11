@@ -123,7 +123,7 @@
 
                 <div class="">
                     @Html.LabelFor(model => model.DetectorComments, htmlAttributes: new { @class = "control-label" })
-                    <span onclick="GetCreateDetectorComment('@Model.ID')" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                    <a class="" href="javascript:GetCreateDetectorComment('@Model.ID')"><span class="fa fa-plus" style='font-size:14px' aria-hidden="true"> Add Detector Comment</span></a>
                     <div id="NewDetectorComment_@Model.ID"></div>
                     <div class="comments col-md-12">
                         <div id="AddedDetectorComment_@Model.ID"></div>
