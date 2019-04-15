@@ -18,7 +18,7 @@ namespace MOE.Common.Migrations
             //AutomaticMigrationDataLossAllowed = true;
             //var migrator = new DbMigrator(this);
             //_pendingMigrations = migrator.GetPendingMigrations().Any();
-            CommandTimeout = int.MaxValue;
+            //CommandTimeout = int.MaxValue;
         }
 
         protected override void Seed(SPM context)
@@ -557,7 +557,7 @@ While each agency should consult with their IT department for specific guideline
                 {
                     Name = "Indiana Hi Resolution Data Logger Enumerations",
                     DisplayOrder = 1,
-                    Url = " http://docs.lib.purdue.edu/jtrpdata/3/"
+                    Url = " https://docs.lib.purdue.edu/jtrpdata/3/"
                 },
                 new ExternalLink
                 {

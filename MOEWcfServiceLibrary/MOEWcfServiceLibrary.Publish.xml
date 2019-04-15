@@ -108,6 +108,7 @@
     <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/AlexPilotti.FTPS.Client.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Owin.Security.xml" publishTime="08/31/2017 18:08:41" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Owin.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/System.Interactive.Async.xml" publishTime="08/31/2017 18:08:41" />
@@ -170,7 +171,7 @@
     <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/System.Web.WebPages.xml" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll" publishTime="07/06/2018 10:21:16" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="08/31/2017 18:08:41" />
+    <file relUrl="bin/FluentFTP.xml" publishTime="05/02/2018 20:59:04" />
     <file relUrl="bin/Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll" publishTime="07/06/2018 10:21:16" />
     <file relUrl="bin/NuGet.Core.dll" publishTime="08/31/2017 18:08:41" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="08/31/2017 18:08:41" />
