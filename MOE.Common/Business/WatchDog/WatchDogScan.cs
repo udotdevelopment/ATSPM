@@ -287,7 +287,7 @@ namespace MOE.Common.Business.WatchDog
 
             if (LowHitCountErrors.Count > 0 && countErrors != "")
             {
-                message.Body += " \n --The following signals had unusually low advanced detection counts on ";
+                message.Body += " \n --The following signals had unusually low detection counts on ";
                 if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
                     message.Body += ScanDate.AddDays(-3).ToShortDateString() + " between ";
                 else
@@ -298,7 +298,7 @@ namespace MOE.Common.Business.WatchDog
             }
             else
             {
-                message.Body += "\n --No new low advanced detection count errors on ";
+                message.Body += "\n --No new low detection count errors on ";
                 if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
                     message.Body += ScanDate.AddDays(-3).ToShortDateString() + " between ";
                 else
