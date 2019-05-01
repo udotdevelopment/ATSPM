@@ -89,11 +89,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         [DataMember]
         [Display(Name = "Secondary Y-axis Min")]
-        public double Y2AxisMin { get; set; }
+        public double? Y2AxisMin { get; set; }
 
         [DataMember]
-        public string MetricFileLocation { get;
-            set; }
+        public string MetricFileLocation { get; set; }
 
         [DataMember]
         public string MetricWebPath { get; set; }

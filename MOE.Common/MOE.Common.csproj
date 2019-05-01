@@ -405,10 +405,10 @@
     <Compile Include="Business\Speed\DetectorSpeed.cs" />
     <Compile Include="Business\SplitFail\SplitFailBin.cs" />
     <Compile Include="Business\SplitFail\SplitFailPhase.cs" />
-    <Compile Include="Business\TimingAndActuations\TimingAndActuationsChartForGlobalEvents.cs" />
+    <Compile Include="Business\TimingAndActuations\ChartForGlobalEventsTimingAndActuations.cs" />
     <Compile Include="Business\TimingAndActuations\TimingAndActuationsChartForPhase.cs" />
     <Compile Include="Business\TimingAndActuations\TimingAndActuationsForPhase.cs" />
-    <Compile Include="Business\TimingAndActuations\TimingAndActuationsGlobalGetData.cs" />
+    <Compile Include="Business\TimingAndActuations\GlobalGetDataTimingAndActuations.cs" />
     <Compile Include="Business\TMC\TMCData.cs" />
     <Compile Include="Business\TMC\TMCInfo.cs" />
     <Compile Include="Business\PCD\Phase.cs" />

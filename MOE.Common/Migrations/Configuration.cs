@@ -665,7 +665,7 @@ While each agency should consult with their IT department for specific guideline
                 new DetectionType {DetectionTypeID = 4, Description = "Lane-by-lane Count"},
                 new DetectionType {DetectionTypeID = 5, Description = "Lane-by-lane with Speed Restriction"},
                 new DetectionType {DetectionTypeID = 6, Description = "Stop Bar Presence"},
-                new DetectionType { DetectionTypeID = 7, Description = "Advance Presence" }
+                new DetectionType { DetectionTypeID = 7, Description = "Advanced Presence" }
             );
 
 

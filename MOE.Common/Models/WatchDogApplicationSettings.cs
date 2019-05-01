@@ -19,13 +19,13 @@ namespace MOE.Common.Models
         [Display(Name = "Current Day Evaluation Start Hour (Max Out, Force Off, & Ped Alarms)")]
         public int ScanDayStartHour { get; set; }
 
-        [Display(Name = "Current Day Evaluation Start Hour (Max Out, Force Off, & Ped Alarms)")]
+        [Display(Name = "Current Day Evaluation End Hour (Max Out, Force Off, & Ped Alarms)")]
         public int ScanDayEndHour { get; set; }
 
         [Display(Name = "Previous Day Evaluation Start Hour (Low Detector Count Alarm)")]
         public int PreviousDayPMPeakStart { get; set; }
 
-        [Display(Name = "Previous Day Evaluation Start Hour (Low Detector Count Alarm)")]
+        [Display(Name = "Previous Day Evaluation End Hour (Low Detector Count Alarm)")]
         public int PreviousDayPMPeakEnd { get; set; }
 
         [Display(Name = "Minimum Record Threshold (Low Detector Count Alarm)")]

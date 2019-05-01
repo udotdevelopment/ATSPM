@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+//using System.IO;
 using System.Linq;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
@@ -64,15 +64,7 @@ namespace MOE.Common.Business
             if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) != RedToRedCycle.EventType.ChangeToRed)
                 GetEventsToCompleteCycle(getPermissivePhase, endDate, approach, cycleEvents);
             var cycles = new List<TimingAndActuationCycle>();
-            using (System.IO.StreamWriter file = new StreamWriter(@"C:\Temp\CycleEvents.csv", true))
-            {    file.WriteLine("TimeStamp, EventCode, EventParam, SignalID");
-            
-                foreach (var cycle in cycleEvents)
-                {
-                    file.WriteLine(cycle.Timestamp.ToString() + ", " +cycle.EventCode + ", "+ cycle.EventParam +", " + cycle.SignalID);
-                }
-            }
-            var dummyTime = new DateTime();
+            DateTime dummyTime;
             for (var i = 0; i < cycleEvents.Count; i++)
             {
                 dummyTime = new DateTime(1900, 1, 1);
@@ -92,19 +84,17 @@ namespace MOE.Common.Business
             //get 4 part series is 61, 63,64 and maybe 66
             if (cycles.Count != 0) return cycles;
             {
-                var overlapDarkTime = new DateTime();
                 var endRedEvent = new DateTime();
                 dummyTime = new DateTime(1900, 1, 1);
                 for (var i = 0; i < cycleEvents.Count; i++)
                 {
-                    overlapDarkTime = new DateTime(1900, 1, 1);
                     if (i < cycleEvents.Count - 5
                         && GetEventType(cycleEvents[i].EventCode) == RedToRedCycle.EventType.ChangeToGreen
                         && GetEventType(cycleEvents[i + 1].EventCode) == RedToRedCycle.EventType.ChangeToYellow
                         && GetEventType(cycleEvents[i + 2].EventCode) == RedToRedCycle.EventType.ChangeToRed
                     )
                     {
-                        overlapDarkTime = cycleEvents[i + 3].Timestamp;
+                        var overlapDarkTime = cycleEvents[i + 3].Timestamp;
                         endRedEvent = cycleEvents[i + 4].Timestamp;
 
                         if (GetEventType(cycleEvents[i + 3].EventCode) != RedToRedCycle.EventType.OverLapDark)
@@ -154,14 +144,15 @@ namespace MOE.Common.Business
                 RedToRedCycle.EventType.ChangeToRed)
                 GetEventsToCompleteCycle(getPermissivePhase, endDate, detector.Approach, cycleEvents);
             var cycles = new List<CycleSpeed>();
-            for (var i = 0; i < cycleEvents.Count; i++)
-                if (i < cycleEvents.Count - 3
-                    && GetEventType(cycleEvents[i].EventCode) == RedToRedCycle.EventType.ChangeToRed
-                    && GetEventType(cycleEvents[i + 1].EventCode) == RedToRedCycle.EventType.ChangeToGreen
-                    && GetEventType(cycleEvents[i + 2].EventCode) == RedToRedCycle.EventType.ChangeToYellow
-                    && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToRed)
-                    cycles.Add(new CycleSpeed(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp,
-                        cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp));
+            if (cycleEvents != null)
+                for (var i = 0; i < cycleEvents.Count; i++)
+                    if (i < cycleEvents.Count - 3
+                        && GetEventType(cycleEvents[i].EventCode) == RedToRedCycle.EventType.ChangeToRed
+                        && GetEventType(cycleEvents[i + 1].EventCode) == RedToRedCycle.EventType.ChangeToGreen
+                        && GetEventType(cycleEvents[i + 2].EventCode) == RedToRedCycle.EventType.ChangeToYellow
+                        && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToRed)
+                        cycles.Add(new CycleSpeed(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp,
+                            cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp));
             if (cycles.Any())
             {
                 var speedEventRepository = SpeedEventRepositoryFactory.Create();

@@ -126,7 +126,6 @@ namespace SPM.Controllers
                     return PartialView("YellowAndRedOptions", yellowAndRedOptions);
                 case 17:
                     TimingAndActuationsOptions timingAndActuationsOptions = new TimingAndActuationsOptions();
-                    timingAndActuationsOptions.SetDefaults();
                     return PartialView("TimingAndActuationsOptions", timingAndActuationsOptions);
                 case 12: default:
                     SplitFailOptions splitFailOptions = new SplitFailOptions();
@@ -152,26 +151,23 @@ namespace SPM.Controllers
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 17); " +
                                                           "SetTimingAndActuationsMetric(" + 
-                                                          metricOptions.ShowPlans.ToString().ToLower() + "," +
                                                           metricOptions.ShowVehicleSignalDisplay.ToString().ToLower() + "," +
                                                           metricOptions.ShowPedestrianIntervals.ToString().ToLower() + "," +
+                                                          metricOptions.CombineLanesForEachGroup.ToString().ToLower() + "," +
+                                                          metricOptions.DotAndBarSize.ToString() + "," +
+                                                          metricOptions.PhaseFilter.ToString() + "," +
+                                                          metricOptions.PhaseEventCodes.ToString() + "," +
+                                                          metricOptions.GlobalCustomEventCodes.ToString() + "," +
+                                                          metricOptions.GlobalCustomEventParams.ToString() + "," +
+                                                          metricOptions.ShowPedestrianActuation.ToString().ToLower() + "," +
                                                           metricOptions.ShowStopBarPresence.ToString().ToLower() + "," +
                                                           metricOptions.ShowLaneByLaneCount.ToString().ToLower() + "," +
                                                           metricOptions.ShowAdvancedCount.ToString().ToLower() + "," +
                                                           metricOptions.ShowAdvancedDilemmaZone.ToString().ToLower() + "," +
-                                                          metricOptions.ShowPedestrianActuation.ToString().ToLower() + "," +
-                                                          metricOptions.CombineLanesForEachGroup.ToString().ToLower() + "," +
-                                                          metricOptions.ShowPhaseCustom.ToString().ToLower() + "," +
-                                                          metricOptions.ShowGlobalCustom.ToString().ToLower() + "," +
-                                                          metricOptions.DotAndBarSize.ToString() + "," +
-                                                          metricOptions.PhaseCustomCode1.ToString() + "," +
-                                                          metricOptions.PhaseCustomCode2.ToString() + "," +
-                                                          metricOptions.GlobalCustomCode1.ToString() + "," +
-                                                          metricOptions.GlobalCustomCode2.ToString() + "," +
-                                                          metricOptions.ShowAllLanes.ToString().ToLower() + "," +
-                                                          metricOptions.MakeExtraStrip.ToString() + "," +
-                                                          metricOptions.PhaseFilter.ToString() +
-
+                                                          metricOptions.AdvancedOffset.ToString() + "," +
+                                                          metricOptions.ShowAllLanesInfo.ToString().ToLower() + "," +
+                                                          metricOptions.ShowLinesStartEnd.ToString().ToLower() + "," +
+                                                          metricOptions.ShowRawEvents.ToString().ToLower( ) +
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }

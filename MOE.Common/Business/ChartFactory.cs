@@ -551,18 +551,25 @@ namespace MOE.Common.Business
             if (totalMinutesRounded <= 1)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
+                chartArea.AxisX.Interval = 1;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
+                chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds)";
+            }
+            else if (totalMinutesRounded > 1.0 && totalMinutesRounded <= 3.0)
+            {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
                 chartArea.AxisX.Interval = 3;
                 chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
                 chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds)";
             }
-            else if (totalMinutesRounded > 1.0 && totalMinutesRounded <= 5.0)
+            else if (totalMinutesRounded > 3.0 && totalMinutesRounded <= 6.0)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
                 chartArea.AxisX.Interval = 15;
                 chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
                 chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds)";
             }
-            else if (totalMinutesRounded > 5.0 && totalMinutesRounded <= 10.0)
+            else if (totalMinutesRounded > 6.0 && totalMinutesRounded <= 10.0)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
                 chartArea.AxisX.Interval = 30;
@@ -624,18 +631,25 @@ namespace MOE.Common.Business
             if (totalMinutesRounded <= 1)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
+                chartArea.AxisX.Interval = 1;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
+                chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds of Day)";
+            }
+            else if(totalMinutesRounded > 1.0 && totalMinutesRounded <= 3.0)
+            {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
                 chartArea.AxisX.Interval = 3;
                 chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
                 chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds of Day)";
             }
-            else if(totalMinutesRounded > 1.0 && totalMinutesRounded <= 5.0)
+            else if (totalMinutesRounded > 3.0 && totalMinutesRounded <= 6.0)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
-                chartArea.AxisX.Interval = 15;
+                chartArea.AxisX.Interval =15;
                 chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
                 chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds of Day)";
             }
-            else if (totalMinutesRounded > 5.0 && totalMinutesRounded <= 10.0)
+            else if (totalMinutesRounded > 6.0 && totalMinutesRounded <= 10.0)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
                 chartArea.AxisX.Interval = 30;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.IO;
 using System.Drawing;
@@ -26,7 +27,7 @@ namespace MOE.Common.Business.TimingAndActuations
         private double _laneOffset;
         private int _lanesProcessed;
         private DateTime orginalEndDate;
-  
+
         public TimingAndActuationsChartForPhase(TimingAndActuationsForPhase timingAndActuationsForPhase)
         {
             _laneOffset = 0.0;
@@ -34,6 +35,7 @@ namespace MOE.Common.Business.TimingAndActuations
             _yValue = 0.5;
             _dotSize = 1;
             TimingAndActuationsForPhase = timingAndActuationsForPhase;
+            var getPermissivePhase = TimingAndActuationsForPhase.GetPermissivePhase;
             if (TimingAndActuationsForPhase.Options.DotAndBarSize > 0)
             {
                 _dotSize = TimingAndActuationsForPhase.Options.DotAndBarSize;
@@ -48,34 +50,38 @@ namespace MOE.Common.Business.TimingAndActuations
                     TimingAndActuationsForPhase.Options.EndDate.AddMinutes(-1);
             }
             Chart = ChartFactory.CreateDefaultChart(TimingAndActuationsForPhase.Options);
+            Chart.ChartAreas[0].AxisX2.Enabled = AxisEnabled.False;
             SetChartTitle();
-            SetCycleStrips();
+            if (TimingAndActuationsForPhase.Options.ShowVehicleSignalDisplay)
+            {
+                SetCycleStrips();
+            }
             if (TimingAndActuationsForPhase.PhaseCustomEvents != null &&
                 TimingAndActuationsForPhase.PhaseCustomEvents.Any())
             {
                 SetPhaseCustomEvents();
             }
-            if (TimingAndActuationsForPhase.Options.ShowPedestrianActuation == true)
-            {
-                SetPedestrianActuation();
-            }
-            if (TimingAndActuationsForPhase.Options.ShowAdvancedCount == true)
+            if (TimingAndActuationsForPhase.Options.ShowAdvancedCount)
             {
                 SetAdvanceCountEvents();
             }
-            if (TimingAndActuationsForPhase.Options.ShowAdvancedDilemmaZone == true)
+            if (TimingAndActuationsForPhase.Options.ShowAdvancedDilemmaZone)
             {
                 SetAdvancePresenceEvents();
             }
-            if (TimingAndActuationsForPhase.Options.ShowLaneByLaneCount == true)
+            if (TimingAndActuationsForPhase.Options.ShowLaneByLaneCount)
             {
                 SetLaneByLaneCount();
             }
-            if (TimingAndActuationsForPhase.Options.ShowStopBarPresence == true)
+            if (TimingAndActuationsForPhase.Options.ShowStopBarPresence)
             {
                 SetStopBarEvents();
             }
-            if (TimingAndActuationsForPhase.Options.ShowPedestrianIntervals == true)
+            if (TimingAndActuationsForPhase.Options.ShowPedestrianActuation && !getPermissivePhase)
+            {
+                SetPedestrianActuation();
+            }
+            if (TimingAndActuationsForPhase.Options.ShowPedestrianIntervals && !getPermissivePhase)
             {
                 SetPedestrianInterval();
             }
@@ -107,6 +113,7 @@ namespace MOE.Common.Business.TimingAndActuations
                     _laneOffset = (double) ++_lanesProcessed * 0.2 - 0.3;
                     if (_laneOffset > _yValue + 0.5) _laneOffset = _yValue + 0.5;
                 }
+
                 var phaseCustomEvents = phaseEventElement.Value;
                 var lastItem = phaseCustomEvents.Count;
                 if (lastItem <= 0) continue;
@@ -132,7 +139,7 @@ namespace MOE.Common.Business.TimingAndActuations
             if (phaseEventsSeries.Points.Count <= 0) return;
             if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == true)
             {
-                phaseEventsSeries.Name = "Combined Lanes for Custom Phase Events";
+                phaseEventsSeries.Name = "All Lanes: Phase Events";
                 Chart.Series.Add(phaseEventsSeries);
                 _yValue += 1.0;
             }
@@ -152,35 +159,22 @@ namespace MOE.Common.Business.TimingAndActuations
                     TimingAndActuationsForPhase.GetPermissivePhase));
         }
 
-        private void WriteStripLines()
-        {
-            //    var fileName = TimingAndActuationsForPhase.Approach.Description;
-            //    using (StreamWriter cycleFile = new StreamWriter(@"c:\temp\save\StripLines" + fileName + ".csv"))
-            //    {
-            //        cycleFile.WriteLine("Color" + ", " + "Offset" + ", " + "Width");
-            //        foreach (var strip in Chart.ChartAreas[0].Axes[0].StripLines)
-            //        {
-            //            cycleFile.WriteLine(strip.BackColor.ToString(), strip.IntervalOffset.ToString("00.00000000"), strip.StripWidth.ToString("00.00000000"));
-            //        }
-            //    }
-        }
-
         private void SetPedestrianInterval()
         {
-            //if (TimingAndActuationsForPhase == null) return;
-            //if (!TimingAndActuationsForPhase.PedestrianIntervals.Any()) return;
+            if (TimingAndActuationsForPhase == null) return;
+            if (!TimingAndActuationsForPhase.PedestrianIntervals.Any()) return;
             var pedestrianIntervalsSeries = new Series
             {
                 ChartType = SeriesChartType.StepLine,
                 XValueType = ChartValueType.DateTime,
-                BorderWidth = 22,
+                BorderWidth = 20,
                 Name = "Pedestrian Intervals"
             };
             if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == true)
-                pedestrianIntervalsSeries.BorderWidth = 17;
+            {
+                pedestrianIntervalsSeries.BorderWidth = 15;
+            }
 
-            var lastItem = TimingAndActuationsForPhase.PedestrianIntervals.Count;
-            if (lastItem <= 0) return;
             foreach (var phase in TimingAndActuationsForPhase.PedestrianIntervals)
             {
                 var pointNumber = new int();
@@ -207,206 +201,172 @@ namespace MOE.Common.Business.TimingAndActuations
             if (pedestrianIntervalsSeries.Points.Count <= 0) return;
             Chart.Series.Add(pedestrianIntervalsSeries);
             _yValue += 1.0;
-
         }
 
         private void SetPedestrianActuation()
         {
-            //if (TimingAndActuationsForPhase.PedestrianEvents == null) return;
-            //if (!TimingAndActuationsForPhase.PedestrianEvents.Any()) return;
-            //var areTherePedAct = false;
-            //var isThereStuckButton = false;
-            //var isThereChattingButton = false;
+            if (TimingAndActuationsForPhase.PedestrianEvents == null) return;
+            if (!TimingAndActuationsForPhase.PedestrianEvents.Any()) return;
             var pedestrianActuation = new Series
             {
-                ChartType = SeriesChartType.Line,
+                ChartType = SeriesChartType.Point,
                 XValueType = ChartValueType.DateTime,
                 Name = "Pedestrian Detector Actuations"
             };
-            var lastItem = TimingAndActuationsForPhase.PedestrianEvents.Count - 1;
-            if (lastItem < 0) return;
-            for (var inde2 = 0; inde2 < lastItem; inde2++)
+            if (TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
             {
-                if (TimingAndActuationsForPhase.PedestrianEvents[inde2].EventCode != 90 ||
-                    TimingAndActuationsForPhase.PedestrianEvents[inde2 + 1].EventCode != 89) continue;
-                var p0 = pedestrianActuation.Points.AddXY(
-                    TimingAndActuationsForPhase.PedestrianEvents[inde2].Timestamp.ToOADate(), _yValue);
-                pedestrianActuation.Points[p0].Color = Color.Transparent;
-                pedestrianActuation.Points[p0].MarkerStyle = MarkerStyle.Triangle;
-                pedestrianActuation.Points[p0].MarkerColor = Color.Black;
-                pedestrianActuation.Points[p0].MarkerSize = _dotSize;
-                var p1 = pedestrianActuation.Points.AddXY(
-                    TimingAndActuationsForPhase.PedestrianEvents[inde2 + 1].Timestamp.ToOADate(), _yValue);
-                pedestrianActuation.Points[p1].Color = Color.Black;
-                pedestrianActuation.Points[p1].MarkerStyle = MarkerStyle.Square;
-                pedestrianActuation.Points[p1].MarkerColor = Color.LightSlateGray;
-                pedestrianActuation.Points[p1].MarkerSize = _dotSize;
+                pedestrianActuation.ChartType = SeriesChartType.Line;
             }
-
-            if (pedestrianActuation.Points.Count <= 0) return;
-            Chart.Series.Add(pedestrianActuation);
-            _yValue += 1.0;
-
-            //isThereStuckButton = SetStuckOnPedButton();
-            //isThereChattingButton = SetChattingPedButton();
-            //if (areTherePedAct || isThereStuckButton || isThereChattingButton)
-            //_yValue += 1.0;
-        }
-
-        private bool SetChattingPedButton()
-        {
-            if (!TimingAndActuationsForPhase.PedestrianEvents.Any()) return false;
-            var pedestrianChatter = new Series
+            if (TimingAndActuationsForPhase.Options.ShowRawEvents)
             {
-                ChartType = SeriesChartType.Point,
-                XValueType = ChartValueType.DateTime
-            };
-            var chattingOffset = 0.25;
-            var lastItem = TimingAndActuationsForPhase.PedestrianEvents.Count - 6;
-            if (lastItem < 0) return false;
-            for (var inde7 = 0; inde7 < lastItem; inde7++)
-            {
-                if (TimingAndActuationsForPhase.PedestrianEvents[inde7].EventCode != 90 ||
-                    TimingAndActuationsForPhase.PedestrianEvents[inde7 + 1].EventCode != 89 ||
-                    TimingAndActuationsForPhase.PedestrianEvents[inde7 + 2].EventCode != 90 ||
-                    TimingAndActuationsForPhase.PedestrianEvents[inde7 + 3].EventCode != 89 ||
-                    TimingAndActuationsForPhase.PedestrianEvents[inde7 + 4].EventCode != 90 ||
-                    TimingAndActuationsForPhase.PedestrianEvents[inde7 + 5].EventCode != 89) continue;
-                var quickPushes = TimingAndActuationsForPhase.PedestrianEvents[inde7 + 4].Timestamp
-                    .Subtract(TimingAndActuationsForPhase.PedestrianEvents[inde7].Timestamp);
-                if (quickPushes.Seconds >= 1) continue;
-                var p0 = pedestrianChatter.Points.AddXY(
-                    TimingAndActuationsForPhase.PedestrianEvents[inde7].Timestamp.ToOADate(),
-                    _yValue + +chattingOffset - 0.1);
-                pedestrianChatter.Points[p0].Color = Color.Transparent;
-                var p1 = pedestrianChatter.Points.AddXY(
-                    TimingAndActuationsForPhase.PedestrianEvents[inde7 + 1].Timestamp.ToOADate(), _yValue);
-                pedestrianChatter.Points[p1].Color = Color.DeepPink;
-                pedestrianChatter.Points[p1].MarkerStyle = MarkerStyle.Diamond;
-                pedestrianChatter.Points[p1].MarkerSize = _dotSize;
-                p0 = pedestrianChatter.Points.AddXY(
-                    TimingAndActuationsForPhase.PedestrianEvents[inde7 + 2].Timestamp.ToOADate(),
-                    _yValue + chattingOffset - 0.1);
-                pedestrianChatter.Points[p0].Color = Color.Transparent;
-                p1 = pedestrianChatter.Points.AddXY(
-                    TimingAndActuationsForPhase.PedestrianEvents[inde7 + 3].Timestamp.ToOADate(), _yValue);
-                pedestrianChatter.Points[p1].Color = Color.DeepPink;
-                pedestrianChatter.Points[p1].MarkerStyle = MarkerStyle.Triangle;
-                pedestrianChatter.Points[p1].MarkerSize = _dotSize;
-                p0 = pedestrianChatter.Points.AddXY(
-                    TimingAndActuationsForPhase.PedestrianEvents[inde7 + 4].Timestamp.ToOADate(),
-                    _yValue + chattingOffset - 0.1);
-                pedestrianChatter.Points[p0].Color = Color.Transparent;
-                p1 = pedestrianChatter.Points.AddXY(
-                    TimingAndActuationsForPhase.PedestrianEvents[inde7 + 5].Timestamp.ToOADate(), _yValue);
-                pedestrianChatter.Points[p1].Color = Color.DeepPink;
-                pedestrianChatter.Points[p1].MarkerStyle = MarkerStyle.Triangle;
-                pedestrianChatter.Points[p1].MarkerSize = _dotSize;
-            }
-
-            if (pedestrianChatter.Points.Count <= 0) return false;
-            pedestrianChatter.Name = "chatting";
-            Chart.Series.Add(pedestrianChatter);
-            return true;
-
-        }
-
-        bool SetStuckOnPedButton()
-        {
-            if (!TimingAndActuationsForPhase.PedestrianEvents.Any()) return false;
-            var pedestrianButton = new Series
-            {
-                ChartType = SeriesChartType.Point,
-                XValueType = ChartValueType.DateTime
-            };
-            var stuckOffset = 0.1;
-            var lastItem = TimingAndActuationsForPhase.PedestrianEvents.Count - 1;
-            if (lastItem < 0) return false;
-            for (var inde8 = 0; inde8 < lastItem; inde8++)
-            {
-                if (TimingAndActuationsForPhase.PedestrianEvents[inde8].EventCode != 90) continue;
-                var buttonTime = TimingAndActuationsForPhase.PedestrianEvents[inde8 + 1].Timestamp
-                    .Subtract(TimingAndActuationsForPhase.PedestrianEvents[inde8].Timestamp);
-                if (buttonTime.Seconds >= 3)
+                for (var i = 0; i < TimingAndActuationsForPhase.PedestrianEvents.Count; i++)
                 {
-                    var p0 = pedestrianButton.Points.AddXY(
-                        TimingAndActuationsForPhase.PedestrianEvents[inde8].Timestamp.ToOADate(),
-                        _yValue + stuckOffset + 0.1);
-                    pedestrianButton.Points[p0].Color = Color.Transparent;
-                    var p1 = pedestrianButton.Points.AddXY(
-                        TimingAndActuationsForPhase.PedestrianEvents[inde8 + 1].Timestamp.ToOADate(), _yValue);
-                    pedestrianButton.Points[p1].Color = Color.Lime;
-                    pedestrianButton.Points[p1].MarkerStyle = MarkerStyle.Star5;
-                    pedestrianButton.Points[p1].MarkerSize = _dotSize;
+                    var seriesPointIndex = new int();
+                    if (TimingAndActuationsForPhase.PedestrianEvents[i].EventCode == 90)
+                    {
+                        seriesPointIndex = pedestrianActuation.Points.AddXY(
+                            TimingAndActuationsForPhase.PedestrianEvents[i].Timestamp.ToOADate(), _yValue);
+                        pedestrianActuation.Points[seriesPointIndex].Color = Color.Transparent;
+                        pedestrianActuation.Points[seriesPointIndex].MarkerStyle = MarkerStyle.Triangle;
+                        pedestrianActuation.Points[seriesPointIndex].MarkerColor = Color.Black;
+                        pedestrianActuation.Points[seriesPointIndex].MarkerSize = _dotSize;
+                    }
+                    else if (TimingAndActuationsForPhase.PedestrianEvents[i].EventCode == 89)
+                    {
+                        seriesPointIndex = pedestrianActuation.Points.AddXY(
+                            TimingAndActuationsForPhase.PedestrianEvents[i].Timestamp.ToOADate(), _yValue);
+                        pedestrianActuation.Points[seriesPointIndex].Color = Color.Black;
+                        pedestrianActuation.Points[seriesPointIndex].MarkerStyle = MarkerStyle.Square;
+                        pedestrianActuation.Points[seriesPointIndex].MarkerColor = Color.LightSlateGray;
+                        pedestrianActuation.Points[seriesPointIndex].MarkerSize = _dotSize;
+                    }
                 }
             }
-
-            if (pedestrianButton.Points.Count <= 0) return false;
-            pedestrianButton.Name = "stuck";
-            Chart.Series.Add(pedestrianButton);
-            return true;
-
+            else 
+            {
+                var lastItem = TimingAndActuationsForPhase.PedestrianEvents.Count - 1;
+                if (lastItem <= 0) return;
+                for (var i = 0; i < lastItem; i++)
+                {
+                    if (TimingAndActuationsForPhase.PedestrianEvents[i].EventCode == 90 &&
+                        TimingAndActuationsForPhase.PedestrianEvents[i + 1].EventCode == 89)
+                    {
+                        var p0 = pedestrianActuation.Points.AddXY(
+                            TimingAndActuationsForPhase.PedestrianEvents[i].Timestamp.ToOADate(), _yValue);
+                        pedestrianActuation.Points[p0].Color = Color.Transparent;
+                        pedestrianActuation.Points[p0].MarkerStyle = MarkerStyle.Triangle;
+                        pedestrianActuation.Points[p0].MarkerColor = Color.Black;
+                        pedestrianActuation.Points[p0].MarkerSize = _dotSize;
+                        var p1 = pedestrianActuation.Points.AddXY(
+                            TimingAndActuationsForPhase.PedestrianEvents[i + 1].Timestamp.ToOADate(), _yValue);
+                        pedestrianActuation.Points[p1].Color = Color.Black;
+                        pedestrianActuation.Points[p1].MarkerStyle = MarkerStyle.Square;
+                        pedestrianActuation.Points[p1].MarkerColor = Color.LightSlateGray;
+                        pedestrianActuation.Points[p1].MarkerSize = _dotSize;
+                    }
+                }
+            }
+            if (pedestrianActuation.Points.Count > 0)
+            {
+                Chart.Series.Add(pedestrianActuation);
+                _yValue += 1.0;
+            }
         }
 
         private void SetStopBarEvents()
         {
             _lanesProcessed = 0;
-            var stopBarSeries = new Series
-            {
-                ChartType = SeriesChartType.Line,
-                XValueType = ChartValueType.DateTime
-            };
             if (TimingAndActuationsForPhase.StopBarEvents == null) return;
             if (!TimingAndActuationsForPhase.StopBarEvents.Any()) return;
+            var stopBarSeries = new Series
+            {
+                ChartType = SeriesChartType.Point,
+                XValueType = ChartValueType.DateTime
+            };
+            if(TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
+            {
+                stopBarSeries.ChartType = SeriesChartType.Line;
+            }
             foreach (var stopBarEventElement in TimingAndActuationsForPhase.StopBarEvents)
             {
-                //if (!stopBarEventElement.Value.Any()) continue;
-                if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == false)
+                if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup)
                 {
-                    stopBarSeries = new Series
-                    {
-                        ChartType = SeriesChartType.Line,
-                        XValueType = ChartValueType.DateTime
-                    };
+                    _laneOffset = (double)++_lanesProcessed * 0.2 - 0.3;
+                    _laneOffset = (_laneOffset > _yValue + 0.5) ? _yValue + 0.5 : _laneOffset;
                 }
                 else
                 {
-                    _laneOffset = (double) ++_lanesProcessed * 0.2 - 0.3;
-                    if (_laneOffset > _yValue + 0.5) _laneOffset = _yValue + 0.5;
+                    stopBarSeries = new Series
+                    {
+                        ChartType = SeriesChartType.Point,
+                        XValueType = ChartValueType.DateTime
+                    };
+                    if (TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
+                    {
+                        stopBarSeries.ChartType = SeriesChartType.Line;
+                    }
                 }
-
                 var stopBarEvents = stopBarEventElement.Value;
-                var lastItem = stopBarEvents.Count - 1;
-                if (lastItem <= 0) continue;
-                for (var i = 0; i < lastItem; i++)
+                if (TimingAndActuationsForPhase.Options.ShowRawEvents)
                 {
-                    if (stopBarEvents[i].EventCode != 82 || stopBarEvents[i + 1].EventCode != 81) continue;
-                    var p0 = stopBarSeries.Points.AddXY(stopBarEvents[i].Timestamp.ToOADate(), _yValue + _laneOffset);
-                    stopBarSeries.Points[p0].Color = Color.Transparent;
-                    stopBarSeries.Points[p0].MarkerStyle = MarkerStyle.Triangle;
-                    stopBarSeries.Points[p0].MarkerColor = Color.Black;
-                    stopBarSeries.Points[p0].MarkerSize = _dotSize;
-                    var p1 = stopBarSeries.Points.AddXY(stopBarEvents[i + 1].Timestamp.ToOADate(),
-                        _yValue + _laneOffset);
-                    stopBarSeries.Points[p1].Color = Color.Black;
-                    stopBarSeries.Points[p1].MarkerStyle = MarkerStyle.Square;
-                    stopBarSeries.Points[p1].MarkerColor = Color.LightSlateGray;
-                    stopBarSeries.Points[p1].MarkerSize = _dotSize;
+                    for (var i = 0; i < stopBarEvents.Count; i++)
+                    {
+                        var seriesPointer = new int();
+                        if (stopBarEvents[i].EventCode == 82)
+                        {
+                            seriesPointer = stopBarSeries.Points.AddXY(
+                                stopBarEvents[i].Timestamp, _yValue + _laneOffset);
+                            stopBarSeries.Points[seriesPointer].Color = Color.Transparent;
+                            stopBarSeries.Points[seriesPointer].MarkerStyle = MarkerStyle.Triangle;
+                            stopBarSeries.Points[seriesPointer].MarkerColor = Color.Black;
+                            stopBarSeries.Points[seriesPointer].MarkerSize = _dotSize;
+                        }
+                        else if (stopBarEvents[i].EventCode == 81)
+                        {
+                            seriesPointer = stopBarSeries.Points.AddXY(
+                                stopBarEvents[i].Timestamp.ToOADate(), _yValue + _laneOffset);
+                            stopBarSeries.Points[seriesPointer].Color = Color.Black;
+                            stopBarSeries.Points[seriesPointer].MarkerStyle = MarkerStyle.Square;
+                            stopBarSeries.Points[seriesPointer].MarkerColor = Color.LightSlateGray;
+                            stopBarSeries.Points[seriesPointer].MarkerSize = _dotSize;
+                        }
+                    }
                 }
-
-                if (stopBarSeries.Points.Count <= 0) continue;
-                if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == false)
+                else
+                {
+                    var lastItem = stopBarEvents.Count - 1;
+                    if (lastItem > 0)
+                    {
+                        for (var i = 0; i < lastItem; i++)
+                        {
+                            if (stopBarEvents[i].EventCode == 82 && stopBarEvents[i + 1].EventCode == 81)
+                            {
+                                var p0 = stopBarSeries.Points.AddXY(stopBarEvents[i].Timestamp.ToOADate(),
+                                    _yValue + _laneOffset);
+                                stopBarSeries.Points[p0].Color = Color.Transparent;
+                                stopBarSeries.Points[p0].MarkerStyle = MarkerStyle.Triangle;
+                                stopBarSeries.Points[p0].MarkerColor = Color.Black;
+                                stopBarSeries.Points[p0].MarkerSize = _dotSize;
+                                var p1 = stopBarSeries.Points.AddXY(stopBarEvents[i + 1].Timestamp.ToOADate(),
+                                    _yValue + _laneOffset);
+                                stopBarSeries.Points[p1].Color = Color.Black;
+                                stopBarSeries.Points[p1].MarkerStyle = MarkerStyle.Square;
+                                stopBarSeries.Points[p1].MarkerColor = Color.LightSlateGray;
+                                stopBarSeries.Points[p1].MarkerSize = _dotSize;
+                            }
+                        }
+                    }
+                }
+                if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == false && stopBarSeries.Points.Count > 0)
                 {
                     stopBarSeries.Name = stopBarEventElement.Key;
                     Chart.Series.Add(stopBarSeries);
                     _yValue += 1.0;
                 }
             }
-
-            if (stopBarSeries.Points.Count <= 0) return;
-            if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == true)
+            if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup && stopBarSeries.Points.Count > 0)
             {
-                stopBarSeries.Name = "Combined Lanes for Stop Bar Events";
+                stopBarSeries.Name = "All Lanes: Stop Bar Events";
                 Chart.Series.Add(stopBarSeries);
                 _yValue += 1.0;
             }
@@ -414,219 +374,332 @@ namespace MOE.Common.Business.TimingAndActuations
 
         private void SetLaneByLaneCount()
         {
-            //if (TimingAndActuationsForPhase.LaneByLanes == null) return;
+            if (TimingAndActuationsForPhase.LaneByLanes == null) return;
             _lanesProcessed = 0;
             var laneByLaneSeries = new Series
             {
-                ChartType = SeriesChartType.Line,
+                ChartType = SeriesChartType.Point,
                 XValueType = ChartValueType.DateTime
             };
+
+            if (TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
+            {
+                laneByLaneSeries.ChartType = SeriesChartType.Line;
+            }
 
             foreach (var laneByLaneElement in TimingAndActuationsForPhase.LaneByLanes)
             {
                 //if (laneByLaneElement.Value.Any()) continue;
-                if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == false)
+                if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup)
                 {
-                    laneByLaneSeries = new Series
-                    {
-                        ChartType = SeriesChartType.Line,
-                        XValueType = ChartValueType.DateTime
-                    };
+                    _laneOffset = (double)++_lanesProcessed * 0.2 - 0.3;
+                    _laneOffset = (_laneOffset > _yValue + 0.5) ? _yValue + 0.5 : _laneOffset;
                 }
                 else
                 {
-                    _laneOffset = (double) ++_lanesProcessed * 0.2 - 0.3;
-                    if (_laneOffset > _yValue + 0.5) _laneOffset = _yValue + 0.5;
+                    laneByLaneSeries = new Series
+                    {
+                        ChartType = SeriesChartType.Point,
+                        XValueType = ChartValueType.DateTime
+                    };
+                    if (TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
+                    {
+                        laneByLaneSeries.ChartType = SeriesChartType.Line;
+                    }
                 }
-
                 var laneByLaneEvents = laneByLaneElement.Value;
-                var lastItem = laneByLaneEvents.Count - 1;
-                if (lastItem < 0) continue;
-                for (var i = 0; i < lastItem; i++)
+                if (TimingAndActuationsForPhase.Options.ShowRawEvents)
                 {
-                    if (laneByLaneEvents[i].EventCode != 82 || laneByLaneEvents[i + 1].EventCode != 81) continue;
-                    var p0 = laneByLaneSeries.Points.AddXY(laneByLaneEvents[i].Timestamp.ToOADate(),
-                        _yValue + _laneOffset);
-                    laneByLaneSeries.Points[p0].Color = Color.Transparent;
-                    laneByLaneSeries.Points[p0].MarkerStyle = MarkerStyle.Triangle;
-                    laneByLaneSeries.Points[p0].MarkerColor = Color.Black;
-                    laneByLaneSeries.Points[p0].BorderWidth = _dotSize;
-                    var p1 = laneByLaneSeries.Points.AddXY(laneByLaneEvents[i + 1].Timestamp.ToOADate(),
-                        _yValue + _laneOffset);
-                    laneByLaneSeries.Points[p1].Color = Color.Black;
-                    laneByLaneSeries.Points[p1].MarkerStyle = MarkerStyle.Square;
-                    laneByLaneSeries.Points[p1].MarkerColor = Color.LightSlateGray;
-                    laneByLaneSeries.Points[p1].MarkerSize = _dotSize;
-                }
 
-                if (laneByLaneSeries.Points.Count <= 0) continue;
-                if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == false)
+                }
+                else
                 {
-                    laneByLaneSeries.Name = laneByLaneElement.Key;
-                    Chart.Series.Add(laneByLaneSeries);
-                    _yValue += 1.0;
+                    var lastItem = laneByLaneEvents.Count - 1;
+                    if (lastItem > 0)
+                    {
+                        for (var i = 0; i < lastItem; i++)
+                        {
+                            if (laneByLaneEvents[i].EventCode == 82 && laneByLaneEvents[i + 1].EventCode == 81)
+                            {
+                                var p0 = laneByLaneSeries.Points.AddXY(laneByLaneEvents[i].Timestamp.ToOADate(),
+                                    _yValue + _laneOffset);
+                                laneByLaneSeries.Points[p0].Color = Color.Transparent;
+                                laneByLaneSeries.Points[p0].MarkerStyle = MarkerStyle.Triangle;
+                                laneByLaneSeries.Points[p0].MarkerColor = Color.Black;
+                                laneByLaneSeries.Points[p0].MarkerSize = _dotSize;
+                                var p1 = laneByLaneSeries.Points.AddXY(laneByLaneEvents[i + 1].Timestamp.ToOADate(),
+                                    _yValue + _laneOffset);
+                                laneByLaneSeries.Points[p1].Color = Color.Black;
+                                laneByLaneSeries.Points[p1].MarkerStyle = MarkerStyle.Square;
+                                laneByLaneSeries.Points[p1].MarkerColor = Color.LightSlateGray;
+                                laneByLaneSeries.Points[p1].MarkerSize = _dotSize;
+                            }
+                        }
+                    }
+                }
+                if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == false && laneByLaneSeries.Points.Count > 0)
+                {
+                        laneByLaneSeries.Name = laneByLaneElement.Key;
+                        Chart.Series.Add(laneByLaneSeries);
+                        _yValue += 1.0;
                 }
             }
-
-            if (laneByLaneSeries.Points.Count <= 0) return;
-            if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == true)
+            if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup && laneByLaneSeries.Points.Count > 0)
             {
-                laneByLaneSeries.Name = "Combined Lane By Lane Events";
+                laneByLaneSeries.Name = "All Lane By Lane: Events";
                 Chart.Series.Add(laneByLaneSeries);
                 _yValue += 1.0;
-
             }
         }
 
-        void SetYAxisLabels()
+        private void SetYAxisLabels()
         {
+            var topLabel = new Series
+            {
+                ChartType = SeriesChartType.Point,
+                Color = Color.Transparent,
+                Name = "Vehicle Signal Display                    .",
+                XValueType = ChartValueType.DateTime
+            };
+            topLabel.Points.AddXY(TimingAndActuationsForPhase.Options.StartDate.AddMinutes(-3).ToOADate(), _yValue);
+            Chart.Series.Add(topLabel);
+            //_yValue++;
             var yMaximum = Math.Round(_yValue + 0.8, 0);
             Chart.ChartAreas[0].AxisY.Maximum = yMaximum;
-            Chart.Height = (Unit) (25.0 * yMaximum + 180.0);
+            var height = yMaximum > 20 ? 20 * yMaximum + 170 : 25.0 * yMaximum + 180.0;
+            if (height < 200) height = 250;
+            Chart.Height = (Unit) height;
             Chart.ChartAreas[0].AxisY.Interval = 1;
             var bottomLabelOffset = 0;
             var topLabelOffset = bottomLabelOffset + 1;
-            var timingAxisLabel = new CustomLabel(bottomLabelOffset, topLabelOffset, "                                         ", 1,
+            var timingAxisLabel = new CustomLabel(bottomLabelOffset, topLabelOffset,
+                ".                                         .", 1,
                 LabelMarkStyle.None);
             //Chart.ChartAreas[0].AxisY.CustomLabels.Add(timingAxisLabel);
-            Chart.ChartAreas[0].AxisY.TitleForeColor = Color.White;
+            //Chart.ChartAreas[0].AxisY.TitleForeColor = Color.White;
             //Series[0] is the required black dot for the stripes to appear.
             for (var i = 1; i < Chart.Series.Count; i++)
             {
-                if (Chart.Series[i].Name == "stuck" || Chart.Series[i].Name == "chatting") continue;
                 bottomLabelOffset = (int) Chart.Series[i].Points[0].YValues[0];
                 topLabelOffset = bottomLabelOffset + 1;
+                var sideLabel = Chart.Series[i].Name;
                 timingAxisLabel = new CustomLabel(bottomLabelOffset, topLabelOffset, Chart.Series[i].Name, 0,
                     LabelMarkStyle.None);
                 Chart.ChartAreas[0].AxisY.CustomLabels.Add(timingAxisLabel);
             }
-            bottomLabelOffset++;
-            topLabelOffset = bottomLabelOffset + 1;
-            timingAxisLabel = new CustomLabel(bottomLabelOffset, topLabelOffset, "Timing And Actutation Signal Vehicle Information", 0,
-                LabelMarkStyle.None);
-            Chart.ChartAreas[0].AxisY.CustomLabels.Add(timingAxisLabel);
+
+            //bottomLabelOffset = Chart.ChartAreas[0].AxisY.CustomLabels.Count -1;
+            //topLabelOffset = bottomLabelOffset + 1;
+            //timingAxisLabel = new CustomLabel(bottomLabelOffset, topLabelOffset, "Vehicle Signal Display                    .", 0,
+            //    LabelMarkStyle.None);
+            //Chart.ChartAreas[0].AxisY.CustomLabels.Add(timingAxisLabel);
         }
 
         private void SetAdvanceCountEvents()
         {
             _lanesProcessed = 0;
-            var advanceCountSeries = new Series
+            var advancedOffset = 0.0;
+            var darkColor = Color.Black;
+            var lightColor = Color.Gray;
+            var advanceCountSeries =
+                new Series
+                {
+                    ChartType = SeriesChartType.Point,
+                    XValueType = ChartValueType.DateTime
+                };
+            //if(TimingAndActuationsForPhase.Options.ShowLinesStartEnd  == false)
+            if (TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
             {
-                ChartType = SeriesChartType.Line,
-                XValueType = ChartValueType.DateTime
-            };
+                advanceCountSeries.ChartType = SeriesChartType.Line;
+            }
+            if (TimingAndActuationsForPhase.Options.AdvancedOffset != null &&
+                TimingAndActuationsForPhase.Options.AdvancedOffset != 0.0)
+            {
+                advancedOffset = (float) TimingAndActuationsForPhase.Options.AdvancedOffset;
+                darkColor = Color.DarkViolet;
+                lightColor = Color.MediumPurple;
+            }
             foreach (var advanceCountEventElement in TimingAndActuationsForPhase.AdvanceCountEvents)
             {
-                //if (!advanceCountEventElement.Value.Any()) continue;
-                if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == false)
+                if (advanceCountEventElement.Value.Any())
                 {
-                    advanceCountSeries = new Series
+                    if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup)
                     {
-                        ChartType = SeriesChartType.Line,
-                        XValueType = ChartValueType.DateTime
-                    };
-                }
-                else
-                {
-                    _laneOffset = (double) ++_lanesProcessed * 0.2 - 0.3;
-                    if (_laneOffset > _yValue + 0.5) _laneOffset = _yValue + 0.5;
-                }
-
-                var advanceEvents = advanceCountEventElement.Value;
-                var lastItem = advanceEvents.Count - 1;
-                if (lastItem <= 0) continue;
-                for (var i = 0; i < lastItem; i++)
-                {
-                    if (advanceEvents[i].EventCode != 82 || advanceEvents[i + 1].EventCode != 81) continue;
-                    var p0 = advanceCountSeries.Points.AddXY(advanceEvents[i].Timestamp.ToOADate(),
-                        _yValue + _laneOffset);
-                    advanceCountSeries.Points[p0].Color = Color.Transparent;
-                    advanceCountSeries.Points[p0].MarkerStyle = MarkerStyle.Triangle;
-                    advanceCountSeries.Points[p0].MarkerColor = Color.Black;
-                    advanceCountSeries.Points[p0].MarkerSize = _dotSize;
-                    var p1 = advanceCountSeries.Points.AddXY(advanceEvents[i + 1].Timestamp.ToOADate(),
-                        _yValue + _laneOffset);
-                    advanceCountSeries.Points[p1].Color = Color.Black;
-                    advanceCountSeries.Points[p1].MarkerStyle = MarkerStyle.Square;
-                    advanceCountSeries.Points[p1].MarkerColor = Color.LightSlateGray;
-                    advanceCountSeries.Points[p1].MarkerSize = _dotSize;
-                }
-
-                if (advanceCountSeries.Points.Count <= 0) continue;
-                if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == false)
-                {
-                    advanceCountSeries.Name = advanceCountEventElement.Key;
-                    Chart.Series.Add(advanceCountSeries);
-                    _yValue += 1.0;
+                        _laneOffset = (double) ++_lanesProcessed * 0.2 - 0.2;
+                        _laneOffset = (_laneOffset > _yValue + 0.5) ? _yValue + 0.5 : _laneOffset;
+                    }
+                    else
+                    {
+                        advanceCountSeries = new Series
+                        {
+                            ChartType = SeriesChartType.Point,
+                            XValueType = ChartValueType.DateTime
+                        };
+                        if(TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
+                        
+                        {
+                            advanceCountSeries.ChartType = SeriesChartType.Line;
+                        }
+                    }
+                    var advanceEvents = advanceCountEventElement.Value;
+                    if (TimingAndActuationsForPhase.Options.ShowRawEvents)
+                    {
+                        for (var i = 0; i < advanceEvents.Count; i++)
+                        {
+                            var seriesPointer = new int();
+                            if (advanceEvents[i].EventCode == 82)
+                            {
+                                seriesPointer = advanceCountSeries.Points.AddXY(advanceEvents[i].Timestamp.AddSeconds(advancedOffset).ToOADate(),
+                                    _yValue + _laneOffset);
+                                advanceCountSeries.Points[seriesPointer].Color = Color.Transparent;
+                                advanceCountSeries.Points[seriesPointer].MarkerStyle = MarkerStyle.Triangle;
+                                advanceCountSeries.Points[seriesPointer].MarkerColor = darkColor;
+                                advanceCountSeries.Points[seriesPointer].MarkerSize = _dotSize;
+                            }
+                            else if (advanceEvents[i].EventCode == 81)
+                            {
+                                seriesPointer = advanceCountSeries.Points.AddXY(advanceEvents[i].Timestamp.AddSeconds(advancedOffset).ToOADate(),
+                                    _yValue + _laneOffset);
+                                advanceCountSeries.Points[seriesPointer].Color = Color.Black;
+                                advanceCountSeries.Points[seriesPointer].MarkerStyle = MarkerStyle.Square;
+                                advanceCountSeries.Points[seriesPointer].MarkerColor = lightColor;
+                                advanceCountSeries.Points[seriesPointer].MarkerSize = _dotSize;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var lastItem = advanceEvents.Count - 1;
+                        if (lastItem > 0)
+                        {
+                            for (var i = 0; i < lastItem; i++)
+                            {
+                                if (advanceEvents[i].EventCode == 82 && advanceEvents[i + 1].EventCode == 81)
+                                {
+                                    var p0 = advanceCountSeries.Points.AddXY(
+                                        advanceEvents[i].Timestamp.AddSeconds(advancedOffset).ToOADate(),
+                                        _yValue + _laneOffset);
+                                    advanceCountSeries.Points[p0].Color = Color.Transparent;
+                                    advanceCountSeries.Points[p0].MarkerStyle = MarkerStyle.Triangle;
+                                    advanceCountSeries.Points[p0].MarkerColor = darkColor;
+                                    advanceCountSeries.Points[p0].MarkerSize = _dotSize;
+                                    var p1 = advanceCountSeries.Points.AddXY(
+                                        advanceEvents[i + 1].Timestamp.AddSeconds(advancedOffset).ToOADate(),
+                                        _yValue + _laneOffset);
+                                    advanceCountSeries.Points[p1].Color = darkColor;
+                                    advanceCountSeries.Points[p1].MarkerStyle = MarkerStyle.Square;
+                                    advanceCountSeries.Points[p1].MarkerColor = lightColor;
+                                    advanceCountSeries.Points[p1].MarkerSize = _dotSize;
+                                }
+                            }
+                        }
+                    }
+                    if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == false &&
+                        advanceCountSeries.Points.Count > 0)
+                    {
+                        advanceCountSeries.Name = advanceCountEventElement.Key;
+                        Chart.Series.Add(advanceCountSeries);
+                        _yValue += 1.0;
+                    }
                 }
             }
-
-            if (advanceCountSeries.Points.Count <= 0) return;
-            if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == true)
+            if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup && advanceCountSeries.Points.Count > 0)
             {
-                advanceCountSeries.Name = "Combined Lanes For Advanced Count Events";
+                advanceCountSeries.Name = "All Lanes: Advanced Events";
                 Chart.Series.Add(advanceCountSeries);
                 _yValue += 1.0;
             }
         }
 
-        private void SetAdvancePresenceEvents()
+    private void SetAdvancePresenceEvents()
         {
             _lanesProcessed = 0;
             var advancePresenceSeries = new Series
             {
-                ChartType = SeriesChartType.Line,
+                ChartType = SeriesChartType.Point,
                 XValueType = ChartValueType.DateTime
             };
+            if (TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
+            {
+                advancePresenceSeries.ChartType = SeriesChartType.Line;
+            }
             foreach (var advancePresenceElement in TimingAndActuationsForPhase.AdvancePresenceEvents)
             {
-//                if (!advancePresenceElement.Value.Any()) continue;
+                if (!advancePresenceElement.Value.Any()) continue;
                 if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == false)
                 {
                     advancePresenceSeries = new Series
                     {
-                        ChartType = SeriesChartType.Line,
+                        ChartType = SeriesChartType.Point,
                         XValueType = ChartValueType.DateTime
                     };
+                    if (TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
+                    {
+                        advancePresenceSeries.ChartType = SeriesChartType.Line;
+                    }
                 }
                 else
                 {
                     _laneOffset = (double) ++_lanesProcessed * 0.2 - 0.3;
                     if (_laneOffset > _yValue + 0.5) _laneOffset = _yValue + 0.5;
                 }
-
-                var advanceEvents = advancePresenceElement.Value;
-                var lastItem = advanceEvents.Count - 1;
-                if (lastItem <= 0) continue;
-                for (var i = 0; i < lastItem; i++)
+                var advancePresenceEvents = advancePresenceElement.Value;
+                if (TimingAndActuationsForPhase.Options.ShowRawEvents)
                 {
-                    if (advanceEvents[i].EventCode != 82 || advanceEvents[i + 1].EventCode != 81) continue;
-                    var p0 = advancePresenceSeries.Points.AddXY(advanceEvents[i].Timestamp.ToOADate(),
-                        _yValue + _laneOffset);
-                    advancePresenceSeries.Points[p0].Color = Color.Transparent;
-                    advancePresenceSeries.Points[p0].MarkerStyle = MarkerStyle.Triangle;
-                    advancePresenceSeries.Points[p0].MarkerColor = Color.Black;
-                    advancePresenceSeries.Points[p0].MarkerSize = _dotSize;
-                    var p1 = advancePresenceSeries.Points.AddXY(advanceEvents[i + 1].Timestamp.ToOADate(), _yValue);
-                    advancePresenceSeries.Points[p1].Color = Color.Black;
-                    advancePresenceSeries.Points[p1].MarkerStyle = MarkerStyle.Square;
-                    advancePresenceSeries.Points[p1].MarkerSize = _dotSize;
-                    advancePresenceSeries.Points[p1].MarkerColor = Color.LightSlateGray;
+                    for (var i = 0; i < advancePresenceEvents.Count; i++)
+                    {
+                        var seriesPointIndex = new int();
+                        if (advancePresenceEvents[i].EventCode == 82)
+                        {
+                            seriesPointIndex = advancePresenceSeries.Points.AddXY(advancePresenceEvents[i].Timestamp.ToOADate(),
+                                _yValue + _laneOffset);
+                            advancePresenceSeries.Points[seriesPointIndex].Color = Color.Transparent;
+                            advancePresenceSeries.Points[seriesPointIndex].MarkerStyle = MarkerStyle.Triangle;
+                            advancePresenceSeries.Points[seriesPointIndex].MarkerSize = _dotSize;
+                            advancePresenceSeries.Points[seriesPointIndex].MarkerColor = Color.Black;
+                        }
+                        else if (advancePresenceEvents[i].EventCode == 81)
+                            seriesPointIndex = advancePresenceSeries.Points.AddXY(advancePresenceEvents[i].Timestamp.ToOADate(),
+                                _yValue + _laneOffset);
+                        advancePresenceSeries.Points[seriesPointIndex].Color = Color.Black;
+                        advancePresenceSeries.Points[seriesPointIndex].MarkerStyle = MarkerStyle.Square;
+                        advancePresenceSeries.Points[seriesPointIndex].MarkerSize = _dotSize;
+                        advancePresenceSeries.Points[seriesPointIndex].MarkerColor = Color.LightSlateGray;
+                    }
                 }
-
-                if (advancePresenceSeries.Points.Count <= 0) continue;
-                if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == false)
+                else
+                {
+                    var lastItem = advancePresenceEvents.Count - 1;
+                    for (var i = 0; i < lastItem; i++)
+                    {
+                        if (advancePresenceEvents[i].EventCode == 82 && advancePresenceEvents[i + 1].EventCode == 81)
+                        {
+                            var p0 = advancePresenceSeries.Points.AddXY(advancePresenceEvents[i].Timestamp.ToOADate(),
+                                _yValue + _laneOffset);
+                            advancePresenceSeries.Points[p0].Color = Color.Transparent;
+                            advancePresenceSeries.Points[p0].MarkerStyle = MarkerStyle.Triangle;
+                            advancePresenceSeries.Points[p0].MarkerColor = Color.Black;
+                            advancePresenceSeries.Points[p0].MarkerSize = _dotSize;
+                            var p1 = advancePresenceSeries.Points.AddXY(
+                                advancePresenceEvents[i + 1].Timestamp.ToOADate(),
+                                _yValue + _laneOffset);
+                            advancePresenceSeries.Points[p1].Color = Color.Black;
+                            advancePresenceSeries.Points[p1].MarkerStyle = MarkerStyle.Square;
+                            advancePresenceSeries.Points[p1].MarkerSize = _dotSize;
+                            advancePresenceSeries.Points[p1].MarkerColor = Color.LightSlateGray;
+                        }
+                    }
+                }
+                if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == false && advancePresenceSeries.Points.Count > 0)
                 {
                     advancePresenceSeries.Name = advancePresenceElement.Key;
-                    Chart.Series.Add(advancePresenceSeries);
-                    _yValue += 1.0;
+                        Chart.Series.Add(advancePresenceSeries);
+                        _yValue += 1.0;
                 }
             }
-
-            if (advancePresenceSeries.Points.Count <= 0) return;
-            if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == true)
+            if (advancePresenceSeries.Points.Count > 0 && TimingAndActuationsForPhase.Options.CombineLanesForEachGroup)
             {
-                advancePresenceSeries.Name = "Combined Lanes For Advanced Presence Events";
+                advancePresenceSeries.Name = "All Lanes: Advanced Presence Events";
                 Chart.Series.Add(advancePresenceSeries);
                 _yValue += 1.0;
             }
@@ -634,261 +707,14 @@ namespace MOE.Common.Business.TimingAndActuations
 
         private void SetCycleStrips()
         {
-            if (TimingAndActuationsForPhase.Cycles.Any() &&
-                TimingAndActuationsForPhase.Cycles[0].EndMinGreen == new DateTime(1900, 1, 1))
-            {
-                SetFourLineStrips();
-            }
-            else
-            {
-                SetFiveLineStripe();
-            }
-        }
-
-        private void SetFourLineStrips()
-        {
-            if (!TimingAndActuationsForPhase.Cycles.Any()) return;
-            var localColorDarkGreen = Color.MediumSeaGreen;
-            var localColorGreen = Color.LightGreen;
-            var localColorYellow = Color.Yellow;
-            var localColorDarkRed = Color.Firebrick;
-            var localColorRed = Color.LightCoral;
-            var localColorGray = Color.DarkGray;
-            var localColorBlack = Color.Black;
-            var tempIntervalOffset = 0.0;
-            double tempStripWidth = 0.0;
-            /*******************************************************************************************************
-            *  For some unknown reason, the stripes only show up when there is data in the chart!  So add a point  *
-            *  at the orgin.  This makes the stipes be displayed even if there is no other data for the chart!     *
-            *  This is "label 0, so start at index 1 when labeling the axes.                                       *
-            *******************************************************************************************************/
-            var blackDot = new Series
-            {
-                ChartType = SeriesChartType.Point,
-                Color = localColorBlack,
-                Name = "Change to Black.  Do not Label!",
-                XValueType = ChartValueType.DateTime
-            };
-            blackDot.Points.AddXY(TimingAndActuationsForPhase.Options.StartDate.Hour, 0.0);
-            Chart.Series.Add(blackDot);
-            switch (Chart.ChartAreas[0].AxisX.IntervalType)
-            {
-                case DateTimeIntervalType.Seconds:
-                    foreach (var cycle in TimingAndActuationsForPhase.Cycles)
-                    {
-                        for (var cycleColor = 1; cycleColor < 5; cycleColor++)
-                        {
-                            var minStripLine = new StripLine();
-                            switch (cycleColor)
-                            {
-                                case 1:
-                                    minStripLine.BackColor = localColorGreen;
-                                    tempIntervalOffset =
-                                        (cycle.StartGreen - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalSeconds;
-                                    tempStripWidth = (cycle.StartYellow - cycle.StartGreen).TotalSeconds;
-                                    break;
-                                case 2:
-                                    minStripLine.BackColor = localColorYellow;
-                                    tempIntervalOffset =
-                                        (cycle.StartYellow - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalSeconds;
-                                    tempStripWidth = (cycle.StartRed - cycle.StartYellow).TotalSeconds;
-                                    break;
-                                case 3:
-                                    minStripLine.BackColor = localColorRed;
-                                    tempIntervalOffset =
-                                        (cycle.StartRed - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalSeconds;
-                                    tempStripWidth = (cycle.OverLapDark - cycle.EndRed).TotalSeconds;
-                                    break;
-                                case 4:
-                                    minStripLine.BackColor = localColorGray;
-                                    tempIntervalOffset =
-                                        (cycle.OverLapDark - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalSeconds;
-                                    tempStripWidth = (TimingAndActuationsForPhase.Options.EndDate - cycle.OverLapDark)
-                                        .TotalSeconds;
-                                    break;
-                            }
-
-                            minStripLine.IntervalOffsetType = DateTimeIntervalType.Seconds;
-                            minStripLine.StripWidthType = DateTimeIntervalType.Seconds;
-                            minStripLine.IntervalType = DateTimeIntervalType.Seconds;
-                            minStripLine.Interval = 1;
-                            minStripLine.IntervalOffset = tempIntervalOffset;
-                            minStripLine.StripWidth = (tempStripWidth > 0.0) ? tempStripWidth : 0.0;
-                            Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(minStripLine);
-                        }
-                    }
-
-                    break;
-                case DateTimeIntervalType.Minutes:
-                    foreach (var cycle in TimingAndActuationsForPhase.Cycles)
-                    {
-                        for (var cycleColor = 1; cycleColor < 5; cycleColor++)
-                        {
-                            var minStripLine = new StripLine();
-                            switch (cycleColor)
-                            {
-                                case 1:
-                                    minStripLine.BackColor = localColorGreen;
-                                    tempIntervalOffset =
-                                        (cycle.StartGreen - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalMinutes;
-                                    tempStripWidth = (cycle.StartYellow - cycle.StartGreen).TotalMinutes;
-                                    break;
-                                case 2:
-                                    minStripLine.BackColor = localColorYellow;
-                                    tempIntervalOffset =
-                                        (cycle.StartYellow - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalMinutes;
-                                    tempStripWidth = (cycle.StartRed - cycle.StartYellow).TotalMinutes;
-                                    break;
-                                case 3:
-                                    minStripLine.BackColor = localColorRed;
-                                    tempIntervalOffset =
-                                        (cycle.StartRed - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalMinutes;
-                                    tempStripWidth = (cycle.OverLapDark - cycle.EndRed).TotalMinutes;
-                                    break;
-                                case 4:
-                                    minStripLine.BackColor = localColorGray;
-                                    tempIntervalOffset =
-                                        (cycle.OverLapDark - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalMinutes;
-                                    tempStripWidth = (TimingAndActuationsForPhase.Options.EndDate - cycle.OverLapDark)
-                                        .TotalMinutes;
-                                    break;
-                            }
-
-                            minStripLine.IntervalOffsetType = DateTimeIntervalType.Minutes;
-                            minStripLine.StripWidthType = DateTimeIntervalType.Minutes;
-                            minStripLine.IntervalType = DateTimeIntervalType.Minutes;
-                            minStripLine.Interval = 1;
-                            minStripLine.IntervalOffset = tempIntervalOffset;
-                            minStripLine.StripWidth = (tempStripWidth > 0.0) ? tempStripWidth : 0.0;
-                            Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(minStripLine);
-                        }
-                    }
-
-                    break;
-                case DateTimeIntervalType.Hours:
-                    foreach (var cycle in TimingAndActuationsForPhase.Cycles)
-                    {
-                        for (var cycleColor = 1; cycleColor < 5; cycleColor++)
-                        {
-                            var minStripLine = new StripLine();
-                            switch (cycleColor)
-                            {
-                                case 1:
-                                    minStripLine.BackColor = localColorGreen;
-                                    tempIntervalOffset =
-                                        (cycle.StartGreen - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalHours;
-                                    tempStripWidth = (cycle.StartYellow - cycle.StartGreen).TotalHours;
-                                    break;
-                                case 2:
-                                    minStripLine.BackColor = localColorYellow;
-                                    tempIntervalOffset =
-                                        (cycle.StartYellow - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalHours;
-                                    tempStripWidth = (cycle.StartRed - cycle.StartYellow).TotalHours;
-                                    break;
-                                case 3:
-                                    minStripLine.BackColor = localColorRed;
-                                    tempIntervalOffset =
-                                        (cycle.StartRed - TimingAndActuationsForPhase.Options.StartDate).TotalHours;
-                                    tempStripWidth = (cycle.OverLapDark - cycle.EndRed).TotalHours;
-                                    break;
-                                case 4:
-                                    minStripLine.BackColor = localColorGray;
-                                    tempIntervalOffset =
-                                        (cycle.OverLapDark - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalHours;
-                                    tempStripWidth = (TimingAndActuationsForPhase.Options.EndDate - cycle.OverLapDark)
-                                        .TotalHours;
-                                    break;
-                            }
-
-                            minStripLine.IntervalOffsetType = DateTimeIntervalType.Hours;
-                            minStripLine.StripWidthType = DateTimeIntervalType.Hours;
-                            minStripLine.IntervalType = DateTimeIntervalType.Hours;
-                            minStripLine.Interval = 1;
-                            minStripLine.IntervalOffset = tempIntervalOffset;
-                            minStripLine.StripWidth = (tempStripWidth > 0.0) ? tempStripWidth : 0.0;
-                            Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(minStripLine);
-                        }
-                    }
-
-                    break;
-                case DateTimeIntervalType.Days:
-                    foreach (var cycle in TimingAndActuationsForPhase.Cycles)
-                    {
-                        for (var cycleColor = 1; cycleColor < 5; cycleColor++)
-                        {
-                            var minStripLine = new StripLine();
-                            switch (cycleColor)
-                            {
-                                case 1:
-                                    minStripLine.BackColor = localColorGreen;
-                                    tempIntervalOffset =
-                                        (cycle.StartGreen - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalDays;
-                                    tempStripWidth = (cycle.StartYellow - cycle.StartGreen).TotalDays;
-                                    break;
-                                case 2:
-                                    minStripLine.BackColor = localColorYellow;
-                                    tempIntervalOffset =
-                                        (cycle.StartYellow - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalDays;
-                                    tempStripWidth = (cycle.StartRed - cycle.StartYellow).TotalDays;
-                                    break;
-                                case 3:
-                                    minStripLine.BackColor = localColorRed;
-                                    tempIntervalOffset =
-                                        (cycle.StartRed - TimingAndActuationsForPhase.Options.StartDate).TotalDays;
-                                    tempStripWidth = (cycle.OverLapDark - cycle.EndRed).TotalDays;
-                                    break;
-                                case 4:
-                                    minStripLine.BackColor = localColorGray;
-                                    tempIntervalOffset =
-                                        (cycle.OverLapDark - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalDays;
-                                    tempStripWidth = (TimingAndActuationsForPhase.Options.EndDate - cycle.OverLapDark)
-                                        .TotalDays; 
-                                    break;
-                            }
-
-                            minStripLine.IntervalOffsetType = DateTimeIntervalType.Days;
-                            minStripLine.StripWidthType = DateTimeIntervalType.Days;
-                            minStripLine.IntervalType = DateTimeIntervalType.Days;
-                            minStripLine.Interval = 1;
-                            minStripLine.IntervalOffset = tempIntervalOffset;
-                            minStripLine.StripWidth = (tempStripWidth > 0.0) ? tempStripWidth : 0.0;
-                            Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(minStripLine);
-                        }
-                    }
-
-                    break;
-            }
-        }
-
-        private void SetFiveLineStripe()
-        {
-            if (!TimingAndActuationsForPhase.Cycles.Any()) return;
-            var localColorDarkGreen = Color.MediumSeaGreen;     //MediumSeaGreen
-            var localColorGreen = Color.LightGreen;   //LightGreen
+            var localColorDarkGreen = Color.MediumSeaGreen; //MediumSeaGreen
+            var localColorGreen = Color.LightGreen; //LightGreen
             var localColorYellow = Color.Yellow;
             var localColorDarkRed = Color.Firebrick; //Firebrick
-            var localColorRed = Color.LightCoral;       //light coral
+            var localColorRed = Color.LightCoral; //light coral
             var localColorGray = Color.DarkGray;
             var localColorBlack = Color.Black;
-            /*******************************************************************************************************
-            *  For some unknown reason, the stripes only show up when there is data in the chart!  So add a point  *
-            *  at the orgin.  This makes the stipes be displayed even if there is no other data for the chart!     *
-            *  This is "label 0, so start at index 1 when labeling the axes.                                       *
-            *******************************************************************************************************/
+            
             var blackDot = new Series
             {
                 ChartType = SeriesChartType.Point,
@@ -898,241 +724,104 @@ namespace MOE.Common.Business.TimingAndActuations
             };
             blackDot.Points.AddXY(TimingAndActuationsForPhase.Options.StartDate.Hour, 0.0);
             Chart.Series.Add(blackDot);
-            var phase = TimingAndActuationsForPhase.PhaseNumber;
-            var count = TimingAndActuationsForPhase.Cycles.Count;
-            var tempIntervalOffset = 0.0;
-            var tempStripWidth = 0.0;
-            double lastOffset = 0.0;
-            double lastWidth = 0.0;
-            var lastStripLine = new StripLine();
-            switch (Chart.ChartAreas[0].AxisX.IntervalType)
+
+            foreach (var vehicleDispalyCycle in TimingAndActuationsForPhase.CycleAllEvents)
             {
-                case DateTimeIntervalType.Seconds:
-                    foreach (var cycle in TimingAndActuationsForPhase.Cycles)
+                var firstStripLine = new StripLine()
+                {
+                    BackColor = localColorGray,
+                    IntervalOffset = 0.0,
+                    StripWidth = 100.0,
+                    IntervalOffsetType = Chart.ChartAreas[0].AxisX.IntervalType,
+                    StripWidthType = Chart.ChartAreas[0].AxisX.IntervalType,
+                    IntervalType = Chart.ChartAreas[0].AxisX.IntervalType,
+                    Interval = 1
+            };
+                Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(firstStripLine);
+                var vehicleDisplayCycleValue = vehicleDispalyCycle.Value;
+                if (vehicleDisplayCycleValue.Count > 1)
+                {
+                    for (int i = 0; i < vehicleDisplayCycleValue.Count; i++)
                     {
-                        for (var cycleColor = 1; cycleColor < 6; cycleColor++)
+                        var vehicleStripeLine = new StripLine();
+                        TimeSpan timeSpanStartOffset = vehicleDisplayCycleValue[i].Timestamp - 
+                                                       TimingAndActuationsForPhase.Options.StartDate;
+                        TimeSpan timeSpanWidth = TimingAndActuationsForPhase.Options.EndDate -
+                                                        vehicleDisplayCycleValue[i].Timestamp;
+                        vehicleStripeLine.IntervalOffsetType = Chart.ChartAreas[0].AxisX.IntervalType;
+                        vehicleStripeLine.StripWidthType = Chart.ChartAreas[0].AxisX.IntervalType;
+                        vehicleStripeLine.IntervalType = Chart.ChartAreas[0].AxisX.IntervalType;
+                        vehicleStripeLine.Interval = 1;
+                        switch (vehicleDisplayCycleValue[i].EventCode)
                         {
-                            var minStripLine = new StripLine();
-                            switch (cycleColor)
-                            {
-                                case 1:
-                                    minStripLine.BackColor = localColorDarkGreen;
-                                    tempIntervalOffset =
-                                        (cycle.StartGreen - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalSeconds;
-                                    tempStripWidth = (cycle.EndMinGreen - cycle.StartGreen).TotalSeconds;
-                                    break;
-                                case 2:
-                                    minStripLine.BackColor = localColorGreen;
-                                    tempIntervalOffset =
-                                        (cycle.EndMinGreen - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalSeconds;
-                                    tempStripWidth = (cycle.StartYellow - cycle.EndMinGreen).TotalSeconds;
-                                    break;
-                                case 3:
-                                    minStripLine.BackColor = localColorYellow;
-                                    tempIntervalOffset =
-                                        (cycle.StartYellow - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalSeconds;
-                                    tempStripWidth = (cycle.StartRedClearance - cycle.StartYellow).TotalSeconds;
-                                    break;
-                                case 4:
-                                    minStripLine.BackColor = localColorDarkRed;
-                                    tempIntervalOffset = (cycle.StartRedClearance -
-                                                          TimingAndActuationsForPhase.Options.StartDate).TotalSeconds;
-                                    tempStripWidth = (cycle.StartRed - cycle.StartRedClearance).TotalSeconds;
-                                    break;
-                                case 5:
-                                    minStripLine.BackColor = localColorRed;
-                                    tempIntervalOffset =
-                                        (cycle.StartRed - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalSeconds;
-                                    tempStripWidth = (TimingAndActuationsForPhase.Options.EndDate - cycle.StartRed)
-                                        .TotalSeconds;
-                                    break;
-                            }
-
-                            minStripLine.IntervalOffsetType = DateTimeIntervalType.Seconds;
-                            minStripLine.StripWidthType = DateTimeIntervalType.Seconds;
-                            minStripLine.IntervalType = DateTimeIntervalType.Seconds;
-                            minStripLine.Interval = 1;
-                            minStripLine.IntervalOffset = tempIntervalOffset;
-                            lastOffset = tempIntervalOffset + tempStripWidth;
-                            minStripLine.StripWidth = (tempStripWidth > 0.0) ? tempStripWidth : 0.0;
-                            Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(minStripLine);
-                            var stripCount = Chart.ChartAreas[0].AxisX.StripLines.Count;
+                            case 1:
+                                vehicleStripeLine.BackColor = localColorDarkGreen;
+                                break;
+                            case 3:
+                                vehicleStripeLine.BackColor = localColorGreen;
+                                break;
+                            case 8:
+                                vehicleStripeLine.BackColor = localColorYellow;
+                                break;
+                            case 9:
+                                vehicleStripeLine.BackColor = localColorDarkRed;
+                                break;
+                            case 11:
+                                vehicleStripeLine.BackColor = localColorRed;
+                                break;
+                            case 61:
+                                vehicleStripeLine.BackColor = localColorDarkGreen;
+                                break;
+                            case 62:
+                                vehicleStripeLine.BackColor = localColorGreen;
+                                break;
+                            case 63:
+                                vehicleStripeLine.BackColor = localColorYellow;
+                                break;
+                            case 64:
+                                vehicleStripeLine.BackColor = localColorDarkRed;
+                                break;
+                            case 65:
+                                vehicleStripeLine.BackColor = localColorRed;
+                                break;
+                            default:
+                                vehicleStripeLine.BackColor = localColorGray;
+                                break;
                         }
-                    }
-                    break;
-                case DateTimeIntervalType.Minutes:
-                    foreach (var cycle in TimingAndActuationsForPhase.Cycles)
-                    {
-                        for (var cycleColor = 1; cycleColor < 6; cycleColor++)
+                        var stripOffest = new double();
+                        var stripWidth = new double();
+                        switch (Chart.ChartAreas[0].AxisX.IntervalType)
                         {
-                            var minStripLine = new StripLine();
-                            switch (cycleColor)
+                            case DateTimeIntervalType.Seconds:
                             {
-                                case 1:
-                                    minStripLine.BackColor = localColorDarkGreen;
-                                    tempIntervalOffset =
-                                        (cycle.StartGreen - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalMinutes;
-                                    tempStripWidth = (cycle.EndMinGreen - cycle.StartGreen).TotalMinutes;
-                                    break;
-                                case 2:
-                                    minStripLine.BackColor = localColorGreen;
-                                    tempIntervalOffset =
-                                        (cycle.EndMinGreen - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalMinutes;
-                                    tempStripWidth = (cycle.StartYellow - cycle.EndMinGreen).TotalMinutes;
-                                    break;
-                                case 3:
-                                    minStripLine.BackColor = localColorYellow;
-                                    tempIntervalOffset =
-                                        (cycle.StartYellow - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalMinutes;
-                                    tempStripWidth = (cycle.StartRedClearance - cycle.StartYellow).TotalMinutes;
-                                    break;
-                                case 4:
-                                    minStripLine.BackColor = localColorDarkRed;
-                                    tempIntervalOffset =
-                                        (cycle.StartRedClearance -
-                                         TimingAndActuationsForPhase.Options.StartDate).TotalMinutes;
-                                    tempStripWidth = (cycle.StartRed - cycle.StartRedClearance).TotalMinutes;
-                                    break;
-                                case 5:
-                                    minStripLine.BackColor = localColorRed;
-                                    tempIntervalOffset =
-                                        (cycle.StartRed - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalMinutes;
-                                    tempStripWidth = (TimingAndActuationsForPhase.Options.EndDate - cycle.StartRed)
-                                        .TotalMinutes;
-                                    break;
+                                stripOffest = timeSpanStartOffset.TotalSeconds;
+                                stripWidth = timeSpanWidth.TotalSeconds;
+                                break;
                             }
-
-                            minStripLine.IntervalOffsetType = DateTimeIntervalType.Minutes;
-                            minStripLine.StripWidthType = DateTimeIntervalType.Minutes;
-                            minStripLine.IntervalType = DateTimeIntervalType.Minutes;
-                            minStripLine.Interval = 1;
-                            minStripLine.IntervalOffset = tempIntervalOffset;
-                            minStripLine.StripWidth = (tempStripWidth > 0.0) ? tempStripWidth : 0.0;
-                            Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(minStripLine);
-                        }
-                    }
-
-                    break;
-                case DateTimeIntervalType.Hours:
-                    foreach (var cycle in TimingAndActuationsForPhase.Cycles)
-                    {
-                        for (var cycleColor = 1; cycleColor < 6; cycleColor++)
-                        {
-                            var minStripLine = new StripLine();
-                            switch (cycleColor)
+                            case DateTimeIntervalType.Minutes:
                             {
-                                case 1:
-                                    minStripLine.BackColor = localColorDarkGreen;
-                                    tempIntervalOffset =
-                                        (cycle.StartGreen - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalHours;
-                                    tempStripWidth = (cycle.EndMinGreen - cycle.StartGreen).TotalHours;
-                                    break;
-                                case 2:
-                                    minStripLine.BackColor = localColorGreen;
-                                    tempIntervalOffset =
-                                        (cycle.EndMinGreen - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalHours;
-                                    tempStripWidth = (cycle.StartYellow - cycle.EndMinGreen).TotalHours;
-                                    break;
-                                case 3:
-                                    minStripLine.BackColor = localColorYellow;
-                                    tempIntervalOffset =
-                                        (cycle.StartYellow - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalHours;
-                                    tempStripWidth = (cycle.StartRedClearance - cycle.StartYellow).TotalHours;
-                                    break;
-                                case 4:
-                                    minStripLine.BackColor = localColorDarkRed;
-                                    tempIntervalOffset =
-                                        (cycle.StartRedClearance - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalHours;
-                                    tempStripWidth = (cycle.StartRed - cycle.StartRedClearance).TotalHours;
-                                    break;
-                                case 5:
-                                    minStripLine.BackColor = localColorRed;
-                                    tempIntervalOffset =
-                                        (cycle.StartRed - TimingAndActuationsForPhase.Options.StartDate).TotalHours;
-                                    tempStripWidth = (TimingAndActuationsForPhase.Options.EndDate - cycle.StartRed)
-                                        .TotalHours;
-                                    break;
+                                stripOffest = timeSpanStartOffset.TotalMinutes;
+                                stripWidth = timeSpanWidth.TotalMinutes;
+                                break;
                             }
-
-                            minStripLine.IntervalOffsetType = DateTimeIntervalType.Hours;
-                            minStripLine.StripWidthType = DateTimeIntervalType.Hours;
-                            minStripLine.IntervalType = DateTimeIntervalType.Hours;
-                            minStripLine.Interval = 1;
-                            minStripLine.IntervalOffset = (tempIntervalOffset > 0.0) ? tempIntervalOffset : 0.0;
-                            minStripLine.StripWidth = (tempStripWidth > 0.0) ? tempStripWidth : 0.0;
-                            Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(minStripLine);
-                        }
-                    }
-
-                    break;
-                case DateTimeIntervalType.Days:
-                    foreach (var cycle in TimingAndActuationsForPhase.Cycles)
-                    {
-                        for (var cycleColor = 1; cycleColor < 6; cycleColor++)
-                        {
-                            var minStripLine = new StripLine();
-                            switch (cycleColor)
+                            case DateTimeIntervalType.Hours:
                             {
-                                case 1:
-                                    minStripLine.BackColor = localColorDarkGreen;
-                                    tempIntervalOffset =
-                                        (cycle.StartGreen - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalDays;
-                                    tempStripWidth = (cycle.EndMinGreen - cycle.StartGreen).TotalDays;
-                                    break;
-                                case 2:
-                                    minStripLine.BackColor = localColorGreen;
-                                    tempIntervalOffset =
-                                        (cycle.EndMinGreen - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalDays;
-                                    tempStripWidth = (cycle.StartYellow - cycle.EndMinGreen).TotalDays;
-                                    break;
-                                case 3:
-                                    minStripLine.BackColor = localColorYellow;
-                                    tempIntervalOffset =
-                                        (cycle.StartYellow - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalDays;
-                                    tempStripWidth = (cycle.StartRedClearance - cycle.StartYellow).TotalDays;
-                                    break;
-                                case 4:
-                                    minStripLine.BackColor = localColorDarkRed;
-                                    tempIntervalOffset =
-                                        (cycle.StartRedClearance - TimingAndActuationsForPhase.Options.StartDate)
-                                        .TotalDays;
-                                    tempStripWidth = (cycle.StartRed - cycle.StartRedClearance).TotalDays;
-                                    break;
-                                case 5:
-                                    minStripLine.BackColor = localColorRed;
-                                    tempIntervalOffset =
-                                        (cycle.StartRed - TimingAndActuationsForPhase.Options.StartDate).TotalDays;
-                                    tempStripWidth = (TimingAndActuationsForPhase.Options.EndDate - cycle.StartRed)
-                                        .TotalDays;
-                                    break;
+                                stripOffest = timeSpanStartOffset.TotalHours;
+                                stripWidth = timeSpanWidth.TotalHours;
+                                break;
                             }
-
-                            minStripLine.IntervalOffsetType = DateTimeIntervalType.Days;
-                            minStripLine.StripWidthType = DateTimeIntervalType.Days;
-                            minStripLine.IntervalType = DateTimeIntervalType.Days;
-                            minStripLine.Interval = 1;
-                            minStripLine.IntervalOffset = (tempIntervalOffset > 0.0) ? tempIntervalOffset : 0.0;
-                            minStripLine.StripWidth = (tempStripWidth > 0.0) ? tempStripWidth : 0.0;
-                            Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(minStripLine);
+                            case DateTimeIntervalType.Days:
+                            {
+                                stripOffest = timeSpanStartOffset.TotalDays;
+                                stripWidth = timeSpanWidth.TotalDays;
+                                break;
+                            }
                         }
+                        vehicleStripeLine.IntervalOffset = stripOffest;
+                        vehicleStripeLine.StripWidth = (stripWidth > 0.0) ? stripWidth : 0.0;
+                        Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(vehicleStripeLine);
                     }
-
-                    break;
+                }
             }
         }
     }

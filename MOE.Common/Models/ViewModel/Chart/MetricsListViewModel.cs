@@ -21,22 +21,53 @@ namespace MOE.Common.Models.ViewModel.Chart
 
         private void GetMetricsForSignal(string signalID)
         {
+            
             var repository =
                 SignalsRepositoryFactory.Create();
             var signal = repository.GetLatestVersionOfSignalBySignalID(signalID);
             MetricsList = new List<SelectListItem>();
             var availableMetrics = signal.GetAvailableMetricsVisibleToWebsite().Where(m => m.ShowOnWebsite);
             if (signal != null)
+            {
                 foreach (var m in availableMetrics)
+                {
                     if (SelectedMetricID != null && SelectedMetricID == m.MetricID)
+                    {
+                        // Andre -- Commented out parts added to try to get this to make the Pudue Phase Tremination hte default chart.
+                        // this is for bug 894.  This will select it, but not get the options showing for it.  Bug 896 is higher on the list for Mark Taylor.
+                        //if (m.ChartName.Contains("Purdue Phase Termination"))
+                        //{
                         MetricsList.Add(new SelectListItem
                         {
                             Value = m.MetricID.ToString(),
                             Text = m.ChartName,
                             Selected = true
                         });
+                        //}
+                        //else
+                        //{
+                        //MetricsList.Add(new SelectListItem
+                        //{
+                        //    Value = m.MetricID.ToString(),
+                        //    Text = m.ChartName
+                        //    //Selected = true
+                        //});
+                        //}
+                    }
                     else
-                        MetricsList.Add(new SelectListItem {Value = m.MetricID.ToString(), Text = m.ChartName});
+                    {
+                        //if (m.ChartName.Contains("Purdue Phase Termination"))
+                        //{
+                        //    MetricsList.Add(new SelectListItem {Value = m.MetricID.ToString(), Text = m.ChartName, Selected = true});
+                        //}
+                        //else
+                        //{
+                            MetricsList.Add(new SelectListItem { Value = m.MetricID.ToString(), Text = m.ChartName });
+                        //}
+                    }
+                }
+                
+            }
         }
     }
 }
