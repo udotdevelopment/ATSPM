@@ -460,11 +460,13 @@ namespace MOE.Common.Models.Repositories
             List<int> controllerTypes = new List<int>{4,5};
             var activeSignals = _db.Signals.Where(r => r.VersionActionId != 3)
                 .Include(s => s.ControllerType)
-                .Where(s => !controllerTypes.Contains(s.ControllerTypeID))
+                //.Where(s => !controllerTypes.Contains(s.ControllerTypeID))
                 .ToList();
             activeSignals = activeSignals
                 .GroupBy(r => r.SignalID)
                 .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).ToList();
+            activeSignals = activeSignals.Where(s => !controllerTypes.Contains(s.ControllerTypeID)).ToList();
+
             return activeSignals;
         }
 
