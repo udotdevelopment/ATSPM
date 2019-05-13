@@ -71,9 +71,9 @@
                 </div>
 
                 <div class="form-group-configuration-tool  form-group col-md-2">
-                    @Html.LabelFor(model => model.IPAddress, htmlAttributes: new {@class = "control-label"})
+                    @Html.LabelFor(model => model.IPAddress, htmlAttributes: new {@class = "control-label", style = "display:none" })
                     <div class="">
-                        @Html.EditorFor(model => model.IPAddress, new {htmlAttributes = new {@class = "form-control"}})
+                        @Html.EditorFor(model => model.IPAddress, new {htmlAttributes = new {@class = "form-control", style = "display:none" } })
                         @Html.ValidationMessageFor(model => model.IPAddress, "", new {id = "IPAddress-error", @class = "text-danger"})
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                 <div class="form-group-configuration-tool  form-group col-md-2">
                     @Html.LabelFor(model => model.Latitude, htmlAttributes: new {@class = "control-label"})
                     <div class="">
-                        @Html.EditorFor(model => model.Latitude, new {htmlAttributes = new {@class = "form-control"}})
+                        @Html.EditorFor(model => model.Latitude, new {htmlAttributes = new {@class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Latitude, "", new {id = "Latitude-error", @class = "text-danger"})
                     </div>
                 </div>
@@ -103,9 +103,9 @@
                 </div>
 
                 <div class="form-group-configuration-tool  form-group col-md-3">
-                    @Html.LabelFor(model => model.ControllerTypeID, "Controller Type", htmlAttributes: new {@class = "control-label"})
+                    @Html.LabelFor(model => model.ControllerTypeID, "Controller Type", htmlAttributes: new {@class = "control-label", style = "display:none" })
                     <div class="">
-                        @Html.DropDownListFor(model => model.ControllerTypeID, (SelectList) ViewBag.ControllerType, new {@class = "form-control"})
+                        @Html.DropDownListFor(model => model.ControllerTypeID, (SelectList) ViewBag.ControllerType, new {@class = "form-control" , style = "display:none" })
 
                         @Html.ValidationMessageFor(model => model.ControllerTypeID, "", new {id = "ControllerTypeID-error", @class = "text-danger"})
                     </div>
