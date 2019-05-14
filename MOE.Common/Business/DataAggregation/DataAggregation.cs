@@ -811,7 +811,7 @@ namespace MOE.Common.Business.DataAggregation
 
         private void AggregatePedDelay(DateTime startTime, DateTime endTime, Models.Signal signal)
         {
-            PedDelaySignal pedDelaySignal = new PedDelaySignal(signal.SignalID, startTime, endTime);
+            PedDelaySignal pedDelaySignal = new PedDelaySignal(signal, startTime, endTime);
             foreach (var pedPhase in pedDelaySignal.PedPhases)
             {
                 PhasePedAggregation pedAggregation = new PhasePedAggregation
