@@ -30,7 +30,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
-            var pds = new PedDelaySignal(SignalID, StartDate, EndDate);
+            var signalRepository = Models.Repositories.SignalsRepositoryFactory.Create();
+            Models.Signal signal= signalRepository.GetVersionOfSignalByDate(SignalID, StartDate);
+
+            var pds = new PedDelaySignal(signal, StartDate, EndDate);
             foreach (var p in pds.PedPhases)
                 if (p.Cycles.Count > 0)
                 {
