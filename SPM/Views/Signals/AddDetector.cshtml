@@ -120,7 +120,7 @@
             </div>
             <div class="">
                 @Html.LabelFor(model => model.DetectorComments, htmlAttributes: new { @class = "control-label" })
-                <span onclick="GetCreateDetectorComment('@Model.ID')" class="glyphicon glyphicon-plus-sign" aria-invisible="true"></span>
+                <span onclick="GetCreateDetectorComment('@Model.ID')" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
                 <div id="NewDetectorComment_@Model.ID"></div>
                 <div class="comments col-md-12">
                     <div id="AddedDetectorComment_@Model.ID"></div>

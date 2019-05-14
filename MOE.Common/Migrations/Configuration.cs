@@ -561,18 +561,65 @@ While each agency should consult with their IT department for specific guideline
                 },
                 new ExternalLink
                 {
-                    Name = "Seminole County, Florida",
+                    Name = "Florida ATSPM",
                     DisplayOrder = 2,
-                    Url = "http://spm.seminolecountyfl.gov/signalperformancemetrics"
+                    Url = "https://atspm.cflsmartroads.com/ATSPM"
                 },
                 new ExternalLink
                 {
                     Name = "FAST (Southern Nevada)",
                     DisplayOrder = 3,
                     Url = "http://challenger.nvfast.org/spm"
+                },
+                new ExternalLink
+                {
+                    Name = "Georgia ATSPM",
+                    DisplayOrder = 4,
+                    Url = "https://traffic.dot.ga.gov/atspm"
+                },
+                new ExternalLink
+                {
+                    Name = "Arizona ATSPM",
+                    DisplayOrder = 5,
+                    Url = "http://spmapp01.mcdot-its.com/ATSPM"
+                },
+                new ExternalLink
+                {
+                    Name = "Alabama ATSPM",
+                    DisplayOrder = 6,
+                    Url = "http://signalmetrics.ua.edu"
+                },
+                new ExternalLink
+                {
+                    Name = "ATSPM Workshop 2016 SLC",
+                    DisplayOrder = 7,
+                    Url = "http://docs.lib.purdue.edu/atspmw/2016"
+                },
+                new ExternalLink
+                {
+                    Name = "Train The Trainer Webinar Day 1 - Morning",
+                    DisplayOrder = 8,
+                    Url = "https://connectdot.connectsolutions.com/p75dwqefphk   "
+                },
+                new ExternalLink
+                {
+                    Name = "Train The Trainer Webinar Day 1 - Afternoon",
+                    DisplayOrder = 9,
+                    Url = "https://connectdot.connectsolutions.com/p6l6jaoy3gj"
+                },
+                new ExternalLink
+                {
+                    Name = "Train The Trainer Webinar Day 2 - Morning",
+                    DisplayOrder = 10,
+                    Url = "https://connectdot.connectsolutions.com/p6mlkvekogo/"
+                },
+                new ExternalLink
+                {
+                    Name = "Train The Trainer Webinar Day 2 - Mid Morning",
+                    DisplayOrder = 11,
+                    Url = "https://connectdot.connectsolutions.com/p3ua8gtj09r/"
                 }
             );
-
             context.ControllerType.AddOrUpdate(
                 c => c.ControllerTypeID,
                 new ControllerType
@@ -1221,7 +1268,8 @@ While each agency should consult with their IT department for specific guideline
                 new DetectionHardware {ID = 2, Name = "Wavetronix Advance"},
                 new DetectionHardware {ID = 3, Name = "Inductive Loops"},
                 new DetectionHardware {ID = 4, Name = "Sensys"},
-                new DetectionHardware {ID = 5, Name = "Video"}
+                new DetectionHardware {ID = 5, Name = "Video"},
+                new DetectionHardware {ID = 6, Name = "FLIR: Thermal Camera" }
             );
 
             //These are default values.  They need to be changed before the system goes into production.

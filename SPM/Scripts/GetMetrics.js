@@ -157,7 +157,9 @@ function GetTimingAndActuationsMetric(metricTypeID) {
     tosend.ShowAdvancedCount = $("#ShowAdvancedCount").is(":checked");
     tosend.ShowAllLanes = $("#ShowAllLanes").is(":checked");
     tosend.ShowLinesStartEnd = $("#ShowLinesStartEnd").is(":checked");
-    tosend.ShowRawEvents = $("#ShowRawEvents").is(":checked");
+    tosend.ShowRawEventData = $("#ShowRawEventData").is(":checked");
+    tosend.ShowLegend = $("#ShowLegend").is(":checked");
+    tosend.ShowHeaderForEachPhase = $("#ShowHeaderForEachPhase").is(":checked");
     GetMetric(urlpathTimingAndActuations, tosend);
 }
 function GetApproachDelayMetric(metricTypeID) {

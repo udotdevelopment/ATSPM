@@ -33,13 +33,11 @@ namespace MOE.Common.Business.TimingAndActuations
                         {
                             GlobalCustomEvents.Add("Global Events: Code: " + globalEventCode + " Param: " +
                                     globalEventParam,
-//                                globalEventParam + " Counter: " + options.GlobalEventCounter++,
+    //                                globalEventParam + " Counter: " + options.GlobalEventCounter++,
                                     globalCustomEvents);
                         }
                     }
                 }
-
-                
             }
         }
     }

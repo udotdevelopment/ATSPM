@@ -26,18 +26,23 @@ namespace MOE.Common.Business.TimingAndActuations
 
         private double _yValue;
         private int _dotSize;
-        private DateTime orginalEndDate;
-
+        
         public ChartForGlobalEventsTimingAndActuations(GlobalGetDataTimingAndActuations globalGetDataTimingAndActuations, TimingAndActuationsOptions options)
         {
             var GlobalDataTimingAndActuations = globalGetDataTimingAndActuations;
             var Options = options;
-           
+            var orginalEndDate = Options.EndDate;
+            var reportTimespan = Options.EndDate - Options.StartDate;
+            var totalMinutesRounded = Math.Round(reportTimespan.TotalMinutes);
+            if (totalMinutesRounded <= 121)
+            {
+                Options.EndDate =Options.EndDate.AddMinutes(-1);
+            }
             Chart = ChartFactory.CreateDefaultChart(Options);
             SetChartTitle(Options);
             SetGlobalEvents(GlobalDataTimingAndActuations, Options);
             SetYAxisLabels(Options);
-            //GlobalGetDataTimingAndActuations.Options.EndDate = orginalEndDate;
+            Options.EndDate = orginalEndDate;
         }
 
         private void SetGlobalEvents(GlobalGetDataTimingAndActuations globalGetDataTimingAndActuations, TimingAndActuationsOptions options)

@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Web.UI.DataVisualization.Charting;
+using AjaxControlToolkit;
+using Microsoft.EntityFrameworkCore.Query.ExpressionTranslators;
 using MOE.Common.Business.TimingAndActuations;
 using MOE.Common.Migrations;
 using MOE.Common.Models;
@@ -15,27 +17,42 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [DataContract]
     public class TimingAndActuationsOptions : MetricOptions
     {
-        
-        [Display(Name = "Vehicle Signal Display . . . . . . . .")]
+        [Display(Name = "Legend")]
+        [Required]
+        [DataMember]
+        public bool ShowLegend { get; set; }
+
+        [Display(Name = "Header For Each Phase")]
+        [Required]
+        [DataMember]
+        public bool ShowHeaderForEachPhase { get; set; }
+
+        [Display(Name = "Raw Data Display")]
+        [Required]
+        [DataMember]
+        public bool ShowRawEventData { get; set; }
+
+        [Display(Name = "Vehicle Signal Display")]
         [Required]
         [DataMember]
         public bool ShowVehicleSignalDisplay { get; set; }
-        
-        [Display(Name = "Pedestrian Intervals . . . . . . . . . .")]
+
+        [Display(Name = "Pedestrian Intervals")]
         [Required]
         [DataMember]
         public bool ShowPedestrianIntervals { get; set; }
-        [Display(Name = "Pedestrian Actuation . . . . . . . . .")]
+
+        [Display(Name = "Pedestrian Actuation")]
         [Required]
         [DataMember]
         public bool ShowPedestrianActuation { get; set; }
-        
-        [Display(Name = "Combine Lanes for Phase . . . . .")]
+
+        [Display(Name = "Combine Lanes for Phase")]
         [Required]
         [DataMember]
         public bool CombineLanesForEachGroup { get; set; }
-        
-        [Display(Name = "Dot And Bar Size")]
+
+        [Display(Name = "Dot Size")]
         [Required]
         [DataMember]
         public int DotAndBarSize { get; set; }
@@ -55,71 +72,57 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [Display(Name = "Global Event Params")]
         [DataMember]
         public string GlobalCustomEventParams { get; set; }
-        
-        [Display(Name = "Stop Bar Presence. . . . . . .")]
+
+        [Display(Name = "Stop Bar Presence")]
         [Required]
         [DataMember]
         public bool ShowStopBarPresence { get; set; }
-        
-        [Display(Name = "Lane-by-lane Count . . . . ."), Required, DataMember]
+
+        [Display(Name = "Lane-by-lane Count"), Required, DataMember]
         public bool ShowLaneByLaneCount { get; set; }
-        
-        [Display(Name = "Advanced Time Offset"), DataMember]
+
+        [Display(Name = "Advd Count Offset"), DataMember]
         public double? AdvancedOffset { get; set; }
 
-        [Display(Name = "Advanced Presence. . . . . .")]
+        [Display(Name = "Advanced Presence")]
         [Required]
         [DataMember]
         public bool ShowAdvancedDilemmaZone { get; set; }
 
-        [Display(Name = "Advanced Count . . . . . . . .")]
+        [Display(Name = "Advanced Count")]
         [Required]
         [DataMember]
         public bool ShowAdvancedCount { get; set; }
-        
-        [Display(Name = "All Lanes For Each Phase .")]
+
+        [Display(Name = "All Lanes For Each Phase")]
         [Required]
         [DataMember]
         public bool ShowAllLanesInfo { get; set; }
-        
-        [Display(Name = "On/Off Lines. . . . . . . . . . . .")]
+
+        [Display(Name = "On/Off Lines")]
         [Required]
         [DataMember]
         public bool ShowLinesStartEnd { get; set; }
-        
-        [Display(Name = "All Event Data (Raw Data)")]
+
+        [Display(Name = "Event Start Stop Pairs")]
         [Required]
         [DataMember]
-        public bool ShowRawEvents { get; set; }
+        public bool ShowEventPairs { get; set; }
 
         public List<int> GlobalEventCodesList { get; set; }
         public List<int> GlobalEventParamsList { get; set; }
         public List<int> PhaseEventCodesList { get; set; }
+        public List<int> PhaseFilterList { get; set; }
         public int GlobalEventCounter { get; set; }
         public Models.Signal Signal { get; set; }
+        public int HeadTitleCounter { get; set; }
 
-        public TimingAndActuationsOptions(string signalID, DateTime startDate, DateTime endDate, double yAxisMax,
-            double y2AxisMax)
+        public TimingAndActuationsOptions(string signalID, DateTime startDate, DateTime endDate)
         {
             SignalID = signalID;
-            YAxisMax = yAxisMax;
-            Y2AxisMax = y2AxisMax;
-            MetricTypeID = 17;
             StartDate = startDate;
             EndDate = endDate;
-            DotAndBarSize = 6;
-            ShowAdvancedCount = true;
-            CombineLanesForEachGroup = false;
-            ShowAdvancedDilemmaZone = true;
-            ShowLaneByLaneCount = true;
-            ShowPedestrianActuation = true;
-            ShowPedestrianIntervals = true;
-            ShowStopBarPresence = true;
-            ShowVehicleSignalDisplay = true;
-            ShowAllLanesInfo = true;
-            ShowLinesStartEnd = true;
-            ShowRawEvents = true;
-            AdvancedOffset = 0.0;
+            MetricTypeID = 17;
         }
 
         public TimingAndActuationsOptions()
@@ -130,19 +133,24 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public void SetDefaults()
         {
-            DotAndBarSize = 6;
-            MetricTypeID = 17;
-            ShowAdvancedCount = true;
+            ShowLegend = false;
             CombineLanesForEachGroup = false;
+            ShowAdvancedCount = true;
             ShowAdvancedDilemmaZone = true;
+            ShowAllLanesInfo = true;
+
+            ShowEventPairs = false;
+            ShowHeaderForEachPhase = false;
             ShowLaneByLaneCount = true;
+            ShowLinesStartEnd = true;
+
             ShowPedestrianActuation = true;
             ShowPedestrianIntervals = true;
             ShowStopBarPresence = true;
+            ShowRawEventData = false;
             ShowVehicleSignalDisplay = true;
-            ShowAllLanesInfo = true;
-            ShowLinesStartEnd = true;
-            ShowRawEvents = true;
+
+            DotAndBarSize = 6;
             AdvancedOffset = 0.0;
         }
 
@@ -152,69 +160,107 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var signalRepository = SignalsRepositoryFactory.Create();
             Signal = signalRepository.GetVersionOfSignalByDateWithDetectionTypes(SignalID, StartDate);
             var chart = new Chart();
-            MetricTypeID = 17;
+            HeadTitleCounter = 0;
+            var timingAndActuationsForPhases = new List<TimingAndActuationsForPhase>();
             PhaseEventCodesList = ExtractListOfNumbers(PhaseEventCodes);
+            int phaseCounter = 0;
+            PhaseFilterList = ExtractListOfNumbers(PhaseFilter);
+            if (ShowRawEventData)
+            {
+                for (int i = 1; i <= 16; i++)
+                {
+                    if (PhaseFilterList.Any() && PhaseFilterList.Contains(i) || PhaseFilterList.Count == 0)
+                    {
+                        var phaseOrOverlap = true;
+                        timingAndActuationsForPhases.Add(new TimingAndActuationsForPhase(i, phaseOrOverlap, this));
+                        timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort = "Phase - " + i.ToString("D2");
+                        phaseOrOverlap = false;
+                        timingAndActuationsForPhases.Add(new TimingAndActuationsForPhase(i, phaseOrOverlap, this));
+                        timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort = "zOverlap - " + i.ToString("D2");
+                    }
+                }
+            }
+            else
+            {
+                if (Signal.Approaches.Count > 0)
+                {
+                    foreach (var approach in Signal.Approaches)
+                    {
+                        bool permissivePhase;
+                        if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
+                        {
+                            if (PhaseFilterList.Any() && PhaseFilterList.Contains((int) approach.PermissivePhaseNumber)
+                                || PhaseFilterList.Count == 0)
+                            {
+                                var permissivePhaseNumber = (int) approach.PermissivePhaseNumber;
+                                permissivePhase = true;
+                                timingAndActuationsForPhases.Add(
+                                    new TimingAndActuationsForPhase(approach, this, permissivePhase));
+                                timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort =
+                                    approach.PermissivePhaseNumber.Value + "-1";
+                            }
+                        }
+
+                        if (approach.ProtectedPhaseNumber > 0)
+                        {
+                            if (PhaseFilterList.Any() && PhaseFilterList.Contains(approach.ProtectedPhaseNumber)
+                                || PhaseFilterList.Count == 0)
+                            {
+                                permissivePhase = false;
+                                timingAndActuationsForPhases.Add(
+                                    new TimingAndActuationsForPhase(approach, this, permissivePhase));
+                                timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort =
+                                    approach.ProtectedPhaseNumber + "-2";
+                            }
+                        }
+                    }
+                }
+            }
+            timingAndActuationsForPhases = timingAndActuationsForPhases.OrderBy(t => t.PhaseNumberSort).ToList();
+            foreach (var timingAndActutionsForPhase in timingAndActuationsForPhases)
+            {
+                GetChart(timingAndActutionsForPhase);
+            }
             GlobalEventCodesList = ExtractListOfNumbers(GlobalCustomEventCodes);
             GlobalEventParamsList = ExtractListOfNumbers(GlobalCustomEventParams);
             GlobalEventCounter = 0;
-            int phaseCounter = 0;
-            var phaseFilters = ExtractListOfNumbers(PhaseFilter);
-            if (Signal.Approaches.Count > 0)
+            if (GlobalEventCodesList != null && GlobalEventParamsList != null &&
+                GlobalEventCodesList.Any() && GlobalEventCodesList.Count > 0 &&
+                GlobalEventParamsList.Any() && GlobalEventParamsList.Count > 0)
             {
-                var timingAndActuationsForPhases = new List<TimingAndActuationsForPhase>();
-                foreach (var approach in Signal.Approaches)
-                {
-                    bool permissivePhase;
-                    if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
-                    {
-                        if (phaseFilters.Any() && phaseFilters.Contains((int) approach.PermissivePhaseNumber)
-                            || phaseFilters.Count == 0)
-                        {
-                            var permissivePhaseNumber = (int) approach.PermissivePhaseNumber;
-                            permissivePhase = true;
-                            timingAndActuationsForPhases.Add(
-                                new TimingAndActuationsForPhase(approach, this, permissivePhase));
-                            timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort =  approach.PermissivePhaseNumber.Value.ToString() + "-1";
-                        }
-                    }
-                    if (approach.ProtectedPhaseNumber > 0)
-                    {
-                        if (phaseFilters.Any() && phaseFilters.Contains(approach.ProtectedPhaseNumber)
-                            || phaseFilters.Count == 0)
-                        {
-                            permissivePhase = false;
-                            timingAndActuationsForPhases.Add(
-                                new TimingAndActuationsForPhase(approach, this, permissivePhase));
-                            timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort = approach.ProtectedPhaseNumber.ToString() + "-2";
-                        }
-                    }
-                }
-                timingAndActuationsForPhases = timingAndActuationsForPhases.OrderBy(t => t.PhaseNumberSort).ToList();
-              
-                foreach (var timingAndActutionsForPhase in timingAndActuationsForPhases)
-                {
-                    GetChart(timingAndActutionsForPhase);
-                }
-
-                if (GlobalEventCodesList != null && GlobalEventParamsList != null &&
-                    GlobalEventCodesList.Any() && GlobalEventCodesList.Count > 0 &&
-                    GlobalEventParamsList.Any() && GlobalEventParamsList.Count > 0)
-                {
-                    var globalGetDataTimingAndActuations = new GlobalGetDataTimingAndActuations(SignalID, this);
-                    GetGlobalChart(globalGetDataTimingAndActuations, this);
-                }
+                var globalGetDataTimingAndActuations = new GlobalGetDataTimingAndActuations(SignalID, this);
+                GetGlobalChart(globalGetDataTimingAndActuations, this);
+            }
+            if (ShowLegend)
+            {
+                GetChartLegend();
             }
             return ReturnList;
         }
 
+        private void GetChartLegend()
+        {
+            if (ReturnList == null)
+                ReturnList = new List<string>();
+            var taaLegendChart = new TimingAndActuationsChartForPhase(true);
+           if (taaLegendChart.Chart != null)
+            {
+                taaLegendChart.Chart.BackColor = Color.Goldenrod;
+                var chartName = CreateFileName();
+                taaLegendChart.Chart.ImageLocation = MetricFileLocation + chartName;
+                taaLegendChart.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
+                ReturnList.Add(MetricWebPath + chartName);
+            }
+        }
+
         private void GetGlobalChart(GlobalGetDataTimingAndActuations globalGetDataTimingAndActuations,
-            TimingAndActuationsOptions options )
+            TimingAndActuationsOptions options)
         {
             if (ReturnList == null) ReturnList = new List<string>();
             var taaGlobalChart =
                 new ChartForGlobalEventsTimingAndActuations(globalGetDataTimingAndActuations, options)
                 {
-                    Chart = { BackColor = Color.LightSkyBlue }
+                    Chart = {BackColor = Color.LightSkyBlue}
                 };
             var chartName = CreateFileName();
             taaGlobalChart.Chart.ImageLocation = MetricFileLocation + chartName;
@@ -227,15 +273,19 @@ namespace MOE.Common.Business.WCFServiceLibrary
             if (ReturnList == null)
                 ReturnList = new List<string>();
             var taaChart = new TimingAndActuationsChartForPhase(timingAndActutionsForPhase);
-            if (timingAndActutionsForPhase.GetPermissivePhase)
+            if (taaChart.Chart != null)
             {
-                taaChart.Chart.BackColor = Color.LightGray;
+                if (timingAndActutionsForPhase.GetPermissivePhase)
+                {
+                    taaChart.Chart.BackColor = Color.LightGray;
+                }
+                var chartName = CreateFileName();
+                taaChart.Chart.ImageLocation = MetricFileLocation + chartName;
+                taaChart.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
+                ReturnList.Add(MetricWebPath + chartName);
             }
-            var chartName = CreateFileName();
-            taaChart.Chart.ImageLocation = MetricFileLocation + chartName;
-            taaChart.Chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
-            ReturnList.Add(MetricWebPath + chartName);
         }
+
         public List<int> ExtractListOfNumbers(string comnmaDashSepartedList)
         {
             var numbers = new List<int>();

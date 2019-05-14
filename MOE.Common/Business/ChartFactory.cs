@@ -490,6 +490,22 @@ namespace MOE.Common.Business
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
         }
 
+        public static Chart CreateTAALegendChart()
+        {
+            var chart = new Chart();
+            SetImageProperties(chart, 720, 700);
+            var chartArea = new ChartArea
+            {
+                Name = "ChartArea1"
+            };
+            chart.ChartAreas.Add(chartArea);
+            chartArea.AxisX.Minimum = 0;
+            chartArea.AxisX.Maximum = 1;
+            chartArea.AxisX.LabelStyle.Interval = 1;
+            chartArea.AxisY.LabelStyle.Interval = 1;
+            return chart;
+        }
+
         public static void SetImageProperties(Chart chart, int width, int height)
         {
             chart.ImageType = ChartImageType.Jpeg;
@@ -551,7 +567,7 @@ namespace MOE.Common.Business
             if (totalMinutesRounded <= 1)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
-                chartArea.AxisX.Interval = 1;
+                chartArea.AxisX.Interval = 2;
                 chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
                 chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds)";
             }
@@ -579,14 +595,14 @@ namespace MOE.Common.Business
             else if (totalMinutesRounded > 10.0 && totalMinutesRounded <= 1.0 * 60.0)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Minutes;
-                chartArea.AxisX.Interval = 5;
+                chartArea.AxisX.Interval = 2;
                 chartArea.AxisX.LabelStyle.Format = "HH:mm";
                 chartArea.AxisX.Title = "Time (Hours:Minutes";
             }
             else if (totalMinutesRounded > 1.0 * 60.0 && totalMinutesRounded <= 2.0 * 60.0)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Minutes;
-                chartArea.AxisX.Interval = 15;
+                chartArea.AxisX.Interval = 5;
                 chartArea.AxisX.LabelStyle.Format = "HH:mm";
                 chartArea.AxisX.Title = "Time (Hours:Minutes)";
             }

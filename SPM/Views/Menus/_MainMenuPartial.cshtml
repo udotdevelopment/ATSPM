@@ -49,8 +49,8 @@
                 if ((m.MenuObject.MenuName == "Admin" && m.IsTechnician) || (m.MenuObject.MenuName == "Admin" && m.IsConfiguration))
                 {
                     <li>
-                        <a href="#" class="dropdown-toggle menuItem" data-toggle="dropdown">@m.MenuObject.MenuName </a>
-                        <ul class="dropdown-menu multi-level">
+                        <a href="#" class="nav-link" dropdown-toggle" data-toggle="dropdown">@m.MenuObject.MenuName </a>
+                        <ul class="dropdown-menu ">
                             @foreach (var s in m.SubMenuItems)
                             {
                                 if (s.MenuObject.MenuName == "Signal Configuration" || s.MenuObject.MenuName == "Route Configuration" || (s.MenuObject.MenuName == "Raw Data Export" && m.IsData))
