@@ -36,7 +36,6 @@ function GetConfigurationTable() {
     });
 }
 
-
 function SetControlValues(signalID, selectedMetricID) {
     $("#SignalID").val(signalID);
     GetSignalLocation();

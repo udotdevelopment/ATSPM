@@ -15,13 +15,9 @@ namespace SPM
 
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}",
+                url: "{Controller}/{action}/{id}",
                 defaults: new { controller = "DefaultCharts", action = "Index", id = UrlParameter.Optional }
             );
-
-            
-            
         }
-
     }
 }

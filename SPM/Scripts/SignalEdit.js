@@ -71,7 +71,6 @@ function AddNewVersion() {
             alert(req.responseText);
         }
     });
-   
 }
 
 function DeleteVersion() {
@@ -108,7 +107,6 @@ function DeleteVersion() {
                 }
             });
         }
-
     }
 }
 
@@ -136,10 +134,7 @@ function DeleteSignal() {
             }
         });
     }
-
-
 }
-
 
 
 function GetCreateComment() {

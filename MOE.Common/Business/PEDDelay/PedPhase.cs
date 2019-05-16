@@ -94,7 +94,12 @@ namespace MOE.Common.Business.PEDDelay
                     Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));
                     i = i + 2;
                 }
-               
+                else if (i < Events.Count - 2 && Events[i].EventCode == 21 &&
+                         Events[i + 1].EventCode == 90 && Events[i + 2].EventCode == 22)
+                {
+                    Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));
+                    i = i + 2;
+                }
             }
         }
 
@@ -107,7 +112,7 @@ namespace MOE.Common.Business.PEDDelay
                 {
                     tempEvents.Add(Events[i]);
                     int count = 1;
-                    while (Events[i].EventCode == 90)
+                    while (i < Events.Count && Events[i].EventCode == 90)
                     {
                         i++;
                         count++;
@@ -129,19 +134,23 @@ namespace MOE.Common.Business.PEDDelay
 
         private void GetCyclesForNonMaxtimeControllers()
         {
+            CombineSequential90Events();
+
             for (var i = 0; i < Events.Count; i++)
-                if (i < Events.Count - 2 && Events[i].EventCode == 21 &&
-                    Events[i + 1].EventCode == 45 && Events[i + 2].EventCode == 22)
+            {
+                if (i < Events.Count - 2 && Events[i].EventCode == 22 &&
+                    Events[i + 1].EventCode == 90 && Events[i + 2].EventCode == 21)
                 {
                     Cycles.Add(new PedCycle(Events[i].Timestamp, Events[i].Timestamp));
                     i = i + 2;
                 }
-                else if (i < Events.Count - 2 && Events[i].EventCode == 22 &&
-                         Events[i + 1].EventCode == 45 && Events[i + 2].EventCode == 21)
+                else if (i < Events.Count - 2 && Events[i].EventCode == 21 &&
+                         Events[i + 1].EventCode == 90 && Events[i + 2].EventCode == 22)
                 {
                     Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));
                     i = i + 2;
                 }
+            }
         }
 
         private void SetHourlyTotals()

@@ -153,7 +153,8 @@ namespace MOE.Common.Business
         public static List<int> GetPedPhases(string signalID, DateTime startDate, DateTime endDate)
         {
             var db = new SPM();
-            var pedEventCodes = new List<int> {21, 45, 90, 23};
+            var pedEventCodes = new List<int> {21, 45, 90, 22};
+
             var events = (from s in db.Controller_Event_Log
                 where s.SignalID == signalID &&
                       s.Timestamp >= startDate &&
@@ -167,15 +168,12 @@ namespace MOE.Common.Business
         {
             var db = new SPM();
             var endDate = startDate.AddHours(-12);
-
-
             var planRecord = from r in db.Controller_Event_Log
                 where r.SignalID == signalID &&
                       r.Timestamp >= endDate &&
                       r.Timestamp <= startDate &&
                       r.EventCode == 131
                 select r;
-
             if (planRecord.Count() > 0)
                 return planRecord.OrderByDescending(s => s.Timestamp).FirstOrDefault().EventParam;
             return 0;

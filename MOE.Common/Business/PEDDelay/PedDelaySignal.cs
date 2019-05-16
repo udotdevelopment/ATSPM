@@ -29,7 +29,7 @@ namespace MOE.Common.Business.PEDDelay
                 var pedPhaseNumbers = ControllerEventLogs.GetPedPhases(_SignalID, startDate, endDate);
                 ConcurrentBag<PedPhase> pedPhases = new ConcurrentBag<PedPhase>();
                 Parallel.ForEach(pedPhaseNumbers, currentPhase =>
-                //foreach(int currentPhase in pedPhaseNumbers)
+                    //foreach (int currentPhase in pedPhaseNumbers)
                 {
                     var pedPhase = new PedPhase(currentPhase, signal, startDate, endDate, _Plans);
                     pedPhases.Add(pedPhase);
