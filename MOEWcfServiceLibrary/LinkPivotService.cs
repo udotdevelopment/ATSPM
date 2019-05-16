@@ -1,18 +1,5 @@
 ﻿using System;
-using System.Configuration;
 using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.DataVisualization.Charting;
-using System.Xml;
-using MOE.Common;
 
 namespace MOEWcfServiceLibrary
 {

@@ -21,7 +21,7 @@ namespace SPM.Controllers
         MOE.Common.Models.Repositories.MetricCommentRepositoryFactory.Create();
 
         // GET: MetricComments/Create
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Configuration")]
         public ActionResult Create(string versionId)
         {
             MOE.Common.Models.Repositories.ISignalsRepository signalsRepository =
@@ -45,7 +45,7 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Configuration")]
         public ActionResult Create([Bind(Include = "VersionID, SignalId,CommentText, MetricIDs")] MetricComment metricComment)
         {
             metricComment.TimeStamp = DateTime.Now;

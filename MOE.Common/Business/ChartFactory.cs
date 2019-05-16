@@ -61,8 +61,6 @@ namespace MOE.Common.Business
             var chart = new Chart();
             SetImageProperties(chart);
             chart.ChartAreas.Add(CreateChartArea(options));
-
-
             return chart;
         }
 
@@ -466,17 +464,16 @@ namespace MOE.Common.Business
                         chartArea.AxisX.LabelStyle.Format = "MM/dd/yy";
                         break;
                 }
-                DateTime tempStart;
-                DateTime tempEnd;
+
                 if (options.TimeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod &&
                     (options.TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.FifteenMinute ||
                      options.TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.ThirtyMinute ||
                      options.TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Hour))
                 {
-                    tempStart = new DateTime(options.TimeOptions.Start.Year, options.TimeOptions.Start.Month,
+                    var tempStart = new DateTime(options.TimeOptions.Start.Year, options.TimeOptions.Start.Month,
                         options.TimeOptions.Start.Day, options.TimeOptions.TimeOfDayStartHour ?? 0,
                         options.TimeOptions.TimeOfDayStartMinute ?? 0, 0);
-                    tempEnd = new DateTime(options.TimeOptions.Start.Year, options.TimeOptions.Start.Month,
+                    var tempEnd = new DateTime(options.TimeOptions.Start.Year, options.TimeOptions.Start.Month,
                         options.TimeOptions.Start.Day, options.TimeOptions.TimeOfDayEndHour ?? 0,
                         options.TimeOptions.TimeOfDayEndMinute ?? 0, 0);
                     chartArea.AxisX.Minimum = tempStart.AddMinutes(-15).ToOADate();
@@ -491,6 +488,22 @@ namespace MOE.Common.Business
             chart.Height = 720;
             chart.Width = 1400;
             chart.ImageStorageMode = ImageStorageMode.UseImageLocation;
+        }
+
+        public static Chart CreateTAALegendChart()
+        {
+            var chart = new Chart();
+            SetImageProperties(chart, 720, 700);
+            var chartArea = new ChartArea
+            {
+                Name = "ChartArea1"
+            };
+            chart.ChartAreas.Add(chartArea);
+            chartArea.AxisX.Minimum = 0;
+            chartArea.AxisX.Maximum = 1;
+            chartArea.AxisX.LabelStyle.Interval = 1;
+            chartArea.AxisY.LabelStyle.Interval = 1;
+            return chart;
         }
 
         public static void SetImageProperties(Chart chart, int width, int height)
@@ -542,56 +555,77 @@ namespace MOE.Common.Business
             chartArea.AxisX2.Minimum = options.StartDate.ToOADate();
             chartArea.AxisX2.Maximum = options.EndDate.ToOADate();
             chartArea.AxisX2.CustomLabels.Add(options.StartDate.ToOADate(), options.EndDate.ToOADate(), "");
-            //var reportTimespan = options.EndDate - options.StartDate;
-            //double totalHoursRounded = Math.Round(reportTimespan.TotalHours);
-            //if (totalHoursRounded <= 2)
-            //{
-            //    chartArea.AxisX2.IntervalType = DateTimeIntervalType.Minutes;
-            //    chartArea.AxisX2.Interval = 15;
-            //}
-            //if (totalHoursRounded > 2 && totalHoursRounded <= 24)
-            //{
-            //    chartArea.AxisX2.Interval = 1;
-            //}
-            //else if (totalHoursRounded > 24 && totalHoursRounded <= 48)
-            //{
-            //    chartArea.AxisX2.Interval = 12;
-            //}
-            //else if (totalHoursRounded > 48)
-            //{
-            //    chartArea.AxisX2.Interval = 24;
-            //}
         }
 
         private static void SetUpX2Axis(ChartArea chartArea, MetricOptions options)
         {
             chartArea.AxisX2.Enabled = AxisEnabled.True;
-            chartArea.AxisX2.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX2.LabelStyle.Format = "HH";
             chartArea.AxisX2.Minimum = options.StartDate.ToOADate();
             chartArea.AxisX2.Maximum = options.EndDate.ToOADate();
             var reportTimespan = options.EndDate - options.StartDate;
-            double totalHoursRounded = Math.Round(reportTimespan.TotalHours);
-            if (totalHoursRounded <= 2)
+            double totalMinutesRounded = Math.Round(reportTimespan.TotalMinutes);
+            if (totalMinutesRounded <= 1)
             {
-                chartArea.AxisX2.IntervalType = DateTimeIntervalType.Minutes;
-                chartArea.AxisX2.Interval = 15;
-                chartArea.AxisX2.LabelStyle.Format = "HH:mm";
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
+                chartArea.AxisX.Interval = 2;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
+                chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds)";
             }
-            if (totalHoursRounded > 2 && totalHoursRounded <= 24)
+            else if (totalMinutesRounded > 1.0 && totalMinutesRounded <= 3.0)
             {
-                chartArea.AxisX2.Interval = 1;
-                chartArea.AxisX2.LabelStyle.Format = "HH";
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
+                chartArea.AxisX.Interval = 3;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
+                chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds)";
             }
-            else if (totalHoursRounded > 24 && totalHoursRounded <= 48)
+            else if (totalMinutesRounded > 3.0 && totalMinutesRounded <= 6.0)
             {
-                chartArea.AxisX2.Interval = 12;
-                chartArea.AxisX2.LabelStyle.Format = "HH";
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
+                chartArea.AxisX.Interval = 15;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
+                chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds)";
             }
-            else if (totalHoursRounded > 48)
+            else if (totalMinutesRounded > 6.0 && totalMinutesRounded <= 10.0)
             {
-                chartArea.AxisX2.Interval = 24;
-                chartArea.AxisX2.LabelStyle.Format = "MM/dd/yyyy";
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
+                chartArea.AxisX.Interval = 30;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
+                chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds)";
+            }
+            else if (totalMinutesRounded > 10.0 && totalMinutesRounded <= 1.0 * 60.0)
+            {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Minutes;
+                chartArea.AxisX.Interval = 2;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm";
+                chartArea.AxisX.Title = "Time (Hours:Minutes";
+            }
+            else if (totalMinutesRounded > 1.0 * 60.0 && totalMinutesRounded <= 2.0 * 60.0)
+            {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Minutes;
+                chartArea.AxisX.Interval = 5;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm";
+                chartArea.AxisX.Title = "Time (Hours:Minutes)";
+            }
+            else if (totalMinutesRounded > 2.0 * 60.0 && totalMinutesRounded <= 24.0 * 60.0)
+            {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
+                chartArea.AxisX.Interval = 1;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm";
+                chartArea.AxisX.Title = "Time (Hours:Minutes)";
+            }
+            else if (totalMinutesRounded > 24.0 * 60.0 && totalMinutesRounded <= 48.0 * 60.0)
+            {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
+                chartArea.AxisX.Interval = 12;
+                chartArea.AxisX.LabelStyle.Format = "HH";
+                chartArea.AxisX.Title = "Time (Hours of Day)";
+            }
+            else if (totalMinutesRounded > 48.0 * 60.0)
+            {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
+                chartArea.AxisX.Interval = 24;
+                chartArea.AxisX.LabelStyle.Format = "MM/dd/yyyy";
+                chartArea.AxisX.Title = "Time (Days)";
             }
         }
         private static void SetSplitFailPassX2Axis(ChartArea chartArea, MetricOptions options)
@@ -606,36 +640,73 @@ namespace MOE.Common.Business
 
         private static void SetUpXAxis(ChartArea chartArea, MetricOptions options)
         {
-            chartArea.AxisX.Title = "Time (Hour of Day)";
-            chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
-            chartArea.AxisX.LabelStyle.Format = "HH";
             chartArea.AxisX.Minimum = options.StartDate.ToOADate();
             chartArea.AxisX.Maximum = options.EndDate.ToOADate();
             var reportTimespan = options.EndDate - options.StartDate;
-            double totalHoursRounded = Math.Round(reportTimespan.TotalHours);
-            if (totalHoursRounded <= 2)
+            double totalMinutesRounded = Math.Round(reportTimespan.TotalMinutes);
+            if (totalMinutesRounded <= 1)
+            {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
+                chartArea.AxisX.Interval = 1;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
+                chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds of Day)";
+            }
+            else if(totalMinutesRounded > 1.0 && totalMinutesRounded <= 3.0)
+            {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
+                chartArea.AxisX.Interval = 3;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
+                chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds of Day)";
+            }
+            else if (totalMinutesRounded > 3.0 && totalMinutesRounded <= 6.0)
+            {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
+                chartArea.AxisX.Interval =15;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
+                chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds of Day)";
+            }
+            else if (totalMinutesRounded > 6.0 && totalMinutesRounded <= 10.0)
+            {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds;
+                chartArea.AxisX.Interval = 30;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
+                chartArea.AxisX.Title = "Time (Hours:Minutes:Seconds of Day)";
+            }
+            else if (totalMinutesRounded > 10.0 && totalMinutesRounded <= 1.0 * 60.0)
+            {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Minutes;
+                chartArea.AxisX.Interval = 5;
+                chartArea.AxisX.LabelStyle.Format = "HH:mm";
+                chartArea.AxisX.Title = "Time (Hours:Minutes of Day)";
+            }
+            else if (totalMinutesRounded > 1.0 * 60.0 && totalMinutesRounded <= 2.0 * 60.0)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Minutes;
                 chartArea.AxisX.Interval = 15;
                 chartArea.AxisX.LabelStyle.Format = "HH:mm";
+                chartArea.AxisX.Title = "Time (Hours:Minutes of Day)";
             }
-            if (totalHoursRounded > 2 && totalHoursRounded <= 24)
+            else if (totalMinutesRounded > 2.0 * 60.0 && totalMinutesRounded <= 24.0 * 60.0)
             {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
                 chartArea.AxisX.Interval = 1;
-                chartArea.AxisX.LabelStyle.Format = "HH";
+                chartArea.AxisX.LabelStyle.Format = "HH:mm";
+                chartArea.AxisX.Title = "Time (Hours:Minutes of Day)";
             }
-            else if (totalHoursRounded > 24 && totalHoursRounded <= 48)
+            else if (totalMinutesRounded > 24.0 * 60.0 && totalMinutesRounded <= 48.0 * 60.0)
             {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
                 chartArea.AxisX.Interval = 12;
                 chartArea.AxisX.LabelStyle.Format = "HH";
+                chartArea.AxisX.Title = "Time (Hours of Day)";
             }
-            else if (totalHoursRounded > 48)
+            else if (totalMinutesRounded > 48.0 * 60.0)
             {
+                chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
                 chartArea.AxisX.Interval = 24;
                 chartArea.AxisX.LabelStyle.Format = "MM/dd/yyyy";
+                chartArea.AxisX.Title = "Time (Days)";
             }
-
-
         }
 
         private static void SetUpY2Axis(ChartArea chartArea, MetricOptions options)

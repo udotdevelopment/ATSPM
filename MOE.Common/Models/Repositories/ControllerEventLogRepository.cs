@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
+using System.Data.Entity.Core.Objects;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
+using System.Web.Management;
 using Microsoft.EntityFrameworkCore.Internal;
 
 namespace MOE.Common.Models.Repositories
@@ -12,7 +16,8 @@ namespace MOE.Common.Models.Repositories
 
         public ControllerEventLogRepository()
         {
-            _db.Database.CommandTimeout = 180;
+            //_db.Database.CommandTimeout = 180;
+            _db.Database.ExecuteSqlCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;");
         }
 
         public int GetRecordCountByParameterAndEvent(string signalId, DateTime startTime, DateTime endTime,
@@ -162,12 +167,33 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
-                return
-                (from r in _db.Controller_Event_Log
-                 where r.SignalID == signalId
-                       && r.Timestamp >= startTime
-                       && r.Timestamp < endTime
-                 select r).Count();
+                return _db.Controller_Event_Log.Count(r => r.SignalID == signalId
+                                                           && r.Timestamp >= startTime
+                                                           && r.Timestamp < endTime);
+            }
+             catch (Exception ex)
+            {
+                var logRepository =
+                    ApplicationEventRepositoryFactory.Create();
+                var e = new ApplicationEvent();
+                e.ApplicationName = "MOE.Common";
+                e.Class = GetType().ToString();
+                e.Function = "GetRecordCount";
+                e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
+                e.Timestamp = DateTime.Now;
+                e.Description = signalId + " - " +ex.Message;
+                logRepository.Add(e);
+                throw ex;
+            }
+        }
+
+        public bool CheckForRecords(string signalId, DateTime startTime, DateTime endTime)
+        {
+            try
+            {
+                return _db.Controller_Event_Log.Any(r => r.SignalID == signalId
+                                                         && r.Timestamp >= startTime
+                                                         && r.Timestamp < endTime);
             }
             catch (Exception ex)
             {
@@ -176,7 +202,7 @@ namespace MOE.Common.Models.Repositories
                 var e = new ApplicationEvent();
                 e.ApplicationName = "MOE.Common";
                 e.Class = GetType().ToString();
-                e.Function = "GetRecordCount";
+                e.Function = "CheckForRecords";
                 e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
                 e.Timestamp = DateTime.Now;
                 e.Description = ex.Message;
@@ -228,6 +254,11 @@ namespace MOE.Common.Models.Repositories
                 events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
                 return events;
             }
+            //catch (EntityCommandExecutionException ex)
+            //{
+                
+            //}
+            
             catch (Exception ex)
             {
                 var logRepository =
@@ -238,9 +269,9 @@ namespace MOE.Common.Models.Repositories
                 e.Function = "GetSignalEventsByEventCodes";
                 e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
                 e.Timestamp = DateTime.Now;
-                e.Description = ex.Message;
+                e.Description = signalId + " - " + ex.Message;
                 logRepository.Add(e);
-                throw;
+                throw ex;
             }
         }
 

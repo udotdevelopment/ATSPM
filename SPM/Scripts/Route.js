@@ -41,19 +41,19 @@ function GetSignals()
 }
 
 function StartReportSpinner() {
-    $("#RunReportSpinner").addClass("glyphicon-refresh spinning");
+    $("#RunReportSpinner").addClass("fa fa-circle-o-notch fa-spin");
 }
 
 function StopReportSpinner() {
-    $("#RunReportSpinner").removeClass("glyphicon-refresh spinning");
+    $("#RunReportSpinner").removeClass("fa fa-circle-o-notch fa-spin");
 }
 
 function StartPCDsReportSpinner() {
-    $("#PCDRunReportSpinner").addClass("glyphicon-refresh spinning");
+    $("#PCDRunReportSpinner").addClass("fa fa-circle-o-notch fa-spin");
 }
 
 function StopPCDsReportSpinner() {    
-    $("#PCDRunReportSpinner").removeClass("glyphicon-refresh spinning");
+    $("#PCDRunReportSpinner").removeClass("fa fa-circle-o-notch fa-spin");
 }
 
 function GetPCDOptions(signalId, downSignalId, upstreamDirection, downstreamDirection,

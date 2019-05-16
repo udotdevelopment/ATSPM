@@ -343,7 +343,7 @@ namespace DecodeSiemensLogs
                     endTime = DateTime.Now;
 
                     //the Signal class has a static methods to insert the table into the DB.  We are using that.
-                    MOE.Common.Business.SignalFtp.BulktoDb(elTable, bulkOptions);
+                    MOE.Common.Business.SignalFtp.BulktoDb(elTable, bulkOptions, Properties.Settings.Default.DestinationTableName);
                     elapsedTime = endTime - startTime;
 
                     if (Properties.Settings.Default.DeleteFiles)

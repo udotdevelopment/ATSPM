@@ -7,8 +7,13 @@
         public static IControllerEventLogRepository Create()
         {
             if (controllerEventLogRepository != null)
+            {
                 return controllerEventLogRepository;
-            return new ControllerEventLogRepository();
+            }
+            else
+            {
+                return new ControllerEventLogRepository();
+            }
         }
 
         public static void SetRepository(IControllerEventLogRepository newRepository)

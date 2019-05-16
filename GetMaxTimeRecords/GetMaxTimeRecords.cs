@@ -179,7 +179,7 @@ namespace GetMaxTimeRecords
                                   Properties.Settings.Default.WriteToConsole,Properties.Settings.Default.forceNonParallel, Properties.Settings.Default.MaxThreads, false, 
                                   Properties.Settings.Default.EarliestAcceptableDate, Properties.Settings.Default.BulkCopyBatchSize, Properties.Settings.Default.BulkCopyTimeOut);
 
-             MOE.Common.Business.SignalFtp.BulktoDb(elTable, Options);
+             MOE.Common.Business.SignalFtp.BulktoDb(elTable, Options,Properties.Settings.Default.DestinationTableName);
             
 
         }

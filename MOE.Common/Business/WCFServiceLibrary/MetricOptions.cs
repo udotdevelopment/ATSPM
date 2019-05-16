@@ -42,6 +42,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(ApproachEventCountAggregationOptions))]
     [KnownType(typeof(PhaseTerminationAggregationOptions))]
     [KnownType(typeof(PhasePedAggregationOptions))]
+    [KnownType(typeof(TimingAndActuationsOptions))]
     [KnownType(typeof(string[]))]
     public class MetricOptions
     {
@@ -88,11 +89,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         [DataMember]
         [Display(Name = "Secondary Y-axis Min")]
-        public double Y2AxisMin { get; set; }
+        public double? Y2AxisMin { get; set; }
 
         [DataMember]
-        public string MetricFileLocation { get;
-            set; }
+        public string MetricFileLocation { get; set; }
 
         [DataMember]
         public string MetricWebPath { get; set; }
