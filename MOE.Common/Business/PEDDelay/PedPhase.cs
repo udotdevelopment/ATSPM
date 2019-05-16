@@ -8,7 +8,7 @@ namespace MOE.Common.Business.PEDDelay
     public class PedPhase : ControllerEventLogs
     {
         public PedPhase(int phaseNumber, Models.Signal signal, DateTime startDate, DateTime endDate,
-            PlansBase plansData) : base(signal.SignalID, startDate, endDate, phaseNumber, new List<int> {21, 22, 45, 90})
+            PlansBase plansData) : base(signal.SignalID, startDate, endDate, phaseNumber, signal.ControllerTypeID == 4 ? new List<int> { 21, 22, 90 } : new List<int> { 21, 22, 45 })
         {
             SignalID = signal.SignalID;
             StartDate = startDate;
