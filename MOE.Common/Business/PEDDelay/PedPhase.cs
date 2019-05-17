@@ -73,14 +73,15 @@ namespace MOE.Common.Business.PEDDelay
 
         private void GetCycles(Signal signal)
         {
-            if (signal.ControllerTypeID == 4)
-            {
+            // both types work the same by only looking at code 90 between 21 and 22
+            //if (signal.ControllerTypeID == 4)
+            //{
                 GetCyclesForMaxtimeControllers();
-            }
-            else
-            {
-                GetCyclesForNonMaxtimeControllers();
-            }
+            //}
+            //else
+            //{
+              //  GetCyclesForNonMaxtimeControllers();
+            //}
         }
 
         private void GetCyclesForMaxtimeControllers()
@@ -88,16 +89,46 @@ namespace MOE.Common.Business.PEDDelay
             CombineSequential90Events();
             for (var i = 0; i < Events.Count; i++)
             {
+                if (i < Events.Count - 3)
+                {
+                    var eventCode1 = Events[i].EventCode;
+                    var eventCode2 = Events[i + 1].EventCode;
+                    var eventCode3 = Events[i + 2].EventCode;
+                    var eventCode4 = Events[i + 3].EventCode;
+                }
+
+                // there are four possibilities:
+                // 1) 22, 90 , 21
+                //   time between 90 and 21, count++
+                // 2) 21, 90, 22
+                //    time = 0 , count++
+                // 3) 22, 90, 22 
+                //    ignore this possibility
+                // 4) 21, 90, 21
+                //    time betweeen 90 and last 21, count++
+                //
+
                 if (i < Events.Count - 2 && Events[i].EventCode == 22 &&
                     Events[i + 1].EventCode == 90 && Events[i + 2].EventCode == 21)
                 {
-                    Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));
+                    Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));  // this is case 1
                     i = i + 2;
                 }
                 else if (i < Events.Count - 2 && Events[i].EventCode == 21 &&
                          Events[i + 1].EventCode == 90 && Events[i + 2].EventCode == 22)
                 {
-                    Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));
+                    Cycles.Add(new PedCycle(Events[i + 1].Timestamp, Events[i + 1].Timestamp));  // this is case 2
+                    i = i + 2;
+                }
+                else if (i < Events.Count - 2 && Events[i].EventCode == 21 &&
+                         Events[i + 1].EventCode == 90 && Events[i + 2].EventCode == 22)
+                {
+                    i = i + 2;                                                                   // ignore this - case 3
+                }
+                else if (i < Events.Count - 2 && Events[i].EventCode == 21 &&
+                         Events[i + 1].EventCode == 90 && Events[i + 2].EventCode == 21)
+                {
+                    Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));  // this is case 4
                     i = i + 2;
                 }
             }
@@ -108,6 +139,13 @@ namespace MOE.Common.Business.PEDDelay
             var tempEvents = new List<Models.Controller_Event_Log>();
             for (int i = 0;  i < Events.Count; i++)
             {
+                if (i < Events.Count - 3)
+                {
+                    var eventCode1 = Events[i].EventCode;
+                    var eventCode2 = Events[i + 1].EventCode;
+                    var eventCode3 = Events[i + 2].EventCode;
+                    var eventCode4 = Events[i + 3].EventCode;
+                }
                 if (Events[i].EventCode == 90)
                 {
                     tempEvents.Add(Events[i]);
@@ -138,10 +176,18 @@ namespace MOE.Common.Business.PEDDelay
 
             for (var i = 0; i < Events.Count; i++)
             {
+                if (i < Events.Count - 3)
+                {
+                    var eventCode1 = Events[i].EventCode;
+                    var eventCode2 = Events[i + 1].EventCode;
+                    var eventCode3 = Events[i + 2].EventCode;
+                    var ecentcode4 = Events[i + 3].EventCode;
+                }
+
                 if (i < Events.Count - 2 && Events[i].EventCode == 22 &&
                     Events[i + 1].EventCode == 90 && Events[i + 2].EventCode == 21)
                 {
-                    Cycles.Add(new PedCycle(Events[i].Timestamp, Events[i].Timestamp));
+                    Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));  // this is good
                     i = i + 2;
                 }
                 else if (i < Events.Count - 2 && Events[i].EventCode == 21 &&

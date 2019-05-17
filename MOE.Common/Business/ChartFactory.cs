@@ -597,7 +597,7 @@ namespace MOE.Common.Business
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Minutes;
                 chartArea.AxisX.Interval = 2;
                 chartArea.AxisX.LabelStyle.Format = "HH:mm";
-                chartArea.AxisX.Title = "Time (Hours:Minutes";
+                chartArea.AxisX.Title = "Time (Hours:Minutes)";
             }
             else if (totalMinutesRounded > 1.0 * 60.0 && totalMinutesRounded <= 2.0 * 60.0)
             {

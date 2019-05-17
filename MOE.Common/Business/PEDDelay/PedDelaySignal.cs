@@ -28,12 +28,14 @@ namespace MOE.Common.Business.PEDDelay
                 _Plans = new PlansBase(_SignalID, startDate, endDate);
                 var pedPhaseNumbers = ControllerEventLogs.GetPedPhases(_SignalID, startDate, endDate);
                 ConcurrentBag<PedPhase> pedPhases = new ConcurrentBag<PedPhase>();
-                Parallel.ForEach(pedPhaseNumbers, currentPhase =>
-                    //foreach (int currentPhase in pedPhaseNumbers)
+                //Parallel.ForEach(pedPhaseNumbers, currentPhase =>
+                foreach (int currentPhase in pedPhaseNumbers)
                 {
                     var pedPhase = new PedPhase(currentPhase, signal, startDate, endDate, _Plans);
                     pedPhases.Add(pedPhase);
-                });
+                    //});
+                }
+
                 _PedPhases = pedPhases.OrderBy(x => x.PhaseNumber).ToList();
             }
             catch (Exception e)
