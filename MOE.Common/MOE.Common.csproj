@@ -47,10 +47,6 @@
       <HintPath>..\packages\AjaxControlToolkit.16.1.0.0\lib\net40\AjaxControlToolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="AlexPilotti.FTPS.Client, Version=1.1.0.27735, Culture=neutral, PublicKeyToken=48316da1e84b328d, processorArchitecture=MSIL">
-      <HintPath>..\packages\AlexFTPS.1.1.0.27735\lib\net20\AlexPilotti.FTPS.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="CsvHelper, Version=6.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.6.1.0\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
@@ -1074,6 +1070,10 @@
     <ProjectReference Include="..\Caseiro.Mvc.PagedList-master\Caseiro.Mvc.PagedList-master\src\Caseiro.Mvc.PagedList\Caseiro.Mvc.PagedList.csproj">
       <Project>{0c799bba-8a0b-43c8-87ee-1a50360c16e1}</Project>
       <Name>Caseiro.Mvc.PagedList</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FTPSClient\FTPSClient\FTPSClient.csproj">
+      <Project>{8271707d-0c08-460d-a332-6fdb8d0bb6d1}</Project>
+      <Name>FTPSClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
