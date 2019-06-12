@@ -28,6 +28,12 @@
     vertical-align:middle;
 }
 
+.jsChart-Small {
+    position: relative;
+    height: 95px;
+    width: 95px;
+}
+
 .center-check {
     text-align: center;
     position: center;

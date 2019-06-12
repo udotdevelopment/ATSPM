@@ -93,31 +93,38 @@
                     <td class="vertical-center">
                         @Html.DisplayFor(modelItem => item.AOGUpstreamPredicted)
                     </td>
-                    <td class="vertical-center" rowspan="2">
-                        <canvas id="@item.UpstreamChartName" width="50"></canvas>
+                    <td class="vertical-center " rowspan="2">
+                        <div class="jsChart-Small" >
+                            <canvas id="@item.UpstreamChartName"></canvas>
                         <script type="text/javascript">
                             var data = {
                                 labels: ["", "", "", ""],
-                                datasets: [{
-                                    data: [@item.UpstreamChartExisting, @item.UpstreamChartPositiveChange, @item.UpstreamChartNegativeChange, @item.UpstreamChartRemaining],
-                                    backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
-                                    hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
-                                    borderWidth: [1,1,1,1]
-                                }]
+                                datasets: [
+                                    {
+                                        data: [@item.UpstreamChartExisting, @item.UpstreamChartPositiveChange,
+                                            @item.UpstreamChartNegativeChange, @item.UpstreamChartRemaining
+                                        ],
+                                        backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
+                                        hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
+                                        borderWidth: [1, 1, 1, 1]
+                                    }
+                                ]
                             };
                             // Get context with jQuery - using jQuery's .get() method.
                             var ctx = $("#@item.UpstreamChartName").get(0).getContext("2d");
-                            var myPieChart = new Chart(ctx, {
-                                type: 'pie',
-                                data: data,
-                                options: {
-                                    legend: {
-                                        display: false
+                            var myPieChart = new Chart(ctx,
+                                {
+                                    type: 'pie',
+                                    data: data,
+                                    options: {
+                                        legend: {
+                                            display: false
+                                        }
                                     }
-                                }
-                            });
+                                });
                         </script>
-                    </td>
+                            </div>
+</td>
                     <td class="vertical-center">
                         @Html.DisplayFor(modelItem => item.AOGDownstreamBefore)
                     </td>
@@ -125,30 +132,38 @@
                         @Html.DisplayFor(modelItem => item.AOGDownstreamPredicted)
                     </td>
                     <td class="vertical-center" rowspan="2">
-                        <canvas id="@item.DownstreamChartName" width="50"></canvas>
+
+                        <div class="jsChart-Small">
+                            <canvas id="@item.DownstreamChartName"></canvas>
                         <script type="text/javascript">
 
                             var data = {
                                 labels: ["", "", "", ""],
-                                datasets: [{
-                                    data: [@item.DownstreamChartExisting, @item.DownstreamChartPositiveChange, @item.DownstreamChartNegativeChange, @item.DownstreamChartRemaining],
-                                    backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
-                                    hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
-                                    borderWidth: [1, 1, 1, 1]
-                                }]
+                                datasets: [
+                                    {
+                                        data: [@item.DownstreamChartExisting, @item.DownstreamChartPositiveChange,
+                                            @item.DownstreamChartNegativeChange, @item.DownstreamChartRemaining
+                                        ],
+                                        backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
+                                        hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
+                                        borderWidth: [1, 1, 1, 1]
+                                    }
+                                ]
                             };
                             // Get context with jQuery - using jQuery's .get() method.
                             var ctx = $("#@item.DownstreamChartName").get(0).getContext("2d");
-                            var myPieChart = new Chart(ctx, {
-                                type: 'pie',
-                                data: data,
-                                options: {
-                                    legend: {
-                                        display: false
+                            var myPieChart = new Chart(ctx,
+                                {
+                                    type: 'pie',
+                                    data: data,
+                                    options: {
+                                        legend: {
+                                            display: false
+                                        }
                                     }
-                                }
-                            });
+                                });
                         </script>
+                        </div>
                     </td>
                     <td class="vertical-center BoldText">
                         @item.AogTotalBefore
@@ -156,31 +171,39 @@
                     <td class="vertical-center BoldText">
                         @item.AogTotalPredicted
                     </td>
-                    <td class ="vertical-center" rowspan="2">
-                        <canvas id="@item.TotalChartName" width="50"></canvas>
+                    <td class="vertical-center" rowspan="2">
+
+                        <div class="jsChart-Small">
+                            <canvas id="@item.TotalChartName"></canvas>
                         <script type="text/javascript">
 
                             var data = {
                                 labels: ["", "", "", ""],
-                                datasets: [{
-                                    data: [@item.TotalChartExisting, @item.TotalChartPositiveChange, @item.TotalChartNegativeChange, @item.TotalChartRemaining],
-                                    backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
-                                    hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
-                                    borderWidth: [1, 1, 1, 1]
-                                }]
+                                datasets: [
+                                    {
+                                        data: [@item.TotalChartExisting, @item.TotalChartPositiveChange,
+                                            @item.TotalChartNegativeChange, @item.TotalChartRemaining
+                                        ],
+                                        backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
+                                        hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
+                                        borderWidth: [1, 1, 1, 1]
+                                    }
+                                ]
                             };
                             // Get context with jQuery - using jQuery's .get() method.
                             var ctx = $("#@item.TotalChartName").get(0).getContext("2d");
-                            var myPieChart = new Chart(ctx, {
-                                type: 'pie',
-                                data: data,
-                                options: {
-                                    legend: {
-                                        display: false
+                            var myPieChart = new Chart(ctx,
+                                {
+                                    type: 'pie',
+                                    data: data,
+                                    options: {
+                                        legend: {
+                                            display: false
+                                        }
                                     }
-                                }
-                            });
+                                });
                         </script>
+                        </div>
                     </td>
 
                     <td class="vertical-center" rowspan="2">
@@ -227,83 +250,107 @@
             <th class="vertical-center text-center">@Model.TotalAogUpstreamBefore</th>
             <th class="vertical-center text-center">@Model.TotalAogUpstreamPredicted</th>
             <th class="vertical-center text-center" rowspan="2">
-                <canvas id="SummaryUpstreamChangeChart" width="50"></canvas>
+                
+                <div class="jsChart-Small" >
+                <canvas id="SummaryUpstreamChangeChart"></canvas>
                 <script type="text/javascript">
                     var data = {
                         labels: ["", "", "", ""],
-                        datasets: [{
-                            data: [@Model.TotalUpstreamChartExisting, @Model.TotalUpstreamChartPositiveChange, @Model.TotalUpstreamChartNegativeChange, @Model.TotalUpstreamChartRemaining],
-                            backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
-                            hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
-                            borderWidth: [1, 1, 1, 1]
-                        }]
+                        datasets: [
+                            {
+                                data: [@Model.TotalUpstreamChartExisting, @Model.TotalUpstreamChartPositiveChange,
+                                    @Model.TotalUpstreamChartNegativeChange, @Model.TotalUpstreamChartRemaining
+                                ],
+                                backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
+                                hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
+                                borderWidth: [1, 1, 1, 1]
+                            }
+                        ]
                     };
                     // Get context with jQuery - using jQuery's .get() method.
                     var ctx = $("#SummaryUpstreamChangeChart").get(0).getContext("2d");
-                    var myPieChart = new Chart(ctx, {
-                        type: 'pie',
-                        data: data,
-                        options: {
-                            legend: {
-                                display: false
+                    var myPieChart = new Chart(ctx,
+                        {
+                            type: 'pie',
+                            data: data,
+                            options: {
+                                legend: {
+                                    display: false
+                                }
                             }
-                        }
-                    });
+                        });
                 </script>
+                </div>
             </th>
             <th class="vertical-center text-center">@Model.TotalAogDownstreamBefore</th>
             <th class="vertical-center text-center">@Model.TotalAogDownstreamPredicted</th>
             <th class="vertical-center text-center" rowspan="2">
-                <canvas id="SummaryDownstreamChangeChart" width="50"></canvas>
+                
+                <div class="jsChart-Small" >
+                <canvas id="SummaryDownstreamChangeChart"></canvas>
                 <script type="text/javascript">
                     var data = {
                         labels: ["", "", "", ""],
-                        datasets: [{
-                            data: [@Model.TotalDownstreamChartExisting, @Model.TotalDownstreamChartPositiveChange, @Model.TotalDownstreamChartNegativeChange, @Model.TotalDownstreamChartRemaining],
-                            backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
-                            hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
-                            borderWidth: [1, 1, 1, 1]
-                        }]
+                        datasets: [
+                            {
+                                data: [@Model.TotalDownstreamChartExisting, @Model.TotalDownstreamChartPositiveChange,
+                                    @Model.TotalDownstreamChartNegativeChange, @Model.TotalDownstreamChartRemaining
+                                ],
+                                backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
+                                hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
+                                borderWidth: [1, 1, 1, 1]
+                            }
+                        ]
                     };
                     // Get context with jQuery - using jQuery's .get() method.
                     var ctx = $("#SummaryDownstreamChangeChart").get(0).getContext("2d");
-                    var myPieChart = new Chart(ctx, {
-                        type: 'pie',
-                        data: data,
-                        options: {
-                            legend: {
-                                display: false
+                    var myPieChart = new Chart(ctx,
+                        {
+                            type: 'pie',
+                            data: data,
+                            options: {
+                                legend: {
+                                    display: false
+                                }
                             }
-                        }
-                    });
+                        });
                 </script>
+                </div>
             </th>
             <th class="vertical-center text-center">@Model.TotalAogBefore</th>
             <th class="vertical-center text-center">@Model.TotalAogPredicted</th>
             <th class="vertical-center text-center" rowspan="2">
-                <canvas id="TotalChangeChart" width="50"></canvas>
+                
+                <div class="jsChart-Small" >
+                <canvas id="TotalChangeChart"></canvas>
                 <script type="text/javascript">
                     var data = {
                         labels: ["", "", "", ""],
-                        datasets: [{
-                            data: [@Model.TotalChartExisting, @Model.TotalChartPositiveChange, @Model.TotalChartNegativeChange, @Model.TotalChartRemaining],
-                            backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
-                            hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
-                            borderWidth: [1, 1, 1, 1]
-                        }]
+                        datasets: [
+                            {
+                                data: [@Model.TotalChartExisting, @Model.TotalChartPositiveChange,
+                                    @Model.TotalChartNegativeChange, @Model.TotalChartRemaining
+                                ],
+                                backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
+                                hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
+                                borderWidth: [1, 1, 1, 1]
+                            }
+                        ]
                     };
                     // Get context with jQuery - using jQuery's .get() method.
                     var ctx = $("#TotalChangeChart").get(0).getContext("2d");
-                    var myPieChart = new Chart(ctx, {
-                        type: 'pie',
-                        data: data,
-                        options: {
-                            legend: {
-                                display: false
+                    var myPieChart = new Chart(ctx,
+                        {
+                            type: 'pie',
+                            data: data,
+                            options: {
+                                legend: {
+                                    display: false
+                                }
                             }
-                        }
-                    });
+                        });
                 </script>
+                </div>
             </th>
         </tr>
         <tr>
