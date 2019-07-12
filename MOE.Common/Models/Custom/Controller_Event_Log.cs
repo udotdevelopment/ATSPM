@@ -18,6 +18,7 @@ namespace MOE.Common.Models
         [StringLength(10)]
         public string SignalID { get; set; }
 
+        //[Column(Order = 0, TypeName = "datetime2")]
         [Column(Order = 0)]
         [Key]
         public DateTime Timestamp { get; set; }

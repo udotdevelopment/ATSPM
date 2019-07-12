@@ -168,11 +168,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
             PhaseFilterList = ExtractListOfNumbers(PhaseFilter);
             if (ShowRawEventData)
             {
-                if (DotAndBarSize > 10)
-                {
-                    CreateFilesForPartitions();
-                    return ReturnList;
-                }
+                //if (DotAndBarSize > 10)
+                //{
+                //    CreateFilesForPartitions();
+                //    return ReturnList;
+                //}
                 for (int i = 1; i <= 16; i++)
                 {
                     if (PhaseFilterList.Any() && PhaseFilterList.Contains(i) || PhaseFilterList.Count == 0)
@@ -244,10 +244,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return ReturnList;
         }
 
-        private void CreateFilesForPartitions()
-        {
-            string path = @"C:\temp\PFunction_ControllerAndSpeed.txt";
-            //using (var PF = new StreamWriter(path, false))
+        //private void CreateFilesForPartitions()
+        //{
+        //    string path = @"C:\temp\PFunction_ControllerAndSpeed.txt";
+        //    //using (var PF = new StreamWriter(path, false))
             //{
             //    PF.WriteLine("USE [MOE]");
             //    PF.WriteLine("GO");
@@ -332,87 +332,87 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
 
 
-            path = @"C:\temp\PFunction_Aggregation.txt";
-            using (var PF = new StreamWriter(path, false))
-            {
-                PF.WriteLine("USE [MOE]");
-                PF.WriteLine("GO");
-                PF.WriteLine();
-                PF.WriteLine("CREATE PARTITION FUNCTION [PF_MOE_Aggregation](datetime2(7)) AS RANGE RIGHT FOR VALUES ");
-                PF.Write("(");
-                var inTheBegining = this.EndDate;
-                for (int i = 0; i < 100; i++)
-                {
-                    PF.Write("N'");
-                    PF.WriteLine(inTheBegining.ToString("s") + "',");
-                    inTheBegining = inTheBegining.AddMonths(1);
-                }
-                PF.WriteLine();
-                PF.WriteLine("GO");
-                PF.Close();
-            }
+        //    path = @"C:\temp\PFunction_Aggregation.txt";
+        //    using (var PF = new StreamWriter(path, false))
+        //    {
+        //        PF.WriteLine("USE [MOE]");
+        //        PF.WriteLine("GO");
+        //        PF.WriteLine();
+        //        PF.WriteLine("CREATE PARTITION FUNCTION [PF_MOE_Aggregation](datetime2(7)) AS RANGE RIGHT FOR VALUES ");
+        //        PF.Write("(");
+        //        var inTheBegining = this.EndDate;
+        //        for (int i = 0; i < 100; i++)
+        //        {
+        //            PF.Write("N'");
+        //            PF.WriteLine(inTheBegining.ToString("s") + "',");
+        //            inTheBegining = inTheBegining.AddMonths(1);
+        //        }
+        //        PF.WriteLine();
+        //        PF.WriteLine("GO");
+        //        PF.Close();
+        //    }
 
-            path = @"C:\temp\PSchema_Aggregation.txt";
-            using (var PS = new StreamWriter(path, false))
-            {
-                var inTheBegining = this.EndDate;
-                PS.WriteLine("USE [MOE]");
-                PS.WriteLine("GO");
-                PS.WriteLine();
-                PS.WriteLine("CREATE PARTITION SCHEME [PS_MOE_Aggregation] AS PARTITION [PF_MOE_Aggregation] TO (");
-                for (int i = 0; i < 100; i++)
-                {
+        //    path = @"C:\temp\PSchema_Aggregation.txt";
+        //    using (var PS = new StreamWriter(path, false))
+        //    {
+        //        var inTheBegining = this.EndDate;
+        //        PS.WriteLine("USE [MOE]");
+        //        PS.WriteLine("GO");
+        //        PS.WriteLine();
+        //        PS.WriteLine("CREATE PARTITION SCHEME [PS_MOE_Aggregation] AS PARTITION [PF_MOE_Aggregation] TO (");
+        //        for (int i = 0; i < 100; i++)
+        //        {
                     
-                    PS.Write("[MOE_Aggregation_");
-                    PS.WriteLine(inTheBegining.ToString("yyyy-MM-dd") + "],");
-                    inTheBegining = inTheBegining.AddMonths(1);
-                }
-                PS.WriteLine(")");
-                PS.WriteLine("GO");
-                PS.Close();
-            }
+        //            PS.Write("[MOE_Aggregation_");
+        //            PS.WriteLine(inTheBegining.ToString("yyyy-MM-dd") + "],");
+        //            inTheBegining = inTheBegining.AddMonths(1);
+        //        }
+        //        PS.WriteLine(")");
+        //        PS.WriteLine("GO");
+        //        PS.Close();
+        //    }
 
-            path = @"C:\temp\Files_Aggregation.txt";
-            using (var PF = new StreamWriter(path, false))
-            {
-                PF.WriteLine("USE [MOE]");
-                PF.WriteLine("GO");
-                PF.WriteLine();
-                var inTheBegining = this.EndDate;
-                for (int i = 0; i < 100; i++)
-                {
-                    PF.Write("ALTER DATABASE [MOE] ADD FILE (NAME = N'MOE_Aggregation_");
-                    PF.WriteLine(inTheBegining.ToString("yyyy-MM-dd")
-                                 + @"', FILENAME = N'E:\MSSQL\DATA\MOE_PARTITIONS\Aggregation\Aggregation_"
-                                 + inTheBegining.ToString("yyyy-MM-dd")
-                                 + ".NDF', SIZE = 2048MB, MAXSIZE = UNLIMITED, FILEGROWTH = 64MB) TO FILEGROUP "
-                                 + "[MOE_Aggregation_" + inTheBegining.ToString("yyyy-MM-dd") + "]");
+        //    path = @"C:\temp\Files_Aggregation.txt";
+        //    using (var PF = new StreamWriter(path, false))
+        //    {
+        //        PF.WriteLine("USE [MOE]");
+        //        PF.WriteLine("GO");
+        //        PF.WriteLine();
+        //        var inTheBegining = this.EndDate;
+        //        for (int i = 0; i < 100; i++)
+        //        {
+        //            PF.Write("ALTER DATABASE [MOE] ADD FILE (NAME = N'MOE_Aggregation_");
+        //            PF.WriteLine(inTheBegining.ToString("yyyy-MM-dd")
+        //                         + @"', FILENAME = N'E:\MSSQL\DATA\MOE_PARTITIONS\Aggregation\Aggregation_"
+        //                         + inTheBegining.ToString("yyyy-MM-dd")
+        //                         + ".NDF', SIZE = 2048MB, MAXSIZE = UNLIMITED, FILEGROWTH = 64MB) TO FILEGROUP "
+        //                         + "[MOE_Aggregation_" + inTheBegining.ToString("yyyy-MM-dd") + "]");
                
-                    inTheBegining = inTheBegining.AddMonths(1);
-                }
-                PF.WriteLine();
-                PF.WriteLine("GO");
-                PF.Close();
-            }
+        //            inTheBegining = inTheBegining.AddMonths(1);
+        //        }
+        //        PF.WriteLine();
+        //        PF.WriteLine("GO");
+        //        PF.Close();
+        //    }
 
 
-            path = @"C:\temp\FileGroup_Aggregation.txt";
-            using (var PS = new StreamWriter(path, false))
-            {
-                var inTheBegining = this.EndDate;
-                PS.WriteLine("USE [MOE]");
-                PS.WriteLine("GO");
-                PS.WriteLine();
-                for (int i = 0; i < 100; i++)
-                {
-                    PS.WriteLine("ALTER DATABASE [MOE] ADD FILEGROUP [MOE_Aggregation_" + inTheBegining.ToString("yyyy-MM-dd") + "]");
-                    inTheBegining = inTheBegining.AddMonths(1);
-                }
-                PS.WriteLine();
-                PS.WriteLine("GO");
-                PS.Close();
-            }
-        }
+        //    path = @"C:\temp\FileGroup_Aggregation.txt";
+        //    using (var PS = new StreamWriter(path, false))
+        //    {
+        //        var inTheBegining = this.EndDate;
+        //        PS.WriteLine("USE [MOE]");
+        //        PS.WriteLine("GO");
+        //        PS.WriteLine();
+        //        for (int i = 0; i < 100; i++)
+        //        {
+        //            PS.WriteLine("ALTER DATABASE [MOE] ADD FILEGROUP [MOE_Aggregation_" + inTheBegining.ToString("yyyy-MM-dd") + "]");
+        //            inTheBegining = inTheBegining.AddMonths(1);
+        //        }
+        //        PS.WriteLine();
+        //        PS.WriteLine("GO");
+        //        PS.Close();
+        //    }
+        //}
 
 
 

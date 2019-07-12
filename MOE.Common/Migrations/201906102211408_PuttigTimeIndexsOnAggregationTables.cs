@@ -2,11 +2,16 @@ namespace MOE.Common.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
-    
+    using System.Web.Mvc;
+
     public partial class PuttigTimeIndexsOnAggregationTables : DbMigration
     {
         public override void Up()
         {
+
+            Filter TABLE[dbo].[ApproachCycleAggregations]
+            DROP CONSTRAINT[FK_dbo.ApproachCycleAggregations_dbo.Approaches_ApproachId]
+
             DropPrimaryKey("dbo.ApproachCycleAggregations");
             DropPrimaryKey("dbo.ApproachEventCountAggregations");
             DropPrimaryKey("dbo.ApproachPcdAggregations");
