@@ -89,9 +89,10 @@ namespace MOE.Common.Business.DataAggregation
                 Parallel.ForEach(signals, signal =>
                 //foreach (var signal in signals)
                 {
-                    Console.WriteLine(signal.SignalID + " " + dt.ToString());
+                    Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "  > " +  signal.SignalID + " " + dt.ToString());
                     ProcessSignal(signal, dt, dt.AddMinutes(binSize));
-                    Console.WriteLine(signal.SignalID + " " + dt.ToString() + " - Complete! signal");
+                    Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "  > " + signal.SignalID + " " +
+                                                            dt.ToString() + " - Complete! signal");
                 }
                 );
                BulkSaveAllAggregateDataInParallel();
