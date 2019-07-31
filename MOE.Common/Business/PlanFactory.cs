@@ -62,6 +62,8 @@ namespace MOE.Common.Business
             var tempPlanEvents = celRepository.GetSignalEventsByEventCode(signalId, startDate, endDate, 131)
                 .OrderBy(e => e.Timestamp).ToList();
 
+            tempPlanEvents.Add(new Controller_Event_Log { SignalID = signalId, EventCode = 131, EventParam = 254, Timestamp = endDate });
+
             for (var x = 0; x < tempPlanEvents.Count(); x++)
                 if (x + 2 < tempPlanEvents.Count())
                 {
