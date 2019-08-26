@@ -953,6 +953,14 @@ While each agency should consult with their IT department for specific guideline
                     Abbreviation = "APD",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true
+                },
+                new MetricType
+                {
+                    MetricID = 31,
+                    ChartName = "Left Turn Gap Analysis",
+                    Abbreviation = "LTGA",
+                    ShowOnWebsite = true,
+                    ShowOnAggregationSite = false
                 }
             );
             context.SaveChanges();
@@ -967,6 +975,7 @@ While each agency should consult with their IT department for specific guideline
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(4));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(14));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(15));
+                        detectionType.MetricTypes.Add(context.MetricTypes.Find(31));
                         break;
                     case 2:
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(6));

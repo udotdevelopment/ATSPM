@@ -26,6 +26,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(SplitFailOptions))]
     [KnownType(typeof(SplitMonitorOptions))]
     [KnownType(typeof(PedDelayOptions))]
+    [KnownType(typeof(LeftTurnGapAnalysisOptions))]
     [KnownType(typeof(ApproachVolumeOptions))]
     [KnownType(typeof(SignalAggregationMetricOptions))]
     [KnownType(typeof(ApproachAggregationMetricOptions))]
