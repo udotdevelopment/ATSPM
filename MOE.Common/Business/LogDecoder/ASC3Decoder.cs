@@ -12,10 +12,12 @@ namespace MOE.Common.Business.LogDecoder
     public class Asc3Decoder
     {
         // reference https://en.wikipedia.org/wiki/List_of_file_signatures
+        // Found the two bytes for EOS by reading the file.
         public static byte[] _ZlibHeaderNoCompression = { 0x78, 0x01 };
         public static byte[] _ZlibHeaderDefaultCompression = { 0x78, 0x9C };
         public static byte[] _ZlibHeaderBestCompression = { 0x78, 0xDA };
         public static byte[] _GZipHeader = { 0x1f, 0x8b };
+        public static byte[] _EOSHeader = { 0x18, 0x95 };
 
         public static void DecodeAsc3File(string fileName, string signalId,
             BlockingCollection<Data.MOE.Controller_Event_LogRow> rowBag, DateTime earliestAcceptableDate)
@@ -155,7 +157,7 @@ namespace MOE.Common.Business.LogDecoder
                 return true;
             }
             // let's make sure it is not another compression 
-            else if (AreEqual(header, _GZipHeader))
+            else if (AreEqual(header, _GZipHeader) || AreEqual(header, _EOSHeader))
             {
                 return true;
             }

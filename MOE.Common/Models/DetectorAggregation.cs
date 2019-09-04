@@ -18,9 +18,11 @@ namespace MOE.Common.Models
         public DateTime BinStartTime { get; set; }
 
         [Key]
+        //[ForeignKey("Detector")]
         [Required]
         [Column(Order = 1)]
         public int DetectorPrimaryId { get; set; }
+        //public virtual Detector Detector { get; set; }
 
         [Required]
         [Column(Order = 2)]
@@ -38,7 +40,6 @@ namespace MOE.Common.Models
                 Map(m => m.Volume).Name("Volume");
                 Map(m => m.DetectorPrimaryId).Name("Detector Primary Id");
                 //Map(m => m.DetectorPrimaryId).Name("Detector ID");
-                
             }
         }
     }

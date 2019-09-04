@@ -542,9 +542,13 @@
     <Compile Include="Migrations\201810301701213_WatchDogEmailAllErrors.Designer.cs">
       <DependentUpon>201810301701213_WatchDogEmailAllErrors.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201907092008341_CompositeKeys-AgregationTables.cs" />
-    <Compile Include="Migrations\201907092008341_CompositeKeys-AgregationTables.Designer.cs">
-      <DependentUpon>201907092008341_CompositeKeys-AgregationTables.cs</DependentUpon>
+    <Compile Include="Migrations\201908300411026_aggregationTablesAndKeys.cs" />
+    <Compile Include="Migrations\201908300411026_aggregationTablesAndKeys.Designer.cs">
+      <DependentUpon>201908300411026_aggregationTablesAndKeys.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908300522432_forceMigration.cs" />
+    <Compile Include="Migrations\201908300522432_forceMigration.Designer.cs">
+      <DependentUpon>201908300522432_forceMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
@@ -924,26 +928,9 @@
     <EmbeddedResource Include="Migrations\201810301701213_WatchDogEmailAllErrors.resx">
       <DependentUpon>201810301701213_WatchDogEmailAllErrors.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201907092008341_CompositeKeys-AgregationTables.resx">
-      <DependentUpon>201907092008341_CompositeKeys-AgregationTables.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\VerboseStatus.sql" />
-    <EmbeddedResource Include="Migrations\InsertValues.sql" />
-    <EmbeddedResource Include="Migrations\PhysicalFileName.sql" />
-    <EmbeddedResource Include="Migrations\ScheduleReclaimFileSpaceFirstFriday.sql" />
     <EmbeddedResource Include="Migrations\201808171744257_AggreationLongsForId.resx">
       <DependentUpon>201808171744257_AggreationLongsForId.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\DatabaseFileName.sql" />
-    <EmbeddedResource Include="Migrations\UpperBoundary.sql" />
-    <EmbeddedResource Include="Migrations\TableName.sql" />
-    <EmbeddedResource Include="Migrations\StopCounter.sql" />
-    <EmbeddedResource Include="Migrations\Processtables.sql" />
-    <EmbeddedResource Include="Migrations\PreserveData.sql" />
-    <EmbeddedResource Include="Migrations\LowerBoundary.sql" />
-    <EmbeddedResource Include="Migrations\IndexNameColumns.sql" />
-    <EmbeddedResource Include="Migrations\IndexNameClustered.sql" />
-    <EmbeddedResource Include="Migrations\IndexName.sql" />
     <EmbeddedResource Include="Migrations\201804251748599_MetricTypeIdentityRemoval.resx">
       <DependentUpon>201804251748599_MetricTypeIdentityRemoval.cs</DependentUpon>
     </EmbeddedResource>
@@ -962,13 +949,13 @@
     <EmbeddedResource Include="Migrations\201806211436552_RemoveLaneByLaneFromAOR.resx">
       <DependentUpon>201806211436552_RemoveLaneByLaneFromAOR.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\CreateConstraints.sql" />
-    <EmbeddedResource Include="Migrations\CreateIndexes.sql" />
-    <EmbeddedResource Include="Migrations\CreateTable.sql" />
+    <EmbeddedResource Include="Migrations\201908300411026_aggregationTablesAndKeys.resx">
+      <DependentUpon>201908300411026_aggregationTablesAndKeys.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908300522432_forceMigration.resx">
+      <DependentUpon>201908300522432_forceMigration.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
-    <EmbeddedResource Include="Migrations\DoTheSwapTable.sql" />
-    <EmbeddedResource Include="Migrations\DropIndexes.sql" />
-    <EmbeddedResource Include="Migrations\FileGroup.sql" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />

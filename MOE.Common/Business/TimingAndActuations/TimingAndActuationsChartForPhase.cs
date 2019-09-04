@@ -96,13 +96,13 @@ namespace MOE.Common.Business.TimingAndActuations
                 SetStopBarEvents();
             }
             if (TimingAndActuationsForPhase.Options.ShowPedestrianActuation
-                && !getPermissivePhase
-                && !TimingAndActuationsForPhase.Options.ShowRawEventData)
+                && (!getPermissivePhase
+                || TimingAndActuationsForPhase.Options.ShowRawEventData))
             {
                 SetPedestrianActuation();
             }
             if (TimingAndActuationsForPhase.Options.ShowPedestrianIntervals
-                && !getPermissivePhase)
+                && (!getPermissivePhase || TimingAndActuationsForPhase.Options.ShowRawEventData))
             {
                 SetPedestrianInterval();
             }

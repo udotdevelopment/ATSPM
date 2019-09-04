@@ -44,9 +44,10 @@ namespace MOE.Common.Business.TimingAndActuations
             {
                 GetPedestrianIntervals(PhaseOrOverlap);
             }
-            if (Options.ShowPedestrianActuation && !GetPermissivePhase)
+            //if (Options.ShowPedestrianActuation && !GetPermissivePhase)
+            if (Options.ShowPedestrianActuation)
             {
-                GetPedestrianEvents();
+                    GetPedestrianEvents();
             }
             if (Options.PhaseEventCodesList != null)
             {
@@ -55,6 +56,7 @@ namespace MOE.Common.Business.TimingAndActuations
             }
         }
 
+       
         public TimingAndActuationsForPhase(Approach approach, TimingAndActuationsOptions options,
             bool getPermissivePhase)
         {

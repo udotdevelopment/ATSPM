@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.DataVisualization.Charting;
 using System.Xml;
+using Microsoft.Ajax.Utilities;
 //using Ionic.Zip;
 using MOE.Common.Business;
 using MOE.Common.Business.Bins;
@@ -284,14 +285,23 @@ namespace SPM.Controllers
                     .AddHours(23).AddMinutes(59);
             }
             List<DayOfWeek> daysOfWeek = new List<DayOfWeek>();
+            // three cases 1) Week Day, 2) Week End, 3) time or WeekDay and Weekend Andre
+            var whichDaysAreIncluded = 0;
             if (aggDataExportViewModel.Weekends)
             {
-                daysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday, DayOfWeek.Saturday });
+                whichDaysAreIncluded = 2;
             }
             if (aggDataExportViewModel.Weekdays)
             {
-                daysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                whichDaysAreIncluded++;
             }
+            if (aggDataExportViewModel.SelectedXAxisType.Value == XAxisType.Time)
+            {
+                whichDaysAreIncluded = 3;
+            }
+            daysOfWeek = getRequiredDayNames(whichDaysAreIncluded, aggDataExportViewModel.StartDateDay.Value.Date,
+                aggDataExportViewModel.EndDateDay.Value.Date);
+
             BinFactoryOptions.BinSize binSize = (BinFactoryOptions.BinSize)aggDataExportViewModel.SelectedBinSize;
             switch (aggDataExportViewModel.SelectedXAxisType)
             {
@@ -318,6 +328,600 @@ namespace SPM.Controllers
                 startHour, startMinute, endHour, endMinute, daysOfWeek,
                 binSize,
                 timeOptions);
+        }
+
+        private static List<DayOfWeek> getRequiredDayNames(int whichDaysAreIncluded, DateTime? startDateDay, DateTime? endDateDay)
+        {
+           var numberOfDays = endDateDay - startDateDay;
+            int days = numberOfDays.Value.Days + 1;
+            List<DayOfWeek> correctDaysOfWeek = new List<DayOfWeek>();
+            var dayNumber = "";
+            switch (days)
+            {
+                case 0:
+                    dayNumber = "One Day";
+                    break;
+                case 1:
+                    dayNumber = "One Day";
+                    break;
+                case 2:
+                    dayNumber = "Two Days";
+                    break;
+                case 3:
+                    dayNumber = "Three Days";
+                    break;
+                case 4:
+                    dayNumber = "Four Days";
+                    break;
+                case 5:
+                    dayNumber = "Five Days";
+                    break;
+                case 6:
+                    dayNumber = "Six Days";
+                    break;
+                default:
+                    dayNumber = "Seven Days";
+                    break;
+            }
+            var daysIncluded = "";
+            switch (whichDaysAreIncluded)
+            {
+                case 1:
+                    daysIncluded = "WeekDay";
+                    break;
+                case 2:
+                    daysIncluded = "WeekEnd";
+                    break;
+                case 3:
+                    daysIncluded = "AllDays";
+                    break;
+            }
+
+            switch (dayNumber)
+            {
+                case "One Day":
+                    switch (daysIncluded)
+                    {
+                        case "WeekDay":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday });
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday });
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday });
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday });
+                                    break;
+                                case DayOfWeek.Friday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    break;
+                            }
+                            break;
+                        case "WeekEnd":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    break;
+                                case DayOfWeek.Friday:
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Saturday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday });
+                                    break;
+                            }
+                            break;
+                        case "AllDays":
+                             switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday });
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday });
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday });
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday });
+                                    break;
+                                case DayOfWeek.Friday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Saturday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday });
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+                case "Two Days":
+                    switch (daysIncluded)
+                    {
+                        case "WeekDay":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday });
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday, DayOfWeek.Wednesday });
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Thursday });
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Friday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    break;
+                            }
+                            break;
+                        case "WeekEnd":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    break;
+                                case DayOfWeek.Friday:
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday });
+                                    break;
+                            }
+                            break;
+                        case "AllDays":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday });
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday, DayOfWeek.Wednesday });
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Thursday });
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Friday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Friday, DayOfWeek.Saturday });
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday, DayOfWeek.Monday });
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+                case "Three Days":
+                    switch (daysIncluded)
+                    {
+                        case "WeekDay":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday });
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday });
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Friday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    break;
+                            }
+                            break;
+                        case "WeekEnd":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    break;
+                                case DayOfWeek.Friday:
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Saturday });
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday });
+                                    break;
+                            }
+                            break;
+                        case "AllDays":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday });
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday });
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday  });
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday });
+                                    break;
+                                case DayOfWeek.Friday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday });
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday });
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+                case "Four Days":
+                    switch (daysIncluded)
+                    {
+                        case "WeekDay":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday });
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Friday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    break;
+                            }
+                            break;
+                        case "WeekEnd":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    break;
+                                case DayOfWeek.Friday:
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Saturday });
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday });
+                                    break;
+                            }
+                            break;
+                        case "AllDays":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday });
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday });
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday });
+                                    break;
+                                case DayOfWeek.Friday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday });
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday });
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+                case "Five Days":
+                    switch (daysIncluded)
+                    {
+                        case "WeekDay":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Friday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    break;
+                            }
+                            break;
+                        case "WeekEnd":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    break;
+                                case DayOfWeek.Friday:
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Saturday });
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday });
+                                    break;
+                            }
+                            break;
+                        case "AllDays":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday });
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday });
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday });
+                                    break;
+                                case DayOfWeek.Friday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday });
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday });
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+                case "Six Days":
+                    switch (daysIncluded)
+                    {
+                        case "WeekDay":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Monday });
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Monday, DayOfWeek.Tuesday });
+                                    break;
+                                case DayOfWeek.Friday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Friday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday });
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                            }
+                            break;
+                        case "WeekEnd":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    break;
+                                case DayOfWeek.Friday:
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Saturday });
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday });
+                                    break;
+                            }
+                            break;
+                        case "AllDays":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday });
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday });
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday });
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday });
+                                    break;
+                                case DayOfWeek.Friday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday });
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+                case "Seven Days":
+                    switch (daysIncluded)
+                    {
+                        case "WeekDay":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Monday });
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Monday, DayOfWeek.Tuesday });
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday });
+                                    break;
+                                case DayOfWeek.Friday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Friday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday });
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                            }
+                            break;
+                        case "WeekEnd":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    break;
+                                case DayOfWeek.Friday:
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Saturday });
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday, DayOfWeek.Saturday });
+                                    break;
+                            }
+                            break;
+                        case "AllDays":
+                            switch (startDateDay.Value.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday });
+                                    break;
+                                case DayOfWeek.Tuesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday });
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday });
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday });
+                                    break;
+                                case DayOfWeek.Friday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday });
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday });
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+            }
+            return correctDaysOfWeek;
         }
 
         // GET: DataExportViewModels

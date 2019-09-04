@@ -3,13 +3,13 @@ namespace MOE.Common.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class CompositeKeysAgregationTables : DbMigration
+    public partial class ChangMoeDbForDifferenKeys : DbMigration
     {
         public override void Up()
         {
             DropForeignKey("dbo.DetectorAggregations", "DetectorPrimaryId", "dbo.Detectors");
             DropIndex("dbo.DetectorAggregations", new[] { "DetectorPrimaryId" });
-            //DropPrimaryKey("dbo.ApproachCycleAggregations");
+            DropPrimaryKey("dbo.ApproachCycleAggregations");
             DropPrimaryKey("dbo.ApproachEventCountAggregations");
             DropPrimaryKey("dbo.ApproachPcdAggregations");
             DropPrimaryKey("dbo.ApproachSpeedAggregations");
@@ -22,6 +22,7 @@ namespace MOE.Common.Migrations
             DropPrimaryKey("dbo.PreemptionAggregations");
             DropPrimaryKey("dbo.PriorityAggregations");
             DropPrimaryKey("dbo.SignalEventCountAggregations");
+            AddColumn("dbo.MetricTypes", "DisplayOrder", c => c.Int(nullable: false));
             AddColumn("dbo.DetectorEventCountAggregations", "DetectorPrimaryId", c => c.Int(nullable: false));
             AlterColumn("dbo.PhaseTerminationAggregations", "Id", c => c.Int(nullable: false, identity: true));
             AlterColumn("dbo.PreemptionAggregations", "Id", c => c.Int(nullable: false, identity: true));
@@ -80,6 +81,7 @@ namespace MOE.Common.Migrations
             AlterColumn("dbo.PreemptionAggregations", "Id", c => c.Long(nullable: false, identity: true));
             AlterColumn("dbo.PhaseTerminationAggregations", "Id", c => c.Long(nullable: false, identity: true));
             DropColumn("dbo.DetectorEventCountAggregations", "DetectorPrimaryId");
+            DropColumn("dbo.MetricTypes", "DisplayOrder");
             AddPrimaryKey("dbo.SignalEventCountAggregations", "Id");
             AddPrimaryKey("dbo.PriorityAggregations", "Id");
             AddPrimaryKey("dbo.PreemptionAggregations", "Id");
@@ -92,7 +94,7 @@ namespace MOE.Common.Migrations
             AddPrimaryKey("dbo.ApproachSpeedAggregations", "Id");
             AddPrimaryKey("dbo.ApproachPcdAggregations", "Id");
             AddPrimaryKey("dbo.ApproachEventCountAggregations", "Id");
-           // AddPrimaryKey("dbo.ApproachCycleAggregations", "Id");
+            AddPrimaryKey("dbo.ApproachCycleAggregations", "Id");
             CreateIndex("dbo.DetectorAggregations", "DetectorPrimaryId");
             AddForeignKey("dbo.DetectorAggregations", "DetectorPrimaryId", "dbo.Detectors", "ID", cascadeDelete: true);
         }

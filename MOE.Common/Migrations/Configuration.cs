@@ -14,11 +14,11 @@ namespace MOE.Common.Migrations
 
         public Configuration()
         {
-            //AutomaticMigrationsEnabled = true;
-            //AutomaticMigrationDataLossAllowed = true;
-            //var migrator = new DbMigrator(this);
+            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
+            var migrator = new DbMigrator(this);
             //_pendingMigrations = migrator.GetPendingMigrations().Any();
-            //CommandTimeout = int.MaxValue;
+            CommandTimeout = int.MaxValue;
         }
 
         protected override void Seed(SPM context)
@@ -681,17 +681,27 @@ namespace MOE.Common.Migrations
                     ActiveFTP = false,
                     UserName = "atc",
                     Password = "PeekAtc"
+                },
+                new ControllerType
+                {
+                    ControllerTypeID = 9,
+                    Description = "EOS",
+                    SNMPPort = 161,
+                    FTPDirectory = "/set1",
+                    ActiveFTP = true,
+                    UserName = "econolite",
+                    Password = "ecpi2ecpi"
                 }
             );
 
             context.DetectionTypes.AddOrUpdate(
                 c => c.DetectionTypeID,
-                new DetectionType {DetectionTypeID = 1, Description = "Basic"},
-                new DetectionType {DetectionTypeID = 2, Description = "Advanced Count"},
-                new DetectionType {DetectionTypeID = 3, Description = "Advanced Speed"},
-                new DetectionType {DetectionTypeID = 4, Description = "Lane-by-lane Count"},
-                new DetectionType {DetectionTypeID = 5, Description = "Lane-by-lane with Speed Restriction"},
-                new DetectionType {DetectionTypeID = 6, Description = "Stop Bar Presence"},
+                new DetectionType { DetectionTypeID = 1, Description = "Basic" },
+                new DetectionType { DetectionTypeID = 2, Description = "Advanced Count" },
+                new DetectionType { DetectionTypeID = 3, Description = "Advanced Speed" },
+                new DetectionType { DetectionTypeID = 4, Description = "Lane-by-lane Count" },
+                new DetectionType { DetectionTypeID = 5, Description = "Lane-by-lane with Speed Restriction" },
+                new DetectionType { DetectionTypeID = 6, Description = "Stop Bar Presence" },
                 new DetectionType { DetectionTypeID = 7, Description = "Advanced Presence" }
             );
 
@@ -704,7 +714,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Purdue Phase Termination",
                     Abbreviation = "PPT",
                     ShowOnWebsite = true,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 1
                 },
                 new MetricType
                 {
@@ -712,7 +723,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Split Monitor",
                     Abbreviation = "SM",
                     ShowOnWebsite = true,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 2
                 },
                 new MetricType
                 {
@@ -720,7 +732,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Pedestrian Delay",
                     Abbreviation = "PedD",
                     ShowOnWebsite = true,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 3
                 },
                 new MetricType
                 {
@@ -728,7 +741,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Preemption Details",
                     Abbreviation = "PD",
                     ShowOnWebsite = true,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 4
                 },
                 new MetricType
                 {
@@ -736,7 +750,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Turning Movement Counts",
                     Abbreviation = "TMC",
                     ShowOnWebsite = true,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 8
                 },
                 new MetricType
                 {
@@ -744,7 +759,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Purdue Coordination Diagram",
                     Abbreviation = "PCD",
                     ShowOnWebsite = true,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 12
                 },
                 new MetricType
                 {
@@ -752,7 +768,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Approach Volume",
                     Abbreviation = "AV",
                     ShowOnWebsite = true,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 9
                 },
                 new MetricType
                 {
@@ -760,7 +777,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Approach Delay",
                     Abbreviation = "AD",
                     ShowOnWebsite = true,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 10
                 },
                 new MetricType
                 {
@@ -768,7 +786,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Arrivals On Red",
                     Abbreviation = "AoR",
                     ShowOnWebsite = true,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 11
                 },
                 new MetricType
                 {
@@ -776,7 +795,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Approach Speed",
                     Abbreviation = "Speed",
                     ShowOnWebsite = true,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 13
                 },
                 new MetricType
                 {
@@ -784,7 +804,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Yellow and Red Actuations",
                     Abbreviation = "YRA",
                     ShowOnWebsite = true,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 7
                 },
                 new MetricType
                 {
@@ -792,7 +813,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Purdue Split Failure",
                     Abbreviation = "SF",
                     ShowOnWebsite = true,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 6
                 },
                 new MetricType
                 {
@@ -800,7 +822,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Purdue Link Pivot",
                     Abbreviation = "LP",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 50
                 },
                 new MetricType
                 {
@@ -808,7 +831,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Preempt Service Request",
                     Abbreviation = "PSR",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 70
                 },
                 new MetricType
                 {
@@ -816,7 +840,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Preempt Service",
                     Abbreviation = "PS",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 60
                 },
                 new MetricType
                 {
@@ -824,7 +849,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Detector Activation Count",
                     Abbreviation = "DVA",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 101
                 },
                 new MetricType
                 {
@@ -832,7 +858,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Timing And Actuation",
                     Abbreviation = "TAA",
                     ShowOnWebsite = true,
-                    ShowOnAggregationSite = false
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 5
                 },
                 new MetricType
                 {
@@ -840,7 +867,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Approach Pcd", //"Purdue Coodination",
                     Abbreviation = "APCD", // "PCDA",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 102
                 },
                 new MetricType
                 {
@@ -848,7 +876,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Approach Cycle", // "Cycle"
                     Abbreviation = "CA",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 103
                 },
                 new MetricType
                 {
@@ -856,7 +885,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Approach Split Fail", //"Purdue Split Failure",
                     Abbreviation = "SFA",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 104
                 },
                 new MetricType
                 {
@@ -864,7 +894,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Signal Preemption", //"Preemption",
                     Abbreviation = "PreemptA",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 105
                 },
                 new MetricType
                 {
@@ -872,7 +903,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Signal Priority", // "Transit Signal Priority",
                     Abbreviation = "TSPA",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 106
                 },
                 new MetricType
                 {
@@ -880,7 +912,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Approach Speed",
                     Abbreviation = "ASA",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 107
                 },
                 new MetricType
                 {
@@ -888,7 +921,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Approach Yellow Red Activations", //"Yellow Red Activations",
                     Abbreviation = "YRAA",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 108
                 },
                 new MetricType
                 {
@@ -896,7 +930,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Signal Event Count",
                     Abbreviation = "SEC",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 109
                 },
                 new MetricType
                 {
@@ -904,7 +939,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Approach Event Count",
                     Abbreviation = "AEC",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 110
                 },
                 new MetricType
                 {
@@ -912,7 +948,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Phase Termination",
                     Abbreviation = "AEC",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 111
                 },
                 new MetricType
                 {
@@ -920,7 +957,8 @@ namespace MOE.Common.Migrations
                     ChartName = "Phase Pedestrian Delay",
                     Abbreviation = "APD",
                     ShowOnWebsite = false,
-                    ShowOnAggregationSite = true
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 112
                 }
             );
             context.SaveChanges();
@@ -961,26 +999,26 @@ namespace MOE.Common.Migrations
             context.SaveChanges();
 
             context.VersionActions.AddOrUpdate(
-                new VersionAction {ID = 1, Description = "New"},
-                new VersionAction {ID = 2, Description = "Edit"},
-                new VersionAction {ID = 3, Description = "Delete"},
-                new VersionAction {ID = 4, Description = "New Version"},
-                new VersionAction {ID = 10, Description = "Initial"}
+                new VersionAction { ID = 1, Description = "New" },
+                new VersionAction { ID = 2, Description = "Edit" },
+                new VersionAction { ID = 3, Description = "Delete" },
+                new VersionAction { ID = 4, Description = "New Version" },
+                new VersionAction { ID = 10, Description = "Initial" }
             );
 
             context.MetricsFilterTypes.AddOrUpdate(
                 c => c.FilterName,
-                new MetricsFilterType {FilterName = "Signal ID"},
-                new MetricsFilterType {FilterName = "Primary Name"},
-                new MetricsFilterType {FilterName = "Secondary Name"}
+                new MetricsFilterType { FilterName = "Signal ID" },
+                new MetricsFilterType { FilterName = "Primary Name" },
+                new MetricsFilterType { FilterName = "Secondary Name" }
             );
 
             context.Applications.AddOrUpdate(
                 c => c.ID,
-                new Application {ID = 1, Name = "ATSPM"},
-                new Application {ID = 2, Name = "SPMWatchDog"},
-                new Application {ID = 3, Name = "DatabaseArchive"},
-                new Application {ID = 4, Name = "GeneralSetting"}
+                new Application { ID = 1, Name = "ATSPM" },
+                new Application { ID = 2, Name = "SPMWatchDog" },
+                new Application { ID = 3, Name = "DatabaseArchive" },
+                new Application { ID = 4, Name = "GeneralSetting" }
             );
 
             context.WatchdogApplicationSettings.AddOrUpdate(
@@ -989,9 +1027,9 @@ namespace MOE.Common.Migrations
                 {
                     ApplicationID = 2,
                     ConsecutiveCount = 3,
-                    DefaultEmailAddress = "dlowe@utah.gov",
-                    EmailServer = "send.state.ut.us",
-                    FromEmailAddress = "SPMWatchdog@utah.gov",
+                    DefaultEmailAddress = "SomeOne@AnEmail.address",
+                    EmailServer = "send.EmailServer",
+                    FromEmailAddress = "SPMWatchdog@default.com",
                     LowHitThreshold = 50,
                     MaxDegreeOfParallelism = 4,
                     MinimumRecords = 500,
@@ -1011,15 +1049,7 @@ namespace MOE.Common.Migrations
                 new DatabaseArchiveSettings
                 {
                     ApplicationID = 3,
-                    ArchivePath = @"\\srwtcnas\tcshare2\MOEFlatFiles\",
-                    //EnableDatbaseArchive = false,
-                    //SelectedTableScheme = TableScheme.Partitioned,
-                    //MonthsToKeepIndex = 6,
-                    //MonthsToKeepData = 6,
-                    //SelectedDeleteOrMove = DeleteOrMove.Move,
-                    //StartTime = 22,
-                    //TimeDuration = 8,
-                    //NumberOfRows = 10000
+                    ArchivePath = @"\\ATSPM_Backup_DataTables\tcshare2\MOEFlatFiles\",
                 }
             );
 
@@ -1029,25 +1059,25 @@ namespace MOE.Common.Migrations
                 {
                     ApplicationID = 4,
                     RawDataCountLimit = 1048576,
-                    ImageUrl = "http://udottraffic.utah.gov/spmimages/",
-                    ImagePath = @"\\utstsrtcns53\C-LinkDynamicContent\SPMImages\"
+                    ImageUrl = "http://defaultWebServer/spmimages/",
+                    ImagePath = @"\\defaultWebserver\SPMImages\"
                 }
             );
 
             context.LaneTypes.AddOrUpdate(
-                new LaneType {LaneTypeID = 1, Description = "Vehicle", Abbreviation = "V"},
-                new LaneType {LaneTypeID = 2, Description = "Bike", Abbreviation = "Bike"},
-                new LaneType {LaneTypeID = 3, Description = "Pedestrian", Abbreviation = "Ped"},
-                new LaneType {LaneTypeID = 4, Description = "Exit", Abbreviation = "E"},
-                new LaneType {LaneTypeID = 5, Description = "Light Rail Transit", Abbreviation = "LRT"},
-                new LaneType {LaneTypeID = 6, Description = "Bus", Abbreviation = "Bus"},
-                new LaneType {LaneTypeID = 7, Description = "High Occupancy Vehicle", Abbreviation = "HOV"}
+                new LaneType { LaneTypeID = 1, Description = "Vehicle", Abbreviation = "V" },
+                new LaneType { LaneTypeID = 2, Description = "Bike", Abbreviation = "Bike" },
+                new LaneType { LaneTypeID = 3, Description = "Pedestrian", Abbreviation = "Ped" },
+                new LaneType { LaneTypeID = 4, Description = "Exit", Abbreviation = "E" },
+                new LaneType { LaneTypeID = 5, Description = "Light Rail Transit", Abbreviation = "LRT" },
+                new LaneType { LaneTypeID = 6, Description = "Bus", Abbreviation = "Bus" },
+                new LaneType { LaneTypeID = 7, Description = "High Occupancy Vehicle", Abbreviation = "HOV" }
             );
 
             context.MovementTypes.AddOrUpdate(
-                new MovementType {MovementTypeID = 1, Description = "Thru", Abbreviation = "T", DisplayOrder = 3},
-                new MovementType {MovementTypeID = 2, Description = "Right", Abbreviation = "R", DisplayOrder = 5},
-                new MovementType {MovementTypeID = 3, Description = "Left", Abbreviation = "L", DisplayOrder = 1},
+                new MovementType { MovementTypeID = 1, Description = "Thru", Abbreviation = "T", DisplayOrder = 3 },
+                new MovementType { MovementTypeID = 2, Description = "Right", Abbreviation = "R", DisplayOrder = 5 },
+                new MovementType { MovementTypeID = 3, Description = "Left", Abbreviation = "L", DisplayOrder = 1 },
                 new MovementType
                 {
                     MovementTypeID = 4,
@@ -1055,7 +1085,7 @@ namespace MOE.Common.Migrations
                     Abbreviation = "TR",
                     DisplayOrder = 4
                 },
-                new MovementType {MovementTypeID = 5, Description = "Thru-Left", Abbreviation = "TL", DisplayOrder = 2}
+                new MovementType { MovementTypeID = 5, Description = "Thru-Left", Abbreviation = "TL", DisplayOrder = 2 }
             );
 
             context.DirectionTypes.AddOrUpdate(
@@ -1127,7 +1157,7 @@ namespace MOE.Common.Migrations
                     PreserveDataWhere =
                         "WHERE SignalID in (select SignalID from  [dbo].[DatabaseArchiveExcludedSignals] )",
                     InsertValues = "INSERT INTO [SignalID], [Timestamp], [EventCode], [EventParam]",
-                    DataBaseName = "MoePartition",
+                    DataBaseName = "Moe",
                     Verbose = true,
 
                     //CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, 
@@ -1158,7 +1188,7 @@ namespace MOE.Common.Migrations
                 }
             );
 
-            context.ToBeProcessededIndexes.AddOrUpdate(t => t.IndexName, 
+            context.ToBeProcessededIndexes.AddOrUpdate(t => t.IndexName,
                 new ToBeProcessedTableIndex()
                 {
                     TableId = 1,
@@ -1207,49 +1237,49 @@ namespace MOE.Common.Migrations
             );
 
             context.Regions.AddOrUpdate(
-                new Region {ID = 1, Description = "Region 1"},
-                new Region {ID = 2, Description = "Region 2"},
-                new Region {ID = 3, Description = "Region 3"},
-                new Region {ID = 4, Description = "Region 4"},
-                new Region {ID = 10, Description = "Other"}
+                new Region { ID = 1, Description = "Region 1" },
+                new Region { ID = 2, Description = "Region 2" },
+                new Region { ID = 3, Description = "Region 3" },
+                new Region { ID = 4, Description = "Region 4" },
+                new Region { ID = 10, Description = "Other" }
             );
 
             context.Agencies.AddOrUpdate(
-                new Agency {AgencyID = 1, Description = "Academics"},
-                new Agency {AgencyID = 2, Description = "City Government"},
-                new Agency {AgencyID = 3, Description = "Consultant"},
-                new Agency {AgencyID = 4, Description = "County Government"},
-                new Agency {AgencyID = 5, Description = "Federal Government"},
-                new Agency {AgencyID = 6, Description = "MPO"},
-                new Agency {AgencyID = 7, Description = "State Government"},
-                new Agency {AgencyID = 8, Description = "Other"}
+                new Agency { AgencyID = 1, Description = "Academics" },
+                new Agency { AgencyID = 2, Description = "City Government" },
+                new Agency { AgencyID = 3, Description = "Consultant" },
+                new Agency { AgencyID = 4, Description = "County Government" },
+                new Agency { AgencyID = 5, Description = "Federal Government" },
+                new Agency { AgencyID = 6, Description = "MPO" },
+                new Agency { AgencyID = 7, Description = "State Government" },
+                new Agency { AgencyID = 8, Description = "Other" }
             );
             context.Actions.AddOrUpdate(
-                new Action {ActionID = 1, Description = "Actuated Coord."},
-                new Action {ActionID = 2, Description = "Coord On/Off"},
-                new Action {ActionID = 3, Description = "Cycle Length"},
-                new Action {ActionID = 4, Description = "Detector Issue"},
-                new Action {ActionID = 5, Description = "Offset"},
-                new Action {ActionID = 6, Description = "Sequence"},
-                new Action {ActionID = 7, Description = "Time Of Day"},
-                new Action {ActionID = 8, Description = "Other"},
-                new Action {ActionID = 9, Description = "All-Red Interval"},
-                new Action {ActionID = 10, Description = "Modeling"},
-                new Action {ActionID = 11, Description = "Traffic Study"},
-                new Action {ActionID = 12, Description = "Yellow Interval"},
-                new Action {ActionID = 13, Description = "Force Off Type"},
-                new Action {ActionID = 14, Description = "Split Adjustment"},
-                new Action {ActionID = 15, Description = "Manual Command"}
+                new Action { ActionID = 1, Description = "Actuated Coord." },
+                new Action { ActionID = 2, Description = "Coord On/Off" },
+                new Action { ActionID = 3, Description = "Cycle Length" },
+                new Action { ActionID = 4, Description = "Detector Issue" },
+                new Action { ActionID = 5, Description = "Offset" },
+                new Action { ActionID = 6, Description = "Sequence" },
+                new Action { ActionID = 7, Description = "Time Of Day" },
+                new Action { ActionID = 8, Description = "Other" },
+                new Action { ActionID = 9, Description = "All-Red Interval" },
+                new Action { ActionID = 10, Description = "Modeling" },
+                new Action { ActionID = 11, Description = "Traffic Study" },
+                new Action { ActionID = 12, Description = "Yellow Interval" },
+                new Action { ActionID = 13, Description = "Force Off Type" },
+                new Action { ActionID = 14, Description = "Split Adjustment" },
+                new Action { ActionID = 15, Description = "Manual Command" }
             );
 
             context.DetectionHardwares.AddOrUpdate(
-                new DetectionHardware {ID = 0, Name = "Unknown"},
-                new DetectionHardware {ID = 1, Name = "Wavetronix Matrix"},
-                new DetectionHardware {ID = 2, Name = "Wavetronix Advance"},
-                new DetectionHardware {ID = 3, Name = "Inductive Loops"},
-                new DetectionHardware {ID = 4, Name = "Sensys"},
-                new DetectionHardware {ID = 5, Name = "Video"},
-                new DetectionHardware {ID = 6, Name = "FLIR: Thermal Camera" }
+                new DetectionHardware { ID = 0, Name = "Unknown" },
+                new DetectionHardware { ID = 1, Name = "Wavetronix Matrix" },
+                new DetectionHardware { ID = 2, Name = "Wavetronix Advance" },
+                new DetectionHardware { ID = 3, Name = "Inductive Loops" },
+                new DetectionHardware { ID = 4, Name = "Sensys" },
+                new DetectionHardware { ID = 5, Name = "Video" },
+                new DetectionHardware { ID = 6, Name = "FLIR: Thermal Camera" }
             );
 
             //These are default values.  They need to be changed before the system goes into production.

@@ -245,11 +245,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             XmlDocument xmlDocument = GetXmlForChart(chart);
             string xmlChartName = CreateFileName(MetricType.Abbreviation, ".xml");
             var chartName = CreateFileName(MetricType.Abbreviation, ".jpg");
-#if(DEBUG)
-            
-            MetricFileLocation = @"C:\SPMImages\";
-            MetricWebPath = @"http:\\localhost\spmimages\";
-#endif
             xmlDocument.Save(MetricFileLocation + xmlChartName);
             chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);
             chart.SaveImage(MetricFileLocation + chartName, ChartImageFormat.Jpeg);

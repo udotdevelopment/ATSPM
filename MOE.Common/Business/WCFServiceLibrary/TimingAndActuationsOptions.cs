@@ -168,11 +168,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             PhaseFilterList = ExtractListOfNumbers(PhaseFilter);
             if (ShowRawEventData)
             {
-                //if (DotAndBarSize > 10)
-                //{
-                //    CreateFilesForPartitions();
-                //    return ReturnList;
-                //}
                 for (int i = 1; i <= 16; i++)
                 {
                     if (PhaseFilterList.Any() && PhaseFilterList.Contains(i) || PhaseFilterList.Count == 0)
