@@ -23,7 +23,7 @@ namespace MOE.Common.Migrations
             DropPrimaryKey("dbo.PriorityAggregations");
             DropPrimaryKey("dbo.SignalEventCountAggregations");
             AddColumn("dbo.MetricTypes", "DisplayOrder", c => c.Int(nullable: false));
-            AddColumn("dbo.DetectorEventCountAggregations", "DetectorPrimaryId", c => c.Int(nullable: false));
+            //AddColumn("dbo.DetectorEventCountAggregations", "DetectorPrimaryId", c => c.Int(nullable: false));
             AlterColumn("dbo.PhaseTerminationAggregations", "Id", c => c.Int(nullable: false, identity: true));
             AlterColumn("dbo.PreemptionAggregations", "Id", c => c.Int(nullable: false, identity: true));
             AlterColumn("dbo.PriorityAggregations", "Id", c => c.Int(nullable: false, identity: true));
@@ -41,28 +41,28 @@ namespace MOE.Common.Migrations
             AddPrimaryKey("dbo.PreemptionAggregations", new[] { "BinStartTime", "Id" });
             AddPrimaryKey("dbo.PriorityAggregations", new[] { "BinStartTime", "VersionId", "Id" });
             AddPrimaryKey("dbo.SignalEventCountAggregations", new[] { "BinStartTime", "Id" });
-            DropColumn("dbo.ApproachCycleAggregations", "Id");
-            DropColumn("dbo.ApproachEventCountAggregations", "Id");
-            DropColumn("dbo.ApproachPcdAggregations", "Id");
-            DropColumn("dbo.ApproachSpeedAggregations", "Id");
-            DropColumn("dbo.ApproachSplitFailAggregations", "Id");
-            DropColumn("dbo.ApproachYellowRedActivationAggregations", "Id");
-            DropColumn("dbo.DetectorAggregations", "Id");
-            DropColumn("dbo.DetectorEventCountAggregations", "Id");
-            DropColumn("dbo.DetectorEventCountAggregations", "DetectorId");
+            //DropColumn("dbo.ApproachCycleAggregations", "Id");
+            //DropColumn("dbo.ApproachEventCountAggregations", "Id");
+            //DropColumn("dbo.ApproachPcdAggregations", "Id");
+            //DropColumn("dbo.ApproachSpeedAggregations", "Id");
+            //DropColumn("dbo.ApproachSplitFailAggregations", "Id");
+            //DropColumn("dbo.ApproachYellowRedActivationAggregations", "Id");
+            //DropColumn("dbo.DetectorAggregations", "Id");
+            //DropColumn("dbo.DetectorEventCountAggregations", "Id");
+            //DropColumn("dbo.DetectorEventCountAggregations", "DetectorId");
         }
 
         public override void Down()
         {
-            AddColumn("dbo.DetectorEventCountAggregations", "DetectorId", c => c.String(nullable: false));
-            AddColumn("dbo.DetectorEventCountAggregations", "Id", c => c.Long(nullable: false, identity: true));
-            AddColumn("dbo.DetectorAggregations", "Id", c => c.Long(nullable: false, identity: true));
-            AddColumn("dbo.ApproachYellowRedActivationAggregations", "Id", c => c.Long(nullable: false, identity: true));
-            AddColumn("dbo.ApproachSplitFailAggregations", "Id", c => c.Long(nullable: false, identity: true));
-            AddColumn("dbo.ApproachSpeedAggregations", "Id", c => c.Long(nullable: false, identity: true));
-            AddColumn("dbo.ApproachPcdAggregations", "Id", c => c.Long(nullable: false, identity: true));
-            AddColumn("dbo.ApproachEventCountAggregations", "Id", c => c.Long(nullable: false, identity: true));
-            AddColumn("dbo.ApproachCycleAggregations", "Id", c => c.Long(nullable: false, identity: true));
+            //AddColumn("dbo.DetectorEventCountAggregations", "DetectorId", c => c.String(nullable: false));
+            //AddColumn("dbo.DetectorEventCountAggregations", "Id", c => c.Long(nullable: false, identity: true));
+            //AddColumn("dbo.DetectorAggregations", "Id", c => c.Long(nullable: false, identity: true));
+            //AddColumn("dbo.ApproachYellowRedActivationAggregations", "Id", c => c.Long(nullable: false, identity: true));
+            //AddColumn("dbo.ApproachSplitFailAggregations", "Id", c => c.Long(nullable: false, identity: true));
+            //AddColumn("dbo.ApproachSpeedAggregations", "Id", c => c.Long(nullable: false, identity: true));
+            //AddColumn("dbo.ApproachPcdAggregations", "Id", c => c.Long(nullable: false, identity: true));
+            //AddColumn("dbo.ApproachEventCountAggregations", "Id", c => c.Long(nullable: false, identity: true));
+            //AddColumn("dbo.ApproachCycleAggregations", "Id", c => c.Long(nullable: false, identity: true));
             DropPrimaryKey("dbo.SignalEventCountAggregations");
             DropPrimaryKey("dbo.PriorityAggregations");
             DropPrimaryKey("dbo.PreemptionAggregations");
@@ -80,7 +80,7 @@ namespace MOE.Common.Migrations
             AlterColumn("dbo.PriorityAggregations", "Id", c => c.Long(nullable: false, identity: true));
             AlterColumn("dbo.PreemptionAggregations", "Id", c => c.Long(nullable: false, identity: true));
             AlterColumn("dbo.PhaseTerminationAggregations", "Id", c => c.Long(nullable: false, identity: true));
-            DropColumn("dbo.DetectorEventCountAggregations", "DetectorPrimaryId");
+            //DropColumn("dbo.DetectorEventCountAggregations", "DetectorPrimaryId");
             DropColumn("dbo.MetricTypes", "DisplayOrder");
             AddPrimaryKey("dbo.SignalEventCountAggregations", "Id");
             AddPrimaryKey("dbo.PriorityAggregations", "Id");
