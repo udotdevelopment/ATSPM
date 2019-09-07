@@ -542,13 +542,13 @@
     <Compile Include="Migrations\201810301701213_WatchDogEmailAllErrors.Designer.cs">
       <DependentUpon>201810301701213_WatchDogEmailAllErrors.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908292210347_ChangMoeDbForDifferenKeys.cs" />
+    <Compile Include="Migrations\201908292210347_ChangMoeDbForDifferenKeys.Designer.cs">
+      <DependentUpon>201908292210347_ChangMoeDbForDifferenKeys.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201908300411026_aggregationTablesAndKeys.cs" />
     <Compile Include="Migrations\201908300411026_aggregationTablesAndKeys.Designer.cs">
       <DependentUpon>201908300411026_aggregationTablesAndKeys.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201908300522432_forceMigration.cs" />
-    <Compile Include="Migrations\201908300522432_forceMigration.Designer.cs">
-      <DependentUpon>201908300522432_forceMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
@@ -949,11 +949,11 @@
     <EmbeddedResource Include="Migrations\201806211436552_RemoveLaneByLaneFromAOR.resx">
       <DependentUpon>201806211436552_RemoveLaneByLaneFromAOR.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908292210347_ChangMoeDbForDifferenKeys.resx">
+      <DependentUpon>201908292210347_ChangMoeDbForDifferenKeys.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908300411026_aggregationTablesAndKeys.resx">
       <DependentUpon>201908300411026_aggregationTablesAndKeys.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908300522432_forceMigration.resx">
-      <DependentUpon>201908300522432_forceMigration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

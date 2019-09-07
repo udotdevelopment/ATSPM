@@ -106,6 +106,9 @@ namespace MOE.Common.Business.DataAggregation
                             Console.WriteLine(GC.GetTotalMemory(false).ToString("0,0") + " exceeds Max Memory Limit " + _maxMemoryLimit.ToString("0,0") + 
                                               ". SignalId is > " + signal.SignalID);
                         }
+
+                        Console.WriteLine("signal is " + signal.SignalID + " Time is " +
+                                          DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                         ProcessSignal(signal, dt, dt.AddMinutes(binSize));
                     });
                 }
