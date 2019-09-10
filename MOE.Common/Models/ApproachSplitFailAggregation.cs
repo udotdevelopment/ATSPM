@@ -8,9 +8,10 @@ namespace MOE.Common.Models
 {
     public class ApproachSplitFailAggregation : Aggregation
     {
-        //[Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        //public int Id { get; set; }
+        [Key]
+        [Column(Order = 5)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
         [Key]
         [Required]
@@ -40,7 +41,7 @@ namespace MOE.Common.Models
             public ApproachSplitFailAggregationClassMap()
             {
                 Map(m => m.Approach).Ignore();
-              //  Map(m => m.Id).Name("Record Number");
+                Map(m => m.Id).Name("Record Number");
                 Map(m => m.BinStartTime).Name("Bin Start Time");
                 Map(m => m.ApproachId).Name("Approach ID");
                 Map(m => m.SplitFailures).Name("Split Failures");

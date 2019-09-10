@@ -6,7 +6,6 @@ using CsvHelper.Configuration;
 namespace MOE.Common.Models
 {
     public class PhaseTerminationAggregation : Aggregation
-    //public class PhaseTerminationAggregation
     {
         [Key]
         [Column(Order = 7)]
@@ -18,7 +17,7 @@ namespace MOE.Common.Models
         [Column(Order = 0)]
         public override DateTime BinStartTime { get; set; }
 
-        //[Key]
+        [Key]
         [Required]
         [StringLength(10)]
         [Column(Order = 1)]

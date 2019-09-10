@@ -7,44 +7,44 @@ namespace MOE.Common.Models
 {
     public class ApproachSpeedAggregation : Aggregation
     {
-        //[Key]
-        [Column(Order = 0)]
+        [Key]
+        [Column(Order = 7)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
 
         [Key]
         [Required]
-        [Column(Order = 1)]
+        [Column(Order = 0)]
         public override DateTime BinStartTime { get; set; }
 
 
         [Key]
         [Required]
-        [Column(Order = 2)]
+        [Column(Order = 1)]
         public int ApproachId { get; set; }
 
         public virtual Approach Approach { get; set; }
 
         [Required]
-        [Column(Order = 3)]
+        [Column(Order = 2)]
         public double SummedSpeed { get; set; }
 
         [Required]
-        [Column(Order = 4)]
+        [Column(Order = 3)]
         public double SpeedVolume { get; set; }
 
         [Required]
-        [Column(Order = 5)]
+        [Column(Order = 4)]
         public double Speed85Th { get; set; }
 
         [Required]
-        [Column(Order = 6)]
+        [Column(Order = 5)]
         public double Speed15Th { get; set; }
 
         [Key]
         [Required]
-        [Column(Order = 7)]
+        [Column(Order = 6)]
         public bool IsProtectedPhase { get; set; }
         
 

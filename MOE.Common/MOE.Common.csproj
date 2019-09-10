@@ -550,6 +550,10 @@
     <Compile Include="Migrations\201908300411026_aggregationTablesAndKeys.Designer.cs">
       <DependentUpon>201908300411026_aggregationTablesAndKeys.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909092102292_ChangesInAggregationTablsV3.cs" />
+    <Compile Include="Migrations\201909092102292_ChangesInAggregationTablsV3.Designer.cs">
+      <DependentUpon>201909092102292_ChangesInAggregationTablsV3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\PhasePedAggregation.cs" />
@@ -954,6 +958,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908300411026_aggregationTablesAndKeys.resx">
       <DependentUpon>201908300411026_aggregationTablesAndKeys.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909092102292_ChangesInAggregationTablsV3.resx">
+      <DependentUpon>201909092102292_ChangesInAggregationTablsV3.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

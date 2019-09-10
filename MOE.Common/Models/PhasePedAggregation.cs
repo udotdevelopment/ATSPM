@@ -6,7 +6,6 @@ using CsvHelper.Configuration;
 namespace MOE.Common.Models
 {
     public class PhasePedAggregation : Aggregation
-    //public class PhasePedAggregation 
     {
         [Key]
         [Column(Order = 5)]

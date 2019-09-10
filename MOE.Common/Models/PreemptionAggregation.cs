@@ -6,7 +6,6 @@ using CsvHelper.Configuration;
 namespace MOE.Common.Models
 {
     public class PreemptionAggregation : Aggregation
-   // public class PreemptionAggregation
     {
         [Key]
         [Column(Order = 6)]
@@ -18,13 +17,13 @@ namespace MOE.Common.Models
         [Column(Order = 0)]
         public override DateTime BinStartTime { get; set; }
 
-        //[Key]
+        [Key]
         [Required]
         [StringLength(10)]
         [Column(Order = 1)]
         public string SignalId { get; set; }
 
-        //[Key]
+        [Key]
         [ForeignKey("Signal")]
         [Column(Order = 2)]
         public int VersionId { get; set; }
