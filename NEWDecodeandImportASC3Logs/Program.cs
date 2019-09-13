@@ -67,7 +67,7 @@ namespace NEWDecodeandImportASC3Logs
         {
             string[] strsplit = dir.Split(new char[] { '\\' });
             signalId = strsplit.Last();
-            fileNames = Directory.GetFiles(dir, "*.dat");
+            fileNames = Directory.GetFiles(dir, "*.dat?");
         }
 
         private static void BulkImportRecordsAndDeleteFiles(NameValueCollection appSettings, ConcurrentBag<string> toDelete, MOE.Common.Data.MOE.Controller_Event_LogDataTable elTable)

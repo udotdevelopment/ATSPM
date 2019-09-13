@@ -206,7 +206,9 @@
             </div>
             <div class="">
                 <div class="col-4">
-                    <button id="CreateMetric" type="submit" name="CreateMetric" value="CreateMetric" class="btn btn-primary">Create Chart &nbsp;<span id='RunReportSpinner' class="glyphicon"></span></button>
+                    @*<button id="CreateMetric" type="submit" name="CreateMetric" value="CreateMetric" class="btn btn-primary">Create Chart &nbsp;<span id='RunReportSpinner' class="glyphicon"></span></button>*@
+                    <button id="CreateMetric" type="submit" name="CreateMetric" value="CreateMetric" class="btn btn-primary">Create Chart &nbsp;<span id='RunReportSpinner' class=""style="font-size:18px"></span></button> 
+
                     @Html.ValidationSummary(false, "", new {@class = "text-danger"})
                 </div>
                 

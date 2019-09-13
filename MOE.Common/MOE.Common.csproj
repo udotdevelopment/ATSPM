@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -336,6 +336,9 @@
     <Compile Include="Business\ChartOptions\ChartOptions.cs" />
     <Compile Include="Business\ChartTitleFactory.cs" />
     <Compile Include="Business\CycleFactory.cs" />
+    <Compile Include="Business\DataAggregation\DataAggregation.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Business\TimingAndActuationCycle.cs" />
     <Compile Include="Business\Phase.cs">
       <SubType>Code</SubType>
@@ -378,7 +381,6 @@
     <Compile Include="Business\DataAggregation\YellowRedActivationsAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\YellowRedActivationsAggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\SplitFailAggregationByApproach.cs" />
-    <Compile Include="Business\DataAggregation\DataAggregation.cs" />
     <Compile Include="Business\DataAggregation\AggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\PriorityAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\PreemptionAggregationBySignal.cs" />
@@ -539,6 +541,18 @@
     <Compile Include="Migrations\201810301701213_WatchDogEmailAllErrors.cs" />
     <Compile Include="Migrations\201810301701213_WatchDogEmailAllErrors.Designer.cs">
       <DependentUpon>201810301701213_WatchDogEmailAllErrors.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908292210347_ChangMoeDbForDifferenKeys.cs" />
+    <Compile Include="Migrations\201908292210347_ChangMoeDbForDifferenKeys.Designer.cs">
+      <DependentUpon>201908292210347_ChangMoeDbForDifferenKeys.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908300411026_aggregationTablesAndKeys.cs" />
+    <Compile Include="Migrations\201908300411026_aggregationTablesAndKeys.Designer.cs">
+      <DependentUpon>201908300411026_aggregationTablesAndKeys.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909092102292_ChangesInAggregationTablsV3.cs" />
+    <Compile Include="Migrations\201909092102292_ChangesInAggregationTablsV3.Designer.cs">
+      <DependentUpon>201909092102292_ChangesInAggregationTablsV3.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
@@ -918,23 +932,9 @@
     <EmbeddedResource Include="Migrations\201810301701213_WatchDogEmailAllErrors.resx">
       <DependentUpon>201810301701213_WatchDogEmailAllErrors.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\VerboseStatus.sql" />
-    <EmbeddedResource Include="Migrations\InsertValues.sql" />
-    <EmbeddedResource Include="Migrations\PhysicalFileName.sql" />
-    <EmbeddedResource Include="Migrations\ScheduleReclaimFileSpaceFirstFriday.sql" />
     <EmbeddedResource Include="Migrations\201808171744257_AggreationLongsForId.resx">
       <DependentUpon>201808171744257_AggreationLongsForId.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\DatabaseFileName.sql" />
-    <EmbeddedResource Include="Migrations\UpperBoundary.sql" />
-    <EmbeddedResource Include="Migrations\TableName.sql" />
-    <EmbeddedResource Include="Migrations\StopCounter.sql" />
-    <EmbeddedResource Include="Migrations\Processtables.sql" />
-    <EmbeddedResource Include="Migrations\PreserveData.sql" />
-    <EmbeddedResource Include="Migrations\LowerBoundary.sql" />
-    <EmbeddedResource Include="Migrations\IndexNameColumns.sql" />
-    <EmbeddedResource Include="Migrations\IndexNameClustered.sql" />
-    <EmbeddedResource Include="Migrations\IndexName.sql" />
     <EmbeddedResource Include="Migrations\201804251748599_MetricTypeIdentityRemoval.resx">
       <DependentUpon>201804251748599_MetricTypeIdentityRemoval.cs</DependentUpon>
     </EmbeddedResource>
@@ -953,13 +953,16 @@
     <EmbeddedResource Include="Migrations\201806211436552_RemoveLaneByLaneFromAOR.resx">
       <DependentUpon>201806211436552_RemoveLaneByLaneFromAOR.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\CreateConstraints.sql" />
-    <EmbeddedResource Include="Migrations\CreateIndexes.sql" />
-    <EmbeddedResource Include="Migrations\CreateTable.sql" />
+    <EmbeddedResource Include="Migrations\201908292210347_ChangMoeDbForDifferenKeys.resx">
+      <DependentUpon>201908292210347_ChangMoeDbForDifferenKeys.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908300411026_aggregationTablesAndKeys.resx">
+      <DependentUpon>201908300411026_aggregationTablesAndKeys.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909092102292_ChangesInAggregationTablsV3.resx">
+      <DependentUpon>201909092102292_ChangesInAggregationTablsV3.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
-    <EmbeddedResource Include="Migrations\DoTheSwapTable.sql" />
-    <EmbeddedResource Include="Migrations\DropIndexes.sql" />
-    <EmbeddedResource Include="Migrations\FileGroup.sql" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />

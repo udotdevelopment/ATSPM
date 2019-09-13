@@ -50,8 +50,14 @@ namespace MOE.Common.Business.TimingAndActuations
                 TimingAndActuationsForPhase.Options.EndDate =
                     TimingAndActuationsForPhase.Options.EndDate.AddMinutes(-1);
             }
-            if (TimingAndActuationsForPhase.Options.ShowRawEventData && TimingAndActuationsForPhase.CycleAllEvents.Values.Count == 0 &&
-                    TimingAndActuationsForPhase.PedestrianIntervals.Count == 0)
+            var myCount = -1;
+            if (TimingAndActuationsForPhase.PedestrianIntervals != null)
+            {
+                myCount = TimingAndActuationsForPhase.PedestrianIntervals.Count;
+            }
+            if (TimingAndActuationsForPhase.Options.ShowRawEventData
+                && TimingAndActuationsForPhase.CycleAllEvents.Values.Count == 0 
+                && myCount <= 0) 
             {
                 TimingAndActuationsForPhase.Options.EndDate = orginalEndDate;
                 return;
@@ -59,36 +65,44 @@ namespace MOE.Common.Business.TimingAndActuations
             Chart = ChartFactory.CreateDefaultChart(TimingAndActuationsForPhase.Options);
             Chart.ChartAreas[0].AxisX2.Enabled = AxisEnabled.False;
             SetChartTitle();
-            if (TimingAndActuationsForPhase.Options.ShowVehicleSignalDisplay  || TimingAndActuationsForPhase.Options.ShowRawEventData)
+            if (TimingAndActuationsForPhase.Options.ShowVehicleSignalDisplay  
+                || TimingAndActuationsForPhase.Options.ShowRawEventData)
             {
                 SetCycleStrips();
             }
-            if (TimingAndActuationsForPhase.PhaseCustomEvents != null &&
-                TimingAndActuationsForPhase.PhaseCustomEvents.Any() && !TimingAndActuationsForPhase.Options.ShowRawEventData)
+            if (TimingAndActuationsForPhase.PhaseCustomEvents != null
+                && TimingAndActuationsForPhase.PhaseCustomEvents.Any())
             {
                 SetPhaseCustomEvents();
             }
-            if (TimingAndActuationsForPhase.Options.ShowAdvancedCount  && ! TimingAndActuationsForPhase.Options.ShowRawEventData)
+            if (TimingAndActuationsForPhase.Options.ShowAdvancedCount
+                && ! TimingAndActuationsForPhase.Options.ShowRawEventData)
             {
                 SetAdvanceCountEvents();
             }
-            if (TimingAndActuationsForPhase.Options.ShowAdvancedDilemmaZone && !TimingAndActuationsForPhase.Options.ShowRawEventData)
+            if (TimingAndActuationsForPhase.Options.ShowAdvancedDilemmaZone
+                && !TimingAndActuationsForPhase.Options.ShowRawEventData)
             {
                 SetAdvancePresenceEvents();
             }
-            if (TimingAndActuationsForPhase.Options.ShowLaneByLaneCount && !TimingAndActuationsForPhase.Options.ShowRawEventData)
+            if (TimingAndActuationsForPhase.Options.ShowLaneByLaneCount
+                && !TimingAndActuationsForPhase.Options.ShowRawEventData)
             {
                 SetLaneByLaneCount();
             }
-            if (TimingAndActuationsForPhase.Options.ShowStopBarPresence && !TimingAndActuationsForPhase.Options.ShowRawEventData)
+            if (TimingAndActuationsForPhase.Options.ShowStopBarPresence
+                && !TimingAndActuationsForPhase.Options.ShowRawEventData)
             {
                 SetStopBarEvents();
             }
-            if (TimingAndActuationsForPhase.Options.ShowPedestrianActuation && !getPermissivePhase && !TimingAndActuationsForPhase.Options.ShowRawEventData)
+            if (TimingAndActuationsForPhase.Options.ShowPedestrianActuation
+                && (!getPermissivePhase
+                || TimingAndActuationsForPhase.Options.ShowRawEventData))
             {
                 SetPedestrianActuation();
             }
-            if (TimingAndActuationsForPhase.Options.ShowPedestrianIntervals && !getPermissivePhase)
+            if (TimingAndActuationsForPhase.Options.ShowPedestrianIntervals
+                && (!getPermissivePhase || TimingAndActuationsForPhase.Options.ShowRawEventData))
             {
                 SetPedestrianInterval();
             }
@@ -225,24 +239,6 @@ namespace MOE.Common.Business.TimingAndActuations
         }
 
         private void SetPedestrianColors()
-
-        //    case 21:
-        //pointNumber = pedestrianIntervalsSeries.Points.AddXY(
-        //phase.Timestamp.ToOADate(), _yValue);
-        //pedestrianIntervalsSeries.Points[pointNumber].Color = Color.Gray;
-        //break;
-        //case 22:
-        //pointNumber = pedestrianIntervalsSeries.Points.AddXY(
-        //phase.Timestamp.ToOADate(), _yValue);
-        //pedestrianIntervalsSeries.Points[pointNumber].Color = Color.DeepSkyBlue;
-        //break;
-        //case 23:
-        //pointNumber = pedestrianIntervalsSeries.Points.AddXY(
-        //phase.Timestamp.ToOADate(), _yValue);
-        //pedestrianIntervalsSeries.Points[pointNumber].Color = Color.LightSkyBlue;
-        //break;
-
-
         {
             var rowNumber = 5.0;
             //var rowNumber = Chart.ChartAreas[0].AxisY.CustomLabels.Count;
@@ -254,7 +250,6 @@ namespace MOE.Common.Business.TimingAndActuations
             rowNumber += 1.0;
             labelNameForLegend = "Light Blue Fill Box: Pedestrian Begin Walk, Event Codes 21 & 67";
             MakeLineColorForLegendLine(Color.LightSkyBlue, labelNameForLegend, rowNumber);
-
         }
 
         private void MakeLineColorForLegendLine (Color lineColorForLegend, string labelNameForLegend, double rowNumber)
@@ -425,7 +420,7 @@ namespace MOE.Common.Business.TimingAndActuations
             }
         }
 
-        private void SetPedestrianInterval()
+        public void SetPedestrianInterval()
         {
             if (TimingAndActuationsForPhase == null) return;
             if (!TimingAndActuationsForPhase.PedestrianIntervals.Any()) return;
@@ -446,8 +441,8 @@ namespace MOE.Common.Business.TimingAndActuations
                 var pointNumber = new int();
                 switch (phase.EventCode)
                 {
-                    // This type of line the color is to the left of the point.  So everything is shifted.
-                    // to the right of code 21, the color should be LightSkyBlue; to the right of 22 DeepSkyBlue, and 23 is Gray.
+                    // This type of line, the color is to the left of the point.  So everything is shifted.
+                    // To the right of code 21, the color should be LightSkyBlue; to the right of 22 DeepSkyBlue, and 23 is Gray.
                     case 21:
                     case 67:
                         pointNumber = pedestrianIntervalsSeries.Points.AddXY(
@@ -468,7 +463,6 @@ namespace MOE.Common.Business.TimingAndActuations
                         break;
                 }
             }
-
             if (pedestrianIntervalsSeries.Points.Count <= 0) return;
             Chart.Series.Add(pedestrianIntervalsSeries);
             _yValue += 1.0;

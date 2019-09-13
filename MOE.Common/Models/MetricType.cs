@@ -25,6 +25,8 @@ namespace MOE.Common.Models
         //[Required]
         //[Column("DetectionType_DetectionTypeID")]
         //public int DetectionTypeID { get; set; }
+        public int DisplayOrder { get; set; }
+
 
 
         public virtual ICollection<DetectionType> DetectionTypes { get; set; }

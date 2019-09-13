@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using AjaxControlToolkit;
 using CsvHelper.Configuration;
 
 namespace MOE.Common.Models
@@ -8,21 +9,31 @@ namespace MOE.Common.Models
     public class ApproachSplitFailAggregation : Aggregation
     {
         [Key]
+        [Column(Order = 5)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public override long Id { get; set; }
+        public int Id { get; set; }
 
+        [Key]
         [Required]
+        [Column(Order = 0)]
         public override DateTime BinStartTime { get; set; }
 
+        [Key]
         [Required]
+        [Column(Order = 1)]
         public int ApproachId { get; set; }
 
+        
+        [Column(Order= 2)]
         public virtual Approach Approach { get; set; }
 
         [Required]
+        [Column(Order = 3)]
         public int SplitFailures { get; set; }
 
+        [Key]
         [Required]
+        [Column(Order = 4)]
         public bool IsProtectedPhase { get; set; }
 
         public sealed class ApproachSplitFailAggregationClassMap : ClassMap<ApproachSplitFailAggregation>

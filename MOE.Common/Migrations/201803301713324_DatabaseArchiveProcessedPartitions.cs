@@ -22,21 +22,6 @@ namespace MOE.Common.Migrations
                 })
                 .PrimaryKey(t => t.Id);
 
-            // -- I don't think I need this table now that we are not shrinking filegroups or tables.  Andre 9/10/2018
-            //CreateTable(
-            //        "dbo.ShrinkFileGroups",
-            //        c => new
-            //        {
-            //            Id = c.Int(nullable: false, identity: true),
-            //            FileGroupName = c.String(),
-            //            CreatedTimeStamp = c.DateTime(),
-            //            StartedTimesStamp = c.DateTime(),
-            //            CompletedTimeStamp = c.DateTime(),
-            //            FileGroupNeedsShrink = c.Boolean(),
-            //            Notes = c.String(),
-            //        })
-            //    .PrimaryKey(t => t.Id);
-
             CreateTable(
                     "dbo.StatusOfProcessedTables",
                     c => new
@@ -100,76 +85,17 @@ namespace MOE.Common.Migrations
                         IndexName = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
-
-            string sqlResVerboseStatus = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".VerboseStatus.sql";
-            this.SqlResource(sqlResVerboseStatus);
-
-            string sqlResCreateConstraints = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".CreateConstraints.sql";
-            this.SqlResource(sqlResCreateConstraints);
-
-            string sqlResCreateIndexes = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".CreateIndexes.sql";
-            this.SqlResource(sqlResCreateIndexes);
-
-            string sqlResCreateTable = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".CreateTable.sql";
-            this.SqlResource(sqlResCreateTable);
-
-            string sqlResDataBasefileName = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".DatabaseFileName.sql";
-            this.SqlResource(sqlResDataBasefileName);
-
-            string sqlResDoTheSwapTable = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".DoTheSwapTable.sql";
-            this.SqlResource(sqlResDoTheSwapTable);
-
-            string sqlResDropIndexes = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".DropIndexes.sql";
-            this.SqlResource(sqlResDropIndexes);
-
-            string sqlResFileGroup = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".FileGroup.sql";
-            this.SqlResource(sqlResFileGroup);
-
-            string sqlResIndexName = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".IndexName.sql";
-            this.SqlResource(sqlResIndexName);
-
-            string sqlResIndexNameClustered = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".IndexNameClustered.sql";
-            this.SqlResource(sqlResIndexNameClustered);
-
-            string sqlResIndexNameColumns = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".IndexNameColumns.sql";
-            this.SqlResource(sqlResIndexNameColumns);
-
-            string sqlResInsertValues = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".InsertValues.sql";
-            this.SqlResource(sqlResInsertValues);
-
-            string sqlResLowerBoundary = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".LowerBoundary.sql";
-            this.SqlResource(sqlResLowerBoundary);
-
-            string sqlResPhysicalFileNmae = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".PhysicalFileName.sql";
-            this.SqlResource(sqlResPhysicalFileNmae);
-
-            string sqlResPreserveData = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".PreserveData.sql";
-            this.SqlResource(sqlResPreserveData);
-
-            string sqlResProcesstables = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".Processtables.sql";
-            this.SqlResource(sqlResProcesstables);
-
-            string sqlResStopCounter = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".StopCounter.sql";
-            this.SqlResource(sqlResStopCounter);
-
-            string sqlResScheduleReclaimFileSpaceFirstFriday = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".ScheduleReclaimFileSpaceFirstFriday.sql";
-            this.SqlResource(sqlResScheduleReclaimFileSpaceFirstFriday);
-
-            string sqlResTableName = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".TableName.sql";
-            this.SqlResource(sqlResTableName);
-
-            string sqlResUpperBoundary = typeof(DatabaseArchiveProcessedPartitions).Namespace + ".UpperBoundary.sql";
-            this.SqlResource(sqlResUpperBoundary);
+          
         }
 
 
         public override void Down()
         {
-            DropTable("dbo.ShrinkFileGroups");
+            DropTable("dbo.ToBeProcessededTables");
             DropTable("dbo.StatusOfProcessedTables");
             DropTable("dbo.TablePartitionProcesseds");
-            DropTable("dbo.ToBeProcessededTables");
             DropTable("dbo.ToBeProcessededIndexes");
-        }
+            //DropTable("dbo.ShrinkFileGroups");
+                   }
     }
 }

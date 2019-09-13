@@ -40,7 +40,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             BinSizeList = new List<int>();
             BinSizeList.Add(15);
             BinSizeList.Add(5);
-            MetricTypeID = 7;
             SetDefaults();
         }
 

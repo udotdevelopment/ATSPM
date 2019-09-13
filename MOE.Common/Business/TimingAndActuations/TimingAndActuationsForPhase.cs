@@ -36,7 +36,6 @@ namespace MOE.Common.Business.TimingAndActuations
 
     public TimingAndActuationsForPhase(int phaseNumber, bool phaseOrOverlap, TimingAndActuationsOptions options)
         {
-           
             PhaseNumber = phaseNumber;
             Options = options;
             PhaseOrOverlap = phaseOrOverlap;
@@ -45,8 +44,19 @@ namespace MOE.Common.Business.TimingAndActuations
             {
                 GetPedestrianIntervals(PhaseOrOverlap);
             }
+            //if (Options.ShowPedestrianActuation && !GetPermissivePhase)
+            if (Options.ShowPedestrianActuation)
+            {
+                    GetPedestrianEvents();
+            }
+            if (Options.PhaseEventCodesList != null)
+            {
+                var optionsSignalID = Options.SignalID;
+                GetRawCustomEvents( optionsSignalID,  PhaseNumber, options.StartDate, options.EndDate);
+            }
         }
 
+       
         public TimingAndActuationsForPhase(Approach approach, TimingAndActuationsOptions options,
             bool getPermissivePhase)
         {
@@ -86,6 +96,25 @@ namespace MOE.Common.Business.TimingAndActuations
             if (Options.PhaseEventCodesList != null)
             {
                 GetPhaseCustomEvents();
+            }
+        }
+
+        private void GetRawCustomEvents(string signalID, int numberPhase, DateTime optionsStartDateTime, DateTime optionsEndDateTime)
+        {
+            PhaseCustomEvents = new Dictionary<string, List<Controller_Event_Log>>();
+            var controllerEventLogRepository = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            if (Options.PhaseEventCodesList != null && Options.PhaseEventCodesList.Any() &&
+                Options.PhaseEventCodesList.Count > 0)
+            {
+                foreach (var phaseEventCode in Options.PhaseEventCodesList)
+                {
+                    var phaseEvents = controllerEventLogRepository.GetEventsByEventCodesParam(signalID,
+                        optionsStartDateTime, optionsEndDateTime, new List<int> {phaseEventCode}, numberPhase);
+                    if (phaseEvents.Count > 0)
+                    {
+                        PhaseCustomEvents.Add("Phase Event Code: " + phaseEventCode, phaseEvents);
+                    }
+                }
             }
         }
 
@@ -393,7 +422,7 @@ namespace MOE.Common.Business.TimingAndActuations
                 Options.StartDate, Options.EndDate, new List<int> {89, 90}, PhaseNumber);
         }
 
-        private void GetPedestrianIntervals(bool phaseOrOverlap)
+        public void GetPedestrianIntervals(bool phaseOrOverlap)
         {
             var overlapCodes = new List<int> { 67, 68, 69 };
             if (phaseOrOverlap)

@@ -8,28 +8,40 @@ namespace MOE.Common.Models
     public class PhaseTerminationAggregation : Aggregation
     {
         [Key]
+        [Column(Order = 7)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public override long Id { get; set; }
+        public int Id { get; set; }
 
+        [Key]
         [Required]
+        [Column(Order = 0)]
         public override DateTime BinStartTime { get; set; }
 
+        [Key]
         [Required]
+        [StringLength(10)]
+        [Column(Order = 1)]
         public string SignalId { get; set; }
 
+        [Key]
         [Required]
+        [Column(Order = 2)]
         public int PhaseNumber { get; set; }
 
         [Required]
+        [Column(Order =3)]
         public int GapOuts { get; set; }
 
         [Required]
+        [Column(Order = 4)]
         public int ForceOffs { get; set; }
 
         [Required]
+        [Column(Order = 5)]
         public int MaxOuts { get; set; }
 
         [Required]
+        [Column(Order = 6)]
         public int UnknownTerminationTypes { get; set; }
 
         public sealed class PhaseTerminationAggregationClassMap : ClassMap<PhaseTerminationAggregation>
@@ -37,7 +49,7 @@ namespace MOE.Common.Models
             public PhaseTerminationAggregationClassMap()
             {
                 Map(m => m.Id).Name("Record Number");
-                Map(m => m.PhaseNumber).Name("Signal Id");
+                Map(m => m.SignalId).Name("Signal Id");
                 Map(m => m.PhaseNumber).Name("Phase Number");
                 Map(m => m.BinStartTime).Name("Bin Start Time");
                 Map(m => m.GapOuts).Name("Gap Outs");

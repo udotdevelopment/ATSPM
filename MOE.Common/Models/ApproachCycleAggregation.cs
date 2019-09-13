@@ -7,34 +7,45 @@ namespace MOE.Common.Models
 {
     public class ApproachCycleAggregation : Aggregation
     {
-        [Key]
+        //[Key]
+        [Column(Order = 8)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public override long Id { get; set; }
+        public int Id { get; set; }
 
+        [Key]
         [Required]
+        [Column(Order = 0)]
         public override DateTime BinStartTime { get; set; }
 
-        [Required]
+        [Key]
+        [Required][Column(Order = 1)]
         public int ApproachId { get; set; }
-
+       
         public virtual Approach Approach { get; set; }
 
         [Required]
+        [Column(Order = 2)]
         public double RedTime { get; set; }
 
         [Required]
+        [Column(Order = 3)]
         public double YellowTime { get; set; }
 
         [Required]
+        [Column(Order = 4)]
         public double GreenTime { get; set; }
 
         [Required]
+        [Column(Order = 5)]
         public int TotalCycles { get; set; }
 
         [Required]
+        [Column(Order = 6)]
         public int PedActuations { get; set; }
 
+        [Key]
         [Required]
+        [Column(Order = 7)]
         public bool IsProtectedPhase { get; set; }
 
         public sealed class ApproachCycleAggregationClassMap : ClassMap<ApproachCycleAggregation>

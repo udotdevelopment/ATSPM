@@ -26,7 +26,8 @@ namespace MOE.Common.Models.ViewModel.Chart
                 SignalsRepositoryFactory.Create();
             var signal = repository.GetLatestVersionOfSignalBySignalID(signalID);
             MetricsList = new List<SelectListItem>();
-            var availableMetrics = signal.GetAvailableMetricsVisibleToWebsite().Where(m => m.ShowOnWebsite);
+            //var availableMetrics = signal.GetAvailableMetricsVisibleToWebsite().Where(m => m.ShowOnWebsite);
+            var availableMetrics = signal.GetAvailableMetricsVisibleToWebsite().Where(m => m.ShowOnWebsite).OrderBy(m => m.DisplayOrder);
             if (signal != null)
             {
                 foreach (var m in availableMetrics)
