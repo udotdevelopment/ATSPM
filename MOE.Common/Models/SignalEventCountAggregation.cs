@@ -32,10 +32,11 @@ namespace MOE.Common.Models
         {
             public EventCountAggregationClassMap()
             {
-                Map(m => m.Id).Name("Record Number");
                 Map(m => m.BinStartTime).Name("Bin Start Time");
                 Map(m => m.SignalId).Name("Signal ID");
                 Map(m => m.EventCount).Name("Event Count");
+                Map(m => m.Id).Name("Record Number");
+
             }
         }
     }

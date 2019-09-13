@@ -335,44 +335,48 @@ namespace MOE.Common.Business.WatchDog
             SendMessage(message);
         }
 
-        private void CheckForLowDetectorHits(Models.Signal signal)
+        private void 
+            CheckForLowDetectorHits(Models.Signal signal)
         {
             var detectors = signal.GetDetectorsForSignalThatSupportAMetric(6);
             //Parallel.ForEach(detectors, options, detector =>
             foreach (var detector in detectors)
                 try
                 {
-                    var channel = detector.DetChannel;
-                    var direction = detector.Approach.DirectionType.Description;
-                    var start = new DateTime();
-                    var end = new DateTime();
-                    if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
+                    if(detector.DetectionTypes != null && detector.DetectionTypes.Any(d => d.DetectionTypeID == 2))
                     {
-                        start = ScanDate.AddDays(-3).Date.AddHours(Settings.PreviousDayPMPeakStart);
-                        end = ScanDate.AddDays(-3).Date.AddHours(Settings.PreviousDayPMPeakEnd);
-                    }
-                    else
-                    {
-                        start = ScanDate.AddDays(-1).Date.AddHours(Settings.PreviousDayPMPeakStart);
-                        end = ScanDate.AddDays(-1).Date.AddHours(Settings.PreviousDayPMPeakEnd);
-                    }
-                    var currentVolume = detector.GetVolumeForPeriod(start, end);
-                    //Compare collected hits to low hit threshold, 
-                    if (currentVolume < Convert.ToInt32(Settings.LowHitThreshold))
-                    {
-                        var error = new SPMWatchDogErrorEvent();
-                        error.SignalID = signal.SignalID;
-                        error.DetectorID = detector.DetectorID;
-                        error.Phase = detector.Approach.ProtectedPhaseNumber;
-                        error.TimeStamp = ScanDate;
-                        error.Direction = detector.Approach.DirectionType.Description;
-                        error.Message = "CH: " + channel.ToString() + " - Count: " + currentVolume.ToString();
-                        error.ErrorCode = 2;
-                        if (!LowHitCountErrors.Contains(error))
-                            LowHitCountErrors.Add(error);
+                        var channel = detector.DetChannel;
+                        var direction = detector.Approach.DirectionType.Description;
+                        var start = new DateTime();
+                        var end = new DateTime();
+                        if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
+                        {
+                            start = ScanDate.AddDays(-3).Date.AddHours(Settings.PreviousDayPMPeakStart);
+                            end = ScanDate.AddDays(-3).Date.AddHours(Settings.PreviousDayPMPeakEnd);
+                        }
+                        else
+                        {
+                            start = ScanDate.AddDays(-1).Date.AddHours(Settings.PreviousDayPMPeakStart);
+                            end = ScanDate.AddDays(-1).Date.AddHours(Settings.PreviousDayPMPeakEnd);
+                        }
+
+                        var currentVolume = detector.GetVolumeForPeriod(start, end);
+                        //Compare collected hits to low hit threshold, 
+                        if (currentVolume < Convert.ToInt32(Settings.LowHitThreshold))
+                        {
+                            var error = new SPMWatchDogErrorEvent();
+                            error.SignalID = signal.SignalID;
+                            error.DetectorID = detector.DetectorID;
+                            error.Phase = detector.Approach.ProtectedPhaseNumber;
+                            error.TimeStamp = ScanDate;
+                            error.Direction = detector.Approach.DirectionType.Description;
+                            error.Message = "CH: " + channel.ToString() + " - Count: " + currentVolume.ToString();
+                            error.ErrorCode = 2;
+                            if (!LowHitCountErrors.Contains(error))
+                                LowHitCountErrors.Add(error);
+                        }
                     }
                 }
-
                 catch (Exception ex)
                 {
                     var er =

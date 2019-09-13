@@ -103,12 +103,12 @@ namespace MOE.Common.Business.DataAggregation
                     {
                         if (GC.GetTotalMemory(false) > _maxMemoryLimit)
                         {
-                            Console.WriteLine(GC.GetTotalMemory(false).ToString("0,0") + " exceeds Max Memory Limit " + _maxMemoryLimit.ToString("0,0") + 
+                            Console.WriteLine(GC.GetTotalMemory(false).ToString("0,0") + " exceeds Max Memory Limit " + _maxMemoryLimit.ToString("0,0") +
                                               ". SignalId is > " + signal.SignalID);
                         }
 
-                        Console.WriteLine("signal is " + signal.SignalID + " Time is " +
-                                          DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                        //Console.WriteLine("signal is " + signal.SignalID + " Time is " +
+                        //                  DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                         ProcessSignal(signal, dt, dt.AddMinutes(binSize));
                     });
                 }
@@ -181,7 +181,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     if (_approachCycleAggregationConcurrentQueue.Count > 0)
                     {
-                        //Console.WriteLine(" 1.  Saving Approach Cycle Data to Database...");
+                        Console.WriteLine(" 1.  Saving Approach Cycle Data to Database...");
                         BulkSaveApproachCycleData();
                     }
                 },
@@ -189,7 +189,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     if (_approachPcdAggregationConcurrentQueue.Count > 0)
                     {
-                        //Console.WriteLine(" 2.  Saving Approach PCD Data to Database...");
+                        Console.WriteLine(" 2.  Saving Approach PCD Data to Database...");
                         BulkSaveApproachPcdData();
                     }
                 },
@@ -197,7 +197,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     if (_approachSplitFailAggregationConcurrentQueue.Count > 0)
                     {
-                        //Console.WriteLine(" 3.  Saving Approach Split Fail Data to Database...");
+                        Console.WriteLine(" 3.  Saving Approach Split Fail Data to Database...");
                         BulkSaveApproachSplitFailData();
                     }
                 },
@@ -205,7 +205,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     if (_approachYellowRedActivationAggregationConcurrentQueue.Count > 0)
                     {
-                        //Console.WriteLine(" 4.  Saving Approach Yellow Red Activations Data to Database...");
+                        Console.WriteLine(" 4.  Saving Approach Yellow Red Activations Data to Database...");
                         BulkSaveApproachYellowRedActivationsData();
                     }
                 },
@@ -213,7 +213,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     if (_approachSpeedAggregationConcurrentQueue.Count > 0)
                     {
-                        //Console.WriteLine(" 5.  Saving Approach Speed Data to Database...");
+                        Console.WriteLine(" 5.  Saving Approach Speed Data to Database...");
                         BulkSaveApproachSpeedData();
                     }
                 },
@@ -221,7 +221,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     if (_detectorAggregationConcurrentQueue.Count > 0)
                     {
-                        //Console.WriteLine(" 6.  Saving Detector Data to Database...");
+                        Console.WriteLine(" 6.  Saving Detector Data to Database...");
                         BulkSaveDetectorData();
                     }
                 },
@@ -229,7 +229,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     if (_priorityAggregationConcurrentQueue.Count > 0)
                     {
-                        //Console.WriteLine(" 7.  Saving Priority Data to Database...");
+                        Console.WriteLine(" 7.  Saving Priority Data to Database...");
                         BulkSavePriorityData();
                     }
                 },
@@ -237,7 +237,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     if (_preemptAggregationConcurrentQueue.Count > 0)
                     {
-                        //Console.WriteLine(" 8.  Saving Preempt Data to Database...");
+                        Console.WriteLine(" 8.  Saving Preempt Data to Database...");
                         BulkSavePreemptData();
                     }
                 },
@@ -245,7 +245,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     if (_signalEventAggregationConcurrentQueue.Count > 0)
                     {
-                        //Console.WriteLine(" 9.  Saving Signal Event Data to Database...");
+                        Console.WriteLine(" 9.  Saving Signal Event Data to Database...");
                         BulkSaveSignalEventData();
                     }
                 },
@@ -253,7 +253,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     if (_phaseTerminationAggregationQueue.Count > 0)
                     {
-                        //Console.WriteLine("10.  Saving Phase Termination Data to Database...");
+                        Console.WriteLine("10.  Saving Phase Termination Data to Database...");
                         BulkSavePhaseTerminationData();
                     }
                 },
@@ -261,7 +261,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     if (_approachEventAggregationConcurrentQueue.Count > -1)
                     {
-                        //Console.WriteLine("11.  Saving Phase Event Data to Database...");
+                        Console.WriteLine("11.  Saving Phase Event Data to Database...");
                         BulkSavePhaseEventData();
                     }
                 },
@@ -269,7 +269,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     if (_phasePedAggregations.Count > -1)
                     {
-                        //Console.WriteLine("12.  Saving Ped Data to Database...");
+                        Console.WriteLine("12.  Saving Ped Data to Database...");
                         BulkSavePedData();
                     }
                 }
@@ -279,11 +279,11 @@ namespace MOE.Common.Business.DataAggregation
         private void BulkSavePhaseEventData()
         {
             var eventAggregationTable = new DataTable();
-            //eventAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             eventAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             eventAggregationTable.Columns.Add(new DataColumn("ApproachId", typeof(int)));
             eventAggregationTable.Columns.Add(new DataColumn("EventCount", typeof(int)));
             eventAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
+            //eventAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
 
             while (_approachEventAggregationConcurrentQueue.TryDequeue(out var preemptionAggregation))
             {
@@ -320,10 +320,10 @@ namespace MOE.Common.Business.DataAggregation
         private void BulkSaveSignalEventData()
         {
             var eventAggregationTable = new DataTable();
-            eventAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             eventAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             eventAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(string)));
             eventAggregationTable.Columns.Add(new DataColumn("EventCount", typeof(int)));
+            eventAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
 
             while (_signalEventAggregationConcurrentQueue.TryDequeue(out var preemptionAggregation))
             {
@@ -360,13 +360,13 @@ namespace MOE.Common.Business.DataAggregation
         private void BulkSavePreemptData()
         {
             var preemptAggregationTable = new DataTable();
-            preemptAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             preemptAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             preemptAggregationTable.Columns.Add(new DataColumn("SignalID", typeof(string)));
             preemptAggregationTable.Columns.Add(new DataColumn("PreemptNumber", typeof(int)));
             preemptAggregationTable.Columns.Add(new DataColumn("PreemptRequests", typeof(int)));
             preemptAggregationTable.Columns.Add(new DataColumn("PreemptServices", typeof(int)));
             preemptAggregationTable.Columns.Add(new DataColumn("VersionId", typeof(int)));
+            preemptAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
 
             while (_preemptAggregationConcurrentQueue.TryDequeue(out var preemptionAggregation))
             {
@@ -406,7 +406,6 @@ namespace MOE.Common.Business.DataAggregation
         private void BulkSavePriorityData()
         {
             var priorityAggregationTable = new DataTable();
-            priorityAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             priorityAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             priorityAggregationTable.Columns.Add(new DataColumn("SignalID", typeof(string)));
             priorityAggregationTable.Columns.Add(new DataColumn("PriorityNumber", typeof(int)));
@@ -415,6 +414,7 @@ namespace MOE.Common.Business.DataAggregation
             priorityAggregationTable.Columns.Add(new DataColumn("PriorityServiceEarlyGreen", typeof(int)));
             priorityAggregationTable.Columns.Add(new DataColumn("PriorityServiceExtendedGreen", typeof(int)));
             priorityAggregationTable.Columns.Add(new DataColumn("VersionId", typeof(int)));
+            priorityAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
 
             while (_priorityAggregationConcurrentQueue.TryDequeue(out var priorityAggregationData))
             {
@@ -456,10 +456,11 @@ namespace MOE.Common.Business.DataAggregation
         private void BulkSaveDetectorData()
         {
             var detectorAggregationTable = new DataTable();
-            detectorAggregationTable.Columns.Add(new DataColumn("Id", typeof(long)));
             detectorAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             detectorAggregationTable.Columns.Add(new DataColumn("Volume", typeof(double)));
             detectorAggregationTable.Columns.Add(new DataColumn("DetectorPrimaryId", typeof(string)));
+            detectorAggregationTable.Columns.Add(new DataColumn("Id", typeof(long)));
+
             while (_detectorAggregationConcurrentQueue.TryDequeue(out var detectorAggregationData))
             {
                 var dataRow = detectorAggregationTable.NewRow();
@@ -496,7 +497,6 @@ namespace MOE.Common.Business.DataAggregation
         private void BulkSaveApproachSpeedData()
         {
             var approachSpeedAggregationTable = new DataTable();
-            approachSpeedAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             approachSpeedAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             approachSpeedAggregationTable.Columns.Add(new DataColumn("ApproachID", typeof(int)));
             approachSpeedAggregationTable.Columns.Add(new DataColumn("SummedSpeed", typeof(double)));
@@ -504,6 +504,8 @@ namespace MOE.Common.Business.DataAggregation
             approachSpeedAggregationTable.Columns.Add(new DataColumn("Speed85th", typeof(double)));
             approachSpeedAggregationTable.Columns.Add(new DataColumn("Speed15th", typeof(double)));
             approachSpeedAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
+
             while (_approachSpeedAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
                 var dataRow = approachSpeedAggregationTable.NewRow();
@@ -543,7 +545,6 @@ namespace MOE.Common.Business.DataAggregation
         private void BulkSaveApproachCycleData()
         {
             var approachAggregationTable = new DataTable();
-            //approachAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             approachAggregationTable.Columns.Add(new DataColumn("ApproachID", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("RedTime", typeof(double)));
@@ -552,6 +553,7 @@ namespace MOE.Common.Business.DataAggregation
             approachAggregationTable.Columns.Add(new DataColumn("TotalCycles", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("PedActuations", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
+            approachAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             while (_approachCycleAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
                 var dataRow = approachAggregationTable.NewRow();
@@ -639,11 +641,11 @@ namespace MOE.Common.Business.DataAggregation
         private void BulkSaveApproachSplitFailData()
         {
             var approachAggregationTable = new DataTable();
-            //approachAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             approachAggregationTable.Columns.Add(new DataColumn("ApproachID", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("SplitFailures", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
+            approachAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             while (_approachSplitFailAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
                 var dataRow = approachAggregationTable.NewRow();
@@ -680,7 +682,6 @@ namespace MOE.Common.Business.DataAggregation
         private void BulkSavePhaseTerminationData()
         {
             var phaseTerminationAggregationTable = new DataTable();
-            phaseTerminationAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             phaseTerminationAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             phaseTerminationAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(string)));
             phaseTerminationAggregationTable.Columns.Add(new DataColumn("PhaseNumber", typeof(int)));
@@ -688,6 +689,7 @@ namespace MOE.Common.Business.DataAggregation
             phaseTerminationAggregationTable.Columns.Add(new DataColumn("ForceOffs", typeof(int)));
             phaseTerminationAggregationTable.Columns.Add(new DataColumn("MaxOuts", typeof(int)));
             phaseTerminationAggregationTable.Columns.Add(new DataColumn("UnknownTerminationTypes", typeof(int)));
+            phaseTerminationAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             while (_phaseTerminationAggregationQueue.TryDequeue(out var phaseTerminationAggregation))
             {
                 var dataRow = phaseTerminationAggregationTable.NewRow();
@@ -728,12 +730,12 @@ namespace MOE.Common.Business.DataAggregation
         private void BulkSavePedData()
         {
             var phasePedAggregationTable = new DataTable();
-            phasePedAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             phasePedAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("PhaseNumber", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("PedCount", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("PedDelay", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             while (_phasePedAggregations.TryDequeue(out var phaseTerminationAggregation))
             {
                 var dataRow = phasePedAggregationTable.NewRow();
