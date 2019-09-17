@@ -15,11 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MOE.Common", "MOE.Common\MO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MOEWcfServiceLibrary", "MOEWcfServiceLibrary\MOEWcfServiceLibrary.csproj", "{FEFD5738-31F2-4097-B0F2-E2A247FE0ADE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InrixConfigurationTool", "InrixConfigurationTool\InrixConfigurationTool.csproj", "{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}"
-	ProjectSection(ProjectDependencies) = postProject
-		{87951632-A7BE-4E04-B62C-C4FC2FC0CD5A} = {87951632-A7BE-4E04-B62C-C4FC2FC0CD5A}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateAddDataScript", "GenerateAddDataScript\GenerateAddDataScript.csproj", "{70285D87-0241-49B6-AD56-31B1F6840584}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPMWatchDog", "SPMWatchDogNew\SPMWatchDog.csproj", "{AB47526A-AAB8-4048-A480-11C02805AD91}"
@@ -148,31 +143,6 @@ Global
 		{FEFD5738-31F2-4097-B0F2-E2A247FE0ADE}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{FEFD5738-31F2-4097-B0F2-E2A247FE0ADE}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
 		{FEFD5738-31F2-4097-B0F2-E2A247FE0ADE}.SingleImage|x86.ActiveCfg = Release|Any CPU
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.CD_ROM|Any CPU.ActiveCfg = Release|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.CD_ROM|Mixed Platforms.ActiveCfg = Release|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.CD_ROM|Mixed Platforms.Build.0 = Release|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.CD_ROM|x86.ActiveCfg = Release|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.CD_ROM|x86.Build.0 = Release|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.Debug|x86.ActiveCfg = Debug|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.Debug|x86.Build.0 = Debug|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.DVD-5|Any CPU.ActiveCfg = Debug|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.DVD-5|Mixed Platforms.ActiveCfg = Debug|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.DVD-5|Mixed Platforms.Build.0 = Debug|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.DVD-5|x86.ActiveCfg = Debug|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.DVD-5|x86.Build.0 = Debug|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.Release|Any CPU.ActiveCfg = Release|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.Release|Mixed Platforms.Build.0 = Release|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.Release|x86.ActiveCfg = Release|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.Release|x86.Build.0 = Release|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.SingleImage|Any CPU.ActiveCfg = Release|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.SingleImage|Mixed Platforms.ActiveCfg = Release|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.SingleImage|Mixed Platforms.Build.0 = Release|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.SingleImage|x86.ActiveCfg = Release|x86
-		{CA4D1108-74C7-4B69-AF5F-FDC9A429C216}.SingleImage|x86.Build.0 = Release|x86
 		{70285D87-0241-49B6-AD56-31B1F6840584}.CD_ROM|Any CPU.ActiveCfg = Release|x86
 		{70285D87-0241-49B6-AD56-31B1F6840584}.CD_ROM|Mixed Platforms.ActiveCfg = Release|x86
 		{70285D87-0241-49B6-AD56-31B1F6840584}.CD_ROM|Mixed Platforms.Build.0 = Release|x86

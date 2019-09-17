@@ -104,7 +104,8 @@ namespace MOE.Common.Business.DataAggregation
                         if (GC.GetTotalMemory(false) > _maxMemoryLimit)
                         {
                             Console.WriteLine(GC.GetTotalMemory(false).ToString("0,0") + " exceeds Max Memory Limit " + _maxMemoryLimit.ToString("0,0") +
-                                              ". SignalId is > " + signal.SignalID);
+                                              ". SignalId is > " + signal.SignalID + "Bin time is " + dt);
+                            GC.Collect();
                         }
 
                         //Console.WriteLine("signal is " + signal.SignalID + " Time is " +
