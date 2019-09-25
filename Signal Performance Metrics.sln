@@ -73,13 +73,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MOE.CommonChartTests", "MOE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncGetMaxTimeRecords", "AsyncGetMaxTimeRecords\AsyncGetMaxTimeRecords.csproj", "{FB182E1E-29BD-4F2B-8246-1AA6C89A60D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtspmApi", "AtspmApi\AtspmApi.csproj", "{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
 		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
@@ -842,12 +841,45 @@ Global
 		{FB182E1E-29BD-4F2B-8246-1AA6C89A60D0}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
 		{FB182E1E-29BD-4F2B-8246-1AA6C89A60D0}.SingleImage|x86.ActiveCfg = Release|Any CPU
 		{FB182E1E-29BD-4F2B-8246-1AA6C89A60D0}.SingleImage|x86.Build.0 = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.CD_ROM|Mixed Platforms.Build.0 = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.CD_ROM|x86.ActiveCfg = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.CD_ROM|x86.Build.0 = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.Debug|x86.Build.0 = Debug|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.DVD-5|x86.ActiveCfg = Debug|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.DVD-5|x86.Build.0 = Debug|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.Release|x86.ActiveCfg = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.Release|x86.Build.0 = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.SingleImage|x86.ActiveCfg = Release|Any CPU
+		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.SingleImage|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B5EC6913-E515-4162-A99E-19BB2D097F94}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
