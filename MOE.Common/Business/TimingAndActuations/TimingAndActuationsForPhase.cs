@@ -235,7 +235,7 @@ namespace MOE.Common.Business.TimingAndActuations
                         Options.StartDate, Options.EndDate, new List<int> {81, 82}, detector.DetChannel);
                     if (laneByLane.Count > 0)
                     {
-                        LaneByLanes.Add("Lane-by-lane Count " + detector.MovementType.Abbreviation + " " +
+                        LaneByLanes.Add("Lane-by-lane Count, " + detector.MovementType.Abbreviation + " " +
                                         laneNumber + ", ch " + detector.DetChannel, laneByLane);
                     }
                     if (LaneByLanes.Count == 0 && Options.ShowAllLanesInfo)
@@ -257,9 +257,8 @@ namespace MOE.Common.Business.TimingAndActuations
                             Timestamp = Options.StartDate.AddSeconds(-9)
                         };
                         forceEventsForAllLanes.Add(tempEvent2);
-                        LaneByLanes.Add("Lane-by-Lane Count, ch " + detector.DetChannel + " " +
-                                        detector.MovementType.Abbreviation + " " +
-                                        laneNumber, forceEventsForAllLanes);
+                        LaneByLanes.Add("Lane-by-Lane Count, "  + detector.MovementType.Abbreviation + " " + laneNumber +
+                                        " ch " + detector.DetChannel + " ", forceEventsForAllLanes);
                     }
                 }
             }
@@ -323,20 +322,21 @@ namespace MOE.Common.Business.TimingAndActuations
                 .ThenByDescending(l => l.LaneNumber).ToList();
             foreach (var detector in localSortedDetectors)
             {
+                string movementType = detector.MovementType.Abbreviation == null ? " " : detector.MovementType.Abbreviation;
+                string laneNumber = " ";
+                if (detector.LaneNumber != null)
+                {
+                    laneNumber = detector.LaneNumber.Value == 0 ? " " : detector.LaneNumber.Value.ToString();
+                }
                 if (detector.DetectionTypes.Any(d => d.DetectionTypeID == 2))
                 {
                     var advanceEvents = controllerEventLogRepository.GetEventsByEventCodesParam(Approach.SignalID,
                         Options.StartDate, Options.EndDate, new List<int> {81, 82}, detector.DetChannel);
-                    var laneNumber = "";
-                    if (detector.LaneNumber != null)
-                    {
-                        laneNumber = detector.LaneNumber.Value.ToString();
-                    }
+                    
                     if (advanceEvents.Count > 0)
                     {
                         AdvanceCountEvents.Add("Advanced Count (" + detector.DistanceFromStopBar + " ft) " +
-                                                detector.MovementType.Abbreviation + " " +
-                                                laneNumber +
+                                                movementType + " " + laneNumber +
                                                 ", ch " + detector.DetChannel, advanceEvents);
                     } 
                     else if (AdvanceCountEvents.Count == 0 && Options.ShowAllLanesInfo)
@@ -359,7 +359,7 @@ namespace MOE.Common.Business.TimingAndActuations
                         };
                         forceEventsForAllLanes.Add(tempEvent2);
                         AdvanceCountEvents.Add("Advanced Count (" + detector.DistanceFromStopBar + " ft), ch " +
-                                               detector.DetChannel + " " + detector.MovementType.Abbreviation + " " +
+                                               detector.DetChannel + " " + movementType + " " +
                                                laneNumber, forceEventsForAllLanes);
                     }
                 }
