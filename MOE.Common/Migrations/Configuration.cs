@@ -1144,6 +1144,13 @@ namespace MOE.Common.Migrations
                     Description = "Southwest",
                     Abbreviation = "SW",
                     DisplayOrder = 8
+                },
+            new DirectionType
+                {
+                    DirectionTypeID = 9,
+                    Description = "None",
+                    Abbreviation = " ",
+                    DisplayOrder = 9
                 }
             );
 

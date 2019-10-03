@@ -81,7 +81,7 @@ namespace MOE.Common.Business.DataAggregation
             for (var dt = _startDate; dt < _endDate; dt = dt.AddMinutes(binSize))
             {
                 Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
-                                  "> Getting the latest version of signals for time period: " + dt.ToString());
+                                  " > Getting the latest version of signals for time period: " + dt.ToString() + " end date " + _endDate);
                 var versionIds = db.Signals.Where(
                         r => r.VersionActionId != 3 && r.Start < dt //&& (r.SignalID == "7064" || r.SignalID == "7022")
                     ).GroupBy(r => r.SignalID).Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault())
@@ -824,7 +824,8 @@ namespace MOE.Common.Business.DataAggregation
             if (args.Length == 1)
             {
                 _startDate = Convert.ToDateTime(args[0]);
-                _endDate = DateTime.Today;
+                //_endDate = DateTime.Today;
+                _endDate = _startDate.AddHours(4);
             }
             else if (args.Length == 2)
             {
@@ -838,7 +839,8 @@ namespace MOE.Common.Business.DataAggregation
                     var db = new SPM();
                     _startDate = db.ApproachPcdAggregations.Select(s => s.BinStartTime).Max();
                     _startDate = _startDate.AddMinutes(15);
-                    _endDate = DateTime.Today; ;
+                    _endDate = _startDate.AddHours(4);
+                    //_endDate = DateTime.Today; 
                 }
                 catch (Exception ex)
                 {

@@ -7,38 +7,38 @@ namespace MOE.Common.Migrations
     {
         public override void Up()
         {
-            CreateIndex("dbo.DetectorAggregations", "DetectorPrimaryId");
-            AddPrimaryKey("dbo.ApproachCycleAggregations", "Id");
-            AddPrimaryKey("dbo.ApproachEventCountAggregations", "Id");
-            AddPrimaryKey("dbo.SignalEventCountAggregations", "Id");
-            AddPrimaryKey("dbo.PriorityAggregations", "Id");
-            AddPrimaryKey("dbo.PreemptionAggregations", "Id");
-            AddPrimaryKey("dbo.PhaseTerminationAggregations", "Id");
-            AddPrimaryKey("dbo.PhasePedAggregations", "Id");
-            AddPrimaryKey("dbo.DetectorEventCountAggregations", "Id");
-            AddPrimaryKey("dbo.DetectorAggregations", "Id");
-            AddPrimaryKey("dbo.ApproachYellowRedActivationAggregations", "Id");
-            AddPrimaryKey("dbo.ApproachSplitFailAggregations", "Id");
-            AddPrimaryKey("dbo.ApproachSpeedAggregations", "Id");
-            AddPrimaryKey("dbo.ApproachPcdAggregations", "Id");
+            //CreateIndex("dbo.DetectorAggregations", "DetectorPrimaryId");
+            //AddPrimaryKey("dbo.ApproachCycleAggregations", "Id");
+            //AddPrimaryKey("dbo.ApproachEventCountAggregations", "Id");
+            //AddPrimaryKey("dbo.SignalEventCountAggregations", "Id");
+            //AddPrimaryKey("dbo.PriorityAggregations", "Id");
+            //AddPrimaryKey("dbo.PreemptionAggregations", "Id");
+            //AddPrimaryKey("dbo.PhaseTerminationAggregations", "Id");
+            //AddPrimaryKey("dbo.PhasePedAggregations", "Id");
+            //AddPrimaryKey("dbo.DetectorEventCountAggregations", "Id");
+            //AddPrimaryKey("dbo.DetectorAggregations", "Id");
+            //AddPrimaryKey("dbo.ApproachYellowRedActivationAggregations", "Id");
+            //AddPrimaryKey("dbo.ApproachSplitFailAggregations", "Id");
+            //AddPrimaryKey("dbo.ApproachSpeedAggregations", "Id");
+            //AddPrimaryKey("dbo.ApproachPcdAggregations", "Id");
 
 
 
 
 
-            AddPrimaryKey("dbo.SignalEventCountAggregations", "Id");
-            AddPrimaryKey("dbo.PriorityAggregations", "Id");
-            AddPrimaryKey("dbo.PreemptionAggregations", "Id");
-            AddPrimaryKey("dbo.PhaseTerminationAggregations", "Id");
-            AddPrimaryKey("dbo.PhasePedAggregations", "Id");
-            AddPrimaryKey("dbo.DetectorEventCountAggregations", "Id");
-            AddPrimaryKey("dbo.DetectorAggregations", "Id");
-            AddPrimaryKey("dbo.ApproachYellowRedActivationAggregations", "Id");
-            AddPrimaryKey("dbo.ApproachSplitFailAggregations", "Id");
-            AddPrimaryKey("dbo.ApproachSpeedAggregations", "Id");
-            AddPrimaryKey("dbo.ApproachPcdAggregations", "Id");
-            AddPrimaryKey("dbo.ApproachEventCountAggregations", "Id");
-            AddPrimaryKey("dbo.ApproachCycleAggregations", "Id");
+            //AddPrimaryKey("dbo.SignalEventCountAggregations", "Id");
+            //AddPrimaryKey("dbo.PriorityAggregations", "Id");
+            //AddPrimaryKey("dbo.PreemptionAggregations", "Id");
+            //AddPrimaryKey("dbo.PhaseTerminationAggregations", "Id");
+            //AddPrimaryKey("dbo.PhasePedAggregations", "Id");
+            //AddPrimaryKey("dbo.DetectorEventCountAggregations", "Id");
+            //AddPrimaryKey("dbo.DetectorAggregations", "Id");
+            //AddPrimaryKey("dbo.ApproachYellowRedActivationAggregations", "Id");
+            //AddPrimaryKey("dbo.ApproachSplitFailAggregations", "Id");
+            //AddPrimaryKey("dbo.ApproachSpeedAggregations", "Id");
+            //AddPrimaryKey("dbo.ApproachPcdAggregations", "Id");
+            //AddPrimaryKey("dbo.ApproachEventCountAggregations", "Id");
+            //AddPrimaryKey("dbo.ApproachCycleAggregations", "Id");
             DropForeignKey("dbo.DetectorAggregations", "DetectorPrimaryId", "dbo.Detectors");
             DropIndex("dbo.DetectorAggregations", new[] { "DetectorPrimaryId" });
             DropPrimaryKey("dbo.ApproachCycleAggregations");
