@@ -571,7 +571,7 @@ namespace MOE.Common.Business.DataAggregation
                 approachAggregationTable.Rows.Add(dataRow);
             }
             var connectionString =
-                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
@@ -852,7 +852,7 @@ namespace MOE.Common.Business.DataAggregation
         {
             var controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
             var records = controllerEventLogRepository.GetAllAggregationCodes(signal.SignalID, startTime, endTime);
-            //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
+            Console.Write(signal.SignalID);
             var preemptCodes = new List<int> { 102, 105 };
             var priorityCodes = new List<int> { 112, 113, 114 };
             Parallel.Invoke(
