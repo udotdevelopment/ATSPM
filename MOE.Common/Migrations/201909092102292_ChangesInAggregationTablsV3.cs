@@ -7,6 +7,16 @@ namespace MOE.Common.Migrations
     {
         public override void Up()
         {
+
+            AlterColumn("dbo.PhaseTerminationAggregations", "SignalID", c => c.String(maxLength: 10, nullable:false));
+            AlterColumn("dbo.SignalEventCountAggregations", "SignalID", c => c.String(maxLength: 10, nullable: false));
+
+            AlterColumn("dbo.ActionLogs", "SignalID", c => c.String(maxLength: 10, nullable: false));
+
+            AlterColumn("dbo.PhaseTerminationAggregations", "SignalID", c => c.String(maxLength: 10, nullable: false));
+            AlterColumn("dbo.SignalEventCountAggregations", "SignalID", c => c.String(maxLength: 10, nullable: false));
+
+
             DropPrimaryKey("dbo.ApproachSpeedAggregations");
             DropPrimaryKey("dbo.ApproachSplitFailAggregations");
             DropPrimaryKey("dbo.DetectorAggregations");

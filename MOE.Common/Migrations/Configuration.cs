@@ -1078,14 +1078,9 @@ namespace MOE.Common.Migrations
                 new MovementType { MovementTypeID = 1, Description = "Thru", Abbreviation = "T", DisplayOrder = 3 },
                 new MovementType { MovementTypeID = 2, Description = "Right", Abbreviation = "R", DisplayOrder = 5 },
                 new MovementType { MovementTypeID = 3, Description = "Left", Abbreviation = "L", DisplayOrder = 1 },
-                new MovementType
-                {
-                    MovementTypeID = 4,
-                    Description = "Thru-Right",
-                    Abbreviation = "TR",
-                    DisplayOrder = 4
-                },
-                new MovementType { MovementTypeID = 5, Description = "Thru-Left", Abbreviation = "TL", DisplayOrder = 2 }
+                new MovementType { MovementTypeID = 4, Description = "Thru-Right", Abbreviation = "TR", DisplayOrder = 4},
+                new MovementType { MovementTypeID = 5, Description = "Thru-Left", Abbreviation = "TL", DisplayOrder = 2 },
+                new MovementType { MovementTypeID = 6, Description = "None", Abbreviation = " ", DisplayOrder = 6 }
             );
 
             context.DirectionTypes.AddOrUpdate(
