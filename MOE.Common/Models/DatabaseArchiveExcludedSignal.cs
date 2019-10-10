@@ -9,6 +9,7 @@ namespace MOE.Common.Models
         [Key]
         public int Id { get; set; }
 
+        [StringLength(10)]
         public string SignalId { get; set; }
         [NotMapped]
         public string SignalDescription { get; set; }
