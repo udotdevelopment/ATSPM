@@ -18,6 +18,9 @@ namespace MOE.Common.Business
         private readonly DateTime _startDate;
         private readonly DateTime _endDate;
         private readonly LeftTurnGapAnalysisOptions _options;
+        private readonly string _detectionType;
+
+        private const int CYCLE_GROUP_COUNT = 10;
 
         public class PhaseLeftTurnGapTracker
         {
@@ -30,7 +33,7 @@ namespace MOE.Common.Business
         }
 
         public LeftTurnGapAnalysisChart(LeftTurnGapAnalysisOptions options, Signal signal, Approach approach,
-            List<Controller_Event_Log> events, int opposingPhase, DateTime startDate, DateTime endDate)
+            List<Controller_Event_Log> events, int opposingPhase, DateTime startDate, DateTime endDate, string detectionType)
         {
             _signal = signal;
             _options = options;
@@ -39,12 +42,13 @@ namespace MOE.Common.Business
             _opposingPhase = opposingPhase;
             _startDate = startDate;
             _endDate = endDate;
+            _detectionType = detectionType;
 
             options.Y2AxisMax = 100;
             options.Y2AxisTitle = $"% Of Gap Time > {options.TrendLineGapThreshold} seconds";
 
             Chart = ChartFactory.CreateDefaultChartNoX2Axis(options);
-            SetChartTitle(Chart, options, signal, approach);
+            SetChartTitle(Chart, options, signal, approach, detectionType);
             ChartFactory.SetImageProperties(Chart);
 
             Chart.ChartAreas[0].AxisY.Title = "# Gaps";
@@ -54,12 +58,13 @@ namespace MOE.Common.Business
             AddDataToChart();
         }
 
-        private void SetChartTitle(Chart chart, LeftTurnGapAnalysisOptions options, Signal signal, Approach approach)
+        private void SetChartTitle(Chart chart, LeftTurnGapAnalysisOptions options, Signal signal, Approach approach, string detectionType)
         {
             chart.Titles.Add(ChartTitleFactory.GetChartName(options.MetricTypeID));
             chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(signal.SignalID, options.StartDate,
                 options.EndDate));
             chart.Titles.Add(ChartTitleFactory.GetPhase(_opposingPhase));
+            chart.Titles.Add(detectionType);
         }
 
         protected void AddDataToChart()
@@ -100,22 +105,22 @@ namespace MOE.Common.Business
 
             var highestTotal = 0;
 
-            for (var time = _startDate; time < _endDate; time = time.AddMinutes(_options.BinSize))
+            for (var lowerTimeLimit = _startDate; lowerTimeLimit < _endDate; lowerTimeLimit = lowerTimeLimit.AddMinutes(_options.BinSize))
             {
-                var upperLimit = time.AddMinutes(15);
-                var items = phaseTrackerList.Where(x => x.GreenTime >= time && x.GreenTime < upperLimit).ToList();
+                var upperTimeLimit = lowerTimeLimit.AddMinutes(15);
+                var items = phaseTrackerList.Where(x => x.GreenTime >= lowerTimeLimit && x.GreenTime < upperTimeLimit).ToList();
 
                 if (!items.Any()) continue;
 
-                shortGapSeries.Points.AddXY(upperLimit, items.Sum(x => x.ShortGapCounter));
-                mediumGapSeries.Points.AddXY(upperLimit, items.Sum(x => x.MediumGapCounter));
-                largeGapSeries.Points.AddXY(upperLimit, items.Sum(x => x.LargeGapCounter));
-                hugeGapSeries.Points.AddXY(upperLimit, items.Sum(x => x.HugeGapCounter));
+                shortGapSeries.Points.AddXY(upperTimeLimit, items.Sum(x => x.ShortGapCounter));
+                mediumGapSeries.Points.AddXY(upperTimeLimit, items.Sum(x => x.MediumGapCounter));
+                largeGapSeries.Points.AddXY(upperTimeLimit, items.Sum(x => x.LargeGapCounter));
+                hugeGapSeries.Points.AddXY(upperTimeLimit, items.Sum(x => x.HugeGapCounter));
 
                 var localTotal = items.Sum(x => x.ShortGapCounter) + items.Sum(x => x.MediumGapCounter)
                                                                    + items.Sum(x => x.LargeGapCounter) +
                                                                    items.Sum(x => x.HugeGapCounter);
-                percentTurnableSeries.Points.AddXY(upperLimit,
+                percentTurnableSeries.Points.AddXY(upperTimeLimit,
                     items.Average(x => x.PercentPhaseTurnable) * 100);
                 if (localTotal > highestTotal)
                     highestTotal = localTotal;

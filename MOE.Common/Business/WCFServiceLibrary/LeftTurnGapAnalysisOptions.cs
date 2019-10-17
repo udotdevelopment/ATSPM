@@ -97,7 +97,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             var eventLogs = new ControllerEventLogs(SignalID, StartDate, EndDate,
                 new List<int> {EVENT_DET, EVENT_GREEN, EVENT_RED});
-
+            
             //Get phase + check for opposing phase before creating chart
             var ebPhase = signal.Approaches.FirstOrDefault(x => x.ProtectedPhaseNumber == 6);
             if (ebPhase != null && signal.Approaches.Any(x => x.ProtectedPhaseNumber == 2))
@@ -125,19 +125,36 @@ namespace MOE.Common.Business.WCFServiceLibrary
             phaseEvents.AddRange(eventLogs.Events.Where(x =>
                 x.EventParam == approach.ProtectedPhaseNumber &&
                 (x.EventCode == EVENT_GREEN || x.EventCode == EVENT_RED)));
-            foreach (var detector in approach.Detectors)
+
+            var detectorsToUse = new List<Models.Detector>();
+            var detectionTypeStr = "Lane-By-Lane Count";
+
+            //Use only lane-by-lane count detectors if they exists, otherwise check for stop bar
+            detectorsToUse = approach.GetAllDetectorsOfDetectionType(4);
+
+            if (!detectorsToUse.Any())
+            {
+                detectorsToUse = approach.GetAllDetectorsOfDetectionType(6);
+                detectionTypeStr = "Stop Bar Presence";
+
+                //If no detectors of either type for this approach, skip it
+                if (!detectorsToUse.Any())
+                    return;
+            }
+
+            foreach (var detector in detectorsToUse)
             {
                 // Check for thru, right, thru-right, and thru-left
                 if (!IsThruDetector(detector)) continue;
 
                 phaseEvents.AddRange(eventLogs.Events.Where(x =>
-                    x.EventCode == 81 && x.EventParam == detector.DetChannel));
+                    x.EventCode == EVENT_DET && x.EventParam == detector.DetChannel));
             }
 
             if (phaseEvents.Any())
             {
                 var leftTurnChart = new LeftTurnGapAnalysisChart(this, signal, approach, phaseEvents,
-                    GetOpposingPhase(approach.ProtectedPhaseNumber), StartDate, EndDate);
+                    GetOpposingPhase(approach.ProtectedPhaseNumber), StartDate, EndDate, detectionTypeStr);
                 var chart = leftTurnChart.Chart;
                 var chartName = CreateFileName();
                 chart.SaveImage(MetricFileLocation + chartName);
