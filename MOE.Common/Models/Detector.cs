@@ -75,8 +75,8 @@ namespace MOE.Common.Models
         public int? LaneNumber { get; set; }
         [Display(Name = "Movement Type (Lane-by-lane Count)")]
         [DataMember]
-        public int? MovementTypeID { get; set; }
 
+        public int? MovementTypeID { get; set; }
         [DataMember]
         public virtual MovementType MovementType { get; set; }
 

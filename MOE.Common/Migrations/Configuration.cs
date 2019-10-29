@@ -14,8 +14,8 @@ namespace MOE.Common.Migrations
 
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = true;
+            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationDataLossAllowed = false;
             var migrator = new DbMigrator(this);
             //_pendingMigrations = migrator.GetPendingMigrations().Any();
             CommandTimeout = int.MaxValue;
@@ -865,8 +865,8 @@ namespace MOE.Common.Migrations
                 {
                     MetricID = 18,
                     ChartName = "Approach Pcd", //"Purdue Coodination",
-                    Abbreviation = "APCD", // "PCDA",
-                    ShowOnWebsite = false,
+                                Abbreviation = "APCD", // "PCDA",
+                                ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 102
                 },
@@ -874,7 +874,7 @@ namespace MOE.Common.Migrations
                 {
                     MetricID = 19,
                     ChartName = "Approach Cycle", // "Cycle"
-                    Abbreviation = "CA",
+                                Abbreviation = "CA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 103
@@ -883,7 +883,7 @@ namespace MOE.Common.Migrations
                 {
                     MetricID = 20,
                     ChartName = "Approach Split Fail", //"Purdue Split Failure",
-                    Abbreviation = "SFA",
+                                Abbreviation = "SFA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 104
@@ -892,7 +892,7 @@ namespace MOE.Common.Migrations
                 {
                     MetricID = 22,
                     ChartName = "Signal Preemption", //"Preemption",
-                    Abbreviation = "PreemptA",
+                                Abbreviation = "PreemptA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 105
@@ -901,7 +901,7 @@ namespace MOE.Common.Migrations
                 {
                     MetricID = 24,
                     ChartName = "Signal Priority", // "Transit Signal Priority",
-                    Abbreviation = "TSPA",
+                                Abbreviation = "TSPA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 106
@@ -919,7 +919,7 @@ namespace MOE.Common.Migrations
                 {
                     MetricID = 26,
                     ChartName = "Approach Yellow Red Activations", //"Yellow Red Activations",
-                    Abbreviation = "YRAA",
+                                Abbreviation = "YRAA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 108
@@ -1074,19 +1074,17 @@ namespace MOE.Common.Migrations
                 new LaneType { LaneTypeID = 7, Description = "High Occupancy Vehicle", Abbreviation = "HOV" }
             );
 
+            context.SaveChanges();
+
             context.MovementTypes.AddOrUpdate(
-                new MovementType { MovementTypeID = 1, Description = "Thru", Abbreviation = "T", DisplayOrder = 3 },
-                new MovementType { MovementTypeID = 2, Description = "Right", Abbreviation = "R", DisplayOrder = 5 },
-                new MovementType { MovementTypeID = 3, Description = "Left", Abbreviation = "L", DisplayOrder = 1 },
-                new MovementType
-                {
-                    MovementTypeID = 4,
-                    Description = "Thru-Right",
-                    Abbreviation = "TR",
-                    DisplayOrder = 4
-                },
-                new MovementType { MovementTypeID = 5, Description = "Thru-Left", Abbreviation = "TL", DisplayOrder = 2 }
+                new MovementType { MovementTypeID = 1, Description = "Thru",        Abbreviation = "T",  DisplayOrder = 3 },
+                new MovementType { MovementTypeID = 2, Description = "Right",       Abbreviation = "R",  DisplayOrder = 5 },
+                new MovementType { MovementTypeID = 3, Description = "Left",        Abbreviation = "L",  DisplayOrder = 1 },
+                new MovementType { MovementTypeID = 4, Description = "Thru-Right",  Abbreviation = "TR", DisplayOrder = 4 },
+                new MovementType { MovementTypeID = 5, Description = "Thru-Left",   Abbreviation = "TL", DisplayOrder = 2 },
+                new MovementType { MovementTypeID = 6, Description = "None",        Abbreviation = ".",  DisplayOrder = 6 }
             );
+            context.SaveChanges();
 
             context.DirectionTypes.AddOrUpdate(
                 new DirectionType
@@ -1144,14 +1142,14 @@ namespace MOE.Common.Migrations
                     Description = "Southwest",
                     Abbreviation = "SW",
                     DisplayOrder = 8
-                },
-            new DirectionType
-                {
-                    DirectionTypeID = 9,
-                    Description = "None",
-                    Abbreviation = " ",
-                    DisplayOrder = 9
                 }
+            //new DirectionType
+            //    {
+            //        DirectionTypeID = 9,
+            //        Description = "None",
+            //        Abbreviation = " ",
+            //        DisplayOrder = 9
+            //    }
             );
 
             context.ToBeProcessededTables.AddOrUpdate(t => t.PartitionedTableName,
@@ -1167,10 +1165,10 @@ namespace MOE.Common.Migrations
                     DataBaseName = "Moe",
                     Verbose = true,
 
-                    //CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, 
-                    //                        [Timestamp] [datetime2](7) NOT NULL, [EventCode] [int] NOT NULL, [EventParam] [int] NOT NULL"
-                    CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS, 
-                                            [Timestamp] [datetime2](7), [EventCode] [int], [EventParam] [int]"
+                                //CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, 
+                                //                        [Timestamp] [datetime2](7) NOT NULL, [EventCode] [int] NOT NULL, [EventParam] [int] NOT NULL"
+                                CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS, 
+                                                        [Timestamp] [datetime2](7), [EventCode] [int], [EventParam] [int]"
                 },
                 new ToBeProcessededTable()
                 {
@@ -1179,14 +1177,14 @@ namespace MOE.Common.Migrations
                     PreserveDataSelect = "SELECT [DetectorID], [MPH], [KPH], [Timestamp]",
                     TableId = 2,
                     PreserveDataWhere = @" WHERE  DetectorID  in 
-                                            (SELECT [DetectorID]   
-                                            FROM [dbo].[Detectors]   
-                                             WHERE  [ApproachID]  in  
-                                                (SELECT [ApproachID]  
-                                                 FROM  [dbo].[Approaches]   
-                                                 WHERE [SignalID]  in  
-                                                    (Select [SignalId]  
-                                                     FROM  [dbo].[DatabaseArchiveExcludedSignals] )))",
+                                                        (SELECT [DetectorID]   
+                                                        FROM [dbo].[Detectors]   
+                                                         WHERE  [ApproachID]  in  
+                                                            (SELECT [ApproachID]  
+                                                             FROM  [dbo].[Approaches]   
+                                                             WHERE [SignalID]  in  
+                                                                (Select [SignalId]  
+                                                                 FROM  [dbo].[DatabaseArchiveExcludedSignals] )))",
                     InsertValues = "Insert into [DetectorID], [MPH], [KPH], [Timestamp]",
                     DataBaseName = "MoePartition",
                     Verbose = true,
