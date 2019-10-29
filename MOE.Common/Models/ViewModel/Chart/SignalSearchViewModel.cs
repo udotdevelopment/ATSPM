@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Web.Mvc;
 using MOE.Common.Models.Repositories;
 
@@ -40,7 +41,7 @@ namespace MOE.Common.Models.ViewModel.Chart
         {
             //MetricTypeRepositoryFactory.SetMetricsRepository(new TestMetricTypeRepository());
 
-            var metricTypes = metricRepository.GetAllToDisplayMetrics();
+            var metricTypes = metricRepository.GetAllToDisplayMetrics().OrderBy(m => m.DisplayOrder);
             MapMetricsList = new List<SelectListItem>();
             foreach (var m in metricTypes)
                 MapMetricsList.Add(new SelectListItem {Value = m.MetricID.ToString(), Text = m.ChartName});
