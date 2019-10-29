@@ -8,6 +8,7 @@ namespace MOE.Common.Migrations
         public override void Up()
         {
 <<<<<<< Development4.2.3
+<<<<<<< Development4.2.3
 
             AlterColumn("dbo.PhaseTerminationAggregations", "SignalID", c => c.String(maxLength: 10, nullable:false));
             AlterColumn("dbo.SignalEventCountAggregations", "SignalID", c => c.String(maxLength: 10, nullable: false));
@@ -17,6 +18,11 @@ namespace MOE.Common.Migrations
             AlterColumn("dbo.PhaseTerminationAggregations", "SignalID", c => c.String(maxLength: 10, nullable: false));
             AlterColumn("dbo.SignalEventCountAggregations", "SignalID", c => c.String(maxLength: 10, nullable: false));
 
+=======
+            // Added this to change the length of SIgnalID to match SinglaID in table signals.
+            AlterColumn("dbo.PhaseTerminationAggregations", "SignalID", c => c.String(nullable: false, maxLength: 10));
+            AlterColumn("dbo.SignalEventCountAggregations", "SignalID", c => c.String(nullable: false, maxLength: 10));
+>>>>>>> Changes required to build a blank database
 =======
             // Added this to change the length of SIgnalID to match SinglaID in table signals.
             AlterColumn("dbo.PhaseTerminationAggregations", "SignalID", c => c.String(nullable: false, maxLength: 10));
