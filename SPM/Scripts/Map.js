@@ -56,6 +56,8 @@ function ReportTypeChange() {
     var regionDdl = $("#Regions")[0];
     var regionMy = document.getElementById('Regions');
     CenterMap(regionDdl.options[regionDdl.selectedIndex].value);
+    var metricTypeID = document.getElementById('MetricTypes');
+
 }
 
 function RegionChange(e) {

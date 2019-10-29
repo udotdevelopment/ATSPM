@@ -1,4 +1,4 @@
-﻿$(function (ready) {    
+$(function (ready) {    
     $(".datepicker").attr('type', 'text');
     $("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
     $("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
