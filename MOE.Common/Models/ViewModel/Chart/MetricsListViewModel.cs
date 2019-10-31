@@ -11,6 +11,7 @@ namespace MOE.Common.Models.ViewModel.Chart
         public MetricsListViewModel(string signalID, int? selectedMetricID)
         {
             SelectedMetricID = selectedMetricID == null?1:selectedMetricID;
+
             GetMetricsForSignal(signalID);
         }
 
