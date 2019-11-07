@@ -141,12 +141,18 @@ function SetBaseOptions() {
 function SetControlValues(signalID, selectedMetricID) {
     $("#SignalID").val(signalID);    
     GetSignalLocation(selectedMetricID);
+    
 }
 
 function GetMetricsList(signalID, selectedMetricID)
 {
-    if (selectedMetricID === null || selectedMetricID == undefined) {
-        selectedMetricID = 1;
+    var metricTypeID = window.document.getElementById('MetricTypes').value;
+
+    selectedMetricID = metricTypeID === "" ? selectedMetricID : metricTypeID;
+
+    if (selectedMetricID === null || selectedMetricID === undefined) {
+        //selectedMetricID = 1;
+        selectedMetricID = metricTypeID === "" ? 1 : metricTypeID;
     }
     var tosend = {};
     tosend.signalID = signalID;
