@@ -1,4 +1,4 @@
-function removeDateType() {
+﻿function removeDateType() {
     $('input[type=date]').each(function () {
         this.type = "text";
     });
