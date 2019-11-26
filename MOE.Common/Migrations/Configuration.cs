@@ -957,6 +957,15 @@ namespace MOE.Common.Migrations
                     ChartName = "Phase Pedestrian Delay",
                     Abbreviation = "APD",
                     ShowOnWebsite = false,
+                    ShowOnAggregationSite = true
+                },
+                new MetricType
+                {
+                    MetricID = 31,
+                    ChartName = "Left Turn Gap Analysis",
+                    Abbreviation = "LTGA",
+                    ShowOnWebsite = true,
+                    ShowOnAggregationSite = false
                     ShowOnAggregationSite = true,
                     DisplayOrder = 112
                 }
@@ -973,6 +982,7 @@ namespace MOE.Common.Migrations
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(4));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(14));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(15));
+                        detectionType.MetricTypes.Add(context.MetricTypes.Find(31));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(17));
                         break;
                     case 2:

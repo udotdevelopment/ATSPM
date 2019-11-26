@@ -1,0 +1,91 @@
+﻿@model MOE.Common.Business.WCFServiceLibrary.LeftTurnGapAnalysisOptions
+
+<div class="panel panel-default">
+    <div class="panel-heading">Left Turn Gap Analysis Options</div>
+    <div class="panel-body">
+        <div class="">
+            <div class="BoldText">Gap 1 Range</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.EditorFor(model => model.Gap1Min, new {htmlAttributes = new {@class = "form-control"}})
+            </div>
+            <div style="width: 1%; position: relative; float: left;">
+                <div style="padding-top: 10px;">-</div>
+            </div>
+            <div class="col-sm-4">
+                @Html.EditorFor(model => model.Gap1Max, new {htmlAttributes = new {@class = "form-control"}})
+            </div>
+            <div style="width:20%; position: relative; float: left;">
+                <div style="padding-top: 10px;">seconds</div>
+            </div>
+        </div>
+        <div class="">
+            <div class="BoldText">Gap 2 Range</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.EditorFor(model => model.Gap2Min, new {htmlAttributes = new {@class = "form-control"}})
+            </div>
+            <div style="width: 1%; position: relative; float: left;">
+                <div style="padding-top: 10px;">-</div>
+            </div>
+            <div class="col-sm-4">
+                @Html.EditorFor(model => model.Gap2Max, new {htmlAttributes = new {@class = "form-control"}})
+            </div>
+            <div style="width:20%; position: relative; float: left;">
+                <div style="padding-top: 10px;">seconds</div>
+            </div>
+        </div>
+        <div class="">
+            <div class="BoldText">Gap 3 Range</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.EditorFor(model => model.Gap3Min, new {htmlAttributes = new {@class = "form-control"}})
+            </div>
+            <div style="width: 1%; position: relative; float: left;">
+                <div style="padding-top: 10px;">-</div>
+            </div>
+            <div class="col-sm-4">
+                @Html.EditorFor(model => model.Gap3Max, new {htmlAttributes = new {@class = "form-control"}})
+            </div>
+            <div style="width:20%; position: relative; float: left;">
+                <div style="padding-top: 10px;">seconds</div>
+            </div>
+        </div>
+        <div class="">
+            <div class="BoldText">Gap 4</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.EditorFor(model => model.Gap4Min, new {htmlAttributes = new {@class = "form-control"}})
+            </div>
+            <div style="width:20%; position: relative; float: left;">
+                <div style="padding-top: 10px;">seconds</div>
+            </div>
+        </div>
+        <div class="">
+            <div class="BoldText">Trend Line Gap Threshold</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.EditorFor(model => model.TrendLineGapThreshold, new {htmlAttributes = new {@class = "form-control"}})
+            </div>
+            <div style="width:20%; position: relative; float: left;">
+                <div style="padding-top: 10px;">seconds</div>
+            </div>
+        </div>
+        <div class="">
+            <div class="BoldText">Bin Size</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.EditorFor(model => model.BinSize, new {htmlAttributes = new {@class = "form-control"}})
+            </div>
+            <div style="width: 20%; position: relative; float: left;">
+                <div style="padding-top: 10px;">minutes</div>
+            </div>
+        </div>
+    </div>
+</div>

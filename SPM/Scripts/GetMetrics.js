@@ -227,6 +227,21 @@ function GetSplitMonitorMetric(metricTypeID) {
     GetMetric(urlpathSplitMonitor, tosend);
 }
 
+function GetLeftTurnGapAnalysisMetric(metricTypeID) {
+    var toSend = GetCommonValues();
+    toSend.MetricTypeID = metricTypeID;
+    toSend.Gap1Min = $("#Gap1Min").val();
+    toSend.Gap1Max = $("#Gap1Max").val();
+    toSend.Gap2Min = $("#Gap2Min").val();
+    toSend.Gap2Max = $("#Gap2Max").val();
+    toSend.Gap3Min = $("#Gap3Min").val();
+    toSend.Gap3Max = $("#Gap3Max").val();
+    toSend.Gap4Min = $("#Gap4Min").val();
+    toSend.TrendLineGapThreshold = $("#TrendLineGapThreshold").val();
+    toSend.BinSize = $("#BinSize").val();
+    GetMetric(urlpathLeftTurnGapAnalysis, toSend);
+}
+
 $('#CreateMetric').click(function() { CreateMetric(); });
 
 function CreateMetric() {
@@ -270,6 +285,9 @@ function CreateMetric() {
         }
         else if (selectedMetricID == 12) {
             GetSplitFailMetric(12);
+        }
+        else if (selectedMetricID == 31) {
+            GetLeftTurnGapAnalysisMetric(31);
         }
         else if (selectedMetricID == 17) {
             GetTimingAndActuationsMetric(17);

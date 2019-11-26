@@ -124,6 +124,10 @@ namespace SPM.Controllers
                     YellowAndRedOptions yellowAndRedOptions = new YellowAndRedOptions();
                     yellowAndRedOptions.SetDefaults();
                     return PartialView("YellowAndRedOptions", yellowAndRedOptions);
+                case 31:
+                    LeftTurnGapAnalysisOptions leftTurnGapAnalysisOptions = new LeftTurnGapAnalysisOptions();
+                    leftTurnGapAnalysisOptions.SetDefaults();
+                    return PartialView("LeftTurnGapAnalysisOptions", leftTurnGapAnalysisOptions);
                 case 17:
                     TimingAndActuationsOptions timingAndActuationsOptions = new TimingAndActuationsOptions();
                     return PartialView("TimingAndActuationsOptions", timingAndActuationsOptions);
@@ -320,6 +324,16 @@ namespace SPM.Controllers
                                                           metricOptions.ShowPercentFailLines.ToString().ToLower() + "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
+
+        public ActionResult GetLeftTurnGapAnalysisMetricByUrl(LeftTurnGapAnalysisOptions metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 31); " +
+                                                          "CreateMetric();";
+            return View("Index", defaultChartsViewModel);
+        }
+
 
         private string GetCommonJavascriptProperties(MetricOptions metricOptions)
         {
@@ -883,6 +897,49 @@ namespace SPM.Controllers
             int placeCounter = fullUri.IndexOf("/DefaultCharts/");
             string hostname = fullUri.Substring(0, placeCounter);
             result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
+            return PartialView("MetricResult", result);
+        }
+
+public ActionResult GetLeftTurnGapAnalysisMetric(LeftTurnGapAnalysisOptions metricOptions)
+        {
+            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
+            if (ModelState.IsValid)
+            {
+                MetricGeneratorService.MetricGeneratorClient client =
+                        new MetricGeneratorService.MetricGeneratorClient();
+                try
+                {
+                    client.Open();
+                    result.ChartPaths = client.CreateMetric(metricOptions);
+                    client.Close();
+                }
+                catch (Exception ex)
+                {
+                    client.Close();
+                    return Content("<h1>" + ex.Message + "</h1>");
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("/DefaultCharts/GetLeftTurnGapAnalysisMetricByUrl?");
+
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
+
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
+
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
+
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
+
             return PartialView("MetricResult", result);
         }
 

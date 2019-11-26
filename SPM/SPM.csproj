@@ -811,6 +811,12 @@
     <None Include="Service References\MetricGeneratorService\MOE.Common.Business.ApproachVolume.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\AggregateDataExport\MetricResult.cshtml" />
+    <Content Include="Views\DatabaseArchiveSettings\Edit.cshtml" />
+    <Content Include="Views\DatabaseArchiveSettings\EditorTemplates\DatabaseArchiveExcludedSignal.cshtml" />
+    <Content Include="Views\DefaultCharts\LeftTurnGapAnalysisOptions.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
     <None Include="Service References\MetricGeneratorService\MOE.Common.Business.Bins.xsd">
       <SubType>Designer</SubType>
     </None>

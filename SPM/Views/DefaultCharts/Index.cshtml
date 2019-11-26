@@ -94,6 +94,7 @@
     <script type="text/javascript" src="~/Scripts/AddData.js"></script>
     <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
     <script>
+    var urlpathLeftTurnGapAnalysis = '@Url.Action("GetLeftTurnGapAnalysisMetric", "DefaultCharts")';
     var urlpathPhaseTermination =    '@Url.Action("GetPhaseTerminationMetric", "DefaultCharts")';
     var urlpathPedDelay =            '@Url.Action("GetPedDelayMetric", "DefaultCharts")';
     var urlpathTMC =                 '@Url.Action("GetTMCMetric", "DefaultCharts")';
@@ -113,7 +114,6 @@
     var urlpathFillSignals =         '@Url.Action("FillSignals", "DefaultCharts")';
     var urlOptions =                 '@Url.Action("MetricOptions", "DefaultCharts")';
     var urlpathTimingAndActuations = '@Url.Action("GetTimingAndActuations", "DefaultCharts")';
-
     </script>
     
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
