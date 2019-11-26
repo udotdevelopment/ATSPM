@@ -377,7 +377,7 @@ new UniqueConstraint(new DataColumn[] { elTable.Columns[0],
                                   
 
                     //the Signal class has a static methos to insert the tableinto the DB.  We are using that.
-                    MOE.Common.Business.SignalFtp.BulktoDb(elTable, Options);
+                    MOE.Common.Business.SignalFtp.BulktoDb(elTable, Options, Properties.Settings.Default.DestinationTableName);
 
                     elapsedTime = endTime - startTime;
 

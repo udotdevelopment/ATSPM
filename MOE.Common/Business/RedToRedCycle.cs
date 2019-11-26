@@ -15,7 +15,10 @@ namespace MOE.Common.Business
             GreenTermination,
             BeginYellowClearance,
             EndYellowClearance,
-            Unknown
+            Unknown,
+            ChangeToEndMinGreen,
+            ChangeToEndOfRedClearance,
+            OverLapDark
         }
 
         public RedToRedCycle(DateTime firstRedEvent, DateTime greenEvent, DateTime yellowEvent, DateTime lastRedEvent)

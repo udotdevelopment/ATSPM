@@ -1,5 +1,5 @@
 ﻿$(function (ready) {
-    $("#collapseTwo").removeClass("in");
+    $("#collapseTwo").removeClass("show");
 });
 
 function LoadSignalEdit(signalID) {

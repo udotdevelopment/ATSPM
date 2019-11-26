@@ -38,7 +38,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                         chartTitle += dayOfWeek + " ";
                 if (TimeOptions.TimeOfDayStartHour != null && TimeOptions.TimeOfDayStartMinute != null &&
                     TimeOptions.TimeOfDayEndHour != null && TimeOptions.TimeOfDayEndMinute != null)
-                    chartTitle += "Limited to: " +
+                    chartTitle += " Limited to: " +
                                   new TimeSpan(0, TimeOptions.TimeOfDayStartHour.Value,
                                       TimeOptions.TimeOfDayStartMinute.Value, 0) + " to " + new TimeSpan(0,
                                       TimeOptions.TimeOfDayEndHour.Value,

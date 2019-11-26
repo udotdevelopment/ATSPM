@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="ONuLueVu1sGVzcAqkFX4MmpJVXk=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="rCICPgRr3H8wcmvuRhN/DcsYrqs=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="BasicHttpBinding_ILinkPivotService1">
       <properties>
@@ -112,7 +112,7 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="BasicHttpBinding_ILinkPivotService1" contract="LinkPivotServiceReference.ILinkPivotService" bindingType="basicHttpBinding" address="http://localhost:8736/Design_Time_Addresses/MOEWcfServiceLibrary/LinkPivotService/" bindingConfiguration="BasicHttpBinding_ILinkPivotService1">
+    <endpoint name="BasicHttpBinding_ILinkPivotService" contract="LinkPivotServiceReference.ILinkPivotService" bindingType="basicHttpBinding" address="http://localhost:8736/Design_Time_Addresses/MOEWcfServiceLibrary/LinkPivotService/" bindingConfiguration="BasicHttpBinding_ILinkPivotService1">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>http://localhost:8736/Design_Time_Addresses/MOEWcfServiceLibrary/LinkPivotService/</serializedValue>
@@ -187,7 +187,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BasicHttpBinding_ILinkPivotService1</serializedValue>
+          <serializedValue>BasicHttpBinding_ILinkPivotService</serializedValue>
         </property>
         <property path="/kind" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
