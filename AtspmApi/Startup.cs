@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Threading.Tasks;
 using Microsoft.Owin;
 using Owin;
@@ -19,11 +20,13 @@ namespace AtspmApi
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
 
             var myProvider = new MyAuthorizationServerProvider();
+            int TokenExpireHours = Convert.ToInt32(ConfigurationManager.AppSettings["TokenExpireHours"]);
+
             OAuthAuthorizationServerOptions options = new OAuthAuthorizationServerOptions
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),//TimeSpan.FromMinutes(1)
+                AccessTokenExpireTimeSpan = TimeSpan.FromHours(TokenExpireHours),//TimeSpan.FromMinutes(1)
                 Provider = myProvider
             };
             app.UseOAuthAuthorizationServer(options);
