@@ -1028,7 +1028,7 @@ namespace MOE.Common.Migrations
                     ApplicationID = 2,
                     ConsecutiveCount = 3,
                     DefaultEmailAddress = "SomeOne@AnEmail.address",
-                    EmailServer = "send.EmailServer",
+//                    EmailServer = "send.EmailServer",
                     FromEmailAddress = "SPMWatchdog@default.com",
                     LowHitThreshold = 50,
                     MaxDegreeOfParallelism = 4,
@@ -1059,8 +1059,8 @@ namespace MOE.Common.Migrations
                 {
                     ApplicationID = 4,
                     RawDataCountLimit = 1048576,
-                    ImageUrl = "http://defaultWebServer/spmimages/",
-                    ImagePath = @"\\defaultWebserver\SPMImages\"
+  //                  ImageUrl = "http://defaultWebServer/spmimages/",
+  //                  ImagePath = @"\\defaultWebserver\SPMImages\"
                 }
             );
 

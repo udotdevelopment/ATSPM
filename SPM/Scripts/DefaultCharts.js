@@ -184,7 +184,7 @@ $("#ResetDate").click(function () { ResetDates(); });
 
 function GetSignalLocation(selectedMetricID)
 {
-    if (selectedMetricID === null || selectedMetricID == undefined) {
+    if (selectedMetricID === null || selectedMetricID === undefined) {
         var metricsList = $("#MetricsList");
         if (metricsList !== null) {
             selectedMetricID = metricsList.val();
