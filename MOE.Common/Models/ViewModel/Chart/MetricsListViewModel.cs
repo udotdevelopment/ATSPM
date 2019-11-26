@@ -10,7 +10,7 @@ namespace MOE.Common.Models.ViewModel.Chart
     {
         public MetricsListViewModel(string signalID, int? selectedMetricID)
         {
-            SelectedMetricID = selectedMetricID;
+            SelectedMetricID = selectedMetricID == null?1:selectedMetricID;
             GetMetricsForSignal(signalID);
         }
 
@@ -34,37 +34,17 @@ namespace MOE.Common.Models.ViewModel.Chart
                 {
                     if (SelectedMetricID != null && SelectedMetricID == m.MetricID)
                     {
-                        // Andre -- Commented out parts added to try to get this to make the Pudue Phase Tremination hte default chart.
-                        // this is for bug 894.  This will select it, but not get the options showing for it.  Bug 896 is higher on the list for Mark Taylor.
-                        //if (m.ChartName.Contains("Purdue Phase Termination"))
-                        //{
                         MetricsList.Add(new SelectListItem
                         {
                             Value = m.MetricID.ToString(),
                             Text = m.ChartName,
                             Selected = true
                         });
-                        //}
-                        //else
-                        //{
-                        //MetricsList.Add(new SelectListItem
-                        //{
-                        //    Value = m.MetricID.ToString(),
-                        //    Text = m.ChartName
-                        //    //Selected = true
-                        //});
-                        //}
                     }
                     else
                     {
-                        //if (m.ChartName.Contains("Purdue Phase Termination"))
-                        //{
-                        //    MetricsList.Add(new SelectListItem {Value = m.MetricID.ToString(), Text = m.ChartName, Selected = true});
-                        //}
-                        //else
-                        //{
+                        
                             MetricsList.Add(new SelectListItem { Value = m.MetricID.ToString(), Text = m.ChartName });
-                        //}
                     }
                 }
                 
