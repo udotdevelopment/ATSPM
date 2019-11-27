@@ -965,8 +965,7 @@ namespace MOE.Common.Migrations
                     ChartName = "Left Turn Gap Analysis",
                     Abbreviation = "LTGA",
                     ShowOnWebsite = true,
-                    ShowOnAggregationSite = false
-                    ShowOnAggregationSite = true,
+                    ShowOnAggregationSite = false,
                     DisplayOrder = 112
                 }
             );

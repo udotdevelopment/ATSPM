@@ -817,6 +817,7 @@
     <Content Include="Views\DefaultCharts\LeftTurnGapAnalysisOptions.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
+      </None>
     <None Include="Service References\MetricGeneratorService\MOE.Common.Business.Bins.xsd">
       <SubType>Designer</SubType>
     </None>
