@@ -1094,7 +1094,9 @@ namespace MOE.Common.Migrations
                     Abbreviation = "TR",
                     DisplayOrder = 4
                 },
-                new MovementType { MovementTypeID = 5, Description = "Thru-Left", Abbreviation = "TL", DisplayOrder = 2 }
+                new MovementType { MovementTypeID = 5, Description = "Thru-Left", Abbreviation = "TL", DisplayOrder = 2 },
+
+                new MovementType { MovementTypeID = 6, Description = "None", Abbreviation = "na", DisplayOrder = 6 }
             );
 
             context.DirectionTypes.AddOrUpdate(
