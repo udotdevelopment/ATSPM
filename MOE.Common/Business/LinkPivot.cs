@@ -31,20 +31,20 @@ namespace MOE.Common.Business
                 foreach (var i in indices)
                 {
                     var signalRepository = SignalsRepositoryFactory.Create();
-                    var signal = signalRepository.GetVersionOfSignalByDate(route.RouteSignals[i].SignalId, startDate);
+                    var signal = signalRepository.GetVersionOfSignalByDate(route.RouteSignals[i - 1].SignalId, startDate);
                     var primaryPhaseDirection =
                         route.RouteSignals[i].PhaseDirections.FirstOrDefault(p => p.IsPrimaryApproach);
-                    var downstreamPrimaryPhaseDirection = route.RouteSignals[i - 1].PhaseDirections
-                        .FirstOrDefault(p => p.IsPrimaryApproach == false);
+                    var downstreamPrimaryPhaseDirection =
+                        route.RouteSignals[i - 1].PhaseDirections.FirstOrDefault(p => p.IsPrimaryApproach == false);
                     if (downstreamPrimaryPhaseDirection != null)
                     {
-                        var dowstreamSignal =
-                            signalRepository.GetVersionOfSignalByDate(route.RouteSignals[i - 1].SignalId, startDate);
-                        var approach = signal.Approaches.FirstOrDefault(a =>
+                        var downstreamSignal =
+                            signalRepository.GetVersionOfSignalByDate(route.RouteSignals[i].SignalId, startDate);
+                        var downstreamApproach = signal.Approaches.FirstOrDefault(a =>
                             a.DirectionTypeID == primaryPhaseDirection.DirectionTypeId &&
                             a.IsProtectedPhaseOverlap == primaryPhaseDirection.IsOverlap &&
                             a.ProtectedPhaseNumber == primaryPhaseDirection.Phase);
-                        var downstreamApproach = dowstreamSignal.Approaches.FirstOrDefault(a =>
+                        var approach = downstreamSignal.Approaches.FirstOrDefault(a =>
                             a.DirectionTypeID == downstreamPrimaryPhaseDirection.DirectionTypeId &&
                             a.IsProtectedPhaseOverlap == downstreamPrimaryPhaseDirection.IsOverlap &&
                             a.ProtectedPhaseNumber == downstreamPrimaryPhaseDirection.Phase);
@@ -70,13 +70,13 @@ namespace MOE.Common.Business
                         .FirstOrDefault(p => p.IsPrimaryApproach == false);
                     if (downstreamPrimaryPhaseDirection != null)
                     {
-                        var dowstreamSignal =
+                        var downstreamSignal =
                             signalRepository.GetVersionOfSignalByDate(route.RouteSignals[i + 1].SignalId, startDate);
                         var approach = signal.Approaches.FirstOrDefault(a =>
                             a.DirectionTypeID == primaryPhaseDirection.DirectionTypeId &&
                             a.IsProtectedPhaseOverlap == primaryPhaseDirection.IsOverlap &&
                             a.ProtectedPhaseNumber == primaryPhaseDirection.Phase);
-                        var downstreamApproach = dowstreamSignal.Approaches.FirstOrDefault(a =>
+                        var downstreamApproach = downstreamSignal.Approaches.FirstOrDefault(a =>
                             a.DirectionTypeID == downstreamPrimaryPhaseDirection.DirectionTypeId &&
                             a.IsProtectedPhaseOverlap == downstreamPrimaryPhaseDirection.IsOverlap &&
                             a.ProtectedPhaseNumber == downstreamPrimaryPhaseDirection.Phase);

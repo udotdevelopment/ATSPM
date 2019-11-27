@@ -16,7 +16,7 @@ namespace MOE.Common.Business
             DownSignalApproach = downSignalApproach;
             StartDate = startDate;
             LinkNumber = linkNumber;
-            SetPcds(endDate, dates);
+            SetPcds(endDate, dates, cycleTime);
             //Check to see if both directions have detection if so analyze both
             if (UpstreamPcd.Count > 0 && DownstreamPcd.Count > 0)
                 if (bias != 0)
@@ -58,7 +58,7 @@ namespace MOE.Common.Business
                             UpstreamPcd[index].LinkPivotAddSeconds(-1);
 
                             totalBiasArrivalOnGreen += UpstreamPcd[index].TotalArrivalOnGreen * upstreamBias;
-                            totalArrivalOnGreen = +UpstreamPcd[index].TotalArrivalOnGreen;
+                            totalArrivalOnGreen += UpstreamPcd[index].TotalArrivalOnGreen;
                             totalUpstreamAog += UpstreamPcd[index].TotalArrivalOnGreen;
                         }
                         //Add the total aog to the dictionary
@@ -103,7 +103,7 @@ namespace MOE.Common.Business
                         for (var index = 0; index < dates.Count; index++)
                         {
                             UpstreamPcd[index].LinkPivotAddSeconds(-1);
-                            totalArrivalOnGreen = +UpstreamPcd[index].TotalArrivalOnGreen;
+                            totalArrivalOnGreen += UpstreamPcd[index].TotalArrivalOnGreen;
                             totalUpstreamAog += UpstreamPcd[index].TotalArrivalOnGreen;
                         }
                         //Add the total aog to the dictionary
@@ -152,7 +152,7 @@ namespace MOE.Common.Business
                         {
                             DownstreamPcd[index].LinkPivotAddSeconds(1);
                             totalBiasArrivalOnGreen += DownstreamPcd[index].TotalArrivalOnGreen * downstreamBias;
-                            totalArrivalOnGreen = +DownstreamPcd[index].TotalArrivalOnGreen;
+                            totalArrivalOnGreen += DownstreamPcd[index].TotalArrivalOnGreen;
                             totalDownstreamAog += DownstreamPcd[index].TotalArrivalOnGreen;
                         }
                         //Add the total aog to the dictionary
@@ -191,7 +191,7 @@ namespace MOE.Common.Business
                         for (var index = 0; index < dates.Count; index++)
                         {
                             DownstreamPcd[index].LinkPivotAddSeconds(1);
-                            totalArrivalOnGreen = +DownstreamPcd[index].TotalArrivalOnGreen;
+                            totalArrivalOnGreen += DownstreamPcd[index].TotalArrivalOnGreen;
                             totalDownstreamAog += DownstreamPcd[index].TotalArrivalOnGreen;
                         }
                         //Add the total aog to the dictionary
@@ -335,7 +335,7 @@ namespace MOE.Common.Business
                     DownstreamPcd[index].LinkPivotAddSeconds(1);
                     totalBiasArrivalOnGreen += UpstreamPcd[index].TotalArrivalOnGreen * upstreamBias +
                                                DownstreamPcd[index].TotalArrivalOnGreen * downstreamBias;
-                    totalArrivalOnGreen = +UpstreamPcd[index].TotalArrivalOnGreen +
+                    totalArrivalOnGreen += UpstreamPcd[index].TotalArrivalOnGreen +
                                           DownstreamPcd[index].TotalArrivalOnGreen;
                     totalUpstreamAog += UpstreamPcd[index].TotalArrivalOnGreen;
                     totalDownstreamAog += DownstreamPcd[index].TotalArrivalOnGreen;
@@ -362,18 +362,18 @@ namespace MOE.Common.Business
             PaogTotalPredicted = Math.Round(AogTotalPredicted / (TotalVolumeUpstream + TotalVolumeDownstream), 2) * 100;
         }
 
-        private void SetPcds(DateTime endDate, List<DateTime> dates)
+        private void SetPcds(DateTime endDate, List<DateTime> dates, int cycleTime)
         {
             foreach (var dt in dates)
             {
                 var tempStartDate = dt;
                 var tempEndDate = new DateTime(dt.Year, dt.Month, dt.Day, endDate.Hour, endDate.Minute, endDate.Second);
-                var upstreamPcd = new SignalPhase(tempStartDate, tempEndDate, SignalApproach, false, 15, 13, false);
+                var upstreamPcd = new SignalPhase(tempStartDate, tempEndDate, SignalApproach, false, 15, 13, false, cycleTime);
                 UpstreamPcd.Add(upstreamPcd);
                 AogUpstreamBefore += upstreamPcd.TotalArrivalOnGreen;
                 TotalVolumeUpstream += upstreamPcd.TotalVolume;
                 var downstreamPcd = new SignalPhase(
-                    tempStartDate, tempEndDate, DownSignalApproach, false, 15, 13, false);
+                    tempStartDate, tempEndDate, DownSignalApproach, false, 15, 13, false, cycleTime);
                 DownstreamPcd.Add(downstreamPcd);
                 AogDownstreamBefore += downstreamPcd.TotalArrivalOnGreen;
                 TotalVolumeDownstream += downstreamPcd.TotalVolume;

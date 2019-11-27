@@ -30,8 +30,9 @@ namespace MOE.Common.Business
         }
 
         public static List<CyclePcd> GetPcdCycles(DateTime startDate, DateTime endDate, Approach approach,
-            List<Controller_Event_Log> detectorEvents, bool getPermissivePhase)
+            List<Controller_Event_Log> detectorEvents, bool getPermissivePhase, int? pcdCycleTime)
         {
+            double pcdCycleShift = pcdCycleTime ?? 0;
             var cycleEvents = GetCycleEvents(getPermissivePhase, startDate, endDate, approach);
             if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) !=
                 RedToRedCycle.EventType.ChangeToRed)
@@ -49,7 +50,7 @@ namespace MOE.Common.Business
                 foreach (var cycle in cycles)
                 {
                     var eventsForCycle = detectorEvents
-                        .Where(d => d.Timestamp >= cycle.StartTime && d.Timestamp < cycle.EndTime).ToList();
+                        .Where(d => d.Timestamp >= cycle.StartTime.AddSeconds(-pcdCycleShift) && d.Timestamp < cycle.EndTime.AddSeconds(pcdCycleShift)).ToList();
                     foreach (var controllerEventLog in eventsForCycle)
                         cycle.AddDetectorData(new DetectorDataPoint(cycle.StartTime, controllerEventLog.Timestamp,
                             cycle.GreenEvent, cycle.YellowEvent));
