@@ -1,6 +1,7 @@
 ﻿using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -34,6 +35,28 @@ namespace AtspmApi
                 if (user == null)
                 {
                     context.SetError("invalid_grant", "The user name or password is incorrect.");
+                    return;
+                }
+
+                bool roleExist = false;
+                var rolesTechnicalNamesUser = new List<string>();
+                if (user.Roles != null)
+                {
+                    rolesTechnicalNamesUser = user.Roles.Select(x => x.RoleId).ToList();
+                    string ApiRoleSetting = ConfigurationManager.AppSettings["ApiRole"];
+                    foreach (var role in rolesTechnicalNamesUser)
+                    {
+                        if (role.Contains(ApiRoleSetting))
+                        {
+                            roleExist = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!roleExist)
+                {
+                    context.SetError("invalid_grant", "The user does not have API access.");
                     return;
                 }
             }
