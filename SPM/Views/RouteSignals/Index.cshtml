@@ -4,17 +4,22 @@
 @Html.HiddenFor(model => model.Route.Id)
 <div class="row">
     <div class="col-md-12">
-        <div class="col-md-3">
-            @Html.DropDownListFor(model => model.SignalSelectList, new SelectList(Model.SignalSelectList, "Item1", "Item2"), new { @id = "SelectedSignalsList", @class = "form-control", @size = 10, @onchange = "DisplayApproaches(this.value)", @title = "Selected Signal List" })
-            <div class="row">
-                <a class="ui-button" href="javascript:MoveUp()">Move Up<span class="glyphicon glyphicon-arrow-up"></span></a>
-                <a class="ui-button" href="javascript:MoveDown()">Move Down<span class="glyphicon glyphicon-arrow-down"></span></a>
-                <a class="ui-button" href="javascript:Remove()">Remove<span class="glyphicon glyphicon-remove"></span></a>
+        <div class="row">
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.SignalSelectList, new SelectList(Model.SignalSelectList, "Item1", "Item2"), new {@id = "SelectedSignalsList", @class = "form-control", @size = 10, @onchange = "DisplayApproaches(this.value)", @title = "Selected Signal List"})
+                <div class="row">
+                    <div class="col-12">
+                        <a class="ui-button" href="javascript:MoveUp()">Move Up<span class="fa fa-arrow-circle-up"></span></a>
+                        <a class="ui-button" href="javascript:MoveDown()">Move Down<span class="fa fa-arrow-circle-down"></span></a>
+                        <a class="ui-button" href="javascript:Remove()">Remove<span class="fa fa-minus-square"></span></a>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div id="DeleteConfirmation"></div>
-        <div id="ApproachList" class="col-md-4"></div>
-        <div id="RouteApproachList" onload="DisplayRouteApproaches" class="col-md-4">
+            <div id="DeleteConfirmation"></div>
+            <div id="ApproachList" class="col-md-4"></div>
+            <div id="RouteApproachList" onload="DisplayRouteApproaches" class="col-md-4">
+
+            </div>
         </div>
     </div>
     </div>
@@ -39,4 +44,5 @@
     <script> var urlpathDeleteSignal = '@Url.Action("Delete", "RouteSignals")';</script>
     <script> var urlpathMoveSignalUp = '@Url.Action("MoveSignalUp", "RouteSignals")';</script>
     <script> var urlpathMoveSignalDown = '@Url.Action("MoveSignalDown", "RouteSignals")';</script>
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
 }

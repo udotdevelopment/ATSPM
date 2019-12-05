@@ -254,22 +254,18 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             double AddCycleToChart(Chart chart, CyclePcd cycle)
             {
-                double totalOnGreenArrivals = 0;
                 chart.Series["Change to Green"].Points.AddXY(cycle.GreenEvent, cycle.GreenLineY);
                 chart.Series["Change to Yellow"].Points.AddXY(cycle.YellowEvent, cycle.YellowLineY);
                 chart.Series["Change to Red"].Points.AddXY(cycle.EndTime, cycle.RedLineY);
                 foreach (var detectorPoint in cycle.DetectorEvents)
                 {
                     chart.Series["Detector Activation"].Points.AddXY(
-                        //cycle.StartTime, 
                         detectorPoint.TimeStamp,
                         detectorPoint.YPoint);
-                    if (detectorPoint.YPoint > cycle.GreenLineY && detectorPoint.YPoint < cycle.RedLineY)
-                        totalOnGreenArrivals++;
                 }
 
-                return totalOnGreenArrivals;
-            }
+            return cycle.TotalArrivalOnGreen;
+        }
 
 
             /// <summary>

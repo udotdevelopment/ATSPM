@@ -12,8 +12,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using AlexPilotti.FTPS.Client;
-using AlexPilotti.FTPS.Common;
 using FluentFTP;
 using Lextm.SharpSnmpLib;
 using Lextm.SharpSnmpLib.Messaging;
@@ -117,13 +115,6 @@ namespace MOE.Common.Business
                 try
                 {
                     ftpClient.Connect();
-                }
-                //If there is an error, Print the error and go on to the next file.
-                catch (FTPException ex)
-                {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
-                    Console.WriteLine(Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
-                    return;
                 }
                 catch (AggregateException)
                 {
@@ -267,11 +258,6 @@ namespace MOE.Common.Business
                 try
                 {
                     ftpClient.DeleteFile(Signal.ControllerType.FTPDirectory +"/" + ftpFile);
-                }
-                catch (FTPException ex)
-                {
-                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
-                    Console.WriteLine(Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
                 }
                 catch (AggregateException)
                 {
@@ -588,7 +574,7 @@ namespace MOE.Common.Business
         }
 
 
-        public static bool BulktoDb(DataTable elTable, BulkCopyOptions options)
+        public static bool BulktoDb(DataTable elTable, BulkCopyOptions options, string tableName)
         {
             MOE.Common.Models.Repositories.IApplicationEventRepository errorRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
             using (options.Connection)
@@ -633,8 +619,7 @@ namespace MOE.Common.Business
                                 OnSqlRowsCopied;
                             bulkCopy.NotifyAfter = Settings.Default.BulkCopyBatchSize;
                         }
-                        var tablename = Settings.Default.EventLogTableName;
-                        bulkCopy.DestinationTableName = tablename;
+                        bulkCopy.DestinationTableName = tableName;
 
                         if (elTable.Rows.Count > 0)
                         {
@@ -704,7 +689,7 @@ namespace MOE.Common.Business
             Console.WriteLine("Copied {0} so far...", e.RowsCopied);
         }
 
-        public static bool SplitBulkToDb(DataTable elTable, BulkCopyOptions options)
+        public static bool SplitBulkToDb(DataTable elTable, BulkCopyOptions options, string tableName)
         {
             if (elTable.Rows.Count > 0)
             {
@@ -730,7 +715,7 @@ namespace MOE.Common.Business
                 {
                     topDt.Merge(dtTop);
                     if (dtTop.Rows.Count > 0)
-                        if (BulktoDb(topDt, options))
+                        if (BulktoDb(topDt, options, tableName))
                         {
                         }
                         else
@@ -760,7 +745,7 @@ namespace MOE.Common.Business
                     bottomDt.Merge(dtBottom);
 
                     if (bottomDt.Rows.Count > 0)
-                        if (BulktoDb(bottomDt, options))
+                        if (BulktoDb(bottomDt, options, tableName))
                         {
                         }
                         else

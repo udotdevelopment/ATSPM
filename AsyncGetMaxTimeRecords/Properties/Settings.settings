@@ -1,0 +1,33 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AsyncGetMaxTimeRecords.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="MaxProcessors" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">4</Value>
+    </Setting>
+    <Setting Name="MaxDownloads" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="DestinationTableName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Controller_Event_Log</Value>
+    </Setting>
+    <Setting Name="WriteToConsole" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="forceNonParallel" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="MaxThreads" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="EarliestAcceptableDate" Type="System.DateTime" Scope="Application">
+      <Value Profile="(Default)">2010-01-01</Value>
+    </Setting>
+    <Setting Name="BulkCopyBatchSize" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">50000</Value>
+    </Setting>
+    <Setting Name="BulkCopyTimeOut" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

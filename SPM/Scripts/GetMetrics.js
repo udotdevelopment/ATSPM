@@ -138,6 +138,30 @@ function GetApproachVolumeMetric(metricTypeID) {
     tosend.ShowAdvanceDetection = $("#ShowAdvanceDetection").is(":checked");
     GetMetric(urlpathApproachVolume, tosend);
 }
+function GetTimingAndActuationsMetric(metricTypeID) {
+    var tosend = GetCommonValues();
+    tosend.MetricTypeID = metricTypeID;
+    tosend.ShowVehicleSignalDisplay = $("#ShowVehicleSignalDisplay").is(":checked");
+    tosend.ShowPedestrianIntervals = $("#ShowPedestrianIntervals").is(":checked");
+    tosend.ShowPedestrianActuation = $("#ShowPedestrianActuation").is(":checked");
+    tosend.CombineLanesForEachGroup = $("#CombineLanesForEachGroup").is(":checked");
+    tosend.DotAndBarSize = $("#DotAndBarSize").val();
+    tosend.PhaseFilter = $("#PhaseFilter").val();
+    tosend.PhaseEventCodes = $("#PhaseEventCodes").val();
+    tosend.GlobalCustomEventCodes = $("#GlobalCustomEventCodes").val();
+    tosend.GlobalCustomEventParams = $("#GlobalCustomEventParams").val();
+    tosend.ShowStopBarPresence = $("#ShowStopBarPresence").is(":checked");
+    tosend.ShowLaneByLaneCount = $("#ShowLaneByLaneCount").is(":checked");
+    tosend.AdvancedOffset = $("#AdvancedOffset").val();
+    tosend.ShowAdvancedDilemmaZone = $("#ShowAdvancedDilemmaZone").is(":checked");
+    tosend.ShowAdvancedCount = $("#ShowAdvancedCount").is(":checked");
+    tosend.ShowAllLanes = $("#ShowAllLanes").is(":checked");
+    tosend.ShowLinesStartEnd = $("#ShowLinesStartEnd").is(":checked");
+    tosend.ShowRawEventData = $("#ShowRawEventData").is(":checked");
+    tosend.ShowLegend = $("#ShowLegend").is(":checked");
+    tosend.ShowHeaderForEachPhase = $("#ShowHeaderForEachPhase").is(":checked");
+    GetMetric(urlpathTimingAndActuations, tosend);
+}
 function GetApproachDelayMetric(metricTypeID) {
     var tosend = GetCommonValues();
     tosend.MetricTypeID = metricTypeID;
@@ -203,6 +227,21 @@ function GetSplitMonitorMetric(metricTypeID) {
     GetMetric(urlpathSplitMonitor, tosend);
 }
 
+function GetLeftTurnGapAnalysisMetric(metricTypeID) {
+    var toSend = GetCommonValues();
+    toSend.MetricTypeID = metricTypeID;
+    toSend.Gap1Min = $("#Gap1Min").val();
+    toSend.Gap1Max = $("#Gap1Max").val();
+    toSend.Gap2Min = $("#Gap2Min").val();
+    toSend.Gap2Max = $("#Gap2Max").val();
+    toSend.Gap3Min = $("#Gap3Min").val();
+    toSend.Gap3Max = $("#Gap3Max").val();
+    toSend.Gap4Min = $("#Gap4Min").val();
+    toSend.TrendLineGapThreshold = $("#TrendLineGapThreshold").val();
+    toSend.BinSize = $("#BinSize").val();
+    GetMetric(urlpathLeftTurnGapAnalysis, toSend);
+}
+
 $('#CreateMetric').click(function() { CreateMetric(); });
 
 function CreateMetric() {
@@ -246,6 +285,12 @@ function CreateMetric() {
         }
         else if (selectedMetricID == 12) {
             GetSplitFailMetric(12);
+        }
+        else if (selectedMetricID == 31) {
+            GetLeftTurnGapAnalysisMetric(31);
+        }
+        else if (selectedMetricID == 17) {
+            GetTimingAndActuationsMetric(17);
         }
     }
     defer.resolve();

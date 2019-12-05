@@ -22,7 +22,7 @@ namespace MOE.Common.Business
             title.Font = new Font(title.Font.FontFamily, 14.0f, FontStyle.Bold);
             return title;
         }
-
+     
         internal static Title GetSignalLocationAndDateRange(string signalID, DateTime startDate, DateTime endDate)
         {
             var titleInfo = signalsRepository.GetSignalLocation(signalID);
@@ -89,6 +89,21 @@ namespace MOE.Common.Business
                 title = new Title("Phase " + phaseNumber + ": " + approach.Description);
             }
             
+            title.Font = new Font(title.Font.FontFamily, title.Font.Size, FontStyle.Bold);
+            return title;
+        }
+        internal static Title GetPhaseOrOverlap(int phaseNumber, bool phaseData)
+        {
+            Title title;
+            if (phaseData)
+            {
+                title = new Title("Phase: " + phaseNumber + " (Raw Data)");
+            }
+            else
+            {
+                title = new Title("Overlap: " + phaseNumber + " (Raw Data)");
+            }
+
             title.Font = new Font(title.Font.FontFamily, title.Font.Size, FontStyle.Bold);
             return title;
         }

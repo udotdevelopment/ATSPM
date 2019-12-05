@@ -654,20 +654,11 @@ namespace SPM.LinkPivotServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILinkPivotService/GetLinkPivot", ReplyAction="http://tempuri.org/ILinkPivotService/GetLinkPivotResponse")]
         SPM.LinkPivotServiceReference.AdjustmentObject[] GetLinkPivot(int routeId, System.DateTime startDate, System.DateTime endDate, int cycleTime, string direction, double bias, string biasDirection, bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILinkPivotService/GetLinkPivot", ReplyAction="http://tempuri.org/ILinkPivotService/GetLinkPivotResponse")]
-        System.Threading.Tasks.Task<SPM.LinkPivotServiceReference.AdjustmentObject[]> GetLinkPivotAsync(int routeId, System.DateTime startDate, System.DateTime endDate, int cycleTime, string direction, double bias, string biasDirection, bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILinkPivotService/DisplayLinkPivotPCD", ReplyAction="http://tempuri.org/ILinkPivotService/DisplayLinkPivotPCDResponse")]
         SPM.LinkPivotServiceReference.DisplayObject DisplayLinkPivotPCD(string upstreamSignalID, string upstreamDirection, string downstreamSignalID, string downstreamDirection, int delta, System.DateTime startDate, System.DateTime endDate, int maxYAxis);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILinkPivotService/DisplayLinkPivotPCD", ReplyAction="http://tempuri.org/ILinkPivotService/DisplayLinkPivotPCDResponse")]
-        System.Threading.Tasks.Task<SPM.LinkPivotServiceReference.DisplayObject> DisplayLinkPivotPCDAsync(string upstreamSignalID, string upstreamDirection, string downstreamSignalID, string downstreamDirection, int delta, System.DateTime startDate, System.DateTime endDate, int maxYAxis);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILinkPivotService/Test", ReplyAction="http://tempuri.org/ILinkPivotService/TestResponse")]
         int Test();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILinkPivotService/Test", ReplyAction="http://tempuri.org/ILinkPivotService/TestResponse")]
-        System.Threading.Tasks.Task<int> TestAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -701,24 +692,12 @@ namespace SPM.LinkPivotServiceReference {
             return base.Channel.GetLinkPivot(routeId, startDate, endDate, cycleTime, direction, bias, biasDirection, monday, tuesday, wednesday, thursday, friday, saturday, sunday);
         }
         
-        public System.Threading.Tasks.Task<SPM.LinkPivotServiceReference.AdjustmentObject[]> GetLinkPivotAsync(int routeId, System.DateTime startDate, System.DateTime endDate, int cycleTime, string direction, double bias, string biasDirection, bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday) {
-            return base.Channel.GetLinkPivotAsync(routeId, startDate, endDate, cycleTime, direction, bias, biasDirection, monday, tuesday, wednesday, thursday, friday, saturday, sunday);
-        }
-        
         public SPM.LinkPivotServiceReference.DisplayObject DisplayLinkPivotPCD(string upstreamSignalID, string upstreamDirection, string downstreamSignalID, string downstreamDirection, int delta, System.DateTime startDate, System.DateTime endDate, int maxYAxis) {
             return base.Channel.DisplayLinkPivotPCD(upstreamSignalID, upstreamDirection, downstreamSignalID, downstreamDirection, delta, startDate, endDate, maxYAxis);
         }
         
-        public System.Threading.Tasks.Task<SPM.LinkPivotServiceReference.DisplayObject> DisplayLinkPivotPCDAsync(string upstreamSignalID, string upstreamDirection, string downstreamSignalID, string downstreamDirection, int delta, System.DateTime startDate, System.DateTime endDate, int maxYAxis) {
-            return base.Channel.DisplayLinkPivotPCDAsync(upstreamSignalID, upstreamDirection, downstreamSignalID, downstreamDirection, delta, startDate, endDate, maxYAxis);
-        }
-        
         public int Test() {
             return base.Channel.Test();
-        }
-        
-        public System.Threading.Tasks.Task<int> TestAsync() {
-            return base.Channel.TestAsync();
         }
     }
 }

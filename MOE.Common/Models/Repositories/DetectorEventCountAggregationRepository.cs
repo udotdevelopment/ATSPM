@@ -21,15 +21,24 @@ namespace MOE.Common.Models.Repositories
         public int GetDetectorEventCountSumAggregationByDetectorIdAndDateRange(int detectorId, DateTime start,
             DateTime end)
         {
+            //var count = 0;
+            //    if (_db.DetectorEventCountAggregations.Any(r => r.Id == detectorId 
+            //                                                 && r.BinStartTime >= start && r.BinStartTime <= end))
+            //    {
+            //        count = _db.DetectorEventCountAggregations.Where(r => r.Id == detectorId 
+            //                                                            && r.BinStartTime >= start && r.BinStartTime <= end)
+            //            .Sum(r => r.EventCount);
+            //    }
             var count = 0;
-                if (_db.DetectorEventCountAggregations.Any(r => r.Id == detectorId 
-                                                             && r.BinStartTime >= start && r.BinStartTime <= end))
-                {
-                    count = _db.DetectorEventCountAggregations.Where(r => r.Id == detectorId 
-                                                                        && r.BinStartTime >= start && r.BinStartTime <= end)
-                        .Sum(r => r.EventCount);
-                }
-               
+            //if (_db.DetectorEventCountAggregations.Any(r => r.DetectorId.Contains(detectorId.ToString())
+            if (_db.DetectorEventCountAggregations.Any(r => r.DetectorPrimaryId == detectorId
+                                                            && r.BinStartTime >= start && r.BinStartTime <= end))
+            {
+                count = _db.DetectorEventCountAggregations.Where(r => r.DetectorPrimaryId  == detectorId
+                                                                      && r.BinStartTime >= start && r.BinStartTime <= end)
+                    .Sum(r => r.EventCount);
+            }
+
             return count;
         }
         
@@ -37,10 +46,14 @@ namespace MOE.Common.Models.Repositories
         public List<DetectorEventCountAggregation> GetDetectorEventCountAggregationByDetectorIdAndDateRange(int detectorId, DateTime start,
             DateTime end)
         {
-            if (_db.DetectorEventCountAggregations.Any(r => r.Id == detectorId 
+            // Note: this one looked like the one above.  Remove the ID field from the tables.  
+            // This field was an identity Specification starting at 1 and growing by one with each record.
+            // Does it make sense to compare the id field to the detectorID?  I don't see why this was compared, other than they were both ints!
+
+            if (_db.DetectorEventCountAggregations.Any(r => r.DetectorPrimaryId == detectorId
                                                              && r.BinStartTime >= start && r.BinStartTime <= end))
                 {
-                    return _db.DetectorEventCountAggregations.Where(r => r.Id == detectorId 
+                    return _db.DetectorEventCountAggregations.Where(r => r.DetectorPrimaryId == detectorId
                                                                       && r.BinStartTime >= start &&
                                                                       r.BinStartTime <= end).ToList();
                 }

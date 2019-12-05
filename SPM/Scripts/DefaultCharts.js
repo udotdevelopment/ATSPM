@@ -22,10 +22,10 @@ function SetCommonValues(signalId, startDateDay, startTime, startAmPmDdl, endDat
     $("#EndAMPMddl").val(endAmPmDdl);
    
 
-    if (yAxisMax != null) {
+    if (yAxisMax !== null) {
         $("#YAxisMax").val(yAxisMax);
     }
-    if (y2AxisMax != null) {
+    if (y2AxisMax !== null) {
         $("#Y2AxisMax").val(y2AxisMax);
     }
 }
@@ -145,7 +145,7 @@ function SetControlValues(signalID, selectedMetricID) {
 
 function GetMetricsList(signalID, selectedMetricID)
 {
-    if (selectedMetricID == null) {
+    if (selectedMetricID === null) {
         selectedMetricID = 1;
     }
     var tosend = {};
@@ -176,9 +176,9 @@ $("#ResetDate").click(function () { ResetDates(); });
 
 function GetSignalLocation(selectedMetricID)
 {
-    if (selectedMetricID == null) {
+    if (selectedMetricID === null) {
         var metricsList = $("#MetricsList");
-        if (metricsList != null) {
+        if (metricsList !== null) {
             selectedMetricID = metricsList.val();
         }
     }
@@ -187,7 +187,7 @@ function GetSignalLocation(selectedMetricID)
     tosend.signalID = signalID;
     $.get(urlpathGetSignalLocation, tosend,function (data) {
         $('#SignalLocation').text(data);
-        if (data != "Signal Not Found") {
+        if (data !== "Signal Not Found") {
             GetMetricsList(signalID, selectedMetricID);
         }
     });    
@@ -212,11 +212,11 @@ function ResetDates()
 }
 
 function StartReportSpinner() {
-    $("#RunReportSpinner").addClass("glyphicon-refresh spinning");
+    $("#RunReportSpinner").addClass("fa fa-circle-o-notch fa-spin");
 }
 
 function StopReportSpinner() {
-    $("#RunReportSpinner").removeClass("glyphicon-refresh spinning");
+    $("#RunReportSpinner").removeClass("fa fa-circle-o-notch fa-spin");
 }
 
 

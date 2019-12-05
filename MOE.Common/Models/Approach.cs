@@ -19,6 +19,7 @@ namespace MOE.Common.Models
         [DataMember]
         public int ApproachID { get; set; }
 
+        [StringLength(10)]
         [DataMember]
         public string SignalID { get; set; }
 

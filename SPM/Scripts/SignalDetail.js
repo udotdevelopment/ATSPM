@@ -1,5 +1,6 @@
 ﻿$(function (ready) {
-    $("#collapseTwo").removeClass("in");
+    $("#collapseTwo").removeClass("show");
+    $("#collapseTwoLink").addClass("collapsed");
 });
 function LoadSignal(signalID) {
     $.ajax({
@@ -34,7 +35,6 @@ function GetConfigurationTable() {
         }
     });
 }
-
 
 function SetControlValues(signalID, selectedMetricID) {
     $("#SignalID").val(signalID);

@@ -39,14 +39,14 @@ namespace MOE.Common.Business.Preempt
             PreemptServiceRequestChart.ChartAreas[0].AxisY.Minimum = 0;
             PreemptServiceRequestChart.ChartAreas[0].AxisY.Title = "Preempt Number";
             PreemptServiceRequestChart.ChartAreas[0].AxisY.Interval = 1;
-            PreemptServiceRequestChart.ChartAreas[0].AxisX.Title = "Time (Hour of Day)";
+            PreemptServiceRequestChart.ChartAreas[0].AxisX.Title = "Time (Hours:Minutes)";
             PreemptServiceRequestChart.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Hours;
-            PreemptServiceRequestChart.ChartAreas[0].AxisX.LabelStyle.Format = "HH";
+            PreemptServiceRequestChart.ChartAreas[0].AxisX.LabelStyle.Format = "HH:mm";
             if (reportTimespan.Days <= 1)
                 if (reportTimespan.Hours > 1)
                     PreemptServiceRequestChart.ChartAreas[0].AxisX.Interval = 1;
                 else
-                    PreemptServiceRequestChart.ChartAreas[0].AxisX.LabelStyle.Format = "HH";
+                    PreemptServiceRequestChart.ChartAreas[0].AxisX.LabelStyle.Format = "HH:mm";
             PreemptServiceRequestChart.ChartAreas[0].AxisX.Minimum = Options.StartDate.ToOADate();
             PreemptServiceRequestChart.ChartAreas[0].AxisX.Maximum = Options.EndDate.ToOADate();
 
