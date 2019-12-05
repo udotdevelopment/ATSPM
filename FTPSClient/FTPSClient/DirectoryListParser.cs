@@ -116,8 +116,16 @@ namespace AlexPilotti.FTPS.Common
             CutSubstringFromStringWithTrim(ref processstr, " ", 0);   //skip one part
             f.Owner = CutSubstringFromStringWithTrim(ref processstr, " ", 0);
             f.Group = CutSubstringFromStringWithTrim(ref processstr, " ", 0);
-            f.Size = ulong.Parse(CutSubstringFromStringWithTrim(ref processstr, " ", 0));  
-            
+            try
+            {
+                f.Size = ulong.Parse(CutSubstringFromStringWithTrim(ref processstr, " ", 0));
+            }
+            catch (Exception ex)
+            {
+                f.Size = 0;
+                return f;
+            }
+
             string creationTimeStr = CutSubstringFromStringWithTrim(ref processstr, " ", 8);
             string dateFormat;
             if(creationTimeStr.IndexOf(':') < 0)
