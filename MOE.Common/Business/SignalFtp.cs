@@ -158,7 +158,7 @@ namespace MOE.Common.Business
                             {
                                 localDate = localDate.AddMinutes(120);
                             }
-                            foreach (var ftpFile in remoteFiles)
+                            foreach (var ftpFile in remoteFiles.Where(x => x.Size > 0))
                             {
                                 if(ftpFile.Type == FtpFileSystemObjectType.File && ftpFile.Name.Contains(filePattern) && ftpFile.Created < localDate)
                                 {
