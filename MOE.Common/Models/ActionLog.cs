@@ -20,10 +20,10 @@ namespace MOE.Common.Models
         [StringLength(255)]
         public string Comment { get; set; }
 
+        [StringLength(10)]
         [Required]
         public string SignalID { get; set; }
-
-
+        
         [StringLength(100)]
         [Required]
         public string Name { get; set; }

@@ -556,6 +556,14 @@
     <Compile Include="Migrations\201909092102292_ChangesInAggregationTablsV3.Designer.cs">
       <DependentUpon>201909092102292_ChangesInAggregationTablsV3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910092143593_SetSignlIdtoTenCharacters.cs" />
+    <Compile Include="Migrations\201910092143593_SetSignlIdtoTenCharacters.Designer.cs">
+      <DependentUpon>201910092143593_SetSignlIdtoTenCharacters.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910162223114_Model-for Oct2019.cs" />
+    <Compile Include="Migrations\201910162223114_Model-for Oct2019.Designer.cs">
+      <DependentUpon>201910162223114_Model-for Oct2019.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\PhasePedAggregation.cs" />
@@ -963,6 +971,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909092102292_ChangesInAggregationTablsV3.resx">
       <DependentUpon>201909092102292_ChangesInAggregationTablsV3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910092143593_SetSignlIdtoTenCharacters.resx">
+      <DependentUpon>201910092143593_SetSignlIdtoTenCharacters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910162223114_Model-for Oct2019.resx">
+      <DependentUpon>201910162223114_Model-for Oct2019.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

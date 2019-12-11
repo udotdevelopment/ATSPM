@@ -81,7 +81,7 @@ namespace MOE.Common.Business.DataAggregation
             for (var dt = _startDate; dt < _endDate; dt = dt.AddMinutes(binSize))
             {
                 Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
-                                  "> Getting the latest version of signals for time period: " + dt.ToString());
+                                  " > Getting the latest version of signals for time period: " + dt.ToString() + " end date " + _endDate);
                 var versionIds = db.Signals.Where(
                         r => r.VersionActionId != 3 && r.Start < dt //&& (r.SignalID == "7064" || r.SignalID == "7022")
                     ).GroupBy(r => r.SignalID).Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault())
@@ -104,7 +104,9 @@ namespace MOE.Common.Business.DataAggregation
                         if (GC.GetTotalMemory(false) > _maxMemoryLimit)
                         {
                             Console.WriteLine(GC.GetTotalMemory(false).ToString("0,0") + " exceeds Max Memory Limit " + _maxMemoryLimit.ToString("0,0") +
-                                              ". SignalId is > " + signal.SignalID);
+                                              ". SignalId is > " + signal.SignalID + " Bin time is " + dt + " Time is " +
+                                                             DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                            GC.Collect();
                         }
 
                         //Console.WriteLine("signal is " + signal.SignalID + " Time is " +
@@ -176,107 +178,108 @@ namespace MOE.Common.Business.DataAggregation
 
         private void BulkSaveAllAggregateDataInParallel()
         {
-            Parallel.Invoke(
-                () =>
-                {
-                    if (_approachCycleAggregationConcurrentQueue.Count > 0)
-                    {
-                        Console.WriteLine(" 1.  Saving Approach Cycle Data to Database...");
-                        BulkSaveApproachCycleData();
-                    }
-                },
-                () =>
-                {
-                    if (_approachPcdAggregationConcurrentQueue.Count > 0)
-                    {
-                        Console.WriteLine(" 2.  Saving Approach PCD Data to Database...");
-                        BulkSaveApproachPcdData();
-                    }
-                },
-                () =>
-                {
-                    if (_approachSplitFailAggregationConcurrentQueue.Count > 0)
-                    {
-                        Console.WriteLine(" 3.  Saving Approach Split Fail Data to Database...");
-                        BulkSaveApproachSplitFailData();
-                    }
-                },
-                () =>
-                {
-                    if (_approachYellowRedActivationAggregationConcurrentQueue.Count > 0)
-                    {
-                        Console.WriteLine(" 4.  Saving Approach Yellow Red Activations Data to Database...");
-                        BulkSaveApproachYellowRedActivationsData();
-                    }
-                },
-                () =>
-                {
+            //Parallel.Invoke(
+            //    () =>
+            //    {
+            if (_approachCycleAggregationConcurrentQueue.Count > 0)
+            {
+                Console.WriteLine(" 1.  Saving Approach Cycle Data to Database...");
+                BulkSaveApproachCycleData();
+            }
+            //    },
+            //    () =>
+            //    {
+            if (_approachPcdAggregationConcurrentQueue.Count > 0)
+            {
+                Console.WriteLine(" 2.  Saving Approach PCD Data to Database...");
+                BulkSaveApproachPcdData();
+            }
+            //    },
+            //    () =>
+            //    {
+            if (_approachSplitFailAggregationConcurrentQueue.Count > 0)
+            {
+                Console.WriteLine(" 3.  Saving Approach Split Fail Data to Database...");
+                BulkSaveApproachSplitFailData();
+            }
+            //    },
+            //    () =>
+            //    {
+            if (_approachYellowRedActivationAggregationConcurrentQueue.Count > 0)
+            {
+                Console.WriteLine(" 4.  Saving Approach Yellow Red Activations Data to Database...");
+                BulkSaveApproachYellowRedActivationsData();
+            }
+            //},
+            //    () =>
+            //    {
                     if (_approachSpeedAggregationConcurrentQueue.Count > 0)
                     {
                         Console.WriteLine(" 5.  Saving Approach Speed Data to Database...");
                         BulkSaveApproachSpeedData();
                     }
-                },
-                () =>
-                {
+            //},
+            //    () =>
+            //    {
                     if (_detectorAggregationConcurrentQueue.Count > 0)
                     {
                         Console.WriteLine(" 6.  Saving Detector Data to Database...");
                         BulkSaveDetectorData();
                     }
-                },
-                () =>
-                {
-                    if (_priorityAggregationConcurrentQueue.Count > 0)
-                    {
-                        Console.WriteLine(" 7.  Saving Priority Data to Database...");
-                        BulkSavePriorityData();
-                    }
-                },
-                () =>
-                {
-                    if (_preemptAggregationConcurrentQueue.Count > 0)
-                    {
-                        Console.WriteLine(" 8.  Saving Preempt Data to Database...");
-                        BulkSavePreemptData();
-                    }
-                },
-                () =>
-                {
-                    if (_signalEventAggregationConcurrentQueue.Count > 0)
-                    {
-                        Console.WriteLine(" 9.  Saving Signal Event Data to Database...");
-                        BulkSaveSignalEventData();
-                    }
-                },
-                () =>
-                {
-                    if (_phaseTerminationAggregationQueue.Count > 0)
-                    {
-                        Console.WriteLine("10.  Saving Phase Termination Data to Database...");
-                        BulkSavePhaseTerminationData();
-                    }
-                },
-                () =>
-                {
-                    if (_approachEventAggregationConcurrentQueue.Count > -1)
-                    {
-                        Console.WriteLine("11.  Saving Phase Event Data to Database...");
-                        BulkSavePhaseEventData();
-                    }
-                },
-                () =>
-                {
-                    if (_phasePedAggregations.Count > -1)
-                    {
-                        Console.WriteLine("12.  Saving Ped Data to Database...");
-                        BulkSavePedData();
-                    }
-                }
-            );
+            //},
+            //    () =>
+            //    {
+            if (_priorityAggregationConcurrentQueue.Count > 0)
+            {
+                Console.WriteLine(" 7.  Saving Priority Data to Database...");
+                BulkSavePriorityData();
+            }
+            //    },
+            //    () =>
+            //    {
+            if (_preemptAggregationConcurrentQueue.Count > 0)
+            {
+                Console.WriteLine(" 8.  Saving Preempt Data to Database...");
+                BulkSavePreemptData();
+            }
+            //    },
+            //    () =>
+            //    {
+            if (_signalEventAggregationConcurrentQueue.Count > 0)
+            {
+                Console.WriteLine(" 9.  Saving Signal Event Data to Database...");
+                BulkSaveSignalEventData();
+            }
+            //    },
+            //    () =>
+            //    {
+            if (_phaseTerminationAggregationQueue.Count > 0)
+            {
+                Console.WriteLine("10.  Saving Phase Termination Data to Database...");
+                BulkSavePhaseTerminationData();
+            }
+            //    },
+            //    () =>
+            //    {
+            if (_approachEventAggregationConcurrentQueue.Count > -1)
+            {
+                Console.WriteLine("11.  Saving Phase Event Data to Database...");
+                BulkSavePhaseEventData();
+            }
+            //    },
+            //    () =>
+            //    {
+            if (_phasePedAggregations.Count > -1)
+            {
+                Console.WriteLine("12.  Saving Ped Data to Database...");
+                BulkSavePedData();
+            }
+            //    }
+            //);
         }
 
         private void BulkSavePhaseEventData()
+        //  Name has bee changed!  sqlBulkCopy.DestinationTableName = "ApproachEventCountAggregations"
         {
             var eventAggregationTable = new DataTable();
             eventAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
@@ -545,6 +548,7 @@ namespace MOE.Common.Business.DataAggregation
         private void BulkSaveApproachCycleData()
         {
             var approachAggregationTable = new DataTable();
+            approachAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             approachAggregationTable.Columns.Add(new DataColumn("ApproachID", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("RedTime", typeof(double)));
@@ -553,7 +557,6 @@ namespace MOE.Common.Business.DataAggregation
             approachAggregationTable.Columns.Add(new DataColumn("TotalCycles", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("PedActuations", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
-            approachAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             while (_approachCycleAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
                 var dataRow = approachAggregationTable.NewRow();
@@ -568,7 +571,7 @@ namespace MOE.Common.Business.DataAggregation
                 approachAggregationTable.Rows.Add(dataRow);
             }
             var connectionString =
-                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
@@ -821,7 +824,8 @@ namespace MOE.Common.Business.DataAggregation
             if (args.Length == 1)
             {
                 _startDate = Convert.ToDateTime(args[0]);
-                _endDate = DateTime.Today;
+                //_endDate = DateTime.Today;
+                _endDate = _startDate.AddHours(4);
             }
             else if (args.Length == 2)
             {
@@ -835,7 +839,8 @@ namespace MOE.Common.Business.DataAggregation
                     var db = new SPM();
                     _startDate = db.ApproachPcdAggregations.Select(s => s.BinStartTime).Max();
                     _startDate = _startDate.AddMinutes(15);
-                    _endDate = DateTime.Today; ;
+                    _endDate = _startDate.AddHours(4);
+                    //_endDate = DateTime.Today; 
                 }
                 catch (Exception ex)
                 {
@@ -849,7 +854,7 @@ namespace MOE.Common.Business.DataAggregation
         {
             var controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
             var records = controllerEventLogRepository.GetAllAggregationCodes(signal.SignalID, startTime, endTime);
-            //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
+            Console.Write(signal.SignalID);
             var preemptCodes = new List<int> { 102, 105 };
             var priorityCodes = new List<int> { 112, 113, 114 };
             Parallel.Invoke(

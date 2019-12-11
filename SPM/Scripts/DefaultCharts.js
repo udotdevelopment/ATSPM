@@ -145,12 +145,13 @@ function SetControlValues(signalID, selectedMetricID) {
 
 function GetMetricsList(signalID, selectedMetricID)
 {
-    if (selectedMetricID === null) {
+    if (selectedMetricID === null || selectedMetricID == undefined) {
         selectedMetricID = 1;
     }
     var tosend = {};
     tosend.signalID = signalID;
     tosend.selectedMetricID = selectedMetricID;
+
 
     GetOptionsByID(selectedMetricID);
     $.ajax({
@@ -168,6 +169,7 @@ function GetMetricsList(signalID, selectedMetricID)
         },
         onerror: function () { alert("Error"); }
     });
+    
 }
 
 $("#ResetDate").click(function () { ResetDates(); });
@@ -176,7 +178,7 @@ $("#ResetDate").click(function () { ResetDates(); });
 
 function GetSignalLocation(selectedMetricID)
 {
-    if (selectedMetricID === null) {
+    if (selectedMetricID === null || selectedMetricID == undefined) {
         var metricsList = $("#MetricsList");
         if (metricsList !== null) {
             selectedMetricID = metricsList.val();
