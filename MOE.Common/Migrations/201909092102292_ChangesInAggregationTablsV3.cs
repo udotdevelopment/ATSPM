@@ -7,15 +7,9 @@ namespace MOE.Common.Migrations
     {
         public override void Up()
         {
-
-            AlterColumn("dbo.PhaseTerminationAggregations", "SignalID", c => c.String(maxLength: 10, nullable:false));
-            AlterColumn("dbo.SignalEventCountAggregations", "SignalID", c => c.String(maxLength: 10, nullable: false));
-
-            AlterColumn("dbo.ActionLogs", "SignalID", c => c.String(maxLength: 10, nullable: false));
-
-            AlterColumn("dbo.PhaseTerminationAggregations", "SignalID", c => c.String(maxLength: 10, nullable: false));
-            AlterColumn("dbo.SignalEventCountAggregations", "SignalID", c => c.String(maxLength: 10, nullable: false));
-
+            // Added this to change the length of SIgnalID to match SinglaID in table signals.
+            AlterColumn("dbo.PhaseTerminationAggregations", "SignalID", c => c.String(nullable: false, maxLength: 10));
+            AlterColumn("dbo.SignalEventCountAggregations", "SignalID", c => c.String(nullable: false, maxLength: 10));
 
             DropPrimaryKey("dbo.ApproachSpeedAggregations");
             DropPrimaryKey("dbo.ApproachSplitFailAggregations");

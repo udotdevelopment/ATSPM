@@ -51,7 +51,6 @@ function GetRouteMap() {
     });
 }
 
-
 function ReportTypeChange() {
     var regionDdl = $("#Regions")[0];
     var regionMy = document.getElementById('Regions');
@@ -65,19 +64,19 @@ function RegionChange(e) {
 }
 
 function CenterMap(region) {
-    if (region == 0) {
+    if (region === 0) {
         GetMapWithCenter(39.777584, -111.719971, 6);
     }
-    else if (region == 1) {
+    else if (region === 1) {
         GetMapWithCenter(41.510213, -112.015501, 8);
     }
-    else if (region == 2) {
+    else if (region === 2) {
         GetMapWithCenter(40.653381, -112.040634, 10);
     }
-    else if (region == 3) {
+    else if (region === 3) {
         GetMapWithCenter(40.354719, -110.710757, 8);
     }
-    else if (region == 4) {
+    else if (region === 4) {
         GetMapWithCenter(38.268951, -111.417847, 7);
     }
 }

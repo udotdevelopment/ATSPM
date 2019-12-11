@@ -298,7 +298,7 @@ namespace MOE.Common.Business.DataAggregation
                 eventAggregationTable.Rows.Add(dataRow);
             }
             var connectionString =
-                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
@@ -337,7 +337,7 @@ namespace MOE.Common.Business.DataAggregation
                 eventAggregationTable.Rows.Add(dataRow);
             }
             var connectionString =
-                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
@@ -383,7 +383,7 @@ namespace MOE.Common.Business.DataAggregation
                 preemptAggregationTable.Rows.Add(dataRow);
             }
             var connectionString =
-                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
@@ -433,7 +433,7 @@ namespace MOE.Common.Business.DataAggregation
                 priorityAggregationTable.Rows.Add(dataRow);
             }
             var connectionString =
-                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
@@ -474,7 +474,7 @@ namespace MOE.Common.Business.DataAggregation
             }
 
             var connectionString =
-                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
@@ -522,7 +522,7 @@ namespace MOE.Common.Business.DataAggregation
                 approachSpeedAggregationTable.Rows.Add(dataRow);
             }
             var connectionString =
-                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
@@ -618,7 +618,7 @@ namespace MOE.Common.Business.DataAggregation
                 approachAggregationTable.Rows.Add(dataRow);
             }
             var connectionString =
-                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
@@ -659,7 +659,7 @@ namespace MOE.Common.Business.DataAggregation
                 approachAggregationTable.Rows.Add(dataRow);
             }
             var connectionString =
-                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
@@ -706,7 +706,7 @@ namespace MOE.Common.Business.DataAggregation
                 phaseTerminationAggregationTable.Rows.Add(dataRow);
             }
             var connectionString =
-                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
@@ -750,7 +750,7 @@ namespace MOE.Common.Business.DataAggregation
                 phasePedAggregationTable.Rows.Add(dataRow);
             }
             var connectionString =
-                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
@@ -777,7 +777,6 @@ namespace MOE.Common.Business.DataAggregation
         private void BulkSaveApproachYellowRedActivationsData()
         {
             var approachAggregationTable = new DataTable();
-            //approachAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             approachAggregationTable.Columns.Add(new DataColumn("ApproachID", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("SevereRedLightViolations", typeof(int)));
@@ -794,7 +793,7 @@ namespace MOE.Common.Business.DataAggregation
                 approachAggregationTable.Rows.Add(dataRow);
             }
             var connectionString =
-                ConfigurationManager.ConnectionStrings["SPM"].ConnectionString;
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
@@ -824,8 +823,7 @@ namespace MOE.Common.Business.DataAggregation
             if (args.Length == 1)
             {
                 _startDate = Convert.ToDateTime(args[0]);
-                //_endDate = DateTime.Today;
-                _endDate = _startDate.AddHours(4);
+                _endDate = _startDate.AddHours(6);
             }
             else if (args.Length == 2)
             {
@@ -839,13 +837,13 @@ namespace MOE.Common.Business.DataAggregation
                     var db = new SPM();
                     _startDate = db.ApproachPcdAggregations.Select(s => s.BinStartTime).Max();
                     _startDate = _startDate.AddMinutes(15);
-                    _endDate = _startDate.AddHours(4);
+                    _endDate = _startDate.AddHours(6);
                     //_endDate = DateTime.Today; 
                 }
                 catch (Exception ex)
                 {
                     _startDate = DateTime.Today.AddDays(-1);
-                    _endDate = DateTime.Today;
+                    _endDate = _startDate.AddHours(6); 
                 }
             }
         }

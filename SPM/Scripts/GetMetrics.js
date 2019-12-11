@@ -250,44 +250,41 @@ function CreateMetric() {
     $.validator.unobtrusive.parse(form);
     if ($(form).valid()) {
         var selectedMetricID = $("#MetricsList").val();
-        if (selectedMetricID == 1) {
+        if (selectedMetricID === 1) {
             GetPhaseTerminationMetric(1);
         }
-        else if (selectedMetricID == 2) {
+        else if (selectedMetricID === 2) {
             GetSplitMonitorMetric(2);
         }
-        else if (selectedMetricID == 3) {
+        else if (selectedMetricID === 3) {
             GetPedDelayMetric(3);
         }
-        else if (selectedMetricID == 4) {
+        else if (selectedMetricID === 4) {
             GetPreemptMetric(4);
         }
-        else if (selectedMetricID == 5) {
+        else if (selectedMetricID === 5) {
             GetTMCMetric(5);
         }
-        else if (selectedMetricID == 6) {
+        else if (selectedMetricID === 6) {
             GetPCDMetric(6);
         }
-        else if (selectedMetricID == 7) {
+        else if (selectedMetricID === 7) {
             GetApproachVolumeMetric(7);
         }
-        else if (selectedMetricID == 8) {
+        else if (selectedMetricID === 8) {
             GetApproachDelayMetric(8);
         }
-        else if (selectedMetricID == 9) {
+        else if (selectedMetricID === 9) {
             GetAoRMetric(9);
         }
-        else if (selectedMetricID == 10) {
+        else if (selectedMetricID === 10) {
             GetApproachSpeedMetric(10);
         }
-        else if (selectedMetricID == 11) {
+        else if (selectedMetricID === 11) {
             GetYellowAndRedMetric(11);
         }
-        else if (selectedMetricID == 12) {
+        else if (selectedMetricID === 12) {
             GetSplitFailMetric(12);
-        }
-        else if (selectedMetricID == 31) {
-            GetLeftTurnGapAnalysisMetric(31);
         }
         else if (selectedMetricID == 17) {
             GetTimingAndActuationsMetric(17);
