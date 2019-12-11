@@ -1,4 +1,4 @@
-$(function (ready) {    
+﻿$(function (ready) {    
     $(".datepicker").attr('type', 'text');
     $("#StartDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
     $("#EndDateDay").val($.datepicker.formatDate('mm/dd/yy', new Date()));
@@ -141,18 +141,12 @@ function SetBaseOptions() {
 function SetControlValues(signalID, selectedMetricID) {
     $("#SignalID").val(signalID);    
     GetSignalLocation(selectedMetricID);
-    
 }
 
 function GetMetricsList(signalID, selectedMetricID)
 {
-    var metricTypeID = window.document.getElementById('MetricTypes').value;
-
-    selectedMetricID = metricTypeID === "" ? selectedMetricID : metricTypeID;
-
-    if (selectedMetricID === null || selectedMetricID === undefined) {
-        //selectedMetricID = 1;
-        selectedMetricID = metricTypeID === "" ? 1 : metricTypeID;
+    if (selectedMetricID === null || selectedMetricID == undefined) {
+        selectedMetricID = 1;
     }
     var tosend = {};
     tosend.signalID = signalID;
@@ -184,7 +178,7 @@ $("#ResetDate").click(function () { ResetDates(); });
 
 function GetSignalLocation(selectedMetricID)
 {
-    if (selectedMetricID === null || selectedMetricID === undefined) {
+    if (selectedMetricID === null || selectedMetricID == undefined) {
         var metricsList = $("#MetricsList");
         if (metricsList !== null) {
             selectedMetricID = metricsList.val();
