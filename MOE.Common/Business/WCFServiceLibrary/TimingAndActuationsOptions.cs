@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
@@ -85,6 +85,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [Display(Name = "Advd Count Offset"), DataMember]
         public double? AdvancedOffset { get; set; }
 
+        [Display(Name = "Extend Search Mins")]
+        [Required]
+        [DataMember]
+        public int ExtendSearch { get; set; }
+
         [Display(Name = "Advanced Presence")]
         [Required]
         [DataMember]
@@ -124,6 +129,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             StartDate = startDate;
             EndDate = endDate;
             MetricTypeID = 17;
+            ExtendSearch = 6;
         }
 
         public TimingAndActuationsOptions()
@@ -153,6 +159,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             DotAndBarSize = 6;
             AdvancedOffset = 0.0;
+            ExtendSearch = 6;
         }
 
         public override List<string> CreateMetric()

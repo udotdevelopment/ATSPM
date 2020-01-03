@@ -1,9 +1,7 @@
 ﻿@model IEnumerable<MOE.Common.Models.Menu>
-
 @{
     ViewBag.Title = "Index";
 }
-
 <h2>Index</h2>
 
 <p>
@@ -34,7 +32,7 @@
         </th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.OrderBy(p => p.ParentId).ThenBy(d => d.DisplayOrder)) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.MenuId)

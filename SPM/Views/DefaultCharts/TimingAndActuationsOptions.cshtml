@@ -92,6 +92,10 @@
                             @Html.LabelFor(model => model.AdvancedOffset, new {htmlAttributes = new {@class = "control-label"}})
                         </div>
                         <div class="">
+                            @Html.EditorFor(model => model.ExtendSearch, new { htmlAttributes = new { @class = "TimingAndAcuationsDotWidth", placeholder = "minutes" } })
+                            @Html.LabelFor(model => model.ExtendSearch, new { htmlAttributes = new { @class = "control-label" } })
+                        </div>
+                        <div class="">
                             @Html.EditorFor(model => model.ShowAllLanesInfo, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
                             @Html.LabelFor(model => model.ShowAllLanesInfo, new {htmlAttributes = new {@class = "control-label"}})
                         </div>

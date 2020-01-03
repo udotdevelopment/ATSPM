@@ -221,6 +221,7 @@ namespace MOE.Common.Business.WatchDog
 
         private void CreateAndSendEmail()
         {
+
             var message = new MailMessage();
             var db = new SPM();
             var userStore = new UserStore<SPMUser>(db);

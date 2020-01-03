@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Models.ViewModel.Chart
@@ -23,7 +23,14 @@ namespace MOE.Common.Models.ViewModel.Chart
 
         private void SetDescription(Signal signal)
         {
-            Description = signal.PrimaryName + " " + signal.SecondaryName;
+            if (signal != null && signal.PrimaryName != null &&signal.SecondaryName != null)
+            {
+                Description = signal.PrimaryName + " " + signal.SecondaryName;
+            }
+            else
+            {
+                Description = "Primary Name or Secondary Name is not defined!";
+            }
         }
 
         private void SetMetrics(Signal signal)
@@ -33,7 +40,14 @@ namespace MOE.Common.Models.ViewModel.Chart
 
         private void SetTitle(Signal signal)
         {
-            Title = signal.SignalID + " - " + signal.PrimaryName + " " + signal.SecondaryName;
+            if (SignalID != null && signal.PrimaryName != null && signal.SecondaryName != null)
+            {
+                Title = signal.SignalID + " - " + signal.PrimaryName + " " + signal.SecondaryName;
+            }
+            else
+            {
+                Title = "SignalID is Null or Primary Name is null or Secondary name is null";
+            } 
         }
     }
 }

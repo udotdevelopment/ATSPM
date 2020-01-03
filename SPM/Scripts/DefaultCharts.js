@@ -145,14 +145,15 @@ function SetControlValues(signalID, selectedMetricID) {
 
 function GetMetricsList(signalID, selectedMetricID)
 {
-    if (selectedMetricID === null || selectedMetricID == undefined) {
-        selectedMetricID = 1;
+    var metricTypeID = window.document.getElementById('MetricTypes').value;
+    selectedMetricID = metricTypeID === "" ? selectedMetricID : metricTypeID;
+    if (selectedMetricID === null || selectedMetricID === undefined)
+    {
+        selectedMetricID = metricTypeID === "" ? 1 : metricTypeID;
     }
     var tosend = {};
     tosend.signalID = signalID;
     tosend.selectedMetricID = selectedMetricID;
-
-
     GetOptionsByID(selectedMetricID);
     $.ajax({
         url: urlpathGetMetricsList,
@@ -174,11 +175,9 @@ function GetMetricsList(signalID, selectedMetricID)
 
 $("#ResetDate").click(function () { ResetDates(); });
 
-
-
 function GetSignalLocation(selectedMetricID)
 {
-    if (selectedMetricID === null || selectedMetricID == undefined) {
+    if (selectedMetricID === null || selectedMetricID === undefined) {
         var metricsList = $("#MetricsList");
         if (metricsList !== null) {
             selectedMetricID = metricsList.val();
