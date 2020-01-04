@@ -61,15 +61,15 @@ namespace MOE.Common.Business.TimingAndActuations
         public TimingAndActuationsForPhase(Approach approach, TimingAndActuationsOptions options,
             bool getPermissivePhase)
         {
-            var startDate = Options.StartDate;
-            var endDate = Options.EndDate;
+            //var startDate = Options.StartDate;
+            //var endDate = Options.EndDate;
             GetPermissivePhase = getPermissivePhase;
             Approach = approach;
             Options = options;
             PhaseNumber = GetPermissivePhase ? Approach.PermissivePhaseNumber.Value : Approach.ProtectedPhaseNumber;
             if (Options.ShowVehicleSignalDisplay)
             {
-                GetAllCycleData(startDate, endDate, approach, getPermissivePhase);
+                GetAllCycleData(Options.StartDate.AddMinutes( -20), Options.EndDate.AddMinutes(20), approach, getPermissivePhase);
             }
             if (Options.ShowStopBarPresence)
             {
@@ -112,7 +112,7 @@ namespace MOE.Common.Business.TimingAndActuations
                 foreach (var phaseEventCode in Options.PhaseEventCodesList)
                 {
                     var phaseEvents = controllerEventLogRepository.GetEventsByEventCodesParam(signalID,
-                        optionsStartDateTime, optionsEndDateTime, new List<int> {phaseEventCode}, numberPhase);
+                        optionsStartDateTime.AddMinutes(-20), optionsEndDateTime.AddMinutes(20), new List<int> {phaseEventCode}, numberPhase);
                     if (phaseEvents.Count > 0)
                     {
                         PhaseCustomEvents.Add("Phase Event Code: " + phaseEventCode, phaseEvents);
@@ -125,7 +125,7 @@ namespace MOE.Common.Business.TimingAndActuations
         {
             CycleDataEventLogs = new List<Controller_Event_Log>();
             CycleAllEvents = new Dictionary<string, List<Controller_Event_Log>>();
-            var extendLine = 6;
+            var extendLine = 20;
             var controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
             var simpleEndDate = optionsEndDate;
             var phaseEventCodesForCycles = new List<int> { 1, 3, 8, 9, 11 };
@@ -162,14 +162,14 @@ namespace MOE.Common.Business.TimingAndActuations
                 phaseEventCodesForCycles, PhaseNumber);
             if (CycleDataEventLogs.Count <= 0)
             {
-                extendLine = 60;
+                extendLine = 6;
                 CycleDataEventLogs = controllerEventLogRepository.GetEventsByEventCodesParam(Approach.SignalID,
                     startDate.AddMinutes(-extendLine), endDate.AddMinutes(extendLine),
                     phaseEventCodesForCycles, PhaseNumber);
             }
             if (CycleDataEventLogs.Count <= 0)
             {
-                extendLine = 24 * 60;
+                extendLine = 30;
                 CycleDataEventLogs = controllerEventLogRepository.GetEventsByEventCodesParam(Approach.SignalID,
                     startDate.AddMinutes(-extendLine), endDate.AddMinutes(extendLine),
                     phaseEventCodesForCycles, PhaseNumber);
@@ -179,8 +179,8 @@ namespace MOE.Common.Business.TimingAndActuations
 
         private void GetPhaseCustomEvents()
         {
-            var startDate = Options.StartDate;
-            var endDate = Options.EndDate;
+            var startDate = Options.StartDate.AddMinutes(-20);
+            var endDate = Options.EndDate.AddMinutes(20);
             PhaseCustomEvents = new Dictionary<string, List<Controller_Event_Log>>();
             var controllerEventLogRepository = Models.Repositories.ControllerEventLogRepositoryFactory.Create();
             if (Options.PhaseEventCodesList != null && Options.PhaseEventCodesList.Any() &&
@@ -238,7 +238,7 @@ namespace MOE.Common.Business.TimingAndActuations
                         laneNumber = detector.LaneNumber.Value.ToString();
                     }
                     var laneByLane = controllerEventLogRepository.GetEventsByEventCodesParam(Approach.SignalID,
-                        Options.StartDate, Options.EndDate, new List<int> {81, 82}, detector.DetChannel);
+                        Options.StartDate.AddMinutes(-20), Options.EndDate.AddMinutes(20), new List<int> {81, 82}, detector.DetChannel);
                     if (laneByLane.Count > 0)
                     {
                         LaneByLanes.Add("Lane-by-lane Count, " + detector.MovementType.Abbreviation + " " +
@@ -281,7 +281,7 @@ namespace MOE.Common.Business.TimingAndActuations
                 if (detector.DetectionTypes.Any(d => d.DetectionTypeID == 6))
                 {
                     var stopEvents = controllerEventLogRepository.GetEventsByEventCodesParam(Approach.SignalID,
-                        Options.StartDate, Options.EndDate, 
+                        Options.StartDate.AddMinutes(-20), Options.EndDate.AddMinutes( 20), 
                             new List<int> {81, 82}, detector.DetChannel);
                     var laneNumber = "";
                     if (detector.LaneNumber != null)
@@ -338,7 +338,7 @@ namespace MOE.Common.Business.TimingAndActuations
                 if (detector.DetectionTypes.Any(d => d.DetectionTypeID == 2))
                 {
                     var advanceEvents = controllerEventLogRepository.GetEventsByEventCodesParam(Approach.SignalID,
-                        Options.StartDate, Options.EndDate, 
+                        Options.StartDate.AddMinutes(-20), Options.EndDate.AddMinutes(20), 
                             new List<int> {81, 82}, detector.DetChannel);
                     if (advanceEvents.Count > 0)
                     {
@@ -384,7 +384,7 @@ namespace MOE.Common.Business.TimingAndActuations
                 if (detector.DetectionTypes.Any(d => d.DetectionTypeID == 7))
                 {
                     var advancePresence = controllerEventLogRepository.GetEventsByEventCodesParam(Approach.SignalID,
-                        Options.StartDate, Options.EndDate, new List<int> {81, 82}, detector.DetChannel);
+                        Options.StartDate.AddMinutes(-20), Options.EndDate.AddMinutes(20), new List<int> {81, 82}, detector.DetChannel);
                     var laneNumber = "";
                     if (detector.LaneNumber != null)
                     {
@@ -436,7 +436,7 @@ namespace MOE.Common.Business.TimingAndActuations
             {
                 overlapCodes = new List<int> { 21, 22, 23 };
             }
-            var expandTimeLine = 6;
+            var expandTimeLine = 20;
             var controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
             PedestrianIntervals = controllerEventLogRepository.GetEventsByEventCodesParam(Options.SignalID,
                 Options.StartDate.AddMinutes(- expandTimeLine), Options.EndDate.AddMinutes(expandTimeLine),overlapCodes,

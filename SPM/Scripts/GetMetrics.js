@@ -19,19 +19,19 @@ function GetMetric(urlPath, tosend)
         datatype: "json",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(tosend),
-        success: function (data) {
-            
+        success: function(data) {
+
             $('#ReportPlaceHolder').html(data);
             $('#ReportPlaceHolder').focus();
             $.validator.unobtrusive.parse($("#PCDOptionsPlaceHolder"));
         },
-        beforeSend: function () {
+        beforeSend: function() {
             StartReportSpinner();
         },
-        complete: function () {
+        complete: function() {
             StopReportSpinner();
             ShowMetricUrl();
-        },
+        }, 
         error: function(xhr, status, error) {
             StopReportSpinner();
             $('#ReportPlaceHolder').html(xhr.responseText);

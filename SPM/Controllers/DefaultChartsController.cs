@@ -162,6 +162,7 @@ namespace SPM.Controllers
                                                           metricOptions.ShowPedestrianActuation.ToString().ToLower() + "," +
                                                           metricOptions.CombineLanesForEachGroup.ToString().ToLower() + "," +
                                                           metricOptions.DotAndBarSize + "," +
+                                                          metricOptions.ExtendSearch + "," +
                                                           metricOptions.PhaseFilter + "," +
                                                           metricOptions.PhaseEventCodes + "," +
                                                           metricOptions.GlobalCustomEventCodes + "," +

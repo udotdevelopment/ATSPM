@@ -135,6 +135,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public TimingAndActuationsOptions()
         {
             MetricTypeID = 17;
+            ExtendSearch = 6;
             SetDefaults();
         }
 
