@@ -156,26 +156,28 @@ namespace SPM.Controllers
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 17); " +
                                                           "SetTimingAndActuationsMetric(" +
                                                           metricOptions.ShowLegend.ToString().ToLower() + "," +
-                                                          metricOptions.ShowRawEventData.ToString().ToLower() + "," +
-                                                          metricOptions.ShowVehicleSignalDisplay.ToString().ToLower() + "," +
-                                                          metricOptions.ShowPedestrianIntervals.ToString().ToLower() + "," +
-                                                          metricOptions.ShowPedestrianActuation.ToString().ToLower() + "," +
+                                                          metricOptions.ShowHeaderForEachPhase.ToString().ToLower() + "," +
                                                           metricOptions.CombineLanesForEachGroup.ToString().ToLower() + "," +
                                                           metricOptions.DotAndBarSize + "," +
-                                                          metricOptions.ExtendSearch + "," +
                                                           metricOptions.PhaseFilter + "," +
                                                           metricOptions.PhaseEventCodes + "," +
                                                           metricOptions.GlobalCustomEventCodes + "," +
                                                           metricOptions.GlobalCustomEventParams + "," +
+                                                          metricOptions.ExtendVsdSearch + "," +
+                                                          metricOptions.ShowVehicleSignalDisplay.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPedestrianIntervals.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPedestrianActuation.ToString().ToLower() + "," +
+                                                          metricOptions.ExtendStartStopSearch + "," +
                                                           metricOptions.ShowStopBarPresence.ToString().ToLower() + "," +
                                                           metricOptions.ShowLaneByLaneCount.ToString().ToLower() + "," +
-                                                          metricOptions.ShowAdvancedCount.ToString().ToLower() + "," +
                                                           metricOptions.ShowAdvancedDilemmaZone.ToString().ToLower() + "," +
+                                                          metricOptions.ShowAdvancedCount.ToString().ToLower() + "," +
                                                           metricOptions.AdvancedOffset + "," +
+                                                          metricOptions.ShowAdvancedEvent.ToString().ToLower() + "," +
                                                           metricOptions.ShowAllLanesInfo.ToString().ToLower() + "," +
                                                           metricOptions.ShowLinesStartEnd.ToString().ToLower() + "," +
-                                                          metricOptions.ShowHeaderForEachPhase.ToString().ToLower() + "," +
-                                                          metricOptions.ShowEventPairs.ToString().ToLower( ) +
+                                                          metricOptions.ShowEventPairs.ToString().ToLower() +
+                                                          metricOptions.ShowRawEventData.ToString().ToLower() + "," +
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }

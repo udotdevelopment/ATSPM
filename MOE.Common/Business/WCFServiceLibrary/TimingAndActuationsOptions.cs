@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Web.Mvc.Routing.Constraints;
 using System.Web.UI.DataVisualization.Charting;
 using AjaxControlToolkit;
 using Microsoft.EntityFrameworkCore.Query.ExpressionTranslators;
@@ -28,32 +29,12 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public bool ShowHeaderForEachPhase { get; set; }
 
-        [Display(Name = "Raw Data Display")]
-        [Required]
-        [DataMember]
-        public bool ShowRawEventData { get; set; }
-
-        [Display(Name = "Vehicle Signal Display")]
-        [Required]
-        [DataMember]
-        public bool ShowVehicleSignalDisplay { get; set; }
-
-        [Display(Name = "Pedestrian Intervals")]
-        [Required]
-        [DataMember]
-        public bool ShowPedestrianIntervals { get; set; }
-
-        [Display(Name = "Pedestrian Actuation")]
-        [Required]
-        [DataMember]
-        public bool ShowPedestrianActuation { get; set; }
-
         [Display(Name = "Combine Lanes for Phase")]
         [Required]
         [DataMember]
         public bool CombineLanesForEachGroup { get; set; }
 
-        [Display(Name = "Dot Size")]
+        [Display(Name = "Dot and Marker Size")]
         [Required]
         [DataMember]
         public int DotAndBarSize { get; set; }
@@ -74,21 +55,40 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public string GlobalCustomEventParams { get; set; }
 
+        [Display(Name = "Extend Search (left)")]
+        [Required]
+        [DataMember]
+        public double ExtendVsdSearch { get; set; }
+
+        [Display(Name = "Vehicle Signal Display")]
+        [Required]
+        [DataMember]
+        public bool ShowVehicleSignalDisplay { get; set; }
+
+        [Display(Name = "Pedestrian Intervals")]
+        [Required]
+        [DataMember]
+        public bool ShowPedestrianIntervals { get; set; }
+
+        [Display(Name = "Pedestrian Actuations")]
+        [Required]
+        [DataMember]
+        public bool ShowPedestrianActuation { get; set; }
+
+        [Display(Name = "Extend Start/Stop Search")]
+        [Required]
+        [DataMember]
+        public double ExtendStartStopSearch { get; set; }
+
         [Display(Name = "Stop Bar Presence")]
         [Required]
         [DataMember]
         public bool ShowStopBarPresence { get; set; }
 
-        [Display(Name = "Lane-by-lane Count"), Required, DataMember]
-        public bool ShowLaneByLaneCount { get; set; }
-
-        [Display(Name = "Advd Count Offset"), DataMember]
-        public double? AdvancedOffset { get; set; }
-
-        [Display(Name = "Extend Search Mins")]
-        [Required]
+        [Display(Name = "Lane-by-lane Count")]
+        [ Required]
         [DataMember]
-        public int ExtendSearch { get; set; }
+        public bool ShowLaneByLaneCount { get; set; }
 
         [Display(Name = "Advanced Presence")]
         [Required]
@@ -99,22 +99,36 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [Required]
         [DataMember]
         public bool ShowAdvancedCount { get; set; }
+        
+        [Display(Name = "Advd Count Offset")]
+        [DataMember]
+        public double AdvancedOffset { get; set; }
 
+        [Display(Name = "Advanced Event")]
+        [Required]
+        [DataMember]
+        public bool ShowAdvancedEvent { get; set; }
+        
         [Display(Name = "All Lanes For Each Phase")]
         [Required]
         [DataMember]
         public bool ShowAllLanesInfo { get; set; }
-
+        
         [Display(Name = "On/Off Lines")]
         [Required]
         [DataMember]
         public bool ShowLinesStartEnd { get; set; }
-
+        
         [Display(Name = "Event Start Stop Pairs")]
         [Required]
         [DataMember]
         public bool ShowEventPairs { get; set; }
-
+        
+        [Display(Name = "Raw Data Display")]
+        [Required]
+        [DataMember]
+        public bool ShowRawEventData { get; set; }
+        
         public List<int> GlobalEventCodesList { get; set; }
         public List<int> GlobalEventParamsList { get; set; }
         public List<int> PhaseEventCodesList { get; set; }
@@ -129,13 +143,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
             StartDate = startDate;
             EndDate = endDate;
             MetricTypeID = 17;
-            ExtendSearch = 6;
+            //ExtendSearch = 0;
         }
 
         public TimingAndActuationsOptions()
         {
             MetricTypeID = 17;
-            ExtendSearch = 6;
+            //ExtendSearch = 0;
             SetDefaults();
         }
 
@@ -144,6 +158,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             ShowLegend = false;
             CombineLanesForEachGroup = false;
             ShowAdvancedCount = true;
+            ShowAdvancedEvent= false;
             ShowAdvancedDilemmaZone = true;
             ShowAllLanesInfo = true;
 
@@ -160,7 +175,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             DotAndBarSize = 6;
             AdvancedOffset = 0.0;
-            ExtendSearch = 6;
+            ExtendStartStopSearch = 2.0;
+
+            ExtendVsdSearch = 5.0;
         }
 
         public override List<string> CreateMetric()
@@ -191,6 +208,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
             else
             {
+                //var approachNumber = 1;
                 if (Signal.Approaches.Count > 0)
                 {
                     foreach (var approach in Signal.Approaches)

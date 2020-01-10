@@ -34,7 +34,7 @@ namespace MOE.Common.Business.TimingAndActuations
             var orginalEndDate = Options.EndDate;
             var reportTimespan = Options.EndDate - Options.StartDate;
             var totalMinutesRounded = Math.Round(reportTimespan.TotalMinutes);
-            if (totalMinutesRounded <= 121)
+            if (totalMinutesRounded <= 121)  // remove extra minute to timefrom defaults
             {
                 Options.EndDate =Options.EndDate.AddMinutes(-1);
             }

@@ -1,21 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Diagnostics.Eventing.Reader;
-using System.IO;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Drawing.Text;
 using System.Linq;
-using System.Net;
 using System.Web.UI.DataVisualization.Charting;
 using System.Web.UI.WebControls;
-using CsvHelper.Configuration.Attributes;
-using Lextm.SharpSnmpLib;
-using MOE.Common.Business.WCFServiceLibrary;
-using MOE.Common.Models;
-using Exception = System.Exception;
 
 namespace MOE.Common.Business.TimingAndActuations
 {
@@ -726,7 +713,7 @@ namespace MOE.Common.Business.TimingAndActuations
                 Name = "Vehicle Signal Display                    .",
                 XValueType = ChartValueType.DateTime
             };
-            topLabel.Points.AddXY(TimingAndActuationsForPhase.Options.StartDate.AddMinutes(-3).ToOADate(), _yValue);
+            topLabel.Points.AddXY(TimingAndActuationsForPhase.Options.StartDate.ToOADate(), _yValue);
             Chart.Series.Add(topLabel);
             //_yValue++;
             var yMaximum = Math.Round(_yValue + 0.8, 0);
@@ -1062,8 +1049,10 @@ namespace MOE.Common.Business.TimingAndActuations
                                 break;
                             }
                         }
+                        //var startTime = TimingAndActuationsForPhase.Options.StartDate.AddMinutes(-TimingAndActuationsForPhase.Options.ExtendSearch);
+                        //var endTime = TimingAndActuationsForPhase.Options.EndDate.AddMinutes(TimingAndActuationsForPhase.Options.ExtendSearch);
                         var startTime = TimingAndActuationsForPhase.Options.StartDate;
-                        var endTime = TimingAndActuationsForPhase.Options.EndDate.AddMinutes(2);
+                        var endTime = TimingAndActuationsForPhase.Options.EndDate;
                         var timeSpanStartOffset = vehicleDisplayCycleValue[i].Timestamp - startTime;
                         var timeSpanWidth = endTime - vehicleDisplayCycleValue[i].Timestamp;
                         var stripOffest = new double();

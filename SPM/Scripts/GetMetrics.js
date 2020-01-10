@@ -156,6 +156,7 @@ function GetTimingAndActuationsMetric(metricTypeID) {
     tosend.ExtendSearch = $("#ExtendSearch").val();
     tosend.ShowAdvancedDilemmaZone = $("#ShowAdvancedDilemmaZone").is(":checked");
     tosend.ShowAdvancedCount = $("#ShowAdvancedCount").is(":checked");
+    tosend.ShowAdvancedEvents = $("#ShowAdvancedEvent").is(":checked");
     tosend.ShowAllLanes = $("#ShowAllLanes").is(":checked");
     tosend.ShowLinesStartEnd = $("#ShowLinesStartEnd").is(":checked");
     tosend.ShowRawEventData = $("#ShowRawEventData").is(":checked");
