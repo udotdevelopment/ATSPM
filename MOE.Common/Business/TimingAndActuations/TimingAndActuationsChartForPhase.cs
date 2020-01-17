@@ -388,6 +388,10 @@ namespace MOE.Common.Business.TimingAndActuations
                 if (TimingAndActuationsForPhase.Options.HeadTitleCounter == 1)
                 {
                     Chart.Titles.Add(ChartTitleFactory.GetChartName(TimingAndActuationsForPhase.Options.MetricTypeID));
+                    //Chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
+                        //TimingAndActuationsForPhase.Options.SignalID, TimingAndActuationsForPhase.Options.StartDate,
+                        //TimingAndActuationsForPhase.Options.EndDate));
+
                     Chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
                         TimingAndActuationsForPhase.Options.SignalID, TimingAndActuationsForPhase.Options.StartDate,
                         TimingAndActuationsForPhase.Options.EndDate));

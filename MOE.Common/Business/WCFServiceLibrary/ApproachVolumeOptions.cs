@@ -79,7 +79,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             YAxisMin = 0;
             YAxisMax = null;
-            ShowDirectionalSplits = false;
+            ShowDirectionalSplits = true;
             ShowTotalVolume = false;
             ShowNbEbVolume = true;
             ShowSbWbVolume = true;

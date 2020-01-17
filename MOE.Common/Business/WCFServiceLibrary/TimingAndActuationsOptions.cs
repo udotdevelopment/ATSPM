@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using System.Web.Mvc.Routing.Constraints;
 using System.Web.UI.DataVisualization.Charting;
 using AjaxControlToolkit;
@@ -55,7 +56,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public string GlobalCustomEventParams { get; set; }
 
-        [Display(Name = "Extend Search (left)")]
+        [Display(Name = "Extend Search (left) Minutes.decimal")]
         [Required]
         [DataMember]
         public double ExtendVsdSearch { get; set; }
@@ -75,7 +76,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public bool ShowPedestrianActuation { get; set; }
 
-        [Display(Name = "Extend Start/Stop Search")]
+        [Display(Name = "Extend Start/Stop Search Minutes.decimal")]
         [Required]
         [DataMember]
         public double ExtendStartStopSearch { get; set; }
@@ -211,6 +212,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 //var approachNumber = 1;
                 if (Signal.Approaches.Count > 0)
                 {
+                    //Parallel.ForEach(Signal.Approaches, approach =>
                     foreach (var approach in Signal.Approaches)
                     {
                         bool permissivePhase;
@@ -241,14 +243,20 @@ namespace MOE.Common.Business.WCFServiceLibrary
                             }
                         }
                     }
+                    //});
                 }
             }
+
             timingAndActuationsForPhases = timingAndActuationsForPhases.OrderBy(t => t.PhaseNumberSort).ToList();
-            foreach (var timingAndActutionsForPhase in timingAndActuationsForPhases)
+            //  Can not add parrallelism because of contention for the same chart.
+            //Parallel.ForEach(timingAndActuationsForPhases, timingAndActutionsForPhase =>
+                foreach (var timingAndActutionsForPhase in timingAndActuationsForPhases)
             {
                 GetChart(timingAndActutionsForPhase);
+           // });
             }
-            GlobalEventCodesList = ExtractListOfNumbers(GlobalCustomEventCodes);
+
+        GlobalEventCodesList = ExtractListOfNumbers(GlobalCustomEventCodes);
             GlobalEventParamsList = ExtractListOfNumbers(GlobalCustomEventParams);
             GlobalEventCounter = 0;
             if (GlobalEventCodesList != null && GlobalEventParamsList != null &&

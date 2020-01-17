@@ -141,27 +141,29 @@ function GetApproachVolumeMetric(metricTypeID) {
 function GetTimingAndActuationsMetric(metricTypeID) {
     var tosend = GetCommonValues();
     tosend.MetricTypeID = metricTypeID;
-    tosend.ShowVehicleSignalDisplay = $("#ShowVehicleSignalDisplay").is(":checked");
-    tosend.ShowPedestrianIntervals = $("#ShowPedestrianIntervals").is(":checked");
-    tosend.ShowPedestrianActuation = $("#ShowPedestrianActuation").is(":checked");
+    tosend.ShowLegend = $("#ShowLegend").is(":checked");
+    tosend.ShowHeaderForEachPhase = $("#ShowHeaderForEachPhase").is(":checked");
     tosend.CombineLanesForEachGroup = $("#CombineLanesForEachGroup").is(":checked");
     tosend.DotAndBarSize = $("#DotAndBarSize").val();
     tosend.PhaseFilter = $("#PhaseFilter").val();
     tosend.PhaseEventCodes = $("#PhaseEventCodes").val();
     tosend.GlobalCustomEventCodes = $("#GlobalCustomEventCodes").val();
     tosend.GlobalCustomEventParams = $("#GlobalCustomEventParams").val();
+    tosend.ShowAllLanesInfo = $("#ShowAllLanesInfo").is(":checked");
+    tosend.ShowLinesStartEnd = $("#ShowLinesStartEnd").is(":checked");
+    tosend.ShowEventPairs = $("#ShowEventPairs").is(":checked");
+    tosend.ShowRawEventData = $("#ShowRawEventData").is(":checked");
+    tosend.ExtendVsdSearch = $("#ExtendVsdSearch").val();
+    tosend.ShowVehicleSignalDisplay = $("#ShowVehicleSignalDisplay").is(":checked");
+    tosend.ShowPedestrianIntervals = $("#ShowPedestrianIntervals").is(":checked");
+    tosend.ExtendStartStopSearch = $("#ExtendStartStopSearch").val();
+    tosend.ShowPedestrianActuation = $("#ShowPedestrianActuation").is(":checked");
     tosend.ShowStopBarPresence = $("#ShowStopBarPresence").is(":checked");
     tosend.ShowLaneByLaneCount = $("#ShowLaneByLaneCount").is(":checked");
-    tosend.AdvancedOffset = $("#AdvancedOffset").val();
-    tosend.ExtendSearch = $("#ExtendSearch").val();
     tosend.ShowAdvancedDilemmaZone = $("#ShowAdvancedDilemmaZone").is(":checked");
     tosend.ShowAdvancedCount = $("#ShowAdvancedCount").is(":checked");
-    tosend.ShowAdvancedEvents = $("#ShowAdvancedEvent").is(":checked");
-    tosend.ShowAllLanes = $("#ShowAllLanes").is(":checked");
-    tosend.ShowLinesStartEnd = $("#ShowLinesStartEnd").is(":checked");
-    tosend.ShowRawEventData = $("#ShowRawEventData").is(":checked");
-    tosend.ShowLegend = $("#ShowLegend").is(":checked");
-    tosend.ShowHeaderForEachPhase = $("#ShowHeaderForEachPhase").is(":checked");
+    tosend.AdvancedOffset = $("#AdvancedOffset").val();
+    tosend.ShowAdvancedEvent = $("#ShowAdvancedEvent").is(":checked");
     GetMetric(urlpathTimingAndActuations, tosend);
 }
 function GetApproachDelayMetric(metricTypeID) {
