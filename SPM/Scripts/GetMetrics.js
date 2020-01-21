@@ -163,7 +163,6 @@ function GetTimingAndActuationsMetric(metricTypeID) {
     tosend.ShowAdvancedDilemmaZone = $("#ShowAdvancedDilemmaZone").is(":checked");
     tosend.ShowAdvancedCount = $("#ShowAdvancedCount").is(":checked");
     tosend.AdvancedOffset = $("#AdvancedOffset").val();
-    tosend.ShowAdvancedEvent = $("#ShowAdvancedEvent").is(":checked");
     GetMetric(urlpathTimingAndActuations, tosend);
 }
 function GetApproachDelayMetric(metricTypeID) {

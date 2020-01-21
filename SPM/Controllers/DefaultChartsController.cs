@@ -173,7 +173,6 @@ namespace SPM.Controllers
                                                           metricOptions.ShowAdvancedDilemmaZone.ToString().ToLower() + "," +
                                                           metricOptions.ShowAdvancedCount.ToString().ToLower() + "," +
                                                           metricOptions.AdvancedOffset + "," +
-                                                          metricOptions.ShowAdvancedEvent.ToString().ToLower() + "," +
                                                           metricOptions.ShowAllLanesInfo.ToString().ToLower() + "," +
                                                           metricOptions.ShowLinesStartEnd.ToString().ToLower() + "," +
                                                           metricOptions.ShowEventPairs.ToString().ToLower() +
