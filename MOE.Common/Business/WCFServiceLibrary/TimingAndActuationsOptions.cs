@@ -105,11 +105,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         public double AdvancedOffset { get; set; }
 
-        [Display(Name = "Advanced Event")]
-        [Required]
-        [DataMember]
-        public bool ShowAdvancedEvent { get; set; }
-        
         [Display(Name = "All Lanes For Each Phase")]
         [Required]
         [DataMember]
@@ -159,7 +154,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             ShowLegend = false;
             CombineLanesForEachGroup = false;
             ShowAdvancedCount = true;
-            ShowAdvancedEvent= false;
             ShowAdvancedDilemmaZone = true;
             ShowAllLanesInfo = true;
 
