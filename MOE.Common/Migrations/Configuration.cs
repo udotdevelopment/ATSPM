@@ -187,7 +187,7 @@ namespace MOE.Common.Migrations
                     Action = "#",
                     ParentId = 0,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 1
+                    DisplayOrder = 10
                 },
                 new Menu
                 {
@@ -197,8 +197,8 @@ namespace MOE.Common.Migrations
                     Action = "#",
                     ParentId = 0,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 2
-                },
+                    DisplayOrder = 20
+                }, 
                 new Menu
                 {
                     MenuId = 3,
@@ -207,7 +207,7 @@ namespace MOE.Common.Migrations
                     Action = "Create",
                     ParentId = 0,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 3
+                    DisplayOrder = 30
                 },
                 new Menu
                 {
@@ -217,47 +217,157 @@ namespace MOE.Common.Migrations
                     Action = "#",
                     ParentId = 0,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 4
+                    DisplayOrder = 40
+                },
+                new Menu
+                {
+                    MenuId = 5,
+                    MenuName = "FAQ",
+                    Controller = "FAQs",
+                    Action = "Display",
+                    ParentId = 0,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 50
+                },
+                new Menu
+                {
+                    MenuId = 32,
+                    MenuName = "UDOT Traffic Signal Documents",
+                    Controller = "#",
+                    Action = "#",
+                    ParentId = 0,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 60
+                },
+                new Menu
+                {
+                    MenuId = 6,
+                    MenuName = "ATSPM Manuals",
+                    Controller = "#",
+                    Action = "#",
+                    ParentId = 0,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 70
+                },
+                new Menu
+                {
+                    MenuId = 7,
+                    MenuName = "ATSPM Presentations",
+                    Controller = "#",
+                    Action = "#",
+                    ParentId = 0,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 80
+                },
+                new Menu
+                {
+                    MenuId = 27,
+                    MenuName = "About",
+                    Controller = "Home",
+                    Action = "About",
+                    ParentId = 0,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 90
+                },
+                new Menu
+                {
+                    MenuId = 11,
+                    MenuName = "Admin",
+                    Controller = "#",
+                    Action = "#",
+                    ParentId = 0,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 100
+                },
+                new Menu
+                {
+                    MenuId = 9,
+                    MenuName = "Signal",
+                    Controller = "DefaultCharts",
+                    Action = "Index",
+                    ParentId = 1,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 10
+                },
+                new Menu
+                {
+                    MenuId = 10,
+                    MenuName = "Purdue Link Pivot",
+                    Controller = "LinkPivot",
+                    Action = "Analysis",
+                    ParentId = 1,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 20
+                },
+                new Menu
+                {
+                    MenuId = 8,
+                    MenuName = "Chart Usage",
+                    Controller = "ActionLogs",
+                    Action = "Usage",
+                    ParentId = 2,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 10
+                },
+                new Menu
+                {
+                    MenuId = 71,
+                    MenuName = "Configuration",
+                    Controller = "Signals",
+                    Action = "SignalDetail",
+                    ParentId = 2,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 15
+                },
+                new Menu
+                {
+                    MenuId = 48,
+                    MenuName = "Aggregate Data",
+                    Controller = "AggregateDataExport",
+                    Action = "Index",
+                    ParentId = 2,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 20
+                },
+                new Menu
+                {
+                    MenuId =42,
+                    MenuName = "GDOT ATSPM Installation Manual",
+                    Controller = "Images",
+                    Action = "ATSPM_Installation_Manual_2020-01-28.pdf",
+                    ParentId = 6,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 10
                 },
                 new Menu
                 {
                     MenuId = 34,
                     MenuName = "GDOT ATSPM Component Details",
                     Controller = "Images",
-                    Action = "ATSPM_Component_Details.pdf",
-                    ParentId = 4,
+                    Action = "ATSPM_Component_Details_20200120.pdf",
+                    ParentId = 6,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 1
+                    DisplayOrder = 20
                 },
                 new Menu
                 {
-                    MenuId = 35,
-                    MenuName = "ATSPM UDOT Conference 11-2-16",
+                    MenuId = 43,
+                    MenuName = "GDOT ATSPM Reporting Details",
                     Controller = "Images",
-                    Action = "ATSPM_UDOT_Conference_11-2-16.pdf",
-                    ParentId = 4,
+                    Action = "ATSPM_Reporting_Details_20200121.pdf",
+                    ParentId = 6,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 1
+                    DisplayOrder = 30
                 },
                 new Menu
                 {
-                    MenuId = 36,
-                    MenuName = "ATSPM EDC4 Minnesota 10-25-16",
+                    MenuId = 70,
+                    MenuName = "ATSPM_User Case Examples_Manual",
                     Controller = "Images",
-                    Action = "ATSPM_EDC4_Minnesota_10-25-16.pdf",
-                    ParentId = 4,
+                    Action = "ATSPM_User Case Examples_Manual_20200128.pdf",
+                    ParentId = 6,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 2
-                },
-                new Menu
-                {
-                    MenuId = 37,
-                    MenuName = "ATSPM CO WY ITE & Rocky Mtn 10-20-16",
-                    Controller = "Images",
-                    Action = "ATSPM_CO-WY_ITE___ITS_Rocky_Mtn_10-20-16.pdf",
-                    ParentId = 4,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 1
+                    DisplayOrder = 40
                 },
                 new Menu
                 {
@@ -265,9 +375,189 @@ namespace MOE.Common.Migrations
                     MenuName = "ATSPM ITS California 9-21-16",
                     Controller = "Images",
                     Action = "ATSPM_ITS_CA_9-21-16.pdf",
-                    ParentId = 4,
+                    ParentId = 7,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 2
+                    DisplayOrder = 10
+                },
+                new Menu
+                {
+                    MenuId = 37,
+                    MenuName = "ATSPM CO WY ITE & Rocky Mtn 10-20-16",
+                    Controller = "Images",
+                    Action = "ATSPM_CO-WY_ITE___ITS_Rocky_Mtn_10-20-16.pdf",
+                    ParentId = 7,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 20
+                },
+                new Menu
+                {
+                    MenuId = 36,
+                    MenuName = "ATSPM EDC4 Minnesota 10-25-16",
+                    Controller = "Images",
+                    Action = "ATSPM_EDC4_Minnesota_10-25-16.pdf",
+                    ParentId = 7,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 30
+                },
+                new Menu
+                {
+                    MenuId = 35,
+                    MenuName = "ATSPM UDOT Conference 11-2-16",
+                    Controller = "Images",
+                    Action = "ATSPM_UDOT_Conference_11-2-16.pdf",
+                    ParentId = 7,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 40
+                },
+                new Menu
+                {
+                    MenuId = 45,
+                    MenuName = "Mark Taylor",
+                    Controller = "Images",
+                    Action = "TTTMarkTaylor.pdf",
+                    ParentId = 7,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 50
+                },
+                new Menu
+                {
+                    MenuId = 62,
+                    MenuName = "ATSPM UDOT Conference 11-6-18",
+                    Controller = "Images",
+                    Action = "Session 27_ATSPMs_UDOT Conference_20181106.pdf",
+                    ParentId = 7,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 60
+                },
+                new Menu
+                {
+                    MenuId = 46,
+                    MenuName = "Jamie Mackey",
+                    Controller = "Images",
+                    Action = "TTTJamieMackey.pdf",
+                    ParentId = 7,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 70
+                },
+                new Menu
+                {
+                    MenuId = 47,
+                    MenuName = "Derek Lowe & Shane Johnson",
+                    Controller = "Images",
+                    Action = "TTTDerekLoweShaneJohnson.pdf",
+                    ParentId = 7,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 80
+                },
+                new Menu
+                {
+                    MenuId = 12,
+                    MenuName = "Signal Configuration",
+                    Controller = "Signals",
+                    Action = "Index",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 10
+                },
+                new Menu
+                {
+                    MenuId = 16,
+                    MenuName = "Menu Configuration",
+                    Controller = "Menus",
+                    Action = "Index",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 20
+                },
+                new Menu
+                {
+                    MenuId = 13,
+                    MenuName = "Route Configuration",
+                    Controller = "Routes",
+                    Action = "Index",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 30
+                },
+                new Menu
+                {
+                    MenuId = 57,
+                    MenuName = "General Settings",
+                    Controller = "GeneralSettings",
+                    Action = "Edit",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 40
+                },
+                new Menu
+                {
+                    MenuId = 49,
+                    MenuName = "Raw Data Export",
+                    Controller = "DataExport",
+                    Action = "RawDataExport",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 50
+                },
+                new Menu
+                {
+                    MenuId = 54,
+                    MenuName = "Watch Dog",
+                    Controller = "WatchDogApplicationSettings",
+                    Action = "Edit",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 60
+                },
+                new Menu
+                {
+                    MenuId = 56,
+                    MenuName = "Database Archive Settings",
+                    Controller = "DatabaseArchiveSettings",
+                    Action = "edit",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 70
+                },
+                new Menu
+                {
+                    MenuId = 52,
+                    MenuName = "FAQs",
+                    Controller = "FAQs",
+                    Action = "Index",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 70
+                },
+                new Menu
+                {
+                    MenuId = 51,
+                    MenuName = "Users",
+                    Controller = "SPMUsers",
+                    Action = "Index",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 90
+                },
+                new Menu
+                {
+                    MenuId = 15,
+                    MenuName = "Roles",
+                    Controller = "Account",
+                    Action = "RoleAddToUser",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 100
+                },
+                new Menu
+                {
+                    MenuId = 61,
+                    MenuName = "NEMA Phase # Convention at UDOT",
+                    Controller = "Images",
+                    Action = "NEMA Phase # Convention UDOT.pdf",
+                    ParentId = 32,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 10
                 },
                 new Menu
                 {
@@ -275,9 +565,9 @@ namespace MOE.Common.Migrations
                     MenuName = "TSMP UDOT V1-2 2-5-16",
                     Controller = "Images",
                     Action = "TSMP_UDOT_v1-2_2-5-16.pdf",
-                    ParentId = 4,
+                    ParentId = 32,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 1
+                    DisplayOrder = 20
                 },
                 new Menu
                 {
@@ -291,163 +581,13 @@ namespace MOE.Common.Migrations
                 },
                 new Menu
                 {
-                    MenuId = 5,
-                    MenuName = "FAQ",
-                    Controller = "FAQs",
-                    Action = "Display",
-                    ParentId = 0,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 5
-                },
-                new Menu
-                {
-                    MenuId = 8,
-                    MenuName = "Chart Usage",
-                    Controller = "ActionLogs",
-                    Action = "Usage",
-                    ParentId = 2,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 1
-                },
-                new Menu
-                {
-                    MenuId = 9,
-                    MenuName = "Signal",
-                    Controller = "DefaultCharts",
-                    Action = "Index",
-                    ParentId = 1,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 1
-                },
-                new Menu
-                {
-                    MenuId = 10,
-                    MenuName = "Purdue Link Pivot",
-                    Controller = "LinkPivot",
-                    Action = "Analysis",
-                    ParentId = 1,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 2
-                },
-                new Menu
-                {
-                    MenuId = 11,
-                    MenuName = "Admin",
-                    Controller = "#",
-                    Action = "#",
-                    ParentId = 0,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 6
-                },
-                new Menu
-                {
-                    MenuId = 12,
-                    MenuName = "Signal Configuration",
-                    Controller = "Signals",
-                    Action = "Index",
-                    ParentId = 11,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 1
-                },
-                new Menu
-                {
-                    MenuId = 13,
-                    MenuName = "Route Configuration",
-                    Controller = "Routes",
-                    Action = "Index",
-                    ParentId = 11,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 2
-                },
-                new Menu
-                {
-                    MenuId = 15,
-                    MenuName = "Roles",
-                    Controller = "Account",
-                    Action = "RoleAddToUser",
-                    ParentId = 11,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 2
-                },
-                new Menu
-                {
-                    MenuId = 16,
-                    MenuName = "Menu Configuration",
-                    Controller = "Menus",
-                    Action = "Index",
-                    ParentId = 11,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 3
-                },
-                new Menu
-                {
-                    MenuId = 27,
-                    MenuName = "About",
-                    Controller = "Home",
-                    Action = "About",
-                    ParentId = 0,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 7
-                },
-                new Menu
-                {
-                    MenuId = 42,
-                    MenuName = "GDOT ATSPM Installation Manual",
+                    MenuId = 41,
+                    MenuName = "Signal Ops QIT Final Report",
                     Controller = "Images",
-                    Action = "ATSPM_Installation_Manual.pdf",
-                    ParentId = 4,
+                    Action = "Signal Ops QIT Final Report Released.pdf",
+                    ParentId = 32,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 2
-                },
-                new Menu
-                {
-                    MenuId = 43,
-                    MenuName = "GDOT ATSPM Reporting Details",
-                    Controller = "Images",
-                    Action = "ATSPM_Reporting_Details.pdf",
-                    ParentId = 4,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 3
-                },
-                new Menu
-                {
-                    MenuId = 50,
-                    MenuName = "Configuration",
-                    Controller = "Signals",
-                    Action = "SignalDetail",
-                    ParentId = 2,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 2
-                },
-                new Menu
-                {
-                    MenuId = 51,
-                    MenuName = "Users",
-                    Controller = "SPMUsers",
-                    Action = "Index",
-                    ParentId = 14,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 1
-                },
-                new Menu
-                {
-                    MenuId = 52,
-                    MenuName = "FAQs",
-                    Controller = "FAQs",
-                    Action = "Index",
-                    ParentId = 11,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 6
-                },
-                new Menu
-                {
-                    MenuId = 54,
-                    MenuName = "Watch Dog",
-                    Controller = "WatchDogApplicationSettings",
-                    Action = "Edit",
-                    ParentId = 11,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 1
+                    DisplayOrder = 40 
                 },
                 new Menu
                 {
@@ -455,79 +595,79 @@ namespace MOE.Common.Migrations
                     MenuName = "Detector Accuracy Information",
                     Controller = "Images",
                     Action = "DetectorAccuracyInformation.pdf",
-                    ParentId = 4,
+                    ParentId = 32,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 4
+                    DisplayOrder = 50
                 },
                 new Menu
                 {
-                    MenuId = 45,
-                    MenuName = "Mark Taylor",
+                    MenuId = 60,
+                    MenuName = "Wavetronix Matrix Latency Information",
                     Controller = "Images",
-                    Action = "TTTMarkTaylor.pdf",
-                    ParentId = 4,
+                    Action = "WavetronixMatrixLatencyInformation.pdf",
+                    ParentId = 32,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 3
+                    DisplayOrder = 60
                 },
                 new Menu
                 {
-                    MenuId = 46,
-                    MenuName = "Jamie Mackey",
+                    MenuId = 64,
+                    MenuName = "UDOT Detection Form 2019-04-09",
                     Controller = "Images",
-                    Action = "TTTJamieMackey.pdf",
-                    ParentId = 4,
+                    Action = "UDOT Detection Form 2019-04-09.xlsm",
+                    ParentId = 32,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 2
+                    DisplayOrder = 70 
                 },
                 new Menu
                 {
-                    MenuId = 47,
-                    MenuName = "Derek Lowe & Shane Johnson",
+                    MenuId = 65,
+                    MenuName = "UDOT Detection Form Printable Tables 2019-04-09",
                     Controller = "Images",
-                    Action = "TTTDerekLoweShaneJohnson.pdf",
-                    ParentId = 4,
+                    Action = "UDOT Detection Form Printable Tables 20190409.pdf",
+                    ParentId = 32,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 1
+                    DisplayOrder = 80 
                 },
                 new Menu
                 {
-                    MenuId = 48,
-                    MenuName = "Aggregate Data",
-                    Controller = "AggregateDataExport",
-                    Action = "Index",
-                    ParentId = 2,
+                    MenuId = 68,
+                    MenuName = "Examples of Detector Setup DZ",
+                    Controller = "Images",
+                    Action = "Examples of Detector Setup 2017-05-02.pdf",
+                    ParentId = 32,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 3
+                    DisplayOrder = 90
                 },
                 new Menu
                 {
-                    MenuId = 49,
-                    MenuName = "Raw Data Export",
-                    Controller = "DataExport",
-                    Action = "RawDataExport",
-                    ParentId = 11,
+                    MenuId = 69,
+                    MenuName = "Configuration - Detection Type - Log Action Taken",
+                    Controller = "Images",
+                    Action = "Configuration-DetectionType-LogActionTaken.pdf",
+                    ParentId = 32,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 4
+                    DisplayOrder = 100
                 },
                 new Menu
                 {
-                    MenuId = 56,
-                    MenuName = "Database Archive Settings",
-                    Controller = "DatabaseArchiveSettings",
-                    Action = "edit",
-                    ParentId = 11,
+                    MenuId = 66,
+                    MenuName = "AWS LFT and Detection Worksheets 2019-04-10",
+                    Controller = "Images",
+                    Action = "AWS LFT and Detection Worksheets 2019-04-10.xlsm",
+                    ParentId = 32,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 2
+                    DisplayOrder =11 0
                 },
                 new Menu
                 {
-                    MenuId = 57,
-                    MenuName = "General Settings",
-                    Controller = "GeneralSettings",
-                    Action = "Edit",
-                    ParentId = 11,
+                    MenuId = 67,
+                    MenuName = "AWS LFT and Detection Worksheets Printable ",
+                    Controller = "Images",
+                    Action = "AWS LFT and Detection Worksheets Printable.pdf",
+                    ParentId = 32,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 2
+                    DisplayOrder = 120
                 }
             );
 
