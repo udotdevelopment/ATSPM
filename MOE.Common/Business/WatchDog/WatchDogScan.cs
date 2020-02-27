@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net.Mail;
@@ -149,14 +150,19 @@ namespace MOE.Common.Business.WatchDog
         private void CreateAndSendEmail()
         {
             var message = new MailMessage();
-            var db = new SPM();
-            var userStore = new UserStore<SPMUser>(db);
-            var userManager = new UserManager<SPMUser>(userStore);
-            var users = (from u in userManager.Users
-                where u.ReceiveAlerts
-                select u).ToList();
-            foreach (var user in users)
-                message.To.Add(user.Email);
+            var appSettings = ConfigurationManager.AppSettings;
+            for (var i = 0; i < appSettings.Count; i++)
+                message.To.Add(appSettings[i]);
+            //var db = new SPM();
+            //var userStore = new UserStore<SPMUser>(db);
+            //var userManager = new UserManager<SPMUser>(userStore);
+            //var users = (from u in userManager.Users
+            //    where u.ReceiveAlerts
+            //    select u).ToList();
+            //foreach (var user in users)
+            //message.To.Add(user);
+            //foreach (var user in users)
+            //    message.To.Add(user.Email);
             message.To.Add(Settings.DefaultEmailAddress);
             message.Subject = "ATSPM Alerts for " + ScanDate.ToShortDateString();
             message.From = new MailAddress(Settings.FromEmailAddress);
