@@ -46,6 +46,35 @@ namespace MOE.Common.Business.Tests
         }
 
         [TestMethod()]
+        public void TwoPlansInDBShouldmeanThreePlansinChartTest()
+        {
+
+
+
+            AddPlanEventToDB(Convert.ToDateTime("09/24/2018 00:30"), "1001", 255);
+            AddPlanEventToDB(Convert.ToDateTime("09/24/2018 07:30"), "1001", 5);
+            var plans = PlanFactory.GetBasicPlans(DateTime.Now.AddDays(-1), DateTime.Now, "1001");
+
+            Assert.IsTrue(plans.Count == 3);
+
+
+
+        }
+
+        private void AddPlanEventToDB(DateTime time, string signalId, int planNumber)
+        {
+            var e = new Controller_Event_Log();
+
+            e.EventCode = 131;
+            e.EventParam = planNumber;
+            e.SignalID = signalId;
+            e.Timestamp = time;
+
+           
+            _db.Controller_Event_Log.Add(e);
+        }
+
+        [TestMethod()]
         public void DuplicatePlanEventsTest()
         {
 

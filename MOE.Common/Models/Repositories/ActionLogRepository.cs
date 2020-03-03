@@ -39,7 +39,7 @@ namespace MOE.Common.Models.Repositories
 
         public void Update(ActionLog entity)
         {
-            var agencyInDatabase = db.Agencies.Find(entity.ActionLogID);
+            var agencyInDatabase = db.ATSPM_Agencies.Find(entity.ActionLogID);
             if (agencyInDatabase == null)
                 Add(entity);
             else

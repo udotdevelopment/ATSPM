@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
@@ -157,8 +158,8 @@ namespace MOE.Common.Business.SplitFail
                 {
                     Timestamp = options.EndDate,
                     EventCode = 81,
-                    EventParam = detector.DetChannel,
-                    SignalID = options.SignalID
+                    EventParam = Convert.ToInt16(detector.DetChannel),
+                    SignalID = Convert.ToInt16(options.SignalID)
                 });
         }
 
@@ -170,8 +171,8 @@ namespace MOE.Common.Business.SplitFail
                 {
                     Timestamp = options.StartDate,
                     EventCode = 82,
-                    EventParam = detector.DetChannel,
-                    SignalID = options.SignalID
+                    EventParam = Convert.ToInt16(detector.DetChannel),
+                    SignalID = Convert.ToInt16(options.SignalID)
                 });
         }
 

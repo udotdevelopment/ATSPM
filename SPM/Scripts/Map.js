@@ -257,9 +257,6 @@ function displayInfobox(e) {
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(tosend),
             success: function (data) {
-                if (infobox != null) {
-                    infobox.setOptions({ visible: false });
-                }
                 infobox = new Microsoft.Maps.Infobox(e.target.getLocation(),
                     { offset: new Microsoft.Maps.Point(-100, 0), htmlContent: data });
                 infobox.setMap(map);

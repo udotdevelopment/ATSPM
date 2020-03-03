@@ -21,7 +21,7 @@ namespace SPM.Controllers
         MOE.Common.Models.Repositories.IDirectionTypeRepository directionRepository =
                 MOE.Common.Models.Repositories.DirectionTypeRepositoryFactory.Create();
         // GET: Signals/Copy
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult Copy(int approachID)
         {
             ViewBag.DirectionType = new SelectList(directionRepository.GetAllDirections(), "DirectionTypeID", "Abbreviation");
@@ -33,9 +33,9 @@ namespace SPM.Controllers
             return PartialView("Create",newApproach);
         }
 
-        
+
         // GET: RouteSignals/Create
-         [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult Create(string id)
         {
             Approach approach = new Approach();
@@ -51,7 +51,7 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+         [AllowAnonymous]
         public ActionResult Create([Bind(Include = "SignalId,DirectionTypeID,Description,MPH,DecisionPoint,MovementDelay")] Approach approach)
         {
             
@@ -69,7 +69,7 @@ namespace SPM.Controllers
         
 
         // GET: RouteSignals/Delete/5
-         [Authorize(Roles = "Admin, Configuration")]
+          [AllowAnonymous]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -87,7 +87,7 @@ namespace SPM.Controllers
         // POST: RouteSignals/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin, Configuration")]
+         [AllowAnonymous]
         public void DeleteConfirmed(int id)
         {
             approachRepository.Remove(id);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net.Mail;
@@ -16,78 +17,54 @@ namespace MOE.Common.Business.WatchDog
 {
     public class WatchDogScan
     {
-        private readonly ConcurrentBag<SPMWatchDogErrorEvent> ForceOffErrors = new ConcurrentBag<SPMWatchDogErrorEvent>();
-        //private readonly object eventRepository;
-        public ConcurrentBag<SPMWatchDogErrorEvent> LowHitCountErrors = new ConcurrentBag<SPMWatchDogErrorEvent>();
-        public ConcurrentBag<SPMWatchDogErrorEvent> MaxOutErrors = new ConcurrentBag<SPMWatchDogErrorEvent>();
-        public ConcurrentBag<SPMWatchDogErrorEvent> MissingRecords = new ConcurrentBag<SPMWatchDogErrorEvent>();
-        public ConcurrentBag<SPMWatchDogErrorEvent> CannotFtpFiles = new ConcurrentBag<SPMWatchDogErrorEvent>();
+        private readonly ConcurrentBag<SPMWatchDogErrorEvent> ForceOffErrors =
+            new ConcurrentBag<SPMWatchDogErrorEvent>();
+
+        public ConcurrentBag<SPMWatchDogErrorEvent> LowHitCountErrors =
+            new ConcurrentBag<SPMWatchDogErrorEvent>();
+
+        public ConcurrentBag<SPMWatchDogErrorEvent> MaxOutErrors =
+            new ConcurrentBag<SPMWatchDogErrorEvent>();
+
+        public ConcurrentBag<SPMWatchDogErrorEvent> MissingRecords =
+            new ConcurrentBag<SPMWatchDogErrorEvent>();
+
         public List<SPMWatchDogErrorEvent> RecordsFromTheDayBefore = new List<SPMWatchDogErrorEvent>();
-        public ConcurrentBag<Models.Signal> SignalsNoRecords = new ConcurrentBag<Models.Signal>();
-        public ConcurrentBag<Models.Signal> SignalsWithRecords = new ConcurrentBag<Models.Signal>();
-        public ConcurrentBag<SPMWatchDogErrorEvent> StuckPedErrors = new ConcurrentBag<SPMWatchDogErrorEvent>();
+
+        public ConcurrentBag<Models.Signal> SignalsNoRecords =
+            new ConcurrentBag<Models.Signal>();
+
+        public ConcurrentBag<Models.Signal> SignalsWithRecords =
+            new ConcurrentBag<Models.Signal>();
+
+        public ConcurrentBag<SPMWatchDogErrorEvent> StuckPedErrors =
+            new ConcurrentBag<SPMWatchDogErrorEvent>();
 
         public WatchDogScan(DateTime scanDate)
         {
             ScanDate = scanDate;
-            var settingsRepository = ApplicationSettingsRepositoryFactory.Create();
+            var settingsRepository =
+                ApplicationSettingsRepositoryFactory.Create();
             Settings = settingsRepository.GetWatchDogSettings();
         }
 
         public WatchDogApplicationSettings Settings { get; set; }
         public DateTime ScanDate { get; set; }
-        public int ErrorCount { get; set; }
-        //public List<SPMWatchDogErrorEvent> ErrorMessages = new List<SPMWatchDogErrorEvent>();
+
         public void StartScan()
         {
             if (!Settings.WeekdayOnly || Settings.WeekdayOnly && ScanDate.DayOfWeek != DayOfWeek.Saturday &&
-               ScanDate.DayOfWeek != DayOfWeek.Sunday)
+                ScanDate.DayOfWeek != DayOfWeek.Sunday)
             {
-               var watchDogErrorEventRepository = SPMWatchDogErrorEventRepositoryFactory.Create();
-               var signalRepository = SignalsRepositoryFactory.Create();
-               var signals = signalRepository.EagerLoadAllSignals();
+                var watchDogErrorEventRepository = SPMWatchDogErrorEventRepositoryFactory.Create();
+                var signalRepository =
+                    SignalsRepositoryFactory.Create();
+                var signals = signalRepository.EagerLoadAllSignals();
                 CheckForRecords(signals);
                 CheckAllSignals(signals);
                 CheckSignalsWithData();
-                CheckApplicationEvents(signals);
                 CreateAndSendEmail();
             }
-        }
-
-        private void CheckApplicationEvents(List<Models.Signal> signals)
-        {
-            CheckFtpFromAllControllers(signals);
-        }
-
-        private void CheckFtpFromAllControllers(List<Models.Signal> signals)
-        {
-            var startHour = new TimeSpan(Settings.ScanDayStartHour, 0, 0);
-            var endHour = new TimeSpan(Settings.ScanDayEndHour, 0, 0);
-            var analysisStart = ScanDate.Date + startHour;
-            var analysisEnd = ScanDate.Date + endHour;
-            var options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism;  
-           MOE.Common.Models.Repositories.IApplicationEventRepository eventRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
-            var events = eventRepository.GetApplicationEventsBetweenDatesByApplication(analysisStart, analysisEnd, "FTPFromAllcontrollers");
-            Parallel.ForEach(signals, options, signal =>
-            //foreach(var signal in signals)
-            {
-                 ErrorCount = (events.Where(e => e.Description.Contains(signal.SignalID)).Count());
-                 if (ErrorCount > 0)
-                 {
-                     MOE.Common.Models.SPMWatchDogErrorEvent error = new MOE.Common.Models.SPMWatchDogErrorEvent();
-                     Console.WriteLine("Signal " + signal.SignalID + " can not download from this signal during " + ErrorCount.ToString() + " atempts.  ");
-                     error.SignalID = signal.SignalID;
-                     error.DetectorID = "0";
-                     error.Phase = 0;
-                     error.Direction = "";
-                     error.TimeStamp = ScanDate;
-                     error.Message = "FTPFromAllControllers could not download from Controller.  Number of attempts were: " + ErrorCount.ToString();
-                     error.ErrorCode = 6;
-                     CannotFtpFiles.Add(error);
-                 }
-            //}
-            });
         }
 
         private void CheckAllSignals(List<Models.Signal> signals)
@@ -99,61 +76,22 @@ namespace MOE.Common.Business.WatchDog
             var options = new ParallelOptions();
             options.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism;
 
-            //Parallel.ForEach(signals, options, signal =>
-                foreach(var signal in signals)
+            Parallel.ForEach(signals, options, signal =>
+                //foreach(var signal in signals)
+            {
+                var APcollection =
+                    new AnalysisPhaseCollection(signal.SignalID,
+                        AnalysisStart, AnalysisEnd, Settings.ConsecutiveCount);
+
+                foreach (var phase in APcollection.Items)
+                    //Parallel.ForEach(APcollection.Items, options,phase =>
                 {
-                    AnalysisPhaseCollection APcollection = null;
-                try
-                {
-                     APcollection =
-                        new AnalysisPhaseCollection(signal.SignalID,
-                            AnalysisStart, AnalysisEnd, Settings.ConsecutiveCount);
+                    CheckForMaxOut(phase, signal);
+                    CheckForForceOff(phase, signal);
+                    CheckForStuckPed(phase, signal);
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Unable to get analysis phase for signal " + signal.SignalID);
-                }
-
-                    if (APcollection != null)
-                    {
-                        foreach (var phase in APcollection.Items)
-                            //Parallel.ForEach(APcollection.Items, options,phase =>
-                        {
-                            try
-                            {
-                                CheckForMaxOut(phase, signal);
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Max Out Error " +
-                                                  e.Message);
-                            }
-
-                            try
-                            {
-
-                                CheckForForceOff(phase, signal);
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Force Off Error " +
-                                                  e.Message);
-                            }
-
-                            try
-                            {
-                                CheckForStuckPed(phase, signal);
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Stuck Ped Error " +
-                                                  e.Message);
-                            }
-                        }
-                    }
-
-                    //);
-            }//);
+                // );
+            });
         }
 
         private void CheckSignalsWithData()
@@ -172,33 +110,23 @@ namespace MOE.Common.Business.WatchDog
         private void CheckForRecords(List<Models.Signal> signals)
         {
             var options = new ParallelOptions();
-            //options.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism;
-           // Parallel.ForEach(signals, options, signal =>
-            foreach (var signal in signals)
+            options.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism;
+            Parallel.ForEach(signals, options, signal =>
             {
-                try
-                {
-                    GetRecordCountForWeekDayAndWeekend(signal);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(signal.SignalID + " - " + e.Message);
-                }
-            }//);
-        }
-
-        private void GetRecordCountForWeekDayAndWeekend(Signal signal)
-        {
-            if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
-                CheckSignalRecordCount(ScanDate.AddDays(-2), signal);
-            else
-                CheckSignalRecordCount(ScanDate, signal);
+                if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
+                    CheckSignalRecordCount(ScanDate.AddDays(-2), signal);
+                else
+                    CheckSignalRecordCount(ScanDate, signal);
+            });
         }
 
         private void CheckSignalRecordCount(DateTime dateToCheck, Models.Signal signal)
         {
-            var controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
-            if (controllerEventLogRepository.GetRecordCount(signal.SignalID, dateToCheck.AddDays(-1), dateToCheck) > Settings.MinimumRecords)
+            var controllerEventLogRepository =
+                ControllerEventLogRepositoryFactory.Create();
+
+            if (controllerEventLogRepository.GetRecordCount(signal.SignalID, dateToCheck.AddDays(-1), dateToCheck) >
+                Settings.MinimumRecords)
             {
                 Console.WriteLine("Signal " + signal.SignalID + " Has Current records");
                 SignalsWithRecords.Add(signal);
@@ -221,16 +149,20 @@ namespace MOE.Common.Business.WatchDog
 
         private void CreateAndSendEmail()
         {
-
             var message = new MailMessage();
-            var db = new SPM();
-            var userStore = new UserStore<SPMUser>(db);
-            var userManager = new UserManager<SPMUser>(userStore);
-            var users = (from u in userManager.Users
-                where u.ReceiveAlerts
-                select u).ToList();
-            foreach (var user in users)
-                message.To.Add(user.Email);
+            var appSettings = ConfigurationManager.AppSettings;
+            for (var i = 0; i < appSettings.Count; i++)
+                message.To.Add(appSettings[i]);
+            //var db = new SPM();
+            //var userStore = new UserStore<SPMUser>(db);
+            //var userManager = new UserManager<SPMUser>(userStore);
+            //var users = (from u in userManager.Users
+            //    where u.ReceiveAlerts
+            //    select u).ToList();
+            //foreach (var user in users)
+            //message.To.Add(user);
+            //foreach (var user in users)
+            //    message.To.Add(user.Email);
             message.To.Add(Settings.DefaultEmailAddress);
             message.Subject = "ATSPM Alerts for " + ScanDate.ToShortDateString();
             message.From = new MailAddress(Settings.FromEmailAddress);
@@ -239,7 +171,6 @@ namespace MOE.Common.Business.WatchDog
             var maxErrors = SortAndAddToMessage(MaxOutErrors);
             var countErrors = SortAndAddToMessage(LowHitCountErrors);
             var stuckpedErrors = SortAndAddToMessage(StuckPedErrors);
-            var ftpErrors = SortAndAddToMessage(CannotFtpFiles);
             if (MissingRecords.Count > 0 && missingErrors != "")
             {
                 message.Body += " \n --The following signals had too few records in the database on ";
@@ -320,68 +251,54 @@ namespace MOE.Common.Business.WatchDog
                                 Settings.ScanDayStartHour + ":00 and " +
                                 Settings.ScanDayEndHour + ":00: \n";
             }
-            if (CannotFtpFiles.Count > 0 && ftpErrors != "")
-            {
-                message.Body += " \n --The following signals have had FTP problems.  central was not able to delete the file on the controller between  " +
-                                Settings.ScanDayStartHour + ":00 and " +
-                                Settings.ScanDayEndHour + ":00: \n";
-                message.Body += ftpErrors;
-            }
-            else
-            {
-                message.Body += "\n --No new controllers had problems FTPing files from the controller between " +
-                                Settings.ScanDayStartHour + ":00 and " +
-                                Settings.ScanDayEndHour + ":00: \n";
-            }
+
             SendMessage(message);
         }
 
-        private void 
-            CheckForLowDetectorHits(Models.Signal signal)
+        private void CheckForLowDetectorHits(Models.Signal signal)
         {
             var detectors = signal.GetDetectorsForSignalThatSupportAMetric(6);
+
             //Parallel.ForEach(detectors, options, detector =>
             foreach (var detector in detectors)
                 try
                 {
-                    if(detector.DetectionTypes != null && detector.DetectionTypes.Any(d => d.DetectionTypeID == 2))
+                    var channel = detector.DetChannel;
+                    var direction = detector.Approach.DirectionType.Description;
+                    var start = new DateTime();
+                    var end = new DateTime();
+                    if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
                     {
-                        var channel = detector.DetChannel;
-                        var direction = detector.Approach.DirectionType.Description;
-                        var start = new DateTime();
-                        var end = new DateTime();
-                        if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
-                        {
-                            start = ScanDate.AddDays(-3).Date.AddHours(Settings.PreviousDayPMPeakStart);
-                            end = ScanDate.AddDays(-3).Date.AddHours(Settings.PreviousDayPMPeakEnd);
-                        }
-                        else
-                        {
-                            start = ScanDate.AddDays(-1).Date.AddHours(Settings.PreviousDayPMPeakStart);
-                            end = ScanDate.AddDays(-1).Date.AddHours(Settings.PreviousDayPMPeakEnd);
-                        }
-
-                        var currentVolume = detector.GetVolumeForPeriod(start, end);
-                        //Compare collected hits to low hit threshold, 
-                        if (currentVolume < Convert.ToInt32(Settings.LowHitThreshold))
-                        {
-                            var error = new SPMWatchDogErrorEvent();
-                            error.SignalID = signal.SignalID;
-                            error.DetectorID = detector.DetectorID;
-                            error.Phase = detector.Approach.ProtectedPhaseNumber;
-                            error.TimeStamp = ScanDate;
-                            error.Direction = detector.Approach.DirectionType.Description;
-                            error.Message = "CH: " + channel.ToString() + " - Count: " + currentVolume.ToString();
-                            error.ErrorCode = 2;
-                            if (!LowHitCountErrors.Contains(error))
-                                LowHitCountErrors.Add(error);
-                        }
+                        start = ScanDate.AddDays(-3).Date.AddHours(Settings.PreviousDayPMPeakStart);
+                        end = ScanDate.AddDays(-3).Date.AddHours(Settings.PreviousDayPMPeakEnd);
+                    }
+                    else
+                    {
+                        start = ScanDate.AddDays(-1).Date.AddHours(Settings.PreviousDayPMPeakStart);
+                        end = ScanDate.AddDays(-1).Date.AddHours(Settings.PreviousDayPMPeakEnd);
+                    }
+                    var currentVolume = detector.GetVolumeForPeriod(start, end);
+                    //Compare collected hits to low hit threshold, 
+                    if (currentVolume < Convert.ToInt32(Settings.LowHitThreshold))
+                    {
+                        var error = new SPMWatchDogErrorEvent();
+                        error.SignalID = signal.SignalID;
+                        error.DetectorID = detector.DetectorID;
+                        error.Phase = detector.Approach.ProtectedPhaseNumber;
+                        error.TimeStamp = ScanDate;
+                        error.Direction = detector.Approach.DirectionType.Description;
+                        error.Message = "CH: " + channel.ToString() + " - Count: " + currentVolume.ToString();
+                        error.ErrorCode = 2;
+                        if (!LowHitCountErrors.Contains(error))
+                            LowHitCountErrors.Add(error);
                     }
                 }
+
                 catch (Exception ex)
                 {
                     var er =
                         ApplicationEventRepositoryFactory.Create();
+
                     er.QuickAdd("SPMWatchDog", "Program", "CheckForLowDetectorHits",
                         ApplicationEvent.SeverityLevels.Medium, detector.DetectorID + "-" + ex.Message);
                 }
@@ -439,9 +356,10 @@ namespace MOE.Common.Business.WatchDog
                 error.Direction = phase.Direction ?? "";
                 error.Message = "Max Outs " + Math.Round(phase.PercentMaxOuts * 100, 1) + "%";
                 error.ErrorCode = 5;
+
                 if (MaxOutErrors.Count == 0 || !MaxOutErrors.Contains(error))
                 {
-                    Console.WriteLine("Signal " + signal.SignalID + " Has MaxOut Errors");
+                    Console.WriteLine("Signal " + signal.SignalID + "Has MaxOut Errors");
                     MaxOutErrors.Add(error);
                 }
             }
@@ -470,27 +388,30 @@ namespace MOE.Common.Business.WatchDog
 
         private string SortAndAddToMessage(ConcurrentBag<SPMWatchDogErrorEvent> errors)
         {
-            var watchDogErrorEventRepository = SPMWatchDogErrorEventRepositoryFactory.Create();
-            var SortedErrors = errors.OrderBy(x => x.SignalID).ThenBy(x => x.Phase).ToList();
+            var watchDogErrorEventRepository =
+                SPMWatchDogErrorEventRepositoryFactory.Create();
+            var SortedErrors =
+                errors.OrderBy(x => x.SignalID).ThenBy(x => x.Phase).ToList();
+
             var ErrorMessage = "";
+
             foreach (var error in SortedErrors)
             {
-                if (!Settings.EmailAllErrors)
+                //List<SPMWatchDogErrorEvent> RecordsFromTheDayBefore = new List<SPMWatchDogErrorEvent>();
+                //compare to error log to see if this was failing yesterday
+                if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
+                    RecordsFromTheDayBefore =
+                        watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-3),
+                            ScanDate.AddDays(-2).AddMinutes(-1));
+                else
+                    RecordsFromTheDayBefore =
+                        watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-1),
+                            ScanDate.AddMinutes(-1));
+
+                if (FindMatchingErrorInErrorTable(error) == false)
                 {
-                    //List<SPMWatchDogErrorEvent> RecordsFromTheDayBefore = new List<SPMWatchDogErrorEvent>();
-                    //compare to error log to see if this was failing yesterday
-                    if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
-                        RecordsFromTheDayBefore =
-                            watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-3),
-                                ScanDate.AddDays(-2).AddMinutes(-1));
-                    else
-                        RecordsFromTheDayBefore =
-                            watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-1),
-                                ScanDate.AddMinutes(-1));
-                }
-                if (Settings.EmailAllErrors || FindMatchingErrorInErrorTable(error) == false)
-                {
-                    var signalRepository = SignalsRepositoryFactory.Create();
+                    var signalRepository =
+                        SignalsRepositoryFactory.Create();
                     var signal = signalRepository.GetLatestVersionOfSignalBySignalID(error.SignalID);
                     //   Add to email if it was not failing yesterday
                     ErrorMessage += error.SignalID;
@@ -505,11 +426,12 @@ namespace MOE.Common.Business.WatchDog
                     }
                     ErrorMessage += " (" + error.Message + ")";
                     ErrorMessage += "\n";
+                    //}
                 }
             }
             try
             {
-                watchDogErrorEventRepository.AddListAndSaveToDatabase(errors.ToList());
+                watchDogErrorEventRepository.AddList(errors.ToList());
             }
             catch (DbEntityValidationException ex)
             {
@@ -518,6 +440,7 @@ namespace MOE.Common.Business.WatchDog
                     Console.WriteLine("Property: " + validationError.PropertyName + " Error: " +
                                       validationError.ErrorMessage);
             }
+
             return ErrorMessage;
         }
 
@@ -525,11 +448,14 @@ namespace MOE.Common.Business.WatchDog
         {
             var smh = SignalsRepositoryFactory.Create();
             var sig = smh.GetLatestVersionOfSignalBySignalID(SignalID);
+
             var dets = sig.GetDetectorsForSignalByPhaseNumber(Phase);
+
             if (dets.Count() > 0)
                 return dets.FirstOrDefault().DetChannel;
             return 0;
         }
+
 
         private bool FindMatchingErrorInErrorTable(SPMWatchDogErrorEvent error)
         {
@@ -539,6 +465,7 @@ namespace MOE.Common.Business.WatchDog
                       && error.ErrorCode == r.ErrorCode
                       && error.Phase == r.Phase
                 select r).FirstOrDefault();
+
             if (MatchingRecord != null)
                 return true;
             return false;
@@ -549,6 +476,7 @@ namespace MOE.Common.Business.WatchDog
             try
             {
                 var gd = Signal.GetDetectorForSignalByChannel(Channel);
+
                 if (gd != null)
                     return gd.DetectorID;
                 return "0";

@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 
 namespace MOE.Common.Models
 {
-    [Table("Region")]
+    [Table("Regions")]
     [DataContract]
     public class Region
     {

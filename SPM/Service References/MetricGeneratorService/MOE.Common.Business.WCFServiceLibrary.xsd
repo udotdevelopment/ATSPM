@@ -55,7 +55,7 @@
         <xs:sequence>
           <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="BinSizeList" nillable="true" type="q3:ArrayOfint" />
           <xs:element minOccurs="0" name="SelectedBinSize" type="xs:int" />
-          <xs:element minOccurs="0" name="ShowPlanStatistics" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowPlansStatistics" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -83,7 +83,7 @@
           <xs:element minOccurs="0" name="SelectedConsecutiveCount" type="xs:int" />
           <xs:element minOccurs="0" name="ShowArrivalsOnGreen" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowPedActivity" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowPlanStripes" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowPlansStripes" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -141,7 +141,7 @@
           <xs:element minOccurs="0" name="Show15Percentile" type="xs:boolean" />
           <xs:element minOccurs="0" name="Show85Percentile" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowAverageSpeed" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowPlanStatistics" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowPlansStatistics" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowPostedSpeed" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
@@ -171,7 +171,7 @@
           <xs:element minOccurs="0" name="ShowPercentGapOuts" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowPercentMaxOutForceOff" type="xs:boolean" />
           <xs:element minOccurs="0" name="ShowPercentSkip" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ShowPlanStripes" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ShowPlansStripes" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -213,7 +213,7 @@
           <xs:element minOccurs="0" name="SelectedAggregatedDataType" nillable="true" type="tns:AggregatedDataType" />
           <xs:element minOccurs="0" name="SelectedAggregationType" type="tns:AggregationType" />
           <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/System.Web.UI.DataVisualization.Charting" minOccurs="0" name="SelectedChartType" type="q11:SeriesChartType" />
-          <xs:element minOccurs="0" name="SelectedDimension" nillable="true" type="tns:Dimension" />
+          <xs:element minOccurs="0" name="SelectedDimension" type="tns:Dimension" />
           <xs:element minOccurs="0" name="SelectedSeries" type="tns:SeriesType" />
           <xs:element minOccurs="0" name="SelectedXAxisType" type="tns:XAxisType" />
           <xs:element minOccurs="0" name="SeriesWidth" type="xs:int" />
@@ -384,12 +384,4 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="PhaseAggregationMetricOptions" nillable="true" type="tns:PhaseAggregationMetricOptions" />
-  <xs:complexType name="PhasePedAggregationOptions">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:PhaseAggregationMetricOptions">
-        <xs:sequence />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="PhasePedAggregationOptions" nillable="true" type="tns:PhasePedAggregationOptions" />
 </xs:schema>

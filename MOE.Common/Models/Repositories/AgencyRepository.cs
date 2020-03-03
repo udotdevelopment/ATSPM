@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace MOE.Common.Models.Repositories
 {
-    public class AgencyRepository : IGenericRepository<Agency>
+    public class AgencyRepository : IGenericRepository<ATSPM_Agency>
     {
         private SPM db = new SPM();
 
@@ -16,33 +16,33 @@ namespace MOE.Common.Models.Repositories
             db = context;
         }
 
-        public IEnumerable<Agency> GetAll()
+        public IEnumerable<ATSPM_Agency> GetAll()
         {
-            return db.Agencies.ToList();
+            return db.ATSPM_Agencies.ToList();
         }
 
-        public Agency GetByID(int id)
+        public ATSPM_Agency GetByID(int id)
         {
-            return db.Agencies.Find(id);
+            return db.ATSPM_Agencies.Find(id);
         }
 
-        public void Delete(Agency entity)
+        public void Delete(ATSPM_Agency entity)
         {
-            db.Agencies.Remove(db.Agencies.Find(entity.AgencyID));
+            db.ATSPM_Agencies.Remove(db.ATSPM_Agencies.Find(entity.AgencyID));
         }
 
-        public void Update(Agency entity)
+        public void Update(ATSPM_Agency entity)
         {
-            var agencyInDatabase = db.Agencies.Find(entity.AgencyID);
+            var agencyInDatabase = db.ATSPM_Agencies.Find(entity.AgencyID);
             if (agencyInDatabase == null)
                 Add(entity);
             else
                 db.Entry(agencyInDatabase).CurrentValues.SetValues(entity);
         }
 
-        public void Add(Agency entity)
+        public void Add(ATSPM_Agency entity)
         {
-            db.Agencies.Add(entity);
+            db.ATSPM_Agencies.Add(entity);
         }
 
         public void Save()

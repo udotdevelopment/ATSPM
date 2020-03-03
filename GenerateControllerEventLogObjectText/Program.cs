@@ -47,10 +47,10 @@ namespace GenerateControllerEventLogObjectText
                 {
                     controllerEventLogs.Add(new Controller_Event_Log
                     {
-                        SignalID = reader.GetString(0),
+                        SignalID = Convert.ToInt16(reader.GetString(0)),
                         Timestamp = reader.GetDateTime(1),
-                        EventCode = reader.GetInt32(2),
-                        EventParam = reader.GetInt32(3)
+                        EventCode = reader.GetInt16(2),
+                        EventParam = reader.GetInt16(3)
                     });
                 }
             }

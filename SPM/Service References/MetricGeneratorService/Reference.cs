@@ -45,7 +45,6 @@ namespace SPM.MetricGeneratorService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.SignalEventCountAggregationOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.PhaseAggregationMetricOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.PhaseTerminationAggregationOptions))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.PhasePedAggregationOptions))]
         string[] CreateMetric(MOE.Common.Business.WCFServiceLibrary.MetricOptions options);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMetricGenerator/CreateMetric", ReplyAction="http://tempuri.org/IMetricGenerator/CreateMetricResponse")]
@@ -81,7 +80,6 @@ namespace SPM.MetricGeneratorService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.SignalEventCountAggregationOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.PhaseAggregationMetricOptions))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.PhaseTerminationAggregationOptions))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MOE.Common.Business.WCFServiceLibrary.PhasePedAggregationOptions))]
         System.Tuple<string, string>[] GetChartAndXmlFileLocations(MOE.Common.Business.WCFServiceLibrary.MetricOptions options);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMetricGenerator/GetChartAndXmlFileLocations", ReplyAction="http://tempuri.org/IMetricGenerator/GetChartAndXmlFileLocationsResponse")]

@@ -39,7 +39,7 @@ namespace SPM.Controllers
         //}
 
         // GET: DetectorComments/Create
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult Create(int id)
         {
             MOE.Common.Models.DetectorComment dc = new DetectorComment();
@@ -52,7 +52,7 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult Create([Bind(Include = "CommentID, ID,TimeStamp,CommentText")] DetectorComment detectorComment)
         {
             if (ModelState.IsValid)
@@ -66,7 +66,7 @@ namespace SPM.Controllers
         }
 
         //// GET: DetectorComments/Edit/5
-        //[Authorize(Roles = "Admin")]
+        // [AllowAnonymous]
         //public ActionResult Edit(int? id)
         //{
         //    if (id == null)
@@ -86,7 +86,7 @@ namespace SPM.Controllers
         //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Admin")]
+        // [AllowAnonymous]
         //public ActionResult Edit([Bind(Include = "CommentID,ID,TimeStamp,CommentText")] DetectorComment detectorComment)
         //{
         //    if (ModelState.IsValid)
@@ -98,7 +98,7 @@ namespace SPM.Controllers
         //}
 
         //// GET: DetectorComments/Delete/5
-        //[Authorize(Roles = "Admin")]
+        // [AllowAnonymous]
         //public ActionResult Delete(int? id)
         //{
         //    if (id == null)
@@ -116,7 +116,7 @@ namespace SPM.Controllers
         //// POST: DetectorComments/Delete/5
         //[HttpPost, ActionName("Delete")]
         //[ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Admin")]
+        // [AllowAnonymous]
         //public ActionResult DeleteConfirmed(int id)
         //{
         //    DetectorComment detectorComment = detectorCommentRepository.GetDetectorCommentByDetectorCommentID(id);

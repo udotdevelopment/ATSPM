@@ -17,25 +17,23 @@ namespace MOE.Common.Business.PEDDelay
         protected string _SignalID;
         protected DateTime _StartDate;
 
-        public PedDelaySignal(Signal signal, DateTime startDate,
+        public PedDelaySignal(string signalID, DateTime startDate,
             DateTime endDate)
         {
-            _SignalID = signal.SignalID;
+            _SignalID = signalID;
             _StartDate = startDate;
             _EndDate = endDate;
             try
             {
-                _Plans = new PlansBase(_SignalID, startDate, endDate);
-                var pedPhaseNumbers = ControllerEventLogs.GetPedPhases(_SignalID, startDate, endDate);
+                _Plans = new PlansBase(signalID, startDate, endDate);
+                var pedPhaseNumbers = GetPedPhases();
                 ConcurrentBag<PedPhase> pedPhases = new ConcurrentBag<PedPhase>();
-                //Parallel.ForEach(pedPhaseNumbers, currentPhase =>
-                foreach (int currentPhase in pedPhaseNumbers)
+                Parallel.ForEach(pedPhaseNumbers, currentPhase =>
+                //foreach(int currentPhase in pedPhaseNumbers)
                 {
-                    var pedPhase = new PedPhase(currentPhase, signal, startDate, endDate, _Plans);
+                    var pedPhase = new PedPhase(currentPhase, signalID, startDate, endDate, _Plans);
                     pedPhases.Add(pedPhase);
-                    //});
-                }
-
+                });
                 _PedPhases = pedPhases.OrderBy(x => x.PhaseNumber).ToList();
             }
             catch (Exception e)
@@ -45,6 +43,26 @@ namespace MOE.Common.Business.PEDDelay
                     this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
                 
             }
+        }
+
+        private List<int> GetPedPhases()
+        {
+            var pedEventCodes = new List<int> { 21, 45, 90, 23 };
+            var CELRepo = MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
+            var events = CELRepo.GetSignalEventsByEventCodes(_SignalID, _StartDate, _EndDate, pedEventCodes);
+
+            var distinctEvents = (from i in events
+                                  select i.EventParam).Distinct();
+
+
+            List<int> converted = new List<int>();
+            foreach (var i in distinctEvents)
+            {
+                var c = Convert.ToInt32(i);
+                converted.Add(c);
+            }
+
+            return converted;
         }
 
         public string SignalID => _SignalID;

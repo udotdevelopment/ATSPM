@@ -11,14 +11,24 @@ namespace MOE.Common.Models
         public SPM()
             : base("name=SPM")
         {
-            Database.SetInitializer<SPM>(new CreateDatabaseIfNotExists<SPM>());
-
-            //Database.CommandTimeout = 1500;
-            Database.CommandTimeout = 900;
+            //InitializeDatabase();
+            Database.SetInitializer(new CreateDatabaseIfNotExists<SPM>());
+            Database.SetInitializer<SPM>(null);
+            
         }
+
+        //protected virtual void InitializeDatabase()
+        //{
+        //    if (!Database.Exists())
+        //    {
+        //        Database.Initialize(true);
+        //        Models.Custom.Seeder.Seed(this);
+        //    }
+        //}
 
 
         public DbSet<SPMRole> IdentityRoles { get; set; }
+
         public virtual DbSet<ApplicationEvent> ApplicationEvents { get; set; }
         public virtual DbSet<SPMWatchDogErrorEvent> SPMWatchDogErrorEvents { get; set; }
         public virtual DbSet<MetricComment> MetricComments { get; set; }
@@ -31,7 +41,7 @@ namespace MOE.Common.Models
         public virtual DbSet<MetricsFilterType> MetricsFilterTypes { get; set; }
         public virtual DbSet<MetricType> MetricTypes { get; set; }
         public virtual DbSet<Controller_Event_Log> Controller_Event_Log { get; set; }
-        public virtual DbSet<Agency> Agencies { get; set; }
+        public virtual DbSet<ATSPM_Agency> ATSPM_Agencies { get; set; }
         public virtual DbSet<Detector> Detectors { get; set; }
         public virtual DbSet<Menu> Menus { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
@@ -44,7 +54,7 @@ namespace MOE.Common.Models
         public virtual DbSet<ControllerType> ControllerType { get; set; }
         public virtual DbSet<Speed_Events> Speed_Events { get; set; }
         public virtual DbSet<FAQ> FAQs { get; set; }
-        public virtual DbSet<ExternalLink> ExternalLinks { get; set; }
+        public virtual DbSet<ATSPM_ExternalLink> ATSPM_ExternalLinks { get; set; }
         public virtual DbSet<Application> Applications { get; set; }
         public virtual DbSet<ApplicationSettings> ApplicationSettings { get; set; }
         public virtual DbSet<WatchDogApplicationSettings> WatchdogApplicationSettings { get; set; }
@@ -86,8 +96,8 @@ public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedAc
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
-            //modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            Database.SetInitializer<SPM>(null);
+           
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Signal>()

@@ -11,7 +11,7 @@ using SPM.Filters;
 namespace SPM.Controllers
 {
 
-    [Authorize(Roles = "Technician, Admin, Configuration")]
+     [AllowAnonymous]
     public class SignalsController : Controller
     {
         private MOE.Common.Models.Repositories.IControllerTypeRepository _controllerTypeRepository; 
@@ -85,7 +85,7 @@ namespace SPM.Controllers
             return View(wctv);
         }
 
-        [Authorize(Roles = "Admin, Configuration")]
+         [AllowAnonymous]
         public int AddNewVersion(string id)
         {
             var existingSignal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
@@ -136,7 +136,7 @@ namespace SPM.Controllers
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin, Configuration")]
+         [AllowAnonymous]
         public ActionResult AddApproach(string versionId)
         {
             int id = Convert.ToInt32(versionId);
@@ -149,7 +149,7 @@ namespace SPM.Controllers
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin, Configuration")]
+         [AllowAnonymous]
         public ActionResult CopyApproach(int versionId, int approachID)
         {
             var signal = _signalsRepository.GetSignalVersionByVersionId(versionId);
@@ -194,7 +194,7 @@ namespace SPM.Controllers
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin, Configuration")]
+         [AllowAnonymous]
         public ActionResult AddDetector(int versionId, int approachID, string approachIndex)
         {
             Signal signal = _signalsRepository.GetSignalVersionByVersionId(versionId);
@@ -210,7 +210,7 @@ namespace SPM.Controllers
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin, Configuration")]
+         [AllowAnonymous]
         public ActionResult CopyDetector(int ID, int versionId, int approachID, string approachIndex)
         {
             Detector newDetector = Detector.CopyDetector(ID, true); //need to increase DetChannel if not copying the whole signal.
@@ -228,7 +228,7 @@ namespace SPM.Controllers
         }
 
 
-        [Authorize(Roles = "Admin, Configuration")]
+         [AllowAnonymous]
         private Detector CreateNewDetector(Approach approach, string approachIndex, string signalID)
         {
             Detector detector = new Detector();
@@ -248,7 +248,7 @@ namespace SPM.Controllers
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin, Configuration")]
+         [AllowAnonymous]
         public ActionResult Create(string id)
         {
             var existingSignal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
@@ -275,7 +275,7 @@ namespace SPM.Controllers
         }
 
 
-        [Authorize(Roles = "Admin, Configuration")]
+         [AllowAnonymous]
         private Signal CreateNewSignal(string id)
         {
             Signal signal = new Signal();
@@ -285,7 +285,7 @@ namespace SPM.Controllers
             signal.IPAddress = "10.10.10.10";
             signal.Latitude = "0";
             signal.Longitude = "0";
-            signal.RegionID = 2;
+            signal.RegionID = _regionRepository.GetAllRegions().FirstOrDefault().ID;
             signal.ControllerTypeID = 1;
             signal.Start = DateTime.Today;          
             signal.Note = "Create New";
@@ -298,7 +298,7 @@ namespace SPM.Controllers
         // POST: Signals/Copy
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin, Configuration")]
+         [AllowAnonymous]
         public ActionResult Copy(string id, string newId)
         {           
             Signal newSignal = new Signal();           
@@ -332,7 +332,7 @@ namespace SPM.Controllers
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin, Configuration")]
+         [AllowAnonymous]
         public ActionResult CopyVersion(Signal signal)
         {
 
@@ -453,7 +453,7 @@ namespace SPM.Controllers
 
 
         // GET: Signals/Edit/5
-        [Authorize(Roles = "Admin, Configuration, Technician")]
+        [AllowAnonymous]
         public ActionResult EditVersion(string Id)
         {
             if (Id == null)
@@ -550,7 +550,7 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Configuration")]
+         [AllowAnonymous]
         public ActionResult Edit(Signal signal)
         {
             try
@@ -623,7 +623,7 @@ namespace SPM.Controllers
         }
 
         // GET: Signals/Delete/5
-        [Authorize(Roles = "Admin, Configuration")]
+         [AllowAnonymous]
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -650,7 +650,7 @@ namespace SPM.Controllers
 
         [HttpPost, ActionName("DeleteVersion")]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin, Configuration")]
+         [AllowAnonymous]
         public ActionResult DeleteVersion(string versionId)
         {
             int _vid = Convert.ToInt32(versionId);

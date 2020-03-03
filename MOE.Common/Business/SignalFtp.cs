@@ -26,7 +26,7 @@ namespace MOE.Common.Business
     {
         private Models.Signal Signal { get; set; }
         private SignalFtpOptions SignalFtpOptions { get; set; }
-        private string FileToBeDeleted { get; set; }
+
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType()) return false;
@@ -76,14 +76,13 @@ namespace MOE.Common.Business
                     char[] fileExtension = new[] {'.', 'd', 'a', 't'};
                     string tempFileName = localFileName.TrimEnd(fileExtension);
                     localFileName = tempFileName + "-" + Convert.ToInt32(DateTime.Now.TimeOfDay.TotalSeconds) + ".dat";
-                    FileToBeDeleted = localFileName;
                 }
                 if(!ftpClient.DownloadFile(SignalFtpOptions.LocalDirectory + Signal.SignalID+ @"\" + localFileName, ".."+Signal.ControllerType.FTPDirectory +@"/" + ftpListItem.Name))
                 {
                     Console.WriteLine(@"Unable to download file "+ Signal.ControllerType.FTPDirectory + @"/" + ftpListItem.Name);
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd("FTPFromAllControllers",
-                        "MOE.Common.Business.SignalFTP", "TransferFile", ApplicationEvent.SeverityLevels.High, Signal.ControllerType.FTPDirectory + " @ " + Signal.IPAddress + " - " + "Unable to download file " + Signal.ControllerType.FTPDirectory + @"/" + ftpListItem.Name);
+                        "MOE.Common.Business.Signal", "TransferFile", ApplicationEvent.SeverityLevels.High, Signal.ControllerType.FTPDirectory + " @ " + Signal.IPAddress + " - " + @"Unable to download file " + Signal.ControllerType.FTPDirectory + @"/" + ftpListItem.Name);
                     return false;
                 }
                 return true;
@@ -93,8 +92,7 @@ namespace MOE.Common.Business
                 Console.WriteLine(e);
                 var errorLog = ApplicationEventRepositoryFactory.Create();
                 errorLog.QuickAdd("FTPFromAllControllers",
-                    "MOE.Common.Business.SignalFTP", "TransferFile", ApplicationEvent.SeverityLevels.High, "SignalID " + Signal.SignalID + " > " + Signal.ControllerType.FTPDirectory + @"/" + ftpListItem.Name  + " File can't be downloaded. Error Mesage " + e.Message);
-                File.Delete(SignalFtpOptions.LocalDirectory + Signal.SignalID + @"\" + FileToBeDeleted);
+                    "MOE.Common.Business.Signal", e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, Signal.ControllerType.FTPDirectory + " @ " + Signal.IPAddress + " - " + e.Message);
                 return false;
             }
         }
@@ -115,6 +113,13 @@ namespace MOE.Common.Business
                 try
                 {
                     ftpClient.Connect();
+                }
+                //If there is an error, Print the error and go on to the next file.
+                catch (FtpException ex)
+                {
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "GetCurrentRecords_ConnectToController", Models.ApplicationEvent.SeverityLevels.Medium, Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
+                    Console.WriteLine(Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
+                    return;
                 }
                 catch (AggregateException)
                 {
@@ -158,7 +163,7 @@ namespace MOE.Common.Business
                             {
                                 localDate = localDate.AddMinutes(120);
                             }
-                            foreach (var ftpFile in remoteFiles.Where(x => x.Size > 0))
+                            foreach (var ftpFile in remoteFiles)
                             {
                                 if(ftpFile.Type == FtpFileSystemObjectType.File && ftpFile.Name.Contains(filePattern) && ftpFile.Created < localDate)
                                 {
@@ -258,6 +263,11 @@ namespace MOE.Common.Business
                 try
                 {
                     ftpClient.DeleteFile(Signal.ControllerType.FTPDirectory +"/" + ftpFile);
+                }
+                catch (FtpException ex)
+                {
+                    errorRepository.QuickAdd("FTPFromAllcontrollers", "Signal", "DeleteFilesFromFTPServer", Models.ApplicationEvent.SeverityLevels.Medium, Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
+                    Console.WriteLine(Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
                 }
                 catch (AggregateException)
                 {
@@ -574,7 +584,7 @@ namespace MOE.Common.Business
         }
 
 
-        public static bool BulktoDb(DataTable elTable, BulkCopyOptions options, string tableName)
+        public static bool BulktoDb(DataTable elTable, BulkCopyOptions options)
         {
             MOE.Common.Models.Repositories.IApplicationEventRepository errorRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
             using (options.Connection)
@@ -619,7 +629,8 @@ namespace MOE.Common.Business
                                 OnSqlRowsCopied;
                             bulkCopy.NotifyAfter = Settings.Default.BulkCopyBatchSize;
                         }
-                        bulkCopy.DestinationTableName = tableName;
+                        var tablename = Settings.Default.EventLogTableName;
+                        bulkCopy.DestinationTableName = tablename;
 
                         if (elTable.Rows.Count > 0)
                         {
@@ -689,7 +700,7 @@ namespace MOE.Common.Business
             Console.WriteLine("Copied {0} so far...", e.RowsCopied);
         }
 
-        public static bool SplitBulkToDb(DataTable elTable, BulkCopyOptions options, string tableName)
+        public static bool SplitBulkToDb(DataTable elTable, BulkCopyOptions options)
         {
             if (elTable.Rows.Count > 0)
             {
@@ -715,7 +726,7 @@ namespace MOE.Common.Business
                 {
                     topDt.Merge(dtTop);
                     if (dtTop.Rows.Count > 0)
-                        if (BulktoDb(topDt, options, tableName))
+                        if (BulktoDb(topDt, options))
                         {
                         }
                         else
@@ -745,7 +756,7 @@ namespace MOE.Common.Business
                     bottomDt.Merge(dtBottom);
 
                     if (bottomDt.Rows.Count > 0)
-                        if (BulktoDb(bottomDt, options, tableName))
+                        if (BulktoDb(bottomDt, options))
                         {
                         }
                         else
@@ -775,10 +786,10 @@ namespace MOE.Common.Business
                     try
                     {
                         var r = new Controller_Event_Log();
-                        r.SignalID = row[0].ToString();
+                        r.SignalID = Convert.ToInt16(row[0]);
                         r.Timestamp = Convert.ToDateTime(row[1]);
-                        r.EventCode = Convert.ToInt32(row[2]);
-                        r.EventParam = Convert.ToInt32(row[3]);
+                        r.EventCode = Convert.ToInt16(row[2]);
+                        r.EventParam = Convert.ToInt16(row[3]);
 
 
                         if (Settings.Default.WriteToConsole)

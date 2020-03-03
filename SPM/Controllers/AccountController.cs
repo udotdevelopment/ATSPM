@@ -24,13 +24,13 @@ namespace SPM.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult RoleCreate()
         {
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult RoleCreate(string roleName)
@@ -48,7 +48,7 @@ namespace SPM.Controllers
             return RedirectToAction("RoleIndex", "Account");
         }
 
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult RoleIndex()
         {
             List<string> roles;
@@ -63,7 +63,7 @@ namespace SPM.Controllers
             return View(roles.ToList());
         }
 
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult RoleDelete(string roleName)
         {
             using (var context = new MOE.Common.Models.SPM())
@@ -80,7 +80,7 @@ namespace SPM.Controllers
             return RedirectToAction("RoleIndex", "Account");
         }
 
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult RoleAddToUser()
         {
             List<string> roles;
@@ -103,7 +103,7 @@ namespace SPM.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult RoleAddToUser(string roleName, string userName)
@@ -148,7 +148,7 @@ namespace SPM.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult GetRoles(string userName)
@@ -189,7 +189,7 @@ namespace SPM.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteRoleForUser(string userName, string roleName)
         {

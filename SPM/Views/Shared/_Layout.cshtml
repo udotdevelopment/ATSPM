@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Automated Signal Performance Metrics show real-time and historical functionality at signalized intersections. This allows traffic engineers to directly measure what previously could only be estimated and modeled.">
-    <title>@ViewBag.Title - Automated Traffic Signal Performance Metrics</title>
+    <meta name="description" content="Automated Signal Peformance Metrics show real-time and historical functionality at signalized intersections. This allows traffic engineers to directly measure what previously could only be estimated and modeled.">
+    @*@ViewBag.Title = Automated Traffic Signal Performance Metrics*@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
@@ -29,7 +29,7 @@
         }); var f = d.getElementsByTagName(s)[0],
             j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
                 'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GoogleAnalyticsContainerId');</script>
+        })(window, document, 'script', 'dataLayer', 'GTM-54S53KK');</script>
     <!-- End Google Tag Manager -->
     <script src='https://www.google.com/recaptcha/api.js'></script>
 
@@ -38,62 +38,65 @@
 <body>
     <!-- Google Tag Manager (noscript) -->
     <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GoogleAnalyticsContainerId"
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-54S53KK"
                 height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
     <div class="row">
-        <div class="col-md-9 col-sm-12">
+        <div class="col-md-6 col-sm-6">
             <img class="img-responsive BrandImage" src="~/Images/ATSPM Logo-01.png" title="Automated Traffic Signal Performance Measures" alt="Automated Traffic Signal Performance Measures icon" />
-        </div><div class="col-md-3 col-sm-12">
-                  <a href="http://udot.utah.gov" class="udotDiv navbar-brand pull-right" title="Utah Department of Transportation">
-                      <img src="~/Images/NewUDOTLogo.png" alt="UDOT Logo" />
+        </div>
+        <div class="col-md-6 col-sm-6">
+                  <a href="http://intelight-its.com" class="navbar-brand pull-right" title="Intelight">
+                      <img src="~/Images/Intelight_Logo_Smaller.png" alt="Intelight Logo" />
                   </a>
 </div>
     </div>
     <div>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+        <nav class="navbar navbar-inverse navbar-static-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
                     </button>
-                    <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="navbar-nav mr-auto">
-                            @{Html.RenderAction("_MainMenuPartial", "Menus");}
-                        </ul>
-                        @if (Request.IsAuthenticated)
-                        {
-                            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-                            {
-                                @Html.AntiForgeryToken()
 
-                                <ul class="navbar-nav mr-auto">
-                                    <li class="nav-item">
-                                        @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-                                </ul>
-                            }
-                        }
-                        else
+                </div>
+               @* <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        @{Html.RenderAction("_MainMenuPartial", "Menus");}
+                    </ul>
+                    @if (Request.IsAuthenticated)
+                    {
+                        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
                         {
-                                <form class="form-inline my-2 my-lg-0">
-                                    <ul class="navbar-nav mr-auto">
-                                        <li class="nav-item">@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
-                                        <li class="nav-item">@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-link" })</li>
-                                    </ul>
-                                </form>
-                                @*<ul class="nav navbar-nav navbar-right">
-                                    <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "menuItem" })</li>
-                                    <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "menuItem" })</li>
-                                </ul>*@
-                                }
-                        </div>
+                            @Html.AntiForgeryToken()
+
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "menuItem" })
+                                </li>
+                                <li><a class="menuItem" href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                            </ul>
+                        }
+                    }
+                    else
+                    {
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "menuItem" })</li>
+                            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "menuItem" })</li>
+                        </ul>
+                    }
+                </div>*@
+            </div>
         </nav>
     </div>
     @RenderBody()
             <hr />
             <footer>
-                <p>Automated Traffic Signal Performance Measures Ver 4.2.3</p>
+                <p>Automated Traffic Signal Performance Measures Ver 4.2</p>
             </footer>
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

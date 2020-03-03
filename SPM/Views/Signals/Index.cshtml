@@ -1,19 +1,20 @@
 ﻿@model MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel
-@{
-    ViewBag.Title = "ATSPM Configuration Tool";
-}
+
+
 @Html.AntiForgeryToken()
 <h2>ATSPM Configuration Tool</h2>
+
 <p>
     <a href="javascript:CreateNewSignal()">Create New Signal</a>
 </p>
+
 @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
 <div class="" id="ResultMessage"></div>
 <div id="SignalEdit"></div>
 @section Scripts
     {
-    <script type="text/javascript" src="~/Scripts/Map.js"></script>
-    <script type="text/javascript" src="~/Scripts/AddData.js"></script>
+    @*<script type="text/javascript" src="~/Scripts/Map.js"></script>*@
+    @*<script type="text/javascript" src="~/Scripts/AddData.js"></script>*@
     <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
     <script type="text/javascript" src="~/Scripts/SPMConfigurationTool.js"></script>
     <script type="text/javascript" src="~/Scripts/SignalEdit.js"></script>
@@ -41,6 +42,4 @@
         var urlpathCopyVersion = '@Url.Action("AddNewVersion", "Signals")';
         var urlpathDeleteVersion = '@Url.Action("DeleteVersion", "Signals")';
     </script>
-
-    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
 }

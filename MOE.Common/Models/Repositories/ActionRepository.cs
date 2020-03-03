@@ -28,12 +28,12 @@ namespace MOE.Common.Models.Repositories
 
         public void Delete(Action entity)
         {
-            db.Agencies.Remove(db.Agencies.Find(entity.ActionID));
+            db.ATSPM_Agencies.Remove(db.ATSPM_Agencies.Find(entity.ActionID));
         }
 
         public void Update(Action entity)
         {
-            var agencyInDatabase = db.Agencies.Find(entity.ActionID);
+            var agencyInDatabase = db.ATSPM_Agencies.Find(entity.ActionID);
             if (agencyInDatabase == null)
                 Add(entity);
             else

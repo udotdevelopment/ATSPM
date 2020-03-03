@@ -15,7 +15,7 @@ using SPM.Filters;
 namespace SPM.Controllers
 {
 
-    [Authorize(Roles = "Admin")]
+    [AllowAnonymous]
     public class SPMUsersController : Controller
     {
         // GET: SPMUsers
@@ -121,7 +121,7 @@ namespace SPM.Controllers
             return View(sPMUser);
         }
 
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         public ActionResult RemoveRoleFromUser(string roleName, string userName)
@@ -152,7 +152,7 @@ namespace SPM.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         public ActionResult AddRoleToUser(string roleName, string userName)

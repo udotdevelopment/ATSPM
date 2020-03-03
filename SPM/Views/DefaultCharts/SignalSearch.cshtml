@@ -2,61 +2,57 @@
 
 <script type="text/javascript" src="~/Scripts/AddData.js"></script>
 <script charset="UTF-8" type="text/javascript" src="//www.bing.com/api/maps/mapcontrol?callback=GetMap"></script>
-<div class="card">
-    <div class="card-header">Signal Selection</div>
-    <div class="card-body">
+<div class="panel panel-default">
+    <div class="panel-heading">Signal Selection</div>
+    <div class="panel-body">
         @Html.LabelFor(model => model.SignalID, htmlAttributes: new { id="SignalId-error", @class = "control-label" })
         <div class="input-group-custom">
-            @Html.EditorFor(model => model.SignalID, new { htmlAttributes = new { @onkeypress = "SignalIdPress(event)", id = "SignalID", @class = "form-control  signalID-width", placeholder = "Signal ID" } })
-            @Html.ValidationMessageFor(model => model.SignalID, "", new { id = "SignalID-error", @class = "text-danger" } )
-            <input id="selectButton" aria-labelledby="SignalLocation" type="button" class="btn btn-dark" value="Select" onclick="GetSignalLocation()">
+            @Html.EditorFor(model => model.SignalID, new { htmlAttributes = new {@onkeypress= "SignalIdPress(event)", id = "SignalID", @class = "form-control  signalID-width", placeholder = "Signal ID" } })
+        <input type="button" class="btn btn-default" value="Select" onclick="GetSignalLocation()">
             <label id="SignalLocation">Press Enter to select signal</label>
         </div>@Html.ValidationMessageFor(model => model.SignalID, "", new { id = "SignalId-error", @class = "text-danger" })
         <br />
  
         
-        <div id="accordion" class="col-12">
-            <div class="card">
-                <div class="card-header" role="tab" id="headingOne">
+        <div id="accordion" role="tablist" aria-multiselectable="true" class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <h4 class="panel-title">
                         <a id="SignalHeader" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                             Signal List
                         </a>
+                    </h4>
                 </div>
-                <div id="collapseOne" class="collapse ControlHeader" data-parent="#accordion">
-                    <div class="card-body" id="SignalsPlaceHolder">
+                <div id="collapseOne" class="panel-collapse collapse ControlHeader" role="tabpanel" aria-labelledby="headingOne">
+                    <div id="SignalsPlaceHolder">
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-header" role="tab" id="headingTwo">
-                        <a id="collapseTwoLink"  data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            @*<div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="@*headingTwo">
+                    <h4 class="panel-title">
+                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                             Signal Map
                         </a>
+                    </h4>
                 </div>
-                <div id="collapseTwo" class="collapse show" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="control-label" for="Regions" id="Regions-error">Region</label>
-                                @Html.DropDownListFor(model => model.SelectedRegionID,
+                <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                    <div class="col-md-6">
+                        <label class="control-label" for="Regions" id="Regions-error">Region</label>
+                        @Html.DropDownListFor(model => model.SelectedRegionID,
                                     new SelectList(Model.Regions, "ID", "Description"),
-                                    "--Select Region--", new {@id = "Regions", @class = "form-control", @onchange = "RegionChange(this)"})
-                                @Html.ValidationMessageFor(model => model.SelectedRegionID, "", new { id = "SelectedRegionID-error", @class = "text-danger" })
-                            </div>
-                            <div class="col-md-6">
-                                <label class="control-label" for="MetricTypes">Metric Type</label>
-                                @Html.DropDownList("MetricTypes", Model.MapMetricsList, "--Select a Metric--", new { @id = "MetricTypes", @class = "form-control", @onchange = "ReportTypeChange()" })
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="Flexible-container col-md-12">
-                                <div id="mapDiv" class="MapDiv"></div>
-                            </div>
-                        </div>
-                        </div>
+                                                      "--Select Region--", new { @id = "Regions", @class = "form-control", @onchange = "RegionChange(this)" })
+                        @Html.ValidationMessageFor(model => model.SelectedRegionID, "", new { id = "SelectedRegionID-error", @class = "text-danger" })
                     </div>
-            </div>
+                    <div class="col-md-6">
+                        <label class="control-label" for="MetricTypes">Metric Type</label>
+                        @Html.DropDownList("MetricTypes", Model.MapMetricsList, "--Select a Metric--", new { @id = "MetricTypes", @class = "form-control", @onchange = "ReportTypeChange()" })
+                    </div>
+                    <div class="Flexible-container col-md-12">
+                        <div id="mapDiv" class="MapDiv"></div>
+                    </div>
+                </div>
+            </div>*@
         </div>
     </div>
 </div>

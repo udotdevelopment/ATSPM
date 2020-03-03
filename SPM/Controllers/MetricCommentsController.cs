@@ -21,7 +21,7 @@ namespace SPM.Controllers
         MOE.Common.Models.Repositories.MetricCommentRepositoryFactory.Create();
 
         // GET: MetricComments/Create
-        [Authorize(Roles = "Admin, Configuration")]
+        [AllowAnonymous]
         public ActionResult Create(string versionId)
         {
             MOE.Common.Models.Repositories.ISignalsRepository signalsRepository =
@@ -45,7 +45,7 @@ namespace SPM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        [Authorize(Roles = "Admin, Configuration")]
+        [AllowAnonymous]
         public ActionResult Create([Bind(Include = "VersionID, SignalId,CommentText, MetricIDs")] MetricComment metricComment)
         {
             metricComment.TimeStamp = DateTime.Now;
@@ -80,7 +80,7 @@ namespace SPM.Controllers
         }
 
         // GET: MetricComments/Delete/5
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -98,7 +98,7 @@ namespace SPM.Controllers
         // POST: MetricComments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public ActionResult DeleteConfirmed(int id)
         {
             commentRepository.Remove(commentRepository.GetMetricCommentByMetricCommentID(id));

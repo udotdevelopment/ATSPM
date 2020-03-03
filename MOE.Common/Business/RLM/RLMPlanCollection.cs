@@ -44,11 +44,11 @@ namespace MOE.Common.Business
                 new ControllerEventLogs(Approach.SignalID, startDate, endDate, new List<int> {131});
             var row = new Controller_Event_Log();
             row.Timestamp = startDate;
-            row.SignalID = Approach.SignalID;
+            row.SignalID = Convert.ToInt16(Approach.SignalID);
             row.EventCode = 131;
             try
             {
-                row.EventParam = ControllerEventLogs.GetPreviousPlan(Approach.SignalID, startDate);
+                row.EventParam = Convert.ToInt16(ControllerEventLogs.GetPreviousPlan(Approach.SignalID, startDate));
 
                 ds.Events.Insert(0, row);
             }

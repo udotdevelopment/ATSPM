@@ -82,7 +82,7 @@ var isFunction = function isFunction( obj ) {
 
 
 var isWindow = function isWindow( obj ) {
-		return obj !== null && obj === obj.window;
+		return obj != null && obj === obj.window;
 	};
 
 
@@ -254,7 +254,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 	for ( ; i < length; i++ ) {
 
 		// Only deal with non-null/undefined values
-		if ( ( options = arguments[ i ] ) !== null ) {
+		if ( ( options = arguments[ i ] ) != null ) {
 
 			// Extend the base object
 			for ( name in options ) {
@@ -377,7 +377,7 @@ jQuery.extend( {
 	makeArray: function( arr, results ) {
 		var ret = results || [];
 
-		if ( arr !== null ) {
+		if ( arr != null ) {
 			if ( isArrayLike( Object( arr ) ) ) {
 				jQuery.merge( ret,
 					typeof arr === "string" ?
@@ -442,7 +442,7 @@ jQuery.extend( {
 			for ( ; i < length; i++ ) {
 				value = callback( elems[ i ], i, arg );
 
-				if ( value !== null ) {
+				if ( value != null ) {
 					ret.push( value );
 				}
 			}
@@ -452,7 +452,7 @@ jQuery.extend( {
 			for ( i in elems ) {
 				value = callback( elems[ i ], i, arg );
 
-				if ( value !== null ) {
+				if ( value != null ) {
 					ret.push( value );
 				}
 			}

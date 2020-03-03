@@ -22,10 +22,10 @@ function SetCommonValues(signalId, startDateDay, startTime, startAmPmDdl, endDat
     $("#EndAMPMddl").val(endAmPmDdl);
    
 
-    if (yAxisMax !== null) {
+    if (yAxisMax != null) {
         $("#YAxisMax").val(yAxisMax);
     }
-    if (y2AxisMax !== null) {
+    if (y2AxisMax != null) {
         $("#Y2AxisMax").val(y2AxisMax);
     }
 }
@@ -145,15 +145,13 @@ function SetControlValues(signalID, selectedMetricID) {
 
 function GetMetricsList(signalID, selectedMetricID)
 {
-    var metricTypeID = window.document.getElementById('MetricTypes').value;
-    selectedMetricID = metricTypeID === "" ? selectedMetricID : metricTypeID;
-    if (selectedMetricID === null || selectedMetricID === undefined)
-    {
-        selectedMetricID = metricTypeID === "" ? 1 : metricTypeID;
+    if (selectedMetricID == null) {
+        selectedMetricID = 1;
     }
     var tosend = {};
     tosend.signalID = signalID;
     tosend.selectedMetricID = selectedMetricID;
+
     GetOptionsByID(selectedMetricID);
     $.ajax({
         url: urlpathGetMetricsList,
@@ -170,16 +168,17 @@ function GetMetricsList(signalID, selectedMetricID)
         },
         onerror: function () { alert("Error"); }
     });
-    
 }
 
 $("#ResetDate").click(function () { ResetDates(); });
 
+
+
 function GetSignalLocation(selectedMetricID)
 {
-    if (selectedMetricID === null || selectedMetricID === undefined) {
+    if (selectedMetricID == null) {
         var metricsList = $("#MetricsList");
-        if (metricsList !== null) {
+        if (metricsList != null) {
             selectedMetricID = metricsList.val();
         }
     }
@@ -188,7 +187,7 @@ function GetSignalLocation(selectedMetricID)
     tosend.signalID = signalID;
     $.get(urlpathGetSignalLocation, tosend,function (data) {
         $('#SignalLocation').text(data);
-        if (data !== "Signal Not Found") {
+        if (data != "Signal Not Found") {
             GetMetricsList(signalID, selectedMetricID);
         }
     });    
@@ -213,11 +212,11 @@ function ResetDates()
 }
 
 function StartReportSpinner() {
-    $("#RunReportSpinner").addClass("fa fa-circle-o-notch fa-spin");
+    $("#RunReportSpinner").addClass("glyphicon-refresh spinning");
 }
 
 function StopReportSpinner() {
-    $("#RunReportSpinner").removeClass("fa fa-circle-o-notch fa-spin");
+    $("#RunReportSpinner").removeClass("glyphicon-refresh spinning");
 }
 
 

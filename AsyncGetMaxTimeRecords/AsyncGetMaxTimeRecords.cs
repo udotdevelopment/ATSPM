@@ -33,9 +33,10 @@ namespace AsyncGetMaxTimeRecords
 
         // This is where the magic happens 
         //: void doStuff(String url, String data)
-        void DoStuff(MOE.Common.Models.Signal signal, XmlDocument xml) 
+        void DoStuff(MOE.Common.Models.Signal signal, String data) 
         {
-
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(data);
 
             SaveToDB(xml, signal.SignalID); 
 
@@ -99,7 +100,7 @@ namespace AsyncGetMaxTimeRecords
 
 
         
-        async Task ProcessAsync(MOE.Common.Models.Signal signal, XmlDocument xml) 
+        async Task ProcessAsync(MOE.Common.Models.Signal signal, string data) 
         {
             await _semaphore.WaitAsync();
             try
@@ -107,7 +108,7 @@ namespace AsyncGetMaxTimeRecords
                 await Task.Run(() =>
                 {
       
-                     DoStuff(signal, xml); 
+                     DoStuff(signal, data); 
 
                 });
             }
@@ -118,10 +119,10 @@ namespace AsyncGetMaxTimeRecords
         }
 
    
-        public async void QueueItemAsync(MOE.Common.Models.Signal signal, XmlDocument xml) 
+        public async void QueueItemAsync(MOE.Common.Models.Signal signal, string data) 
         {
      
-            var task = ProcessAsync(signal, xml); 
+            var task = ProcessAsync(signal, data); 
             lock (_lock)
                 _pending.Add(task);
             try
@@ -173,23 +174,8 @@ namespace AsyncGetMaxTimeRecords
                     try
                     {
                         var data = await httpClient.GetStringAsync(url);
-                        XmlDocument xml = new XmlDocument();
-                        xml.LoadXml(data);
-
-                        XmlNodeList list = xml.SelectNodes("/EventResponses/EventResponse/Event");
-                        if(list.Count == 0)
-                        {
-                            try
-                            {
-                                url = $"http://{signal.IPAddress}/v1/asclog/xml/full";
-                                data = await httpClient.GetStringAsync(url);
-                                xml = new XmlDocument();
-                                xml.LoadXml(data);
-                            }
-                            catch { }
-                        }
                         // put the result on the processing pipeline 
-                        processing.QueueItemAsync(signal, xml); 
+                         processing.QueueItemAsync(signal, data); 
                     }
                     catch
                     {
