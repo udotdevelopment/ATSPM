@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -91,7 +91,7 @@ namespace MOE.Common.Models.Repositories
                 }
         }
 
-        public void AddList(List<SPMWatchDogErrorEvent> SPMWatchDogErrorEvents)
+        public void AddListAndSaveToDatabase(List<SPMWatchDogErrorEvent> SPMWatchDogErrorEvents)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace MOE.Common.Models.Repositories
             {
                 var er =
                     ApplicationEventRepositoryFactory.Create();
-                er.QuickAdd("MOE.Common", "SPMWatchDogErrrorEventRepository", "AddList",
+                er.QuickAdd("MOE.Common", "SPMWatchDogErrrorEventRepository", "AddListAndSaveToDatabase",
                     ApplicationEvent.SeverityLevels.Medium, ex.Message);
             }
         }

@@ -15,6 +15,7 @@ namespace MOE.Common.Models
         public virtual Signal Signal { get; set; }
 
         [DataMember]
+        [StringLength(10)]
         public string SignalID { get; set; }
 
 

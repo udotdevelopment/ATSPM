@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Automated Signal Peformance Metrics show real-time and historical functionality at signalized intersections. This allows traffic engineers to directly measure what previously could only be estimated and modeled.">
+    <meta name="description" content="Automated Signal Performance Metrics show real-time and historical functionality at signalized intersections. This allows traffic engineers to directly measure what previously could only be estimated and modeled.">
     <title>@ViewBag.Title - Automated Traffic Signal Performance Metrics</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -52,50 +52,48 @@
 </div>
     </div>
     <div>
-        <nav class="navbar navbar-inverse navbar-static-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
                     </button>
-
-                </div>
-                <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        @{Html.RenderAction("_MainMenuPartial", "Menus");}
-                    </ul>
-                    @if (Request.IsAuthenticated)
-                    {
-                        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-                        {
-                            @Html.AntiForgeryToken()
-
-                            <ul class="nav navbar-nav navbar-right">
-                                <li>
-                                    @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "menuItem" })
-                                </li>
-                                <li><a class="menuItem" href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-                            </ul>
-                        }
-                    }
-                    else
-                    {
-                        <ul class="nav navbar-nav navbar-right">
-                            <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "menuItem" })</li>
-                            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "menuItem" })</li>
+                    <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="navbar-nav mr-auto">
+                            @{Html.RenderAction("_MainMenuPartial", "Menus");}
                         </ul>
-                    }
-                </div>
-            </div>
+                        @if (Request.IsAuthenticated)
+                        {
+                            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <ul class="navbar-nav mr-auto">
+                                    <li class="nav-item">
+                                        @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+                                    </li>
+                                    <li class="nav-item"><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                                </ul>
+                            }
+                        }
+                        else
+                        {
+                                <form class="form-inline my-2 my-lg-0">
+                                    <ul class="navbar-nav mr-auto">
+                                        <li class="nav-item">@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
+                                        <li class="nav-item">@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-link" })</li>
+                                    </ul>
+                                </form>
+                                @*<ul class="nav navbar-nav navbar-right">
+                                    <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "menuItem" })</li>
+                                    <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "menuItem" })</li>
+                                </ul>*@
+                                }
+                        </div>
         </nav>
     </div>
     @RenderBody()
             <hr />
             <footer>
-                <p>Automated Traffic Signal Performance Measures Ver 4.2</p>
+                <p>Automated Traffic Signal Performance Measures Ver 4.2.3</p>
             </footer>
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

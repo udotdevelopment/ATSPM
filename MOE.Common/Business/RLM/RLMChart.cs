@@ -98,7 +98,7 @@ namespace MOE.Common.Business
             yellowClearanceSeries.Color = yelowish;
             //yellowClearanceSeries.BackGradientStyle = GradientStyle.DiagonalLeft;
             yellowClearanceSeries.BackSecondaryColor = yelowish;
-            yellowClearanceSeries.Name = "Yellow Clearance";
+            yellowClearanceSeries.Name = "Yellow Change";
             yellowClearanceSeries.XValueType = ChartValueType.DateTime;
             chart.Series.Add(yellowClearanceSeries);
 
@@ -150,7 +150,7 @@ namespace MOE.Common.Business
                 if (plan.RLMCycleCollection.Count > 0)
                     foreach (var rlm in plan.RLMCycleCollection)
                     {
-                        chart.Series["Yellow Clearance"].Points.AddXY(
+                        chart.Series["Yellow Change"].Points.AddXY(
                             //pcd.StartTime,
                             rlm.RedClearanceEvent,
                             rlm.RedClearanceBeginY);

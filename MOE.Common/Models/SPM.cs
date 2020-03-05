@@ -12,6 +12,8 @@ namespace MOE.Common.Models
             : base("name=SPM")
         {
             Database.SetInitializer<SPM>(new CreateDatabaseIfNotExists<SPM>());
+
+            //Database.CommandTimeout = 1500;
             Database.CommandTimeout = 900;
         }
 

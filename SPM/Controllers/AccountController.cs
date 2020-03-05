@@ -1,18 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using MOE.Common.Business.Export;
+using MOE.Common.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using MOE.Common.Models;
 using MOE.Common.Business.SiteSecurity;
 using SPM.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System.Collections.Generic;
+using MOE.Common.Models.ViewModel;
+using Newtonsoft.Json.Linq;
 
 namespace SPM.Controllers
 {
@@ -379,11 +383,44 @@ namespace SPM.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            string response = Request["g-recaptcha-response"];
+            bool status = GetReCaptchaStatus(response);
+            if (!status)
+            {
+                ViewBag.RecaptchaMessage = "Google reCaptcha validation failed";
+                return View();
+            }
             return View();
         }
 
+
+
+        private bool GetReCaptchaStatus(string response)
+        {
+            var generalSettingsRepository =
+                MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
+            var settings = generalSettingsRepository.GetGeneralSettings();
+            if (String.IsNullOrEmpty(settings.ReCaptchaPublicKey) && String.IsNullOrEmpty(settings.ReCaptchaSecretKey))
+            {
+                return true;
+            }
+            var userIp = Request.UserHostAddress;
+            string secretKey = settings.ReCaptchaSecretKey;
+            var client = new WebClient();
+            var result = client.DownloadString(
+                $"https://www.google.com/recaptcha/api/siteverify?secret={secretKey}&response={response}&remoteip={userIp}");
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            return status;
+        }
+
+
+
+
+
+
         //
-        // POST: /Account/Register
+        //POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]

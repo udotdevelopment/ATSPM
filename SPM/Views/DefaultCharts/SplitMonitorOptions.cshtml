@@ -1,7 +1,7 @@
 ﻿@model MOE.Common.Business.WCFServiceLibrary.SplitMonitorOptions
-<div class="panel panel-default ">
-    <div class="panel-heading">Split Monitor Options</div>
-    <div class="panel-body">
+<div class="card">
+    <div class="card-header">Split Monitor Options</div>
+    <div class="card-body">
         <div class="">
             @Html.LabelFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "control-label" } })
             @Html.EditorFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -68,6 +68,7 @@ namespace MOE.Common.Models.Repositories
         {
             var det = (from r in _db.Detectors
                 where r.DetectorID == DetectorID
+                orderby r.DateAdded descending
                 select r).FirstOrDefault();
 
             return det;
@@ -231,13 +232,17 @@ namespace MOE.Common.Models.Repositories
         public bool CheckReportAvialbility(string detectorID, int metricID)
         {
             var gd = _db.Detectors
-                .FirstOrDefault(g => g.DetectorID == detectorID);
+                .GroupBy(g => g.DetectorID == detectorID)
+                .Select(r => r.OrderByDescending(g => g.DateAdded).FirstOrDefault())
+                .ToList();
+
             var result = false;
             if (gd != null)
-                foreach (var dt in gd.DetectionTypes)
-                foreach (var m in dt.MetricTypes)
-                    if (m.MetricID == metricID)
-                        return true;
+                foreach (var firstGd in gd)
+                    foreach (var dt in firstGd.DetectionTypes)
+                        foreach (var m in dt.MetricTypes)
+                            if (m.MetricID == metricID)
+                                return true;
             return result;
         }
 

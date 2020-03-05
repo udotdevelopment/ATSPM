@@ -79,7 +79,7 @@ namespace FileByFileASC3Decoder
                                 writeToConsole, true, 0, deleteFile, Convert.ToDateTime(appSettings["EarliestAcceptableDate"]), 5000, 30);
                             if (eventsTable.Count > 0)
                             {
-                                if (MOE.Common.Business.SignalFtp.BulktoDb(eventsTable, Options) && deleteFile)
+                                if (MOE.Common.Business.SignalFtp.BulktoDb(eventsTable, Options, destTable) && deleteFile)
                                 {
                                     try
                                     {

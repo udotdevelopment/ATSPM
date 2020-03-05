@@ -10,7 +10,7 @@ namespace MOE.Common.Models.ViewModel.Chart
     {
         public MetricsListViewModel(string signalID, int? selectedMetricID)
         {
-            SelectedMetricID = selectedMetricID;
+            SelectedMetricID = selectedMetricID == null?1:selectedMetricID;
             GetMetricsForSignal(signalID);
         }
 
@@ -21,22 +21,33 @@ namespace MOE.Common.Models.ViewModel.Chart
 
         private void GetMetricsForSignal(string signalID)
         {
+            
             var repository =
                 SignalsRepositoryFactory.Create();
             var signal = repository.GetLatestVersionOfSignalBySignalID(signalID);
             MetricsList = new List<SelectListItem>();
-            var availableMetrics = signal.GetAvailableMetricsVisibleToWebsite().Where(m => m.ShowOnWebsite);
+            var availableMetrics = signal.GetAvailableMetricsVisibleToWebsite().Where(m => m.ShowOnWebsite).OrderBy(m => m.DisplayOrder);
             if (signal != null)
+            {
                 foreach (var m in availableMetrics)
+                {
                     if (SelectedMetricID != null && SelectedMetricID == m.MetricID)
+                    {
                         MetricsList.Add(new SelectListItem
                         {
                             Value = m.MetricID.ToString(),
                             Text = m.ChartName,
                             Selected = true
                         });
+                    }
                     else
-                        MetricsList.Add(new SelectListItem {Value = m.MetricID.ToString(), Text = m.ChartName});
+                    {
+                        
+                            MetricsList.Add(new SelectListItem { Value = m.MetricID.ToString(), Text = m.ChartName });
+                    }
+                }
+                
+            }
         }
     }
 }

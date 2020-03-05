@@ -99,22 +99,61 @@ namespace MOE.Common.Business.WatchDog
             var options = new ParallelOptions();
             options.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism;
 
-            Parallel.ForEach(signals, options, signal =>
-                //foreach(var signal in signals)
-            {
-                var APcollection =
-                    new AnalysisPhaseCollection(signal.SignalID,
-                        AnalysisStart, AnalysisEnd, Settings.ConsecutiveCount);
-
-                foreach (var phase in APcollection.Items)
-                    //Parallel.ForEach(APcollection.Items, options,phase =>
+            //Parallel.ForEach(signals, options, signal =>
+                foreach(var signal in signals)
                 {
-                    CheckForMaxOut(phase, signal);
-                    CheckForForceOff(phase, signal);
-                    CheckForStuckPed(phase, signal);
+                    AnalysisPhaseCollection APcollection = null;
+                try
+                {
+                     APcollection =
+                        new AnalysisPhaseCollection(signal.SignalID,
+                            AnalysisStart, AnalysisEnd, Settings.ConsecutiveCount);
                 }
-                // );
-            });
+                catch (Exception e)
+                {
+                    Console.WriteLine("Unable to get analysis phase for signal " + signal.SignalID);
+                }
+
+                    if (APcollection != null)
+                    {
+                        foreach (var phase in APcollection.Items)
+                            //Parallel.ForEach(APcollection.Items, options,phase =>
+                        {
+                            try
+                            {
+                                CheckForMaxOut(phase, signal);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Max Out Error " +
+                                                  e.Message);
+                            }
+
+                            try
+                            {
+
+                                CheckForForceOff(phase, signal);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Force Off Error " +
+                                                  e.Message);
+                            }
+
+                            try
+                            {
+                                CheckForStuckPed(phase, signal);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(phase.SignalID + " " + phase.PhaseNumber + " - Stuck Ped Error " +
+                                                  e.Message);
+                            }
+                        }
+                    }
+
+                    //);
+            }//);
         }
 
         private void CheckSignalsWithData()
@@ -133,14 +172,27 @@ namespace MOE.Common.Business.WatchDog
         private void CheckForRecords(List<Models.Signal> signals)
         {
             var options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism;
-            Parallel.ForEach(signals, options, signal =>
+            //options.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism;
+           // Parallel.ForEach(signals, options, signal =>
+            foreach (var signal in signals)
             {
-                if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
-                    CheckSignalRecordCount(ScanDate.AddDays(-2), signal);
-                else
-                    CheckSignalRecordCount(ScanDate, signal);
-            });
+                try
+                {
+                    GetRecordCountForWeekDayAndWeekend(signal);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(signal.SignalID + " - " + e.Message);
+                }
+            }//);
+        }
+
+        private void GetRecordCountForWeekDayAndWeekend(Signal signal)
+        {
+            if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
+                CheckSignalRecordCount(ScanDate.AddDays(-2), signal);
+            else
+                CheckSignalRecordCount(ScanDate, signal);
         }
 
         private void CheckSignalRecordCount(DateTime dateToCheck, Models.Signal signal)
@@ -169,6 +221,7 @@ namespace MOE.Common.Business.WatchDog
 
         private void CreateAndSendEmail()
         {
+
             var message = new MailMessage();
             var db = new SPM();
             var userStore = new UserStore<SPMUser>(db);
@@ -283,44 +336,48 @@ namespace MOE.Common.Business.WatchDog
             SendMessage(message);
         }
 
-        private void CheckForLowDetectorHits(Models.Signal signal)
+        private void 
+            CheckForLowDetectorHits(Models.Signal signal)
         {
             var detectors = signal.GetDetectorsForSignalThatSupportAMetric(6);
             //Parallel.ForEach(detectors, options, detector =>
             foreach (var detector in detectors)
                 try
                 {
-                    var channel = detector.DetChannel;
-                    var direction = detector.Approach.DirectionType.Description;
-                    var start = new DateTime();
-                    var end = new DateTime();
-                    if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
+                    if(detector.DetectionTypes != null && detector.DetectionTypes.Any(d => d.DetectionTypeID == 2))
                     {
-                        start = ScanDate.AddDays(-3).Date.AddHours(Settings.PreviousDayPMPeakStart);
-                        end = ScanDate.AddDays(-3).Date.AddHours(Settings.PreviousDayPMPeakEnd);
-                    }
-                    else
-                    {
-                        start = ScanDate.AddDays(-1).Date.AddHours(Settings.PreviousDayPMPeakStart);
-                        end = ScanDate.AddDays(-1).Date.AddHours(Settings.PreviousDayPMPeakEnd);
-                    }
-                    var currentVolume = detector.GetVolumeForPeriod(start, end);
-                    //Compare collected hits to low hit threshold, 
-                    if (currentVolume < Convert.ToInt32(Settings.LowHitThreshold))
-                    {
-                        var error = new SPMWatchDogErrorEvent();
-                        error.SignalID = signal.SignalID;
-                        error.DetectorID = detector.DetectorID;
-                        error.Phase = detector.Approach.ProtectedPhaseNumber;
-                        error.TimeStamp = ScanDate;
-                        error.Direction = detector.Approach.DirectionType.Description;
-                        error.Message = "CH: " + channel.ToString() + " - Count: " + currentVolume.ToString();
-                        error.ErrorCode = 2;
-                        if (!LowHitCountErrors.Contains(error))
-                            LowHitCountErrors.Add(error);
+                        var channel = detector.DetChannel;
+                        var direction = detector.Approach.DirectionType.Description;
+                        var start = new DateTime();
+                        var end = new DateTime();
+                        if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
+                        {
+                            start = ScanDate.AddDays(-3).Date.AddHours(Settings.PreviousDayPMPeakStart);
+                            end = ScanDate.AddDays(-3).Date.AddHours(Settings.PreviousDayPMPeakEnd);
+                        }
+                        else
+                        {
+                            start = ScanDate.AddDays(-1).Date.AddHours(Settings.PreviousDayPMPeakStart);
+                            end = ScanDate.AddDays(-1).Date.AddHours(Settings.PreviousDayPMPeakEnd);
+                        }
+
+                        var currentVolume = detector.GetVolumeForPeriod(start, end);
+                        //Compare collected hits to low hit threshold, 
+                        if (currentVolume < Convert.ToInt32(Settings.LowHitThreshold))
+                        {
+                            var error = new SPMWatchDogErrorEvent();
+                            error.SignalID = signal.SignalID;
+                            error.DetectorID = detector.DetectorID;
+                            error.Phase = detector.Approach.ProtectedPhaseNumber;
+                            error.TimeStamp = ScanDate;
+                            error.Direction = detector.Approach.DirectionType.Description;
+                            error.Message = "CH: " + channel.ToString() + " - Count: " + currentVolume.ToString();
+                            error.ErrorCode = 2;
+                            if (!LowHitCountErrors.Contains(error))
+                                LowHitCountErrors.Add(error);
+                        }
                     }
                 }
-
                 catch (Exception ex)
                 {
                     var er =
@@ -418,41 +475,41 @@ namespace MOE.Common.Business.WatchDog
             var ErrorMessage = "";
             foreach (var error in SortedErrors)
             {
-                //if (!Settings.EmailAllErrors)
-                //{
-                //    //List<SPMWatchDogErrorEvent> RecordsFromTheDayBefore = new List<SPMWatchDogErrorEvent>();
-                //    //compare to error log to see if this was failing yesterday
-                //    if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
-                //        RecordsFromTheDayBefore =
-                //            watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-3),
-                //                ScanDate.AddDays(-2).AddMinutes(-1));
-                //    else
-                //        RecordsFromTheDayBefore =
-                //            watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-1),
-                //                ScanDate.AddMinutes(-1));
-                //}
-                //if (Settings.EmailAllErrors || FindMatchingErrorInErrorTable(error) == false )
-                //{
-                //    var signalRepository = SignalsRepositoryFactory.Create();
-                //    var signal = signalRepository.GetLatestVersionOfSignalBySignalID(error.SignalID);
-                //    //   Add to email if it was not failing yesterday
-                //    ErrorMessage += error.SignalID;
-                //    ErrorMessage += " - ";
-                //    ErrorMessage += signal.PrimaryName;
-                //    ErrorMessage += " & ";
-                //    ErrorMessage += signal.SecondaryName;
-                //    if (error.Phase > 0)
-                //    {
-                //        ErrorMessage += " - Phase ";
-                //        ErrorMessage += error.Phase;
-                //    }
-                //    ErrorMessage += " (" + error.Message + ")";
-                //    ErrorMessage += "\n";
-                //}
+                if (!Settings.EmailAllErrors)
+                {
+                    //List<SPMWatchDogErrorEvent> RecordsFromTheDayBefore = new List<SPMWatchDogErrorEvent>();
+                    //compare to error log to see if this was failing yesterday
+                    if (Settings.WeekdayOnly && ScanDate.DayOfWeek == DayOfWeek.Monday)
+                        RecordsFromTheDayBefore =
+                            watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-3),
+                                ScanDate.AddDays(-2).AddMinutes(-1));
+                    else
+                        RecordsFromTheDayBefore =
+                            watchDogErrorEventRepository.GetSPMWatchDogErrorEventsBetweenDates(ScanDate.AddDays(-1),
+                                ScanDate.AddMinutes(-1));
+                }
+                if (Settings.EmailAllErrors || FindMatchingErrorInErrorTable(error) == false)
+                {
+                    var signalRepository = SignalsRepositoryFactory.Create();
+                    var signal = signalRepository.GetLatestVersionOfSignalBySignalID(error.SignalID);
+                    //   Add to email if it was not failing yesterday
+                    ErrorMessage += error.SignalID;
+                    ErrorMessage += " - ";
+                    ErrorMessage += signal.PrimaryName;
+                    ErrorMessage += " & ";
+                    ErrorMessage += signal.SecondaryName;
+                    if (error.Phase > 0)
+                    {
+                        ErrorMessage += " - Phase ";
+                        ErrorMessage += error.Phase;
+                    }
+                    ErrorMessage += " (" + error.Message + ")";
+                    ErrorMessage += "\n";
+                }
             }
             try
             {
-                watchDogErrorEventRepository.AddList(errors.ToList());
+                watchDogErrorEventRepository.AddListAndSaveToDatabase(errors.ToList());
             }
             catch (DbEntityValidationException ex)
             {

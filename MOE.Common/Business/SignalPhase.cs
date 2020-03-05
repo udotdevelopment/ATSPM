@@ -11,6 +11,7 @@ namespace MOE.Common.Business
         private readonly bool _showVolume;
         private readonly int _binSize;
         private readonly int _metricTypeId;
+        private readonly int _pcdCycleTime = 0;
 
         public SignalPhase(DateTime startDate, DateTime endDate, Approach approach,
             bool showVolume, int binSize, int metricTypeId, bool getPermissivePhase)
@@ -18,6 +19,20 @@ namespace MOE.Common.Business
             _showVolume = showVolume;
             _binSize = binSize;
             _metricTypeId = metricTypeId;
+            StartDate = startDate;
+            EndDate = endDate;
+            Approach = approach;
+            GetPermissivePhase = getPermissivePhase;
+            GetSignalPhaseData();
+        }
+
+        public SignalPhase(DateTime startDate, DateTime endDate, Approach approach,
+            bool showVolume, int binSize, int metricTypeId, bool getPermissivePhase, int pcdCycleTime)
+        {
+            _showVolume = showVolume;
+            _binSize = binSize;
+            _metricTypeId = metricTypeId;
+            _pcdCycleTime = pcdCycleTime;
             StartDate = startDate;
             EndDate = endDate;
             Approach = approach;
@@ -92,7 +107,7 @@ namespace MOE.Common.Business
 
         private void GetPlansCyclesAndEvents()
         {
-            Cycles = CycleFactory.GetPcdCycles(StartDate, EndDate, Approach, DetectorEvents, GetPermissivePhase);
+            Cycles = CycleFactory.GetPcdCycles(StartDate, EndDate, Approach, DetectorEvents, GetPermissivePhase, _pcdCycleTime);
             Plans = PlanFactory.GetPcdPlans(Cycles, StartDate, EndDate, Approach);
             //GetPreemptEvents();
             if (_showVolume)

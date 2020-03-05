@@ -2,6 +2,7 @@
 {
     public class SignalFTPInfo
     {
+
         public string SignalID { get; set; }
         public string PrimaryName { get; set; }
         public string Secondary_Name { get; set; }

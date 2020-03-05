@@ -68,16 +68,15 @@ namespace MOE.Common.Models
         [Display(Name = "Detection Types")]
         [DataMember]
         public virtual ICollection<DetectionType> DetectionTypes { get; set; }
-
         [Display(Name = "Lane Number (Lane-by-lane Count)")]
         [DataMember]
         [Range(0, 50)]
-        public int? LaneNumber { get; set; }
 
+        public int? LaneNumber { get; set; }
         [Display(Name = "Movement Type (Lane-by-lane Count)")]
         [DataMember]
-        public int? MovementTypeID { get; set; }
 
+        public int? MovementTypeID { get; set; }
         [DataMember]
         public virtual MovementType MovementType { get; set; }
 

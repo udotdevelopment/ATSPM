@@ -19,19 +19,19 @@ function GetMetric(urlPath, tosend)
         datatype: "json",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(tosend),
-        success: function (data) {
-            
+        success: function(data) {
+
             $('#ReportPlaceHolder').html(data);
             $('#ReportPlaceHolder').focus();
             $.validator.unobtrusive.parse($("#PCDOptionsPlaceHolder"));
         },
-        beforeSend: function () {
+        beforeSend: function() {
             StartReportSpinner();
         },
-        complete: function () {
+        complete: function() {
             StopReportSpinner();
             ShowMetricUrl();
-        },
+        }, 
         error: function(xhr, status, error) {
             StopReportSpinner();
             $('#ReportPlaceHolder').html(xhr.responseText);
@@ -138,6 +138,33 @@ function GetApproachVolumeMetric(metricTypeID) {
     tosend.ShowAdvanceDetection = $("#ShowAdvanceDetection").is(":checked");
     GetMetric(urlpathApproachVolume, tosend);
 }
+function GetTimingAndActuationsMetric(metricTypeID) {
+    var tosend = GetCommonValues();
+    tosend.MetricTypeID = metricTypeID;
+    tosend.ShowLegend = $("#ShowLegend").is(":checked");
+    tosend.ShowHeaderForEachPhase = $("#ShowHeaderForEachPhase").is(":checked");
+    tosend.CombineLanesForEachGroup = $("#CombineLanesForEachGroup").is(":checked");
+    tosend.DotAndBarSize = $("#DotAndBarSize").val();
+    tosend.PhaseFilter = $("#PhaseFilter").val();
+    tosend.PhaseEventCodes = $("#PhaseEventCodes").val();
+    tosend.GlobalCustomEventCodes = $("#GlobalCustomEventCodes").val();
+    tosend.GlobalCustomEventParams = $("#GlobalCustomEventParams").val();
+    tosend.ShowAllLanesInfo = $("#ShowAllLanesInfo").is(":checked");
+    tosend.ShowLinesStartEnd = $("#ShowLinesStartEnd").is(":checked");
+    tosend.ShowEventPairs = $("#ShowEventPairs").is(":checked");
+    tosend.ShowRawEventData = $("#ShowRawEventData").is(":checked");
+    tosend.ExtendVsdSearch = $("#ExtendVsdSearch").val();
+    tosend.ShowVehicleSignalDisplay = $("#ShowVehicleSignalDisplay").is(":checked");
+    tosend.ShowPedestrianIntervals = $("#ShowPedestrianIntervals").is(":checked");
+    tosend.ExtendStartStopSearch = $("#ExtendStartStopSearch").val();
+    tosend.ShowPedestrianActuation = $("#ShowPedestrianActuation").is(":checked");
+    tosend.ShowStopBarPresence = $("#ShowStopBarPresence").is(":checked");
+    tosend.ShowLaneByLaneCount = $("#ShowLaneByLaneCount").is(":checked");
+    tosend.ShowAdvancedDilemmaZone = $("#ShowAdvancedDilemmaZone").is(":checked");
+    tosend.ShowAdvancedCount = $("#ShowAdvancedCount").is(":checked");
+    tosend.AdvancedOffset = $("#AdvancedOffset").val();
+    GetMetric(urlpathTimingAndActuations, tosend);
+}
 function GetApproachDelayMetric(metricTypeID) {
     var tosend = GetCommonValues();
     tosend.MetricTypeID = metricTypeID;
@@ -203,6 +230,21 @@ function GetSplitMonitorMetric(metricTypeID) {
     GetMetric(urlpathSplitMonitor, tosend);
 }
 
+function GetLeftTurnGapAnalysisMetric(metricTypeID) {
+    var toSend = GetCommonValues();
+    toSend.MetricTypeID = metricTypeID;
+    toSend.Gap1Min = $("#Gap1Min").val();
+    toSend.Gap1Max = $("#Gap1Max").val();
+    toSend.Gap2Min = $("#Gap2Min").val();
+    toSend.Gap2Max = $("#Gap2Max").val();
+    toSend.Gap3Min = $("#Gap3Min").val();
+    toSend.Gap3Max = $("#Gap3Max").val();
+    toSend.Gap4Min = $("#Gap4Min").val();
+    toSend.TrendLineGapThreshold = $("#TrendLineGapThreshold").val();
+    toSend.BinSize = $("#BinSize").val();
+    GetMetric(urlpathLeftTurnGapAnalysis, toSend);
+}
+
 $('#CreateMetric').click(function() { CreateMetric(); });
 
 function CreateMetric() {
@@ -211,41 +253,47 @@ function CreateMetric() {
     $.validator.unobtrusive.parse(form);
     if ($(form).valid()) {
         var selectedMetricID = $("#MetricsList").val();
-        if (selectedMetricID == 1) {
+        if (selectedMetricID === "1") {
             GetPhaseTerminationMetric(1);
         }
-        else if (selectedMetricID == 2) {
+        else if (selectedMetricID === "2") {
             GetSplitMonitorMetric(2);
         }
-        else if (selectedMetricID == 3) {
+        else if (selectedMetricID === "3") {
             GetPedDelayMetric(3);
         }
-        else if (selectedMetricID == 4) {
+        else if (selectedMetricID === "4") {
             GetPreemptMetric(4);
         }
-        else if (selectedMetricID == 5) {
+        else if (selectedMetricID === "5") {
             GetTMCMetric(5);
         }
-        else if (selectedMetricID == 6) {
+        else if (selectedMetricID === "6") {
             GetPCDMetric(6);
         }
-        else if (selectedMetricID == 7) {
+        else if (selectedMetricID === "7") {
             GetApproachVolumeMetric(7);
         }
-        else if (selectedMetricID == 8) {
+        else if (selectedMetricID === "8") {
             GetApproachDelayMetric(8);
         }
-        else if (selectedMetricID == 9) {
+        else if (selectedMetricID === "9") {
             GetAoRMetric(9);
         }
-        else if (selectedMetricID == 10) {
+        else if (selectedMetricID === "10") {
             GetApproachSpeedMetric(10);
         }
-        else if (selectedMetricID == 11) {
+        else if (selectedMetricID === "11") {
             GetYellowAndRedMetric(11);
         }
-        else if (selectedMetricID == 12) {
+        else if (selectedMetricID === "12") {
             GetSplitFailMetric(12);
+        }
+        else if (selectedMetricID === "31") {
+            GetLeftTurnGapAnalysisMetric(31);
+        }
+        else if (selectedMetricID === "17") {
+            GetTimingAndActuationsMetric(17);
         }
     }
     defer.resolve();

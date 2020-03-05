@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
 using MOE.Common.Business;
+using MOE.Common.Business.CustomReport;
 using NuGet;
 
 namespace MOE.Common.Models.Repositories
@@ -33,6 +34,28 @@ namespace MOE.Common.Models.Repositories
         {
             var signals = _db.Signals
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.MovementType)))
+                .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                .Where(signal => signal.SignalID == signalId)
+                .Where(signal => signal.Start <= startDate)
+                .Where(signal => signal.VersionActionId != 3)
+                .ToList();
+
+            if (signals.Count > 1)
+            {
+                var orderedSignals = signals.OrderByDescending(signal => signal.Start);
+                return orderedSignals.First();
+            }
+            else
+            {
+                return signals.FirstOrDefault();
+            }
+        }
+
+        public Signal GetVersionOfSignalByDateWithDetectionTypes(string signalId, DateTime startDate)
+        {
+            var signals = _db.Signals
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.MovementType)))
+                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
                 .Include(signal => signal.Approaches.Select(a => a.DirectionType))
                 .Where(signal => signal.SignalID == signalId)
                 .Where(signal => signal.Start <= startDate)
@@ -205,9 +228,11 @@ namespace MOE.Common.Models.Repositories
         public List<Pin> GetPinInfo()
         {
             var pins = new List<Pin>();
-            foreach (var signal in GetLatestVersionOfAllSignals().Where(s => s.Enabled //&& s.SignalID == "7063"
-            ).ToList())
-            {
+            //foreach (var signal in GetLatestVersionOfAllSignals().Where(s => s.Enabled //&& s.SignalID == "7063"
+            //).ToList())
+            List<Signal> signals = GetLatestVersionOfAllSignals().Where(s => s.Enabled).ToList();
+            foreach (var signal in signals)
+                {
                 var pin = new Pin(signal.SignalID, signal.Latitude,
                     signal.Longitude,
                     signal.PrimaryName + " " + signal.SecondaryName, signal.RegionID.ToString());
@@ -438,11 +463,13 @@ namespace MOE.Common.Models.Repositories
             List<int> controllerTypes = new List<int>{4,5};
             var activeSignals = _db.Signals.Where(r => r.VersionActionId != 3)
                 .Include(s => s.ControllerType)
-                .Where(s => !controllerTypes.Contains(s.ControllerTypeID))
+                //.Where(s => !controllerTypes.Contains(s.ControllerTypeID))
                 .ToList();
             activeSignals = activeSignals
                 .GroupBy(r => r.SignalID)
                 .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).ToList();
+            activeSignals = activeSignals.Where(s => !controllerTypes.Contains(s.ControllerTypeID)).ToList();
+
             return activeSignals;
         }
 

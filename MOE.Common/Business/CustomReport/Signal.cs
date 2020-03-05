@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.CustomReport

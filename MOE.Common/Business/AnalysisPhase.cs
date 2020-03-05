@@ -88,7 +88,7 @@ namespace MOE.Common.Business
                       )
                 select row).ToList();
 
-            var sortedEvents = events.OrderBy(x => x.Timestamp).ThenByDescending(y => y.EventCode).ToList();
+            var sortedEvents = events.OrderBy(x => x.Timestamp).ThenBy(y => y.EventCode).ToList();
             return sortedEvents;
         }
 

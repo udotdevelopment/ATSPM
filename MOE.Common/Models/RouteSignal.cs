@@ -21,7 +21,9 @@ namespace MOE.Common.Models
         public int Order { get; set; }
 
         [Required]
+
         [Display(Name = "Signal")]
+        [StringLength(10)]
         public string SignalId { get; set; }
 
         [NotMapped]

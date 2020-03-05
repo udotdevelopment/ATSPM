@@ -10,6 +10,7 @@ namespace MOE.Common.Models
         [Required]
         public DateTime TimeStamp { get; set; }
         [Required]
+        [StringLength(10)]
         public string SignalId { get; set; }
         public string DetectorId { get; set; }
         [Required(AllowEmptyStrings = true)]
@@ -31,6 +32,7 @@ namespace MOE.Common.Models
         public DateTime TimeStamp { get; set; }
 
         [Required]
+        [StringLength(10)]
         public string SignalID { get; set; }
 
 

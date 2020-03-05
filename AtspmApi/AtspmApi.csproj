@@ -1,0 +1,334 @@
+﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AtspmApi</RootNamespace>
+    <AssemblyName>AtspmApi</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.12.1.3\lib\net47\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.0.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.0.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Cors, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Cors.4.0.0\lib\net451\Microsoft.Owin.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.0.0\lib\net451\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.4.0.0\lib\net451\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.0.0\lib\net451\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Cors, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.0.0\lib\net45\System.Web.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http.Owin, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.4\lib\net45\System.Web.Http.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.4\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.4\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.4\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.4\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.4\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.4\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.4\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.4\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.4\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.asax" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\DataController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Aggregation.cs" />
+    <Compile Include="Models\Approach.cs" />
+    <Compile Include="Models\ApproachCycleAggregation.cs" />
+    <Compile Include="Models\ApproachPcdAggregation.cs" />
+    <Compile Include="Models\ApproachSpeedAggregation.cs" />
+    <Compile Include="Models\ApproachSplitFailAggregation.cs" />
+    <Compile Include="Models\ApproachYellowRedActivationsAggregation.cs" />
+    <Compile Include="Models\AtspmApi.cs" />
+    <Compile Include="Models\ControllerType.cs" />
+    <Compile Include="Models\Controller_Event_Log.cs" />
+    <Compile Include="Models\DetectionHardware.cs" />
+    <Compile Include="Models\DetectionType.cs" />
+    <Compile Include="Models\DetectionTypeDetector.cs" />
+    <Compile Include="Models\Detector.cs" />
+    <Compile Include="Models\DetectorAggregation.cs" />
+    <Compile Include="Models\DetectorEventCountAggregation.cs" />
+    <Compile Include="Models\DirectionType.cs" />
+    <Compile Include="Models\LaneType.cs" />
+    <Compile Include="Models\MetricType.cs" />
+    <Compile Include="Models\MovementType.cs" />
+    <Compile Include="Models\OAuthContext.cs" />
+    <Compile Include="Models\PhaseEventCountAggregation.cs" />
+    <Compile Include="Models\PhasePedAggregation.cs" />
+    <Compile Include="Models\PhaseTerminationAggregation.cs" />
+    <Compile Include="Models\PreemptionAggregation.cs" />
+    <Compile Include="Models\PriorityAggregation.cs" />
+    <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\Route.cs" />
+    <Compile Include="Models\RouteSignal.cs" />
+    <Compile Include="Models\Signal.cs" />
+    <Compile Include="Models\SignalEventCountAggregation.cs" />
+    <Compile Include="Models\Speed_Events.cs" />
+    <Compile Include="Models\VersionAction.cs" />
+    <Compile Include="MyAuthorizationServerProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\ApproachCycleAggregationRepository.cs" />
+    <Compile Include="Repositories\ApproachCycleAggregationRepositoryFactory.cs" />
+    <Compile Include="Repositories\ApproachPcdAggregationRepository.cs" />
+    <Compile Include="Repositories\ApproachPcdAggregationRepositoryFactory.cs" />
+    <Compile Include="Repositories\ApproachRepository.cs" />
+    <Compile Include="Repositories\ApproachRepositoryFactory.cs" />
+    <Compile Include="Repositories\ApproachSpeedAggregationRepository.cs" />
+    <Compile Include="Repositories\ApproachSpeedAggregationRepositoryFactory.cs" />
+    <Compile Include="Repositories\ApproachSplitFailAggregationRepository.cs" />
+    <Compile Include="Repositories\ApproachSplitFailAggregationRepositoryFactory.cs" />
+    <Compile Include="Repositories\ApproachYellowRedActivationsAggregationRepository.cs" />
+    <Compile Include="Repositories\ApproachYellowRedActivationsAggregationRepositoryFactory.cs" />
+    <Compile Include="Repositories\ControllerEventLogRepository.cs" />
+    <Compile Include="Repositories\ControllerEventLogRepositoryFactory.cs" />
+    <Compile Include="Repositories\ControllerTypeRepository.cs" />
+    <Compile Include="Repositories\ControllerTypeRepositoryFactory.cs" />
+    <Compile Include="Repositories\DetectionHardwareRepository.cs" />
+    <Compile Include="Repositories\DetectionHardwareRepositoryFactory.cs" />
+    <Compile Include="Repositories\DetectionTypeRepository.cs" />
+    <Compile Include="Repositories\DetectionTypeRepositoryFactory.cs" />
+    <Compile Include="Repositories\DetectorAggregationsRepository.cs" />
+    <Compile Include="Repositories\DetectorAggregationsRepositoryFactory.cs" />
+    <Compile Include="Repositories\DetectorEventCountAggregationRepository.cs" />
+    <Compile Include="Repositories\DetectorEventCountAggregationRepositoryFactory.cs" />
+    <Compile Include="Repositories\DetectorRepository.cs" />
+    <Compile Include="Repositories\DetectorRepositoryFactory.cs" />
+    <Compile Include="Repositories\DirectionTypeRepository.cs" />
+    <Compile Include="Repositories\DirectionTypeRepositoryFactory.cs" />
+    <Compile Include="Repositories\IApproachCycleAggregationRepository.cs" />
+    <Compile Include="Repositories\IApproachEventCountAggregationRepository.cs" />
+    <Compile Include="Repositories\IApproachPcdAggregationRepository.cs" />
+    <Compile Include="Repositories\IApproachRepository.cs" />
+    <Compile Include="Repositories\IApproachSpeedAggregationRepository.cs" />
+    <Compile Include="Repositories\IApproachSplitFailAggregationRepository.cs" />
+    <Compile Include="Repositories\IApproachYellowRedActivationsAggregationRepository.cs" />
+    <Compile Include="Repositories\IControllerEventLogRepository.cs" />
+    <Compile Include="Repositories\IControllerTypeRepository.cs" />
+    <Compile Include="Repositories\IDetectionHardwareRepository.cs" />
+    <Compile Include="Repositories\IDetectionTypeRepository.cs" />
+    <Compile Include="Repositories\IDetectorAggregationsRepository.cs" />
+    <Compile Include="Repositories\IDetectorEventCountAggregationRepository.cs" />
+    <Compile Include="Repositories\IDetectorRepository.cs" />
+    <Compile Include="Repositories\IDirectionTypeRepository.cs" />
+    <Compile Include="Repositories\IGenericRepository.cs" />
+    <Compile Include="Repositories\ILaneTypeRepository.cs" />
+    <Compile Include="Repositories\IMetricTypeRepository.cs" />
+    <Compile Include="Repositories\IMovementTypeRepository.cs" />
+    <Compile Include="Repositories\IPhasePedAggregationRepository.cs" />
+    <Compile Include="Repositories\IPhaseTerminationAggregationRepository.cs" />
+    <Compile Include="Repositories\IPreemptAggregationDatasRepository.cs" />
+    <Compile Include="Repositories\IPriorityAggregationDatasRepository.cs" />
+    <Compile Include="Repositories\IRegionsRepository.cs" />
+    <Compile Include="Repositories\IRouteSignalRepository.cs" />
+    <Compile Include="Repositories\ISignalEventCountAggregationRepository.cs" />
+    <Compile Include="Repositories\ISignalsRepository.cs" />
+    <Compile Include="Repositories\ISpeedEventRepository.cs" />
+    <Compile Include="Repositories\AuthRepository.cs" />
+    <Compile Include="Repositories\LaneTypeRepository.cs" />
+    <Compile Include="Repositories\LaneTypeRepositoryFactory.cs" />
+    <Compile Include="Repositories\MetricTypeRepository.cs" />
+    <Compile Include="Repositories\MetricTypeRepositoryFactory.cs" />
+    <Compile Include="Repositories\MovementTypeRepository.cs" />
+    <Compile Include="Repositories\MovementTypeRepositoryFactory.cs" />
+    <Compile Include="Repositories\PhaseEventCountAggregationRepository.cs" />
+    <Compile Include="Repositories\PhaseEventCountAggregationRepositoryFactory.cs" />
+    <Compile Include="Repositories\PhasePedAggregationRepository.cs" />
+    <Compile Include="Repositories\PhasePedAggregationRepositoryFactory.cs" />
+    <Compile Include="Repositories\PhaseTerminationAggregationRepository.cs" />
+    <Compile Include="Repositories\PhaseTerminationAggregationRepositoryFactory.cs" />
+    <Compile Include="Repositories\PreemptAggregationDatasRepository.cs" />
+    <Compile Include="Repositories\PreemptAggregationDatasRepositoryFactory.cs" />
+    <Compile Include="Repositories\PriorityAggregationDatasRepository.cs" />
+    <Compile Include="Repositories\PriorityAggregationDatasRepositoryFactory.cs" />
+    <Compile Include="Repositories\RegionsRepository.cs" />
+    <Compile Include="Repositories\RegionsRepositoryFactory.cs" />
+    <Compile Include="Repositories\RouteSignalRepository.cs" />
+    <Compile Include="Repositories\RouteSignalRepositoryFactory.cs" />
+    <Compile Include="Repositories\SignalEventCountAggregationRepository.cs" />
+    <Compile Include="Repositories\SignalEventCountAggregationRepositoryFactory.cs" />
+    <Compile Include="Repositories\SignalsRepository.cs" />
+    <Compile Include="Repositories\SignalsRepositoryFactory.cs" />
+    <Compile Include="Repositories\SpeedEventRepository.cs" />
+    <Compile Include="Repositories\SpeedEventRepositoryFactory.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\MD5PasswordHasher.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>50688</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:50688/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -3,20 +3,20 @@
 
 
 <div id="DetectorConfiguration@(Model.ID)" role="tablist" aria-multiselectable="true" class="col-md-12">
-    <div class="panel panel-detector">
-        <div class="panel-heading" role="tab" id="DetectorConfigurationHeading@Model.ApproachID">
-            <h4 class="panel-title">
+    <div class="card panel-detector">
+        <div class="card-header bg-info" role="tab" id="DetectorConfigurationHeading@Model.ApproachID">
                 <a id="DetectorConfigurationHeader@(Model.ID)" data-toggle="collapse" data-parent="#DetectorConfiguration@(Model.ID)" href="#DetectorConfigurationCollapse@(Model.ID)" aria-expanded="false" aria-controls="DetectorConfigurationCollapse@(Model.ID)">
                     Detector @Model.DetectorID
                 </a>
-                <a class="pull-right" href="javascript:DeleteDetector('@Model.DetectorID', '@Model.ID')">Delete&nbsp;<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
-                <a class="pull-right" href="javascript:CopyDetector('@Model.ID', @Model.ApproachID)">Copy&nbsp;<span class="glyphicon glyphicon-copy" aria-hidden="true"></span></a>
-            </h4>
+                <a class="float-right" href="javascript:DeleteDetector('@Model.DetectorID', '@Model.ID')">Delete&nbsp;<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+                <a class="float-right" href="javascript:CopyDetector('@Model.ID', @Model.ApproachID)">Copy&nbsp;<span class="glyphicon glyphicon-copy" aria-hidden="true"></span></a>
+            
         </div>
-        <div id="DetectorConfigurationCollapse@(Model.ID)" class="panel-collapse panel-body collapse ControlHeader" role="tabpanel" aria-labelledby="headingOne">
+        <div id="DetectorConfigurationCollapse@(Model.ID)" class="card-body collapse" role="tabpanel" aria-labelledby="headingOne">
             @Html.HiddenFor(model => model.ID)
             @Html.HiddenFor(model => model.DetectorID)
             @Html.HiddenFor(model => model.ApproachID)
+            <div class="row">
             <div class="form-group col-md-4">
                 <div class="">
                     @Html.LabelFor(model => model.DetChannel, htmlAttributes: new { @class = "control-label" })
@@ -75,43 +75,28 @@
                         @Html.ValidationMessageFor(model => model.LaneTypeID, "", new { id = "LaneTypeID-error", @class = "text-danger" })
                     </div>
                 </div>
-                @*@{
-                    bool shouldBeHidden = true;
 
-                    foreach (var detTypeId in Model.DetectionTypeIDs)
-                    {
-                        if (detTypeId == 2)
-                        {
-                            shouldBeHidden = false;
-                        }
-                        if (detTypeId == 3)
-                        {
-                            shouldBeHidden = false;
-                        }
-                    }
-                }*@
-
-                <div id="MPHDiv_@Model.ID" class="@(Model.DetectionTypeIDs.Contains(2) ? "" : "hidden"), @(Model.DetectionTypeIDs.Contains(3) ? "" : "hidden")">
-                @*<div id="MPHDiv_@Model.ID" class="@(shouldBeHidden ? "" : "hidden"), )">*@
+                <div id="MPHDiv_@Model.ID" class="@(Model.DetectionTypeIDs.Contains(2) ? "" : "invisible"), @(Model.DetectionTypeIDs.Contains(3) ? "" : "invisible")">
+               
                     <label for="mph_@Model.ID" class="control-label mph">MPH (Advanced Count, Advanced Speed)</label>
                     <input id="mph_@Model.ID" class="form-control mph_@Model.ApproachID" onkeyup="SyncText(this, @Model.ApproachID)" type="text" value="@Model.Approach.MPH" />
                 </div>
 
-                <div id="DistanceFromStopBar_@Model.ID" class="PCD_@Model.ID @(Model.DetectionTypeIDs.Contains(2) ? "" : "hidden")">
+                <div id="DistanceFromStopBar_@Model.ID" class="PCD_@Model.ID @(Model.DetectionTypeIDs.Contains(2) ? "" : "invisible")">
                     @Html.LabelFor(model => model.DistanceFromStopBar, htmlAttributes: new { @class = "control-label" })
                     <div class="">
                         @Html.EditorFor(model => model.DistanceFromStopBar, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.DistanceFromStopBar, "", new { id = "DistanceFromStopBar-error", @class = "text-danger" })
                     </div>
                 </div>
-                <div id="Min_Speed_Filter_@Model.ID" class="Speed_@Model.ID  @(Model.DetectionTypeIDs.Contains(3) ? "" : "hidden")">
+                <div id="Min_Speed_Filter_@Model.ID" class="Speed_@Model.ID  @(Model.DetectionTypeIDs.Contains(3) ? "" : "invisible")">
                     @Html.LabelFor(model => model.MinSpeedFilter, htmlAttributes: new { @class = "control-label" })
                     <div class="">
                         @Html.EditorFor(model => model.MinSpeedFilter, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.MinSpeedFilter, "", new { id = "MinSpeedFilter-error", @class = "text-danger" })
                     </div>
                 </div>
-                <div class="PCD_@Model.ID @(Model.DetectionTypeIDs.Contains(2) ? "" : "hidden")">
+                <div class="PCD_@Model.ID @(Model.DetectionTypeIDs.Contains(2) ? "" : "invisible")">
                     @Html.LabelFor(model => model.DecisionPoint, htmlAttributes: new { @class = "control-label" })
                     <div class="">
                         @Html.EditorFor(model => model.DecisionPoint, new { htmlAttributes = new { @class = "form-control" } })
@@ -119,7 +104,7 @@
                     </div>
                 </div>
 
-                <div class="Speed_@Model.ID @(Model.DetectionTypeIDs.Contains(3) ? "" : "hidden")">
+                <div class="Speed_@Model.ID @(Model.DetectionTypeIDs.Contains(3) ? "" : "invisible")">
                     @Html.LabelFor(model => model.MovementDelay, htmlAttributes: new { @class = "control-label" })
                     <div class="">
                         @Html.EditorFor(model => model.MovementDelay, new { htmlAttributes = new { @class = "form-control" } })
@@ -138,12 +123,13 @@
 
                 <div class="">
                     @Html.LabelFor(model => model.DetectorComments, htmlAttributes: new { @class = "control-label" })
-                    <span onclick="GetCreateDetectorComment('@Model.ID')" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                    <a class="" href="javascript:GetCreateDetectorComment('@Model.ID')"><span class="fa fa-plus" style='font-size:14px' aria-hidden="true"> Add Detector Comment</span></a>
                     <div id="NewDetectorComment_@Model.ID"></div>
                     <div class="comments col-md-12">
                         <div id="AddedDetectorComment_@Model.ID"></div>
                         @Html.EditorFor(model => model.DetectorComments, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
+                </div>
                 </div>
             </div>
         </div>

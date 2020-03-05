@@ -31,12 +31,15 @@ namespace MOE.Common.Business.Bins
             int? timeOfDayEndHour, int? timeOfDayEndMinute, List<DayOfWeek> daysOfWeek, BinSize binSize,
             TimeOptions timeOption)
         {
+            DaysOfWeek = new List<DayOfWeek>();
             Start = start;
             End = end;
             TimeOfDayStartHour = timeOfDayStartHour;
             TimeOfDayStartMinute = timeOfDayStartMinute;
             TimeOfDayEndHour = timeOfDayEndHour;
             TimeOfDayEndMinute = timeOfDayEndMinute;
+            int dayOfWeekCounter = 0;
+            DateTime oneDay = Start;
             DaysOfWeek = daysOfWeek;
             SelectedBinSize = binSize;
             TimeOption = timeOption;
