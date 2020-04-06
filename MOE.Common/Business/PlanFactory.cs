@@ -40,7 +40,8 @@ namespace MOE.Common.Business
 
         public static List<Controller_Event_Log> GetPlanEvents(DateTime startDate, DateTime endDate, string signalId)
         {
-            var celRepository = ControllerEventLogRepositoryFactory.Create();
+            var db = new SPM();
+            var celRepository = ControllerEventLogRepositoryFactory.Create(db);
             var planEvents = new List<Controller_Event_Log>();
             var firstPlanEvent = celRepository.GetFirstEventBeforeDate(signalId, 131, startDate);
             if (firstPlanEvent != null)

@@ -4,6 +4,11 @@
     {
         private static IControllerEventLogRepository controllerEventLogRepository;
 
+        public static IControllerEventLogRepository Create(SPM db)
+        {
+            return new ControllerEventLogRepository(db);
+            
+        }
         public static IControllerEventLogRepository Create()
         {
             if (controllerEventLogRepository != null)
