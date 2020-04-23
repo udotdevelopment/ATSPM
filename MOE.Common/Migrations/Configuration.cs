@@ -657,7 +657,7 @@ namespace MOE.Common.Migrations
                     Action = "AWS LFT and Detection Worksheets 2019-04-10.xlsm",
                     ParentId = 32,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 110
+                    DisplayOrder =11 0
                 },
                 new Menu
                 {
@@ -1121,6 +1121,7 @@ namespace MOE.Common.Migrations
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(4));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(14));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(15));
+                        detectionType.MetricTypes.Add(context.MetricTypes.Find(31));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(17));
                         break;
                     case 2:
@@ -1135,15 +1136,13 @@ namespace MOE.Common.Migrations
                         break;
                     case 4:
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(5));
-                        detectionType.MetricTypes.Add(context.MetricTypes.Find(7)); 
-                        detectionType.MetricTypes.Add(context.MetricTypes.Find(31));
+                        detectionType.MetricTypes.Add(context.MetricTypes.Find(7));
                         break;
                     case 5:
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(11));
                         break;
                     case 6:
-                        detectionType.MetricTypes.Add(context.MetricTypes.Find(12)); 
-                        detectionType.MetricTypes.Add(context.MetricTypes.Find(31));
+                        detectionType.MetricTypes.Add(context.MetricTypes.Find(12));
                         break;
                 }
             context.SaveChanges();
