@@ -116,7 +116,8 @@ namespace MOE.Common.Business
 
         private void GetDetectorEvents(int metricTypeId)
         {
-            var celRepository = ControllerEventLogRepositoryFactory.Create();
+            var db = new SPM();
+            var celRepository = ControllerEventLogRepositoryFactory.Create(db);
             DetectorEvents = new List<Controller_Event_Log>();
             var detectorsForMetric = Approach.GetDetectorsForMetricType(metricTypeId);
             foreach (var d in detectorsForMetric)

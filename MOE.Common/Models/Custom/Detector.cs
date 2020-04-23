@@ -67,11 +67,15 @@ namespace MOE.Common.Models
         {
             if (DecisionPoint == null)
                 DecisionPoint = 0;
-            var offset = Convert.ToDouble((DistanceFromStopBar / (Approach.MPH * 1.467) - DecisionPoint) * 1000);
+            if (Approach.MPH.HasValue && Approach.MPH > 0)
+            {
+                return Convert.ToDouble((DistanceFromStopBar / (Approach.MPH * 1.467) - DecisionPoint) * 1000);
+            }
+            else
+            {
+                return 0;
+            }
 
-
-
-            return offset;
         }
 
         public static Detector

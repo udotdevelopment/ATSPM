@@ -13,11 +13,18 @@ namespace MOE.Common.Models.Repositories
     public class ControllerEventLogRepository : IControllerEventLogRepository
     {
         private readonly SPM _db = new SPM();
-
+        public ControllerEventLogRepository(SPM db)
+        {
+            //_db.Database.CommandTimeout = 180;
+            db.Database.ExecuteSqlCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;");
+            db.Configuration.AutoDetectChangesEnabled = false;
+            _db = db;
+        }
         public ControllerEventLogRepository()
         {
             //_db.Database.CommandTimeout = 180;
             _db.Database.ExecuteSqlCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;");
+            _db.Configuration.AutoDetectChangesEnabled = false;
         }
 
         public int GetRecordCountByParameterAndEvent(string signalId, DateTime startTime, DateTime endTime,
