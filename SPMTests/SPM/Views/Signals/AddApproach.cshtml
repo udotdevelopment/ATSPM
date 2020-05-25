@@ -1,0 +1,76 @@
+﻿@model MOE.Common.Models.Approach
+
+
+<div id="ApproachConfiguration_@(Model.ApproachID)" role="tablist" aria-multiselectable="true" class="col-md-12">
+    <div class="card">
+        <div class="card-header" role="tab" id="ApproachConfigurationHeading_@Model.ApproachID">
+                <a id="ApproachConfigurationHeader_@(Model.ApproachID)" data-toggle="collapse" data-parent="#ApproachConfiguration_@(Model.ApproachID)" href="#ApproachConfigurationCollapse_@(Model.ApproachID)" aria-expanded="true" aria-controls="ApproachConfigurationCollapse_@(Model.ApproachID)">
+                    @Model.Description
+                </a>
+                <a class="float-right" href="javascript:DeleteApproach(@Model.ApproachID, '@Model.Description')">Delete &nbsp;<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+                <a class="float-right" href="javascript:GetCopyApproach(@Model.ApproachID)">Copy &nbsp;<span class="glyphicon glyphicon-copy" aria-hidden="true"></span></a>                &nbsp;
+    
+        </div>
+        <div id="ApproachConfigurationCollapse_@(Model.ApproachID)" class="collapse card-body show" role="tabpanel">
+            @Html.Hidden(Model.Index + "ApproachID", Model.ApproachID, new { @id = "ApproachID" + @Model.ApproachID })
+            @Html.HiddenFor(model => model.SignalID, htmlAttributes: new { Name = Model.Index + "SignalID" })
+            @Html.HiddenFor(model => model.VersionID, htmlAttributes: new { Name = Model.Index + "VersionID" })
+            @Html.HiddenFor(model => model.Index, new { @id = "Index" + Model.ApproachID })
+            @Html.HiddenFor(model => model.MPH, new { @class = "mph_" + @Model.ApproachID, Name = Model.Index + "MPH" })
+            <div class="row">
+            <div class="form-group-configuration-tool  form-group col-md-2">
+                @Html.LabelFor(model => model.DirectionTypeID, "Direction", htmlAttributes: new { @class = "control-label" })
+                <div class="">
+                    @Html.DropDownListFor(model => model.DirectionTypeID, (SelectList)ViewBag.DirectionType, htmlAttributes: new { Name = Model.Index + "DirectionTypeID", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DirectionTypeID, "", new { id = "DirectionTypeID-error", @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group-configuration-tool  form-group col-md-2">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+                <div class="">
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { Name = Model.Index + "Description", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group-configuration-tool  form-group col-md-2">
+                @Html.LabelFor(model => model.ProtectedPhaseNumber, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group">
+                    @Html.EditorFor(model => model.ProtectedPhaseNumber, new { htmlAttributes = new { Name = Model.Index + "ProtectedPhaseNumber", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ProtectedPhaseNumber, "", new { id = "ProtectedPhaseNumber-error", @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+            <div class="form-group-configuration-tool  form-group col-md-2">
+                @Html.LabelFor(model => model.PermissivePhaseNumber, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group">
+                    @Html.EditorFor(model => model.PermissivePhaseNumber, new { htmlAttributes = new { Name = Model.Index + "PermissivePhaseNumber", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PermissivePhaseNumber, "", new { id = "PermissivePhaseNumber-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group-configuration-tool  text-center form-group col-md-2">
+                @Html.LabelFor(model => model.IsProtectedPhaseOverlap, htmlAttributes: new { @class = "control-label" })
+                <div style="text-align:center;">
+                    @Html.EditorFor(model => model.IsProtectedPhaseOverlap, new { htmlAttributes = new { Name = Model.Index + "IsProtectedPhaseOverlap", @class = "form -control" } })
+                    @Html.ValidationMessageFor(model => model.IsProtectedPhaseOverlap, "", new { id = "IsProtectedPhaseOverlap-error", @class = "text-danger" })
+                </div>
+            </div>
+                <div class="form-group-configuration-tool  text-center form-group col-md-2">
+                    @Html.LabelFor(model => model.IsPermissivePhaseOverlap, htmlAttributes: new { @class = "control-label" })
+                    <div style="text-align:center;">
+                        @Html.EditorFor(model => model.IsPermissivePhaseOverlap, new { htmlAttributes = new { Name = Model.Index + "IsPermissivePhaseOverlap", @class = "form -control" } })
+                        @Html.ValidationMessageFor(model => model.IsPermissivePhaseOverlap, "", new { id = "IsPermissivePhaseOverlap-error", @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="DetectorsList_@Model.ApproachID" class="center-block col-md-12">
+            @Html.LabelFor(model => model.Detectors, htmlAttributes: new { @class = "control-label" })
+            <a class="" href="javascript:GetCreateNewDetector(@Model.ApproachID, '@Model.VersionID')"><span class="fa fa-plus" style='font-size:14px' aria-hidden="true"></span></a>
+
+            @Html.EditorFor(model => model.Detectors, new { @class = "" })
+
+        </div>
+    </div>
+</div>

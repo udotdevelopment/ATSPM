@@ -1,0 +1,66 @@
+﻿@model MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel
+
+<script type="text/javascript" src="~/Scripts/AddData.js"></script>
+<script charset="UTF-8" type="text/javascript" src="//www.bing.com/api/maps/mapcontrol?callback=GetMap"></script>
+<div class="card">
+    <div class="card-header">Signal Selection</div>
+    <div class="card-body">
+        @Html.LabelFor(model => model.SignalID, htmlAttributes: new { id="SignalId-error", @class = "control-label" })
+        <div class="input-group-custom">
+            @Html.EditorFor(model => model.SignalID, new { htmlAttributes = new { @onkeypress = "SignalIdPress(event)", id = "SignalID", @class = "form-control  signalID-width", placeholder = "Signal ID" } })
+            @Html.ValidationMessageFor(model => model.SignalID, "", new { id = "SignalID-error", @class = "text-danger" } )
+            <input id="selectButton" aria-labelledby="SignalLocation" type="button" class="btn btn-dark" value="Select" onclick="GetSignalLocation()">
+            <label id="SignalLocation">Press Enter to select signal</label>
+        </div>@Html.ValidationMessageFor(model => model.SignalID, "", new { id = "SignalId-error", @class = "text-danger" })
+        <br />
+ 
+        
+        <div id="accordion" class="col-12">
+            <div class="card">
+                <div class="card-header" role="tab" id="headingOne">
+                        <a id="SignalHeader" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            Signal List
+                        </a>
+                </div>
+                <div id="collapseOne" class="collapse ControlHeader" data-parent="#accordion">
+                    <div class="card-body" id="SignalsPlaceHolder">
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" role="tab" id="headingTwo">
+                        <a id="collapseTwoLink"  data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                            Signal Map
+                        </a>
+                </div>
+                <div id="collapseTwo" class="collapse show" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label" for="Regions" id="Regions-error">Region</label>
+                                @Html.DropDownListFor(model => model.SelectedRegionID,
+                                    new SelectList(Model.Regions, "ID", "Description"),
+                                    "--Select Region--", new {@id = "Regions", @class = "form-control", @onchange = "RegionChange(this)"})
+                                @Html.ValidationMessageFor(model => model.SelectedRegionID, "", new { id = "SelectedRegionID-error", @class = "text-danger" })
+                            </div>
+                            <div class="col-md-6">
+                                <label class="control-label" for="MetricTypes">Metric Type</label>
+                                @Html.DropDownList("MetricTypes", Model.MapMetricsList, "--Select a Metric--", new { @id = "MetricTypes", @class = "form-control", @onchange = "ReportTypeChange()" })
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="Flexible-container col-md-12">
+                                <div id="mapDiv" class="MapDiv"></div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+<script type="text/javascript" src="~/Scripts/SignalSearch.js"></script>
+}

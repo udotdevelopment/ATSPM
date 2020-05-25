@@ -1,0 +1,150 @@
+﻿@using MvcCheckBoxList.Model
+@model MOE.Common.Models.ViewModel.LinkPivotViewModel
+@{
+    ViewBag.Title = "Purdue Link Pivot Analysis";
+}
+
+<h1>Purdue Link Pivot Analysis</h1>
+@Html.ValidationSummary(false)
+<div class="row">
+    <div class="col-md-3 card card-body bg-light">
+        @using (Ajax.BeginForm("LinkPivotResult", "LinkPivot", new AjaxOptions { UpdateTargetId = "ReportPlaceHolder", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "StartReportSpinner()", OnSuccess = "StopReportSpinner()", OnFailure = "StopReportSpinner()" }))
+        {
+            <form class="form-horizontal">
+                <fieldset>
+                    <legend>Report Options</legend>
+                    <div class="form-group">
+                        <label class="control-label" for="Routes">Route</label>
+                        @Html.DropDownListFor(model => model.SelectedRouteId,
+new SelectList(Model.Routes, "Id", "RouteName"),
+                  "--Select Route--", new { @id = "Routes", @class = "form-control", onclick = "ClearReport()" })
+                        @Html.ValidationMessageFor(model => model.SelectedRouteId, "", new { id = "Routes-error", @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <div id="SignalAccordion">
+                            <div class="card col-12 no-gutter">
+                                <div class="card-header" id="signalsHeadingOne">
+                                    <a id="SignalHeader" data-toggle="collapse" data-parent="#SignalAccordion" href="#collapse1" aria-expanded="false" aria-controls="collapse1">Signals</a>
+                                </div>
+                                <div id="collapse1" class="collapse">
+                                    <div id="signalsPlaceHolder"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CycleLength, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CycleLength, new { htmlAttributes = new { onchange = "ClearReport()", @class = "form-control", placeholder = "Cycle Length" } })
+                        @Html.ValidationMessageFor(model => model.CycleLength, "", new { id = "CycleLength-error", @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { onchange = "ClearReport()", @class = "form-control datepicker", placeholder = "Start Date" } })
+                        @Html.ValidationMessageFor(model => model.StartDate, "", new { id = "StartDate-error", @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { onchange = "ClearReport()", @class = "form-control datepicker", placeholder = "End Date" } })
+                        @Html.ValidationMessageFor(model => model.EndDate, "", new { id = "EndDate-error", @class = "text-danger col-md-6" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.StartTime, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group-custom">
+                            @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control timeWidth" } })
+                            @{List<SelectListItem> StartAMPMlistItems = new List<SelectListItem>(); StartAMPMlistItems.Add(new SelectListItem { Text = "AM", Value = "AM", Selected = true }); StartAMPMlistItems.Add(new SelectListItem { Text = "PM", Value = "PM" }); }
+                            @Html.DropDownListFor(model => model.StartAMPM, StartAMPMlistItems, new { id = "StartAMPM", @class = "form-control timeWidth", aria_labelledby = "StartAMPM" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EndTime, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group-custom">
+                            @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { onchange = "ClearReport()", @class = "form-control timeWidth", placeholder = "End Time" } })
+                            @{List<SelectListItem> EndAMPMlistItems = new List<SelectListItem>(); EndAMPMlistItems.Add(new SelectListItem { Text = "AM", Value = "AM", Selected = true }); EndAMPMlistItems.Add(new SelectListItem { Text = "PM", Value = "PM" }); }
+                            @Html.DropDownListFor(model => model.EndAMPM, EndAMPMlistItems, new { id = "EndAMPM", @class = "form-control timeWidth", @title = "EndAMPM" })
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.StartAMPM, "", new { id = "StartAMPM-error", @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.EndAMPM, "", new { id = "EndAMPM-error", @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.StartTime, "", new { id = "StartTime-error", @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.EndTime, "", new { id = "EndTime-error", @class = "text-danger" })
+                    <div id="DaysAccordion"></div>
+                    <div class="card col-12">
+                        <div class="card-header">
+                            <a id="SignalHeader" data-toggle="collapse" data-parent="#SignalAccordion" href="#collapse2" aria-expanded="false" aria-controls="collapse2">Advanced</a>
+                        </div>
+                        <div id="collapse2" class="collapse AdvancedDiv">
+                            <div class="form-group">
+                                <h3>Days to Include</h3>
+                                <div id="DaysDiv" class="col-md-12 DaysDiv">
+                                    @Html.CheckBoxListFor(x => x.PostedDays.DayIDs,
+                    x => x.AvailableDays,
+                    x => x.DayId,
+                    x => x.Name,
+                    x => x.SelectedDays,
+                    Position.Vertical)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.StartingPoint)
+                                @{List<SelectListItem> StartingPointlistItems = new List<SelectListItem>();
+                                    StartingPointlistItems.Add(new SelectListItem { Text = "Downstream", Value = "Downstream", Selected = true });
+                                    StartingPointlistItems.Add(new SelectListItem { Text = "Upstream", Value = "Upstream" }); }
+                                @Html.DropDownListFor(model => model.StartingPoint, StartingPointlistItems, "-- Select Direction --", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.StartingPoint, "", new { id = "StartingPoint-error", @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Bias, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.Bias, new { htmlAttributes = new { @class = "form-control", placeholder = "Bias" } })
+                                @Html.ValidationMessageFor(model => model.Bias, "", new { id = "Bias-error", @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="BiasUpDownStream">Bias Direction</label>
+                                @{
+                                    List<SelectListItem> listItems = new List<SelectListItem>();
+                                    listItems.Add(new SelectListItem
+                                    {
+                                        Text = "Downstream",
+                                        Value = "Downstream",
+                                        Selected = true
+                                    });
+                                    listItems.Add(new SelectListItem
+                                    {
+                                        Text = "Upstream",
+                                        Value = "Upstream"
+                                    });
+                                }
+                                @Html.DropDownListFor(model => model.BiasUpDownStream, listItems, "-- Select Direction --", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BiasUpDownStream, "", new { id = "BiasUpDownStream-error", @class = "text-danger" })
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" onclick="ClearReport()" class="btn btn-primary">Run Report &nbsp; <span id='RunReportSpinner' class="" style="font-size:18px"></span></button>
+
+                    </div>
+                </fieldset>
+            </form>
+        }
+        <br />
+        <div id="PCDOptionsPlaceHolder"></div>
+    </div>
+    <div class="col-md-9">
+        <div id="ReportPlaceHolder"></div>
+    </div>
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-9">
+        <div id="PCDsPlaceHolder"></div>
+    </div>
+</div>
+@section Scripts
+    {
+    <script src="~/Scripts/Route.js"></script>
+    <script>
+        var urlpathPCDOptions = '@Url.Action("LinkPivotPCDOptions", "LinkPivot")';
+        var urlpathPCDs = '@Url.Action("PCDs", "LinkPivot")';
+        var urlpathSignals = '@Url.Action("FillSignals", "LinkPivot")';
+    </script>
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+}

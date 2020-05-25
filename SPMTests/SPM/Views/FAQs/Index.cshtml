@@ -1,0 +1,43 @@
+﻿@model IEnumerable<MOE.Common.Models.FAQ>
+
+@{
+    ViewBag.Title = "FAQ Editor";
+}
+
+<h2>FAQ Editor</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Header)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Body)
+        </th>
+        <th>@Html.DisplayNameFor(model => model.OrderNumber)</th>
+        <th>Edit Delete</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Header)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Body)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderNumber)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.FAQID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.FAQID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.FAQID })
+        </td>
+    </tr>
+}
+
+</table>

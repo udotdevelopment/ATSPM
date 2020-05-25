@@ -1,0 +1,23 @@
+﻿@model MOE.Common.Models.RouteSignal
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h4>Are you sure you want to delete signal @Model.SignalId?</h4>
+    <div>
+            <div class="form-actions no-color">
+                <input type="button" value="Delete" onclick="DeleteRouteSignal()" class="btn btn-danger" /> 
+                <input type="button" value="Cancel" onclick="CancelDelete()" class="btn btn-primary" /> 
+            </div>
+    </div>
+</body>
+</html>

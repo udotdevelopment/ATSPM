@@ -1,0 +1,54 @@
+﻿
+@model  SPM.Models.SPMConfigurationTableViewModel
+<table class="table table-striped signalConfiguration" border="1">
+
+    <tr>
+        <th>Detector ID</th>
+        <th>Det. Channel</th>
+        <th>Direction</th>
+        <th>Phase</th>
+        <th>Perm. Phase</th>
+        <th>Overlap</th>
+        <th>Enabled</th>
+        <th class="DetectionTypesWidth">Detection Types</th>
+        <th>Detection Hardware</th>
+        <th>Latency Correction</th>
+        <th>Movement Type</th>
+        <th>Lane Number</th>
+        <th>Lane Type</th>
+        <th>MPH</th>
+        <th>Dist. From Stop Bar</th>
+        <th>Decision Point</th>
+        <th>Move. Delay</th>
+        <th>Min Speed Filter</th>
+        <th>Comment</th>
+    </tr>
+
+    @foreach (var record in Model.Records)
+    {
+        <tr>
+            <td align="center">@record.DetectorID</td>
+            <td align="center">@record.DetectorChannel</td>
+            <td align="center">@record.Direction</td>
+            <td align="center">@record.ProtectedPhaseNumber</td>
+            <td align="center">@record.PermissivePhaseNumber</td>
+            <td align="center">@record.Overlap</td>
+            <td align="center">@record.Enabled</td>
+            <td align="left">@Html.Raw(record.DetectionTypes)</td>
+            <td align="center">@record.DetectionHardware</td>
+            <td align="center">@record.LatencyCorrection</td>
+            <td align="center">@record.MovementType</td>
+            <td align="center">@record.LaneNumber</td>
+            <td align="center">@record.LaneType</td>
+            <td align="center">@record.MPH</td>
+            <td align="center">@record.DistanceFromStopBar</td>
+            <td align="center">@record.DecisionPoint</td>
+            <td align="center">@record.MovementDelay</td>
+            <td align="center">@record.MinSpeedFilter</td>
+            <td align="left">@record.Comment</td>
+        </tr>
+    }
+
+
+
+</table>

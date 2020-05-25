@@ -1,0 +1,51 @@
+﻿@model MOE.Common.Models.ViewModel.RouteEdit.ApproachesForRouteViewModel
+
+<div>
+    <table class="table-sm table-striped">
+        <thead>
+        <tr class=""><th rowspan="2">Signal</th><th colspan="3">Primary</th><th colspan="3">Opposing</th></tr>
+        <tr>
+            <th>
+                Dir.
+            </th>
+            <th>
+                Phase
+            </th>
+            <th>
+                Overlap
+            </th>
+            <th>Dir.</th>
+            <th>Phase</th>
+            <th>Overlap</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.PairedApproaches)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item1.RouteSignal.Signal.SignalDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item1.Direction.Abbreviation)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.Item1.Phase)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.Item1.IsOverlap)*@
+                    @Html.CheckBoxFor(modelItem => item.Item1.IsOverlap, new { disabled = true, aria_label = "Overlap1" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item2.Direction.Abbreviation)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.Item2.Phase)
+                </td>
+                <td>
+                    @Html.CheckBoxFor(modelItem => item.Item2.IsOverlap, new { disabled = true, aria_label = "Overlap2" })
+                </td>
+            </tr>
+        }</tbody>
+    </table>
+</div>

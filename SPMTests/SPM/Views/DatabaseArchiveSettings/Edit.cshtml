@@ -1,0 +1,134 @@
+﻿@model MOE.Common.Models.ViewModel.DatabaseArchive.ArchiveSettingsViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Database Archive Settings</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.DatabaseArchiveSettings.ID)
+        @Html.HiddenFor(model => model.DatabaseArchiveSettings.ApplicationID)
+
+<div class="form-group">
+    @Html.LabelFor(model => model.DatabaseArchiveSettings.EnableDatbaseArchive, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        <div class="checkbox">
+            @Html.CheckBoxFor(model => model.DatabaseArchiveSettings.EnableDatbaseArchive, new { @onchange = "ShowArchiveSettings()", @class = "form -control" })
+            @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.EnableDatbaseArchive, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+        
+        
+        <div id="EnabledArchiveSettings" class="">
+            
+
+            @*<div class="form-group">
+                @Html.LabelFor(model => model.DatabaseArchiveSettings.SelectedTableScheme, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EnumDropDownListFor(model => model.DatabaseArchiveSettings.SelectedTableScheme, "Select a Table Scheme", new { @onchange = "ShowDeleteMoveOptions()", @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.SelectedTableScheme, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DatabaseArchiveSettings.MonthsToKeepIndex, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DatabaseArchiveSettings.MonthsToKeepIndex, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.MonthsToKeepIndex, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DatabaseArchiveSettings.MonthsToKeepData, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DatabaseArchiveSettings.MonthsToKeepData, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.MonthsToKeepData, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+                    
+
+            @*<div class="form-group">
+                @Html.LabelFor(model => model.DatabaseArchiveSettings.SelectedDeleteOrMove, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EnumDropDownListFor(model => model.DatabaseArchiveSettings.SelectedDeleteOrMove, "Select An Action", new { @onchange = "ShowDeleteMoveOptions()", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.SelectedDeleteOrMove, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div id="MoveOption" class="invisible">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatabaseArchiveSettings.ArchivePath, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DatabaseArchiveSettings.ArchivePath, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.ArchivePath, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>*@
+            @*<div id="DeleteForStandardTable"class="invisible">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatabaseArchiveSettings.NumberOfRows, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DatabaseArchiveSettings.NumberOfRows, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.NumberOfRows, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatabaseArchiveSettings.StartTime, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DatabaseArchiveSettings.StartTime, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.StartTime, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatabaseArchiveSettings.TimeDuration, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DatabaseArchiveSettings.TimeDuration, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DatabaseArchiveSettings.TimeDuration, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>*@
+        </div>
+        <div class="col-md-6">
+            @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
+        </div>
+        <div class="col-md-6">
+            <table class="table table-striped">
+                <tbody id="SignalExclusionList">
+                    <tr><th>Signal Id</th><th>Signal Description</th><th>Remove</th></tr>
+                    @Html.EditorFor(model => model.ExcludedSignals)
+                </tbody>
+            </table>
+        </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+@section Scripts
+{
+    <script type="text/javascript" src="~/Scripts/ArchiveSettings.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
+    <script type="text/javascript" src="~/Scripts/Map.js"></script>
+<script type="text/javascript" src="~/Scripts/AddData.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
+    <script type="text/javascript">
+        var urlpathAddSignal = '@Url.Action("AddSignal", "DatabaseArchiveSettings")';
+        var urlpathRemoveSignal = '@Url.Action("RemoveSignal", "DatabaseArchiveSettings")';
+        var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';
+        var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';
+
+    </script>
+}

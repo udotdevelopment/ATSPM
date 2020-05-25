@@ -1,0 +1,16 @@
+﻿@model MOE.Common.Models.DatabaseArchiveExcludedSignal
+
+    <tr id="@Model.SignalId">
+        <td>
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.SignalId)
+            @Html.HiddenFor(model => model.SignalDescription)
+            @Html.DisplayFor(model => model.SignalId, new { htmlAttributes = new { @class = "form-control" } })
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.SignalDescription, new { htmlAttributes = new { @class = "form-control" } })
+        </td>
+        <td>
+            <a href="javascript:RemoveSignal('@Model.SignalId')"><span class="fa fa-minus" style='font-size:14px' aria-hidden="true">Remove</span></a>
+        </td>
+    </tr>

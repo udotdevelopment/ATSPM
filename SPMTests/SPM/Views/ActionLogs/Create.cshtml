@@ -1,0 +1,102 @@
+﻿@using MvcCheckBoxList.Model;
+@model MOE.Common.Models.ActionLog
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="card card-body bg-light">
+        <h4>ActionLog</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { id = "Name-error", @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Date, "", new { id = "Date-error", @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SignalID, "Signal", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("SignalId", null, htmlAttributes: new { @class = "form-control", id= "SignalID" })
+                @*@Html.ValidationMessageFor(model => model.SignalId, "", new { id = "Signal-error", @class = "text-danger" })*@
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.AgencyID, "Agency", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("AgencyID", null, htmlAttributes: new { @class = "form-control" })
+                @*@Html.ValidationMessageFor(model => model.AgencyID, "", new { id = "Agency-error", @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Actions, "Actions", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @{
+                var htmlListInfo = new HtmlListInfo(HtmlTag.vertical_columns, 2, null, TextLayout.Default, TemplateIsUsed.No);
+                }
+                @Html.CheckBoxListFor(x => x.CheckBoxListReturnActions,
+                                x => x.CheckBoxListAllActions,
+                                x => x.ActionID,
+                                x => x.Description,
+                                x => x.Actions,
+                                         htmlListInfo)
+                
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MetricTypes, "MetricTypes", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBoxListFor(x => x.CheckBoxListReturnMetricTypes,
+                                x => x.CheckBoxListAllMetricTypes,
+                                x => x.MetricID,
+                                x => x.ChartName,
+                                x => x.MetricTypes,
+                                  htmlListInfo)
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Comment, "", new { id = "Comment-error", @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" onclick="PostCreateActionLog()" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+<div id="ResultPlaceHolder"></div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript" src="~/Scripts/ActionLog.js"></script>
+    <script>
+        var urlActionLogCreate = '@Url.Action("Create", "ActionLogs")';
+
+    </script>
+}

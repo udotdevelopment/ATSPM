@@ -1,0 +1,365 @@
+﻿
+@model MOE.Common.Models.ViewModel.LinkPivotResultViewModel
+<table id="AdjustmentTable" class="table table-striped table-bordered table-condensed">
+    <caption>Adjustments</caption>
+    <thead>
+        <tr>
+            <th class="vertical-center text-center" scope="col">Link</th>
+            <th class="vertical-center text-center" scope="col">Signal</th>
+            <th class="vertical-center text-center" scope="col">Location</th>
+            <th class="vertical-center text-center" scope="col">Link Delta</th>
+            <th class="vertical-center text-center" id="EditLinkDelta" scope="col">Edit Link Delta</th>
+            <th class="vertical-center text-center" scope="col">Offset(+ to Offset)</th>
+            <th class="vertical-center text-center" scope="col">Existing Offset</th>
+            <th class="vertical-center text-center" scope="col">New Offset</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Adjustments)
+        {
+            <tr>
+                <td class="vertical-center">
+                    @Html.DisplayFor(modelItem => item.LinkNumber)
+                </td>
+                <td class="vertical-center">
+                    @Html.DisplayFor(modelItem => item.SignalId)
+                </td>
+                <td class="vertical-center">
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                <td class="vertical-center">
+                    @Html.DisplayFor(modelItem => item.Delta)
+                </td>
+                <td class="vertical-center">
+                    @Html.TextBoxFor(modelItem => item.Delta, new { id = "uxEditDelta" + @item.LinkNumber, @Class = "DisplayInput", aria_labelledby = "EditLinkDelta", onchange = "AdjustOffset()" })
+                </td>
+                <td class="vertical-center">
+                    @Html.DisplayFor(modelItem => item.Adjustment, new { id = "uxAdjustmentLabel" + @item.LinkNumber })
+                </td>
+                <td class="vertical-center">
+                    <input id="Text"+ @item.LinkNumber title="Modifiable Existing Offset" class="DisplayInput" type="text" onchange="AdjustOffset()" value="0" aria_labelledby="ExistingOffsetLabel" />
+                </td>
+                <td class="vertical-center">
+                    <span id="uxNewOffsetLabel">@item.Adjustment</span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<table class="table table-body-striped table-bordered table-condensed table-body-hover">
+    <caption>Approach Link Comparison</caption>
+    <thead>
+        <tr>
+            <th class="vertical-center text-center" rowspan="2">Link</th>
+            <th class="vertical-center text-center" colspan="2">Approaches</th>
+            <th class="vertical-center text-center" colspan="3">Upstream AOG</th>
+            <th class="vertical-center text-center" colspan="3">Downstream AOG</th>
+            <th class="vertical-center text-center" colspan="3">Total Link AOG</th>
+            <th class="vertical-center text-center" rowspan="2">Delta</th>
+            <th class="vertical-center text-center" rowspan="2" >AOG Chart</th>
+        </tr>
+        <tr>
+            <th class="vertical-center text-center">Upstream</th>
+            <th class="vertical-center text-center">Downstream</th>
+            <th class="vertical-center text-center">Existing</th>
+            <th class="vertical-center text-center">Predicted</th>
+            <th class="vertical-center text-center">Change</th>
+            <th class="vertical-center text-center">Existing</th>
+            <th class="vertical-center text-center">Predicted</th>
+            <th class="vertical-center text-center">Change</th>
+            <th class="vertical-center text-center">Existing</th>
+            <th class="vertical-center text-center">Predicted</th>
+            <th class="vertical-center text-center">Change</th>
+        </tr>
+    </thead>
+    
+        @foreach (var item in Model.ApproachLinks)
+        {
+            <tbody>
+                <tr>
+                    <td class="vertical-center" rowspan="2">
+                        @item.LinkNumber                       
+                    </td>
+                    <td class="vertical-center">
+                        @item.UpstreamCombinedLocation
+                    </td>
+                    <td class="vertical-center">
+                        @item.DownstreamCombinedLocation
+                    </td>
+                    <td class="vertical-center">
+                        @Html.DisplayFor(modelItem => item.AOGUpstreamBefore)
+                    </td>
+                    <td class="vertical-center">
+                        @Html.DisplayFor(modelItem => item.AOGUpstreamPredicted)
+                    </td>
+                    <td class="vertical-center " rowspan="2">
+                        <div class="jsChart-Small" >
+                            <canvas id="@item.UpstreamChartName"></canvas>
+                        <script type="text/javascript">
+                            var data = {
+                                labels: ["", "", "", ""],
+                                datasets: [
+                                    {
+                                        data: [@item.UpstreamChartExisting, @item.UpstreamChartPositiveChange,
+                                            @item.UpstreamChartNegativeChange, @item.UpstreamChartRemaining
+                                        ],
+                                        backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
+                                        hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
+                                        borderWidth: [1, 1, 1, 1]
+                                    }
+                                ]
+                            };
+                            // Get context with jQuery - using jQuery's .get() method.
+                            var ctx = $("#@item.UpstreamChartName").get(0).getContext("2d");
+                            var myPieChart = new Chart(ctx,
+                                {
+                                    type: 'pie',
+                                    data: data,
+                                    options: {
+                                        legend: {
+                                            display: false
+                                        }
+                                    }
+                                });
+                        </script>
+                            </div>
+</td>
+                    <td class="vertical-center">
+                        @Html.DisplayFor(modelItem => item.AOGDownstreamBefore)
+                    </td>
+                    <td class="vertical-center">
+                        @Html.DisplayFor(modelItem => item.AOGDownstreamPredicted)
+                    </td>
+                    <td class="vertical-center" rowspan="2">
+
+                        <div class="jsChart-Small">
+                            <canvas id="@item.DownstreamChartName"></canvas>
+                        <script type="text/javascript">
+
+                            var data = {
+                                labels: ["", "", "", ""],
+                                datasets: [
+                                    {
+                                        data: [@item.DownstreamChartExisting, @item.DownstreamChartPositiveChange,
+                                            @item.DownstreamChartNegativeChange, @item.DownstreamChartRemaining
+                                        ],
+                                        backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
+                                        hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
+                                        borderWidth: [1, 1, 1, 1]
+                                    }
+                                ]
+                            };
+                            // Get context with jQuery - using jQuery's .get() method.
+                            var ctx = $("#@item.DownstreamChartName").get(0).getContext("2d");
+                            var myPieChart = new Chart(ctx,
+                                {
+                                    type: 'pie',
+                                    data: data,
+                                    options: {
+                                        legend: {
+                                            display: false
+                                        }
+                                    }
+                                });
+                        </script>
+                        </div>
+                    </td>
+                    <td class="vertical-center BoldText">
+                        @item.AogTotalBefore
+                    </td>
+                    <td class="vertical-center BoldText">
+                        @item.AogTotalPredicted
+                    </td>
+                    <td class="vertical-center" rowspan="2">
+
+                        <div class="jsChart-Small">
+                            <canvas id="@item.TotalChartName"></canvas>
+                        <script type="text/javascript">
+
+                            var data = {
+                                labels: ["", "", "", ""],
+                                datasets: [
+                                    {
+                                        data: [@item.TotalChartExisting, @item.TotalChartPositiveChange,
+                                            @item.TotalChartNegativeChange, @item.TotalChartRemaining
+                                        ],
+                                        backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
+                                        hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
+                                        borderWidth: [1, 1, 1, 1]
+                                    }
+                                ]
+                            };
+                            // Get context with jQuery - using jQuery's .get() method.
+                            var ctx = $("#@item.TotalChartName").get(0).getContext("2d");
+                            var myPieChart = new Chart(ctx,
+                                {
+                                    type: 'pie',
+                                    data: data,
+                                    options: {
+                                        legend: {
+                                            display: false
+                                        }
+                                    }
+                                });
+                        </script>
+                        </div>
+                    </td>
+
+                    <td class="vertical-center" rowspan="2">
+                        @Html.DisplayFor(modelItem => item.Delta)
+                    </td>
+                    <td class="vertical-center text-left" rowspan="2">
+                        <a href="@item.ResultChartLocation" alt="Link to Result Chart Image" target="_blank"><img class="ResultChartImage" src="@item.ResultChartLocation" alt="Result Chart Image" /></a>
+                        <button type="button" onclick="GetPCDOptions('@item.SignalId', '@item.DownSignalID' , '@item.UpstreamApproachDirection' , '@item.DownstreamApproachDirection' , @item.Delta )">PCD Options</button>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vertical-center">
+                        @Html.DisplayFor(modelItem => item.Location)
+                    </td>
+                    <td class="vertical-center">
+                        @Html.DisplayFor(modelItem => item.DownLocation)
+                    </td>
+                    
+                    <td class="vertical-center">
+                        @Html.DisplayFor(modelItem => item.PAOGUpstreamBefore)%
+                    </td>
+                    <td class="vertical-center">
+                        @Html.DisplayFor(modelItem => item.PAOGUpstreamPredicted)%
+                    </td>
+                    <td class="vertical-center">
+                        @Html.DisplayFor(modelItem => item.PAOGDownstreamBefore)%
+                    </td>
+                    <td class="vertical-center">
+                        @Html.DisplayFor(modelItem => item.PAOGDownstreamPredicted)%
+                    </td>
+                    <td class="vertical-center BoldText">
+                        @item.PAogTotalBefore%
+                    </td>
+                    <td class="vertical-center BoldText">
+                        @item.PAogTotalPredicted%
+                    </td>
+                </tr>
+            </tbody>
+        }
+    <tfoot>
+        <tr>
+            <th class="vertical-center text-center" colspan="3" rowspan="2">Corridor Summary</th>
+            <th class="vertical-center text-center">@Model.TotalAogUpstreamBefore</th>
+            <th class="vertical-center text-center">@Model.TotalAogUpstreamPredicted</th>
+            <th class="vertical-center text-center" rowspan="2">
+                
+                <div class="jsChart-Small" >
+                <canvas id="SummaryUpstreamChangeChart"></canvas>
+                <script type="text/javascript">
+                    var data = {
+                        labels: ["", "", "", ""],
+                        datasets: [
+                            {
+                                data: [@Model.TotalUpstreamChartExisting, @Model.TotalUpstreamChartPositiveChange,
+                                    @Model.TotalUpstreamChartNegativeChange, @Model.TotalUpstreamChartRemaining
+                                ],
+                                backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
+                                hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
+                                borderWidth: [1, 1, 1, 1]
+                            }
+                        ]
+                    };
+                    // Get context with jQuery - using jQuery's .get() method.
+                    var ctx = $("#SummaryUpstreamChangeChart").get(0).getContext("2d");
+                    var myPieChart = new Chart(ctx,
+                        {
+                            type: 'pie',
+                            data: data,
+                            options: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        });
+                </script>
+                </div>
+            </th>
+            <th class="vertical-center text-center">@Model.TotalAogDownstreamBefore</th>
+            <th class="vertical-center text-center">@Model.TotalAogDownstreamPredicted</th>
+            <th class="vertical-center text-center" rowspan="2">
+                
+                <div class="jsChart-Small" >
+                <canvas id="SummaryDownstreamChangeChart"></canvas>
+                <script type="text/javascript">
+                    var data = {
+                        labels: ["", "", "", ""],
+                        datasets: [
+                            {
+                                data: [@Model.TotalDownstreamChartExisting, @Model.TotalDownstreamChartPositiveChange,
+                                    @Model.TotalDownstreamChartNegativeChange, @Model.TotalDownstreamChartRemaining
+                                ],
+                                backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
+                                hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
+                                borderWidth: [1, 1, 1, 1]
+                            }
+                        ]
+                    };
+                    // Get context with jQuery - using jQuery's .get() method.
+                    var ctx = $("#SummaryDownstreamChangeChart").get(0).getContext("2d");
+                    var myPieChart = new Chart(ctx,
+                        {
+                            type: 'pie',
+                            data: data,
+                            options: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        });
+                </script>
+                </div>
+            </th>
+            <th class="vertical-center text-center">@Model.TotalAogBefore</th>
+            <th class="vertical-center text-center">@Model.TotalAogPredicted</th>
+            <th class="vertical-center text-center" rowspan="2">
+                
+                <div class="jsChart-Small" >
+                <canvas id="TotalChangeChart"></canvas>
+                <script type="text/javascript">
+                    var data = {
+                        labels: ["", "", "", ""],
+                        datasets: [
+                            {
+                                data: [@Model.TotalChartExisting, @Model.TotalChartPositiveChange,
+                                    @Model.TotalChartNegativeChange, @Model.TotalChartRemaining
+                                ],
+                                backgroundColor: ["#B7E8A7", "#339933", "#cc0000", "#c0c0c0"],
+                                hoverBackgroundColor: ["#BDE8AE", "#8cd98c", "#ff0000", "#e6e6e6"],
+                                borderWidth: [1, 1, 1, 1]
+                            }
+                        ]
+                    };
+                    // Get context with jQuery - using jQuery's .get() method.
+                    var ctx = $("#TotalChangeChart").get(0).getContext("2d");
+                    var myPieChart = new Chart(ctx,
+                        {
+                            type: 'pie',
+                            data: data,
+                            options: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        });
+                </script>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th class="vertical-center text-center">@Model.TotalPaogUpstreamBefore %</th>
+            <th class="vertical-center text-center">@Model.TotalPaogUpstreamPredicted %</th>
+            <th class="vertical-center text-center">@Model.TotalPaogDownstreamBefore %</th>
+            <th class="vertical-center text-center">@Model.TotalPaogDownstreamPredicted %</th>
+            <th class="vertical-center text-center">@Model.TotalPaogBefore %</th>
+            <th class="vertical-center text-center">@Model.TotalPaogPredicted %</th>
+        </tr>
+    </tfoot>
+</table>

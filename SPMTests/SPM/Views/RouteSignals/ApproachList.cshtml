@@ -1,0 +1,36 @@
+﻿@model MOE.Common.Models.RouteSignal
+
+<table class="table-condensed table-striped">
+    
+    <tr><th colspan="5">@Model.Signal.SignalDescription</th></tr>
+    <tr><th>Dir.</th><th class="col-centered">Phase</th><th><label id="OverlapHeader">Overlap</label></th><th><label id="PrimaryHeader">Primary</label></th><th><label id="OpposingHeader">Opposing</label></th></tr>
+    @if (Model.Signal.Approaches != null)
+    {
+        foreach (var approach in Model.Signal.Approaches)
+        {
+            var routePhaseDirectiton = Model.PhaseDirections.FirstOrDefault(p => p.IsOverlap == approach.IsProtectedPhaseOverlap
+                && p.Phase == approach.ProtectedPhaseNumber
+                && p.DirectionTypeId == approach.DirectionTypeID);
+            if (routePhaseDirectiton != null)
+            {
+                <tr>
+                    <td>@approach.DirectionType.Abbreviation</td>
+                    <td class="text-center">@approach.ProtectedPhaseNumber</td>
+                    <td class="text-center">@Html.CheckBoxFor(modelItem => approach.IsProtectedPhaseOverlap, new{aria_labelledby="OverlapHeader"})</td>
+                    <td class="text-center"><input type="radio" aria-labelledby="PrimaryHeader" id="@approach.ProtectedPhaseNumber@approach.DirectionType.Abbreviation" onclick="SetApproach(@approach.ProtectedPhaseNumber, @approach.DirectionTypeID, @approach.IsProtectedPhaseOverlap.ToString().ToLower(), true, @Model.Id)" @(routePhaseDirectiton.IsPrimaryApproach == true ? "checked" : "") value="primary" name="primary" class="radio"/></td>
+                    <td class="text-center"><input type="radio" aria-labelledby="OpposingHeader" value="opposing" name="opposing" onclick="SetApproach(@approach.ProtectedPhaseNumber, @approach.DirectionTypeID, @approach.IsProtectedPhaseOverlap.ToString().ToLower(), false, @Model.Id)" @(routePhaseDirectiton.IsPrimaryApproach == false ? "checked" : "") class="radio"/></td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>@approach.DirectionType.Abbreviation</td>
+                    <td class="text-center">@approach.ProtectedPhaseNumber</td>
+                    <td class="text-center">@Html.CheckBoxFor(modelItem => approach.IsProtectedPhaseOverlap, new { aria_labelledby = "OverlapHeader" })</td>
+                    <td class="text-center"><input type="radio" aria-labelledby="PrimaryHeader" id="@approach.ProtectedPhaseNumber@approach.DirectionType.Abbreviation" onclick="SetApproach(@approach.ProtectedPhaseNumber, @approach.DirectionTypeID, @approach.IsProtectedPhaseOverlap.ToString().ToLower(), true, @Model.Id)" value="primary" name="primary" class="radio"/></td>
+                    <td class="text-center"><input type="radio" aria-labelledby="OpposingHeader" value="opposing" name="opposing" onclick="SetApproach(@approach.ProtectedPhaseNumber, @approach.DirectionTypeID, @approach.IsProtectedPhaseOverlap.ToString().ToLower(), false, @Model.Id)" class="radio"/></td>
+                </tr>
+            }
+        }
+    }
+</table>

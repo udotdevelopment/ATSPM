@@ -91,6 +91,8 @@
   <ItemGroup>
     <Compile Include="Controllers\ActionLogsControllerTests.cs" />
     <Compile Include="Controllers\DataExportControllerTests.cs" />
+    <Compile Include="Controllers\InMemoryControllerTypeRepository.cs" />
+    <Compile Include="Controllers\InMemoryMOEDatabase.cs" />
     <Compile Include="Controllers\RoutesControllerTests.cs" />
     <Compile Include="Controllers\AggregateDataExportControllerTests.cs" />
     <Compile Include="Controllers\SignalsControllerTests.cs" />
@@ -104,6 +106,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MOE.Common\MOE.Common.csproj">
+      <Project>{87951632-A7BE-4E04-B62C-C4FC2FC0CD5A}</Project>
+      <Name>MOE.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SPM\SPM.csproj">
       <Project>{9589DEB3-61EF-4517-AF80-CCB7996AD4DD}</Project>
       <Name>SPM</Name>

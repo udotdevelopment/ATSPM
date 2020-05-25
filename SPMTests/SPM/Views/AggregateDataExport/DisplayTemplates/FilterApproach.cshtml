@@ -1,0 +1,18 @@
+﻿@model MOE.Common.Business.FilterExtensions.FilterApproach
+
+<div class="card panel-signal">
+    <div class="card-header">
+            <a id="Signals" data-toggle="collapse" href="#collapseSignal_@Model.ApproachId">
+               @Html.DisplayFor(m => m.Description)
+            </a>
+            
+            <a class="pull-right">
+            <span>
+                @Html.LabelFor(m => m.Exclude)
+                @Html.CheckBoxFor(m => m.Exclude)
+                </span></a>
+    </div>
+    <div id="collapseSignal_@Model.ApproachId" class="card-body collapse">
+                @Html.HiddenFor(m => m.ApproachId)
+                @Html.DisplayFor(m => m.FilterDetectors)
+        </div></div>

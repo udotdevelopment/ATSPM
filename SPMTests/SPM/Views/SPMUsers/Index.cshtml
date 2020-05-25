@@ -1,0 +1,42 @@
+﻿@model IEnumerable<SPM.Models.UserViewModel>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.User.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.ReceiveAlerts)
+        </th>
+        <th>
+            Roles
+        </th>
+        <th>
+            Action
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Email)
+            </td>
+            <td>
+                <input type="checkbox" checked="@item.User.ReceiveAlerts" title="Receive Alerts" disabled="disabled"/>
+                       @*@Html.DisplayFor(modelItem => item.User.ReceiveAlerts, new {htmlAttributes = new { @class = "form-control col-md-2", title = "User"} })*@
+            </td>
+            <td>
+                @foreach (string role in item.Roles.OrderBy(r=> r))
+                {
+                    @Html.DisplayFor(modelItem => role) <br/>
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.User.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.User.Id })
+            </td>
+        </tr>
+    }
+
+</table>

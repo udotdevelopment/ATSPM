@@ -657,7 +657,7 @@ namespace MOE.Common.Migrations
                     Action = "AWS LFT and Detection Worksheets 2019-04-10.xlsm",
                     ParentId = 32,
                     Application = "SignalPerformanceMetrics",
-                    DisplayOrder =11 0
+                    DisplayOrder =110
                 },
                 new Menu
                 {

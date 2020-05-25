@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/MOEWcfServiceLibrary" />
+  <xs:element name="GetLinkPivot">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="routeId" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="cycleTime" type="xs:int" />
+        <xs:element minOccurs="0" name="direction" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="bias" type="xs:double" />
+        <xs:element minOccurs="0" name="biasDirection" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="monday" type="xs:boolean" />
+        <xs:element minOccurs="0" name="tuesday" type="xs:boolean" />
+        <xs:element minOccurs="0" name="wednesday" type="xs:boolean" />
+        <xs:element minOccurs="0" name="thursday" type="xs:boolean" />
+        <xs:element minOccurs="0" name="friday" type="xs:boolean" />
+        <xs:element minOccurs="0" name="saturday" type="xs:boolean" />
+        <xs:element minOccurs="0" name="sunday" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLinkPivotResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/MOEWcfServiceLibrary" minOccurs="0" name="GetLinkPivotResult" nillable="true" type="q1:ArrayOfAdjustmentObject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DisplayLinkPivotPCD">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="upstreamSignalID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="upstreamDirection" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="downstreamSignalID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="downstreamDirection" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="delta" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="maxYAxis" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DisplayLinkPivotPCDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/MOEWcfServiceLibrary" minOccurs="0" name="DisplayLinkPivotPCDResult" nillable="true" type="q2:DisplayObject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Test">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TestResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
