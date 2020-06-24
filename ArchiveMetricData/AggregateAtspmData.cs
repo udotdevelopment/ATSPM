@@ -29,7 +29,6 @@ namespace AggregateATSPMData
             var dataAggregation = new MOE.Common.Business.DataAggregation.DataAggregation();
             dataAggregation.StartAggregation(args);
         }
-
         
     }
 }

@@ -69,7 +69,7 @@ namespace MOE.Common.Models
         public virtual DbSet<ToBeProcessededTable> ToBeProcessededTables { get; set; }
         public virtual DbSet<ToBeProcessedTableIndex> ToBeProcessededIndexes { get; set; }
 
-public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedActivationAggregations
+        public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedActivationAggregations
         {
             get;
             set;
@@ -171,4 +171,19 @@ public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedAc
 
         //public System.Data.Entity.DbSet<SPM.Models.AggDataExportViewModel> AggDataExportViewModels { get; set; }
     }
+
+
+
+
+    //public class AggregationStaus : IdentityDbContext<AggregationStausUser>
+    //{
+    //    public AggregationStaus()
+    //        : base("name=AggregationStaus")
+    //    {
+    //        Database.SetInitializer<AggregationStaus>(new CreateDatabaseIfNotExists<AggregationStaus>());
+
+    //        //Database.CommandTimeout = 1500;
+    //        Database.CommandTimeout = 900;
+    //    }
+    //}
 }

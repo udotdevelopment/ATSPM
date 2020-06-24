@@ -562,6 +562,14 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
+<<<<<<< Updated upstream
+=======
+    <Content Include="Images\ATSPM_Component_Details_20200120.pdf" />
+    <Content Include="Images\ATSPM_Reporting_Details_20200121.pdf" />
+    <Content Include="Images\ATSPM_User Case Examples_Manual_20200128.pdf" />
+    <Content Include="Images\Configuration-Detection Type-Log Action Taken.pdf" />
+    <Content Include="Images\ATSPM_Installation_Manual_2020-01-28.pdf" />
+>>>>>>> Stashed changes
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Historical.pubxml" />
     <None Include="Properties\PublishProfiles\srtcns61-Staging.pubxml" />
@@ -644,9 +652,12 @@
     <Content Include="Images\TSMP_UDOT_v1-2_2-5-16.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+<<<<<<< Updated upstream
     <Content Include="Images\ATSPM_Component_Details.pdf" />
     <Content Include="Images\ATSPM_Installation_Manual.pdf" />
     <Content Include="Images\ATSPM_Reporting_Details.pdf" />
+=======
+>>>>>>> Stashed changes
     <Content Include="Scripts\Map.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
@@ -931,6 +942,7 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+<<<<<<< Updated upstream
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\</OutputPath>
@@ -949,6 +961,8 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+=======
+>>>>>>> Stashed changes
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
