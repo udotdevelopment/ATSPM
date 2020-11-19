@@ -1,0 +1,68 @@
+﻿@model MOE.Common.Models.LaneGroup
+
+<div id="LaneGroupConfiguration@(Model.LaneGroupID)" role="tablist" aria-multiselectable="true" class="col-md-12">
+    <div class="panel panel-lanegroup">
+        <div class="panel-heading" role="tab" id="LaneGroupConfigurationHeading@Model.ApproachID">
+            <h4 class="panel-title">
+                <a id="LaneGroupConfigurationHeader@(Model.LaneGroupID)" data-toggle="collapse" data-parent="#LaneGroupConfiguration@(Model.LaneGroupID)" href="#LaneGroupConfigurationCollapse@(Model.LaneGroupID)" aria-expanded="false" aria-controls="LaneGroupConfigurationCollapse@(Model.LaneGroupID)">
+                    Lane Group @Model.Description
+                </a>
+            </h4>
+        </div>
+        <div id="LaneGroupConfigurationCollapse@(Model.LaneGroupID)" class="panel-collapse collapse in ControlHeader" role="tabpanel" aria-labelledby="headingOne">
+
+            @Html.HiddenFor(model => model.ApproachID)
+
+            <div class="form-group-configuration-tool  form-group col-md-2">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+                <div class="">
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @id = "Description" + @Model.ApproachID, @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group-configuration-tool  form-group col-md-2">
+                @Html.LabelFor(model => model.MovementTypeID, htmlAttributes: new { @class = "control-label" })
+                <div class="">
+
+                    @Html.DropDownListFor(model => model.MovementTypeID, (SelectList)ViewBag.MovementType, htmlAttributes: new { @id = "MovementTypeID" + @Model.ApproachID, @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MovementTypeID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group-configuration-tool  form-group col-md-3">
+                @Html.LabelFor(model => model.LaneGroupTypeID, htmlAttributes: new { @class = "control-label" })
+                <div class="">
+                    @Html.DropDownListFor(model => model.LaneGroupTypeID, (SelectList)ViewBag.LaneGroupType, htmlAttributes: new { @id = "LaneGroupTypeID" + @Model.ApproachID, @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LaneGroupTypeID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group-configuration-tool  form-group col-md-2">
+                @Html.LabelFor(model => model.ProtectedPhaseNumber, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group">
+                    @Html.EditorFor(model => model.ProtectedPhaseNumber, new { htmlAttributes = new { @id = "ProtectedPhaseNumber" + @Model.ApproachID, @class = "form-control" } })
+                    <span class="input-group-addon">
+                        @Html.EditorFor(model => model.IsProtectedPhaseOverlap, new { htmlAttributes = new { @id = "IsProtectedPhaseOverlap" + @Model.ApproachID, @class = "" } })
+                        Overlap
+                    </span>
+                    @Html.ValidationMessageFor(model => model.ProtectedPhaseNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group-configuration-tool  form-group col-md-2">
+                @Html.LabelFor(model => model.PermissivePhaseNumber, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group">
+                    @Html.EditorFor(model => model.PermissivePhaseNumber, new { htmlAttributes = new { @id = "PermissivePhaseNumber" + @Model.ApproachID, @class = "form-control" } })
+                    <span class="input-group-addon">
+                        @Html.EditorFor(model => model.IsPermissivePhaseOverlap, new { htmlAttributes = new { @id = "IsPermissivePhaseOverlap" + @Model.ApproachID, @class = "" } })
+                        Overlap
+                    </span>
+                    @Html.ValidationMessageFor(model => model.PermissivePhaseNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group-configuration-tool  form-group col-md-12">
+                <a class="btn btn-default col-md-2" href="javascript:PostCreateLaneGroup(@Model.ApproachID)">Add To Approach</a>
+                <a class="btn btn-danger col-md-2" href="javascript:CancelAddLaneGroup(@Model.ApproachID)">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>

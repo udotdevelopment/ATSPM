@@ -1,0 +1,61 @@
+﻿@model MOE.Common.Models.ViewModel.Chart.SignalSearchViewModel
+
+
+<script>var urlpathSignalInfoBox = '@Url.Action("RouteInfoBox", "RouteSignals")';</script> 
+<script>var urlpathFillSignals = '@Url.Action("FillSignals", "DefaultCharts")';</script>
+<script type="text/javascript" src="~/Scripts/RouteMap.js"></script>
+<script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
+<script type="text/javascript" src="~/Scripts/AddRouteData.js"></script>
+<script type="text/javascript" src="~/Scripts/Map.js"></script>
+<script charset="UTF-8" type="text/javascript" src="//www.bing.com/api/maps/mapcontrol?callback=GetRouteMap"></script>
+
+@Html.AntiForgeryToken()
+<div class="card panel-default">
+    <div class="card-header">Signal Selection</div>
+    <div class="card-body">
+        
+        @Html.ValidationMessageFor(model => model.SignalID, "", new { id = "SignalId-error", @class = "text-danger" })
+        <br />
+        <div id="accordion" role="tablist" aria-multiselectable="true" class="col-md-12">
+            <div class="card panel-default">
+                <div class="card-header" role="tab" id="headingOne">
+                        <a id="SignalHeader" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            Signal List
+                        </a>
+                </div>
+                <div id="collapseOne" class="collapse card-body" role="tabpanel" aria-labelledby="headingOne">
+                    <div id="SignalsPlaceHolder">
+                    </div>
+                </div>
+            </div>
+            <div class="card panel-default">
+                <div class="card-header" role="tab" id="headingTwo">
+                        <a class="" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Signal Map
+                        </a>
+                </div>
+                <div id="collapseTwo" class="collapse card-body" role="tabpanel" aria-labelledby="headingTwo">
+                    <div class="row">
+                    <div class="col-md-6">
+                        <label class="control-label" for="Regions" id="Regions-error">Region</label>
+                        @Html.DropDownListFor(model => model.SelectedRegionID,
+                            new SelectList(Model.Regions, "ID", "Description"),
+                            "--Select Region--", new {@id = "Regions", @class = "form-control", @onchange = "RegionChange(this)"})
+                        @Html.ValidationMessageFor(model => model.SelectedRegionID, "", new {id = "SelectedRegionID-error", @class = "text-danger"})
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label" for="MetricTypes">Metric Type</label>
+                        @Html.DropDownList("MetricTypes", Model.MapMetricsList, "--Select a Metric--", new {@id = "MetricTypes", @class = "form-control", @onchange = "ReportTypeChange()"})
+                    </div>
+                        <div class="Flexible-container col-md-12">
+                            <div id="mapDiv" class="MapDiv"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+}

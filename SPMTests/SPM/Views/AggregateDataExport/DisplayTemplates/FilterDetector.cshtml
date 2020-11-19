@@ -1,0 +1,16 @@
+﻿@model MOE.Common.Business.FilterExtensions.FilterDetector
+
+<div class="card panel-detector">
+<div class="card-header" >
+        <a id="Detector" data-toggle="collapse" href="#DetectorConfiguration_@Model.Id" >
+            Detector Channel @Html.DisplayFor(model => model.Description)
+        </a>
+        <a class="pull-right">
+            <span>@Html.LabelFor(model => model.Exclude)
+                @Html.CheckBoxFor(m => m.Exclude)</span>
+        </a>
+</div>
+<div id="DetectorConfiguration_@Model.Id" class="card-body collapse" role="tabpanel" aria-labelledby="headingOne">
+        @Html.HiddenFor(m => m.Id)
+        
+    </div></div>

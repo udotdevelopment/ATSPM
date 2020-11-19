@@ -1,0 +1,35 @@
+﻿@model MOE.Common.Models.ViewModel.MetricUsage.ChartViewModel
+
+<canvas id="@Model.CanvasName"></canvas>
+<script>
+    var labelsArray = [];
+    var valuesArray = [];
+    var colorsArray = [];
+    @foreach(MOE.Common.Business.ActionLog.ChartData c in Model.ChartData)
+    {
+        @:labelsArray.push('@c.Description');
+                    @:valuesArray.push('@c.Value');
+                    @:colorsArray.push('@c.Color');
+    }
+    var ctx = $("#@Model.CanvasName");
+    var myChart = new Chart(ctx, {
+        type: '@Model.ChartType',
+        data: {
+            labels: labelsArray,
+            datasets: [{
+                label: '@Model.YAxisDescription',
+                data: valuesArray,
+                backgroundColor: colorsArray,
+                borderColor: 'lightgray',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            title: { display: true, text: '@Model.ReportTitle' }
+            @if(@Model.ChartType == "bar")
+            {
+                @:, scales: {yAxes: [{ticks: {beginAtZero: true}}] }
+            }
+        }
+        });
+</script>

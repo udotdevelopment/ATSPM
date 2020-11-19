@@ -1,0 +1,238 @@
+﻿@using System.Web.UI.WebControls
+@using MvcCheckBoxList.Model;
+@model SPM.Models.AggDataExportViewModel
+    
+
+@using (Ajax.BeginForm("CreateMetric", "AggregateDataExport", new AjaxOptions { InsertionMode = System.Web.Mvc.Ajax.InsertionMode.Replace, UpdateTargetId = "Results", HttpMethod = "POST", OnBegin = "StartReportSpinner()", OnSuccess = "StopReportSpinner()", OnFailure = "StopReportSpinner()" }))
+{
+
+    @Html.AntiForgeryToken()
+    <br/>
+    <div class="row">
+        <div class="col-4">
+            <div class="card panel-signal">
+                <div class="card-header">
+                        <a id="Signals" data-toggle="collapse" href="#collapseSignal">
+                            Signals
+                        </a>
+                </div>
+                <div id="collapseSignal" class="card-body collapse show">
+                    <div class="card panel-signal">
+                        <div class="card-header">
+                                <a id="Signals" data-toggle="collapse" href="#collapseRoutes">
+                                    <label id="LoadSignals">Load Signals From Route</label>
+                                </a>
+                        </div>
+                        <div id="collapseRoutes" class="card-body collapse show">
+                            <div id="Routes" class="col-md-12">
+                                @Html.DropDownListFor(m => m.SelectedRouteId, new SelectList(Model.Routes, "Id", "RouteName"), "Select A Route",
+                                    new { @onchange = "LoadRoute()", @class = "form-control", aria_labelledby= "LoadSignals" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card panel-signal">
+                        <div class="card-header">
+                                <a id="Signals" data-toggle="collapse" href="#collapseMap">
+                                    Load Signals From Map
+                                </a>
+                        </div>
+                        <div id="collapseMap" class="card-body collapse">
+                            @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
+                        </div>
+                    </div>
+
+                    <div class="card panel-signal">
+                        <div class="card-header">
+                                <a id="Signals" data-toggle="collapse" href="#collapseDirection">
+                                    Direction Filters
+                                </a>
+                        </div>
+                        <div id="collapseDirection" class="card-body collapse">
+                            @Html.DisplayFor(m => m.FilterDirections)
+                        </div>
+
+                    </div>
+                    <div class="card panel-signal">
+                        <div class="card-header">
+                                <a id="Signals" data-toggle="collapse" href="#collapseMovement">
+                                    Movement Filters
+                                </a>
+                        </div>
+                        <div id="collapseMovement" class="card-body collapse">
+                            @Html.DisplayFor(m => m.FilterMovements)
+                        </div>
+
+                    </div>
+
+                    <button class="btn btn-dark" type="button" value="Clear Signals" onclick="ClearSignals()">Clear Signals</button>
+                    <div class="card panel-signal">
+                        <div class="card-header">
+                                <a id="DataAggregation" data-toggle="collapse" href="#RouteSignals">
+                                    Selected Signals
+                                </a>
+                        </div>
+                        <div id="RouteSignals" class="card-body collapse show">
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="card panel-signal">
+                <div class="card-header">
+                    <a id="DataAggregation" data-toggle="collapse" href="#collapseDataAggregation">
+                        Chart Options
+                    </a>
+                </div>
+                <div id="collapseDataAggregation" class="card-body collapse show control-label">
+                    <div class="row">
+                        <div class="col-4">
+                            @Html.LabelFor(model => model.SelectedMetricTypeId, htmlAttributes: new {@class = "control-label"})
+                            @Html.DropDownListFor(model => model.SelectedMetricTypeId, new SelectList(Model.MetricTypes, "MetricId", "ChartName"), new {@onchange = "LoadDataAggregateTypes()", @class = "form-control"})
+                        </div>
+
+                        <div class="col-4">
+                            @Html.LabelFor(model => model.SelectedAggregatedData, htmlAttributes: new {@class = "control-label"})
+                            <div id="AggregatedDataType">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            @Html.LabelFor(model => model.SelectedXAxisType, htmlAttributes: new {@class = "control-label"})
+                            @Html.DropDownListFor(model => model.SelectedXAxisType, new SelectList(Model.XAxisTypes), new {@class = "form-control"})
+                        </div>
+                        <div class="col-4">
+                            @Html.LabelFor(model => model.SelectedSeriesType, htmlAttributes: new {@class = "control-label"})
+                            @Html.DropDownListFor(model => model.SelectedSeriesType, new SelectList(Model.SeriesTypes), new {@class = "form-control"})
+                        </div>
+                        <div class="col-4">
+                            @Html.LabelFor(model => model.SelectedAggregationType, htmlAttributes: new {@class = "control-label"})
+                            @Html.DropDownListFor(model => model.SelectedAggregationType, new SelectList(Model.AggregationTypes), new {@class = "form-control"})
+                        </div>
+                        <div class="col-4">
+                            @Html.LabelFor(model => model.SelectedChartType, htmlAttributes: new {@class = "control-label"})
+                            @Html.DropDownListFor(model => model.SelectedChartType, new SelectList(Model.ChartTypesList), new {@class = "form-control"})
+                        </div>
+                        <div class="col-4">
+                            @Html.LabelFor(model => model.SelectedSeriesWidth, htmlAttributes: new {@class = "control-label"})
+                            @Html.DropDownListFor(model => model.SelectedSeriesWidth, new SelectList(Model.SeriesWidths), new {@class = "form-control"})
+                        </div>
+                        <div class="col-4">
+                            @Html.LabelFor(model => model.SelectedBinSize, htmlAttributes: new {@class = "control-label"})
+                            @Html.DropDownListFor(model => model.SelectedBinSize, new SelectList(Model.BinSizes, "Item1", "Item2"), new {@class = "form-control"})
+                        </div>
+                        <div class="col-4">
+                            @Html.LabelFor(model => model.SelectedDimension, htmlAttributes: new {@class = "control-label"})
+                            @Html.DropDownListFor(model => model.SelectedDimension, new SelectList(Model.Dimensions), new {@class = "form-control"})
+                        </div>
+                        <div class="col-4">
+                            @Html.CheckBoxFor(model => model.ShowEventCount, new{aria_labelledby= "ShowEventCount" })
+                            @Html.LabelFor(model => model.ShowEventCount, htmlAttributes: new {@class = "control-label"})
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+            <div class="col-7">
+                <div class="card panel-signal">
+                    <div class="card-header">
+                            <a id="DataAggregation" data-toggle="collapse" href="#collapseDateOptions">
+                                Date Options
+                            </a>
+                    </div>
+                    <div id="collapseDateOptions" class="card-body collapse show">
+                        <div class="row">
+                        <div class="col-5">
+                            <div class="col-12">
+                                @Html.LabelFor(model => model.StartDateDay, htmlAttributes: new {@class = "control-label"})
+                                <div class="input-group-custom">
+                                    @Html.EditorFor(model => model.StartDateDay, new {htmlAttributes = new {@class = "form-control DayWidth datepicker"}})
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                @Html.LabelFor(model => model.EndDateDay, htmlAttributes: new {@class = "control-label"})
+                                <div class="input-group-custom">
+                                    @Html.EditorFor(model => model.EndDateDay, new {htmlAttributes = new {@class = "form-control DayWidth datepicker"}})
+                                </div>
+                            </div>
+                            <div class="col-12 col-left col-nomargin dateSelector">
+                                <div class="col-4">
+                                    @Html.CheckBoxFor(model => model.Weekdays, false)
+                                    @Html.LabelFor(model => model.Weekdays, new {@class = "control-label"})
+                                </div>
+                                <div class="col-4">
+                                    @Html.CheckBoxFor(model => model.Weekends, false)
+                                    @Html.LabelFor(model => model.Weekends, new {@class = "control-label"})
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-5 col-left dateSelector">
+                            <div id="StartEndDaySelector" class="jquery-datepickermoveleft"></div>
+                        </div>
+                        <div class="col-2 col-left dateSelector">
+                            <button class="btn btn-primary" type="button" onclick="ResetDates()">Reset Date</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-5">
+                    <div class="card panel-signal">
+                        <div class="card-header">
+                            <a id="DataAggregation" data-toggle="collapse" href="#collapseDateOptions">
+                                Time Filter
+                            </a>
+                        </div>
+                        <div id="collapseDateOptions" class="card-body collapse show">
+                            <div class="col-12">
+                                @Html.LabelFor(model => model.StartTime, htmlAttributes: new { @class = "control-label" })
+                                <div class="input-group-custom">
+                                    @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of start date" } })
+                                    @Html.DropDownListFor(model => model.SelectedStartAMPM, Model.StartAMPMList,
+                                        new { @class = "form-control AMPMWidth", title = "AM PM component of start date" })
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                @Html.LabelFor(model => model.EndTime, htmlAttributes: new { @class = "control-label" })
+                                <div class="input-group-custom">
+                                    @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control timeWidth", title = "Time component of end date" } })
+                                    @Html.DropDownListFor(model => model.SelectedEndAMPM, Model.EndAMPMList,
+                                        new { @class = "form-control AMPMWidth", title = "AM PM component of end date" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-4">
+                    @*<button id="CreateMetric" type="submit" name="CreateMetric" value="CreateMetric" class="btn btn-primary">Create Chart &nbsp;<span id='RunReportSpinner' class="glyphicon"></span></button>*@
+                    <button id="CreateMetric" type="submit" name="CreateMetric" value="CreateMetric" class="btn btn-primary">Create Chart &nbsp;<span id='RunReportSpinner' class=""style="font-size:18px"></span></button> 
+
+                    @Html.ValidationSummary(false, "", new {@class = "text-danger"})
+                </div>
+                
+            </div>
+        </div>
+    </div>
+}
+        <div id="Results"></div>
+
+        @section Scripts
+{
+            <script type="text/javascript" src="~/Scripts/AggregateDataExport.js"></script>
+            <script type="text/javascript" src="~/Scripts/Map.js"></script>
+            <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
+            <script type="text/javascript">
+                var urlpathGetRouteSignals = '@Url.Action("GetRouteSignals", "AggregateDataExport")';
+                var urlpathGetAggregateDataTypesSignals = '@Url.Action("GetAggregateDataTypes", "AggregateDataExport")';
+                var urlpathGetSignal = '@Url.Action("GetSignal", "AggregateDataExport")';
+                var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';
+                var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';
+                var urlpathGetMetricsList = '@Url.Action("GetMetricsList", "DefaultCharts")';
+                var urlpathFillSignals = '@Url.Action("FillSignals", "DefaultCharts")';
+                var urlpathExportData = '@Url.Action("Index", "AggregateDataExport")';
+            </script>
+    
+            <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+        }

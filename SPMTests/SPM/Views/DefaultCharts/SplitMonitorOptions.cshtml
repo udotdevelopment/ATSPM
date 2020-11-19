@@ -1,0 +1,39 @@
+﻿@model MOE.Common.Business.WCFServiceLibrary.SplitMonitorOptions
+<div class="card">
+    <div class="card-header">Split Monitor Options</div>
+    <div class="card-body">
+        <div class="">
+            @Html.LabelFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.SelectedPercentileSplit, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.DropDownListFor(model => model.SelectedPercentileSplit, Model.PercentSplitsSelectList, new { @class = "form-control col-md-6" })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowPlanStripes, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowPlanStripes, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowPedActivity, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowPedActivity, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowAverageSplit, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowAverageSplit, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowPercentMaxOutForceOff, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowPercentMaxOutForceOff, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowPercentGapOuts, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowPercentGapOuts, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowPercentSkip, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowPercentSkip, new { htmlAttributes = new { @class = "control-label" } })
+        </div></div></div>
+
+
+

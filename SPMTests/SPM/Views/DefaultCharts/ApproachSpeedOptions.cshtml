@@ -1,0 +1,39 @@
+﻿@model MOE.Common.Business.WCFServiceLibrary.ApproachSpeedOptions
+<div class="card">
+    <div class="card-header">Approach Speed Options</div>
+    <div class="card-body">
+        <div class="">
+            @Html.LabelFor(model => model.YAxisMin, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.YAxisMin, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.SelectedBinSize, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.DropDownListFor(model => model.SelectedBinSize,
+                new SelectList(Model.BinSizeList, 15), new { @id = "SelectedBinSize", @class = "form-control col-md-6" })
+            @Html.ValidationMessageFor(model => model.SelectedBinSize, "", new { id = "SelectedBinSize-error", @class = "text-danger" })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowPlanStatistics, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowPlanStatistics, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowAverageSpeed, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowAverageSpeed, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowPostedSpeed, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowPostedSpeed, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.Show85Percentile, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.Show85Percentile, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.Show15Percentile, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.Show15Percentile, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        </div></div>

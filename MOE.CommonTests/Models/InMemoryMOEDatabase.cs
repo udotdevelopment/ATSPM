@@ -1423,7 +1423,7 @@ namespace MOE.CommonTests.Models
                     ApproachId = approach.ApproachID,
                     IsProtectedPhase = true,
                     EventCount = rnd.Next(500, 1000),
-                    Id = id
+                    //Id = id
                 };
                 PhaseEventCountAggregations.Add(r);
                 id++;
@@ -1435,7 +1435,7 @@ namespace MOE.CommonTests.Models
                         ApproachId = approach.ApproachID,
                         IsProtectedPhase = false,
                         EventCount = rnd.Next(500, 1000),
-                        Id = id
+                        //Id = id
                     };
                     PhaseEventCountAggregations.Add(permissivePhase);
                     id++;

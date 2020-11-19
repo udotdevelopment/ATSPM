@@ -1,0 +1,61 @@
+﻿@model MOE.Common.Models.ViewModel.MetricUsage.MetricUsageViewModel
+@{
+    ViewBag.Title = "Chart Usage Report";
+}
+<h2>Chart Usage Report</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new { id = "StartDate-error", @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control  datepicker" } })
+                @Html.ValidationMessageFor(model => model.EndDate, "", new { id = "EndDate-error", @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" onclick="GetCharts()" value="Run Report" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+
+}
+<div class="col-md-11" id="MetricsUsagePlaceHolder"></div>
+<div class="col-md-11" id="AgencyUsagePlaceHolder"></div>
+<div class="col-md-11" id="ReportsRunPlaceHolder"></div>
+<div class="col-md-11" id="ActionsByMetricPlaceHolder"></div>
+@foreach (MOE.Common.Models.MetricType m in Model.MetricTypes)
+{
+    <div class="col-md-11" id="PlaceHolder_@m.Abbreviation"></div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript" src="~/Scripts/Usage.js"></script>
+    <script>
+        var urlReportsRun = '@Url.Action("ReportsRun", "ActionLogs")';
+        var urlActionsByMetric = '@Url.Action("GetActionsByMetric", "ActionLogs")';
+        var urlMetricsUsage = '@Url.Action("GetMetricsUsage", "ActionLogs")';
+        var urlAgencyUsage = '@Url.Action("GetAgencyUsage", "ActionLogs")';
+        var urlActionsByMetricTypeID = '@Url.Action("GetActionsByMetricID", "ActionLogs")';
+        var urlGetMetrics = '@Url.Action("GetMetrics", "ActionLogs")';
+    </script>
+
+
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+}

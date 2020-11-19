@@ -1,0 +1,142 @@
+﻿@model MOE.Common.Models.Signal
+
+@Html.AntiForgeryToken()
+<div class="card panel-signal col-12">
+    <div class="card-header">
+            Signal @Model.SignalID
+    </div>
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.SignalID, new { @id = "editSignalID" })
+    @Html.HiddenFor(model => model.VersionID)
+        
+    @{
+        List <SelectListItem>  versionList = new List<SelectListItem>();
+        foreach (var v in Model.VersionList)
+        {
+            if (v.VersionID == Model.VersionID)
+            {
+                versionList.Add(new SelectListItem { Text = v.SelectListName, Value = v.VersionID.ToString(), Selected = true });
+            }
+            else
+            {
+                versionList.Add(new SelectListItem { Text = v.SelectListName, Value = v.VersionID.ToString() });
+            }
+        }
+    }         
+                
+    <div class="form-group-configuration-tool  form-group col-md-6">
+        @Html.LabelFor(model => model.VersionID, htmlAttributes: new { @class = "control-label" })
+        <div class="">
+            @Html.DropDownList("versionDropDown", versionList, new {id = "versionDropDown", aria_labelledby = "VersionID", @class = "form-control", @onchange = "LoadVersionByVersionID(this.value)" })
+            @Html.ValidationMessageFor(model => model.VersionID, "", new { id = "Version-error", @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <table class="table">
+                <tr>
+                    <th>
+                        Controller Type
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Region.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PrimaryName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SecondaryName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Latitude)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Longitude)
+                    </th>
+                    <th>
+                        @Html.LabelFor(model => model.Enabled, new{id="EnabledHeader"})
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.ControllerType.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Region.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.PrimaryName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.SecondaryName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Latitude)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Longitude)
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(model => model.Enabled, new { aria_labelledby="EnabledHeader" })
+                    </td>
+                </tr>
+            </table>
+            <h3>Approaches</h3>
+            <table class="table table-striped">
+                <tr>
+                    <th>
+                        Direction
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Approaches.First().Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Approaches.First().ProtectedPhaseNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Approaches.First().PermissivePhaseNumber)
+                    </th>
+                    <th>
+                        @Html.LabelFor(model => model.Approaches.First().IsProtectedPhaseOverlap, new { id = "IsProtectedPhaseOverlapHeader",  })
+                    </th>
+                    <th>
+                        @Html.LabelFor(model => model.Approaches.First().IsPermissivePhaseOverlap, new { id = "IsPermissivePhaseOverlapHeader" })
+                    </th>
+                </tr>
+
+                @foreach (var item in Model.Approaches)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DirectionType.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProtectedPhaseNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PermissivePhaseNumber)
+                        </td>
+                        <td>
+                            @Html.CheckBoxFor(modelItem => item.IsProtectedPhaseOverlap, new { aria_labelledby = "IsProtectedPhaseOverlapHeader" })
+                        </td>
+                        <td>
+                            @Html.CheckBoxFor(modelItem => item.IsPermissivePhaseOverlap, new { aria_labelledby = "IsPermissivePhaseOverlapHeader" })
+                        </td>
+                    </tr>
+                }
+            </table>
+
+            <h3>Detectors</h3>
+            <div id="ConfigurationTableCollapse">
+            </div>
+
+        </div>
+    </div>
+</div>
+

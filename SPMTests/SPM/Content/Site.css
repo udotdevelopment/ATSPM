@@ -1,0 +1,804 @@
+﻿body {
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-right:15px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top:70px;
+}
+
+.udotDiv
+{
+    margin-bottom:20px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+.vertical-center
+{
+    vertical-align:middle;
+}
+
+.jsChart-Small {
+    position: relative;
+    height: 95px;
+    width: 95px;
+}
+
+.center-check {
+    text-align: center;
+    position: center;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.approachName {
+    max-width: 500px;
+}
+
+.signalConfiguration{
+    background-color: white;
+}
+
+.table-body-striped > tbody:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.table-body-hover > tbody:hover {
+  background-color: #c1bfbf;
+}
+
+.ImageHome
+ {
+     width:100%;
+ }
+
+.BrandImage
+{    
+    padding-left:10px;
+    padding-bottom:5px;
+    height:100px;
+}
+  
+ .table > tbody > tr > td {
+      text-align: center;
+     vertical-align: middle;
+}
+
+.table > tbody > tr > th {
+      text-align: center;
+     vertical-align: middle;
+}
+
+.glyphicon.spinning {
+    animation: spin 1s infinite linear;
+    -webkit-animation: spin2 1s infinite linear;
+}
+
+.DaysDiv
+{
+    height:100%;
+}
+
+.AdvancedDiv
+{
+    height:500px;
+}
+
+.DisplayInput
+{
+    width:50px;
+    text-align:center;
+}
+
+.card-header {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: #1b6fce;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    color: white;
+}
+
+.card-header > a {
+    color: white;
+}
+
+.card > .card-heading {
+    background-color:#1b6fce;
+    color:white;
+    border-color: #dddddd;
+}
+
+.panel-default > .panel-heading-black {
+    background-color: #000000;
+    color: white;
+    border-color: #000000;
+}
+
+.panel-signal > .panel-heading {
+    background-color:#1b6fce;
+    color:white;
+    border-color: #dddddd;
+}
+
+.panel-signal{
+    border-color: #1b6fce;
+}
+
+.panel-black {
+    border-color: #000000;
+}
+
+.PageTitle{
+    color:#1b6fce;
+    font-size:36pt;
+    vertical-align:top;
+}
+
+.configuration-card-header {
+    background-color:#ee7623;
+    color:white;
+    border-color: #dddddd;
+}
+
+.panel-configuration-table{
+    border-color: #880015;
+}
+
+.panel-approach > .panel-heading {
+    background-color:#1b6fce;
+    color:white;
+    border-color: #dddddd;
+}
+
+.panel-approach{
+    border-color: #1b6fce;
+}
+
+.panel-lanegroup > .panel-heading {
+    background-color:#adcff5;
+    color:#1b6fce;
+    border-color: #dddddd;
+}
+
+.panel-lanegroup{
+    border-color: #adcff5;
+}
+
+.panel-detector > .panel-heading {
+    background-color:#d9e9fb;
+    color:#1b6fce;
+    border-color: #dddddd;
+}
+
+.panel-detector{
+    border-color: #d9e9fb;
+}
+
+.comments
+{
+    height:125px;
+    overflow-y:scroll;
+    border-width:1px;
+    border-style:solid;
+}
+
+.roles
+{
+    border-width:1px;
+    border-style:solid;
+}
+
+.col-centered{
+    float: none;
+}
+
+.col-left{
+    float:left;
+}
+
+.col-nomargin{
+    margin: 0 auto;
+    padding:0px;
+}
+
+.jquery-datepickermoveleft
+{
+    float:left;
+    margin:0px;
+    padding:0px;
+}
+
+.options-div{
+    max-width:400px;
+}
+.TimingAndAcuationsDotWidth {
+    max-width: 40px;
+}
+
+.PhaseBoxLightBlue{
+    /*height:36px;*/
+    /*border-style:solid;
+    border-width:3px;
+    border-color:red;
+    padding:0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;*/
+    background: rgba(102,175,233,.6) !important;
+}
+
+.PhaseBoxLightGreen{
+    background: #beeee1 !important;
+}
+.laneGroup
+{
+    border-width:1px;
+    border-style:solid;
+    margin:15px;
+}
+.laneGroupCustom
+{
+    width:60px;
+}
+
+/*.form-group {
+    margin-bottom: 15px;
+    border-style:solid;
+    border-width:3px;
+    border-color:#1b6fce;
+    padding-top:0;
+    padding-bottom:15px;
+    padding-left:15px;
+    padding-right:15px;
+}*/
+
+.form-group-configuration-tool-separated {
+    /*margin: 10px;*/
+    padding: 10px;
+}
+
+.form-group-configuration-tool {
+    margin: 0px;
+    /*border-style:solid;
+    border-width:3px;
+    border-color:#1b6fce;*/
+    /*padding-top:0;
+    padding-bottom:15px;
+    padding-left:5px;
+    padding-right:5px;*/
+}
+.section-header{
+    color:white;
+    background-color: #1b6fce;
+    margin-left:-15px;
+    margin-right:-15px;
+    margin-top:-21px;
+    font-weight:bolder;
+}
+
+.options-minHeight{
+    min-height:350px;
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg); }
+    to { transform: scale(1) rotate(360deg); }
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+
+/*.navbar-brand-custom {
+  float: left;
+  padding: 14.5px 15px;
+  font-size: 19px;
+  line-height: 21px;
+  height: 50px;
+}*/
+/*.navbarColor
+{
+    background-color:white;
+}*/
+
+.ResultChartImage
+{
+    width:135px;
+    display:block;
+}
+
+.ui-datepicker {
+	background-color: #fff;
+	border: 1px solid #66AFE9;
+	border-radius: 4px;
+	box-shadow: 0 0 8px rgba(102,175,233,.6);
+	display: none;
+	margin-top: 4px;
+	padding: 10px;
+	width: 230px;
+}
+.ui-datepicker a,
+.ui-datepicker a:hover {
+	text-decoration: none;
+    color: black;
+}
+.ui-datepicker a:hover,
+.ui-datepicker td:hover a {
+	color: #2A6496;
+	-webkit-transition: color 0.1s ease-in-out;
+	   -moz-transition: color 0.1s ease-in-out;
+	     -o-transition: color 0.1s ease-in-out;
+	        transition: color 0.1s ease-in-out;
+}
+.ui-datepicker .ui-datepicker-header {
+	margin-bottom: 4px;
+	text-align: center;
+}
+.ui-datepicker .ui-datepicker-title {
+	font-weight: 700;
+}
+    .ui-datepicker .ui-datepicker-prev,
+    .ui-datepicker .ui-datepicker-next {
+        cursor: default;
+        font-family: 'FontAwesome';
+        -webkit-font-smoothing: antialiased;
+        font-style: normal;
+        font-weight: normal;
+        height: 20px;
+        line-height: 1;
+        margin-top: 2px;
+        width: 30px;
+    }
+.ui-datepicker .ui-datepicker-prev {
+	float: left;
+	text-align: left;
+}
+.ui-datepicker .ui-datepicker-next {
+	float: right;
+	text-align: right;
+}
+    .ui-datepicker .ui-datepicker-prev:before {
+        content: "\f100";
+    }
+    .ui-datepicker .ui-datepicker-next:before {
+        content: "\f101";
+    }
+.ui-datepicker .ui-icon {
+	display: none;
+}
+.ui-datepicker .ui-datepicker-calendar {
+  table-layout: fixed;
+	width: 100%;
+}
+.ui-datepicker .ui-datepicker-calendar th,
+.ui-datepicker .ui-datepicker-calendar td {
+	text-align: center;
+	padding: 4px 0;
+}
+.ui-datepicker .ui-datepicker-calendar td {
+	border-radius: 4px;
+	-webkit-transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;
+	   -moz-transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;
+	     -o-transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;
+	        transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;
+}
+.ui-datepicker .ui-datepicker-calendar td:hover {
+	background-color: #eee;
+	cursor: pointer;
+}
+.ui-datepicker .ui-datepicker-calendar td a {
+	text-decoration: none;
+}
+.ui-datepicker .ui-datepicker-current-day {
+	background-color: #1b6fce;
+}
+.ui-datepicker .ui-datepicker-current-day a {
+	color: #fff
+}
+.ui-datepicker .ui-datepicker-calendar .ui-datepicker-unselectable:hover {
+	background-color: #fff;
+	cursor: default;
+}
+
+.no-gutter > [class*='col-'] {
+    padding-right:0;
+    padding-left:0;
+}
+
+.DayWidth
+{
+    width:115px;
+}
+
+.timeWidth
+{
+    width:80px;     
+}
+
+.panel-min-width
+{
+    min-width:400px;
+}
+
+.chart-selection-min-width
+{
+    min-width:310px;
+}
+.options-selection-min-width {
+    min-width: 285px;
+}
+
+.location-nowrap{
+    white-space:nowrap;    
+    display: flex;
+    align-items: flex-end;
+}
+
+.AMPMWidth
+{
+     width:auto;
+}
+
+.signalID-width
+{
+     width:125px;
+}
+
+.dateSelector
+{
+    min-width:220px;
+}
+.input-group-custom
+{
+    min-width:580px;
+}
+.input-group-custom .form-control {
+    display:inline-block;
+    margin:0;
+}
+
+.control-label {
+    font-weight: bold;
+}
+
+/*@media (min-width: 768px) {
+  .form-horizontal .control-label {
+    text-align: left;
+    margin-bottom: 0;
+    padding-top: 11px;
+  }
+}*/
+
+
+.partners {
+    width: 100%;
+    min-width: 800px;
+}
+
+/*.navbar-brand {
+  float: left;
+  padding: 14.5px 30px;
+  font-size: 30px;
+  line-height: 21px;
+  height: 50px;
+}*/
+
+/*.menuItem{
+    font-size: 14pt;
+    font-weight:bold;
+    color: #000000 !important;
+}*/
+
+
+.table > tfoot > tr > th,
+.table > tfoot > tr > td {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: middle;
+  border-top: 1px solid #dddddd;
+}
+
+.table > thead > tr > th {
+  vertical-align: middle;
+  border-bottom: 2px solid #dddddd;
+}
+
+caption {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color: #4c4c4c;
+  text-align: left;
+}
+
+.version {
+    color:white;
+    font-size:small;
+}
+.VersionContainer{
+    vertical-align:middle;
+    width:100%;
+}
+
+.BoldText{
+    font-weight:bold;
+}
+
+.MapDiv{
+    width:100%;
+    height:100%;
+    position:absolute;
+    min-width:500px;
+    min-height:450px;
+}
+
+.Flexible-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px;
+    height: 0;
+    overflow: hidden;
+}
+
+.Flexible-container iframe,   
+.Flexible-container object,  
+.Flexible-container embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.infobox{
+    position:relative;
+    background-color:White;
+    border:1px solid rgb(136, 136, 136);
+    left:0px;
+    top:0px;
+    text-align:center;
+    min-width:200px;
+}
+
+.infobox_close{
+    cursor:pointer;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    border:none;
+}
+
+.infobox_content{
+    margin:5px;
+    font-family: Arial;
+    font-size: large;
+    line-height:22px;
+}
+
+.infobox_pointer{
+    width:33px;
+    height:38px;
+    overflow:hidden;
+    position:relative;
+    z-index:1;
+    top:-1px;
+    left:90px;
+}
+
+.infobox_title
+{
+	font-weight: bold;
+    font-size: 15px;
+    color:Black;
+    font-family:Sans-Serif;
+}
+
+.infobox_link
+{
+	color:Black;	
+	font-family:Sans-Serif;
+	font-size:12px;
+    text-decoration:none;    
+    white-space:nowrap;  
+}
+
+.infobox_link:hover
+{		
+	text-decoration:underline;
+}
+
+.Infobox-list{
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns: 2;
+  list-style-type:none;
+}
+
+.DetectionType-list{    
+  list-style-type:none;
+}
+
+/*.dropdown-submenu {
+    position: relative;
+}*/
+
+/*.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+}*/
+
+/*.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+}*/
+
+/*.dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+}*/
+
+/*.navbar-toggle {
+  position: relative;
+  float: right;
+  margin-right: 15px;
+  padding: 9px 10px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  background-color: #1b6fce;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 0;
+}*/
+
+.colorPlaceHolder{
+    color:#b20400;
+}
+
+.dashPlaceHoder{
+    color:#f9f9f9;
+}
+
+.DetectionTypesWidth
+{
+    width:150px;
+}
+
+.FAQs
+{
+    width:100%;
+    max-width:100%
+}
+
+.TMCDirectionTotalColumn
+{
+    background-color:#f0fff0;
+}
+
+.TMCMLaneTypeTotalColumn
+{
+    background-color:#cce0f8;
+    max-width:30px;
+}
+
+.TMCTable
+{
+    margin-left:10px;
+}
+
+.approachVolumeImage{
+    width:100%;
+}
+
+.leftAlign{
+    text-align:left !important;
+}
+
+.bg-dark {
+    background-color: #1b6fce !important;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #fff;
+}
+
+
+.btn-warning {
+    color: #ffffff;
+    background-color: #ff7518;
+    border-color: #ff7518;
+}
+
+    .btn-warning:hover {
+        color: #ffffff;
+        background-color: #e45c00;
+        border-color: #983d00;
+    }
+
+    .btn-warning:focus, .btn-warning.focus {
+        box-shadow: 0 0 0 0.2rem #983d00;
+    }
+
+    .btn-warning.disabled, .btn-warning:disabled {
+        color: #ffffff;
+        background-color: #ff7518;
+        border-color: #ff7518;
+    }
+
+.btn-warning:not(:disabled):not(.disabled):active, .btn-warning:not(:disabled):not(.disabled).active,
+.show > .btn-warning.dropdown-toggle {
+    color: #ffffff;
+    background-color: #e45c00;
+    border-color: #983d00;
+}
+
+    .btn-warning:not(:disabled):not(.disabled):active:focus, .btn-warning:not(:disabled):not(.disabled).active:focus,
+    .show > .btn-warning.dropdown-toggle:focus {
+        box-shadow: 0 0 0 0.2rem #983d00;
+    }
+
+.bg-warning {
+    background-color: #e45c00 !important;
+}
+
+a.bg-warning:hover, a.bg-warning:focus,
+button.bg-warning:hover,
+button.bg-warning:focus {
+    background-color: #983d00 !important;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    z-index: 1000;
+    display: none;
+    min-width: 10rem;
+    padding: 0.5rem 0;
+    margin: 0.125rem 0 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
+}

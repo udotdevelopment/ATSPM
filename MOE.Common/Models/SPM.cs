@@ -1,20 +1,33 @@
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
+using System.Data.Entity.Core.EntityClient;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Infrastructure.Annotations;
+using System.Data.Entity.Migrations;
+using System.Linq;
 using Microsoft.AspNet.Identity.EntityFramework;
 using MOE.Common.Business.SiteSecurity;
+using MOE.Common.Migrations;
 
 namespace MOE.Common.Models
 {
     public class SPM : IdentityDbContext<SPMUser>
     {
         public SPM()
-            : base("name=SPM")
+            :base("SPM")
+            //: base("name=SPM")
         {
-            Database.SetInitializer<SPM>(new CreateDatabaseIfNotExists<SPM>());
+            
 
-            //Database.CommandTimeout = 1500;
+            Database.SetInitializer<SPM>(new CreateDatabaseIfNotExists<SPM>());
             Database.CommandTimeout = 900;
+        }
+
+        public SPM(string ConnectionString) : base(ConnectionString)
+        {
+            
+            Database.SetInitializer(new CustomInitializer());
+            Database.Initialize(true);
         }
 
 
@@ -172,18 +185,27 @@ namespace MOE.Common.Models
         //public System.Data.Entity.DbSet<SPM.Models.AggDataExportViewModel> AggDataExportViewModels { get; set; }
     }
 
+    public class CustomInitializer : IDatabaseInitializer<SPM>
+    {
+        #region IDatabaseInitializer<SPM> Members
 
+        // fix the problem with MigrateDatabaseToLatestVersion 
+        // by copying the connection string FROM the context
+        public void InitializeDatabase(SPM context)
+        {
+            
+            Configuration cfg = new Configuration(); // migration configuration class
+            cfg.TargetDatabase = new DbConnectionInfo(context.Database.Connection.ConnectionString, "System.Data.SqlClient");
 
+          
+            DbMigrator dbMigrator = new DbMigrator(cfg);
+            if(dbMigrator.GetPendingMigrations().Any())
+                // this will call the parameterless constructor of the datacontext
+                // but the connection string from above will be then set on in
+                dbMigrator.Update();
+        }
 
-    //public class AggregationStaus : IdentityDbContext<AggregationStausUser>
-    //{
-    //    public AggregationStaus()
-    //        : base("name=AggregationStaus")
-    //    {
-    //        Database.SetInitializer<AggregationStaus>(new CreateDatabaseIfNotExists<AggregationStaus>());
+        #endregion
+    }
 
-    //        //Database.CommandTimeout = 1500;
-    //        Database.CommandTimeout = 900;
-    //    }
-    //}
 }
