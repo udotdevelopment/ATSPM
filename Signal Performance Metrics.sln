@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FF3E4208-1F85-4029-8093-543DA106846C}"
 	ProjectSection(SolutionItems) = preProject
@@ -69,8 +69,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncGetMaxTimeRecords", "AsyncGetMaxTimeRecords\AsyncGetMaxTimeRecords.csproj", "{FB182E1E-29BD-4F2B-8246-1AA6C89A60D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtspmApi", "AtspmApi\AtspmApi.csproj", "{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpmApi", "SpmApi\SpmApi.csproj", "{D74B2F14-E712-4EA1-86EF-BD6322952484}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -846,42 +844,16 @@ Global
 		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
 		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.SingleImage|x86.ActiveCfg = Release|Any CPU
 		{2F4B34A4-7EF4-4496-A4B7-258F21310BEA}.SingleImage|x86.Build.0 = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.CD_ROM|Mixed Platforms.Build.0 = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.CD_ROM|x86.ActiveCfg = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.CD_ROM|x86.Build.0 = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.Debug|x86.Build.0 = Debug|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.DVD-5|x86.ActiveCfg = Debug|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.DVD-5|x86.Build.0 = Debug|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.Release|x86.ActiveCfg = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.Release|x86.Build.0 = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.SingleImage|Any CPU.Build.0 = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.SingleImage|x86.ActiveCfg = Release|Any CPU
-		{D74B2F14-E712-4EA1-86EF-BD6322952484}.SingleImage|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B5EC6913-E515-4162-A99E-19BB2D097F94}
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
