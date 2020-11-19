@@ -505,5 +505,10 @@ namespace MOE.CommonTests.Models
         {
             throw new NotImplementedException();
         }
+
+        public bool CheckForRecords(string signalId, DateTime startTime, DateTime endTime)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -516,5 +516,10 @@ namespace MOE.CommonTests.Models
         {
             throw new NotImplementedException();
         }
+
+        public Signal GetVersionOfSignalByDateWithDetectionTypes(string signalId, DateTime startDate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

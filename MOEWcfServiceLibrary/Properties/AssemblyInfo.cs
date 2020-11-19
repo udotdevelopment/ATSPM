@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MOEWcfServiceLibrary")]
-[assembly: AssemblyDescription("This assembly contains severices that work with the performance metrics system")]
+[assembly: AssemblyDescription("This assembly contains services that work with the performance metrics system")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Utah Department of Transportation")]
 [assembly: AssemblyProduct("MOEWcfServiceLibrary")]
