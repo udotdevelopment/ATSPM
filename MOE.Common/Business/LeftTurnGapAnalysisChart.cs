@@ -107,7 +107,7 @@ namespace MOE.Common.Business
 
             for (var lowerTimeLimit = _startDate; lowerTimeLimit < _endDate; lowerTimeLimit = lowerTimeLimit.AddMinutes(_options.BinSize))
             {
-                var upperTimeLimit = lowerTimeLimit.AddMinutes(15);
+                var upperTimeLimit = lowerTimeLimit.AddMinutes(_options.BinSize);
                 var items = phaseTrackerList.Where(x => x.GreenTime >= lowerTimeLimit && x.GreenTime < upperTimeLimit).ToList();
 
                 if (!items.Any()) continue;

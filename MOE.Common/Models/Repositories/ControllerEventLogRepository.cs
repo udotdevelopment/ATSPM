@@ -12,13 +12,30 @@ namespace MOE.Common.Models.Repositories
 {
     public class ControllerEventLogRepository : IControllerEventLogRepository
     {
+       
         private readonly SPM _db = new SPM();
         public ControllerEventLogRepository(SPM db)
         {
-            //_db.Database.CommandTimeout = 180;
-            db.Database.ExecuteSqlCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;");
-            db.Configuration.AutoDetectChangesEnabled = false;
-            _db = db;
+            var i = 0;
+            for ( i = 0; i < 10; i++)
+            {
+                try
+                {
+
+                    //_db.Database.CommandTimeout = 180;
+                    db.Database.ExecuteSqlCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;");
+                    db.Configuration.AutoDetectChangesEnabled = false;
+                    _db = db;
+                    break;
+                }
+                catch 
+                {
+                    Console.WriteLine(" Inside a catch statement for setting the TRANSACTION ISOLATION LEVEL."
+                                      + "  Number of times is : {0}.", i);
+                    Console.WriteLine("Now wait for 120 seconds.");
+                    System.Threading.Thread.Sleep(120000);
+                }
+            }
         }
         public ControllerEventLogRepository()
         {

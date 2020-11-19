@@ -82,7 +82,7 @@ namespace MOE.Common.Models
         public virtual DbSet<ToBeProcessededTable> ToBeProcessededTables { get; set; }
         public virtual DbSet<ToBeProcessedTableIndex> ToBeProcessededIndexes { get; set; }
 
-public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedActivationAggregations
+        public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedActivationAggregations
         {
             get;
             set;
@@ -207,4 +207,5 @@ public virtual DbSet<ApproachYellowRedActivationAggregation> ApproachYellowRedAc
 
         #endregion
     }
+
 }
