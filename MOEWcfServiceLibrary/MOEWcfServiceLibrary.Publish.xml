@@ -1,43 +1,147 @@
 <publishData>
-  <publishTarget publishUrl="C:\inetpub\wwwroot\UDOT_ATSPM_WCF\">
+  <publishTarget publishUrl="C:\Temp\ATSPM Executables\MOEWcfServiceLibrary\">
     <file relUrl="bin/CsvHelper.xml" publishTime="12/05/2018 21:11:06" />
     <file relUrl="bin/FluentFTP.xml" publishTime="05/02/2018 20:59:04" />
+    <file relUrl="bin/EntityFramework.xml" publishTime="04/16/2020 20:38:40" />
     <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
-    <file relUrl="bin/MetricGenerator.cs" publishTime="05/12/2020 21:37:13" />
-    <file relUrl="bin/EntityFramework.xml" publishTime="05/12/2020 21:37:16" />
-    <file relUrl="bin/Microsoft.Extensions.Logging.xml" publishTime="11/11/2018 00:27:18" />
+    <file relUrl="MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="11/19/2020 14:20:15" />
+    <file relUrl="bin/MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="11/19/2020 14:20:15" />
+    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
+    <file relUrl="bin/System.Collections.Immutable.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.dll" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/Microsoft.Web.XmlTransform.pdb" publishTime="12/07/2018 23:17:02" />
-    <file relUrl="Web.config" publishTime="07/30/2020 12:10:11" />
+    <file relUrl="bin/MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="11/19/2020 14:20:15" />
+    <file relUrl="bin/Newtonsoft.Json.dll" publishTime="11/27/2018 18:07:34" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
     <file relUrl="bin/Microsoft.Owin.Security.xml" publishTime="02/13/2018 16:28:16" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Owin.dll" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/System.Interactive.Async.xml" publishTime="07/11/2018 13:43:40" />
-    <file relUrl="bin/Owin.dll" publishTime="05/12/2020 21:37:16" />
+    <file relUrl="bin/Owin.dll" publishTime="11/30/2018 13:45:46" />
     <file relUrl="bin/System.Numerics.Vectors.xml" publishTime="05/15/2018 13:29:44" />
-    <file relUrl="bin/Newtonsoft.Json.pdb" publishTime="11/27/2018 17:59:08" />
-    <file relUrl="bin/System.Memory.xml" publishTime="06/06/2018 13:29:04" />
+    <file relUrl="bin/MetricGenerator.cs" publishTime="11/26/2019 14:26:13" />
     <file relUrl="bin/Newtonsoft.Json.xml" publishTime="11/27/2018 17:59:08" />
     <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.xml" publishTime="11/11/2018 00:26:40" />
     <file relUrl="bin/Microsoft.Extensions.Options.dll" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Web.Razor.xml" publishTime="11/28/2018 13:00:12" />
-    <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="08/06/2020 17:21:40" />
-    <file relUrl="bin/LinkPivotService.cs" publishTime="05/12/2020 21:37:13" />
+    <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="01/22/2021 10:38:26" />
+    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
+    <file relUrl="bin/LinkPivotService.cs" publishTime="11/26/2019 14:26:13" />
     <file relUrl="bin/System.Web.Mvc.xml" publishTime="11/28/2018 12:59:46" />
     <file relUrl="bin/Microsoft.Extensions.Logging.dll" publishTime="11/11/2018 00:27:18" />
+    <file relUrl="MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="11/19/2020 14:20:15" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Core.dll" publishTime="04/24/2018 12:47:38" />
     <file relUrl="bin/Microsoft.Owin.Security.dll" publishTime="02/13/2018 16:28:16" />
     <file relUrl="bin/System.Interactive.Async.dll" publishTime="07/11/2018 13:48:42" />
     <file relUrl="bin/System.Numerics.Vectors.dll" publishTime="05/15/2018 13:29:44" />
-    <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="07/30/2020 12:10:11" />
+    <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="01/22/2021 13:16:26" />
     <file relUrl="bin/Remotion.Linq.xml" publishTime="02/06/2018 22:25:00" />
     <file relUrl="bin/Microsoft.Owin.Security.Cookies.xml" publishTime="02/13/2018 16:28:20" />
-    <file relUrl="bin/Newtonsoft.Json.dll" publishTime="11/27/2018 18:07:34" />
-    <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="05/12/2020 21:37:16" />
+    <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
+    <file relUrl="bin/Microsoft.Extensions.Logging.xml" publishTime="11/11/2018 00:27:18" />
+    <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="11/30/2018 13:45:46" />
     <file relUrl="bin/System.Web.Mvc.dll" publishTime="11/28/2018 12:59:46" />
+    <file relUrl="bin/FluentFTP.dll" publishTime="05/02/2018 20:59:04" />
+    <file relUrl="bin/Microsoft.Owin.Security.Cookies.dll" publishTime="02/13/2018 16:28:20" />
+    <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.xml" publishTime="11/12/2018 17:31:02" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.xml" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.dll" publishTime="09/18/2018 19:38:10" />
+    <file relUrl="bin/Microsoft.Owin.xml" publishTime="02/13/2018 16:28:04" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Memory.xml" publishTime="11/11/2018 00:26:46" />
+    <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.dll" publishTime="11/11/2018 00:26:40" />
+    <file relUrl="bin\Business\DataAggregation/DataAggregation.cs" publishTime="12/31/2020 16:43:14" />
+    <file relUrl="bin/MOEWcfServiceLibrary.dll" publishTime="01/22/2021 13:08:18" />
+    <file relUrl="bin/Microsoft.Web.XmlTransform.dll" publishTime="12/07/2018 23:18:14" />
+    <file relUrl="bin/Microsoft.EntityFrameworkCore.dll" publishTime="11/12/2018 17:31:14" />
+    <file relUrl="bin/EntityFramework.SqlServer.xml" publishTime="04/16/2020 20:38:56" />
+    <file relUrl="Web.config" publishTime="01/22/2021 13:16:26" />
+    <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.dll" publishTime="11/12/2018 17:31:02" />
+    <file relUrl="bin/MOEWcfServiceLibrary.pdb" publishTime="01/22/2021 13:08:18" />
+    <file relUrl="bin/MOE.Common.dll" publishTime="01/22/2021 10:38:45" />
+    <file relUrl="bin/Remotion.Linq.dll" publishTime="02/06/2018 22:25:00" />
+    <file relUrl="bin/Microsoft.Extensions.Primitives.xml" publishTime="11/11/2018 00:26:36" />
+    <file relUrl="bin/Newtonsoft.Json.pdb" publishTime="11/27/2018 17:59:08" />
+    <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/MOE.Common.pdb" publishTime="01/22/2021 10:38:45" />
+    <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="04/16/2020 20:38:56" />
+    <file relUrl="bin/System.Memory.dll" publishTime="06/06/2018 13:29:04" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="04/24/2018 12:47:40" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.dll" publishTime="11/11/2018 00:26:44" />
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.xml" publishTime="02/13/2018 16:28:28" />
+    <file relUrl="bin/System.ValueTuple.xml" publishTime="05/15/2018 13:29:52" />
+    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
+    <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/System.Buffers.xml" publishTime="05/15/2018 13:29:34" />
+    <file relUrl="bin/System.Diagnostics.DiagnosticSource.xml" publishTime="09/18/2018 19:38:16" />
+    <file relUrl="bin/System.Web.WebPages.dll" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/System.ValueTuple.dll" publishTime="05/15/2018 13:29:52" />
+    <file relUrl="bin/EntityFramework.dll" publishTime="04/16/2020 20:38:42" />
+    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/System.Memory.xml" publishTime="06/06/2018 13:29:04" />
+    <file relUrl="bin/SharpSnmpLib.dll" publishTime="08/26/2018 04:29:10" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Core.xml" publishTime="04/24/2018 12:47:38" />
+    <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="01/22/2021 10:38:26" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Memory.dll" publishTime="11/11/2018 00:26:46" />
+    <file relUrl="bin/Caseiro.Mvc.PagedList.dll.config" publishTime="01/13/2021 19:53:11" />
+    <file relUrl="bin/SharpSnmpLib.pdb" publishTime="08/26/2018 04:29:10" />
+    <file relUrl="bin/Microsoft.EntityFrameworkCore.xml" publishTime="11/12/2018 17:31:12" />
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
+    <file relUrl="bin/System.Web.WebPages.xml" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/System.Buffers.dll" publishTime="05/15/2018 13:29:34" />
+    <file relUrl="bin/NuGet.Core.dll" publishTime="09/07/2016 11:09:14" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
+    <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.xml" publishTime="09/18/2018 19:38:10" />
+    <file relUrl="bin/MOE.Common.dll.config" publishTime="01/13/2021 19:53:11" />
+    <file relUrl="bin/MvcCheckBoxList.dll" publishTime="11/30/2018 13:45:46" />
+    <file relUrl="bin/System.Web.WebPages.Deployment.dll" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.xml" publishTime="11/11/2018 00:26:44" />
+  </publishTarget>
+  <publishTarget publishUrl="C:\Temp\ATSPM\MOEWcfServiceLibrary\">
+    <file relUrl="bin/CsvHelper.xml" publishTime="12/05/2018 21:11:06" />
+    <file relUrl="bin/FluentFTP.xml" publishTime="05/02/2018 20:59:04" />
+    <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="11/30/2018 13:45:46" />
+    <file relUrl="MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="11/19/2020 14:20:15" />
+    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="11/19/2020 14:20:15" />
+    <file relUrl="bin/EntityFramework.xml" publishTime="04/16/2020 20:38:40" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="04/24/2018 12:47:40" />
+    <file relUrl="bin/Microsoft.Extensions.Primitives.dll" publishTime="11/11/2018 00:26:36" />
+    <file relUrl="bin/System.Web.Mvc.dll" publishTime="11/28/2018 12:59:46" />
+    <file relUrl="bin/MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="11/19/2020 14:20:15" />
+    <file relUrl="bin/Newtonsoft.Json.dll" publishTime="11/27/2018 18:07:34" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll" publishTime="11/11/2018 00:26:36" />
+    <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Owin.dll" publishTime="04/24/2018 12:47:40" />
+    <file relUrl="bin/System.Interactive.Async.xml" publishTime="07/11/2018 13:43:40" />
+    <file relUrl="bin/Owin.dll" publishTime="11/30/2018 13:45:46" />
+    <file relUrl="bin/System.Numerics.Vectors.xml" publishTime="05/15/2018 13:29:44" />
+    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
+    <file relUrl="bin/MetricGenerator.cs" publishTime="11/26/2019 14:26:13" />
+    <file relUrl="bin/Newtonsoft.Json.xml" publishTime="11/27/2018 17:59:08" />
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
+    <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.xml" publishTime="11/11/2018 00:26:40" />
+    <file relUrl="bin/Microsoft.Extensions.Options.dll" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/System.Web.Razor.xml" publishTime="11/28/2018 13:00:12" />
+    <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="01/22/2021 10:38:26" />
+    <file relUrl="bin/LinkPivotService.cs" publishTime="11/26/2019 14:26:13" />
+    <file relUrl="bin/System.Web.Mvc.xml" publishTime="11/28/2018 12:59:46" />
+    <file relUrl="bin/Microsoft.Extensions.Logging.dll" publishTime="11/11/2018 00:27:18" />
+    <file relUrl="MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="11/19/2020 14:20:15" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Core.dll" publishTime="04/24/2018 12:47:38" />
+    <file relUrl="bin/Microsoft.Owin.Security.dll" publishTime="02/13/2018 16:28:16" />
+    <file relUrl="bin/Caseiro.Mvc.PagedList.dll.config" publishTime="01/13/2021 19:53:11" />
+    <file relUrl="bin/System.Interactive.Async.dll" publishTime="07/11/2018 13:48:42" />
+    <file relUrl="bin/System.Numerics.Vectors.dll" publishTime="05/15/2018 13:29:44" />
+    <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="01/22/2021 10:40:14" />
+    <file relUrl="bin/Remotion.Linq.xml" publishTime="02/06/2018 22:25:00" />
+    <file relUrl="bin/Microsoft.Owin.Security.Cookies.xml" publishTime="02/13/2018 16:28:20" />
+    <file relUrl="bin/Microsoft.Extensions.Logging.xml" publishTime="11/11/2018 00:27:18" />
+    <file relUrl="bin/Microsoft.Owin.Security.xml" publishTime="02/13/2018 16:28:16" />
     <file relUrl="bin/FluentFTP.dll" publishTime="05/02/2018 20:59:04" />
     <file relUrl="bin/Microsoft.Owin.Security.Cookies.dll" publishTime="02/13/2018 16:28:20" />
     <file relUrl="bin/Microsoft.Owin.Security.OAuth.xml" publishTime="02/13/2018 16:28:28" />
@@ -45,41 +149,142 @@
     <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.xml" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.dll" publishTime="09/18/2018 19:38:10" />
     <file relUrl="bin/Microsoft.Owin.xml" publishTime="02/13/2018 16:28:04" />
-    <file relUrl="bin/MOEWcfServiceLibrary.pdb" publishTime="08/06/2020 17:26:25" />
+    <file relUrl="bin/Microsoft.Web.XmlTransform.pdb" publishTime="12/07/2018 23:17:02" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Memory.xml" publishTime="11/11/2018 00:26:46" />
     <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.dll" publishTime="11/11/2018 00:26:40" />
-    <file relUrl="bin\Business\DataAggregation/DataAggregation.cs" publishTime="05/12/2020 21:37:12" />
-    <file relUrl="bin/MOEWcfServiceLibrary.dll" publishTime="08/06/2020 17:26:25" />
+    <file relUrl="bin\Business\DataAggregation/DataAggregation.cs" publishTime="12/31/2020 16:43:14" />
+    <file relUrl="bin/MOEWcfServiceLibrary.dll" publishTime="01/22/2021 10:38:46" />
     <file relUrl="bin/Microsoft.Web.XmlTransform.dll" publishTime="12/07/2018 23:18:14" />
-    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
-    <file relUrl="bin/EntityFramework.SqlServer.xml" publishTime="05/12/2020 21:37:16" />
-    <file relUrl="bin/System.ValueTuple.xml" publishTime="05/15/2018 13:29:52" />
+    <file relUrl="bin/Microsoft.EntityFrameworkCore.dll" publishTime="11/12/2018 17:31:14" />
+    <file relUrl="bin/EntityFramework.SqlServer.xml" publishTime="04/16/2020 20:38:56" />
+    <file relUrl="Web.config" publishTime="01/22/2021 10:40:14" />
     <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.dll" publishTime="11/12/2018 17:31:02" />
-    <file relUrl="bin/MOE.Common.dll" publishTime="08/06/2020 17:21:48" />
+    <file relUrl="bin/MOEWcfServiceLibrary.pdb" publishTime="01/22/2021 10:38:46" />
+    <file relUrl="bin/MOE.Common.dll" publishTime="01/22/2021 10:38:45" />
+    <file relUrl="bin/Remotion.Linq.dll" publishTime="02/06/2018 22:25:00" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.xml" publishTime="11/11/2018 00:26:36" />
-    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
-    <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Newtonsoft.Json.pdb" publishTime="11/27/2018 17:59:08" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
-    <file relUrl="bin/MOE.Common.pdb" publishTime="08/06/2020 17:21:48" />
-    <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="05/12/2020 21:37:16" />
+    <file relUrl="bin/MOE.Common.pdb" publishTime="01/22/2021 10:38:45" />
+    <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="04/16/2020 20:38:56" />
     <file relUrl="bin/System.Memory.dll" publishTime="06/06/2018 13:29:04" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.dll" publishTime="11/11/2018 00:26:44" />
     <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
-    <file relUrl="bin/Remotion.Linq.dll" publishTime="02/06/2018 22:25:00" />
+    <file relUrl="bin/System.ValueTuple.xml" publishTime="05/15/2018 13:29:52" />
     <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/System.Buffers.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/System.Diagnostics.DiagnosticSource.xml" publishTime="09/18/2018 19:38:16" />
     <file relUrl="bin/System.Web.WebPages.dll" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/System.ValueTuple.dll" publishTime="05/15/2018 13:29:52" />
-    <file relUrl="bin/EntityFramework.dll" publishTime="05/12/2020 21:37:16" />
-    <file relUrl="bin/Microsoft.EntityFrameworkCore.dll" publishTime="11/12/2018 17:31:14" />
-    <file relUrl="bin/MvcCheckBoxList.dll" publishTime="05/12/2020 21:37:16" />
-    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/EntityFramework.dll" publishTime="04/16/2020 20:38:42" />
+    <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
+    <file relUrl="bin/System.Memory.xml" publishTime="06/06/2018 13:29:04" />
     <file relUrl="bin/SharpSnmpLib.dll" publishTime="08/26/2018 04:29:10" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Core.xml" publishTime="04/24/2018 12:47:38" />
-    <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="08/06/2020 17:21:40" />
+    <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="01/22/2021 10:38:26" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Memory.dll" publishTime="11/11/2018 00:26:46" />
+    <file relUrl="bin/System.Collections.Immutable.xml" publishTime="05/15/2018 13:29:34" />
+    <file relUrl="bin/SharpSnmpLib.pdb" publishTime="08/26/2018 04:29:10" />
+    <file relUrl="bin/Microsoft.EntityFrameworkCore.xml" publishTime="11/12/2018 17:31:12" />
+    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
+    <file relUrl="bin/System.Web.WebPages.xml" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/System.Buffers.dll" publishTime="05/15/2018 13:29:34" />
+    <file relUrl="bin/NuGet.Core.dll" publishTime="09/07/2016 11:09:14" />
+    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
+    <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.xml" publishTime="09/18/2018 19:38:10" />
+    <file relUrl="bin/MOE.Common.dll.config" publishTime="01/13/2021 19:53:11" />
+    <file relUrl="bin/MvcCheckBoxList.dll" publishTime="11/30/2018 13:45:46" />
+    <file relUrl="bin/System.Web.WebPages.Deployment.dll" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.xml" publishTime="11/11/2018 00:26:44" />
+  </publishTarget>
+  <publishTarget publishUrl="\\srwtcmoedb\c$\inetpub\wwwroot\MOEWCFTest\">
+    <file relUrl="bin/CsvHelper.xml" publishTime="12/05/2018 21:11:06" />
+    <file relUrl="bin/FluentFTP.xml" publishTime="05/02/2018 20:59:04" />
+    <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="11/30/2018 13:45:46" />
+    <file relUrl="MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="11/19/2020 14:20:15" />
+    <file relUrl="bin/MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="11/19/2020 14:20:15" />
+    <file relUrl="bin/EntityFramework.xml" publishTime="04/24/2019 10:00:00" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="04/24/2018 12:47:40" />
+    <file relUrl="bin/Microsoft.Extensions.Primitives.dll" publishTime="11/11/2018 00:26:36" />
+    <file relUrl="bin/System.Web.Mvc.dll" publishTime="11/28/2018 12:59:46" />
+    <file relUrl="bin/MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="11/19/2020 14:20:15" />
+    <file relUrl="bin/Newtonsoft.Json.dll" publishTime="11/27/2018 18:07:34" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll" publishTime="11/11/2018 00:26:36" />
+    <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
+    <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Owin.dll" publishTime="04/24/2018 12:47:40" />
+    <file relUrl="bin/System.Interactive.Async.xml" publishTime="07/11/2018 13:43:40" />
+    <file relUrl="bin/Owin.dll" publishTime="11/30/2018 13:45:46" />
+    <file relUrl="bin/System.Numerics.Vectors.xml" publishTime="05/15/2018 13:29:44" />
+    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
+    <file relUrl="bin/MetricGenerator.cs" publishTime="11/26/2019 14:26:13" />
+    <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
+    <file relUrl="bin/Newtonsoft.Json.xml" publishTime="11/27/2018 17:59:08" />
+    <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.xml" publishTime="11/11/2018 00:26:40" />
+    <file relUrl="bin/Microsoft.Extensions.Options.dll" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/System.Web.Razor.xml" publishTime="11/28/2018 13:00:12" />
+    <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="12/31/2020 20:26:56" />
+    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
+    <file relUrl="bin/LinkPivotService.cs" publishTime="11/26/2019 14:26:13" />
+    <file relUrl="bin/System.Web.Mvc.xml" publishTime="11/28/2018 12:59:46" />
+    <file relUrl="bin/Microsoft.Extensions.Logging.dll" publishTime="11/11/2018 00:27:18" />
+    <file relUrl="MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="11/19/2020 14:20:15" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Core.dll" publishTime="04/24/2018 12:47:38" />
+    <file relUrl="bin/Microsoft.Owin.Security.dll" publishTime="02/13/2018 16:28:16" />
+    <file relUrl="bin/System.Interactive.Async.dll" publishTime="07/11/2018 13:48:42" />
+    <file relUrl="bin/System.Numerics.Vectors.dll" publishTime="05/15/2018 13:29:44" />
+    <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="12/31/2020 20:39:32" />
+    <file relUrl="bin/Remotion.Linq.xml" publishTime="02/06/2018 22:25:00" />
+    <file relUrl="bin/Microsoft.Owin.Security.Cookies.xml" publishTime="02/13/2018 16:28:20" />
+    <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
+    <file relUrl="bin/Microsoft.Extensions.Logging.xml" publishTime="11/11/2018 00:27:18" />
+    <file relUrl="bin/Microsoft.Owin.Security.xml" publishTime="02/13/2018 16:28:16" />
+    <file relUrl="bin/FluentFTP.dll" publishTime="05/02/2018 20:59:04" />
+    <file relUrl="bin/Microsoft.Owin.Security.Cookies.dll" publishTime="02/13/2018 16:28:20" />
+    <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.xml" publishTime="11/12/2018 17:31:02" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.xml" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.dll" publishTime="09/18/2018 19:38:10" />
+    <file relUrl="bin/Microsoft.Owin.xml" publishTime="02/13/2018 16:28:04" />
+    <file relUrl="bin/Microsoft.Web.XmlTransform.pdb" publishTime="12/07/2018 23:17:02" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Memory.xml" publishTime="11/11/2018 00:26:46" />
+    <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.dll" publishTime="11/11/2018 00:26:40" />
+    <file relUrl="bin\Business\DataAggregation/DataAggregation.cs" publishTime="12/31/2020 16:43:14" />
+    <file relUrl="bin/MOEWcfServiceLibrary.dll" publishTime="01/07/2021 13:48:56" />
+    <file relUrl="bin/Microsoft.Web.XmlTransform.dll" publishTime="12/07/2018 23:18:14" />
+    <file relUrl="bin/Microsoft.EntityFrameworkCore.dll" publishTime="11/12/2018 17:31:14" />
+    <file relUrl="bin/EntityFramework.SqlServer.xml" publishTime="04/24/2019 10:00:00" />
+    <file relUrl="Web.config" publishTime="12/31/2020 20:39:32" />
+    <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.dll" publishTime="11/12/2018 17:31:02" />
+    <file relUrl="bin/MOEWcfServiceLibrary.pdb" publishTime="01/07/2021 13:48:56" />
+    <file relUrl="bin/MOE.Common.dll" publishTime="01/07/2021 13:48:54" />
+    <file relUrl="bin/Remotion.Linq.dll" publishTime="02/06/2018 22:25:00" />
+    <file relUrl="bin/Microsoft.Extensions.Primitives.xml" publishTime="11/11/2018 00:26:36" />
+    <file relUrl="bin/Newtonsoft.Json.pdb" publishTime="11/27/2018 17:59:08" />
+    <file relUrl="bin/MOE.Common.pdb" publishTime="01/07/2021 13:48:54" />
+    <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="04/24/2019 10:00:00" />
+    <file relUrl="bin/System.Memory.dll" publishTime="06/06/2018 13:29:04" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="04/24/2018 12:47:40" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.dll" publishTime="11/11/2018 00:26:44" />
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.xml" publishTime="02/13/2018 16:28:28" />
+    <file relUrl="bin/System.ValueTuple.xml" publishTime="05/15/2018 13:29:52" />
+    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
+    <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/System.Buffers.xml" publishTime="05/15/2018 13:29:34" />
+    <file relUrl="bin/System.Diagnostics.DiagnosticSource.xml" publishTime="09/18/2018 19:38:16" />
+    <file relUrl="bin/System.Web.WebPages.dll" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/System.ValueTuple.dll" publishTime="05/15/2018 13:29:52" />
+    <file relUrl="bin/EntityFramework.dll" publishTime="04/24/2019 10:00:00" />
+    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/System.Memory.xml" publishTime="06/06/2018 13:29:04" />
+    <file relUrl="bin/SharpSnmpLib.dll" publishTime="08/26/2018 04:29:10" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Core.xml" publishTime="04/24/2018 12:47:38" />
+    <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="12/31/2020 20:26:56" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Memory.dll" publishTime="11/11/2018 00:26:46" />
     <file relUrl="bin/System.Collections.Immutable.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/SharpSnmpLib.pdb" publishTime="08/26/2018 04:29:10" />
     <file relUrl="bin/Microsoft.EntityFrameworkCore.xml" publishTime="11/12/2018 17:31:12" />
@@ -89,19 +294,114 @@
     <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Buffers.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/NuGet.Core.dll" publishTime="09/07/2016 11:09:14" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
+    <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.xml" publishTime="09/18/2018 19:38:10" />
+    <file relUrl="bin/MOE.Common.dll.config" publishTime="12/31/2020 20:39:25" />
+    <file relUrl="bin/MvcCheckBoxList.dll" publishTime="11/30/2018 13:45:46" />
+    <file relUrl="bin/System.Web.WebPages.Deployment.dll" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.xml" publishTime="11/11/2018 00:26:44" />
+  </publishTarget>
+  <publishTarget publishUrl="C:\inetpub\wwwroot\UDOT_ATSPM_WCF\">
+    <file relUrl="bin/CsvHelper.xml" publishTime="12/05/2018 21:11:06" />
+    <file relUrl="bin/FluentFTP.xml" publishTime="05/02/2018 20:59:04" />
+    <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="05/12/2020 21:37:16" />
+    <file relUrl="bin/EntityFramework.xml" publishTime="05/12/2020 21:37:16" />
+    <file relUrl="bin/Microsoft.Extensions.Logging.xml" publishTime="11/11/2018 00:27:18" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="04/24/2018 12:47:40" />
+    <file relUrl="bin/Microsoft.Extensions.Primitives.dll" publishTime="11/11/2018 00:26:36" />
+    <file relUrl="bin/System.Web.Mvc.dll" publishTime="11/28/2018 12:59:46" />
+    <file relUrl="Web.config" publishTime="07/30/2020 12:10:11" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll" publishTime="11/11/2018 00:26:36" />
+    <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Owin.dll" publishTime="04/24/2018 12:47:40" />
+    <file relUrl="bin/System.Interactive.Async.xml" publishTime="07/11/2018 13:43:40" />
+    <file relUrl="bin/Owin.dll" publishTime="05/12/2020 21:37:16" />
+    <file relUrl="bin/System.Numerics.Vectors.xml" publishTime="05/15/2018 13:29:44" />
+    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
+    <file relUrl="bin/MetricGenerator.cs" publishTime="05/12/2020 21:37:13" />
+    <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
+    <file relUrl="bin/Newtonsoft.Json.xml" publishTime="11/27/2018 17:59:08" />
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
+    <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.xml" publishTime="11/11/2018 00:26:40" />
+    <file relUrl="bin/Microsoft.Extensions.Options.dll" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/System.Web.Razor.xml" publishTime="11/28/2018 13:00:12" />
+    <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="08/06/2020 17:21:40" />
+    <file relUrl="bin/LinkPivotService.cs" publishTime="05/12/2020 21:37:13" />
+    <file relUrl="bin/System.Web.Mvc.xml" publishTime="11/28/2018 12:59:46" />
+    <file relUrl="bin/Microsoft.Extensions.Logging.dll" publishTime="11/11/2018 00:27:18" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Core.dll" publishTime="04/24/2018 12:47:38" />
+    <file relUrl="bin/Microsoft.Owin.Security.dll" publishTime="02/13/2018 16:28:16" />
+    <file relUrl="bin/System.Interactive.Async.dll" publishTime="07/11/2018 13:48:42" />
+    <file relUrl="bin/System.Numerics.Vectors.dll" publishTime="05/15/2018 13:29:44" />
+    <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="07/30/2020 12:10:11" />
+    <file relUrl="bin/Remotion.Linq.xml" publishTime="02/06/2018 22:25:00" />
+    <file relUrl="bin/Microsoft.Owin.Security.Cookies.xml" publishTime="02/13/2018 16:28:20" />
+    <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
+    <file relUrl="bin/Newtonsoft.Json.dll" publishTime="11/27/2018 18:07:34" />
+    <file relUrl="bin/Microsoft.Owin.Security.xml" publishTime="02/13/2018 16:28:16" />
+    <file relUrl="bin/FluentFTP.dll" publishTime="05/02/2018 20:59:04" />
+    <file relUrl="bin/Microsoft.Owin.Security.Cookies.dll" publishTime="02/13/2018 16:28:20" />
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.xml" publishTime="02/13/2018 16:28:28" />
+    <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.xml" publishTime="11/12/2018 17:31:02" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.xml" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.dll" publishTime="09/18/2018 19:38:10" />
+    <file relUrl="bin/Microsoft.Owin.xml" publishTime="02/13/2018 16:28:04" />
+    <file relUrl="bin/Microsoft.Web.XmlTransform.pdb" publishTime="12/07/2018 23:17:02" />
+    <file relUrl="bin/MOEWcfServiceLibrary.pdb" publishTime="08/06/2020 17:26:25" />
+    <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.dll" publishTime="11/11/2018 00:26:40" />
+    <file relUrl="bin\Business\DataAggregation/DataAggregation.cs" publishTime="05/12/2020 21:37:12" />
+    <file relUrl="bin/MOEWcfServiceLibrary.dll" publishTime="08/06/2020 17:26:25" />
+    <file relUrl="bin/Microsoft.Web.XmlTransform.dll" publishTime="12/07/2018 23:18:14" />
+    <file relUrl="bin/Microsoft.EntityFrameworkCore.dll" publishTime="11/12/2018 17:31:14" />
+    <file relUrl="bin/EntityFramework.SqlServer.xml" publishTime="05/12/2020 21:37:16" />
+    <file relUrl="bin/System.ValueTuple.xml" publishTime="05/15/2018 13:29:52" />
+    <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.dll" publishTime="11/12/2018 17:31:02" />
     <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
+    <file relUrl="bin/MOE.Common.dll" publishTime="08/06/2020 17:21:48" />
+    <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Microsoft.Extensions.Primitives.xml" publishTime="11/11/2018 00:26:36" />
+    <file relUrl="bin/Newtonsoft.Json.pdb" publishTime="11/27/2018 17:59:08" />
+    <file relUrl="bin/MOE.Common.pdb" publishTime="08/06/2020 17:21:48" />
+    <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="05/12/2020 21:37:16" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="04/24/2018 12:47:40" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.dll" publishTime="11/11/2018 00:26:44" />
+    <file relUrl="bin/System.Memory.dll" publishTime="06/06/2018 13:29:04" />
+    <file relUrl="bin/Remotion.Linq.dll" publishTime="02/06/2018 22:25:00" />
+    <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/System.Buffers.xml" publishTime="05/15/2018 13:29:34" />
+    <file relUrl="bin/System.Diagnostics.DiagnosticSource.xml" publishTime="09/18/2018 19:38:16" />
+    <file relUrl="bin/System.Web.WebPages.dll" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/System.ValueTuple.dll" publishTime="05/15/2018 13:29:52" />
+    <file relUrl="bin/EntityFramework.dll" publishTime="05/12/2020 21:37:16" />
+    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/System.Memory.xml" publishTime="06/06/2018 13:29:04" />
+    <file relUrl="bin/SharpSnmpLib.dll" publishTime="08/26/2018 04:29:10" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.Core.xml" publishTime="04/24/2018 12:47:38" />
+    <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="08/06/2020 17:21:40" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Memory.dll" publishTime="11/11/2018 00:26:46" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Memory.xml" publishTime="11/11/2018 00:26:46" />
+    <file relUrl="bin/System.Collections.Immutable.xml" publishTime="05/15/2018 13:29:34" />
+    <file relUrl="bin/SharpSnmpLib.pdb" publishTime="08/26/2018 04:29:10" />
+    <file relUrl="bin/Microsoft.EntityFrameworkCore.xml" publishTime="11/12/2018 17:31:12" />
+    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
+    <file relUrl="bin/System.Web.WebPages.xml" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/System.Buffers.dll" publishTime="05/15/2018 13:29:34" />
+    <file relUrl="bin/NuGet.Core.dll" publishTime="09/07/2016 11:09:14" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.xml" publishTime="09/18/2018 19:38:10" />
     <file relUrl="bin/MOE.Common.dll.config" publishTime="06/02/2020 08:52:50" />
+    <file relUrl="bin/MvcCheckBoxList.dll" publishTime="05/12/2020 21:37:16" />
     <file relUrl="bin/System.Web.WebPages.Deployment.dll" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.xml" publishTime="11/11/2018 00:26:44" />
   </publishTarget>
   <publishTarget publishUrl="C:\inetpub\wwwroot\UDOT_ATSPM\">
     <file relUrl="bin/CsvHelper.xml" publishTime="12/05/2018 21:11:06" />
     <file relUrl="bin/FluentFTP.xml" publishTime="05/02/2018 20:59:04" />
-    <file relUrl="bin/EntityFramework.xml" publishTime="05/12/2020 21:37:16" />
     <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
-
-    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
+    <file relUrl="bin/EntityFramework.xml" publishTime="05/12/2020 21:37:16" />
     <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.dll" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/System.Web.Mvc.dll" publishTime="11/28/2018 12:59:46" />
@@ -113,13 +413,15 @@
     <file relUrl="bin/System.Interactive.Async.xml" publishTime="07/11/2018 13:43:40" />
     <file relUrl="bin/Owin.dll" publishTime="05/12/2020 21:37:16" />
     <file relUrl="bin/System.Numerics.Vectors.xml" publishTime="05/15/2018 13:29:44" />
+    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
     <file relUrl="bin/MetricGenerator.cs" publishTime="05/12/2020 21:37:13" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.xml" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/Newtonsoft.Json.xml" publishTime="11/27/2018 17:59:08" />
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
     <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.xml" publishTime="11/11/2018 00:26:40" />
     <file relUrl="bin/Microsoft.Extensions.Options.dll" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Web.Razor.xml" publishTime="11/28/2018 13:00:12" />
     <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="08/06/2020 17:21:40" />
-    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/LinkPivotService.cs" publishTime="05/12/2020 21:37:13" />
     <file relUrl="bin/System.Web.Mvc.xml" publishTime="11/28/2018 12:59:46" />
     <file relUrl="bin/Microsoft.Extensions.Logging.dll" publishTime="11/11/2018 00:27:18" />
@@ -133,14 +435,14 @@
     <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
     <file relUrl="bin/Microsoft.Extensions.Logging.xml" publishTime="11/11/2018 00:27:18" />
     <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="05/12/2020 21:37:16" />
-    <file relUrl="bin/System.Web.Mvc.dll" publishTime="11/28/2018 12:59:46" />
     <file relUrl="bin/FluentFTP.dll" publishTime="05/02/2018 20:59:04" />
     <file relUrl="bin/Microsoft.Owin.Security.Cookies.dll" publishTime="02/13/2018 16:28:20" />
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.xml" publishTime="02/13/2018 16:28:28" />
     <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.xml" publishTime="11/12/2018 17:31:02" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.xml" publishTime="11/11/2018 00:26:38" />
+    <file relUrl="bin/System.ValueTuple.xml" publishTime="05/15/2018 13:29:52" />
     <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.dll" publishTime="09/18/2018 19:38:10" />
     <file relUrl="bin/Microsoft.Owin.xml" publishTime="02/13/2018 16:28:04" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Memory.xml" publishTime="11/11/2018 00:26:46" />
+    <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.dll" publishTime="11/11/2018 00:26:40" />
     <file relUrl="bin\Business\DataAggregation/DataAggregation.cs" publishTime="05/12/2020 21:37:12" />
     <file relUrl="bin/MOEWcfServiceLibrary.dll" publishTime="08/06/2020 17:21:54" />
@@ -154,16 +456,12 @@
     <file relUrl="bin/Remotion.Linq.dll" publishTime="02/06/2018 22:25:00" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.xml" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/Newtonsoft.Json.pdb" publishTime="11/27/2018 17:59:08" />
-    <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/MOE.Common.pdb" publishTime="08/06/2020 17:21:48" />
     <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="05/12/2020 21:37:16" />
-    <file relUrl="bin/System.Memory.dll" publishTime="06/06/2018 13:29:04" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.dll" publishTime="11/11/2018 00:26:44" />
-    <file relUrl="bin/Microsoft.Owin.Security.OAuth.xml" publishTime="02/13/2018 16:28:28" />
-    <file relUrl="bin/System.ValueTuple.xml" publishTime="05/15/2018 13:29:52" />
-    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
-    <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/System.Memory.dll" publishTime="06/06/2018 13:29:04" />
     <file relUrl="bin/System.Buffers.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/System.Diagnostics.DiagnosticSource.xml" publishTime="09/18/2018 19:38:16" />
     <file relUrl="bin/System.Web.WebPages.dll" publishTime="11/28/2018 13:04:24" />
@@ -175,16 +473,17 @@
     <file relUrl="bin/Microsoft.AspNet.Identity.Core.xml" publishTime="04/24/2018 12:47:38" />
     <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="08/06/2020 17:21:40" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Memory.dll" publishTime="11/11/2018 00:26:46" />
+    <file relUrl="bin/Microsoft.Extensions.Caching.Memory.xml" publishTime="11/11/2018 00:26:46" />
     <file relUrl="bin/System.Collections.Immutable.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/SharpSnmpLib.pdb" publishTime="08/26/2018 04:29:10" />
     <file relUrl="bin/Microsoft.EntityFrameworkCore.xml" publishTime="11/12/2018 17:31:12" />
-    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
+    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
     <file relUrl="bin/System.Web.WebPages.xml" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Buffers.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/NuGet.Core.dll" publishTime="09/07/2016 11:09:14" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
+    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.xml" publishTime="09/18/2018 19:38:10" />
     <file relUrl="bin/MOE.Common.dll.config" publishTime="06/02/2020 08:52:50" />
     <file relUrl="bin/MvcCheckBoxList.dll" publishTime="05/12/2020 21:37:16" />
@@ -194,9 +493,10 @@
   <publishTarget publishUrl="\\srwtcmoedb\C$\inetpub\wwwroot\Signal Performance Metrics\Moe Wcf Library\">
     <file relUrl="bin/CsvHelper.xml" publishTime="12/05/2018 21:11:06" />
     <file relUrl="bin/FluentFTP.xml" publishTime="05/02/2018 20:59:04" />
+    <file relUrl="bin/EntityFramework.xml" publishTime="03/30/2018 10:08:38" />
     <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="03/30/2018 10:08:38" />
     <file relUrl="MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="12/18/2019 12:24:14" />
-    <file relUrl="bin/EntityFramework.xml" publishTime="03/30/2018 10:08:38" />
+    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
     <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.dll" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/System.Web.Mvc.dll" publishTime="11/28/2018 12:59:46" />
@@ -209,15 +509,13 @@
     <file relUrl="bin/System.Interactive.Async.xml" publishTime="07/11/2018 13:43:40" />
     <file relUrl="bin/Owin.dll" publishTime="03/30/2018 10:08:38" />
     <file relUrl="bin/System.Numerics.Vectors.xml" publishTime="05/15/2018 13:29:44" />
-    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
     <file relUrl="bin/System.Memory.xml" publishTime="06/06/2018 13:29:04" />
-    <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
     <file relUrl="bin/Newtonsoft.Json.xml" publishTime="11/27/2018 17:59:08" />
-    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
     <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.xml" publishTime="11/11/2018 00:26:40" />
     <file relUrl="bin/Microsoft.Extensions.Options.dll" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Web.Razor.xml" publishTime="11/28/2018 13:00:12" />
     <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="01/22/2020 09:41:33" />
+    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/System.Web.Mvc.xml" publishTime="11/28/2018 12:59:46" />
     <file relUrl="bin/Microsoft.Extensions.Logging.dll" publishTime="11/11/2018 00:27:18" />
     <file relUrl="MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="01/22/2020 14:28:50" />
@@ -252,14 +550,13 @@
     <file relUrl="bin/Remotion.Linq.dll" publishTime="02/06/2018 22:25:00" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.xml" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/Newtonsoft.Json.pdb" publishTime="11/27/2018 17:59:08" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/MOE.Common.pdb" publishTime="01/22/2020 09:41:36" />
     <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.dll" publishTime="11/11/2018 00:26:44" />
     <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
     <file relUrl="bin/System.ValueTuple.xml" publishTime="05/15/2018 13:29:52" />
+    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
     <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/System.Buffers.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/System.Diagnostics.DiagnosticSource.xml" publishTime="09/18/2018 19:38:16" />
@@ -274,13 +571,13 @@
     <file relUrl="bin/System.Collections.Immutable.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/SharpSnmpLib.pdb" publishTime="08/26/2018 04:29:10" />
     <file relUrl="bin/Microsoft.EntityFrameworkCore.xml" publishTime="11/12/2018 17:31:12" />
-    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
     <file relUrl="bin/System.Web.WebPages.xml" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Buffers.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/NuGet.Core.dll" publishTime="09/07/2016 11:09:14" />
-    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.xml" publishTime="09/18/2018 19:38:10" />
     <file relUrl="bin/MOE.Common.dll.config" publishTime="12/04/2019 19:03:21" />
     <file relUrl="bin/MvcCheckBoxList.dll" publishTime="03/30/2018 10:08:38" />
@@ -290,18 +587,15 @@
   <publishTarget publishUrl="\\srwtcmvweb2\d$\UDOT\HistoryMoeWcfLibrary\">
     <file relUrl="bin/CsvHelper.xml" publishTime="12/05/2018 21:11:06" />
     <file relUrl="bin/FluentFTP.xml" publishTime="05/02/2018 20:59:04" />
-    <file relUrl="bin/EntityFramework.xml" publishTime="03/30/2018 10:08:38" />
     <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="03/30/2018 10:08:38" />
     <file relUrl="MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="12/18/2019 11:27:26" />
-    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
+    <file relUrl="bin/EntityFramework.xml" publishTime="03/30/2018 10:08:38" />
     <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.dll" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/System.Web.Mvc.dll" publishTime="11/28/2018 12:59:46" />
     <file relUrl="bin/Newtonsoft.Json.dll" publishTime="11/27/2018 18:07:34" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
     <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Owin.dll" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/System.Interactive.Async.xml" publishTime="07/11/2018 13:43:40" />
@@ -311,11 +605,11 @@
     <file relUrl="bin/System.Memory.xml" publishTime="06/06/2018 13:29:04" />
     <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
     <file relUrl="bin/Newtonsoft.Json.xml" publishTime="11/27/2018 17:59:08" />
-    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
     <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.xml" publishTime="11/11/2018 00:26:40" />
     <file relUrl="bin/Microsoft.Extensions.Options.dll" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Web.Razor.xml" publishTime="11/28/2018 13:00:12" />
     <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="12/18/2019 10:59:11" />
+    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/System.Web.Mvc.xml" publishTime="11/28/2018 12:59:46" />
     <file relUrl="bin/Microsoft.Extensions.Logging.dll" publishTime="11/11/2018 00:27:18" />
     <file relUrl="MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="12/18/2019 11:27:26" />
@@ -326,11 +620,11 @@
     <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="12/18/2019 11:14:37" />
     <file relUrl="bin/Remotion.Linq.xml" publishTime="02/06/2018 22:25:00" />
     <file relUrl="bin/Microsoft.Owin.Security.Cookies.xml" publishTime="02/13/2018 16:28:20" />
+    <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
     <file relUrl="bin/Microsoft.Extensions.Logging.xml" publishTime="11/11/2018 00:27:18" />
     <file relUrl="bin/Microsoft.Owin.Security.xml" publishTime="02/13/2018 16:28:16" />
     <file relUrl="bin/FluentFTP.dll" publishTime="05/02/2018 20:59:04" />
     <file relUrl="bin/Microsoft.Owin.Security.Cookies.dll" publishTime="02/13/2018 16:28:20" />
-    <file relUrl="bin/Microsoft.Owin.Security.OAuth.xml" publishTime="02/13/2018 16:28:28" />
     <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.xml" publishTime="11/12/2018 17:31:02" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.xml" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.dll" publishTime="09/18/2018 19:38:10" />
@@ -350,23 +644,21 @@
     <file relUrl="bin/Remotion.Linq.dll" publishTime="02/06/2018 22:25:00" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.xml" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/Newtonsoft.Json.pdb" publishTime="11/27/2018 17:59:08" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/MOE.Common.pdb" publishTime="12/18/2019 10:59:14" />
     <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="03/30/2018 10:08:38" />
     <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.dll" publishTime="11/11/2018 00:26:44" />
-
-    <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
-
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.xml" publishTime="02/13/2018 16:28:28" />
     <file relUrl="bin/System.ValueTuple.xml" publishTime="05/15/2018 13:29:52" />
+    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
     <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/System.Buffers.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/System.Diagnostics.DiagnosticSource.xml" publishTime="09/18/2018 19:38:16" />
     <file relUrl="bin/System.Web.WebPages.dll" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/System.ValueTuple.dll" publishTime="05/15/2018 13:29:52" />
     <file relUrl="bin/EntityFramework.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
+    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/SharpSnmpLib.dll" publishTime="08/26/2018 04:29:10" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Core.xml" publishTime="04/24/2018 12:47:38" />
     <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="12/18/2019 10:59:11" />
@@ -374,13 +666,13 @@
     <file relUrl="bin/System.Collections.Immutable.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/SharpSnmpLib.pdb" publishTime="08/26/2018 04:29:10" />
     <file relUrl="bin/Microsoft.EntityFrameworkCore.xml" publishTime="11/12/2018 17:31:12" />
-    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
     <file relUrl="bin/System.Web.WebPages.xml" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Buffers.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/NuGet.Core.dll" publishTime="09/07/2016 11:09:14" />
-    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.xml" publishTime="09/18/2018 19:38:10" />
     <file relUrl="bin/MOE.Common.dll.config" publishTime="12/04/2019 19:03:21" />
     <file relUrl="bin/MvcCheckBoxList.dll" publishTime="03/30/2018 10:08:38" />
@@ -392,9 +684,6 @@
     <file relUrl="bin/FluentFTP.xml" publishTime="05/02/2018 20:59:04" />
     <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="11/30/2018 13:45:46" />
     <file relUrl="MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="11/27/2019 10:57:23" />
-
-    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
-
     <file relUrl="bin/EntityFramework.xml" publishTime="04/24/2019 10:00:00" />
     <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.dll" publishTime="11/11/2018 00:26:36" />
@@ -402,7 +691,6 @@
     <file relUrl="bin/Newtonsoft.Json.dll" publishTime="11/27/2018 18:07:34" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
     <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Owin.dll" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/System.Interactive.Async.xml" publishTime="07/11/2018 13:43:40" />
@@ -412,11 +700,11 @@
     <file relUrl="bin/System.Memory.xml" publishTime="06/06/2018 13:29:04" />
     <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
     <file relUrl="bin/Newtonsoft.Json.xml" publishTime="11/27/2018 17:59:08" />
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
     <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.xml" publishTime="11/11/2018 00:26:40" />
     <file relUrl="bin/Microsoft.Extensions.Options.dll" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Web.Razor.xml" publishTime="11/28/2018 13:00:12" />
     <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="11/27/2019 09:58:02" />
-    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/System.Web.Mvc.xml" publishTime="11/28/2018 12:59:46" />
     <file relUrl="bin/Microsoft.Extensions.Logging.dll" publishTime="11/11/2018 00:27:18" />
     <file relUrl="MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="11/27/2019 10:57:23" />
@@ -427,6 +715,7 @@
     <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="11/27/2019 10:39:56" />
     <file relUrl="bin/Remotion.Linq.xml" publishTime="02/06/2018 22:25:00" />
     <file relUrl="bin/Microsoft.Owin.Security.Cookies.xml" publishTime="02/13/2018 16:28:20" />
+    <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
     <file relUrl="bin/Microsoft.Extensions.Logging.xml" publishTime="11/11/2018 00:27:18" />
     <file relUrl="bin/Microsoft.Owin.Security.xml" publishTime="02/13/2018 16:28:16" />
     <file relUrl="bin/FluentFTP.dll" publishTime="05/02/2018 20:59:04" />
@@ -451,14 +740,14 @@
     <file relUrl="bin/Remotion.Linq.dll" publishTime="02/06/2018 22:25:00" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.xml" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/Newtonsoft.Json.pdb" publishTime="11/27/2018 17:59:08" />
+    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/MOE.Common.pdb" publishTime="11/27/2019 10:01:55" />
     <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="04/24/2019 10:00:00" />
-    <file relUrl="bin/System.Memory.dll" publishTime="06/06/2018 13:29:04" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.dll" publishTime="11/11/2018 00:26:44" />
-    <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
+    <file relUrl="bin/System.Memory.dll" publishTime="06/06/2018 13:29:04" />
     <file relUrl="bin/System.ValueTuple.xml" publishTime="05/15/2018 13:29:52" />
-    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
     <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/System.Buffers.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/System.Diagnostics.DiagnosticSource.xml" publishTime="09/18/2018 19:38:16" />
@@ -473,13 +762,13 @@
     <file relUrl="bin/System.Collections.Immutable.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/SharpSnmpLib.pdb" publishTime="08/26/2018 04:29:10" />
     <file relUrl="bin/Microsoft.EntityFrameworkCore.xml" publishTime="11/12/2018 17:31:12" />
-    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
+    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
     <file relUrl="bin/System.Web.WebPages.xml" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
+    <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Buffers.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/NuGet.Core.dll" publishTime="09/07/2016 11:09:14" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
+    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.xml" publishTime="09/18/2018 19:38:10" />
     <file relUrl="bin/MOE.Common.dll.config" publishTime="11/26/2019 14:26:13" />
     <file relUrl="bin/MvcCheckBoxList.dll" publishTime="11/30/2018 13:45:46" />
@@ -489,25 +778,25 @@
   <publishTarget publishUrl="\\srwtcmvweb2\d$\udot\MOEWCFServiceLibrary\">
     <file relUrl="bin/CsvHelper.xml" publishTime="12/05/2018 21:11:06" />
     <file relUrl="bin/FluentFTP.xml" publishTime="05/02/2018 20:59:04" />
-    <file relUrl="bin/EntityFramework.xml" publishTime="03/30/2018 10:08:38" />
+    <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
     <file relUrl="MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="09/10/2019 11:15:21" />
-    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
+    <file relUrl="bin/EntityFramework.xml" publishTime="03/30/2018 10:08:38" />
     <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.dll" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/System.Web.Mvc.dll" publishTime="11/28/2018 12:59:46" />
     <file relUrl="bin/Newtonsoft.Json.dll" publishTime="11/27/2018 18:07:34" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
     <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Owin.dll" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/System.Interactive.Async.xml" publishTime="07/11/2018 13:43:40" />
     <file relUrl="bin/Owin.dll" publishTime="03/30/2018 10:08:38" />
     <file relUrl="bin/System.Numerics.Vectors.xml" publishTime="05/15/2018 13:29:44" />
+    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
     <file relUrl="bin/System.Memory.xml" publishTime="06/06/2018 13:29:04" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.xml" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/Newtonsoft.Json.xml" publishTime="11/27/2018 17:59:08" />
-    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
     <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.xml" publishTime="11/11/2018 00:26:40" />
     <file relUrl="bin/Microsoft.Extensions.Options.dll" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Web.Razor.xml" publishTime="11/28/2018 13:00:12" />
@@ -522,7 +811,6 @@
     <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="10/01/2019 17:12:26" />
     <file relUrl="bin/Remotion.Linq.xml" publishTime="02/06/2018 22:25:00" />
     <file relUrl="bin/Microsoft.Owin.Security.Cookies.xml" publishTime="02/13/2018 16:28:20" />
-    <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
     <file relUrl="bin/Microsoft.Extensions.Logging.xml" publishTime="11/11/2018 00:27:18" />
     <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="03/30/2018 10:08:38" />
     <file relUrl="bin/FluentFTP.dll" publishTime="05/02/2018 20:59:04" />
@@ -541,7 +829,6 @@
     <file relUrl="bin/EntityFramework.SqlServer.xml" publishTime="03/30/2018 10:08:38" />
     <file relUrl="Web.config" publishTime="10/01/2019 17:12:26" />
     <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.dll" publishTime="11/12/2018 17:31:02" />
-    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/MOE.Common.dll" publishTime="10/01/2019 17:15:03" />
     <file relUrl="bin/Remotion.Linq.dll" publishTime="02/06/2018 22:25:00" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.xml" publishTime="11/11/2018 00:26:36" />
@@ -549,21 +836,17 @@
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/MOE.Common.pdb" publishTime="09/10/2019 09:59:37" />
     <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.dll" publishTime="11/11/2018 00:26:44" />
-
     <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
     <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
-
-
     <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/System.Buffers.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/System.Diagnostics.DiagnosticSource.xml" publishTime="09/18/2018 19:38:16" />
     <file relUrl="bin/System.Web.WebPages.dll" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/System.ValueTuple.dll" publishTime="05/15/2018 13:29:52" />
     <file relUrl="bin/EntityFramework.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
+    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/SharpSnmpLib.dll" publishTime="08/26/2018 04:29:10" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Core.xml" publishTime="04/24/2018 12:47:38" />
     <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="10/01/2019 17:15:00" />
@@ -572,9 +855,9 @@
     <file relUrl="bin/System.Collections.Immutable.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/SharpSnmpLib.pdb" publishTime="08/26/2018 04:29:10" />
     <file relUrl="bin/Microsoft.EntityFrameworkCore.xml" publishTime="11/12/2018 17:31:12" />
-    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
+    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
     <file relUrl="bin/System.Web.WebPages.xml" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
+    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Buffers.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/NuGet.Core.dll" publishTime="09/07/2016 11:09:14" />
@@ -588,25 +871,25 @@
   <publishTarget publishUrl="\\utstsrtcns53\d$\Inetpub\WCFLibrary-Historical\">
     <file relUrl="bin/CsvHelper.xml" publishTime="12/05/2018 21:11:06" />
     <file relUrl="bin/FluentFTP.xml" publishTime="05/02/2018 20:59:04" />
-    <file relUrl="bin/EntityFramework.xml" publishTime="03/30/2018 10:08:38" />
+    <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
     <file relUrl="MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="09/09/2019 15:51:32" />
-    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
+    <file relUrl="bin/EntityFramework.xml" publishTime="03/30/2018 10:08:38" />
     <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.dll" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/System.Web.Mvc.dll" publishTime="11/28/2018 12:59:46" />
     <file relUrl="bin/Newtonsoft.Json.dll" publishTime="11/27/2018 18:07:34" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="11/28/2018 13:04:24" />
+    <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
     <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Owin.dll" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/System.Interactive.Async.xml" publishTime="07/11/2018 13:43:40" />
     <file relUrl="bin/Owin.dll" publishTime="03/30/2018 10:08:38" />
     <file relUrl="bin/System.Numerics.Vectors.xml" publishTime="05/15/2018 13:29:44" />
+    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
     <file relUrl="bin/System.Memory.xml" publishTime="06/06/2018 13:29:04" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.xml" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/Newtonsoft.Json.xml" publishTime="11/27/2018 17:59:08" />
-    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
     <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.xml" publishTime="11/11/2018 00:26:40" />
     <file relUrl="bin/Microsoft.Extensions.Options.dll" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Web.Razor.xml" publishTime="11/28/2018 13:00:12" />
@@ -621,7 +904,6 @@
     <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="10/01/2019 17:12:26" />
     <file relUrl="bin/Remotion.Linq.xml" publishTime="02/06/2018 22:25:00" />
     <file relUrl="bin/Microsoft.Owin.Security.Cookies.xml" publishTime="02/13/2018 16:28:20" />
-    <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
     <file relUrl="bin/Microsoft.Extensions.Logging.xml" publishTime="11/11/2018 00:27:18" />
     <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="03/30/2018 10:08:38" />
     <file relUrl="bin/FluentFTP.dll" publishTime="05/02/2018 20:59:04" />
@@ -640,7 +922,6 @@
     <file relUrl="bin/EntityFramework.SqlServer.xml" publishTime="03/30/2018 10:08:38" />
     <file relUrl="Web.config" publishTime="10/01/2019 17:12:26" />
     <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.dll" publishTime="11/12/2018 17:31:02" />
-    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/MOE.Common.dll" publishTime="10/01/2019 17:15:03" />
     <file relUrl="bin/Remotion.Linq.dll" publishTime="02/06/2018 22:25:00" />
     <file relUrl="bin/Microsoft.Extensions.Primitives.xml" publishTime="11/11/2018 00:26:36" />
@@ -648,20 +929,18 @@
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
     <file relUrl="bin/MOE.Common.pdb" publishTime="09/09/2019 15:47:28" />
     <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
+    <file relUrl="bin/System.Memory.dll" publishTime="06/06/2018 13:29:04" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.dll" publishTime="11/11/2018 00:26:44" />
-
-    <file relUrl="bin/System.Memory.dll" publishTime="06/06/2018 13:29:04" />
-    <file relUrl="bin/System.ValueTuple.xml" publishTime="05/15/2018 13:29:52" />
-
+    <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
+    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
     <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/System.Buffers.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/System.Diagnostics.DiagnosticSource.xml" publishTime="09/18/2018 19:38:16" />
     <file relUrl="bin/System.Web.WebPages.dll" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/System.ValueTuple.dll" publishTime="05/15/2018 13:29:52" />
     <file relUrl="bin/EntityFramework.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
+    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/SharpSnmpLib.dll" publishTime="08/26/2018 04:29:10" />
     <file relUrl="bin/Microsoft.AspNet.Identity.Core.xml" publishTime="04/24/2018 12:47:38" />
     <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="10/01/2019 17:15:00" />
@@ -670,201 +949,12 @@
     <file relUrl="bin/System.Collections.Immutable.xml" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/SharpSnmpLib.pdb" publishTime="08/26/2018 04:29:10" />
     <file relUrl="bin/Microsoft.EntityFrameworkCore.xml" publishTime="11/12/2018 17:31:12" />
-    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
-    <file relUrl="bin/System.Web.WebPages.xml" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/System.Buffers.dll" publishTime="05/15/2018 13:29:34" />
-    <file relUrl="bin/NuGet.Core.dll" publishTime="09/07/2016 11:09:14" />
-    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
-    <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.xml" publishTime="09/18/2018 19:38:10" />
-    <file relUrl="bin/MOE.Common.dll.config" publishTime="05/16/2019 14:55:08" />
-    <file relUrl="bin/MvcCheckBoxList.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/System.Web.WebPages.Deployment.dll" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.xml" publishTime="11/11/2018 00:26:44" />
-  </publishTarget>
-  <publishTarget publishUrl="\\utstsrtcns53\d$\Inetpub\WCFLibrary-Production\">
-    <file relUrl="bin/CsvHelper.xml" publishTime="12/05/2018 21:11:06" />
-    <file relUrl="bin/FluentFTP.xml" publishTime="05/02/2018 20:59:04" />
-    <file relUrl="bin/EntityFramework.xml" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="08/29/2019 08:26:42" />
-    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="04/24/2018 12:47:40" />
-    <file relUrl="bin/Microsoft.Extensions.Primitives.dll" publishTime="11/11/2018 00:26:36" />
-    <file relUrl="bin/System.Web.Mvc.dll" publishTime="11/28/2018 12:59:46" />
-    <file relUrl="bin/Newtonsoft.Json.dll" publishTime="11/27/2018 18:07:34" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll" publishTime="11/11/2018 00:26:36" />
-    <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
-    <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.Owin.dll" publishTime="04/24/2018 12:47:40" />
-    <file relUrl="bin/System.Interactive.Async.xml" publishTime="07/11/2018 13:43:40" />
-    <file relUrl="bin/Owin.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/System.Numerics.Vectors.xml" publishTime="05/15/2018 13:29:44" />
-    <file relUrl="bin/System.Memory.xml" publishTime="06/06/2018 13:29:04" />
-    <file relUrl="bin/Newtonsoft.Json.xml" publishTime="11/27/2018 17:59:08" />
     <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
-    <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.xml" publishTime="11/11/2018 00:26:40" />
-    <file relUrl="bin/Microsoft.Extensions.Options.dll" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/System.Web.Razor.xml" publishTime="11/28/2018 13:00:12" />
-    <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="10/01/2019 17:15:00" />
-    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
-    <file relUrl="bin/System.Web.Mvc.xml" publishTime="11/28/2018 12:59:46" />
-    <file relUrl="bin/Microsoft.Extensions.Logging.dll" publishTime="11/11/2018 00:27:18" />
-    <file relUrl="MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="10/01/2019 17:20:47" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.Core.dll" publishTime="04/24/2018 12:47:38" />
-    <file relUrl="bin/Microsoft.Owin.Security.dll" publishTime="02/13/2018 16:28:16" />
-    <file relUrl="bin/System.Interactive.Async.dll" publishTime="07/11/2018 13:48:42" />
-    <file relUrl="bin/System.Numerics.Vectors.dll" publishTime="05/15/2018 13:29:44" />
-    <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="10/01/2019 17:12:26" />
-    <file relUrl="bin/Remotion.Linq.xml" publishTime="02/06/2018 22:25:00" />
-    <file relUrl="bin/Microsoft.Owin.Security.Cookies.xml" publishTime="02/13/2018 16:28:20" />
-    <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
-    <file relUrl="bin/Microsoft.Extensions.Logging.xml" publishTime="11/11/2018 00:27:18" />
-    <file relUrl="bin/Microsoft.Owin.Security.xml" publishTime="02/13/2018 16:28:16" />
-    <file relUrl="bin/FluentFTP.dll" publishTime="05/02/2018 20:59:04" />
-    <file relUrl="bin/Microsoft.Owin.Security.Cookies.dll" publishTime="02/13/2018 16:28:20" />
-    <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.xml" publishTime="11/12/2018 17:31:02" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.xml" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.dll" publishTime="09/18/2018 19:38:10" />
-    <file relUrl="bin/Microsoft.Owin.xml" publishTime="02/13/2018 16:28:04" />
-    <file relUrl="bin/Microsoft.Web.XmlTransform.pdb" publishTime="12/07/2018 23:17:02" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Memory.xml" publishTime="11/11/2018 00:26:46" />
-    <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.dll" publishTime="11/11/2018 00:26:40" />
-    <file relUrl="bin\Business\DataAggregation/DataAggregation.cs" publishTime="09/27/2019 18:27:47" />
-    <file relUrl="bin/MOEWcfServiceLibrary.dll" publishTime="10/01/2019 17:15:03" />
-    <file relUrl="bin/Microsoft.Web.XmlTransform.dll" publishTime="12/07/2018 23:18:14" />
-    <file relUrl="bin/Microsoft.EntityFrameworkCore.dll" publishTime="11/12/2018 17:31:14" />
-    <file relUrl="bin/EntityFramework.SqlServer.xml" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="Web.config" publishTime="10/01/2019 17:12:26" />
-    <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.dll" publishTime="11/12/2018 17:31:02" />
-    <file relUrl="bin/MOEWcfServiceLibrary.pdb" publishTime="10/01/2019 17:15:03" />
-    <file relUrl="bin/MOE.Common.dll" publishTime="10/01/2019 17:15:03" />
-    <file relUrl="bin/Remotion.Linq.dll" publishTime="02/06/2018 22:25:00" />
-    <file relUrl="bin/Microsoft.Extensions.Primitives.xml" publishTime="11/11/2018 00:26:36" />
-    <file relUrl="bin/Newtonsoft.Json.pdb" publishTime="11/27/2018 17:59:08" />
-    <file relUrl="bin/MOE.Common.pdb" publishTime="08/28/2019 13:52:18" />
-    <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="04/24/2018 12:47:40" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.dll" publishTime="11/11/2018 00:26:44" />
-    <file relUrl="bin/System.Memory.dll" publishTime="06/06/2018 13:29:04" />
-    <file relUrl="bin/System.Buffers.xml" publishTime="05/15/2018 13:29:34" />
-    <file relUrl="bin/System.Diagnostics.DiagnosticSource.xml" publishTime="09/18/2018 19:38:16" />
-    <file relUrl="bin/System.Web.WebPages.dll" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/System.ValueTuple.dll" publishTime="05/15/2018 13:29:52" />
-    <file relUrl="bin/EntityFramework.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
-    <file relUrl="bin/SharpSnmpLib.dll" publishTime="08/26/2018 04:29:10" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.Core.xml" publishTime="04/24/2018 12:47:38" />
-    <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="10/01/2019 17:15:00" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Memory.dll" publishTime="11/11/2018 00:26:46" />
-    <file relUrl="bin/System.Collections.Immutable.xml" publishTime="05/15/2018 13:29:34" />
-    <file relUrl="bin/SharpSnmpLib.pdb" publishTime="08/26/2018 04:29:10" />
-    <file relUrl="bin/Microsoft.EntityFrameworkCore.xml" publishTime="11/12/2018 17:31:12" />
-    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
     <file relUrl="bin/System.Web.WebPages.xml" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
     <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="11/11/2018 00:26:38" />
     <file relUrl="bin/System.Buffers.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/NuGet.Core.dll" publishTime="09/07/2016 11:09:14" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
-    <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.xml" publishTime="09/18/2018 19:38:10" />
-    <file relUrl="bin/MOE.Common.dll.config" publishTime="05/16/2019 14:55:08" />
-    <file relUrl="bin/MvcCheckBoxList.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/System.Web.WebPages.Deployment.dll" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.xml" publishTime="11/11/2018 00:26:44" />
-  </publishTarget>
-  <publishTarget publishUrl="\\srwtcmoe\d$\UDOT\TestMoeWcfLibraryHistorical\">
-    <file relUrl="bin/CsvHelper.xml" publishTime="12/05/2018 21:11:06" />
-    <file relUrl="bin/FluentFTP.xml" publishTime="05/02/2018 20:59:04" />
-    <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="07/30/2019 12:31:26" />
-    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/EntityFramework.xml" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="04/24/2018 12:47:40" />
-    <file relUrl="bin/Microsoft.Extensions.Primitives.dll" publishTime="11/11/2018 00:26:36" />
-    <file relUrl="bin/System.Web.Mvc.dll" publishTime="11/28/2018 12:59:46" />
-    <file relUrl="bin/Newtonsoft.Json.dll" publishTime="11/27/2018 18:07:34" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll" publishTime="11/11/2018 00:26:36" />
-    <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.Owin.dll" publishTime="04/24/2018 12:47:40" />
-    <file relUrl="bin/System.Interactive.Async.xml" publishTime="07/11/2018 13:43:40" />
-    <file relUrl="bin/Owin.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/System.Numerics.Vectors.xml" publishTime="05/15/2018 13:29:44" />
-    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
-    <file relUrl="bin/System.Memory.xml" publishTime="06/06/2018 13:29:04" />
-    <file relUrl="bin/Newtonsoft.Json.xml" publishTime="11/27/2018 17:59:08" />
-    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
-    <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.xml" publishTime="11/11/2018 00:26:40" />
-    <file relUrl="bin/Microsoft.Extensions.Options.dll" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/System.Web.Razor.xml" publishTime="11/28/2018 13:00:12" />
-    <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="07/29/2019 13:37:39" />
-    <file relUrl="bin/System.Web.Mvc.xml" publishTime="11/28/2018 12:59:46" />
-    <file relUrl="bin/Microsoft.Extensions.Logging.dll" publishTime="11/11/2018 00:27:18" />
-    <file relUrl="MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="09/26/2019 18:51:13" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.Core.dll" publishTime="04/24/2018 12:47:38" />
-    <file relUrl="bin/Microsoft.Owin.Security.dll" publishTime="02/13/2018 16:28:16" />
-    <file relUrl="bin/System.Interactive.Async.dll" publishTime="07/11/2018 13:48:42" />
-    <file relUrl="bin/System.Numerics.Vectors.dll" publishTime="05/15/2018 13:29:44" />
-    <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="09/25/2019 16:02:49" />
-    <file relUrl="bin/Remotion.Linq.xml" publishTime="02/06/2018 22:25:00" />
-    <file relUrl="bin/Microsoft.Owin.Security.Cookies.xml" publishTime="02/13/2018 16:28:20" />
-    <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
-    <file relUrl="bin/Microsoft.Extensions.Logging.xml" publishTime="11/11/2018 00:27:18" />
-    <file relUrl="bin/Microsoft.Owin.Security.xml" publishTime="02/13/2018 16:28:16" />
-    <file relUrl="bin/FluentFTP.dll" publishTime="05/02/2018 20:59:04" />
-    <file relUrl="bin/Microsoft.Owin.Security.Cookies.dll" publishTime="02/13/2018 16:28:20" />
-    <file relUrl="bin/Microsoft.Owin.Security.OAuth.xml" publishTime="02/13/2018 16:28:28" />
-    <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.xml" publishTime="11/12/2018 17:31:02" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.xml" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.dll" publishTime="09/18/2018 19:38:10" />
-    <file relUrl="bin/Microsoft.Owin.xml" publishTime="02/13/2018 16:28:04" />
-    <file relUrl="bin/Microsoft.Web.XmlTransform.pdb" publishTime="12/07/2018 23:17:02" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Memory.xml" publishTime="11/11/2018 00:26:46" />
-    <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.dll" publishTime="11/11/2018 00:26:40" />
-    <file relUrl="bin\Business\DataAggregation/DataAggregation.cs" publishTime="09/25/2019 16:03:46" />
-    <file relUrl="bin/MOEWcfServiceLibrary.dll" publishTime="09/26/2019 18:51:11" />
-    <file relUrl="bin/Microsoft.Web.XmlTransform.dll" publishTime="12/07/2018 23:18:14" />
-    <file relUrl="bin/Microsoft.EntityFrameworkCore.dll" publishTime="11/12/2018 17:31:14" />
-    <file relUrl="bin/EntityFramework.SqlServer.xml" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="Web.config" publishTime="09/25/2019 16:02:49" />
-    <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.dll" publishTime="11/12/2018 17:31:02" />
-    <file relUrl="bin/MOEWcfServiceLibrary.pdb" publishTime="09/26/2019 18:51:11" />
-    <file relUrl="bin/MOE.Common.dll" publishTime="09/26/2019 18:32:59" />
-    <file relUrl="bin/Remotion.Linq.dll" publishTime="02/06/2018 22:25:00" />
-    <file relUrl="bin/Microsoft.Extensions.Primitives.xml" publishTime="11/11/2018 00:26:36" />
-    <file relUrl="bin/Newtonsoft.Json.pdb" publishTime="11/27/2018 17:59:08" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
-    <file relUrl="bin/MOE.Common.pdb" publishTime="07/29/2019 13:37:42" />
-    <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="04/24/2018 12:47:40" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.dll" publishTime="11/11/2018 00:26:44" />
-    <file relUrl="bin/System.Memory.dll" publishTime="06/06/2018 13:29:04" />
-    <file relUrl="bin/System.ValueTuple.xml" publishTime="05/15/2018 13:29:52" />
-    <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/System.Buffers.xml" publishTime="05/15/2018 13:29:34" />
-    <file relUrl="bin/System.Diagnostics.DiagnosticSource.xml" publishTime="09/18/2018 19:38:16" />
-    <file relUrl="bin/System.Web.WebPages.dll" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/System.ValueTuple.dll" publishTime="05/15/2018 13:29:52" />
-    <file relUrl="bin/EntityFramework.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
-    <file relUrl="bin/SharpSnmpLib.dll" publishTime="08/26/2018 04:29:10" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.Core.xml" publishTime="04/24/2018 12:47:38" />
-    <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="09/26/2019 18:32:57" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Memory.dll" publishTime="11/11/2018 00:26:46" />
-    <file relUrl="bin/System.Collections.Immutable.xml" publishTime="05/15/2018 13:29:34" />
-    <file relUrl="bin/SharpSnmpLib.pdb" publishTime="08/26/2018 04:29:10" />
-    <file relUrl="bin/Microsoft.EntityFrameworkCore.xml" publishTime="11/12/2018 17:31:12" />
-    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
-    <file relUrl="bin/System.Web.WebPages.xml" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/System.Buffers.dll" publishTime="05/15/2018 13:29:34" />
-    <file relUrl="bin/NuGet.Core.dll" publishTime="09/07/2016 11:09:14" />
     <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
     <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.xml" publishTime="09/18/2018 19:38:10" />
     <file relUrl="bin/MOE.Common.dll.config" publishTime="05/16/2019 14:55:08" />
@@ -872,101 +962,4 @@
     <file relUrl="bin/System.Web.WebPages.Deployment.dll" publishTime="11/28/2018 13:04:24" />
     <file relUrl="bin/Microsoft.Extensions.DependencyInjection.xml" publishTime="11/11/2018 00:26:44" />
   </publishTarget>
-  <publishTarget publishUrl="\\srwtcmoe\d$\UDOT\HistoricalMoeWcfLibray\">
-    <file relUrl="bin/CsvHelper.xml" publishTime="12/05/2018 21:11:06" />
-    <file relUrl="bin/FluentFTP.xml" publishTime="05/02/2018 20:59:04" />
-    <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="MOEWcfServiceLibrary.LinkPivotService.svc" publishTime="07/30/2019 11:48:54" />
-    <file relUrl="bin/Microsoft.Extensions.Options.xml" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/EntityFramework.xml" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.xml" publishTime="04/24/2018 12:47:40" />
-    <file relUrl="bin/Microsoft.Extensions.Primitives.dll" publishTime="11/11/2018 00:26:36" />
-    <file relUrl="bin/System.Web.Mvc.dll" publishTime="11/28/2018 12:59:46" />
-    <file relUrl="bin/Newtonsoft.Json.dll" publishTime="11/27/2018 18:07:34" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll" publishTime="11/11/2018 00:26:36" />
-    <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.Owin.dll" publishTime="04/24/2018 12:47:40" />
-    <file relUrl="bin/System.Interactive.Async.xml" publishTime="07/11/2018 13:43:40" />
-    <file relUrl="bin/Owin.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/System.Numerics.Vectors.xml" publishTime="05/15/2018 13:29:44" />
-    <file relUrl="bin/CsvHelper.dll" publishTime="12/05/2018 21:11:06" />
-    <file relUrl="bin/System.Memory.xml" publishTime="06/06/2018 13:29:04" />
-    <file relUrl="bin/Newtonsoft.Json.xml" publishTime="11/27/2018 17:59:08" />
-    <file relUrl="bin/Microsoft.Owin.Security.OAuth.dll" publishTime="02/13/2018 16:28:28" />
-    <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.xml" publishTime="11/11/2018 00:26:40" />
-    <file relUrl="bin/Microsoft.Extensions.Options.dll" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/System.Web.Razor.xml" publishTime="11/28/2018 13:00:12" />
-    <file relUrl="bin/Caseiro.Mvc.PagedList.pdb" publishTime="07/29/2019 13:37:39" />
-    <file relUrl="bin/System.Web.Mvc.xml" publishTime="11/28/2018 12:59:46" />
-    <file relUrl="bin/Microsoft.Extensions.Logging.dll" publishTime="11/11/2018 00:27:18" />
-    <file relUrl="MOEWcfServiceLibrary.MetricGenerator.svc" publishTime="09/16/2019 09:41:14" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.Core.dll" publishTime="04/24/2018 12:47:38" />
-    <file relUrl="bin/Microsoft.Owin.Security.dll" publishTime="02/13/2018 16:28:16" />
-    <file relUrl="bin/System.Interactive.Async.dll" publishTime="07/11/2018 13:48:42" />
-    <file relUrl="bin/System.Numerics.Vectors.dll" publishTime="05/15/2018 13:29:44" />
-    <file relUrl="bin/MOEWcfServiceLibrary.dll.config" publishTime="09/13/2019 13:04:09" />
-    <file relUrl="bin/Remotion.Linq.xml" publishTime="02/06/2018 22:25:00" />
-    <file relUrl="bin/Microsoft.Owin.Security.Cookies.xml" publishTime="02/13/2018 16:28:20" />
-    <file relUrl="bin/System.Web.Razor.dll" publishTime="11/28/2018 13:00:12" />
-    <file relUrl="bin/Microsoft.Extensions.Logging.xml" publishTime="11/11/2018 00:27:18" />
-    <file relUrl="bin/Microsoft.Owin.Security.xml" publishTime="02/13/2018 16:28:16" />
-    <file relUrl="bin/FluentFTP.dll" publishTime="05/02/2018 20:59:04" />
-    <file relUrl="bin/Microsoft.Owin.Security.Cookies.dll" publishTime="02/13/2018 16:28:20" />
-    <file relUrl="bin/Microsoft.Owin.Security.OAuth.xml" publishTime="02/13/2018 16:28:28" />
-    <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.xml" publishTime="11/12/2018 17:31:02" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.xml" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.dll" publishTime="09/18/2018 19:38:10" />
-    <file relUrl="bin/Microsoft.Owin.xml" publishTime="02/13/2018 16:28:04" />
-    <file relUrl="bin/Microsoft.Web.XmlTransform.pdb" publishTime="12/07/2018 23:17:02" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Memory.xml" publishTime="11/11/2018 00:26:46" />
-    <file relUrl="bin/Microsoft.Extensions.Logging.Abstractions.dll" publishTime="11/11/2018 00:26:40" />
-    <file relUrl="bin\Business\DataAggregation/DataAggregation.cs" publishTime="09/13/2019 16:29:24" />
-    <file relUrl="bin/MOEWcfServiceLibrary.dll" publishTime="09/16/2019 09:40:09" />
-    <file relUrl="bin/Microsoft.Web.XmlTransform.dll" publishTime="12/07/2018 23:18:14" />
-    <file relUrl="bin/Microsoft.EntityFrameworkCore.dll" publishTime="11/12/2018 17:31:14" />
-    <file relUrl="bin/EntityFramework.SqlServer.xml" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="Web.config" publishTime="09/13/2019 13:04:09" />
-    <file relUrl="bin/Microsoft.EntityFrameworkCore.Abstractions.dll" publishTime="11/12/2018 17:31:02" />
-    <file relUrl="bin/MOEWcfServiceLibrary.pdb" publishTime="09/16/2019 09:40:09" />
-    <file relUrl="bin/MOE.Common.dll" publishTime="09/16/2019 09:40:07" />
-    <file relUrl="bin/Remotion.Linq.dll" publishTime="02/06/2018 22:25:00" />
-    <file relUrl="bin/Microsoft.Extensions.Primitives.xml" publishTime="11/11/2018 00:26:36" />
-    <file relUrl="bin/Newtonsoft.Json.pdb" publishTime="11/27/2018 17:59:08" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.Abstractions.xml" publishTime="11/11/2018 00:26:36" />
-    <file relUrl="bin/MOE.Common.pdb" publishTime="07/29/2019 13:37:42" />
-    <file relUrl="bin/EntityFramework.SqlServer.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.EntityFramework.dll" publishTime="04/24/2018 12:47:40" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.Owin.xml" publishTime="04/24/2018 12:47:40" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.dll" publishTime="11/11/2018 00:26:44" />
-    <file relUrl="bin/System.Memory.dll" publishTime="06/06/2018 13:29:04" />
-    <file relUrl="bin/System.ValueTuple.xml" publishTime="05/15/2018 13:29:52" />
-    <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/System.Buffers.xml" publishTime="05/15/2018 13:29:34" />
-    <file relUrl="bin/System.Diagnostics.DiagnosticSource.xml" publishTime="09/18/2018 19:38:16" />
-    <file relUrl="bin/System.Web.WebPages.dll" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/System.ValueTuple.dll" publishTime="05/15/2018 13:29:52" />
-    <file relUrl="bin/EntityFramework.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/System.Diagnostics.DiagnosticSource.dll" publishTime="09/18/2018 19:38:16" />
-    <file relUrl="bin/SharpSnmpLib.dll" publishTime="08/26/2018 04:29:10" />
-    <file relUrl="bin/Microsoft.AspNet.Identity.Core.xml" publishTime="04/24/2018 12:47:38" />
-    <file relUrl="bin/Caseiro.Mvc.PagedList.dll" publishTime="09/16/2019 09:39:54" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Memory.dll" publishTime="11/11/2018 00:26:46" />
-    <file relUrl="bin/System.Collections.Immutable.xml" publishTime="05/15/2018 13:29:34" />
-    <file relUrl="bin/SharpSnmpLib.pdb" publishTime="08/26/2018 04:29:10" />
-    <file relUrl="bin/Microsoft.EntityFrameworkCore.xml" publishTime="11/12/2018 17:31:12" />
-    <file relUrl="bin/System.ComponentModel.Annotations.dll" publishTime="05/15/2018 13:29:36" />
-    <file relUrl="bin/System.Web.WebPages.xml" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.Owin.dll" publishTime="02/13/2018 16:28:04" />
-    <file relUrl="bin/Microsoft.Extensions.Caching.Abstractions.dll" publishTime="11/11/2018 00:26:38" />
-    <file relUrl="bin/System.Buffers.dll" publishTime="05/15/2018 13:29:34" />
-    <file relUrl="bin/NuGet.Core.dll" publishTime="09/07/2016 11:09:14" />
-    <file relUrl="bin/System.Collections.Immutable.dll" publishTime="05/15/2018 13:29:34" />
-    <file relUrl="bin/System.Runtime.CompilerServices.Unsafe.xml" publishTime="09/18/2018 19:38:10" />
-    <file relUrl="bin/MOE.Common.dll.config" publishTime="05/16/2019 14:55:08" />
-    <file relUrl="bin/MvcCheckBoxList.dll" publishTime="03/30/2018 10:08:38" />
-    <file relUrl="bin/System.Web.WebPages.Deployment.dll" publishTime="11/28/2018 13:04:24" />
-    <file relUrl="bin/Microsoft.Extensions.DependencyInjection.xml" publishTime="11/11/2018 00:26:44" />
-  </publishTarget>
-
 </publishData>

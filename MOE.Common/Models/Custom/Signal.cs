@@ -177,9 +177,11 @@ namespace MOE.Common.Models
                     foreach (var dt in d.DetectionTypes)
                         if (dt.DetectionTypeID != 1)
                             foreach (var m in dt.MetricTypes)
-                                if (m.ShowOnWebsite)
+                                if (m.ShowOnWebsite&& !availableMetrics.Contains(m))
                                     availableMetrics.Add(m);
-            return availableMetrics.Distinct().OrderBy(a => a.MetricID).ToList();
+            //availableMetrics = availableMetrics.Distinct().OrderBy(m => m.DisplayOrder).ToList();
+            //return availableMetrics.OrderBy(a => a.MetricID).ToList();
+            return availableMetrics;
         }
 
         public List<MetricType> GetAvailableMetrics()

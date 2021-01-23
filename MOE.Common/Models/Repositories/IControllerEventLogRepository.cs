@@ -61,6 +61,8 @@ namespace MOE.Common.Models.Repositories
         Controller_Event_Log GetFirstEventBeforeDateByEventCodeAndParameter(string signalId, int eventCode,
             int eventParam, DateTime date);
 
+        List<Controller_Event_Log> GetEventsBetweenDates(DateTime startTime, DateTime endTime);
+
         int GetSignalEventsCountBetweenDates(string signalId, DateTime startTime, DateTime endTime);
 
         int GetApproachEventsCountBetweenDates(int approachId, DateTime startTime, DateTime endTime,

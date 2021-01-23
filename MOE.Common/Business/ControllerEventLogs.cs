@@ -7,7 +7,7 @@ namespace MOE.Common.Business
 {
     public class ControllerEventLogs
     {
-        private readonly SPM db = new SPM();
+        private readonly SPM _db = new SPM();
 
         public ControllerEventLogs(string signalId, DateTime startDate, DateTime endDate)
         {
@@ -24,6 +24,24 @@ namespace MOE.Common.Business
         }
 
         public ControllerEventLogs(string signalID, DateTime startDate, DateTime endDate, List<int> eventCodes)
+        {
+            SignalId = signalID;
+            StartDate = startDate;
+            EndDate = endDate;
+            EventCodes = eventCodes;
+
+            var events = from s in _db.Controller_Event_Log
+                where s.SignalID == signalID &&
+                      s.Timestamp >= startDate &&
+                      s.Timestamp <= endDate &&
+                      eventCodes.Contains(s.EventCode)
+                select s;
+
+            Events = events.ToList();
+            Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
+        }
+
+        public ControllerEventLogs(string signalID, DateTime startDate, DateTime endDate, List<int> eventCodes, SPM db)
         {
             SignalId = signalID;
             StartDate = startDate;
@@ -49,7 +67,7 @@ namespace MOE.Common.Business
             EndDate = endDate;
             EventCodes = eventCodes;
 
-            var events = from s in db.Controller_Event_Log
+            var events = from s in _db.Controller_Event_Log
                 where s.SignalID == signalID &&
                       s.Timestamp >= startDate &&
                       s.Timestamp <= endDate &&
@@ -90,7 +108,7 @@ namespace MOE.Common.Business
 
         public void Add105Events(string signalId, DateTime startDate, DateTime endDate)
         {
-            var events = (from s in db.Controller_Event_Log
+            var events = (from s in _db.Controller_Event_Log
                 where s.SignalID == signalId &&
                       s.Timestamp >= startDate &&
                       s.Timestamp <= endDate &&

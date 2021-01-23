@@ -18,17 +18,20 @@ namespace MOE.Common.Business
             SevereRedLightViolationSeconds = severeRedLightViolatinsSeconds;
             Approach = approach;
             GetPermissivePhase = usePermissivePhase;
-            var controllerRepository =
-                ControllerEventLogRepositoryFactory.Create();
-            if (!Approach.IsProtectedPhaseOverlap)
+            using (var db = new SPM())
             {
-                GetSignalPhaseData(startDate, endDate, usePermissivePhase);
-            }
-            else
-            {
-                TotalVolume = controllerRepository.GetTmcVolume(startDate, endDate, Approach.SignalID,
-                    Approach.ProtectedPhaseNumber);
-                GetSignalOverlapData(startDate, endDate, _showVolume, binSize);
+                var controllerRepository =
+                    ControllerEventLogRepositoryFactory.Create(db);
+                if (!Approach.IsProtectedPhaseOverlap)
+                {
+                    GetSignalPhaseData(startDate, endDate, usePermissivePhase, db);
+                }
+                else
+                {
+                    TotalVolume = controllerRepository.GetTmcVolume(startDate, endDate, Approach.SignalID,
+                        Approach.ProtectedPhaseNumber);
+                    GetSignalOverlapData(startDate, endDate, _showVolume, binSize, db);
+                }
             }
         }
 
@@ -102,25 +105,26 @@ namespace MOE.Common.Business
 
         public Approach Approach { get; set; }
 
-        private void GetSignalPhaseData(DateTime startDate, DateTime endDate, bool usePermissivePhase)
+        private void GetSignalPhaseData(DateTime startDate, DateTime endDate, bool usePermissivePhase, SPM db)
         {
-            var controllerRepository =
-                ControllerEventLogRepositoryFactory.Create();
             if (!usePermissivePhase)
                 PhaseNumber = Approach.ProtectedPhaseNumber;
             else
                 PhaseNumber = Approach.PermissivePhaseNumber ?? 0;
-            TotalVolume = controllerRepository.GetTmcVolume(startDate, endDate, Approach.SignalID, PhaseNumber);
-            var cycleEvents = controllerRepository.GetEventsByEventCodesParam(Approach.SignalID,
-                startDate, endDate, new List<int> {1, 8, 9, 10, 11}, PhaseNumber);
-            Plans = new RLMPlanCollection(cycleEvents, startDate, endDate, SevereRedLightViolationSeconds, Approach);
-            if (Plans.PlanList.Count == 0)
-                Plans.AddItem(new RLMPlan(startDate, endDate, 0, cycleEvents, SevereRedLightViolationSeconds,
-                    Approach));
+                var controllerRepository =
+                    ControllerEventLogRepositoryFactory.Create(db);
+                TotalVolume = controllerRepository.GetTmcVolume(startDate, endDate, Approach.SignalID, PhaseNumber);
+                var cycleEvents = controllerRepository.GetEventsByEventCodesParam(Approach.SignalID,
+                    startDate, endDate, new List<int> { 1, 8, 9, 10, 11 }, PhaseNumber);
+                Plans = new RLMPlanCollection(cycleEvents, startDate, endDate, SevereRedLightViolationSeconds, Approach, db);
+                if (Plans.PlanList.Count == 0)
+                    Plans.AddItem(new RLMPlan(startDate, endDate, 0, cycleEvents, SevereRedLightViolationSeconds,
+                        Approach));
+            
         }
 
 
-        private void GetSignalOverlapData(DateTime startDate, DateTime endDate, bool showVolume, int binSize)
+        private void GetSignalOverlapData(DateTime startDate, DateTime endDate, bool showVolume, int binSize, SPM db)
         {
             var redLightTimeStamp = DateTime.MinValue;
             var li = new List<int> {62, 63, 64};
@@ -128,7 +132,7 @@ namespace MOE.Common.Business
                 ControllerEventLogRepositoryFactory.Create();
             var cycleEvents = controllerRepository.GetEventsByEventCodesParam(Approach.SignalID,
                 startDate, endDate, li, Approach.ProtectedPhaseNumber);
-            Plans = new RLMPlanCollection(cycleEvents, startDate, endDate, SevereRedLightViolationSeconds, Approach);
+            Plans = new RLMPlanCollection(cycleEvents, startDate, endDate, SevereRedLightViolationSeconds, Approach, db);
             if (Plans.PlanList.Count == 0)
                 Plans.AddItem(new RLMPlan(startDate, endDate, 0, cycleEvents, SevereRedLightViolationSeconds,
                     Approach));

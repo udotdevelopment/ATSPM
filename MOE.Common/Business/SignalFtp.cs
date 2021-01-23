@@ -576,6 +576,7 @@ namespace MOE.Common.Business
 
         public static bool BulktoDb(DataTable elTable, BulkCopyOptions options, string tableName)
         {
+            bool exportCsv = Convert.ToBoolean(ConfigurationManager.AppSettings["ExportCsv"]);
             MOE.Common.Models.Repositories.IApplicationEventRepository errorRepository = MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
             using (options.Connection)
             {
@@ -623,6 +624,10 @@ namespace MOE.Common.Business
 
                         if (elTable.Rows.Count > 0)
                         {
+                            if (exportCsv)
+                            {
+                                WriteTableToCsv(elTable);
+                            }
                             try
                             {
                                 bulkCopy.WriteToServer(elTable);
@@ -680,6 +685,38 @@ namespace MOE.Common.Business
                         return false;
                     }
                 }
+            }
+        }
+
+        private static void WriteTableToCsv(DataTable dt)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            IEnumerable<string> columnNames = dt.Columns.Cast<DataColumn>().
+                Select(column => column.ColumnName);
+            sb.AppendLine(string.Join(",", columnNames));
+
+            foreach (DataRow row in dt.Rows)
+            {
+                IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
+                sb.AppendLine(string.Join(",", fields));
+            }
+
+            string csvPath = ConfigurationManager.AppSettings["CsvExportPath"];
+            if (!Directory.Exists(csvPath.TrimEnd('\\')))
+            {
+                Directory.CreateDirectory(csvPath.TrimEnd('\\'));
+            }
+            try
+            {
+                string fullCsvPath = csvPath + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond + ".csv";
+                File.WriteAllText(fullCsvPath, sb.ToString());
+            }
+            catch (Exception ex)
+            {
+                IApplicationEventRepository errorRepository = ApplicationEventRepositoryFactory.Create();
+                errorRepository.QuickAdd("MOE.Common", "SignalFTP", "WriteTableToCsv",
+                    Models.ApplicationEvent.SeverityLevels.Medium, ex.Message);
             }
         }
 

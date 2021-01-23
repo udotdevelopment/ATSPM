@@ -17,11 +17,11 @@ namespace MOE.Common.Business
         /// <param name="signalId"></param>
         /// <param name="region"></param>
         public RLMPlanCollection(List<Controller_Event_Log> cycleEvents, DateTime startdate,
-            DateTime enddate, double srlvSeconds, Approach approach)
+            DateTime enddate, double srlvSeconds, Approach approach, SPM db)
         {
             Approach = approach;
             SRLVSeconds = srlvSeconds;
-            GetPlanCollection(startdate, enddate, cycleEvents);
+            GetPlanCollection(startdate, enddate, cycleEvents, db);
         }
 
 
@@ -38,10 +38,10 @@ namespace MOE.Common.Business
 
 
         public void GetPlanCollection(DateTime startDate, DateTime endDate,
-            List<Controller_Event_Log> cycleEvents)
+            List<Controller_Event_Log> cycleEvents, SPM db)
         {
             var ds =
-                new ControllerEventLogs(Approach.SignalID, startDate, endDate, new List<int> {131});
+                new ControllerEventLogs(Approach.SignalID, startDate, endDate, new List<int> {131}, db);
             var row = new Controller_Event_Log();
             row.Timestamp = startDate;
             row.SignalID = Approach.SignalID;
