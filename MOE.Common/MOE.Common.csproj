@@ -602,6 +602,22 @@
     <Compile Include="Migrations\201910162223114_Model-for Oct2019.Designer.cs">
       <DependentUpon>201910162223114_Model-for Oct2019.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202102042152251_CycleCompletionSeconds.cs" />
+    <Compile Include="Migrations\202102042152251_CycleCompletionSeconds.designer.cs">
+      <DependentUpon>202102042152251_CycleCompletionSeconds.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103042041127_YellowRedActivationAggregateChange.cs" />
+    <Compile Include="Migrations\202103042041127_YellowRedActivationAggregateChange.designer.cs">
+      <DependentUpon>202103042041127_YellowRedActivationAggregateChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103082016593_PCDAggregateUpdate.cs" />
+    <Compile Include="Migrations\202103082016593_PCDAggregateUpdate.designer.cs">
+      <DependentUpon>202103082016593_PCDAggregateUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103091550504_DetectorEventAggregationUpdate.cs" />
+    <Compile Include="Migrations\202103091550504_DetectorEventAggregationUpdate.designer.cs">
+      <DependentUpon>202103091550504_DetectorEventAggregationUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\PhasePedAggregation.cs" />
@@ -1015,6 +1031,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910162223114_Model-for Oct2019.resx">
       <DependentUpon>201910162223114_Model-for Oct2019.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202102042152251_CycleCompletionSeconds.resx">
+      <DependentUpon>202102042152251_CycleCompletionSeconds.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103042041127_YellowRedActivationAggregateChange.resx">
+      <DependentUpon>202103042041127_YellowRedActivationAggregateChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103082016593_PCDAggregateUpdate.resx">
+      <DependentUpon>202103082016593_PCDAggregateUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103091550504_DetectorEventAggregationUpdate.resx">
+      <DependentUpon>202103091550504_DetectorEventAggregationUpdate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

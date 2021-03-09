@@ -36,6 +36,26 @@ namespace MOE.Common.Models
         [Column(Order = 4)]
         public bool IsProtectedPhase { get; set; }
 
+        [Required]
+        [Column(Order = 5)]
+        public int YellowActivations { get; set; }
+
+        [Required]
+        [Column(Order = 6)]
+        public int ViolationTime { get; set; }
+
+        [Required]
+        [Column(Order = 7)]
+        public int Cycles { get; set; }
+
+        [Required]
+        [Column(Order = 8)]
+        public string SignalId { get; set; }
+
+        [Required]
+        [Column(Order = 9)]
+        public int PhaseNumber { get; set; }
+
         public sealed class
             ApproachYellowRedActivationAggregationClassMap : ClassMap<ApproachYellowRedActivationAggregation>
         {
@@ -48,6 +68,11 @@ namespace MOE.Common.Models
                 Map(m => m.SevereRedLightViolations).Name("Severe Red Light Violations");
                 Map(m => m.TotalRedLightViolations).Name("Total Red Light Violations");
                 Map(m => m.IsProtectedPhase).Name("Is Protected Phase");
+                Map(m => m.YellowActivations).Name("Yellow Activations");
+                Map(m => m.ViolationTime).Name("Violation Time");
+                Map(m => m.Cycles).Name("Cycles");
+                Map(m => m.SignalId).Name("Signal ID");
+                Map(m => m.PhaseNumber).Name("Signal ID");
             }
         }
     }

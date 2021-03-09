@@ -44,6 +44,10 @@ namespace MOE.Common.Models
         [Column(Order = 6)]
         public int UnknownTerminationTypes { get; set; }
 
+        //[Required]
+        //[Column(Order = 7)]
+        //public int PhaseSkipped { get; set; }
+
         public sealed class PhaseTerminationAggregationClassMap : ClassMap<PhaseTerminationAggregation>
         {
             public PhaseTerminationAggregationClassMap()
@@ -56,6 +60,7 @@ namespace MOE.Common.Models
                 Map(m => m.MaxOuts).Name("Max Outs");
                 Map(m => m.ForceOffs).Name("Force OFfs");
                 Map(m => m.UnknownTerminationTypes).Name("Unknown Termination Types");
+                //Map(m => m.PhaseSkipped).Name("Phase Skipped");
             }
         }
     }

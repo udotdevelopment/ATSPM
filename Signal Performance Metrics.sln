@@ -117,6 +117,9 @@ Global
 		Svn-Managed = True
 		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
 		CD_ROM|Mixed Platforms = CD_ROM|Mixed Platforms

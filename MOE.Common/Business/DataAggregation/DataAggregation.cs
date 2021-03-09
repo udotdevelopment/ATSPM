@@ -1337,6 +1337,9 @@ namespace MOE.Common.Business.DataAggregation
             approachAggregationTable.Columns.Add(new DataColumn("ArrivalsOnYellow", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
             approachAggregationTable.Columns.Add(new DataColumn("Volume", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(string)));
+            approachAggregationTable.Columns.Add(new DataColumn("PhaseNumber", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("TotalDelay", typeof(double)));
             while (_approachPcdAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
                 var dataRow = approachAggregationTable.NewRow();
@@ -1347,6 +1350,9 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["ArrivalsOnYellow"] = approachAggregationData.ArrivalsOnYellow;
                 dataRow["IsProtectedPhase"] = approachAggregationData.IsProtectedPhase;
                 dataRow["Volume"] = approachAggregationData.Volume;
+                dataRow["SignalId"] = approachAggregationData.SignalId;
+                dataRow["PhaseNumber"] = approachAggregationData.PhaseNumber;
+                dataRow["TotalDelay"] = approachAggregationData.TotalDelay;
                 approachAggregationTable.Rows.Add(dataRow);
             }
 
@@ -1531,6 +1537,11 @@ namespace MOE.Common.Business.DataAggregation
             approachAggregationTable.Columns.Add(new DataColumn("SevereRedLightViolations", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("TotalRedLightViolations", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
+            approachAggregationTable.Columns.Add(new DataColumn("YellowActivations", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("ViolationTime", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("Cycles", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(string)));
+            approachAggregationTable.Columns.Add(new DataColumn("PhaseNumber", typeof(int)));
             while (_approachYellowRedActivationAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
                 var dataRow = approachAggregationTable.NewRow();
@@ -1539,6 +1550,11 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["SevereRedLightViolations"] = approachAggregationData.SevereRedLightViolations;
                 dataRow["TotalRedLightViolations"] = approachAggregationData.TotalRedLightViolations;
                 dataRow["IsProtectedPhase"] = approachAggregationData.IsProtectedPhase;
+                dataRow["YellowActivations"] = approachAggregationData.YellowActivations;
+                dataRow["ViolationTime"] = approachAggregationData.ViolationTime;
+                dataRow["Cycles"] = approachAggregationData.Cycles;
+                dataRow["SignalId"] = approachAggregationData.SignalId;
+                dataRow["PhaseNumber"] = approachAggregationData.PhaseNumber;
                 approachAggregationTable.Rows.Add(dataRow);
             }
 
@@ -2002,6 +2018,7 @@ namespace MOE.Common.Business.DataAggregation
                     GapOuts = analysisPhase.ConsecutiveGapOuts.Count,
                     PhaseNumber = analysisPhase.PhaseNumber,
                     UnknownTerminationTypes = analysisPhase.UnknownTermination.Count
+                    //PhaseSkipped = analysisPhase.
                 };
                 _phaseTerminationAggregationQueue.Enqueue(phaseTerminationAggregation);
             }
@@ -2055,9 +2072,13 @@ namespace MOE.Common.Business.DataAggregation
 
                     var detectorAggregation = new DetectorAggregation
                         {
+                            SignalId = signalApproach.SignalID,
+                            ApproachId = signalApproach.ApproachID,
                             DetectorPrimaryId = detector.ID,
                             BinStartTime = startTime,
-                            Volume = count
+                            Volume = count,
+                            MovementTypeId = detector.MovementTypeID !=null? detector.MovementTypeID.Value: -1,
+                            DirectionTypeId = signalApproach.DirectionTypeID
                         };
                         _detectorAggregationConcurrentQueue.Enqueue(detectorAggregation);
                     
@@ -2178,7 +2199,12 @@ namespace MOE.Common.Business.DataAggregation
                         BinStartTime = startTime,
                         SevereRedLightViolations = Convert.ToInt32(yellowRedAcuationsPhase.SevereRedLightViolations),
                         TotalRedLightViolations = Convert.ToInt32(yellowRedAcuationsPhase.Violations),
-                        IsProtectedPhase = !isPermissivePhase
+                        IsProtectedPhase = !isPermissivePhase,
+                        YellowActivations = Convert.ToInt32(yellowRedAcuationsPhase.YellowOccurrences),
+                        ViolationTime = Convert.ToInt32(Math.Round(yellowRedAcuationsPhase.ViolationTime)),
+                        Cycles = yellowRedAcuationsPhase.Plans.PlanList.Sum(p => p.CycleCount),
+                        SignalId = approach.SignalID,
+                        PhaseNumber = isPermissivePhase? approach.PermissivePhaseNumber.Value:approach.ProtectedPhaseNumber,
                     });
                 //Console.Write((DateTime.Now - dt).Milliseconds.ToString());
             }
@@ -2195,7 +2221,11 @@ namespace MOE.Common.Business.DataAggregation
                     ArrivalsOnYellow = Convert.ToInt32(signalPhase.TotalArrivalOnYellow),
                     Volume = Convert.ToInt32(signalPhase.TotalVolume),
                     BinStartTime = startTime,
-                    IsProtectedPhase = !isPermissivePhase
+                    IsProtectedPhase = !isPermissivePhase,
+                    SignalId =  approach.SignalID,
+                    PhaseNumber = isPermissivePhase?approach.PermissivePhaseNumber.Value:approach.ProtectedPhaseNumber,
+                    TotalDelay = signalPhase.TotalDelay
+                     
                 });
         }
 

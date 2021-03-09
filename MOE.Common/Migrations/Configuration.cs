@@ -1211,8 +1211,9 @@ namespace MOE.Common.Migrations
                 {
                     ApplicationID = 4,
                     RawDataCountLimit = 1048576,
-                    ImageUrl = "http://defaultWebServer/spmimages/",
-                    ImagePath = @"\\defaultWebserver\SPMImages\"
+                    //ImageUrl = "http://defaultWebServer/spmimages/",
+                    //ImagePath = @"\\defaultWebserver\SPMImages\",
+                    CycleCompletionSeconds = 900
                 }
             );
 

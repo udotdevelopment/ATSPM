@@ -567,7 +567,6 @@
     <Content Include="Images\ATSPM_Reporting_Details_20200121.pdf" />
     <Content Include="Images\ATSPM_User Case Examples_Manual_20200128.pdf" />
     <Content Include="Images\Configuration-Detection Type-Log Action Taken.pdf" />
-    <Content Include="Images\ATSPM_Installation_Manual_2020-01-28.pdf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\GitHubDeploy.pubxml" />
