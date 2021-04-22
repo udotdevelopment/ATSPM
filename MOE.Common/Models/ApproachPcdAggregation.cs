@@ -54,7 +54,7 @@ namespace MOE.Common.Models
 
         [Required]
         [Column(Order = 9)]
-        public double TotalDelay { get; set; }
+        public int TotalDelay { get; set; }
 
         public sealed class ApproachPcdAggregationClassMap : ClassMap<ApproachPcdAggregation>
         {

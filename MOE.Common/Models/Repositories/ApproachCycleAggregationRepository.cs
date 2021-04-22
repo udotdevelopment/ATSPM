@@ -27,12 +27,12 @@ namespace MOE.Common.Models.Repositories
             DateTime end)
         {
             var cycles = 0;
-            if (_db.ApproachCycleAggregations.Any(r => r.ApproachId == approachId
-                                                       && r.BinStartTime >= start && r.BinStartTime <= end))
-                cycles = _db.ApproachCycleAggregations.Where(r => r.ApproachId == approachId
-                                                                  && r.BinStartTime >= start &&
-                                                                  r.BinStartTime <= end)
-                    .Sum(r => r.TotalCycles);
+            //if (_db.ApproachCycleAggregations.Any(r => r.ApproachId == approachId
+            //                                           && r.BinStartTime >= start && r.BinStartTime <= end))
+            //    cycles = _db.ApproachCycleAggregations.Where(r => r.ApproachId == approachId
+            //                                                      && r.BinStartTime >= start &&
+            //                                                      r.BinStartTime <= end)
+            //        .Sum(r => r.TotalCycles);
             return cycles;
         }
 
@@ -41,14 +41,20 @@ namespace MOE.Common.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public List<ApproachCycleAggregation> GetApproachCyclesAggregationByApproachIdAndDateRange(int approachId,
-            DateTime startDate, DateTime endDate, bool getProtectedPhase)
+        public List<ApproachCycleAggregation> GetApproachCyclesAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate,
+            bool getProtectedPhase)
         {
-            return _db.ApproachCycleAggregations.Where(r => r.ApproachId == approachId
-                                                            && r.BinStartTime >= startDate &&
-                                                            r.BinStartTime <= endDate
-                                                            && r.IsProtectedPhase == getProtectedPhase).ToList();
+            throw new NotImplementedException();
         }
+
+        //public List<ApproachCycleAggregation> GetApproachCyclesAggregationByApproachIdAndDateRange(int approachId,
+        //    DateTime startDate, DateTime endDate, bool getProtectedPhase)
+        //{
+        //    return _db.ApproachCycleAggregations.Where(r => r.ApproachId == approachId
+        //                                                    && r.BinStartTime >= startDate &&
+        //                                                    r.BinStartTime <= endDate
+        //                                                    && r.IsProtectedPhase == getProtectedPhase).ToList();
+        //}
 
 
         public void Update(ApproachCycleAggregation approachCycleAggregation)

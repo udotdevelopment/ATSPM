@@ -90,6 +90,9 @@ namespace MOE.Common.Models
 
         public virtual DbSet<ApproachSpeedAggregation> ApproachSpeedAggregations { get; set; }
         public virtual DbSet<DetectorAggregation> DetectorAggregations { get; set; }
+        public virtual DbSet<SignalPlanAggregation> SignalPlanAggregations { get; set; }
+        public virtual DbSet<PhaseSplitMonitorAggregation> PhaseSplitMonitorAggregationsAggregations { get; set; }
+        public virtual DbSet<PhaseLeftTurnGapAggregation> PhaseLeftTurnGapAggregations { get; set; }
 
         public static SPM Create()
         {
@@ -182,7 +185,6 @@ namespace MOE.Common.Models
                 .HasMany(al => al.MetricTypes);
         }
 
-        //public System.Data.Entity.DbSet<SPM.Models.AggDataExportViewModel> AggDataExportViewModels { get; set; }
     }
 
     public class CustomInitializer : IDatabaseInitializer<SPM>

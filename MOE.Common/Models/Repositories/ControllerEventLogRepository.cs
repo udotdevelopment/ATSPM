@@ -567,6 +567,43 @@ namespace MOE.Common.Models.Repositories
             }
         }
 
+        public Controller_Event_Log GetFirstEventAfterDateByEventCodesAndParameter(string signalId, List<int> eventCodes,
+            int eventParam, DateTime start, int secondsToSearch)
+        {
+            
+            if (!String.IsNullOrEmpty(signalId))
+            {
+                try
+                {
+                    _db.Database.CommandTimeout = 10;
+                    var tempDate = start.AddSeconds(secondsToSearch);
+                    var controllerEvent = _db.Controller_Event_Log.Where(c => c.SignalID == signalId &&
+                                                                        c.Timestamp > start &&
+                                                                        c.Timestamp <= tempDate && 
+                                                                        c.EventParam == eventParam&&
+                                                                        eventCodes.Contains(c.EventCode)  )
+                        .OrderBy(c => c.Timestamp).FirstOrDefault();
+                    return controllerEvent;
+                }
+
+                catch (Exception ex)
+                {
+                    var logRepository = ApplicationEventRepositoryFactory.Create();
+                    var e = new ApplicationEvent();
+                    e.ApplicationName = "MOE.Common";
+                    e.Class = GetType().ToString();
+                    e.Function = "GetEventsByEventCodesParamWithOffsetAndLatencyCorrection";
+                    e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
+                    e.Description = ex.Message;
+                    e.Timestamp = DateTime.Now;
+                    logRepository.Add(e);
+                    return null;
+                }
+            }
+
+            return null;
+        }
+
         public Controller_Event_Log GetFirstEventBeforeDateByEventCodeAndParameter(string signalId, int eventCode,
             int eventParam, DateTime date)
         {

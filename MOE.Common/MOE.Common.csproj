@@ -377,6 +377,8 @@
     <Compile Include="Business\DataAggregation\DataAggregation.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Business\LeftTurnGapAnalysis\LeftTurnGapAnalysis.cs" />
+    <Compile Include="Business\SplitMonitor\SplitMonitor.cs" />
     <Compile Include="Business\TimingAndActuationCycle.cs" />
     <Compile Include="Business\Phase.cs">
       <SubType>Code</SubType>
@@ -618,9 +620,39 @@
     <Compile Include="Migrations\202103091550504_DetectorEventAggregationUpdate.designer.cs">
       <DependentUpon>202103091550504_DetectorEventAggregationUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202103102112389_SplitFailAggregationUpdate.cs" />
+    <Compile Include="Migrations\202103102112389_SplitFailAggregationUpdate.designer.cs">
+      <DependentUpon>202103102112389_SplitFailAggregationUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103111512530_PedDelayAggregationUpdate.cs" />
+    <Compile Include="Migrations\202103111512530_PedDelayAggregationUpdate.designer.cs">
+      <DependentUpon>202103111512530_PedDelayAggregationUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103111632416_SignalPlanAggregation.cs" />
+    <Compile Include="Migrations\202103111632416_SignalPlanAggregation.designer.cs">
+      <DependentUpon>202103111632416_SignalPlanAggregation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103121633479_ApproachCycleAggregationUpdate.cs" />
+    <Compile Include="Migrations\202103121633479_ApproachCycleAggregationUpdate.designer.cs">
+      <DependentUpon>202103121633479_ApproachCycleAggregationUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103161717407_ApproachSpeedAggregationUpdate.cs" />
+    <Compile Include="Migrations\202103161717407_ApproachSpeedAggregationUpdate.designer.cs">
+      <DependentUpon>202103161717407_ApproachSpeedAggregationUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104071353183_SplitMonitorAggregation.cs" />
+    <Compile Include="Migrations\202104071353183_SplitMonitorAggregation.designer.cs">
+      <DependentUpon>202104071353183_SplitMonitorAggregation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104212329348_LeftTurnGapAggregation.cs" />
+    <Compile Include="Migrations\202104212329348_LeftTurnGapAggregation.designer.cs">
+      <DependentUpon>202104212329348_LeftTurnGapAggregation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\PhasePedAggregation.cs" />
+    <Compile Include="Models\PhaseSplitMonitorAggregation.cs" />
+    <Compile Include="Models\PhaseLeftTurnGapAggregation.cs" />
     <Compile Include="Models\PhaseTerminationAggregation.cs" />
     <Compile Include="Models\PhaseEventCountAggregation.cs" />
     <Compile Include="Models\DetectorEventCountAggregation.cs" />
@@ -638,6 +670,7 @@
     <Compile Include="Models\Repositories\PhaseEventCountAggregationRepository.cs" />
     <Compile Include="Models\Repositories\DetectorEventCountAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\PhaseEventCountAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\SignalPlanAggregation.cs" />
     <Compile Include="Models\SignalEventCountAggregation.cs" />
     <Compile Include="Models\ApproachPcdAggregation.cs" />
     <Compile Include="Models\ApproachYellowRedActivationsAggregation.cs" />
@@ -1043,6 +1076,27 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202103091550504_DetectorEventAggregationUpdate.resx">
       <DependentUpon>202103091550504_DetectorEventAggregationUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103102112389_SplitFailAggregationUpdate.resx">
+      <DependentUpon>202103102112389_SplitFailAggregationUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103111512530_PedDelayAggregationUpdate.resx">
+      <DependentUpon>202103111512530_PedDelayAggregationUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103111632416_SignalPlanAggregation.resx">
+      <DependentUpon>202103111632416_SignalPlanAggregation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103121633479_ApproachCycleAggregationUpdate.resx">
+      <DependentUpon>202103121633479_ApproachCycleAggregationUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103161717407_ApproachSpeedAggregationUpdate.resx">
+      <DependentUpon>202103161717407_ApproachSpeedAggregationUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104071353183_SplitMonitorAggregation.resx">
+      <DependentUpon>202104071353183_SplitMonitorAggregation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104212329348_LeftTurnGapAggregation.resx">
+      <DependentUpon>202104212329348_LeftTurnGapAggregation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

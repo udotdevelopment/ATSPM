@@ -9,8 +9,8 @@
     <ProjectGuid>{90FFF51A-9263-4C04-84C1-A2813200E25D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AggregateATSPMData</RootNamespace>
-    <AssemblyName>AggregateATSPMData</AssemblyName>
+    <RootNamespace>AggregateSignalEventData</RootNamespace>
+    <AssemblyName>AggregateSignalEventData</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -65,7 +65,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>AggregateATSPMData.AggregateAtspmData</StartupObject>
+    <StartupObject>AggregateSignalEventData.AggregateAtspmData</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>5E330DC145B1DCF17B0F9AECAFE9D282DF5DF570</ManifestCertificateThumbprint>

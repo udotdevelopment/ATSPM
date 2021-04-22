@@ -81,7 +81,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 SignalsRepositoryFactory.Create();
             var signal = repository.GetVersionOfSignalByDate(SignalID, StartDate);
             TmcInfo = new TMCInfo();
-            var plans = PlanFactory.GetBasicPlans(StartDate, EndDate, SignalID);
+            var plans = PlanFactory.GetBasicPlans(StartDate, EndDate, SignalID, null);
 
 
             var ltr = LaneTypeRepositoryFactory.Create();

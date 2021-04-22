@@ -17,11 +17,13 @@ using System.Web.UI.DataVisualization.Charting;
 using System.Web.UI.WebControls;
 using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Business.PEDDelay;
+using MOE.Common.Business.Preempt;
 using MOE.Common.Business.Speed;
 using MOE.Common.Business.SplitFail;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
+using DateTime = System.DateTime;
 
 namespace MOE.Common.Business.DataAggregation
 {
@@ -75,12 +77,91 @@ namespace MOE.Common.Business.DataAggregation
         private ConcurrentQueue<ApproachEventCountAggregation> _approachEventAggregationConcurrentQueue =
             new ConcurrentQueue<ApproachEventCountAggregation>();
 
+        private ConcurrentQueue<SignalPlanAggregation> _signalPlanAggregationConcurrentQueue =
+            new ConcurrentQueue<SignalPlanAggregation>();
+
+        private ConcurrentQueue<PhaseSplitMonitorAggregation> _phaseSplitMonitorAggregationConcurrentQueue= 
+            new ConcurrentQueue<PhaseSplitMonitorAggregation>();
+
+        private ConcurrentQueue<PhaseLeftTurnGapAggregation> _phaseLeftTurnGapAggregationAggregationConcurrentQueue =
+            new ConcurrentQueue<PhaseLeftTurnGapAggregation>();
         //private bool _allStop;
         private long _maxMemoryLimit;
         private DateTime _testDate;
         public int _binSize;
 
-       
+        public void StartAggregationSignalPlan(string[] args)
+        {
+            NameValueCollection appSettings = ConfigurationManager.AppSettings;
+            _binSize = Convert.ToInt32(appSettings["BinSize"]);
+            _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
+            SetStartEndDate(args);
+
+            Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
+            ParallelOptions options =
+                new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"]) };
+            List<Signal> signals = GetSignalOnlyVersionByDate(_startDate);//.Where(s=> s.SignalID == "1001").ToList();
+            List<Signal> nextSignals = new List<Signal>();
+            for (var startDateTime = _startDate; startDateTime < _endDate; startDateTime = startDateTime.AddMinutes(_binSize))
+            {
+                Console.WriteLine("Starting Aggregation:for {0} to {1} ",
+                    startDateTime.ToString("yyyy-MM-dd HH:mm"), startDateTime.AddMinutes(_binSize).ToString("yyyy-MM-dd HH:mm"));
+
+                if (nextSignals.Any())
+                {
+                    signals = nextSignals;
+                    nextSignals = new List<Signal>();
+                }
+                Parallel.Invoke(
+                () =>
+                {
+                    try
+                    {
+                        Parallel.ForEach(signals, options, signal =>
+                        //foreach (var signal in signals)
+                        {
+                            ProcessSignalPlanData(signal, startDateTime, startDateTime.AddMinutes(_binSize));
+                        });
+                        signals = new List<Signal>();
+                        //GC.Collect();
+                        //GC.WaitForPendingFinalizers();
+                    }
+                    catch (Exception e)
+                    {
+                        //ClearCollections(DateTime.Now);
+                        Console.WriteLine("Inside ProcessSignal Catch: " +
+                                          "was Processing Signals, an execption has occurred.");
+                        Console.WriteLine("e.TargetSite: " + e.TargetSite + " Message is: " +
+                                          e.Message);
+                        throw e;
+                    }
+                },
+                () => { nextSignals = GetSignalOnlyVersionByDate(startDateTime.AddMinutes(_binSize)); });
+
+                Console.WriteLine(
+                    "At {0}, the data for {1}, is being written to the database.",
+                    DateTime.Now.ToString("HH:mm"), startDateTime.ToString("MM-dd HH:mm"));
+                BulkSaveSignalPlanData();
+
+            }
+        }
+
+        private void ProcessSignalPlanData(Signal signal, DateTime startDateTime, DateTime endDateTime)
+        {
+            Console.Write(signal.SignalID + "    \r");
+            var db = new SPM();
+            List<Plan> plans = PlanFactory.GetBasicPlans(startDateTime, endDateTime, signal.SignalID, db);
+            foreach (var plan in plans)
+            {
+                _signalPlanAggregationConcurrentQueue.Enqueue(new SignalPlanAggregation
+                {
+                    SignalId = signal.SignalID, 
+                    Start = plan.StartTime,
+                    End= plan.EndTime,
+                    PlanNumber = plan.PlanNumber
+                });
+            }
+        }
 
         public void StartAggregationSignalEventData(string[] args)
         {
@@ -352,6 +433,156 @@ namespace MOE.Common.Business.DataAggregation
         }
 
 
+        public void StartAggregationLeftTurnAnalysis(string[] args)
+        {
+            NameValueCollection appSettings = ConfigurationManager.AppSettings;
+            _binSize = Convert.ToInt32(appSettings["BinSize"]);
+            _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
+            SetStartEndDate(args);
+
+            Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
+            ParallelOptions options =
+                new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"]) };
+            List<Signal> signals = GetSignalVersionByDate(_startDate);
+            List<Signal> nextSignals = new List<Signal>();
+            for (var startDateTime = _startDate; startDateTime < _endDate; startDateTime = startDateTime.AddMinutes(_binSize))
+            {
+                Console.WriteLine("Starting Aggregation:for {0} to {1} ",
+                    startDateTime.ToString("yyyy-MM-dd HH:mm"), startDateTime.AddMinutes(_binSize).ToString("yyyy-MM-dd HH:mm"));
+
+                if (nextSignals.Any())
+                {
+                    signals = nextSignals;
+                    nextSignals = new List<Signal>();
+                }
+                Parallel.Invoke(
+                () =>
+                {
+                    try
+                    {
+                        Parallel.ForEach(signals, options, signal =>
+                        {
+                            Console.Write(signal.SignalID + "    \r");
+                            ProcessLeftTurnGapAnalysis(signal, startDateTime, startDateTime.AddMinutes(_binSize), options);
+                        });
+                        signals = new List<Signal>();
+                    }
+                    catch (Exception e)
+                    {
+                        ClearCollections(DateTime.Now);
+                        Console.WriteLine("Inside ProcessSignal Catch: " +
+                                          "was Processing Signals, an execption has occurred.");
+                        Console.WriteLine("e.TargetSite: " + e.TargetSite + " Message is: " +
+                                          e.Message);
+                        throw e;
+                    }
+                },
+                () => { nextSignals = GetSignalVersionByDate(startDateTime.AddMinutes(_binSize)); });
+
+                Console.WriteLine(
+                    "At {0}, the data for {1}, is being written to the database.",
+                    DateTime.Now.ToString("HH:mm"), startDateTime.ToString("MM-dd HH:mm"));
+                BulkSavePhaseLeftTurnGapData();
+
+            }
+        }
+
+        private void ProcessLeftTurnGapAnalysis(Signal signal, DateTime startDateTime, DateTime endDateTime, ParallelOptions parallelOptions)
+        {
+            int EVENT_GREEN = 1;
+            int EVENT_RED = 10;
+            int EVENT_DET = 81;
+            var eventLogs = new ControllerEventLogs(signal.SignalID, startDateTime, endDateTime,
+                new List<int> { EVENT_DET, EVENT_GREEN, EVENT_RED });
+
+            NameValueCollection appSettings = ConfigurationManager.AppSettings;
+            double gap1Min = Convert.ToDouble(appSettings["Gap1Min"]);
+            double gap1Max = Convert.ToDouble(appSettings["Gap1Max"]);
+            double gap2Min = Convert.ToDouble(appSettings["Gap2Min"]);
+            double gap2Max = Convert.ToDouble(appSettings["Gap2Max"]);
+            double gap3Min = Convert.ToDouble(appSettings["Gap3Min"]);
+            double gap3Max = Convert.ToDouble(appSettings["Gap3Max"]);
+            double gap4Min = Convert.ToDouble(appSettings["Gap4Min"]);
+            double? gap4Max = Convert.ToDouble(appSettings["Gap4Max"]);
+            double? gap5Min = Convert.ToDouble(appSettings["Gap5Min"]);
+            double? gap5Max = Convert.ToDouble(appSettings["Gap5Max"]);
+            double? gap6Min = Convert.ToDouble(appSettings["Gap6Min"]);
+            double? gap6Max = Convert.ToDouble(appSettings["Gap6Max"]);
+            double? gap7Min = Convert.ToDouble(appSettings["Gap7Min"]);
+            double? gap7Max = Convert.ToDouble(appSettings["Gap7Max"]);
+            double? gap8Min = Convert.ToDouble(appSettings["Gap8Min"]);
+            double? gap8Max = Convert.ToDouble(appSettings["Gap8Max"]);
+            double? gap9Min = Convert.ToDouble(appSettings["Gap9Min"]);
+            double? gap9Max = Convert.ToDouble(appSettings["Gap9Max"]);
+            double? gap10Min = Convert.ToDouble(appSettings["Gap10Min"]);
+            double? gap10Max = Convert.ToDouble(appSettings["Gap10Max"]);
+            double? gap11Min = Convert.ToDouble(appSettings["Gap11Min"]);
+            double? gap11Max = Convert.ToDouble(appSettings["Gap11Max"]);
+            double? sumGapDuration1 = Convert.ToDouble(appSettings["SumGapDuration1"]);
+            double? sumGapDuration2 = Convert.ToDouble(appSettings["SumGapDuration2"]);
+            double? sumGapDuration3 = Convert.ToDouble(appSettings["SumGapDuration3"]);
+
+
+            LeftTurnGapAnalysisOptions options = new LeftTurnGapAnalysisOptions(signal.SignalID, startDateTime, endDateTime, gap1Min, gap1Max, gap2Min, gap2Max, gap3Min, gap3Max, 
+                gap4Min, gap4Max, gap5Min, gap5Max, gap6Min, gap6Max, gap7Min, gap7Max, gap8Min, gap8Max, gap9Min, gap9Max, gap10Min, gap10Max, gap11Min, gap11Max, sumGapDuration1, 
+                sumGapDuration2, sumGapDuration3, 7.4);
+
+            //Get phase + check for opposing phase before creating chart
+            var ebPhase = signal.Approaches.FirstOrDefault(x => x.ProtectedPhaseNumber == 6);
+            if (ebPhase != null && signal.Approaches.Any(x => x.ProtectedPhaseNumber == 2))
+            {
+                var leftTurnGapData = new LeftTurnGapAnalysis.LeftTurnGapAnalysis(ebPhase, eventLogs, options);
+                SetLeftTurnGapData(leftTurnGapData, startDateTime);
+            }
+
+            var nbPhase = signal.Approaches.FirstOrDefault(x => x.ProtectedPhaseNumber == 8);
+            if (nbPhase != null && signal.Approaches.Any(x => x.ProtectedPhaseNumber == 4))
+            {
+                var leftTurnGapData = new LeftTurnGapAnalysis.LeftTurnGapAnalysis(nbPhase, eventLogs, options);
+                SetLeftTurnGapData(leftTurnGapData, startDateTime);
+            }
+
+            var wbPhase = signal.Approaches.FirstOrDefault(x => x.ProtectedPhaseNumber == 2);
+            if (wbPhase != null && signal.Approaches.Any(x => x.ProtectedPhaseNumber == 6))
+            {
+                var leftTurnGapData = new LeftTurnGapAnalysis.LeftTurnGapAnalysis(wbPhase, eventLogs, options);
+                SetLeftTurnGapData(leftTurnGapData, startDateTime);
+            }
+
+            var sbPhase = signal.Approaches.FirstOrDefault(x => x.ProtectedPhaseNumber == 4);
+            if (sbPhase != null && signal.Approaches.Any(x => x.ProtectedPhaseNumber == 8))
+            {
+                var leftTurnGapData = new LeftTurnGapAnalysis.LeftTurnGapAnalysis(sbPhase, eventLogs, options);
+                SetLeftTurnGapData(leftTurnGapData, startDateTime);
+            }
+        }
+
+        private void SetLeftTurnGapData(LeftTurnGapAnalysis.LeftTurnGapAnalysis leftTurnGapData, DateTime binStartTime)
+        {
+            var leftTurnGapDataAggregation = new PhaseLeftTurnGapAggregation { 
+                BinStartTime = binStartTime, SignalId = leftTurnGapData.LeftTurnGapAnalysisOptions.SignalID,
+                PhaseNumber = leftTurnGapData.Approach.ProtectedPhaseNumber,
+                ApproachId = leftTurnGapData.Approach.ApproachID,
+                GapCount1 = leftTurnGapData.Gaps1.Sum(g => g.Value),
+                GapCount2 = leftTurnGapData.Gaps2.Sum(g => g.Value),
+                GapCount3 = leftTurnGapData.Gaps3.Sum(g => g.Value),
+                GapCount4 = leftTurnGapData.Gaps4.Sum(g => g.Value),
+                GapCount5 = leftTurnGapData.Gaps5.Sum(g => g.Value),
+                GapCount6 = leftTurnGapData.Gaps6.Sum(g => g.Value),
+                GapCount7 = leftTurnGapData.Gaps7.Sum(g => g.Value),
+                GapCount8 = leftTurnGapData.Gaps8.Sum(g => g.Value),
+                GapCount9 = leftTurnGapData.Gaps9.Sum(g => g.Value),
+                GapCount10 = leftTurnGapData.Gaps10.Sum(g => g.Value),
+                GapCount11 = leftTurnGapData.Gaps11.Sum(g => g.Value),
+                SumGapDuration1 = leftTurnGapData.SumDuration1.Value,
+                SumGapDuration2 = leftTurnGapData.SumDuration2.Value,
+                SumGapDuration3 = leftTurnGapData.SumDuration2.Value,
+                SumGreenTime = leftTurnGapData.SumGreenTime
+            };
+            _phaseLeftTurnGapAggregationAggregationConcurrentQueue.Enqueue(leftTurnGapDataAggregation);
+        }
+
+
         public void StartAggregationApproachEvent(string[] args)
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
@@ -462,6 +693,68 @@ namespace MOE.Common.Business.DataAggregation
                     "At {0}, the data for {1}, is being written to the database.",
                     DateTime.Now.ToString("HH:mm"), startDateTime.ToString("MM-dd HH:mm"));
                 BulkSaveApproachPcdData();
+            }
+        }
+
+        public void StartAggregationApproachCycle(string[] args)
+        {
+            NameValueCollection appSettings = ConfigurationManager.AppSettings;
+            _binSize = Convert.ToInt32(appSettings["BinSize"]);
+            _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
+            SetStartEndDate(args);
+
+            Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
+            ParallelOptions options =
+                new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"]) };
+            List<Signal> signals = GetSignalVersionByDate(_startDate);
+            List<Signal> nextSignals = new List<Signal>();
+            var dbRepository = MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
+            var settings = dbRepository.GetGeneralSettings();
+            var secondsToCompleteCycle = 900;
+            if (settings != null)
+                secondsToCompleteCycle = Convert.ToInt32(settings.CycleCompletionSeconds);
+            for (var startDateTime = _startDate; startDateTime < _endDate; startDateTime = startDateTime.AddMinutes(_binSize))
+            {
+                Console.WriteLine("Starting Aggregation:for {0} to {1} ",
+                    startDateTime.ToString("yyyy-MM-dd HH:mm"), startDateTime.AddMinutes(_binSize).ToString("yyyy-MM-dd HH:mm"));
+
+                if (nextSignals.Any())
+                {
+                    signals = nextSignals;
+                    nextSignals = new List<Signal>();
+                }
+                Parallel.Invoke(
+                () =>
+                {
+                    try
+                    {
+                        Parallel.ForEach(signals, options, signal =>
+                        //foreach(var signal in signals)
+                        {
+                            Console.Write(signal.SignalID + "    \r");
+                            Parallel.ForEach(signal.Approaches, options, approach =>
+                            //foreach (var approach in signal.Approaches)
+                            {
+                                SetApproachCycleData(startDateTime, startDateTime.AddMinutes(_binSize), approach, secondsToCompleteCycle);
+                            });
+                        });
+                        signals = new List<Signal>();
+                    }
+                    catch (Exception e)
+                    {
+                        ClearCollections(DateTime.Now);
+                        Console.WriteLine("Inside ProcessSignal Catch: " +
+                                          "was Processing Signals, an execption has occurred.");
+                        Console.WriteLine("e.TargetSite: " + e.TargetSite + " Message is: " +
+                                          e.Message);
+                        throw e;
+                    }
+                },
+                () => { nextSignals = GetSignalVersionByDate(startDateTime.AddMinutes(_binSize)); });
+
+                Console.WriteLine(
+                    "At {0}, the data for {1}, is being written to the database.",
+                    DateTime.Now.ToString("HH:mm"), startDateTime.ToString("MM-dd HH:mm"));
                 BulkSaveApproachCycleData();
             }
         }
@@ -520,7 +813,6 @@ namespace MOE.Common.Business.DataAggregation
                     "At {0}, the data for {1}, is being written to the database.",
                     DateTime.Now.ToString("HH:mm"), startDateTime.ToString("MM-dd HH:mm"));
                 BulkSaveApproachPcdData();
-                BulkSaveApproachCycleData();
             }
         }
 
@@ -579,6 +871,71 @@ namespace MOE.Common.Business.DataAggregation
                 BulkSaveApproachSplitFailData();
             }
         }
+
+        public void StartAggregationSplitMonitor(string[] args)
+        {
+            NameValueCollection appSettings = ConfigurationManager.AppSettings;
+            _binSize = Convert.ToInt32(appSettings["BinSize"]);
+            _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
+            SetStartEndDate(args);
+
+            Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
+            ParallelOptions options =
+                new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"]) };
+            List<Signal> signals = GetSignalOnlyVersionByDate(_startDate);
+            List<Signal> nextSignals = new List<Signal>();
+            for (var startDateTime = _startDate; startDateTime < _endDate; startDateTime = startDateTime.AddMinutes(_binSize))
+            {
+                Console.WriteLine("Starting Aggregation:for {0} to {1} ",
+                    startDateTime.ToString("yyyy-MM-dd HH:mm"), startDateTime.AddMinutes(_binSize).ToString("yyyy-MM-dd HH:mm"));
+
+                if (nextSignals.Any())
+                {
+                    signals = nextSignals;
+                    nextSignals = new List<Signal>();
+                }
+                Parallel.Invoke(
+                () =>
+                {
+                    try
+                    {
+                        Parallel.ForEach(signals, options, signal =>
+                        //foreach (var signal in signals)
+                        {
+                            Console.Write(signal.SignalID + "    \r");
+                            var analysisPhases = new AnalysisPhaseCollection(signal.SignalID, startDateTime, startDateTime.AddMinutes(_binSize));
+                            foreach (var plan in analysisPhases.Plans)
+                            {
+                                plan.SetProgrammedSplits(signal.SignalID);
+                                plan.SetHighCycleCount(analysisPhases);
+                            }
+                            Parallel.ForEach(analysisPhases.Items, options, phase => { SetSplitMonitorData(analysisPhases.Plans, phase, startDateTime, startDateTime.AddMinutes(_binSize)); });
+                        });
+                        signals = new List<Signal>();
+                        //GC.Collect();
+                        //GC.WaitForPendingFinalizers();
+                    }
+                    catch (Exception e)
+                    {
+                        //ClearCollections(DateTime.Now);
+                        Console.WriteLine("Inside ProcessSignal Catch: " +
+                                          "was Processing Signals, an execption has occurred.");
+                        Console.WriteLine("e.TargetSite: " + e.TargetSite + " Message is: " +
+                                          e.Message);
+                        throw e;
+                    }
+                },
+                () => { nextSignals = GetSignalOnlyVersionByDate(startDateTime.AddMinutes(_binSize)); });
+
+                Console.WriteLine(
+                    "At {0}, the data for {1}, is being written to the database.",
+                    DateTime.Now.ToString("HH:mm"), startDateTime.ToString("MM-dd HH:mm"));
+                BulkSaveSplitMonitorData();
+
+            }
+        }
+
+        
 
         public void StartAggregationApproachYellowRedActivation(string[] args)
         {
@@ -813,22 +1170,25 @@ namespace MOE.Common.Business.DataAggregation
 
         private List<Signal> GetSignalVersionByDate(DateTime dt)
         {
-            var db = new SPM();
-            db.Configuration.LazyLoadingEnabled = false;
-            //Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
-            //                  " > Getting the latest version of signals for time period: " + dt.ToString() + " end date " + _endDate);
-            var versionIds = db.Signals.Where(
-                    r => r.VersionActionId != 3 && r.Start < dt //&& (r.SignalID == "7060")
-                ).GroupBy(r => r.SignalID).Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault())
-                .Select(s => s.VersionID).ToList();
-            var signals = db.Signals.Where(signal => versionIds.Contains(signal.VersionID))
-                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
-                .Include(signal => signal.Approaches.Select(a =>
-                    a.Detectors.Select(d => d.DetectionTypes.Select(det => det.MetricTypes))))
-                .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
-                .Include(signal => signal.Approaches.Select(a => a.DirectionType))
-                .OrderBy(signal => signal.SignalID).ToList();
+            using (var db = new SPM())
+            {
+                db.Configuration.LazyLoadingEnabled = false;
+                //Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
+                //                  " > Getting the latest version of signals for time period: " + dt.ToString() + " end date " + _endDate);
+                var versionIds = db.Signals.Where(
+                        r => r.VersionActionId != 3 && r.Start < dt //&& (r.SignalID == "7060")
+                    ).GroupBy(r => r.SignalID).Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault())
+                    .Select(s => s.VersionID).ToList();
+                var signals = db.Signals.Where(signal => versionIds.Contains(signal.VersionID))
+                    .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
+                    .Include(signal => signal.Approaches.Select(a =>
+                        a.Detectors.Select(d => d.DetectionTypes.Select(det => det.MetricTypes))))
+                    .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
+                    .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                    .OrderBy(signal => signal.SignalID).ToList();
+
             return signals;
+            }
         }
 
 
@@ -981,6 +1341,55 @@ namespace MOE.Common.Business.DataAggregation
             ClearCollections(DateTime.Now);
         }
 
+        private void BulkSaveSplitMonitorData()
+        //  Name has bee changed!  sqlBulkCopy.DestinationTableName = "ApproachEventCountAggregations"
+        {
+            var splitMonitorAggregationTable = new DataTable();
+            splitMonitorAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
+            splitMonitorAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(string)));
+            splitMonitorAggregationTable.Columns.Add(new DataColumn("PhaseNumber", typeof(int)));
+            splitMonitorAggregationTable.Columns.Add(new DataColumn("EightyFifthPercentileSplit", typeof(int)));
+            splitMonitorAggregationTable.Columns.Add(new DataColumn("SkippedCount", typeof(int)));
+            //eventAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
+
+            while (_phaseSplitMonitorAggregationConcurrentQueue.TryDequeue(out var phaseSplitMonitorAggregation))
+            {
+                var dataRow = splitMonitorAggregationTable.NewRow();
+                dataRow["BinStartTime"] = phaseSplitMonitorAggregation.BinStartTime;
+                dataRow["SignalId"] = phaseSplitMonitorAggregation.SignalId;
+                dataRow["PhaseNumber"] = phaseSplitMonitorAggregation.PhaseNumber;
+                dataRow["EightyFifthPercentileSplit"] = phaseSplitMonitorAggregation.EightyFifthPercentileSplit;
+                dataRow["SkippedCount"] = phaseSplitMonitorAggregation.SkippedCount;
+                splitMonitorAggregationTable.Rows.Add(dataRow);
+            }
+
+            var connectionString =
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
+                sqlBulkCopy.DestinationTableName = "PhaseSplitMonitorAggregations";
+                sqlBulkCopy.BulkCopyTimeout = 180;
+                sqlBulkCopy.BatchSize = 50000;
+                try
+                {
+                    connection.Open();
+                    sqlBulkCopy.WriteToServer(splitMonitorAggregationTable);
+                    connection.Close();
+                }
+                catch (Exception e)
+                {
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        e.Message);
+                    throw new Exception("Unable to import Approach (Phase) Event Count Data");
+                }
+            }
+
+            splitMonitorAggregationTable.Dispose();
+        }
+
         private void BulkSaveApproachEventData()
             //  Name has bee changed!  sqlBulkCopy.DestinationTableName = "ApproachEventCountAggregations"
         {
@@ -1026,6 +1435,51 @@ namespace MOE.Common.Business.DataAggregation
             }
 
             eventAggregationTable.Dispose();
+        }
+
+        private void BulkSaveSignalPlanData()
+        {
+            var planAggregationTable = new DataTable();
+            planAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(string)));
+            planAggregationTable.Columns.Add(new DataColumn("Start", typeof(DateTime)));
+            planAggregationTable.Columns.Add(new DataColumn("End", typeof(DateTime)));
+            planAggregationTable.Columns.Add(new DataColumn("PlanNumber", typeof(int)));
+
+            while (_signalPlanAggregationConcurrentQueue.TryDequeue(out var plan))
+            {
+                var dataRow = planAggregationTable.NewRow();
+                dataRow["SignalId"] = plan.SignalId;
+                dataRow["Start"] = plan.Start;
+                dataRow["End"] = plan.End;
+                dataRow["PlanNumber"] = plan.PlanNumber;
+                planAggregationTable.Rows.Add(dataRow);
+            }
+
+            var connectionString =
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
+                sqlBulkCopy.DestinationTableName = "SignalPlanAggregations";
+                sqlBulkCopy.BulkCopyTimeout = 180;
+                sqlBulkCopy.BatchSize = 50000;
+                try
+                {
+                    connection.Open();
+                    sqlBulkCopy.WriteToServer(planAggregationTable);
+                    connection.Close();
+                }
+                catch (Exception e)
+                {
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        e.Message);
+                    throw new Exception("Unable to import Signal Event Count Data");
+                }
+            }
+
+            planAggregationTable.Dispose();
         }
 
         private void BulkSaveSignalEventData()
@@ -1179,17 +1633,25 @@ namespace MOE.Common.Business.DataAggregation
         private void BulkSaveDetectorData()
         {
             var detectorAggregationTable = new DataTable();
+
             detectorAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
-            detectorAggregationTable.Columns.Add(new DataColumn("Volume", typeof(double)));
-            detectorAggregationTable.Columns.Add(new DataColumn("DetectorPrimaryId", typeof(string)));
-            detectorAggregationTable.Columns.Add(new DataColumn("Id", typeof(long)));
+            detectorAggregationTable.Columns.Add(new DataColumn("Volume", typeof(int)));
+            detectorAggregationTable.Columns.Add(new DataColumn("DetectorPrimaryId", typeof(int)));
+            detectorAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(string)));
+            detectorAggregationTable.Columns.Add(new DataColumn("ApproachId", typeof(int)));
+            detectorAggregationTable.Columns.Add(new DataColumn("MovementTypeId", typeof(int)));
+            detectorAggregationTable.Columns.Add(new DataColumn("DirectionTypeId", typeof(int)));
 
             while (_detectorAggregationConcurrentQueue.TryDequeue(out var detectorAggregationData))
             {
                 var dataRow = detectorAggregationTable.NewRow();
+                dataRow["SignalId"] = detectorAggregationData.SignalId;
+                dataRow["ApproachId"] = detectorAggregationData.ApproachId;
                 dataRow["BinStartTime"] = detectorAggregationData.BinStartTime;
-                dataRow["Volume"] = detectorAggregationData.Volume;
                 dataRow["DetectorPrimaryId"] = detectorAggregationData.DetectorPrimaryId;
+                dataRow["Volume"] = detectorAggregationData.Volume;
+                dataRow["MovementTypeId"] = detectorAggregationData.MovementTypeId;
+                dataRow["DirectionTypeId"] = detectorAggregationData.DirectionTypeId;
                 detectorAggregationTable.Rows.Add(dataRow);
             }
 
@@ -1225,12 +1687,13 @@ namespace MOE.Common.Business.DataAggregation
             var approachSpeedAggregationTable = new DataTable();
             approachSpeedAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             approachSpeedAggregationTable.Columns.Add(new DataColumn("ApproachID", typeof(int)));
-            approachSpeedAggregationTable.Columns.Add(new DataColumn("SummedSpeed", typeof(double)));
-            approachSpeedAggregationTable.Columns.Add(new DataColumn("SpeedVolume", typeof(double)));
-            approachSpeedAggregationTable.Columns.Add(new DataColumn("Speed85th", typeof(double)));
-            approachSpeedAggregationTable.Columns.Add(new DataColumn("Speed15th", typeof(double)));
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("SummedSpeed", typeof(int)));
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("SpeedVolume", typeof(int)));
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("Speed85th", typeof(int)));
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("Speed15th", typeof(int)));
             approachSpeedAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
-            approachSpeedAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(string)));
+            approachSpeedAggregationTable.Columns.Add(new DataColumn("PhaseNumber", typeof(int)));
 
             while (_approachSpeedAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
@@ -1242,6 +1705,9 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["Speed85th"] = approachAggregationData.Speed85Th;
                 dataRow["Speed15th"] = approachAggregationData.Speed15Th;
                 dataRow["IsProtectedPhase"] = approachAggregationData.IsProtectedPhase;
+                dataRow["SignalId"] = approachAggregationData.SignalId;
+                dataRow["PhaseNumber"] = approachAggregationData.PhaseNumber;
+
                 approachSpeedAggregationTable.Rows.Add(dataRow);
             }
 
@@ -1275,26 +1741,27 @@ namespace MOE.Common.Business.DataAggregation
         private void BulkSaveApproachCycleData()
         {
             var approachAggregationTable = new DataTable();
+            approachAggregationTable.Columns.Add(new DataColumn("ApproachId", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("GreenTime", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("YellowTime", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("RedTime", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
-            approachAggregationTable.Columns.Add(new DataColumn("ApproachID", typeof(int)));
-            approachAggregationTable.Columns.Add(new DataColumn("RedTime", typeof(double)));
-            approachAggregationTable.Columns.Add(new DataColumn("YellowTime", typeof(double)));
-            approachAggregationTable.Columns.Add(new DataColumn("GreenTime", typeof(double)));
-            approachAggregationTable.Columns.Add(new DataColumn("TotalCycles", typeof(int)));
-            approachAggregationTable.Columns.Add(new DataColumn("PedActuations", typeof(int)));
-            approachAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
-            approachAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(string)));
+            approachAggregationTable.Columns.Add(new DataColumn("PhaseNumber", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("TotalRedToRedCycles", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("TotalGreenToGreenCycles", typeof(int)));
             while (_approachCycleAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
                 var dataRow = approachAggregationTable.NewRow();
+                dataRow["ApproachId"] = approachAggregationData.ApproachId;
                 dataRow["BinStartTime"] = approachAggregationData.BinStartTime;
-                dataRow["ApproachID"] = approachAggregationData.ApproachId;
                 dataRow["RedTime"] = approachAggregationData.RedTime;
                 dataRow["YellowTime"] = approachAggregationData.YellowTime;
                 dataRow["GreenTime"] = approachAggregationData.GreenTime;
-                dataRow["TotalCycles"] = approachAggregationData.TotalCycles;
-                dataRow["PedActuations"] = approachAggregationData.PedActuations;
-                dataRow["IsProtectedPhase"] = approachAggregationData.IsProtectedPhase;
+                dataRow["SignalId"] = approachAggregationData.SignalId;
+                dataRow["PhaseNumber"] = approachAggregationData.PhaseNumber;
+                dataRow["TotalRedToRedCycles"] = approachAggregationData.TotalRedToRedCycles;
+                dataRow["TotalGreenToGreenCycles"] = approachAggregationData.TotalGreenToGreenCycles;
                 approachAggregationTable.Rows.Add(dataRow);
             }
 
@@ -1391,7 +1858,13 @@ namespace MOE.Common.Business.DataAggregation
             approachAggregationTable.Columns.Add(new DataColumn("ApproachID", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("SplitFailures", typeof(int)));
             approachAggregationTable.Columns.Add(new DataColumn("IsProtectedPhase", typeof(bool)));
-            approachAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(string)));
+            approachAggregationTable.Columns.Add(new DataColumn("GreenOccupancySum", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("RedOccupancySum", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("GreenTimeSum", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("RedTimeSum", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("Cycles", typeof(int)));
+            approachAggregationTable.Columns.Add(new DataColumn("PhaseNumber", typeof(int)));
             while (_approachSplitFailAggregationConcurrentQueue.TryDequeue(out var approachAggregationData))
             {
                 var dataRow = approachAggregationTable.NewRow();
@@ -1399,6 +1872,13 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["ApproachID"] = approachAggregationData.ApproachId;
                 dataRow["SplitFailures"] = approachAggregationData.SplitFailures;
                 dataRow["IsProtectedPhase"] = approachAggregationData.IsProtectedPhase;
+                dataRow["SignalId"] = approachAggregationData.SignalId;
+                dataRow["GreenOccupancySum"] = approachAggregationData.GreenOccupancySum;
+                dataRow["RedOccupancySum"] = approachAggregationData.RedOccupancySum;
+                dataRow["GreenTimeSum"] = approachAggregationData.GreenTimeSum;
+                dataRow["RedTimeSum"] = approachAggregationData.RedTimeSum;
+                dataRow["Cycles"] = approachAggregationData.Cycles;
+                dataRow["PhaseNumber"] = approachAggregationData.PhaseNumber;
                 approachAggregationTable.Rows.Add(dataRow);
             }
 
@@ -1480,24 +1960,102 @@ namespace MOE.Common.Business.DataAggregation
             phaseTerminationAggregationTable.Dispose();
         }
 
+        private void BulkSavePhaseLeftTurnGapData()
+        {
+            var aggregationTable = new DataTable();
+            aggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
+            aggregationTable.Columns.Add(new DataColumn("SignalId", typeof(string)));
+            aggregationTable.Columns.Add(new DataColumn("PhaseNumber", typeof(int)));
+            aggregationTable.Columns.Add(new DataColumn("ApproachId", typeof(int)));
+            aggregationTable.Columns.Add(new DataColumn("GapCount1", typeof(int)));
+            aggregationTable.Columns.Add(new DataColumn("GapCount2", typeof(int)));
+            aggregationTable.Columns.Add(new DataColumn("GapCount3", typeof(int)));
+            aggregationTable.Columns.Add(new DataColumn("GapCount4", typeof(int)));
+            aggregationTable.Columns.Add(new DataColumn("GapCount5", typeof(int)));
+            aggregationTable.Columns.Add(new DataColumn("GapCount6", typeof(int)));
+            aggregationTable.Columns.Add(new DataColumn("GapCount7", typeof(int)));
+            aggregationTable.Columns.Add(new DataColumn("GapCount8", typeof(int)));
+            aggregationTable.Columns.Add(new DataColumn("GapCount9", typeof(int)));
+            aggregationTable.Columns.Add(new DataColumn("GapCount10", typeof(int)));
+            aggregationTable.Columns.Add(new DataColumn("GapCount11", typeof(int)));
+            aggregationTable.Columns.Add(new DataColumn("SumGapDuration1", typeof(double)));
+            aggregationTable.Columns.Add(new DataColumn("SumGapDuration2", typeof(double)));
+            aggregationTable.Columns.Add(new DataColumn("SumGapDuration3", typeof(double)));
+            aggregationTable.Columns.Add(new DataColumn("SumGreenTime", typeof(double)));
+            while (_phaseLeftTurnGapAggregationAggregationConcurrentQueue.TryDequeue(out var phaseLeftTurnAggregation))
+            {
+                var dataRow = aggregationTable.NewRow();
+                dataRow["BinStartTime"] = phaseLeftTurnAggregation.BinStartTime;
+                dataRow["SignalId"] = phaseLeftTurnAggregation.SignalId;
+                dataRow["PhaseNumber"] = phaseLeftTurnAggregation.PhaseNumber;
+                dataRow["ApproachId"] = phaseLeftTurnAggregation.ApproachId;
+                dataRow["GapCount1"] = phaseLeftTurnAggregation.GapCount1;
+                dataRow["GapCount2"] = phaseLeftTurnAggregation.GapCount2;
+                dataRow["GapCount3"] = phaseLeftTurnAggregation.GapCount3;
+                dataRow["GapCount4"] = phaseLeftTurnAggregation.GapCount4;
+                dataRow["GapCount5"] = phaseLeftTurnAggregation.GapCount5;
+                dataRow["GapCount6"] = phaseLeftTurnAggregation.GapCount6;
+                dataRow["GapCount7"] = phaseLeftTurnAggregation.GapCount7;
+                dataRow["GapCount8"] = phaseLeftTurnAggregation.GapCount8;
+                dataRow["GapCount9"] = phaseLeftTurnAggregation.GapCount9;
+                dataRow["GapCount10"] = phaseLeftTurnAggregation.GapCount10;
+                dataRow["GapCount11"] = phaseLeftTurnAggregation.GapCount11;
+                dataRow["SumGapDuration1"] = phaseLeftTurnAggregation.SumGapDuration1;
+                dataRow["SumGapDuration2"] = phaseLeftTurnAggregation.SumGapDuration2;
+                dataRow["SumGapDuration3"] = phaseLeftTurnAggregation.SumGapDuration3;
+                dataRow["SumGreenTime"] = phaseLeftTurnAggregation.SumGreenTime;
+                aggregationTable.Rows.Add(dataRow);
+            }
+
+            var connectionString =
+                ConfigurationManager.ConnectionStrings["SPMImport"].ConnectionString;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                var sqlBulkCopy = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.UseInternalTransaction);
+                sqlBulkCopy.DestinationTableName = "PhaseLeftTurnGapAggregations";
+                sqlBulkCopy.BulkCopyTimeout = 180;
+                sqlBulkCopy.BatchSize = 50000;
+                try
+                {
+                    connection.Open();
+                    sqlBulkCopy.WriteToServer(aggregationTable);
+                    connection.Close();
+                }
+                catch (Exception e)
+                {
+                    var errorLog = ApplicationEventRepositoryFactory.Create();
+                    errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
+                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        e.Message);
+                    throw new Exception("Unable to import Phase Termination Data");
+                }
+            }
+
+            aggregationTable.Dispose();
+        }
 
         private void BulkSavePedData()
         {
             var phasePedAggregationTable = new DataTable();
-            phasePedAggregationTable.Columns.Add(new DataColumn("Id", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("BinStartTime", typeof(DateTime)));
             phasePedAggregationTable.Columns.Add(new DataColumn("SignalId", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("PhaseNumber", typeof(int)));
-            phasePedAggregationTable.Columns.Add(new DataColumn("PedCount", typeof(int)));
-            phasePedAggregationTable.Columns.Add(new DataColumn("PedDelay", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("PedCycles", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("PedDelaySum", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("MinPedDelay", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("MaxPedDelay", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("PedActuations", typeof(int)));
             while (_phasePedAggregations.TryDequeue(out var phasePedAggregation))
             {
                 var dataRow = phasePedAggregationTable.NewRow();
                 dataRow["BinStartTime"] = phasePedAggregation.BinStartTime;
                 dataRow["SignalId"] = phasePedAggregation.SignalId;
                 dataRow["PhaseNumber"] = phasePedAggregation.PhaseNumber;
-                dataRow["PedDelay"] = phasePedAggregation.PedDelay;
-                dataRow["PedCount"] = phasePedAggregation.PedCount;
+                dataRow["PedCycles"] = phasePedAggregation.PedCycles;
+                dataRow["PedDelaySum"] = phasePedAggregation.PedDelaySum;
+                dataRow["MinPedDelay"] = phasePedAggregation.MinPedDelay;
+                dataRow["MaxPedDelay"] = phasePedAggregation.MaxPedDelay;
+                dataRow["PedActuations"] = phasePedAggregation.PedActuations;
                 phasePedAggregationTable.Rows.Add(dataRow);
             }
 
@@ -1879,6 +2437,12 @@ namespace MOE.Common.Business.DataAggregation
             {
                 if (!string.IsNullOrEmpty(signal.SignalID) && signal.SignalID != "null")
                 {
+                    //var engine = new PreemptCycleEngine();
+                    //var cycles = engine.CreatePreemptCycle(dttb);
+
+
+
+
                     var controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
                     var records = controllerEventLogRepository.GetAllAggregationCodes(signal.SignalID, startTime, endTime);
                     var preemptCodes = new List<int> { 102, 105 };
@@ -1965,13 +2529,13 @@ namespace MOE.Common.Business.DataAggregation
                 Parallel.ForEach(signal.Approaches, options, signalApproach =>
                 {
                     if (signalApproach.Detectors != null && signalApproach.Detectors.Count > 0)
-                        SetApproachSpeedAggregationData(startTime, endTime, signalApproach);
-                        //SetApproachAggregationData(startTime, endTime, signalApproach);
-                        //SetDetectorAggregationData(startTime, endTime, signalApproach);
-                        //Parallel.Invoke(
-                        //    () => { SetApproachSpeedAggregationData(startTime, endTime, signalApproach); },
-                        //    () => { SetApproachAggregationData(startTime, endTime, signalApproach); },
-                        //    () => { SetDetectorAggregationData(startTime, endTime, signalApproach, options); });
+                    {
+                        SetApproachSpeedAggregationData(startTime, endTime, signalApproach, false);
+                        if (signalApproach.PermissivePhaseNumber != null)
+                        {
+                            SetApproachSpeedAggregationData(startTime, endTime, signalApproach, true);
+                        }
+                    }
 
                 });
             }
@@ -1995,8 +2559,11 @@ namespace MOE.Common.Business.DataAggregation
                     SignalId = signal.SignalID,
                     PhaseNumber = pedPhase.PhaseNumber,
                     BinStartTime = startTime,
-                    PedCount = pedPhase.Cycles.Count,
-                    PedDelay = pedPhase.TotalDelay,
+                    PedCycles = pedPhase.Cycles.Count,
+                    PedDelaySum = Convert.ToInt32(Math.Round(pedPhase.TotalDelay)),
+                    MinPedDelay = Convert.ToInt32(Math.Round(pedPhase.MinDelay)),
+                    MaxPedDelay = Convert.ToInt32(Math.Round(pedPhase.MaxDelay)),
+                    PedActuations = Convert.ToInt32(Math.Round(pedPhase.PedActuations))
                 };
                 _phasePedAggregations.Enqueue(pedAggregation);
             }
@@ -2024,33 +2591,7 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
-        private void ProcessApproach(Signal signal, DateTime startTime, DateTime endTime, ParallelOptions options)
-        {
-
-            if (signal.Approaches != null)
-                //foreach (var signalApproach in signal.Approaches)
-                //{
-                //    if (signalApproach.Detectors != null && signalApproach.Detectors.Count > 0)
-                //    {
-                //        SetApproachSpeedAggregationData(startTime, endTime, signalApproach);
-                //        SetApproachAggregationData(startTime, endTime, records, signalApproach);
-                //        SetDetectorAggregationData(startTime, endTime, signalApproach);
-                //    }
-                //}
-                Parallel.ForEach(signal.Approaches, options, signalApproach =>
-                {
-                    if (signalApproach.Detectors != null && signalApproach.Detectors.Count > 0)
-                        //SetApproachSpeedAggregationData(startTime, endTime, signalApproach);
-                        //SetApproachAggregationData(startTime, endTime, signalApproach);
-                        //SetDetectorAggregationData(startTime, endTime, signalApproach);
-                        Parallel.Invoke(
-                            () => { SetApproachSpeedAggregationData(startTime, endTime, signalApproach); },
-                            () => { SetApproachAggregationData(startTime, endTime, signalApproach); //},
-                            //() => { SetDetectorAggregationData(startTime, endTime, signalApproach, options);
-                            });
-
-                });
-        }
+      
 
         private void SetDetectorAggregationData(DateTime startTime, DateTime endTime, Approach signalApproach,
             ParallelOptions options)
@@ -2121,18 +2662,18 @@ namespace MOE.Common.Business.DataAggregation
         {
             var signalPhase = new SignalPhase(startTime, endTime, approach, true, 15, 6, false);
             Parallel.Invoke(
-                () => { SetApproachCycleData(signalPhase, startTime, approach, false); },
                 () => { SetApproachPcdData(signalPhase, startTime, approach, false); }
             );
             if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
             {
                 var permissiveSignalPhase = new SignalPhase(startTime, endTime, approach, false, 15, 6, true);
                 Parallel.Invoke(
-                    () => { SetApproachCycleData(permissiveSignalPhase, startTime, approach, true); },
                     () => { SetApproachPcdData(permissiveSignalPhase, startTime, approach, true); }
                 );
             }
         }
+
+        
 
         private void SetApproachAggregationData(DateTime startTime, DateTime endTime, Approach approach)
         {
@@ -2153,7 +2694,6 @@ namespace MOE.Common.Business.DataAggregation
             //SetSplitFailData(startTime, endTime, approach, false); 
             //SetYellowRedActivationData(startTime, endTime, approach, false); 
             Parallel.Invoke(
-                () => { SetApproachCycleData(signalPhase, startTime, approach, false); },
                 () => { SetApproachPcdData(signalPhase, startTime, approach, false); },
                 () => { SetSplitFailData(startTime, endTime, approach, false); },
                 () => { SetYellowRedActivationData(startTime, endTime, approach, false); }
@@ -2165,7 +2705,6 @@ namespace MOE.Common.Business.DataAggregation
                         startTime, endTime, (int)approach.PermissivePhaseNumber);
                 var permissiveSignalPhase = new SignalPhase(startTime, endTime, approach, false, 15, 6, true);
                 Parallel.Invoke(
-                    () => { SetApproachCycleData(permissiveSignalPhase, startTime, approach, true); },
                     () => { SetApproachPcdData(permissiveSignalPhase, startTime, approach, true); }
                     );
                 _approachEventAggregationConcurrentQueue.Enqueue(new ApproachEventCountAggregation
@@ -2224,27 +2763,37 @@ namespace MOE.Common.Business.DataAggregation
                     IsProtectedPhase = !isPermissivePhase,
                     SignalId =  approach.SignalID,
                     PhaseNumber = isPermissivePhase?approach.PermissivePhaseNumber.Value:approach.ProtectedPhaseNumber,
-                    TotalDelay = signalPhase.TotalDelay
+                    TotalDelay = Convert.ToInt32(Math.Round(signalPhase.TotalDelay))
                      
                 });
         }
 
-        private void SetApproachCycleData(SignalPhase signalPhase, DateTime startTime, Approach approach, bool isPermissivePhase)
+        private void SetApproachCycleData(DateTime startTime, DateTime endTime, Approach approach, int secondsToSearch)
         {
-            //Console.Write("\n-Aggregate Cycle data ");
-           
-            var approachAggregation = new ApproachCycleAggregation
+            
+            SPM db = new SPM();
+            var cel = ControllerEventLogRepositoryFactory.Create(db);
+            var cycleEventNumbers = approach.IsPermissivePhaseOverlap
+                ? new List<int> { 61, 63, 64 }
+                : new List<int> { 1, 8, 9 };
+            var cycleEvents = cel.GetEventsByEventCodesParam(approach.SignalID, startTime, endTime, cycleEventNumbers,
+                approach.ProtectedPhaseNumber);
+
+            var redCycles = CycleFactory.GetRedToRedCycles(approach, startTime, endTime, false, cycleEvents);
+            var greenCycles = CycleFactory.GetGreenToGreenCycles(approach, startTime, endTime, false, cycleEvents);
+
+            _approachCycleAggregationConcurrentQueue.Enqueue(new ApproachCycleAggregation
             {
                 BinStartTime = startTime,
+                SignalId = approach.SignalID,
                 ApproachId = approach.ApproachID,
-                GreenTime = signalPhase.TotalGreenTime,
-                RedTime = signalPhase.TotalRedTime,
-                YellowTime = signalPhase.TotalYellowTime,
-                PedActuations =  0,
-                TotalCycles = signalPhase.Cycles.Count,// totalCycles,
-                IsProtectedPhase = !isPermissivePhase
-            };
-            _approachCycleAggregationConcurrentQueue.Enqueue(approachAggregation);
+                PhaseNumber = approach.ProtectedPhaseNumber,
+                RedTime = Convert.ToInt32(Math.Round(redCycles.Sum(c => c.TotalRedTime))),
+                YellowTime = Convert.ToInt32(Math.Round(redCycles.Sum(c => c.TotalYellowTime))),
+                GreenTime = Convert.ToInt32(Math.Round(redCycles.Sum(c => c.TotalGreenTime))),
+                TotalRedToRedCycles = redCycles.Count,
+                TotalGreenToGreenCycles = greenCycles.Count
+            });
         }
 
         private void SetSplitFailData(DateTime startTime, DateTime endTime, Approach approach, bool getPermissivePhase)
@@ -2262,20 +2811,80 @@ namespace MOE.Common.Business.DataAggregation
             var splitFailPhase = new SplitFailPhase(approach, splitFailOptions, getPermissivePhase);
             _approachSplitFailAggregationConcurrentQueue.Enqueue(new ApproachSplitFailAggregation
             {
+                SignalId = approach.SignalID,
                 ApproachId = approach.ApproachID,
                 BinStartTime = startTime,
                 SplitFailures = splitFailPhase.TotalFails,
-                IsProtectedPhase = !getPermissivePhase
+                IsProtectedPhase = !getPermissivePhase,
+                GreenOccupancySum = Convert.ToInt32(Math.Round(splitFailPhase.Cycles.Sum(c => c.GreenOccupancyTimeInMilliseconds/1000))),
+                RedOccupancySum = Convert.ToInt32(Math.Round(splitFailPhase.Cycles.Sum(c => c.RedOccupancyTimeInMilliseconds)/1000)),
+                GreenTimeSum = Convert.ToInt32(Math.Round(splitFailPhase.Cycles.Sum(c => c.TotalGreenTime))),
+                RedTimeSum = Convert.ToInt32(Math.Round(splitFailPhase.Cycles.Sum(c => c.TotalRedTime))),
+                Cycles = splitFailPhase.Cycles.Count,
+                PhaseNumber = getPermissivePhase?approach.PermissivePhaseNumber.Value:approach.ProtectedPhaseNumber
             });
         }
 
-        private void SetApproachSpeedAggregationData(DateTime startTime, DateTime endTime, Approach signalApproach)
+        private void SetSplitMonitorData(List<PlanSplitMonitor> plans, AnalysisPhase phase, DateTime start, DateTime end)
+        {
+            int skippedCount = 0;
+            foreach (var plan in plans)
+            {
+                var cycles = from cycle in phase.Cycles.Items
+                    where cycle.StartTime >= plan.StartTime && cycle.EndTime < plan.EndTime
+                    orderby cycle.Duration
+                    select cycle;
+
+                if (plan.CycleCount > 0)
+                {
+                    skippedCount += plan.CycleCount - cycles.Count();
+                }
+            }
+
+            double percentileResult = 0;
+            if (phase.Cycles.Items.Count() > 2)
+            {
+                var percentile = Convert.ToDouble(85) / 100;
+
+
+                var percentilIndex = percentile * phase.Cycles.Items.Count();
+                if (percentilIndex % 1 == 0)
+                {
+                    percentileResult = phase.Cycles.Items.ElementAt(Convert.ToInt16(percentilIndex) - 1).Duration
+                        .TotalSeconds;
+                }
+                else
+                {
+                    var indexMod = percentilIndex % 1;
+                    //subtracting .5 leaves just the integer after the convert.
+                    //There was probably another way to do that, but this is easy.
+                    int indexInt = Convert.ToInt16(percentilIndex - .5);
+
+                    var step1 = phase.Cycles.Items.ElementAt(Convert.ToInt16(indexInt) - 1).Duration.TotalSeconds;
+                    var step2 = phase.Cycles.Items.ElementAt(Convert.ToInt16(indexInt)).Duration.TotalSeconds;
+                    var stepDiff = step2 - step1;
+                    var step3 = stepDiff * indexMod;
+                    percentileResult = step1 + step3;
+                }
+            }
+
+            _phaseSplitMonitorAggregationConcurrentQueue.Enqueue(new PhaseSplitMonitorAggregation
+            {
+                SignalId = phase.SignalID,
+                BinStartTime = start,
+                PhaseNumber = phase.PhaseNumber,
+                EightyFifthPercentileSplit = Convert.ToInt32(Math.Round(percentileResult)),
+                SkippedCount = skippedCount
+            });
+        }
+
+        private void SetApproachSpeedAggregationData(DateTime startTime, DateTime endTime, Approach signalApproach, bool getPermissivePhase)
         {
             var speedDetectors = signalApproach.GetDetectorsForMetricType(10);
             if (speedDetectors.Count > 0)
                 foreach (var detector in speedDetectors)
                 {
-                    var detectorSpeed = new DetectorSpeed(detector, startTime, endTime, 15, false);
+                    var detectorSpeed = new DetectorSpeed(detector, startTime, endTime, 15, getPermissivePhase);
                     if (detectorSpeed.AvgSpeedBucketCollection.AvgSpeedBuckets.Any())
                     {
                         var speedBucket = detectorSpeed.AvgSpeedBucketCollection.AvgSpeedBuckets.FirstOrDefault();
@@ -2283,12 +2892,14 @@ namespace MOE.Common.Business.DataAggregation
                             new ApproachSpeedAggregation
                             {
                                 ApproachId = signalApproach.ApproachID,
+                                SignalId = signalApproach.SignalID,
+                                PhaseNumber = getPermissivePhase?signalApproach.PermissivePhaseNumber.Value:signalApproach.ProtectedPhaseNumber,
                                 BinStartTime = startTime,
                                 Speed85Th = speedBucket.EightyFifth,
                                 Speed15Th = speedBucket.FifteenthPercentile,
                                 SpeedVolume = speedBucket.SpeedVolume,
                                 SummedSpeed = speedBucket.SummedSpeed,
-                                IsProtectedPhase = true
+                                IsProtectedPhase = !getPermissivePhase
                             };
                         _approachSpeedAggregationConcurrentQueue.Enqueue(approachSpeedAggregation);
                     }
@@ -2333,5 +2944,8 @@ namespace MOE.Common.Business.DataAggregation
                     _preemptAggregationConcurrentQueue.Enqueue(preemptionAggregationData);
                 }
         }
+
+
+        
     }
 }

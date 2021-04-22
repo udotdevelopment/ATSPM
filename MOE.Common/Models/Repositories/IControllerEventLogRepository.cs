@@ -72,5 +72,8 @@ namespace MOE.Common.Models.Repositories
             int phaseNumber);
         DateTime GetMostRecentRecordTimestamp(string signalID);
         bool CheckForRecords(string signalId, DateTime startTime, DateTime endTime);
+
+        Controller_Event_Log GetFirstEventAfterDateByEventCodesAndParameter(string signalId, List<int> eventCodes,
+            int eventParam, DateTime start, int secondsToSearch);
     }
 }

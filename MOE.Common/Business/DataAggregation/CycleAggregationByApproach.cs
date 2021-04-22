@@ -48,7 +48,7 @@ namespace MOE.Common.Business.DataAggregation
                                     approachCycleCount =
                                         approachCycles.Where(s =>
                                                 s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.TotalCycles);
+                                            .Sum(s => s.TotalRedToRedCycles);
                                     break;
                                 case "RedTime":
                                     approachCycleCount =
@@ -67,12 +67,6 @@ namespace MOE.Common.Business.DataAggregation
                                         (int) approachCycles.Where(s =>
                                                 s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.GreenTime);
-                                    break;
-                                case "PedActuations":
-                                    approachCycleCount =
-                                        approachCycles.Where(s =>
-                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.PedActuations);
                                     break;
                                 default:
 

@@ -11,9 +11,8 @@ namespace MOE.Common.Business
     public static class CycleFactory
     {
         public static List<RedToRedCycle> GetRedToRedCycles(Approach approach, DateTime startTime, DateTime endTime,
-            bool getPermissivePhase, List<Controller_Event_Log> detectorEvents)
+            bool getPermissivePhase, List<Controller_Event_Log> cycleEvents)
         {
-            var cycleEvents = GetCycleEvents(getPermissivePhase, startTime, endTime, approach, null);
             if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) !=
                 RedToRedCycle.EventType.ChangeToRed)
                 GetEventsToCompleteCycle(getPermissivePhase, endTime, approach, cycleEvents);
@@ -25,6 +24,26 @@ namespace MOE.Common.Business
                     && GetEventType(cycleEvents[i + 2].EventCode) == RedToRedCycle.EventType.ChangeToYellow
                     && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToRed)
                     cycles.Add(new RedToRedCycle(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp,
+                        cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp));
+            return cycles;
+        }
+
+        
+
+        public static List<GreenToGreenCycle> GetGreenToGreenCycles(Approach approach, DateTime startTime, DateTime endTime,
+            bool getPermissivePhase, List<Controller_Event_Log> cycleEvents)
+        {
+            if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) !=
+                RedToRedCycle.EventType.ChangeToGreen)
+                GetEventsToCompleteCycle(getPermissivePhase, endTime, approach, cycleEvents);
+            var cycles = new List<GreenToGreenCycle>();
+            for (var i = 0; i < cycleEvents.Count; i++)
+                if (i < cycleEvents.Count - 3
+                    && GetEventType(cycleEvents[i].EventCode) == RedToRedCycle.EventType.ChangeToGreen
+                    && GetEventType(cycleEvents[i + 1].EventCode) == RedToRedCycle.EventType.ChangeToYellow
+                    && GetEventType(cycleEvents[i + 2].EventCode) == RedToRedCycle.EventType.ChangeToRed
+                    && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToGreen)
+                    cycles.Add(new GreenToGreenCycle(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp,
                         cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp));
             return cycles;
         }
@@ -153,9 +172,12 @@ namespace MOE.Common.Business
             Models.Detector detector)
         {
             var cycleEvents = GetCycleEvents(getPermissivePhase, startDate, endDate, detector.Approach, null);
-            if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) !=
+            if (cycleEvents.Any() && GetEventType(cycleEvents.Last().EventCode) !=
                 RedToRedCycle.EventType.ChangeToRed)
                 GetEventsToCompleteCycle(getPermissivePhase, endDate, detector.Approach, cycleEvents);
+            if (cycleEvents.Any() && GetEventType(cycleEvents.First().EventCode) !=
+                RedToRedCycle.EventType.ChangeToRed)
+                GetEventsToStartCycle(getPermissivePhase, startDate, detector.Approach, cycleEvents);
             var cycles = new List<CycleSpeed>();
             if (cycleEvents != null)
                 for (var i = 0; i < cycleEvents.Count; i++)
@@ -166,14 +188,7 @@ namespace MOE.Common.Business
                         && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToRed)
                         cycles.Add(new CycleSpeed(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp,
                             cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp));
-            if (cycles.Any())
-            {
-                var speedEventRepository = SpeedEventRepositoryFactory.Create();
-                var speedEvents = speedEventRepository.GetSpeedEventsByDetector(startDate,
-                    cycles.LastOrDefault().EndTime, detector, detector.MinSpeedFilter ?? 5);
-                foreach (var cycle in cycles)
-                    cycle.FindSpeedEventsForCycle(speedEvents);
-            }
+            
 
             return cycles;
         }
@@ -293,9 +308,13 @@ namespace MOE.Common.Business
             bool getPermissivePhase, SPM db)
         {
             var cycleEvents = GetCycleEvents(getPermissivePhase, options.StartDate, options.EndDate, approach, db);
-            if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) !=
-                RedToRedCycle.EventType.ChangeToGreen)
-                GetEventsToCompleteCycle(getPermissivePhase, options.EndDate, approach, cycleEvents);
+            if (cycleEvents.Any())
+            {
+                if(GetEventType(cycleEvents.Last().EventCode) != RedToRedCycle.EventType.ChangeToGreen)
+                    GetEventsToCompleteCycle(getPermissivePhase, options.EndDate, approach, cycleEvents);
+                if (GetEventType(cycleEvents.First().EventCode) != RedToRedCycle.EventType.ChangeToGreen)
+                    GetEventsToStartCycle(getPermissivePhase, options.StartDate, approach, cycleEvents);
+            }
             var terminationEvents =
                 GetTerminationEvents(getPermissivePhase, options.StartDate, options.EndDate, approach);
             var cycles = new List<CycleSplitFail>();

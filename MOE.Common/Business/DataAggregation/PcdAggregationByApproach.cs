@@ -69,13 +69,13 @@ namespace MOE.Common.Business.DataAggregation
                                     break;
                                 case "PlatoonRatio":
                                     double percentArrivalOnGreen = GetPercentArrivalOnGreen(bin, pcdAggregations);
-                                    var aggregations = cycleAggregtaions.Where(s =>
-                                        s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).ToList();
+                                    //var aggregations = cycleAggregtaions.Where(s =>
+                                    //    s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).ToList();
 
-                                    double greenTime = aggregations.Sum(s => s.GreenTime);
-                                    double totalTime = greenTime + aggregations.Sum(s=> s.YellowTime) + aggregations.Sum(s => s.RedTime);
-                                    if (greenTime > 0)
-                                        pcdCount = percentArrivalOnGreen / (greenTime/totalTime);
+                                    //double greenTime = aggregations.Sum(s => s.GreenTime);
+                                    //double totalTime = greenTime + aggregations.Sum(s=> s.YellowTime) + aggregations.Sum(s => s.RedTime);
+                                    //if (greenTime > 0)
+                                    //    pcdCount = percentArrivalOnGreen / (greenTime/totalTime);
                                     break;
                                 case "ApproachVolume":
                                     pcdCount = pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.ArrivalsOnYellow)

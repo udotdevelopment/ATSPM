@@ -140,21 +140,28 @@ namespace MOE.Common.Business
             List<int> li = new List<int> {1, 8, 9, 10, 11};
                 var cycleEvents = controllerRepository.GetEventsByEventCodesParam(Approach.SignalID,
                     startDate, endDate,li , PhaseNumber);
+            List<Controller_Event_Log> beginningEvents= new List<Controller_Event_Log>();
+            List<Controller_Event_Log> endingEvents = new List<Controller_Event_Log>();
             Parallel.Invoke(
                 () =>
                 {
                     if (!cycleEvents.Any() || cycleEvents.First().EventCode != 8)
                     {
-                        GetEventsToStartCycle(usePermissivePhase, startDate, Approach, cycleEvents);
+                        beginningEvents = GetEventsToStartCycle(usePermissivePhase, startDate, Approach);
                     }
                 },
                 () =>
                 {
                     if (!cycleEvents.Any() || cycleEvents.Last().EventCode != 1)
                     {
-                        GetEventsToCompleteCycle(usePermissivePhase, endDate, Approach, cycleEvents);
+                        endingEvents = GetEventsToCompleteCycle(usePermissivePhase, endDate, Approach);
                     }
                 });
+            if(beginningEvents.Any())
+                cycleEvents.InsertRange(0,beginningEvents);
+            if(endingEvents.Any())
+                cycleEvents.AddRange(endingEvents);
+
             GetRedCycle(startDate, endDate, cycleEvents);
             Plans = new RLMPlanCollection(Cycles, Cycles.Any() ? Cycles.First().StartTime : startDate, Cycles.Any()? Cycles.Last().EndTime:endDate, SevereRedLightViolationSeconds, Approach, db);
                 if (Plans.PlanList.Count == 0)
@@ -166,27 +173,32 @@ namespace MOE.Common.Business
 
         private void GetSignalOverlapData(DateTime startDate, DateTime endDate, bool showVolume, int binSize, SPM db, bool usePermissive)
         {
-            var redLightTimeStamp = DateTime.MinValue;
             var li = new List<int> {62, 63, 64};
             var controllerRepository =
-                ControllerEventLogRepositoryFactory.Create();
+                ControllerEventLogRepositoryFactory.Create(db);
             var cycleEvents = controllerRepository.GetEventsByEventCodesParam(Approach.SignalID,
                 startDate, endDate, li, Approach.ProtectedPhaseNumber);
+            List<Controller_Event_Log> beginningEvents = new List<Controller_Event_Log>();
+            List<Controller_Event_Log> endingEvents = new List<Controller_Event_Log>();
             Parallel.Invoke(
                 () =>
                 {
                     if (!cycleEvents.Any() || cycleEvents.First().EventCode != 63)
                     {
-                        GetEventsToStartCycle(usePermissive, startDate, Approach, cycleEvents);
+                       beginningEvents = GetEventsToStartCycle(usePermissive, startDate, Approach);
                     }
                 },
                 () =>
                 {
                     if (!cycleEvents.Any() || cycleEvents.Last().EventCode != 61)
                     {
-                        GetEventsToCompleteCycle(usePermissive, endDate, Approach, cycleEvents);
+                        endingEvents = GetEventsToCompleteCycle(usePermissive, endDate, Approach);
                     }
                 });
+            if (beginningEvents.Any())
+                cycleEvents.InsertRange(0, beginningEvents);
+            if (endingEvents.Any())
+                cycleEvents.AddRange(endingEvents);
             GetRedCycle(startDate, endDate, cycleEvents);
             Plans = new RLMPlanCollection(Cycles, startDate, endDate, SevereRedLightViolationSeconds, Approach, db);
             if (Plans.PlanList.Count == 0)
@@ -194,8 +206,7 @@ namespace MOE.Common.Business
                     Approach));
         }
 
-        public void GetEventsToCompleteCycle(bool getPermissivePhase, DateTime endDate, Approach approach,
-            List<Controller_Event_Log> cycleEvents)
+        public List<Controller_Event_Log> GetEventsToCompleteCycle(bool getPermissivePhase, DateTime endDate, Approach approach)
         {
             var celRepository = ControllerEventLogRepositoryFactory.Create();
             if (getPermissivePhase)
@@ -203,25 +214,20 @@ namespace MOE.Common.Business
                 var cycleEventNumbers = approach.IsPermissivePhaseOverlap
                     ? new List<int> { 61, 63, 64, 65 }
                     : new List<int> { 1, 8, 9 };
-                var eventsAfterEndDate = celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
-                    endDate, cycleEventNumbers, approach.PermissivePhaseNumber.Value, 3);
-                if (eventsAfterEndDate != null)
-                    cycleEvents.AddRange(eventsAfterEndDate);
+                return celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
+                    endDate, cycleEventNumbers, approach.PermissivePhaseNumber.Value, 3).OrderByDescending(e => e.Timestamp).ToList();
             }
             else
             {
                 var cycleEventNumbers = approach.IsProtectedPhaseOverlap
                     ? new List<int> { 61, 63, 64, 65 }
                     : new List<int> { 1, 8, 9 };
-                var eventsAfterEndDate = celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
-                    endDate, cycleEventNumbers, approach.ProtectedPhaseNumber, 3);
-                if (eventsAfterEndDate != null)
-                    cycleEvents.AddRange(eventsAfterEndDate);
+                return celRepository.GetTopEventsAfterDateByEventCodesParam(approach.SignalID,
+                    endDate, cycleEventNumbers, approach.ProtectedPhaseNumber, 3).OrderByDescending(e => e.Timestamp).ToList();
             }
         }
 
-        public void GetEventsToStartCycle(bool getPermissivePhase, DateTime startDate, Approach approach,
-            List<Controller_Event_Log> cycleEvents)
+        public List<Controller_Event_Log> GetEventsToStartCycle(bool getPermissivePhase, DateTime startDate, Approach approach)
         {
             var celRepository = ControllerEventLogRepositoryFactory.Create();
             if (getPermissivePhase)
@@ -229,20 +235,16 @@ namespace MOE.Common.Business
                 var cycleEventNumbers = approach.IsPermissivePhaseOverlap
                     ? new List<int> { 63, 64, 65 }
                     : new List<int> { 8, 9, 11 };
-                var eventsBeforeEndDate = celRepository.GetTopEventsBeforeDateByEventCodesParam(approach.SignalID,
+                return  celRepository.GetTopEventsBeforeDateByEventCodesParam(approach.SignalID,
                     startDate, cycleEventNumbers, approach.PermissivePhaseNumber.Value, 3);
-                if (eventsBeforeEndDate != null)
-                    cycleEvents.InsertRange(0, eventsBeforeEndDate.OrderBy(e => e.Timestamp));
             }
             else
             {
                 var cycleEventNumbers = approach.IsProtectedPhaseOverlap
                     ? new List<int> { 63, 64, 65 }
                     : new List<int> { 8, 9,11 };
-                var eventsBeforeEndDate = celRepository.GetTopEventsBeforeDateByEventCodesParam(approach.SignalID,
+                return celRepository.GetTopEventsBeforeDateByEventCodesParam(approach.SignalID,
                     startDate, cycleEventNumbers, approach.ProtectedPhaseNumber, 3);
-                if (eventsBeforeEndDate != null)
-                    cycleEvents.InsertRange(0, eventsBeforeEndDate.OrderBy(e => e.Timestamp));
             }
         }
 
