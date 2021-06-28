@@ -236,9 +236,9 @@ namespace SPM.Models
                     case 27:
                         AggregatedDataTypes = new SignalEventCountAggregationOptions().AggregatedDataTypes;
                         break;
-                    case 28:
-                        AggregatedDataTypes = new ApproachEventCountAggregationOptions().AggregatedDataTypes;
-                        break;
+                    //case 28:
+                    //    AggregatedDataTypes = new ApproachEventCountAggregationOptions().AggregatedDataTypes;
+                    //    break;
                     default:
                         throw new Exception("Invalid Metric Type");
                         break;

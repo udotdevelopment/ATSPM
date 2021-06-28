@@ -41,12 +41,6 @@ namespace MOE.Common.Business.DataAggregation
 
                             switch (options.SelectedAggregatedDataType.DataName)
                             {
-                                case "TotalCycles":
-                                    preemptionSum = priorityAggregations.Where(s =>
-                                            s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                        .Sum(s => s.TotalCycles);
-                                    break;
-
                                 case "PriorityNumber":
                                     preemptionSum = priorityAggregations.Where(s =>
                                             s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)

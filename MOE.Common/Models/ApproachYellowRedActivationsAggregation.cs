@@ -16,12 +16,25 @@ namespace MOE.Common.Models
         [Column(Order = 0)]
         public override DateTime BinStartTime { get; set; }
 
-        [Key]
         [Required]
         [Column(Order= 1)]
         public int ApproachId { get; set; }
 
-        public virtual Approach Approach { get; set; }
+        [Key]
+        [Required]
+        [Column(Order = 8)]
+        [StringLength(10)]
+        public string SignalId { get; set; }
+
+        [Key]
+        [Required]
+        [Column(Order = 9)]
+        public int PhaseNumber { get; set; }
+
+        [Key]
+        [Required]
+        [Column(Order = 4)]
+        public bool IsProtectedPhase { get; set; }
 
         [Required]
         [Column(Order = 2)]
@@ -31,10 +44,6 @@ namespace MOE.Common.Models
         [Column(Order = 3)]
         public int TotalRedLightViolations { get; set; }
 
-        [Key]
-        [Required]
-        [Column(Order = 4)]
-        public bool IsProtectedPhase { get; set; }
 
         [Required]
         [Column(Order = 5)]
@@ -48,20 +57,12 @@ namespace MOE.Common.Models
         [Column(Order = 7)]
         public int Cycles { get; set; }
 
-        [Required]
-        [Column(Order = 8)]
-        public string SignalId { get; set; }
-
-        [Required]
-        [Column(Order = 9)]
-        public int PhaseNumber { get; set; }
 
         public sealed class
             ApproachYellowRedActivationAggregationClassMap : ClassMap<ApproachYellowRedActivationAggregation>
         {
             public ApproachYellowRedActivationAggregationClassMap()
             {
-                Map(m => m.Approach).Ignore();
                 //Map(m => m.Id).Name("Record Number");
                 Map(m => m.BinStartTime).Name("Bin Start Time");
                 Map(m => m.ApproachId).Name("Approach ID");

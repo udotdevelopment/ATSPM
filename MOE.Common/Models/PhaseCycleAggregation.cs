@@ -5,7 +5,7 @@ using CsvHelper.Configuration;
 
 namespace MOE.Common.Models
 {
-    public class ApproachCycleAggregation : Aggregation
+    public class PhaseCycleAggregation : Aggregation
     {
 
         [Key]
@@ -16,9 +16,9 @@ namespace MOE.Common.Models
         [Key]
         [Required]
         [Column(Order = 1)]
+        [StringLength(10)]
         public string SignalId { get; set; }
 
-        [Key]
         [Required]
         [Column(Order = 2)]
         public int ApproachId { get; set; }
@@ -48,7 +48,7 @@ namespace MOE.Common.Models
         [Column(Order = 8)]
         public int TotalGreenToGreenCycles { get; set; }
 
-        public sealed class ApproachCycleAggregationClassMap : ClassMap<ApproachCycleAggregation>
+        public sealed class ApproachCycleAggregationClassMap : ClassMap<PhaseCycleAggregation>
         {
             public ApproachCycleAggregationClassMap()
             {

@@ -46,6 +46,19 @@ namespace MOE.Common.Business.LeftTurnGapAnalysis
                 SumDuration2 = 0;
             if (LeftTurnGapAnalysisOptions.SumDurationGap3.HasValue)
                 SumDuration3 = 0;
+
+
+            Gaps1 = new List<KeyValuePair<DateTime, int>>();
+            Gaps2 = new List<KeyValuePair<DateTime, int>>();
+            Gaps3 = new List<KeyValuePair<DateTime, int>>();
+            Gaps4 = new List<KeyValuePair<DateTime, int>>();
+            Gaps5 = new List<KeyValuePair<DateTime, int>>();
+            Gaps6 = new List<KeyValuePair<DateTime, int>>();
+            Gaps7 = new List<KeyValuePair<DateTime, int>>();
+            Gaps8 = new List<KeyValuePair<DateTime, int>>();
+            Gaps9 = new List<KeyValuePair<DateTime, int>>();
+            Gaps10 = new List<KeyValuePair<DateTime, int>>();
+            Gaps11 = new List<KeyValuePair<DateTime, int>>();
             GetLeftTurnData(approach, approachEvents);
         }
 
@@ -118,21 +131,40 @@ namespace MOE.Common.Business.LeftTurnGapAnalysis
 
         protected void GetData(List<Controller_Event_Log> _events)
         {
-            var greenList = _events.Where(x => x.EventCode == EVENT_GREEN)
-                .OrderBy(x => x.Timestamp);
-            var redList = _events.Where(x => x.EventCode == EVENT_RED)
+            var greenList = _events.Where(x => x.EventCode == EVENT_GREEN && x.Timestamp >= LeftTurnGapAnalysisOptions.StartDate && x.Timestamp < LeftTurnGapAnalysisOptions.EndDate)
                 .OrderBy(x => x.Timestamp).ToList();
-            var orderedDetectorCallList = _events.Where(x => x.EventCode == EVENT_DET)
+            var redList = _events.Where(x => x.EventCode == EVENT_RED && x.Timestamp >= LeftTurnGapAnalysisOptions.StartDate && x.Timestamp < LeftTurnGapAnalysisOptions.EndDate)
                 .OrderBy(x => x.Timestamp).ToList();
+            var orderedDetectorCallList = _events.Where(x => x.EventCode == EVENT_DET && x.Timestamp >= LeftTurnGapAnalysisOptions.StartDate && x.Timestamp < LeftTurnGapAnalysisOptions.EndDate)
+                .OrderBy(x => x.Timestamp).ToList();
+
+            var eventBeforeStart = _events.Where(e => e.Timestamp < LeftTurnGapAnalysisOptions.StartDate && (e.EventCode == EVENT_GREEN || e.EventCode == EVENT_RED)).OrderByDescending(e => e.Timestamp).FirstOrDefault();
+            if (eventBeforeStart != null && eventBeforeStart.EventCode == EVENT_GREEN)
+            {
+                eventBeforeStart.Timestamp = LeftTurnGapAnalysisOptions.StartDate;
+                greenList.Insert(0, eventBeforeStart);
+            }
+            if (eventBeforeStart != null && eventBeforeStart.EventCode == EVENT_RED)
+            {
+                eventBeforeStart.Timestamp = LeftTurnGapAnalysisOptions.StartDate;
+                redList.Insert(0, eventBeforeStart);
+            }
+
+            var eventAfterEnd = _events.Where(e => e.Timestamp > LeftTurnGapAnalysisOptions.EndDate && (e.EventCode == EVENT_GREEN || e.EventCode == EVENT_RED)).OrderBy(e => e.Timestamp).FirstOrDefault();
+            if (eventAfterEnd != null && eventAfterEnd.EventCode == EVENT_GREEN)
+            {
+                eventAfterEnd.Timestamp = LeftTurnGapAnalysisOptions.EndDate;
+                greenList.Add(eventAfterEnd);
+            }
+            if (eventAfterEnd != null && eventAfterEnd.EventCode == EVENT_RED)
+            {
+                eventAfterEnd.Timestamp = LeftTurnGapAnalysisOptions.EndDate;
+                redList.Add(eventAfterEnd);
+            }
 
             var phaseTrackerList = GetGapsFromControllerData(greenList, redList, orderedDetectorCallList);
 
             HighestTotal = 0;
-
-            Gaps1 = new List<KeyValuePair<DateTime, int>>();
-            Gaps2 = new List<KeyValuePair<DateTime, int>>();
-            Gaps3 = new List<KeyValuePair<DateTime, int>>();
-            Gaps4 = new List<KeyValuePair<DateTime, int>>();
 
             for (var lowerTimeLimit = LeftTurnGapAnalysisOptions.StartDate; lowerTimeLimit < LeftTurnGapAnalysisOptions.EndDate; lowerTimeLimit = lowerTimeLimit.AddMinutes(LeftTurnGapAnalysisOptions.BinSize))
             {
@@ -149,56 +181,42 @@ namespace MOE.Common.Business.LeftTurnGapAnalysis
                                                                items.Sum(x => x.GapCounter4);
                 if (LeftTurnGapAnalysisOptions.Gap5Min.HasValue)
                 {
-                    if(Gaps5 == null)
-                        Gaps5 = new List<KeyValuePair<DateTime, int>>();
                     int sum = items.Sum(x => x.GapCounter5);
                     Gaps5.Add(new KeyValuePair<DateTime, int>(upperTimeLimit, sum));
                     localTotal += sum;
                 }
                 if (LeftTurnGapAnalysisOptions.Gap6Min.HasValue)
                 {
-                    if (Gaps6 == null)
-                        Gaps6 = new List<KeyValuePair<DateTime, int>>();
                     int sum = items.Sum(x => x.GapCounter6);
                     Gaps6.Add(new KeyValuePair<DateTime, int>(upperTimeLimit, sum));
                     localTotal += sum;
                 }
                 if (LeftTurnGapAnalysisOptions.Gap7Min.HasValue)
                 {
-                    if (Gaps7 == null)
-                        Gaps7 = new List<KeyValuePair<DateTime, int>>();
                     int sum = items.Sum(x => x.GapCounter7);
                     Gaps7.Add(new KeyValuePair<DateTime, int>(upperTimeLimit, sum));
                     localTotal += sum;
                 }
                 if (LeftTurnGapAnalysisOptions.Gap8Min.HasValue)
                 {
-                    if (Gaps8 == null)
-                        Gaps8 = new List<KeyValuePair<DateTime, int>>();
                     int sum = items.Sum(x => x.GapCounter8);
                     Gaps8.Add(new KeyValuePair<DateTime, int>(upperTimeLimit, sum));
                     localTotal += sum;
                 }
                 if (LeftTurnGapAnalysisOptions.Gap9Min.HasValue)
                 {
-                    if (Gaps9 == null)
-                        Gaps9 = new List<KeyValuePair<DateTime, int>>();
                     int sum = items.Sum(x => x.GapCounter9);
                     Gaps9.Add(new KeyValuePair<DateTime, int>(upperTimeLimit, sum));
                     localTotal += sum;
                 }
                 if (LeftTurnGapAnalysisOptions.Gap10Min.HasValue)
                 {
-                    if (Gaps10 == null)
-                        Gaps10 = new List<KeyValuePair<DateTime, int>>();
                     int sum = items.Sum(x => x.GapCounter10);
                     Gaps10.Add(new KeyValuePair<DateTime, int>(upperTimeLimit, sum));
                     localTotal += sum;
                 }
                 if (LeftTurnGapAnalysisOptions.Gap11Min.HasValue)
                 {
-                    if (Gaps11 == null)
-                        Gaps11 = new List<KeyValuePair<DateTime, int>>();
                     int sum = items.Sum(x => x.GapCounter11);
                     Gaps11.Add(new KeyValuePair<DateTime, int>(upperTimeLimit, sum));
                     localTotal += sum;
@@ -298,67 +316,103 @@ namespace MOE.Common.Business.LeftTurnGapAnalysis
 
         }
 
-        private List<LeftTurnGapAnalysisChart.PhaseLeftTurnGapTracker> GetGapsFromControllerData(IEnumerable<Controller_Event_Log> greenList,
+        private List<LeftTurnGapAnalysisChart.PhaseLeftTurnGapTracker> GetGapsFromControllerData(List<Controller_Event_Log> greenList,
             List<Controller_Event_Log> redList, List<Controller_Event_Log> orderedDetectorCallList)
         {
+            //List<Controller_Event_Log> tempGreenList = greenList.Where(g =>
+            //        g.Timestamp >= LeftTurnGapAnalysisOptions.StartDate &&
+            //        g.Timestamp < LeftTurnGapAnalysisOptions.EndDate)
+            //    .ToList();
+
+            //var firstGreen = greenList.Where(g => g.Timestamp < LeftTurnGapAnalysisOptions.StartDate)
+            //    .OrderByDescending(g => g.Timestamp).FirstOrDefault();
+            //if(firstGreen != null)
+            //    tempGreenList.Insert(0, firstGreen);
+            //var lastGreen = greenList.Where(g => g.Timestamp > LeftTurnGapAnalysisOptions.EndDate)
+            //    .OrderBy(g => g.Timestamp).FirstOrDefault();
+            //if (lastGreen != null)
+            //    tempGreenList.Add(lastGreen);
+            //greenList = tempGreenList;
+
+            //List<Controller_Event_Log> tempRedList = redList.Where(g =>
+            //        g.Timestamp >= LeftTurnGapAnalysisOptions.StartDate &&
+            //        g.Timestamp < LeftTurnGapAnalysisOptions.EndDate)
+            //    .ToList();
+            //var firstRed = redList.Where(g => g.Timestamp < LeftTurnGapAnalysisOptions.StartDate)
+            //    .OrderByDescending(g => g.Timestamp).FirstOrDefault();
+            //if (firstRed != null)
+            //    tempRedList.Insert(0, firstRed);
+            //var lastRed = redList.Where(g => g.Timestamp > LeftTurnGapAnalysisOptions.EndDate)
+            //    .OrderBy(g => g.Timestamp).FirstOrDefault();
+            //if (lastRed != null)
+            //    tempRedList.Add(lastRed);
+            //redList = tempRedList;
+
             var phaseTrackerList = new List<LeftTurnGapAnalysisChart.PhaseLeftTurnGapTracker>();
-
-            foreach (var green in greenList)
+            if (redList.Any() && greenList.Any())
             {
-                //Find the corresponding red
-                var red = redList.Where(x => x.Timestamp > green.Timestamp).OrderBy(x => x.Timestamp).FirstOrDefault();
-                if (red == null)
-                    continue;
-
-                double trendLineGapTimeCounter = 0;
-
-                var phaseTracker = new LeftTurnGapAnalysisChart.PhaseLeftTurnGapTracker { GreenTime = green.Timestamp };
-
-                var gapsList = new List<Controller_Event_Log>();
-                gapsList.Add(green);
-                gapsList.AddRange(orderedDetectorCallList.Where(x =>
-                    x.Timestamp > green.Timestamp && x.Timestamp < red.Timestamp));
-                gapsList.Add(red);
-
-                for (var i = 1; i < gapsList.Count; i++)
+                foreach (var green in greenList)
                 {
-                    var gap = gapsList[i].Timestamp.TimeOfDay.TotalSeconds -
-                              gapsList[i - 1].Timestamp.TimeOfDay.TotalSeconds;
+                    //Find the corresponding red
+                    var red = redList.Where(x => x.Timestamp > green.Timestamp).OrderBy(x => x.Timestamp)
+                        .FirstOrDefault();
+                    if (red == null)
+                        continue;
 
-                    if (gap < 0) continue;
+                    double trendLineGapTimeCounter = 0;
 
-                    AddGapToCounters(phaseTracker, gap);
+                    var phaseTracker = new LeftTurnGapAnalysisChart.PhaseLeftTurnGapTracker
+                        {GreenTime = green.Timestamp};
 
-                    if (gap >= LeftTurnGapAnalysisOptions.TrendLineGapThreshold)
+                    var gapsList = new List<Controller_Event_Log>();
+                    gapsList.Add(green);
+                    gapsList.AddRange(orderedDetectorCallList.Where(x =>
+                        x.Timestamp > green.Timestamp && x.Timestamp < red.Timestamp));
+                    gapsList.Add(red);
+
+                    for (var i = 1; i < gapsList.Count; i++)
                     {
-                        trendLineGapTimeCounter += gap;
+                        var gap = gapsList[i].Timestamp.TimeOfDay.TotalSeconds -
+                                  gapsList[i - 1].Timestamp.TimeOfDay.TotalSeconds;
+
+                        if (gap < 0) continue;
+
+                        AddGapToCounters(phaseTracker, gap);
+
+                        if (gap >= LeftTurnGapAnalysisOptions.TrendLineGapThreshold)
+                        {
+                            trendLineGapTimeCounter += gap;
+                        }
+
+                        if (LeftTurnGapAnalysisOptions.SumDurationGap1.HasValue &&
+                            gap >= LeftTurnGapAnalysisOptions.SumDurationGap1.Value)
+                        {
+                            SumDuration1 += gap;
+                        }
+
+                        if (LeftTurnGapAnalysisOptions.SumDurationGap2.HasValue &&
+                            gap >= LeftTurnGapAnalysisOptions.SumDurationGap2.Value)
+                        {
+                            SumDuration2 += gap;
+                        }
+
+                        if (LeftTurnGapAnalysisOptions.SumDurationGap3.HasValue &&
+                            gap >= LeftTurnGapAnalysisOptions.SumDurationGap3.Value)
+                        {
+                            SumDuration3 += gap;
+                        }
                     }
 
-                    if (LeftTurnGapAnalysisOptions.SumDurationGap1.HasValue &&
-                        gap >= LeftTurnGapAnalysisOptions.SumDurationGap1.Value)
-                    {
-                        SumDuration1 += gap;
-                    }
-                    if (LeftTurnGapAnalysisOptions.SumDurationGap2.HasValue &&
-                        gap >= LeftTurnGapAnalysisOptions.SumDurationGap2.Value)
-                    {
-                        SumDuration2 += gap;
-                    }
-                    if (LeftTurnGapAnalysisOptions.SumDurationGap3.HasValue &&
-                        gap >= LeftTurnGapAnalysisOptions.SumDurationGap3.Value)
-                    {
-                        SumDuration3 += gap;
-                    }
+                    //Decimal rounding errors can cause the number to be > 100
+                    var percentTurnable =
+                        Math.Min(trendLineGapTimeCounter / (red.Timestamp - green.Timestamp).TotalSeconds, 100);
+                    SumGreenTime += (red.Timestamp - green.Timestamp).TotalSeconds;
+                    phaseTracker.PercentPhaseTurnable = percentTurnable;
+
+                    phaseTrackerList.Add(phaseTracker);
                 }
-
-                //Decimal rounding errors can cause the number to be > 100
-                var percentTurnable =
-                    Math.Min(trendLineGapTimeCounter / (red.Timestamp - green.Timestamp).TotalSeconds, 100);
-                SumGreenTime += (red.Timestamp - green.Timestamp).TotalSeconds;
-                phaseTracker.PercentPhaseTurnable = percentTurnable;
-
-                phaseTrackerList.Add(phaseTracker);
             }
+
             return phaseTrackerList;
         }
 

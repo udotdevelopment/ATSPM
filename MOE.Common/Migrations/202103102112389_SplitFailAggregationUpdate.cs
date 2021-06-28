@@ -7,7 +7,7 @@
     {
         public override void Up()
         {
-            DropPrimaryKey("dbo.ApproachSplitFailAggregations");
+            //DropPrimaryKey("dbo.ApproachSplitFailAggregations");
             AddColumn("dbo.ApproachSplitFailAggregations", "SignalId", c => c.String(nullable: false, maxLength: 128));
             AddColumn("dbo.ApproachSplitFailAggregations", "GreenOccupancySum", c => c.Int(nullable: false));
             AddColumn("dbo.ApproachSplitFailAggregations", "RedOccupancySum", c => c.Int(nullable: false));

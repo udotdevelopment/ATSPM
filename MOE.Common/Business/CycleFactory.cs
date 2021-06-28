@@ -13,9 +13,9 @@ namespace MOE.Common.Business
         public static List<RedToRedCycle> GetRedToRedCycles(Approach approach, DateTime startTime, DateTime endTime,
             bool getPermissivePhase, List<Controller_Event_Log> cycleEvents)
         {
-            if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) !=
-                RedToRedCycle.EventType.ChangeToRed)
-                GetEventsToCompleteCycle(getPermissivePhase, endTime, approach, cycleEvents);
+            //if (cycleEvents != null && cycleEvents.Count > 0 && (GetEventType(cycleEvents.LastOrDefault().EventCode) !=
+            //    RedToRedCycle.EventType.ChangeToRed || cycleEvents.LastOrDefault().Timestamp < endTime))
+            //    GetEventsToCompleteCycle(getPermissivePhase, endTime, approach, cycleEvents);
             var cycles = new List<RedToRedCycle>();
             for (var i = 0; i < cycleEvents.Count; i++)
                 if (i < cycleEvents.Count - 3
@@ -23,9 +23,13 @@ namespace MOE.Common.Business
                     && GetEventType(cycleEvents[i + 1].EventCode) == RedToRedCycle.EventType.ChangeToGreen
                     && GetEventType(cycleEvents[i + 2].EventCode) == RedToRedCycle.EventType.ChangeToYellow
                     && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToRed)
+                {
                     cycles.Add(new RedToRedCycle(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp,
                         cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp));
-            return cycles;
+                    i += 2;
+                }
+
+            return cycles.Where(c => (c.EndTime >= startTime && c.EndTime <= endTime) || (c.StartTime <= endTime && c.StartTime >= startTime)).ToList();
         }
 
         
@@ -33,9 +37,9 @@ namespace MOE.Common.Business
         public static List<GreenToGreenCycle> GetGreenToGreenCycles(Approach approach, DateTime startTime, DateTime endTime,
             bool getPermissivePhase, List<Controller_Event_Log> cycleEvents)
         {
-            if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) !=
-                RedToRedCycle.EventType.ChangeToGreen)
-                GetEventsToCompleteCycle(getPermissivePhase, endTime, approach, cycleEvents);
+        //    if (cycleEvents != null && cycleEvents.Count > 0 && (GetEventType(cycleEvents.LastOrDefault().EventCode) !=
+        //        RedToRedCycle.EventType.ChangeToGreen || cycleEvents.LastOrDefault().Timestamp < endTime))
+        //        GetEventsToCompleteCycle(getPermissivePhase, endTime, approach, cycleEvents);
             var cycles = new List<GreenToGreenCycle>();
             for (var i = 0; i < cycleEvents.Count; i++)
                 if (i < cycleEvents.Count - 3
@@ -45,20 +49,14 @@ namespace MOE.Common.Business
                     && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToGreen)
                     cycles.Add(new GreenToGreenCycle(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp,
                         cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp));
-            return cycles;
+            return cycles.Where(c => (c.EndTime >= startTime && c.EndTime <= endTime) || (c.StartTime <= endTime && c.StartTime >= startTime)).ToList();
         }
 
         public static List<CyclePcd> GetPcdCycles(DateTime startDate, DateTime endDate, Approach approach,
             List<Controller_Event_Log> detectorEvents, bool getPermissivePhase, int? pcdCycleTime, SPM db)
         {
             double pcdCycleShift = pcdCycleTime ?? 0;
-            var cycleEvents = GetCycleEvents(getPermissivePhase, startDate, endDate, approach, db);
-            if (cycleEvents.Any() && GetEventType(cycleEvents.Last().EventCode) !=
-                RedToRedCycle.EventType.ChangeToRed)
-                GetEventsToCompleteCycle(getPermissivePhase, endDate, approach, cycleEvents);
-            if (cycleEvents.Any() && GetEventType(cycleEvents.First().EventCode) !=
-                RedToRedCycle.EventType.ChangeToRed)
-                GetEventsToStartCycle(getPermissivePhase, startDate, approach, cycleEvents);
+            var cycleEvents = GetCycleEvents(getPermissivePhase, startDate.AddSeconds(-900), endDate.AddSeconds(900), approach, db);
             var cycles = new List<CyclePcd>();
             for (var i = 0; i < cycleEvents.Count; i++)
                 if (i < cycleEvents.Count - 3
@@ -80,7 +78,7 @@ namespace MOE.Common.Business
                 }
 
             //var totalSortedEvents = cycles.Sum(d => d.DetectorEvents.Count);
-            return cycles;
+            return cycles.Where(c => (c.EndTime >= startDate && c.EndTime <= endDate) || (c.StartTime <= endDate && c.StartTime >= startDate)).ToList(); 
         }
 
         
@@ -89,8 +87,8 @@ namespace MOE.Common.Business
             Approach approach, bool getPermissivePhase)
         {
             var cycleEvents = GetDetailedCycleEvents(getPermissivePhase, startDate, endDate, approach);
-            if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) !=
-                RedToRedCycle.EventType.ChangeToRed)
+            if (cycleEvents != null && cycleEvents.Count > 0 && (GetEventType(cycleEvents.LastOrDefault().EventCode) !=
+                RedToRedCycle.EventType.ChangeToRed || cycleEvents.LastOrDefault().Timestamp < endDate))
                 GetEventsToCompleteCycle(getPermissivePhase, endDate, approach, cycleEvents);
             var cycles = new List<TimingAndActuationCycle>();
             DateTime dummyTime;
@@ -172,11 +170,11 @@ namespace MOE.Common.Business
             Models.Detector detector)
         {
             var cycleEvents = GetCycleEvents(getPermissivePhase, startDate, endDate, detector.Approach, null);
-            if (cycleEvents.Any() && GetEventType(cycleEvents.Last().EventCode) !=
-                RedToRedCycle.EventType.ChangeToRed)
+            if (cycleEvents.Any() && (GetEventType(cycleEvents.Last().EventCode) !=
+                RedToRedCycle.EventType.ChangeToRed || cycleEvents.LastOrDefault().Timestamp < endDate))
                 GetEventsToCompleteCycle(getPermissivePhase, endDate, detector.Approach, cycleEvents);
-            if (cycleEvents.Any() && GetEventType(cycleEvents.First().EventCode) !=
-                RedToRedCycle.EventType.ChangeToRed)
+            if (cycleEvents.Any() && (GetEventType(cycleEvents.First().EventCode) !=
+                RedToRedCycle.EventType.ChangeToRed || cycleEvents.LastOrDefault().Timestamp > startDate))
                 GetEventsToStartCycle(getPermissivePhase, startDate, detector.Approach, cycleEvents);
             var cycles = new List<CycleSpeed>();
             if (cycleEvents != null)
@@ -307,14 +305,7 @@ namespace MOE.Common.Business
         public static List<CycleSplitFail> GetSplitFailCycles(SplitFailOptions options, Approach approach,
             bool getPermissivePhase, SPM db)
         {
-            var cycleEvents = GetCycleEvents(getPermissivePhase, options.StartDate, options.EndDate, approach, db);
-            if (cycleEvents.Any())
-            {
-                if(GetEventType(cycleEvents.Last().EventCode) != RedToRedCycle.EventType.ChangeToGreen)
-                    GetEventsToCompleteCycle(getPermissivePhase, options.EndDate, approach, cycleEvents);
-                if (GetEventType(cycleEvents.First().EventCode) != RedToRedCycle.EventType.ChangeToGreen)
-                    GetEventsToStartCycle(getPermissivePhase, options.StartDate, approach, cycleEvents);
-            }
+            var cycleEvents = GetCycleEvents(getPermissivePhase, options.StartDate.AddSeconds(-900), options.EndDate.AddSeconds(900), approach, db);
             var terminationEvents =
                 GetTerminationEvents(getPermissivePhase, options.StartDate, options.EndDate, approach);
             var cycles = new List<CycleSplitFail>();
@@ -333,7 +324,8 @@ namespace MOE.Common.Business
                     //i = i + 2;
                 }
 
-            return cycles;
+            return cycles.Where(c =>
+                (c.EndTime >= options.StartDate && c.EndTime <= options.EndDate) || (c.StartTime <= options.EndDate && c.StartTime >= options.StartDate)).ToList();
         }
 
         private static CycleSplitFail.TerminationType GetTerminationEventBetweenStartAndEnd(DateTime start,

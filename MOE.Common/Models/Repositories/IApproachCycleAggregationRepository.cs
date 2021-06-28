@@ -8,11 +8,11 @@ namespace MOE.Common.Models.Repositories
         int GetApproachCycleCountAggregationByApproachIdAndDateRange(int versionId, DateTime start,
             DateTime end);
 
-        ApproachCycleAggregation Add(ApproachCycleAggregation priorityAggregation);
-        void Update(ApproachCycleAggregation priorityAggregation);
-        void Remove(ApproachCycleAggregation priorityAggregation);
+        PhaseCycleAggregation Add(PhaseCycleAggregation priorityAggregation);
+        void Update(PhaseCycleAggregation priorityAggregation);
+        void Remove(PhaseCycleAggregation priorityAggregation);
 
-        List<ApproachCycleAggregation> GetApproachCyclesAggregationByApproachIdAndDateRange(int approachId,
+        List<PhaseCycleAggregation> GetApproachCyclesAggregationByApproachIdAndDateRange(int approachId,
             DateTime startDate, DateTime endDate, bool getProtectedPhase);
     }
 }

@@ -18,7 +18,7 @@ namespace MOE.Common.Models.Repositories
             _db = context;
         }
 
-        public ApproachCycleAggregation Add(ApproachCycleAggregation approachCycleAggregation)
+        public PhaseCycleAggregation Add(PhaseCycleAggregation phaseCycleAggregation)
         {
             throw new NotImplementedException();
         }
@@ -36,12 +36,12 @@ namespace MOE.Common.Models.Repositories
             return cycles;
         }
 
-        public void Remove(ApproachCycleAggregation approachCycleAggregation)
+        public void Remove(PhaseCycleAggregation phaseCycleAggregation)
         {
             throw new NotImplementedException();
         }
 
-        public List<ApproachCycleAggregation> GetApproachCyclesAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate,
+        public List<PhaseCycleAggregation> GetApproachCyclesAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate,
             bool getProtectedPhase)
         {
             throw new NotImplementedException();
@@ -57,7 +57,7 @@ namespace MOE.Common.Models.Repositories
         //}
 
 
-        public void Update(ApproachCycleAggregation approachCycleAggregation)
+        public void Update(PhaseCycleAggregation phaseCycleAggregation)
         {
             throw new NotImplementedException();
         }

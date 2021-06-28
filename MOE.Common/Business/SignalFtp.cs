@@ -216,7 +216,7 @@ namespace MOE.Common.Business
                     Console.WriteLine(Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
                     return;
                 }
-
+                //var dirs = ftpClient.GetListing("/set1");
                 if (ftpClient.IsConnected && ftpClient.DirectoryExists(".." + Signal.ControllerType.FTPDirectory))
                 {
                     try

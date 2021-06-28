@@ -36,26 +36,26 @@ namespace ConvertDBForHistoricalConfigurations
         //Update Metrics with version information
         static void Main()
         {
-            GetApproachRouteRecords(); 
-            GetApproachRouteDetails(); 
+            //GetApproachRouteRecords(); 
+            //GetApproachRouteDetails(); 
 
-            GetMetricComments(); 
-            GetMetricCommentMetricTypes();
-            ClearMetricComments(); 
-            //ClearMetricCommentMetricTypes(); // Derek
-            //GetDetectionTypeMetricTypes();  //Andre
-            ClearDetectionTypeMetricTypes();  
-            GetActionLogMetricTypes();  
-            ClearActionLogMetricTypes();
-            GetActionLogs();  
-            //ClearActionLogs();  //Andre
+            //GetMetricComments(); 
+            //GetMetricCommentMetricTypes();
+            //ClearMetricComments(); 
+            ////ClearMetricCommentMetricTypes(); // Derek
+            ////GetDetectionTypeMetricTypes();  //Andre
+            //ClearDetectionTypeMetricTypes();  
+            //GetActionLogMetricTypes();  
+            //ClearActionLogMetricTypes();
+            //GetActionLogs();  
+            ////ClearActionLogs();  //Andre
 
             RunMigrations(); 
-            UpdateSignalRecordsWithStartDateAndVersion();
-            UpdateApproachesWithVersionId();
-            UpdateMetriCommentsWithVersionId();
-            CreateRoutes();
-            UpdateActionLogs();
+            //UpdateSignalRecordsWithStartDateAndVersion();
+            //UpdateApproachesWithVersionId();
+            //UpdateMetriCommentsWithVersionId();
+            //CreateRoutes();
+            //UpdateActionLogs();
         }
 
         private static void UpdateActionLogs()

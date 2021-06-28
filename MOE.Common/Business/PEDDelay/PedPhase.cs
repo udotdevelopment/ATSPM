@@ -48,7 +48,7 @@ namespace MOE.Common.Business.PEDDelay
 
         public double PedActuations
         {
-            get { return Plans.Sum(p => p.PedActuations); }
+            get; private set;
         }
 
         public List<PedCycle> Cycles { get; }
@@ -86,6 +86,7 @@ namespace MOE.Common.Business.PEDDelay
 
         private void GetCyclesForMaxtimeControllers()
         {
+            PedActuations = Convert.ToDouble(Events.Count(e => e.EventCode == 90));
             CombineSequential90Events();
             if (Events[0].EventCode == 90 && Events[1].EventCode == 21)
             {

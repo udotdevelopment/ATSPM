@@ -102,8 +102,8 @@ namespace SPM.Controllers
                     return GetPriorityChart(aggDataExportViewModel);
                 case 27:
                     return GetSignalEventCountChart(aggDataExportViewModel);
-                case 28:
-                    return GetApproachEventCountChart(aggDataExportViewModel);
+                //case 28:
+                //    return GetApproachEventCountChart(aggDataExportViewModel);
                 case 29:
                     return GetPhaseTerminationChart(aggDataExportViewModel);
                 case 30:
@@ -179,11 +179,11 @@ namespace SPM.Controllers
             SignalEventCountAggregationOptions options = new SignalEventCountAggregationOptions();
             return GetChart(aggDataExportViewModel, options);
         }
-        private ActionResult GetApproachEventCountChart(AggDataExportViewModel aggDataExportViewModel)
-        {
-            ApproachEventCountAggregationOptions options = new ApproachEventCountAggregationOptions();
-            return GetChart(aggDataExportViewModel, options);
-        }
+        //private ActionResult GetApproachEventCountChart(AggDataExportViewModel aggDataExportViewModel)
+        //{
+        //    ApproachEventCountAggregationOptions options = new ApproachEventCountAggregationOptions();
+        //    return GetChart(aggDataExportViewModel, options);
+        //}
         private ActionResult GetYraChart(AggDataExportViewModel aggDataExportViewModel)
         {
             ApproachYellowRedActivationsAggregationOptions options = new ApproachYellowRedActivationsAggregationOptions();
@@ -1004,9 +1004,9 @@ namespace SPM.Controllers
                 case 27:
                     AggregatedDataTypes = new SignalEventCountAggregationOptions().AggregatedDataTypes;
                     break;
-                case 28:
-                    AggregatedDataTypes = new ApproachEventCountAggregationOptions().AggregatedDataTypes;
-                    break;
+                //case 28:
+                //    AggregatedDataTypes = new ApproachEventCountAggregationOptions().AggregatedDataTypes;
+                //    break;
                 case 29:
                     AggregatedDataTypes = new PhaseTerminationAggregationOptions().AggregatedDataTypes;
                     break;

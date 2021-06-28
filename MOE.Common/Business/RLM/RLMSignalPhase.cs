@@ -139,29 +139,7 @@ namespace MOE.Common.Business
             //var cycles = CycleFactory.GetYellowToRedCycles(startDate, endDate, Approach, usePermissivePhase, db);
             List<int> li = new List<int> {1, 8, 9, 10, 11};
                 var cycleEvents = controllerRepository.GetEventsByEventCodesParam(Approach.SignalID,
-                    startDate, endDate,li , PhaseNumber);
-            List<Controller_Event_Log> beginningEvents= new List<Controller_Event_Log>();
-            List<Controller_Event_Log> endingEvents = new List<Controller_Event_Log>();
-            Parallel.Invoke(
-                () =>
-                {
-                    if (!cycleEvents.Any() || cycleEvents.First().EventCode != 8)
-                    {
-                        beginningEvents = GetEventsToStartCycle(usePermissivePhase, startDate, Approach);
-                    }
-                },
-                () =>
-                {
-                    if (!cycleEvents.Any() || cycleEvents.Last().EventCode != 1)
-                    {
-                        endingEvents = GetEventsToCompleteCycle(usePermissivePhase, endDate, Approach);
-                    }
-                });
-            if(beginningEvents.Any())
-                cycleEvents.InsertRange(0,beginningEvents);
-            if(endingEvents.Any())
-                cycleEvents.AddRange(endingEvents);
-
+                    startDate.AddSeconds(-900), endDate.AddSeconds(900),li , PhaseNumber);
             GetRedCycle(startDate, endDate, cycleEvents);
             Plans = new RLMPlanCollection(Cycles, Cycles.Any() ? Cycles.First().StartTime : startDate, Cycles.Any()? Cycles.Last().EndTime:endDate, SevereRedLightViolationSeconds, Approach, db);
                 if (Plans.PlanList.Count == 0)
@@ -177,28 +155,28 @@ namespace MOE.Common.Business
             var controllerRepository =
                 ControllerEventLogRepositoryFactory.Create(db);
             var cycleEvents = controllerRepository.GetEventsByEventCodesParam(Approach.SignalID,
-                startDate, endDate, li, Approach.ProtectedPhaseNumber);
-            List<Controller_Event_Log> beginningEvents = new List<Controller_Event_Log>();
-            List<Controller_Event_Log> endingEvents = new List<Controller_Event_Log>();
-            Parallel.Invoke(
-                () =>
-                {
-                    if (!cycleEvents.Any() || cycleEvents.First().EventCode != 63)
-                    {
-                       beginningEvents = GetEventsToStartCycle(usePermissive, startDate, Approach);
-                    }
-                },
-                () =>
-                {
-                    if (!cycleEvents.Any() || cycleEvents.Last().EventCode != 61)
-                    {
-                        endingEvents = GetEventsToCompleteCycle(usePermissive, endDate, Approach);
-                    }
-                });
-            if (beginningEvents.Any())
-                cycleEvents.InsertRange(0, beginningEvents);
-            if (endingEvents.Any())
-                cycleEvents.AddRange(endingEvents);
+                startDate.AddSeconds(-900), endDate.AddSeconds(900), li, Approach.ProtectedPhaseNumber);
+            //List<Controller_Event_Log> beginningEvents = new List<Controller_Event_Log>();
+            //List<Controller_Event_Log> endingEvents = new List<Controller_Event_Log>();
+            //Parallel.Invoke(
+            //    () =>
+            //    {
+            //        if (!cycleEvents.Any() || cycleEvents.First().EventCode != 63)
+            //        {
+            //           beginningEvents = GetEventsToStartCycle(usePermissive, startDate, Approach);
+            //        }
+            //    },
+            //    () =>
+            //    {
+            //        if (!cycleEvents.Any() || cycleEvents.Last().EventCode != 61)
+            //        {
+            //            endingEvents = GetEventsToCompleteCycle(usePermissive, endDate, Approach);
+            //        }
+            //    });
+            //if (beginningEvents.Any())
+            //    cycleEvents.InsertRange(0, beginningEvents);
+            //if (endingEvents.Any())
+            //    cycleEvents.AddRange(endingEvents);
             GetRedCycle(startDate, endDate, cycleEvents);
             Plans = new RLMPlanCollection(Cycles, startDate, endDate, SevereRedLightViolationSeconds, Approach, db);
             if (Plans.PlanList.Count == 0)
@@ -274,7 +252,7 @@ namespace MOE.Common.Business
                     else if (cycle != null)
                     {
                         cycle.NextEvent(GetEventType(row.EventCode), row.Timestamp);
-                        if (cycle.Status == RLMCycle.NextEventResponse.GroupComplete)
+                        if (cycle.Status == RLMCycle.NextEventResponse.GroupComplete) //&&((cycle.StartTime <= endTime && cycle.StartTime >= startTime)|| (cycle.EndTime >= startTime && cycle.EndTime <= endTime)))
                         {
                             Cycles.Add(cycle);
                             cycle = null;
@@ -285,6 +263,7 @@ namespace MOE.Common.Business
                         }
                     }
             }
+            Cycles = Cycles.Where(c => (c.EndTime >= startTime && c.EndTime <= endTime) || (c.StartTime <= endTime && c.StartTime >= startTime)).ToList();
             AddDetectorData(startTime, endTime);
         }
 

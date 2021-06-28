@@ -68,14 +68,13 @@ namespace MOE.Common.Models
         public virtual DbSet<VersionAction> VersionActions { get; set; }
         public virtual DbSet<PreemptionAggregation> PreemptionAggregations { get; set; }
         public virtual DbSet<PriorityAggregation> PriorityAggregations { get; set; }
-        public virtual DbSet<ApproachCycleAggregation> ApproachCycleAggregations { get; set; }
+        public virtual DbSet<PhaseCycleAggregation> PhaseCycleAggregations { get; set; }
         public virtual DbSet<ApproachPcdAggregation> ApproachPcdAggregations { get; set; }
         public virtual DbSet<ApproachSplitFailAggregation> ApproachSplitFailAggregations { get; set; }
         public virtual DbSet<PhaseTerminationAggregation> PhaseTerminationAggregations { get; set; }
         public virtual DbSet<PhasePedAggregation> PhasePedAggregations { get; set; }
         public virtual DbSet<SignalEventCountAggregation> SignalEventCountAggregations { get; set; }
-        public virtual DbSet<ApproachEventCountAggregation> ApproachEventCountAggregations { get; set; }
-        public virtual DbSet<DetectorEventCountAggregation> DetectorEventCountAggregations { get; set; }
+       public virtual DbSet<DetectorEventCountAggregation> DetectorEventCountAggregations { get; set; }
 
         public virtual DbSet<TablePartitionProcessed> TablePartitionProcesseds { get; set; }
         public virtual DbSet<StatusOfProcessedTable> StatusOfProcessedTables { get; set; }
@@ -89,10 +88,10 @@ namespace MOE.Common.Models
         }
 
         public virtual DbSet<ApproachSpeedAggregation> ApproachSpeedAggregations { get; set; }
-        public virtual DbSet<DetectorAggregation> DetectorAggregations { get; set; }
         public virtual DbSet<SignalPlanAggregation> SignalPlanAggregations { get; set; }
         public virtual DbSet<PhaseSplitMonitorAggregation> PhaseSplitMonitorAggregationsAggregations { get; set; }
         public virtual DbSet<PhaseLeftTurnGapAggregation> PhaseLeftTurnGapAggregations { get; set; }
+        public virtual DbSet<SignalToAggregate> SignalsToAggregate { get; set; }
 
         public static SPM Create()
         {

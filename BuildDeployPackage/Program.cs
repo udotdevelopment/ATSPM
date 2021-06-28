@@ -35,6 +35,7 @@ namespace BuildDeployPackage
             ModifyConnectionStrings();
             CreateParentFolder();
             CreateAsyncGetMaxTimeRecordsDeploy();
+            CreateGetMaxTimeRecordsDeploy();
             CreateATSPMAPIDeploy();
             CreateDecodePeekLogsDeploy();
             CreateDecodeSiemensLogsDeploy();
@@ -204,6 +205,13 @@ namespace BuildDeployPackage
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             string appLocation = appSettings["AsyncGetMaxTimeRecordsProjectFolderLocation"];
             CopyBinFiles(appLocation,true);
+        }
+
+        private static void CreateGetMaxTimeRecordsDeploy()
+        {
+            NameValueCollection appSettings = ConfigurationManager.AppSettings;
+            string appLocation = appSettings["GetMaxTimeRecordsProjectFolderLocation"];
+            CopyBinFiles(appLocation, true);
         }
 
         private static void CreateAggregateDeploy()

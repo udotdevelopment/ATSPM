@@ -7,7 +7,7 @@
     {
         public override void Up()
         {
-            DropPrimaryKey("dbo.PhasePedAggregations", "PK_PhasePedAggregations");
+            DropPrimaryKey("dbo.PhasePedAggregations");
             AddColumn("dbo.PhasePedAggregations", "PedCycles", c => c.Int(nullable: false));
             AddColumn("dbo.PhasePedAggregations", "PedDelaySum", c => c.Int(nullable: false));
             AddColumn("dbo.PhasePedAggregations", "MinPedDelay", c => c.Int(nullable: false));

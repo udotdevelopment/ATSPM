@@ -16,14 +16,18 @@ namespace MOE.Common.Models
         [Key]
         [Required]
         [Column(Order = 1)]
+        [StringLength(10)]
         public string SignalId { get; set; }
+
+        [Key]
+        [Required]
+        [Column(Order = 10)]
+        public int PhaseNumber { get; set; }
 
         [Key]
         [Required]
         [Column(Order = 2)]
         public int ApproachId { get; set; }
-
-        public virtual Approach Approach { get; set; }
 
         [Required]
         [Column(Order = 3)]
@@ -54,15 +58,10 @@ namespace MOE.Common.Models
         [Column(Order = 9)]
         public int Cycles { get; set; }
 
-        [Required]
-        [Column(Order = 10)]
-        public int PhaseNumber { get; set; }
-
         public sealed class ApproachSplitFailAggregationClassMap : ClassMap<ApproachSplitFailAggregation>
         {
             public ApproachSplitFailAggregationClassMap()
             {
-                Map(m => m.Approach).Ignore();
                 Map(m => m.BinStartTime).Name("Bin Start Time");
                 Map(m => m.SignalId).Name("Signal ID");
                 Map(m => m.ApproachId).Name("Approach ID");

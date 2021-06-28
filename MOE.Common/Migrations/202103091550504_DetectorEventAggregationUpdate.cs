@@ -7,7 +7,7 @@
     {
         public override void Up()
         {
-            DropPrimaryKey("dbo.DetectorAggregations");
+            DropPrimaryKey("dbo.DetectorAggregations", "PK_dbo.DetectorAggregations");
             AddColumn("dbo.DetectorAggregations", "SignalId", c => c.String(nullable: false, maxLength: 128));
             AddColumn("dbo.DetectorAggregations", "ApproachId", c => c.Int(nullable: false));
             AddColumn("dbo.DetectorAggregations", "MovementTypeId", c => c.Int(nullable: false));

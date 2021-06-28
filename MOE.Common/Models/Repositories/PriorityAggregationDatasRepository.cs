@@ -31,8 +31,7 @@ namespace MOE.Common.Models.Repositories
             DateTime end)
         {
             var records = (from r in _db.PriorityAggregations
-                where r.VersionId == versionId
-                      && r.BinStartTime >= start && r.BinStartTime <= end
+                where r.BinStartTime >= start && r.BinStartTime <= end
                 select r).ToList();
 
             return records;
@@ -47,7 +46,7 @@ namespace MOE.Common.Models.Repositories
             DateTime end)
         {
             return db.PriorityAggregations
-                .Where(p => p.SignalID == signalId && p.BinStartTime >= start && p.BinStartTime < end).ToList();
+                .Where(p => p.SignalId == signalId && p.BinStartTime >= start && p.BinStartTime < end).ToList();
         }
 
 

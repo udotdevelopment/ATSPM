@@ -18,10 +18,24 @@ namespace MOE.Common.Models
 
         [Key]
         [Required]
+        [Column(Order = 7)]
+        [StringLength(10)]
+        public string SignalId { get; set; }
+
+        [Key]
+        [Required]
+        [Column(Order = 8)]
+        public int PhaseNumber { get; set; }
+
+        [Key]
+        [Required]
+        [Column(Order = 5)]
+        public bool IsProtectedPhase { get; set; }
+
+
+        [Required]
         [Column(Order = 1)]
         public int ApproachId { get; set; }
-
-        public virtual Approach Approach { get; set; }
 
         [Required]
         [Column(Order = 2)]
@@ -35,22 +49,12 @@ namespace MOE.Common.Models
         [Column(Order = 4)]
         public int ArrivalsOnYellow { get; set; }
 
-        [Key]
-        [Required]
-        [Column(Order = 5)]
-        public bool IsProtectedPhase { get; set; }
 
         [Required]
         [Column(Order = 6)]
         public int Volume { get; set; }
 
-        [Required]
-        [Column(Order = 7)]
-        public string SignalId { get; set; }
-
-        [Required]
-        [Column(Order = 8)]
-        public int PhaseNumber { get; set; }
+        
 
         [Required]
         [Column(Order = 9)]
@@ -58,9 +62,7 @@ namespace MOE.Common.Models
 
         public sealed class ApproachPcdAggregationClassMap : ClassMap<ApproachPcdAggregation>
         {
-            public ApproachPcdAggregationClassMap()
-            {
-                Map(m => m.Approach).Ignore();
+            public ApproachPcdAggregationClassMap() { 
         //        Map(m => m.Id).Name("Record Number");
                 Map(m => m.BinStartTime).Name("Bin Start Time");
                 Map(m => m.ApproachId).Name("Approach ID");

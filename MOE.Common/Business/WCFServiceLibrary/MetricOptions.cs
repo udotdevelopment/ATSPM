@@ -40,7 +40,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(ApproachSpeedAggregationOptions))]
     [KnownType(typeof(ApproachCycleAggregationOptions))]
     [KnownType(typeof(SignalEventCountAggregationOptions))]
-    [KnownType(typeof(ApproachEventCountAggregationOptions))]
     [KnownType(typeof(PhaseTerminationAggregationOptions))]
     [KnownType(typeof(PhasePedAggregationOptions))]
     [KnownType(typeof(TimingAndActuationsOptions))]
