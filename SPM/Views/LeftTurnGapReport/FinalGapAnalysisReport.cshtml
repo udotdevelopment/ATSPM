@@ -1,0 +1,49 @@
+﻿@model SPM.Models.FinalGapAnalysisReportViewModel
+
+Signal data check complete please note the following results:
+<ul>
+    @if (Model.GapDurationConsiderForStudy.HasValue)
+    {
+        if (Model.GapDurationConsiderForStudy.Value)
+        {
+            <li>Gap Duration: <label class="alert-success">Consider for Study</label></li>
+        }
+        else
+        {
+            <li>Gap Duration: <label class="alert-danger">Do not Consider for Study</label></li>
+        }
+    }
+    @if (Model.SplitFailsConsiderForStudy.HasValue)
+    {
+        if (Model.SplitFailsConsiderForStudy.Value)
+        {
+            <li>Split Fails: <label class="alert-success">Consider for Study</label></li>
+        }
+        else
+        {
+            <li>Split Fails: <label class="alert-danger">Do not Consider for Study</label></li>
+        }
+    }
+    @if (Model.PedActuationsConsiderForStudy.HasValue)
+    {
+        if (Model.PedActuationsConsiderForStudy.Value)
+        {
+            <li>Ped Actuations: <label class="alert-success">Consider for Study</label></li>
+        }
+        else
+        {
+            <li>Ped Actuations: <label class="alert-danger">Do not Consider for Study</label></li>
+        }
+    }
+    @if (Model.VolumesConsiderForStudy.HasValue)
+    {
+        if (Model.VolumesConsiderForStudy.Value)
+        {
+            <li>Volumes: <label class="alert-success">Consider for Study</label></li>
+        }
+        else
+        {
+            <li>Volumes: <label class="alert-danger">Do not Consider for Study</label></li>
+        }
+    }
+</ul>

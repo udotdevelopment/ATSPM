@@ -1194,7 +1194,7 @@ namespace MOE.Common.Business.DataAggregation
                 else
                 {
                     versionIds = db.Signals.Where(
-                            r => r.VersionActionId != 3 && r.Start < dt //&& (r.SignalID == "7115")
+                            r => r.VersionActionId != 3 && r.Start < dt && (r.SignalID == "4395")
                         ).GroupBy(r => r.SignalID).Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault())
                         .Select(s => s.VersionID).ToList();
                 }

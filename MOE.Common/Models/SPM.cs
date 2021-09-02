@@ -25,7 +25,6 @@ namespace MOE.Common.Models
 
         public SPM(string ConnectionString) : base(ConnectionString)
         {
-            
             Database.SetInitializer(new CustomInitializer());
             Database.Initialize(true);
         }

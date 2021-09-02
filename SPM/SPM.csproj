@@ -389,13 +389,22 @@
     <Compile Include="Controllers\ApproachesController.cs" />
     <Compile Include="Controllers\ArchiveSettingsOldController.cs" />
     <Compile Include="Controllers\ConfigurationTableController.cs" />
+    <Compile Include="Models\ConflictingVolumesAnalysisReportParameters.cs" />
+    <Compile Include="Models\ConflictingVolumesAnalysisReportViewModel.cs" />
     <Compile Include="Controllers\DatabaseArchiveSettingsController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\DefaultChartsController.cs" />
     <Compile Include="Controllers\DetectorCommentsController.cs" />
     <Compile Include="Controllers\DetectorsController.cs" />
     <Compile Include="Controllers\FAQsController.cs" />
+    <Compile Include="Models\PedestrianCallAnalysisReportParameters.cs" />
+    <Compile Include="Models\PedestrianCallAnalysisReportViewModel.cs" />
+    <Compile Include="Models\SplitFailAnalysisReportParameters.cs" />
+    <Compile Include="Models\SplitFailAnalysisReportViewModel.cs" />
+    <Compile Include="Models\FinalGapAnalysisReportParameters.cs" />
+    <Compile Include="Models\FinalGapAnalysisReportViewModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LeftTurnGapReportController.cs" />
     <Compile Include="Controllers\LinkPivotController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MenusController.cs" />
@@ -404,6 +413,8 @@
     <Compile Include="Controllers\RoutePhaseDirectionsController.cs" />
     <Compile Include="Controllers\RoutesController.cs" />
     <Compile Include="Controllers\RouteSignalsController.cs" />
+    <Compile Include="Models\SignalDataCheckReportViewModel.cs" />
+    <Compile Include="Models\SignalDataCheckReportParameters.cs" />
     <Compile Include="Controllers\SignalsController.cs" />
     <Compile Include="Controllers\SPMUsersController.cs" />
     <Compile Include="Controllers\GeneralSettingsController.cs" />
@@ -415,6 +426,8 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArchiveSettingsViewModel.cs" />
     <Compile Include="Models\AggDataExportViewModel.cs" />
+    <Compile Include="Models\DateSelectorViewModel.cs" />
+    <Compile Include="Models\LeftTurnGapReportViewModel.cs" />
     <Compile Include="Models\MetricAndXmlResultViewModel.cs" />
     <Compile Include="Models\MetricResultViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -586,6 +599,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\LeftTurnReport.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
@@ -820,6 +834,14 @@
     <Content Include="Views\DatabaseArchiveSettings\Edit.cshtml" />
     <Content Include="Views\DatabaseArchiveSettings\EditorTemplates\DatabaseArchiveExcludedSignal.cshtml" />
     <Content Include="Views\DefaultCharts\LeftTurnGapAnalysisOptions.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\Index.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\DateSelection.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\LeftTurnCheckBoxes.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\SignalDataCheckReport.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\FinalGapAnalysisReport.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\SplitFailAnalysisReport.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\PedestrianCallAnalysisReport.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\ConflictingVolumesAnalysisReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -82,9 +82,13 @@ namespace MOE.Common.Models
         public List<Detector> GetDetectorsForSignal()
         {
             var detectors = new List<Detector>();
-            foreach (var a in Approaches.OrderBy(a => a.ProtectedPhaseNumber))
-            foreach (var d in a.Detectors)
-                detectors.Add(d);
+            if (Approaches != null)
+            {
+                foreach (var a in Approaches.OrderBy(a => a.ProtectedPhaseNumber))
+                foreach (var d in a.Detectors)
+                    detectors.Add(d);
+            }
+
             return detectors.OrderBy(d => d.DetectorID).ToList();
         }
 

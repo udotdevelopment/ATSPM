@@ -26,6 +26,7 @@ namespace NEWDecodeandImportASC3Logs
             var appSettings = ConfigurationManager.AppSettings;
             List<string> dirList = new List<string>();
             string cwd = appSettings["ASC3LogsPath"];
+            int maxFilesToImportPerSignal = Convert.ToInt32(appSettings["MaxFilesPerSignalToImport"]);
             string startSignal = null;
             string endSignal = null;
             if (args.Length == 2)
@@ -45,8 +46,10 @@ namespace NEWDecodeandImportASC3Logs
                 string signalId;
                 string[] fileNames;
                 GetFileNamesAndSignalId(dir, out signalId, out fileNames);
-                if ((args.Length == 2 && String.Compare(signalId, startSignal, comparisonType:StringComparison.OrdinalIgnoreCase) > 0 &&
-                    String.Compare(signalId, endSignal, comparisonType: StringComparison.OrdinalIgnoreCase) < 0) || args.Length ==0)
+                if ((args.Length == 2 && (String.Compare(signalId, startSignal, comparisonType:StringComparison.OrdinalIgnoreCase) > 0 ||
+                                          String.Compare(signalId, startSignal, comparisonType: StringComparison.OrdinalIgnoreCase) == 0 ) &&
+                    (String.Compare(signalId, endSignal, comparisonType: StringComparison.OrdinalIgnoreCase) < 0 || 
+                     String.Compare(signalId, endSignal, comparisonType: StringComparison.OrdinalIgnoreCase) == 0)) || args.Length ==0)
                 {
                     var toDelete = new ConcurrentBag<string>();
                     var mergedEventsTable = new BlockingCollection<MOE.Common.Data.MOE.Controller_Event_LogRow>();
@@ -54,13 +57,14 @@ namespace NEWDecodeandImportASC3Logs
                     {
                         Console.WriteLine("-----------------------------Starting Signal " + dir);
                     }
-                    foreach (var fileName in fileNames)
+                    //foreach (var fileName in fileNames)
+                        for(int i = 0; i < maxFilesToImportPerSignal && i < fileNames.Length; i++)
                     {
                         try
                         {
-                            MOE.Common.Business.LogDecoder.Asc3Decoder.DecodeAsc3File(fileName, signalId,
+                            MOE.Common.Business.LogDecoder.Asc3Decoder.DecodeAsc3File(fileNames[i], signalId,
                                 mergedEventsTable, Convert.ToDateTime(appSettings["EarliestAcceptableDate"]));
-                            toDelete.Add(fileName);
+                            toDelete.Add(fileNames[i]);
                         }
                         catch (Exception ex)
                         {

@@ -1,0 +1,23 @@
+﻿@model IEnumerable<SPM.Models.CheckModel>
+
+<div class="card">
+    <div class="card-header">Left Turn Gap Options</div>
+    <div class="card-body">
+        @foreach (var turn in Model)
+        {
+            <table>
+                <tr>
+                    <td>
+                        @Html.CheckBoxFor(it => turn.Checked, new { Style = "vertical- align:3px}" })
+                    </td>
+                    <td>
+                        @Html.HiddenFor(it => turn.Id)
+                        @Html.DisplayFor(it => turn.Name)
+                    </td>
+                </tr>
+            </table>
+
+
+        }
+    </div>
+</div>

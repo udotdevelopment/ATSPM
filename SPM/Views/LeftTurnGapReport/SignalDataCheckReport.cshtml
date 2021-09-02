@@ -1,0 +1,39 @@
+﻿@model SPM.Models.SignalDataCheckReportViewModel
+
+Signal data check complete please note the following results:
+<ul>
+    @if (Model.LeftTurnVolumesOk.HasValue)
+    {
+        if (Model.LeftTurnVolumesOk.Value)
+        {
+            <li>The LT Volumes are below 60 vph you may want to <label class="alert-danger">Check Detector</label></li>
+        }
+        else
+        {
+            <li>The LT Volumes are <label class="alert-success">OK</label></li>
+        }
+    }
+    @if (Model.GapOutOk.HasValue)
+    {
+        if (Model.GapOutOk.Value)
+        {
+            <li>70% or more of cycles Gap Out you may want to <label class="alert-danger">Check Detector</label></li>
+        }
+        else
+        {
+            <li>Gap Out Percentage is <label class="alert-success">OK</label></li>
+        }
+    }
+    @if (Model.PedCyclesOk.HasValue)
+    {
+        if (Model.PedCyclesOk.Value)
+        {
+            <li>More than 30% of cycles have pedestrian calls you may want to <label class="alert-danger">Review Crash History</label></li>
+        }
+        else
+        {
+            <li>Pedestrian Cycles are <label class="alert-success">OK</label></li>
+        }
+    }
+</ul>
+<label class="BoldText">It is always good practice to review the Split Pattern performance in conjunction with using this report.</label>
