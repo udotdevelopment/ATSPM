@@ -4,6 +4,8 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Mvc;
 using MOE.Common.Models;
@@ -33,11 +35,31 @@ namespace SPM.Controllers
             return PartialView("LeftTurnCheckBoxes",checkModels);
         }
 
-        public ActionResult GetSignalDataCheckReport(SignalDataCheckReportParameters parameters)
-        {
-            SignalDataCheckReportViewModel signalDataCheckReportViewModel = new SignalDataCheckReportViewModel(true, false, true);
-            return PartialView("SignalDataCheckReport", signalDataCheckReportViewModel);
-        }
+        //public async ActionResult GetSignalDataCheckReport(SignalDataCheckReportParameters parameters)
+        //{
+        //    using (var client = new HttpClient())
+        //    {
+        //        //Passing service base url
+        //        client.BaseAddress = new Uri("");
+        //        client.DefaultRequestHeaders.Clear();
+        //        //Define request data format
+        //        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        //        //Sending request to find web api REST service resource GetAllEmployees using HttpClient
+        //        HttpResponseMessage Res = await client.GetAsync("api/DataCheck/Get");
+        //        //Checking the response is successful or not which is sent using HttpClient
+        //        if (Res.IsSuccessStatusCode)
+        //        {
+        //            //Storing the response details recieved from web api
+        //            var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+        //            //Deserializing the response recieved from web api and storing into the Employee list
+        //            EmpInfo = JsonConvert.DeserializeObject<List<Employee>>(EmpResponse);
+        //        }
+        //        //returning the employee list to view
+        //        return View(EmpInfo);
+        //    }
+        //    SignalDataCheckReportViewModel signalDataCheckReportViewModel = new SignalDataCheckReportViewModel(true, false, true);
+        //    return PartialView("SignalDataCheckReport", signalDataCheckReportViewModel);
+        //}
 
         public ActionResult GetFinalGapAnalysisReport(FinalGapAnalysisReportParameters parameters)
         {
