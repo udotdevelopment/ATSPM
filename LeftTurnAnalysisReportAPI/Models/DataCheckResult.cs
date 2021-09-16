@@ -15,33 +15,25 @@ namespace LeftTurnAnalysisReportAPI.Models
         //public bool? GapOutOk { get; set; }
         //public bool? PedCyclesOk { get; set; }
 
-        public DataCheckResult(bool checkLeftTurnVolumes, bool checkGapOut, bool checkPedCycles)
+        public DataCheckResult(string signalId)
         {
-            if (checkLeftTurnVolumes)
-            {
-                SetLeftTurnVolumesResult();
-            }
-            if(checkGapOut)
-            {
-                SetGapOutResult();
-            }
-            if(checkPedCycles)
-            {
-                SetPedCyclesResult();
-            }
+             SetLeftTurnVolumesResult(signalId);
+             SetGapOutResult(signalId);
+             SetPedCyclesResult(signalId);
+            
         }
 
-        public void SetLeftTurnVolumesResult()
+        public void SetLeftTurnVolumesResult(string signalId)
         {
             LeftTurnVolumeOk = true;
         }
 
-        public void SetGapOutResult()
+        public void SetGapOutResult(string signalId)
         {
             GapOutOk = true;
         }
 
-        public void SetPedCyclesResult()
+        public void SetPedCyclesResult(string signalId)
         {
             PedCycleOk = true;
         }

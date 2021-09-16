@@ -15,7 +15,10 @@ $('#RunChecks').click(function () { RunChecks(); });
 
 function RunChecks() {
     var tosend = {};
-    tosend.parameters = null;
+    tosend.parameters = {};
+    tosend.parameters.CheckLeftTurnVolume = true;
+    tosend.parameters.CheckGapOut = true;
+    tosend.parameters.CheckPedCycle = true;
     $.get(urlpathGetSignalDataCheckReport,
         tosend,
         function(data) {

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MOE.Common;
+using System.Web.Http.Cors;
 
 namespace LeftTurnAnalysisReportAPI.Controllers
 {
@@ -13,9 +14,10 @@ namespace LeftTurnAnalysisReportAPI.Controllers
     public class DataCheckController : Controller
     {
         [HttpGet]
-        public Models.IDataCheckResult Get(bool checkLeftTurnVolumes, bool checkGapOut, bool checkPedCycle)
+        [EnableCors(origins: "https://localhost:44361/, https://staging.udottraffic.utah.gov, https://udottraffic.utah.gov", headers: "*", methods: "*")]
+        public Models.IDataCheckResult Get(string signalId)
         {
-            var dataCheck = new Models.DataCheckResult(checkLeftTurnVolumes, checkGapOut, checkPedCycle);
+            var dataCheck = new Models.DataCheckResult(signalId);
             return dataCheck;
         }
     }

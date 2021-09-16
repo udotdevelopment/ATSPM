@@ -80,7 +80,7 @@
                     RedTimeSum = c.Int(false),
                     Cycles = c.Int(false)
                 });
-            AddPrimaryKey("dbo.ApproachSplitFailAggregations", new[] { "BinStartTime", "SignalId", "PhaseNumber", "IsProtectedPhase" });
+            AddPrimaryKey("dbo.ApproachSplitFailAggregations", new[] { "BinStartTime", "SignalId", "ApproachId", "PhaseNumber", "IsProtectedPhase" });
 
             DropTable("dbo.ApproachYellowRedActivationAggregations");
             CreateTable(

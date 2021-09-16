@@ -10,9 +10,9 @@ namespace LeftTurnAnalysisReportAPI.Models
         public bool? LeftTurnVolumeOk { get;  }
         public bool? GapOutOk { get;  }
         public bool? PedCycleOk { get; }
-        void  SetLeftTurnVolumesResult();
-        void  SetGapOutResult();
-        void  SetPedCyclesResult();
+        void  SetLeftTurnVolumesResult(string signalId);
+        void  SetGapOutResult(string signalId);
+        void  SetPedCyclesResult(string signalId);
 
     }
 }

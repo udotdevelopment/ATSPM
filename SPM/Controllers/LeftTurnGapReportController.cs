@@ -35,31 +35,39 @@ namespace SPM.Controllers
             return PartialView("LeftTurnCheckBoxes",checkModels);
         }
 
-        //public async ActionResult GetSignalDataCheckReport(SignalDataCheckReportParameters parameters)
-        //{
-        //    using (var client = new HttpClient())
-        //    {
-        //        //Passing service base url
-        //        client.BaseAddress = new Uri("");
-        //        client.DefaultRequestHeaders.Clear();
-        //        //Define request data format
-        //        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        //        //Sending request to find web api REST service resource GetAllEmployees using HttpClient
-        //        HttpResponseMessage Res = await client.GetAsync("api/DataCheck/Get");
-        //        //Checking the response is successful or not which is sent using HttpClient
-        //        if (Res.IsSuccessStatusCode)
-        //        {
-        //            //Storing the response details recieved from web api
-        //            var EmpResponse = Res.Content.ReadAsStringAsync().Result;
-        //            //Deserializing the response recieved from web api and storing into the Employee list
-        //            EmpInfo = JsonConvert.DeserializeObject<List<Employee>>(EmpResponse);
-        //        }
-        //        //returning the employee list to view
-        //        return View(EmpInfo);
-        //    }
-        //    SignalDataCheckReportViewModel signalDataCheckReportViewModel = new SignalDataCheckReportViewModel(true, false, true);
-        //    return PartialView("SignalDataCheckReport", signalDataCheckReportViewModel);
-        //}
+        public ActionResult GetSignalDataCheckReport(string signalId)
+        {
+            string checkDataUrl = BuildUrlString(signalId);
+            SignalDataCheckReportViewModel signalDataCheckReportViewModel = new SignalDataCheckReportViewModel(true, false, true);
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(checkDataUrl);
+                //HTTP GET
+                var responseTask = client.GetAsync("https://localhost:44363/DataCheck?signalId=7412");
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<SignalDataCheckReportViewModel>();
+                    readTask.Wait();
+
+                    signalDataCheckReportViewModel = readTask.Result;
+                }
+                else //web api sent error response 
+                {
+                    return PartialView((Object)"There was an error while trying to get the signal check data.");
+                }
+            }
+            return PartialView("SignalDataCheckReport", signalDataCheckReportViewModel);
+        }
+
+        private static string BuildUrlString(string signalId)
+        {
+            string checkDataUrl = "https://localhost:44363/";            
+
+            return checkDataUrl;
+        }
 
         public ActionResult GetFinalGapAnalysisReport(FinalGapAnalysisReportParameters parameters)
         {
