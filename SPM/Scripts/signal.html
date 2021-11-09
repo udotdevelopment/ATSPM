@@ -1,0 +1,260 @@
+﻿<div id="signal-page" class="page-layout carded fullwidth" layout="row" ms-scroll >
+    <div class="top-bg md-accent-bg"></div>
+
+    <div class="center" layout="column" flex ms-scroll>
+        <!-- HEADER -->
+        <div class="header" layout="row" layout-align="start center">
+            <div class="white-fg" layout="row" layout-align="start center" flex>
+                <md-button class="goto-signal-button md-icon-button" aria-label="Go to Signals"
+                           ng-click="vm.goToSignals()">
+                    <md-icon md-font-icon="icon-arrow-left"></md-icon>
+                </md-button>
+                <div layout="row" layout-align="start center">
+                    <div layout="column" layout-align="start start">
+                        <div class="h2">
+                            {{vm.headerMessage}}
+                        </div>
+                        <div class="subtitle secondary-text">
+                            <span>Back to Signals</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- / HEADER -->
+        <!-- CONTENT -->
+        <md-card layout="row" ms-scroll>
+            <div class="signal-form-container md-background-bg " flex>
+                <div class="pb-16" layout="row" layout-align="start center" flex>
+                    <md-icon md-font-icon="icon-traffic-light" class="icon s24" layout-align="start center"></md-icon>
+                    <div class="h2 secondary-text" layout-align="start center">Signal</div>
+                    <span flex></span>
+                </div>
+                <md-tabs layout-fill>
+                    <md-tab>
+                        <md-tab-label>
+                            <span>Properties</span>
+                        </md-tab-label>
+                        <md-tab-body ms-scroll>
+                            <form id="signalEditForm" class="padding-top-10" name="vm.signalEditForm"
+                                  ng-submit="vm.saveSignal()">
+                                <div class="pb-16" layout-gt-sm="row">
+                                    <md-input-container class="md-block" flex>
+                                        <label>ID</label>
+                                        <input type="text" ng-model="vm.signal.SignalID" disabled>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex>
+                                        <label>Controller Type</label>
+                                        <md-select ng-model="vm.signal.ControllerTypeID" required>
+                                            <md-option ng-repeat="cType in vm.lookups.ControllerTypes"
+                                                       ng-value="cType.ID">
+                                                {{cType.Description}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex>
+                                        <label>Enabled</label>
+                                        <input type="text" ng-model="vm.signal.Enabled" required>
+                                    </md-input-container>
+                                </div>
+                                <div class="pb-16" layout-gt-sm="row">
+                                    <md-input-container class="md-block" flex>
+                                        <label>Primary Name</label>
+                                        <input type="text" ng-model="vm.signal.PrimaryName" required>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex>
+                                        <label>Secondary Name</label>
+                                        <input type="text" ng-model="vm.signal.SecondaryName" required>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex>
+                                        <label>Versions</label>
+                                        <md-select ng-model="vm.signal.VersionID" ng-value="vm.signal.VersionID" required ng-change="vm.selectChanged(vm.signal.VersionID)">
+                                            <md-option ng-repeat="ver in vm.versions"
+                                                       ng-value="ver.VersionID">
+                                                {{ver.VersionID}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div class="pb-16" layout-gt-sm="row" flex="100">
+                                    <md-input-container class="md-block" flex>
+                                        <label>Latitude</label>
+                                        <input id="add-signal-latitude" type="number" step="any"
+                                               title="Please enter a valid latitude in decimal degrees format"
+                                               ng-model="vm.signal.Latitude" required>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex>
+                                        <label>Longitude</label>
+                                        <input id="add-signal-longitude" type="number" step="any"
+                                               title="Please enter a valid longitude in decimal degrees format"
+                                               ng-model="vm.signal.Longitude" required>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex>
+                                        <label>IP Address</label>
+                                        <input type="text" ng-model="vm.signal.IPAddress" required>
+                                    </md-input-container>
+                                </div>
+                                <div>
+                                    <div class="pb-16" layout-gt-sm="row" flex="100">
+                                        <md-input-container class="md-block" flex>
+                                            <label>Comment</label>
+                                            <input type="text" ng-model="vm.comment">
+                                        </md-input-container>
+                                        <md-input-container class="md-block" flex>
+                                            <label>Version Label</label>
+                                            <input type="text" ng-model="vm.signal.Note" required>
+                                        </md-input-container>
+                                        <md-input-container class="md-block" flex>
+                                            <label style="left:0px">Version Start</label>
+                                            <div flex-gt-xs>
+                                                <md-datepicker ng-model="vm.StartVersion" md-placeholder="Enter date" md-open-on-focus></md-datepicker>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <!--ng-click="vm.saveSignal()" ng-disabled="!vm.enableSaveButton()"-->
+                                    <md-button class="md-raised md-accent" ng-disabled="!vm.enableSaveButton()"
+                                               type="submit">Save</md-button>
+                                    <md-button class="md-raised md-warn md-accent" ng-click="vm.deleteSignalVersion()"
+                                               ng-show="!vm.newSignal">Delete</md-button>
+                                </div>
+                            </form>
+                        </md-tab-body>
+                    </md-tab>
+                    <!--<md-tab md-on-deselect="vm.changeValues()" ng-disabled="vm.signalEditForm.$invalid">
+                        <md-tab-label>
+                            <span>Location</span>
+                        </md-tab-label>
+                        <md-tab-body>
+                            <ms-widget layout-fill flippable="true" layout="column" flex class="map-widget">-->
+                                <!-- Front -->
+                                <!--<ms-widget-front layout-fill class="white-bg" id="map-widget-container">-->
+                                    <!-- <bing-map is-session-storage="false" show-traffic="true" show-all-signals="false"
+                                        style="height:100%; min-height: 100%; max-height: 100%" map-type="aerial"
+                                        show-only-signal-id="vm.signalID" hide-context-menu="true"></bing-map> -->
+                                    <!--<google-map style="height:100%; min-height: 100%; max-height: 100%" edit-signal="true"
+                                                is-session-storage="false" draggable-marker="true" show-all-signals="false" hide-context-menu="true"
+                                                show-traffic="true" show-traffic-button="false"
+                                                full-screen="true" rotate-controls="false"
+                                                zoom-restriction="false" draggable-map="true" disable-zoom-control="true"
+                                                zoom-level=18 hide-signal-marker="false"
+                                                show-only-signal-id="vm.signal.SignalID" single-signal="true"></google-map>
+                                </ms-widget-front>
+                            </ms-widget>
+                        </md-tab-body>
+                    </md-tab>-->
+                    <md-tab md-on-select="vm.onTabChange(1)" ng-disabled="vm.signalEditForm.$invalid">
+                        <md-tab-label>
+                            <span>Approaches</span>
+                        </md-tab-label>
+                        <md-tab-body ms-scroll>
+                            <ms-widget flippable="false" layout="row" flex="100" class="md-whiteframe-0dp" ms-scroll>
+                                <ms-widget-front class="white-bg" flex>
+                                    <md-toolbar class="md-table-toolbar md-default"
+                                                ng-hide="vm.options.rowSelection && vm.selected.length">
+                                        <div class="md-toolbar-tools">
+                                            <div flex>
+                                                <form name="filter.form" layout="row" flex>
+                                                    <md-tooltip>Search</md-tooltip>
+                                                    <md-icon style="margin:0px" md-font-icon="icon-magnify"></md-icon>
+                                                    <input flex type="text" ng-model="vm.queryData.Filter"
+                                                           ng-model-options="vm.options.filter" placeholder="search..."
+                                                           ng-change="vm.searchChange(vm.queryData.Filter, '{{vm.queryData.Filter}}')">
+                                                </form>
+                                            </div>
+                                            <span flex></span>
+                                            <md-button class="md-icon-button" ng-click="vm.goToAddApproach(ev)"
+                                                       aria-label="Add Approach">
+                                                <md-tooltip>Add Approach</md-tooltip>
+                                                <md-icon md-font-icon="icon-plus"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button" ng-click="vm.getApproaches()"
+                                                       aria-label="Refresh">
+                                                <md-tooltip>Refresh Data</md-tooltip>
+                                                <md-icon md-font-icon="icon-refresh"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </md-toolbar>
+                                    <md-toolbar class="md-table-toolbar alternate"
+                                                ng-show="vm.options.rowSelection && vm.selected.length">
+                                        <div class="md-toolbar-tools">
+                                            <span>
+                                                Selected approach {{vm.selected[0].ApproachID}}:
+                                                {{vm.selected[0].Description}}
+                                            </span>
+                                            <div flex></div>
+                                            <md-button class="md-icon-button" ng-click="vm.goToApproachEdit()"
+                                                       aria-label="Edit Approach">
+                                                <md-tooltip>Edit Approach</md-tooltip>
+                                                <md-icon md-font-icon="icon-pencil"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button" ng-click="vm.deleteApproach()"
+                                                       aria-label="Delete Approach">
+                                                <md-tooltip>Delete Approach</md-tooltip>
+                                                <md-icon md-font-icon="icon-delete-variant"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </md-toolbar>
+                                    <md-table-container flex ms-scroll>
+                                        <table ms-scroll md-table md-row-select ng-model="vm.selected"
+                                               md-progress="vm.approachPromise">
+                                            <thead md-head md-order="vm.queryData.orderBy"
+                                                   md-on-reorder="vm.getApproaches">
+                                                <tr md-row>
+                                                    <th md-column md-order-by="approachID"><span>Approach ID</span></th>
+                                                    <th md-column md-order-by="directionTypeDesc">
+                                                        <span>
+                                                            Direction
+                                                            Type
+                                                        </span>
+                                                    </th>
+                                                    <th md-column md-order-by="description">
+                                                        <span>Description</span>
+                                                    </th>
+                                                    <th md-column md-order-by="mph"><span>MPH</span></th>
+                                                    <th md-column md-order-by="protectedPhaseNumber">
+                                                        <span>
+                                                            Protected
+                                                            Phase Number
+                                                        </span>
+                                                    </th>
+                                                    <th md-column md-order-by="permissivePhaseNumber">
+                                                        <span>
+                                                            Permissive
+                                                            Phase Number
+                                                        </span>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody md-body ms-scroll>
+                                                <tr md-row md-select="approach" md-select-id="approachID" md-auto-select
+                                                    ng-repeat="approach in vm.approaches" ng-class-odd="'odd-row'"
+                                                    ng-class-even="'even-row'">
+                                                    <td md-cell>{{approach.ApproachID}}</td>
+                                                    <td md-cell>{{approach.DirectionTypeDesc}}</td>
+                                                    <td md-cell>{{approach.Description}}</td>
+                                                    <td md-cell>{{approach.MPH}}</td>
+                                                    <td md-cell>{{approach.ProtectedPhaseNumber}}</td>
+                                                    <td md-cell>{{approach.PermissivePhaseNumber}}</td>
+                                                    <td md-cell layout="row">
+                                                        <span flex></span>
+                                                        <edit-context-menu edit-action="vm.goToApproachEdit(obj)"
+                                                                           delete-action="vm.deleteApproach(obj)"
+                                                                           edit-object="approach" no-excel="true"></edit-context-menu>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </md-table-container>
+                                    <md-table-pagination md-limit="vm.queryData.PageSize" md-limit-options="[5, 10, 15]"
+                                                         md-page="vm.queryData.PageIndex" md-on-paginate="vm.getApproaches"
+                                                         md-total="{{vm.totalApproaches}}" md-page-select></md-table-pagination>
+                                </ms-widget-front>
+                            </ms-widget>
+                        </md-tab-body>
+                    </md-tab>
+                </md-tabs>
+            </div>
+        </md-card>
+        <!-- / CONTENT -->
+    </div>
+</div>

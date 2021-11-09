@@ -1,0 +1,87 @@
+﻿<md-dialog id="detector-page" ng-cloak>
+    <md-dialog-content class="md-dialog-content" ng-cloak>
+        <h2 class="md-title">Add New Detector</h2>
+        <form id="detectorForm" class="padding-top-10" name="detectorForm">
+            <div class="pb-16" layout-gt-sm="row">
+                <md-input-container class="md-block" flex="50">
+                    <label>Detection Type</label>
+                    <md-select ng-model="vm.detector.DetectionTypeID"
+                               ng-change="vm.checkDetectionType(vm.detector.DetectionTypeID)" required>
+                        <md-option ng-repeat="cType in vm.lookups.DetectionTypes" ng-value="cType.ID">
+                            {{cType.Description}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container class="md-block" flex="50">
+                    <label>Channel</label>
+                    <input type="number" name="detChannel" min="0" ng-model="vm.detector.DetChannel" required>
+                    <div ng-messages="detectorForm.detChannel.$error" role="alert" multiple>
+                        <div ng-message="required">{{vm.showDetChError}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div class="pb-16" layout-gt-sm="row" flex>
+                <md-input-container ng-if="!vm.isDistanceDisabled" class="md-block" flex="33">
+                    <label>Distance from Stop Bar</label>
+                    <input type="number" min="0" ng-model="vm.detector.DistanceFromStopBar"
+                           ng-disabled="vm.isDistanceDisabled" ng-required="vm.isRequired">
+                </md-input-container>
+                <md-input-container ng-if="vm.isDistanceDisabled" class="md-block" flex="33">
+                    <label>Distance from Stop Bar</label>
+                    <input ng-class="{ 'not-allowed' : vm.isDistanceDisabled }" title={{vm.messageDistanceStopBar}}
+                           type="number" min="0" ng-model="vm.detector.DistanceFromStopBar"
+                           ng-disabled="vm.isDistanceDisabled" ng-required="vm.isRequired">
+                </md-input-container>
+                <md-input-container class="md-block" flex="33">
+                    <label>Min Speed Filter</label>
+                    <input ng-class="{ 'not-allowed' : vm.isDisabled }" ng-model="vm.detector.MinSpeedFilter"
+                           ng-disabled="vm.isDisabled" title={{vm.messageMinSpeed}}>
+                </md-input-container>
+                <md-input-container class="md-block" flex="33">
+                    <label>Decision Point</label>
+                    <input ng-class="{ 'not-allowed' : vm.isDisabled }" ng-model="vm.detector.DecisionPoint"
+                           ng-disabled="vm.isDisabled" title={{vm.messageDecisionPoint}}>
+                </md-input-container>
+            </div>
+            <div class="pb-16" layout-gt-sm="row">
+                <md-input-container class="md-block" flex="50">
+                    <label>Lane Type</label>
+                    <md-select ng-model="vm.detector.LaneTypeID" required>
+                        <md-option ng-repeat="cType in vm.lookups.LaneTypes" ng-value="cType.ID">
+                            {{cType.Description}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container class="md-block" flex="50">
+                    <label>Lane Number</label>
+                    <input type="number" min="0" required ng-model="vm.detector.LaneNumber">
+                </md-input-container>
+            </div>
+            <div class="pb-16" layout-gt-sm="row">
+                <md-input-container class="md-block" flex="50">
+                    <label>Movement Type</label>
+                    <md-select ng-model="vm.detector.MovementTypeID" required>
+                        <md-option ng-repeat="cType in vm.lookups.MovementTypes" ng-value="cType.ID">
+                            {{cType.Description}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container class="md-block" flex="50">
+                    <label>Movement Delay</label>
+                    <input type="number" min="0" ng-model="vm.detector.MovementDelay">
+                </md-input-container>
+            </div>
+            <md-dialog-actions>
+                <md-button class="md-raised md-warn md-accent md-button md-ink-ripple" ng-click="vm.close()">
+                    Cancel
+                </md-button>
+                <md-button class="md-accent md-raised"
+                           ng-click="vm.checkLaneDetType(vm.detector.LaneNumber,vm.detector.DetectionTypeID)"
+                           ng-disabled="detectorForm.$invalid" analytics-on="click" analytics-event="click"
+                           analytics-label="Detector Saved from Detector Add" disabled="disabled">
+                    Save Detector
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog-content>
+</md-dialog>

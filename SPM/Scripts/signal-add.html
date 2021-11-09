@@ -1,0 +1,80 @@
+﻿<md-dialog ng-cloak layout="row">
+    <md-dialog-content layout="row" class="md-dialog-content" ng-cloak>
+        <div style="margin-right: 30px;">
+            <h2 class="md-title" style="margin-top: -5px;">Add New Signal Version</h2>
+            <form id="signalAddForm" name="signalAddForm" class="padding-top-10">
+                <div layout="column" flex>
+                    <div class="pb-16" layout-gt-sm="row" style="padding-bottom: 0px;">
+                        <md-input-container class="md-block" flex>
+                            <label>ID</label>
+                            <input type="text" ng-model="vm.signal.SignalID" required>
+                            <span ng-if="vm.signalExists" style="color:tomato; font-size: 12px;">Signal with this ID<br /> already exists!</span>
+                        </md-input-container>
+                        <md-input-container class="md-block" flex>
+                            <label>Controller Type</label>
+                            <md-select ng-model="vm.signal.ControllerTypeID" required>
+                                <md-option ng-repeat="cType in vm.lookups.ControllerTypes" ng-value="cType.ID">
+                                    {{cType.Description}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container class="md-block" flex>
+                            <md-checkbox ng-model="vm.signal.Enabled">
+                                Enabled
+                            </md-checkbox>
+                        </md-input-container>
+                    </div>
+                    <div class="pb-16" layout-gt-sm="row" style="padding-bottom: 0px;">
+                        <md-input-container class="md-block" flex>
+                            <label>Primary Name</label>
+                            <input id="primaryNameSignal" type="text" ng-model="vm.signal.PrimaryName" required>
+                        </md-input-container>
+                    </div>
+                    <div class="pb-16" style="padding-bottom: 0px;" layout-gt-sm="row" flex="100">
+                        <md-input-container class="md-block" flex>
+                            <label>Secondary Name</label>
+                            <input type="text" ng-model="vm.signal.SecondaryName" required>
+                        </md-input-container>
+                    </div>
+                    <div class="pb-16" style="padding-bottom: 0px;" title={{vm.coordinatesHoverText}} layout-gt-sm="row"
+                         flex="100">
+                        <div flex="50">
+                            <md-input-container class="md-block">
+                                <label style="padding-left: 5px;">Latitude</label>
+                                <input type="text" ng-model="vm.signal.Latitude" required>
+                            </md-input-container>
+                        </div>
+                        <div flex="50">
+                            <md-input-container class="md-block" flex>
+                                <label style="padding-left: 5px;">Longitude</label>
+                                <input type="text" ng-model="vm.signal.Longitude" required>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div class="pb-16" layout-gt-sm="row" flex="100">
+                        <md-input-container class="md-block" flex>
+                            <label>IP Address</label>
+                            <input type="text" ng-model="vm.signal.IPAddress" required>
+                        </md-input-container>
+                    </div>
+                    <div flex layout="column">
+                        <span class="traffop-red pr-15" style="text-align: right;">{{vm.errorMessage}}</span>
+                        <md-dialog-actions>
+                            <md-button class="md-raised md-warn md-accent md-button md-ink-ripple"
+                                       ng-click="vm.close()">
+                                Cancel
+                            </md-button>
+                            <md-button class="md-accent md-raised"
+                                       ng-click="vm.saveSignal(vm.signal.Latitude, vm.signal.Longitude)"
+                                       ng-disabled="signalAddForm.$invalid || vm.signalExists" disabled="disabled" analytics-on="click"
+                                       analytics-event="click"
+                                       analytics-label="New Signal Saved at Signals Configuration / Add New Signal">
+                                Save Signal
+                            </md-button>
+                        </md-dialog-actions>
+                    </div>
+                </div>
+</form>
+        </div>
+    </md-dialog-content>
+</md-dialog>

@@ -1,0 +1,27 @@
+﻿<md-dialog>
+    <form ng-cloak>
+        <md-toolbar style="background-color: #0F75DB !important;">
+            <div class="md-toolbar-tools">
+                <h2>Delete Signal or Signal Version</h2>
+                <span flex></span>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                You can delete signal or only latest version of this signal from this dialog. Please select.
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="vm.cancel()" aria-label="Close dialog">
+                Cancel
+            </md-button>
+            <span flex></span>
+            <md-button ng-click="vm.answer('signal')">
+                Delete Signal
+            </md-button>
+            <md-button ng-click="vm.answer('version')">
+                Delete Current Version
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

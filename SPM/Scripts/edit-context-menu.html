@@ -1,0 +1,19 @@
+﻿<md-menu>
+    <md-button ng-click="$mdMenu.open()" class="md-icon-button" aria-label="Open context menu">
+        <md-icon md-font-icon="icon-dots-vertical" class="icon"></md-icon>
+    </md-button>
+    <md-menu-content width="2">
+        <md-menu-item>
+            <md-button ng-click="editClicked()">
+                <md-icon md-font-icon="icon-pencil" md-menu-align-target></md-icon>
+                Edit
+            </md-button>
+        </md-menu-item>
+        <md-menu-item>
+            <md-button ng-click="deleteClicked()">
+                <md-icon md-font-icon="icon-delete"></md-icon>
+                Delete
+            </md-button>
+        </md-menu-item>
+    </md-menu-content>
+</md-menu>

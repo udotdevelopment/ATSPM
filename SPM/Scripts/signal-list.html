@@ -1,0 +1,121 @@
+﻿<div class="page-layout carded fullwidth" layout="row" ms-scroll>
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg md-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+    <!-- CENTER -->
+    <div class="center" layout="column" flex>
+        <!-- CONTENT HEADER -->
+        <div class="header" layout="row" layout-align="space-between center">
+            <div class="white-fg" layout="column" layout-align="start start">
+                <div class="h1" layout="row" layout-align="start center">
+                    <md-icon md-font-icon="icon-nfc-tap"></md-icon>
+                    <span>Signals</span>
+                </div>
+                <div class="routes-count secondary-text">
+                    <span>Total Signals:</span>
+                    <span>{{vm.totalCount}}</span>
+                </div>
+            </div>
+        </div>
+        <!-- / CONTENT HEADER -->
+        <!-- CONTENT CARD -->
+        <md-card layout="row">
+            <div flex>
+                <md-toolbar class="md-table-toolbar md-default" ng-hide="vm.options.rowSelection && vm.selected.length">
+                    <div class="md-toolbar-tools">
+                        <div flex>
+                            <form name="filter.form" layout="row" flex>
+                                <md-tooltip>Search</md-tooltip>
+                                <md-icon style="margin:0px" md-font-icon="icon-magnify"></md-icon>
+                                <input flex type="text" ng-model="vm.queryData.Filter"
+                                       ng-model-options="vm.options.filter" placeholder="search..."
+                                       ng-change="vm.searchChange(vm.queryData.Filter, '{{vm.queryData.Filter}}')">
+                            </form>
+                        </div>
+                        <md-button class="md-icon-button" ng-click="vm.goToAddSignal(ev)" aria-label="Add Signal"
+                                   analytics-on="click" analytics-event="click"
+                                   analytics-label="Add Signal clicked from Signals Configuration">
+                            <md-tooltip>Add Signal</md-tooltip>
+                            <md-icon md-font-icon="icon-plus"></md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button" ng-click="vm.getSignals()" aria-label="Refresh"
+                                   analytics-on="click" analytics-event="click"
+                                   analytics-label="Signals List Refreshed on Signals Configuration">
+                            <md-tooltip>Refresh Data</md-tooltip>
+                            <md-icon md-font-icon="icon-refresh"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-toolbar class="md-table-toolbar alternate" ng-show="vm.options.rowSelection && vm.selected.length">
+                    <div class="md-toolbar-tools">
+                        <span>
+                            Selected signal {{vm.selected[0].SignalID}}: {{vm.selected[0].PrimaryName}} -
+                            {{vm.selected[0].SecondaryName}}
+                        </span>
+                        <div flex></div>
+                        <md-button class="md-icon-button" ng-click="vm.goToAddVersion(ev,obj)" aria-label="Add Version"
+                                   analytics-on="click" analytics-event="click"
+                                   analytics-label="Add Version clicked from Signals Configuration">
+                            <md-tooltip>Add Version</md-tooltip>
+                            <md-icon md-font-icon="icon-plus"></md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button" ng-click="vm.goToEditSignal()" aria-label="Edit Signal"
+                                   analytics-on="click" analytics-event="click"
+                                   analytics-label="Edit Signal clicked from Signals Configuration">
+                            <md-tooltip>Edit Signal</md-tooltip>
+                            <md-icon md-font-icon="icon-pencil"></md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button" ng-click="vm.deleteSignalVersion(ev,obj)" aria-label="Delete Signal"
+                                   analytics-on="click" analytics-event="click"
+                                   analytics-label="Delete Signal clicked from Signals Configuration">
+                            <md-tooltip>Delete Signal</md-tooltip>
+                            <md-icon md-font-icon="icon-delete-variant"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <!-- CONTENT -->
+                <md-table-container flex style="height:450px;">
+                    <table flex md-table md-row-select ng-model="vm.selected" md-progress="vm.signalsPromise">
+                        <thead md-head md-order="vm.queryData.OrderBy" md-on-reorder="vm.getSignals">
+                            <tr md-row>
+                                <th md-column md-order-by="signalID"><span>ID</span></th>
+                                <th md-column md-order-by="primaryName"><span>Primary Street</span></th>
+                                <th md-column md-order-by="secondaryName"><span>Secondary Street</span></th>
+                                <th md-column md-order-by="controllerType"><span>Controller Type</span></th>
+                                <th md-column md-order-by="ipAddress"><span>Ip Address</span></th>
+                                <th md-column md-order-by="latitude"><span>Latitude</span></th>
+                                <th md-column md-order-by="longitude"><span>Longitude</span></th>
+                                <th md-column><span>Enabled</span></th>
+                            </tr>
+                        </thead>
+                        <tbody md-body>
+                            <tr md-row md-select="signal" md-select-id="signalID" md-auto-select
+                                ng-repeat="signal in vm.signals" ng-class-odd="'odd-row'" ng-class-even="'even-row'">
+                                <td md-cell>{{signal.SignalID}}</td>
+                                <td md-cell>{{signal.PrimaryName}}</td>
+                                <td md-cell>{{signal.SecondaryName}}</td>
+                                <td md-cell>{{signal.ControllerType.Description}}</td>
+                                <td md-cell>{{signal.IPAddress}}</td>
+                                <td md-cell>{{signal.Latitude}}</td>
+                                <td md-cell>{{signal.Longitude}}</td>
+                                <td md-cell>{{signal.Enabled}}</td>
+                                <td md-cell layout="row">
+                                    <span flex></span>
+                                    <edit-context-menu edit-action="vm.goToEditSignal(obj)"
+                                                       excel-export-from-menu="vm.excelExportFromMenu(obj)"
+                                                       delete-action="vm.deleteSignalVersion(ev,obj)" edit-object="signal"></edit-context-menu>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
+                <md-table-pagination md-limit="vm.queryData.PageSize" md-limit-options="[5, 10, 15, 25]"
+                                     md-page="vm.queryData.PageIndex" md-on-paginate="vm.getSignals" md-total="{{vm.totalQueryCount}}"
+                                     md-page-select></md-table-pagination>
+                <!-- / CONTENT -->
+            </div>
+        </md-card>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

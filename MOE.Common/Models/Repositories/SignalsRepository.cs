@@ -29,7 +29,7 @@ namespace MOE.Common.Models.Repositories
         {
             return GetLatestVersionOfAllSignals();
         }
-
+       
         public Signal GetVersionOfSignalByDate(string signalId, DateTime startDate)
         {
             var signals = _db.Signals
@@ -660,5 +660,29 @@ namespace MOE.Common.Models.Repositories
 
             return va;
         }
+
+        public List<Signal> GetAllSignalsForEnhancedConfig()
+        {
+            return _db.Signals.ToList();
+        }
+
+
+        public SignalsQueryResults GetAllSignalsRange(int from, int to)
+        {
+            var res = new SignalsQueryResults();
+            var signals = GetAllSignalsForEnhancedConfig();
+            res.TotalCount = signals.Count;
+            res.TotalCountInQuery = signals.Count;
+            res.Signals = signals.GetRange(from,to);
+            return res;
+        }
+
+    }
+
+    public class SignalsQueryResults
+    {
+        public List<Signal> Signals { get; set; }
+        public int TotalCount { get; set; }
+        public int TotalCountInQuery { get; set; }
     }
 }

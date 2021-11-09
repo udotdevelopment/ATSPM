@@ -18,6 +18,12 @@ namespace SPM
                 url: "{Controller}/{action}/{id}",
                 defaults: new { controller = "DefaultCharts", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "EnhancedConfiguration",
+                url: "{Controller}/{action}/{id}",
+                defaults: new { controller = "EnhancedConfiguration", action = "Index", id = UrlParameter.Optional }
+        );
         }
     }
 }

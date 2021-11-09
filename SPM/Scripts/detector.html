@@ -1,0 +1,121 @@
+﻿<div id="detector-page" class="page-layout carded fullwidth" layout="row" ms-scroll>
+    <div class="top-bg md-accent-bg"></div>
+
+    <div class="center" layout="column" flex>
+        <!-- HEADER -->
+        <div class="header" layout="row" layout-align="start center">
+            <div class="white-fg" layout="row" layout-align="start center" flex>
+                <md-button class="goto-signal-button md-icon-button" aria-label="Go back to Approach"
+                           ng-click="vm.goToApproach()">
+                    <md-icon md-font-icon="icon-arrow-left"></md-icon>
+                </md-button>
+                <div layout="row" layout-align="start center">
+                    <div layout="column" layout-align="start start">
+                        <div class="h2">
+                            {{vm.headerMessage}}
+                        </div>
+                        <div class="subtitle secondary-text">
+                            <span>Go back to Approach</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- / HEADER -->
+        <!-- CONTENT -->
+        <md-card layout="row">
+            <div class="detector-form-container md-background-bg " flex>
+                <div class="pb-16" layout="row" layout-align="start center" flex>
+                    <md-icon md-font-icon="icon-traffic-light" class="icon s24" layout-align="start center"></md-icon>
+                    <div class="h2 secondary-text" layout-align="start center">Detector</div>
+                    <span flex></span>
+                </div>
+                <form id="detectorForm" class="padding-top-10" name="vm.detectorForm"
+                      layout-fill>
+                    <div class="pb-16" layout-gt-sm="row">
+                        <md-input-container class="md-block" flex>
+                            <label>ID</label>
+                            <input type="text" ng-model="vm.detector.DetectorID" disabled>
+                        </md-input-container>
+                        <md-input-container class="md-block" flex>
+                            <label>Detection Type</label>
+                            <md-select disabled ng-model="vm.detector.DetectionTypeID"
+                                       ng-change="vm.checkDetectionType(vm.detector.DetectionTypeID)" required>
+                                <md-option ng-repeat="cType in vm.lookups.DetectionTypes" ng-value="cType.ID">
+                                    {{cType.Description}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container class="md-block" flex>
+                            <label>Channel</label>
+                            <input disabled type="number" name="detChannel" min="0" ng-model="vm.detector.DetChannel" required>
+                            <div ng-messages="detectorForm.detChannel.$error" role="alert" multiple>
+                                <div ng-message="required">{{vm.showDetChError}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div class="pb-16" layout-gt-sm="row" flex>
+                        <md-input-container ng-if="!vm.isDistanceDisabled" class="md-block" flex="33">
+                            <label>Distance from Stop Bar</label>
+                            <input type="number" min="0" ng-model="vm.detector.DistanceFromStopBar"
+                                   ng-disabled="vm.isDistanceDisabled" ng-required="vm.isRequired">
+                        </md-input-container>
+                        <md-input-container ng-if="vm.isDistanceDisabled" class="md-block" flex="33">
+                            <label>Distance from Stop Bar</label>
+                            <input ng-class="{ 'not-allowed' : vm.isDistanceDisabled }"
+                                   title={{vm.messageDistanceStopBar}} type="number" min="0"
+                                   ng-model="vm.detector.DistanceFromStopBar" ng-disabled="vm.isDistanceDisabled"
+                                   ng-required="vm.isRequired">
+                        </md-input-container>
+                        <md-input-container class="md-block" flex="33">
+                            <label>Min Speed Filter</label>
+                            <input ng-class="{ 'not-allowed' : vm.isDisabled }" ng-model="vm.detector.MinSpeedFilter"
+                                   ng-disabled="vm.isDisabled" title={{vm.messageMinSpeed}}>
+                        </md-input-container>
+                        <md-input-container class="md-block" flex="33">
+                            <label>Decision Point</label>
+                            <input ng-class="{ 'not-allowed' : vm.isDisabled }" ng-model="vm.detector.DecisionPoint"
+                                   ng-disabled="vm.isDisabled" title={{vm.messageDecisionPoint}}>
+                        </md-input-container>
+                    </div>
+                    <div class="pb-16" layout-gt-sm="row">
+                        <md-input-container class="md-block" flex>
+                            <label>Lane Type</label>
+                            <md-select ng-model="vm.detector.LaneTypeID" required>
+                                <md-option ng-repeat="cType in vm.lookups.LaneTypes" ng-value="cType.ID">
+                                    {{cType.Description}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container class="md-block" flex>
+                            <label>Lane Number</label>
+                            <input type="number" min="0" required ng-model="vm.detector.LaneNumber">
+                        </md-input-container>
+                    </div>
+                    <div class="pb-16" layout-gt-sm="row">
+                        <md-input-container class="md-block" flex>
+                            <label>Movement Type</label>
+                            <md-select ng-model="vm.detector.MovementTypeID">
+                                <md-option ng-repeat="cType in vm.lookups.MovementTypes" ng-value="cType.ID">
+                                    {{cType.Description}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container class="md-block" flex>
+                            <label>Movement Delay</label>
+                            <input type="number" min="0" ng-model="vm.detector.MovementDelay">
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <!--ng-click="vm.saveSignal()" ng-disabled="!vm.enableSaveButton()"-->
+                        <md-button class="md-raised md-accent" ng-click="vm.checkLaneDetType(vm.detector.LaneNumber,vm.detector.DetectionTypeID,vm.detector.ID)" ng-disabled="!vm.enableSaveButton()" type="submit">
+                            Save
+                        </md-button>
+                        <md-button class="md-raised md-warn md-accent" ng-click="vm.deleteDetector()">Delete</md-button>
+                    </div>
+                </form>
+            </div>
+        </md-card>
+        <!-- / CONTENT -->
+    </div>
+</div>
