@@ -144,7 +144,7 @@
             var confirm = $mdDialog.confirm()
                 .title(confirmText)
                 .textContent('This action cannot be undone')
-                .ok('Yes delete this signal')
+                .ok('Yes delete this version')
                 .cancel('Cancel');
 
             $mdDialog.show(confirm)
@@ -167,7 +167,7 @@
                 showSignalVersionDeletedToast();
                 vm.getVersionsOfSignal();
                 vm.versions = vm.versions.filter(x => x.VersionID != versionId);
-                vm.signal = vm.versions.length > 0 ? vm.versions[vm.versions.length - 1] : $state.go('MyApp');
+                vm.signal = vm.versions.length > 0 ? vm.versions[0] : $state.go('MyApp');
             }).catch(function (e, status, headers, config) {
                 errorToast();
             });
@@ -217,7 +217,7 @@
                 vm.signal.Comments[0].CommentText = vm.comment;
             }
             if (vm.signal.Comments.length == 0) {
-                vm.signal.Comments = [{ CommentText: vm.signal.Comment }];
+                vm.signal.Comments = [{ CommentText: vm.comment }];
             }
 
             $http({

@@ -155,7 +155,7 @@ namespace SPM.Controllers
 
             if (!string.IsNullOrEmpty(query.Filter))
                 dets = appr.Detectors.AsQueryable()
-                    .Where(y => y.Description.ToLower().Contains(query.Filter.ToLower()) || y.ApproachID.ToString().Contains(query.Filter.ToLower()))
+                    .Where(y => y.Description.ToLower().Contains(query.Filter.ToLower()) || y.DetectorID.ToString().Contains(query.Filter.ToLower()))
                     .OrderByWithDirection(HelperFunctions.GetExpression<Detector>(query.OrderBy), query.DecesendingOrder)
                     .Skip((query.PageIndex - 1) * query.PageSize)
                     .Take(query.PageSize).ToList();

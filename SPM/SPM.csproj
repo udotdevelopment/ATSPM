@@ -759,7 +759,6 @@
     <Content Include="Scripts\detector.html" />
     <Content Include="Scripts\edit-context-menu.directive.js" />
     <Content Include="Scripts\edit-context-menu.html" />
-    <Content Include="Scripts\EnhancedConfigDirective.js" />
     <Content Include="Scripts\directive.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
@@ -839,7 +838,6 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\EnhancedConfigController.js" />
     <Content Include="Scripts\signal-list.controller.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
