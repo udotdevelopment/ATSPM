@@ -1173,49 +1173,49 @@ namespace MOE.Common.Migrations
                 new Application { ID = 4, Name = "GeneralSetting" }
             );
 
-            //context.WatchdogApplicationSettings.AddOrUpdate(
-            //    c => c.ApplicationID,
-            //    new WatchDogApplicationSettings
-            //    {
-            //        ApplicationID = 2,
-            //        ConsecutiveCount = 3,
-            //        DefaultEmailAddress = "SomeOne@AnEmail.address",
-            //        EmailServer = "send.EmailServer",
-            //        FromEmailAddress = "SPMWatchdog@default.com",
-            //        LowHitThreshold = 50,
-            //        MaxDegreeOfParallelism = 4,
-            //        MinimumRecords = 500,
-            //        MinPhaseTerminations = 50,
-            //        PercentThreshold = .9,
-            //        PreviousDayPMPeakEnd = 18,
-            //        PreviousDayPMPeakStart = 17,
-            //        ScanDayEndHour = 5,
-            //        ScanDayStartHour = 1,
-            //        WeekdayOnly = true,
-            //        MaximumPedestrianEvents = 200,
-            //        EmailAllErrors = false
-            //    }
-            //);
+            context.WatchdogApplicationSettings.AddOrUpdate(
+                c => c.ApplicationID,
+                new WatchDogApplicationSettings
+                {
+                    ApplicationID = 2,
+                    ConsecutiveCount = 3,
+                    DefaultEmailAddress = "SomeOne@AnEmail.address",
+                    EmailServer = "send.EmailServer",
+                    FromEmailAddress = "SPMWatchdog@default.com",
+                    LowHitThreshold = 50,
+                    MaxDegreeOfParallelism = 4,
+                    MinimumRecords = 500,
+                    MinPhaseTerminations = 50,
+                    PercentThreshold = .9,
+                    PreviousDayPMPeakEnd = 18,
+                    PreviousDayPMPeakStart = 17,
+                    ScanDayEndHour = 5,
+                    ScanDayStartHour = 1,
+                    WeekdayOnly = true,
+                    MaximumPedestrianEvents = 200,
+                    EmailAllErrors = false
+                }
+            );
 
-            //context.DatabaseArchiveSettings.AddOrUpdate(m => m.ApplicationID,
-            //    new DatabaseArchiveSettings
-            //    {
-            //        ApplicationID = 3,
-            //        ArchivePath = @"\\ATSPM_Backup_DataTables\tcshare2\MOEFlatFiles\",
-            //    }
-            //);
+            context.DatabaseArchiveSettings.AddOrUpdate(m => m.ApplicationID,
+                new DatabaseArchiveSettings
+                {
+                    ApplicationID = 3,
+                    ArchivePath = @"\\ATSPM_Backup_DataTables\tcshare2\MOEFlatFiles\",
+                }
+            );
 
-            //context.GeneralSettings.AddOrUpdate(
-            //    c => c.ApplicationID,
-            //    new Models.GeneralSettings
-            //    {
-            //        ApplicationID = 4,
-            //        RawDataCountLimit = 1048576,
-            //        //ImageUrl = "http://defaultWebServer/spmimages/",
-            //        //ImagePath = @"\\defaultWebserver\SPMImages\",
-            //        CycleCompletionSeconds = 900
-            //    }
-            //);
+            context.GeneralSettings.AddOrUpdate(
+                c => c.ApplicationID,
+                new Models.GeneralSettings
+                {
+                    ApplicationID = 4,
+                    RawDataCountLimit = 1048576,
+                    //ImageUrl = "http://defaultWebServer/spmimages/",
+                    //ImagePath = @"\\defaultWebserver\SPMImages\",
+                    CycleCompletionSeconds = 900
+                }
+            );
 
             context.LaneTypes.AddOrUpdate(
                 new LaneType { LaneTypeID = 1, Description = "Vehicle", Abbreviation = "V" },

@@ -131,6 +131,8 @@ namespace MOE.Common.Business.LeftTurnGapAnalysis
 
         protected void GetData(List<Controller_Event_Log> _events)
         {
+            if(PercentTurnableSeries == null)
+                PercentTurnableSeries = new List<KeyValuePair<DateTime, double>>();
             var greenList = _events.Where(x => x.EventCode == EVENT_GREEN && x.Timestamp >= LeftTurnGapAnalysisOptions.StartDate && x.Timestamp < LeftTurnGapAnalysisOptions.EndDate)
                 .OrderBy(x => x.Timestamp).ToList();
             var redList = _events.Where(x => x.EventCode == EVENT_RED && x.Timestamp >= LeftTurnGapAnalysisOptions.StartDate && x.Timestamp < LeftTurnGapAnalysisOptions.EndDate)
@@ -221,8 +223,6 @@ namespace MOE.Common.Business.LeftTurnGapAnalysis
                     Gaps11.Add(new KeyValuePair<DateTime, int>(upperTimeLimit, sum));
                     localTotal += sum;
                 }
-
-                PercentTurnableSeries = new List<KeyValuePair<DateTime, double>>();
                 PercentTurnableSeries.Add(new KeyValuePair<DateTime, double>(upperTimeLimit, items.Average(x => x.PercentPhaseTurnable) * 100));
 
                 if (localTotal > HighestTotal)
