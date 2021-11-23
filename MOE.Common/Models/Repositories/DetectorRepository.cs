@@ -77,13 +77,7 @@ namespace MOE.Common.Models.Repositories
         public List<Detector> GetDetectorsByApproachID(int approachID)
         {
             var detectors = new List<Detector>();
-            foreach (var d in _db.Detectors)
-            {
-                if (approachID == d.ApproachID)
-                {
-                    detectors.Add(d);
-                }
-            }       
+            detectors = _db.Detectors.Where(d => d.ApproachID == approachID).ToList(); 
             return detectors.OrderBy(d => d.DetectorID).ToList();
         }
 
