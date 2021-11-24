@@ -245,6 +245,13 @@ function GetLeftTurnGapAnalysisMetric(metricTypeID) {
     GetMetric(urlpathLeftTurnGapAnalysis, toSend);
 }
 
+function GetWaitTimeMetric(metricTypeID) {
+    var toSend = GetCommonValues();
+    toSend.metricTypeID = metricTypeID;
+    toSend.ShowPlanStripes = $("#ShowPlanStripes").is(":checked");
+    GetMetric(urlpathWaitTime, toSend);
+}
+
 $('#CreateMetric').click(function() { CreateMetric(); });
 
 function CreateMetric() {
@@ -291,6 +298,9 @@ function CreateMetric() {
         }
         else if (selectedMetricID === "31") {
             GetLeftTurnGapAnalysisMetric(31);
+        }
+        else if (selectedMetricID === "32") {
+            GetWaitTimeMetric(32);
         }
         else if (selectedMetricID === "17") {
             GetTimingAndActuationsMetric(17);
