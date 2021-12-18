@@ -20,6 +20,9 @@ using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using MOE.Common.Properties;
+using Renci.SshNet;
+using Renci.SshNet.Common;
+using Renci.SshNet.Sftp;
 
 namespace MOE.Common.Business
 {
@@ -167,6 +170,11 @@ namespace MOE.Common.Business
 
         public void GetCurrentRecords()
         {
+            if (Signal.ControllerType.FTPDirectory.StartsWith("sftp://"))
+            {
+                GetCurrentRecordsSftpAsync();
+                return;
+            }
 
             var errorRepository = ApplicationEventRepositoryFactory.Create();
             FtpClient ftpClient = new FtpClient(Signal.IPAddress);
@@ -333,6 +341,88 @@ namespace MOE.Common.Business
                 catch
                 {
                 }
+            }
+        }
+
+        /*
+         * If the ControllerType FTP path starts with "sftp://" this code will run to 
+         * download files.  Adapted from code provided by Yi Che @ychehntb / FDOT ITS 
+         * https://github.com/udotdevelopment/ATSPM/issues/99
+         */
+
+        public void GetCurrentRecordsSftpAsync()
+        {
+            // Run the sftp fetch operation async
+            Thread sftpFetch = new Thread(delegate () {
+                string host = Signal.IPAddress;
+                string username = Signal.ControllerType.UserName;
+                string password = Signal.ControllerType.Password;
+                string remoteDirectory = Signal.ControllerType.FTPDirectory.Replace("sftp://", "");
+                string localDirectory = SignalFtpOptions.LocalDirectory + Signal.SignalID + @"\";
+                using (SftpClient sftp = new SftpClient(host, username, password))
+                {
+                    try
+                    {
+                        sftp.Connect();
+
+                        var files = sftp.ListDirectory(remoteDirectory);
+                        var dataFiles = files.Where(x => x.FullName.Contains(".dat")).ToList();
+
+                        // Download current files, remove files from remote directory
+                        TransferFilesSftp(dataFiles, localDirectory, sftp);
+                        sftp.Disconnect();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        // to-do: add some custom error handling as fit 
+                        throw ex;
+                    }
+                }
+            });
+            sftpFetch.Start();
+        }
+
+        private void TransferFilesSftp(List<SftpFile> receivedFiles, string directory, SftpClient client)
+        {
+            var errorRepository = ApplicationEventRepositoryFactory.Create();
+            try
+            {
+                foreach (var ret in receivedFiles)
+                {
+                    // FullName will include full path in sFTP
+                    // Name will just include the file name without path
+
+                    string fileName = ret.Name;
+                    string remoteFileName = ret.FullName;
+
+                    using (Stream fileStream = File.OpenWrite(Path.Combine(directory, fileName)))
+                    {
+                        Console.WriteLine("Downloading {0}", fileName);
+                        // Copy file and get to local diretory
+                        client.DownloadFile(remoteFileName, fileStream);
+
+
+                        // Delete file in remote sFTP directory
+                        if (SignalFtpOptions.DeleteAfterFtp && client.Exists(remoteFileName))
+                        {
+                            Console.WriteLine("deleting {0} in sFTP instance", remoteFileName);
+                            client.DeleteFile(remoteFileName);
+                        }
+                    }
+                }
+            }
+            catch (ScpException ex)
+            {
+                //capture if there is any sFTP related exception
+                errorRepository.QuickAdd("FTPFromAllControllers", "SignalFtp", "TransferFilesSftp", ApplicationEvent.SeverityLevels.Medium, Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
+                Console.WriteLine(Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
+            }
+            catch (IOException ex)
+            {
+                //capture if there is any file IO exception
+                errorRepository.QuickAdd("FTPFromAllControllers", "SignalFtp", "TransferFilesSftp", ApplicationEvent.SeverityLevels.Medium, Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
+                Console.WriteLine(Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
             }
         }
 
@@ -818,7 +908,7 @@ namespace MOE.Common.Business
             var timeout = 1000;
             var version = VersionCode.V1;
             var receiver = new IPEndPoint(ipControllerAddress, 161);
-            var oid = new ObjectIdentifier(objectIdentifier);
+            var oid = new Lextm.SharpSnmpLib.ObjectIdentifier(objectIdentifier);
             var vList = new List<Variable>();
             ISnmpData data = new Integer32(int.Parse(value));
             var oiddata = new Variable(oid, data);
@@ -855,7 +945,7 @@ namespace MOE.Common.Business
             var timeout = 1000;
             var version = VersionCode.V1;
             var receiver = new IPEndPoint(ipControllerAddress, snmpPort);
-            var oid = new ObjectIdentifier(objectIdentifier);
+            var oid = new Lextm.SharpSnmpLib.ObjectIdentifier(objectIdentifier);
             var vList = new List<Variable>();
             ISnmpData data = new Integer32(int.Parse(value));
             var oiddata = new Variable(oid, data);
