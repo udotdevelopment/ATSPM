@@ -228,7 +228,7 @@ namespace SPM.Controllers
             {
                 fileStream.Write(pdfData, 0, pdfData.Length);
             }
-            pdfResult.HTML = "<iframe src=\"" + "http://localhost/SpmImages/" + tempFileName +
+            pdfResult.HTML = "<iframe src=\"" + settings.ImageUrl  + tempFileName +
                 "\"style=\"width:100%; height:500px;\" frameborder=\"0\"></iframe>";
             pdfResult.FileName = tempFileName;
             return Json(new { pdfResult }, JsonRequestBehavior.AllowGet);
