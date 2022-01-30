@@ -1,49 +1,237 @@
-﻿@model SPM.Models.FinalGapAnalysisReportViewModel
+﻿@model IEnumerable<SPM.Models.FinalGapAnalysisReportViewModel>
 
 Signal data check complete please note the following results:
-<ul>
-    @if (Model.GapDurationConsiderForStudy.HasValue)
+@foreach (var result in Model)
+{
+    <h4>@result.ApproachDescription</h4>
+    if (result.GapDurationConsiderForStudy.HasValue)
     {
-        if (Model.GapDurationConsiderForStudy.Value)
-        {
-            <li>Gap Duration: <label class="alert-success">Consider for Study</label></li>
-        }
-        else
-        {
-            <li>Gap Duration: <label class="alert-danger">Do not Consider for Study</label></li>
-        }
+        <table class="table table-bordered table">
+            <tr>
+                <th colspan="3">
+                    @if (result.GapDurationConsiderForStudy.Value)
+                    {
+                        <label class="alert-success">Gap Duration:Consider for Study</label>
+                        <br />
+                    }
+                    else
+                    {
+                        <label class="alert-danger">Gap Duration : Do not Consider for Study</label>
+                        <br />
+                    }
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    Capacity
+                </th>
+                <th>
+                    Demand
+                </th>
+                <th>
+                    V/C Ratio
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    @result.Capacity
+                </td>
+                <td>
+                    @result.Demand
+                </td>
+                <td>
+                    @result.GapOutPercent
+                </td>
+            </tr>
+        </table>
+        <table class="table table-bordered table">
+            <tr>
+                <th>Date/Time</th>
+                <th>Value</th>
+            </tr>
+            @foreach (var gapListItem in result.AcceptableGapList)
+            {
+                <tr>
+                    <td>@gapListItem.Key</td>
+                    <td>@gapListItem.Value</td>
+                </tr>
+            }
+        </table>
     }
-    @if (Model.SplitFailsConsiderForStudy.HasValue)
+    if (result.SplitFailsConsiderForStudy.HasValue)
     {
-        if (Model.SplitFailsConsiderForStudy.Value)
-        {
-            <li>Split Fails: <label class="alert-success">Consider for Study</label></li>
-        }
-        else
-        {
-            <li>Split Fails: <label class="alert-danger">Do not Consider for Study</label></li>
-        }
+        <table class="table table-bordered table">
+            <tr>
+                <th colspan="3">
+                    @if (result.SplitFailsConsiderForStudy.Value)
+                    {
+                        <label class="alert-success">Split Fails: Consider for Study</label>
+                        <br />
+                    }
+                    else
+                    {
+                        <label class="alert-danger">Split Fails: Do not Consider for Study</label>
+                        <br />
+                    }
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    Cycles with Split Fails
+                </th>
+                <th>
+                    Percent Cycles with Split Fails
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    @result.CyclesWithSplitFailNum
+                </td>
+                <td>
+                    @result.CyclesWithSplitFailPercent
+                </td>
+            </tr>
+        </table>
+        <table class="table table-bordered table">
+            <tr>
+                <th>Date/Time</th>
+                <th>Value</th>
+            </tr>
+            @foreach (var item in result.PercentCyclesWithSplitFailList)
+            {
+                <tr>
+                    <td>@item.Key</td>
+                    <td>@item.Value</td>
+                </tr>
+            }
+        </table>
     }
-    @if (Model.PedActuationsConsiderForStudy.HasValue)
+    if (result.PedActuationsConsiderForStudy.HasValue)
     {
-        if (Model.PedActuationsConsiderForStudy.Value)
-        {
-            <li>Ped Actuations: <label class="alert-success">Consider for Study</label></li>
-        }
-        else
-        {
-            <li>Ped Actuations: <label class="alert-danger">Do not Consider for Study</label></li>
-        }
+        <table class="table table-bordered table">
+            <tr>
+                <th colspan="2">
+                    @if (result.PedActuationsConsiderForStudy.Value)
+                    {
+                        <label class="alert-success">Ped Actuations: Consider for Study</label>
+                        <br />
+                    }
+                    else
+                    {
+                        <label class="alert-danger">Ped Actuations: Do not Consider for Study</label>
+                        <br />
+                    }
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    Cycles with Pedestrian Calls
+                </th>
+                <th>
+                    Percent Cycles with Pedestrian Calls
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    @result.CyclesWithPedCallNum
+                </td>
+                <td>
+                    @result.CyclesWithPedCallPercent
+                </td>
+            </tr>
+        </table>
+
+        <table class="table table-bordered table">
+            <tr>
+                <th>Date/Time</th>
+                <th>Value</th>
+            </tr>
+            @foreach (var item in result.PercentCyclesWithPedsList)
+            {
+                <tr>
+                    <td>@item.Key</td>
+                    <td>@item.Value</td>
+                </tr>
+            }
+        </table>
     }
-    @if (Model.VolumesConsiderForStudy.HasValue)
+    if (result.VolumesConsiderForStudy.HasValue)
     {
-        if (Model.VolumesConsiderForStudy.Value)
-        {
-            <li>Volumes: <label class="alert-success">Consider for Study</label></li>
-        }
-        else
-        {
-            <li>Volumes: <label class="alert-danger">Do not Consider for Study</label></li>
-        }
+        <table class="table table-bordered table">
+            <tr>
+                <th colspan="7">
+                    @if (result.VolumesConsiderForStudy.Value)
+                    {
+                        <label class="alert-success">Volumes: Consider for Study</label>
+                        <br />
+                    }
+                    else
+                    {
+                        <label class="alert-danger">Volumes: Do not Consider for Study</label>
+                        <br />
+                    }
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    Opposing Lanes
+                </th>
+                <th>
+                    Cross Product Review
+                </th>
+                <th>
+                    Decision Boundaries Review
+                </th>
+                <th>
+                    Left Turn Volume
+                </th>
+                <th>
+                    Opposing Through Volume
+                </th>
+                <th>
+                    Cross Poduct Value
+                </th>
+                <th>
+                    Calculated Volume Boundary
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    @result.OpposingLanes
+                </td>
+                <td>
+                    @result.CrossProductReview
+                </td>
+                <td>
+                    @result.DecisionBoundariesReview
+                </td>
+                <td>
+                    @result.LeftTurnVolume
+                </td>
+                <td>
+                    @result.OpposingThroughVolume
+                </td>
+                <td>
+                    @result.CrossProductValue
+                </td>
+                <td>
+                    @result.CalculatedVolumeBoundary
+                </td>
+            </tr>
+        </table>
+
+        <table class="table table-bordered table">
+            <tr>
+                <th>Date/Time</th>
+                <th>Value</th>
+            </tr>
+            @foreach (var item in result.DemandList)
+            {
+                <tr>
+                    <td>@item.Key</td>
+                    <td>@item.Value</td>
+                </tr>
+            }
+        </table>
     }
-</ul>
+}

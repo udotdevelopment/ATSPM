@@ -1,39 +1,55 @@
-﻿@model SPM.Models.SignalDataCheckReportViewModel
+﻿@model IEnumerable<SPM.Models.SignalDataCheckReportViewModel>
 
 Signal data check complete please note the following results:
-<ul>
-    @if (Model.LeftTurnVolumesOk.HasValue)
-    {
-        if (Model.LeftTurnVolumesOk.Value)
+
+@foreach (var check in Model)
+{
+    <h4>@check.ApproachDescriptions</h4>
+    <ul>
+        @if (check.InsufficientDetectorEventCount)
         {
-            <li>The LT Volumes are below 60 vph you may want to <label class="alert-danger">Check Detector</label></li>
+            <li> <label class="alert-danger">Insufficient Aggregated Detector Events Found</label></li>
         }
-        else
+        @if (check.InsufficientCycleAggregation)
         {
-            <li>The LT Volumes are <label class="alert-success">OK</label></li>
+            <li> <label class="alert-danger">Insufficient Aggregated Cycle Data Found</label></li>
         }
-    }
-    @if (Model.GapOutOk.HasValue)
-    {
-        if (Model.GapOutOk.Value)
+        @if (check.InsufficientPhaseTermination)
         {
-            <li>70% or more of cycles Gap Out you may want to <label class="alert-danger">Check Detector</label></li>
+            <li> <label class="alert-danger">Insufficient Termination Data Found</label></li>
         }
-        else
+        @if (check.InsufficientPedAggregations)
         {
-            <li>Gap Out Percentage is <label class="alert-success">OK</label></li>
+            <li> <label class="alert-danger">Insufficient Aggregated Ped Data Found</label></li>
         }
-    }
-    @if (Model.PedCyclesOk.HasValue)
-    {
-        if (Model.PedCyclesOk.Value)
+        @if (!check.InsufficientPedAggregations && !check.InsufficientCycleAggregation && !check.InsufficientDetectorEventCount && !check.InsufficientPhaseTermination)
         {
-            <li>More than 30% of cycles have pedestrian calls you may want to <label class="alert-danger">Review Crash History</label></li>
+            if (check.LeftTurnVolumeOk)
+            {
+                <li>The LT Volumes are below 60 vph you may want to <label class="alert-danger">Check Detector</label></li>
+            }
+            else
+            {
+                <li>The LT Volumes are <label class="alert-success">OK</label></li>
+            }
+            if (check.GapOutOk)
+            {
+                <li>70% or more of cycles Gap Out you may want to <label class="alert-danger">Check Detector</label></li>
+            }
+            else
+            {
+                <li>Gap Out Percentage is <label class="alert-success">OK</label></li>
+            }
+            if (check.PedCycleOk)
+            {
+                <li>Pedestrian Cycles are <label class="alert-success">OK</label></li>
+
+            }
+            else
+            {
+                <li>More than 30% of cycles have pedestrian calls you may want to <label class="alert-danger">Review Crash History</label></li>
+            }
         }
-        else
-        {
-            <li>Pedestrian Cycles are <label class="alert-success">OK</label></li>
-        }
-    }
-</ul>
+    </ul>
+}
 <label class="BoldText">It is always good practice to review the Split Pattern performance in conjunction with using this report.</label>

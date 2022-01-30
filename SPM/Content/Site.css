@@ -441,12 +441,16 @@ textarea {
     min-width:400px;
 }
 
+.panel-min-width-lt {
+    min-width: 500px;
+}
+
 .chart-selection-min-width
 {
     min-width:310px;
 }
 .signal-data-check-min-width {
-    min-width: 310px;
+    /*min-width: 310px;*/
 }
 
 .report-Info-min-width {

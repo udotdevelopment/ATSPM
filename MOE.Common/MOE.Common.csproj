@@ -382,6 +382,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Business\LeftTurnGapAnalysis\LeftTurnGapAnalysis.cs" />
+    <Compile Include="Business\LeftTurnGapReport\LeftTurnGapOutAnalysis.cs" />
+    <Compile Include="Business\LeftTurnGapReport\LeftTurnPedestrianAnalysis.cs" />
+    <Compile Include="Business\LeftTurnGapReport\LeftTurnReportPreCheck.cs" />
+    <Compile Include="Business\LeftTurnGapReport\LeftTurnSplitFailAnalysis.cs" />
+    <Compile Include="Business\LeftTurnGapReport\LeftTurnVolumeAnalysis.cs" />
     <Compile Include="Business\SplitMonitor\SplitMonitor.cs" />
     <Compile Include="Business\TimingAndActuationCycle.cs" />
     <Compile Include="Business\Phase.cs">
@@ -674,9 +679,12 @@
     <Compile Include="Models\DetectorEventCountAggregation.cs" />
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\Repositories\IPhasePedAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\IPhaseLeftTurnGapAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhasePedAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\PhaseLeftTurnGapAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseTerminationAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhasePedAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\PhaseLeftTurnGapAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\PhaseTerminationAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\IPhaseTerminationAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IDetectorEventCountAggregationRepository.cs" />
@@ -797,7 +805,7 @@
     <Compile Include="Business\PlanFactory.cs" />
     <Compile Include="Business\RLM\RLMSignalPhaseCollection.cs" />
     <Compile Include="Business\ScriptGenerator\GenerateAddData.cs" />
-    <Compile Include="Business\SignalFtp.cs" />
+    <Compile Include="Models\SignalFtp.cs" />
     <Compile Include="Business\RLM\RLMSignalPhase.cs" />
     <Compile Include="Business\ControllerEventLogs.cs" />
     <Compile Include="Business\SignalControllers\BaseController.cs" />

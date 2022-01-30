@@ -26,7 +26,7 @@ namespace MOE.Common.Business.DataAggregation
                 ApproachCycleAggregationRepositoryFactory.Create();
             var approachCycles =
                 approachCycleAggregationRepository.GetApproachCyclesAggregationByApproachIdAndDateRange(
-                    approach.ApproachID, options.StartDate, options.EndDate, getProtectedPhase);
+                    approach.ApproachID, options.StartDate, options.EndDate);
             if (approachCycles != null)
             {
                 var concurrentBinContainers = new ConcurrentBag<BinsContainer>();

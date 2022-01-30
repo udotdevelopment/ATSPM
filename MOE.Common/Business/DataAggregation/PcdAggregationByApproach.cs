@@ -40,7 +40,7 @@ namespace MOE.Common.Business.DataAggregation
                     var cycleAggregationRepository = Models.Repositories.ApproachCycleAggregationRepositoryFactory.Create();
                     var cycleAggregtaions =
                         cycleAggregationRepository.GetApproachCyclesAggregationByApproachIdAndDateRange(
-                            approach.ApproachID, options.StartDate, options.EndDate, getProtectedPhase);
+                            approach.ApproachID, options.StartDate, options.EndDate);
                     //foreach (var bin in binsContainer.Bins)
                     Parallel.ForEach(binsContainer.Bins, bin =>
                     {
