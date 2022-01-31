@@ -353,7 +353,7 @@ namespace MOE.Common.Models.Repositories
             {
                 var errorLog = ApplicationEventRepositoryFactory.Create();
                 errorLog.QuickAdd(Assembly.GetExecutingAssembly().FullName,
-                    GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.Low, e.Message);
+                    GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.Low, e.Message);
                 return null;
             }
         }
@@ -382,7 +382,7 @@ namespace MOE.Common.Models.Repositories
             {
                 var errorLog = ApplicationEventRepositoryFactory.Create();
                 errorLog.QuickAdd(Assembly.GetExecutingAssembly().FullName,
-                    GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.Low, e.Message);
+                    GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.Low, e.Message);
                 return null;
             }
         }

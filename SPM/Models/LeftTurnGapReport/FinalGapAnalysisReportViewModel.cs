@@ -38,6 +38,8 @@ namespace SPM.Models
         public Dictionary<DateTime, double> PercentCyclesWithPedsList { get; internal set; }
         public Dictionary<DateTime, double> DemandList { get; internal set; }
         public Dictionary<DateTime, double> PercentCyclesWithSplitFailList { get; internal set; }
+        public String GapDemandChartImg { get; set; }
+        public String PedSplitFailChartImg { get; set; }
 
         public FinalGapAnalysisReportViewModel(bool? gapDurationConsiderForStudy, 
             bool? splitFailsConsiderForStudy, bool? pedActuationsConsiderForStudy,

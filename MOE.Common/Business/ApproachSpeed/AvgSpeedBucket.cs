@@ -94,7 +94,7 @@ namespace MOE.Common.Business
             {
                 var errorLog = ApplicationEventRepositoryFactory.Create();
                 errorLog.QuickAdd(Assembly.GetExecutingAssembly().GetName().ToString(),
-                    GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
                 throw new Exception("Error creating Percentile");
             }
             return percentileValue;

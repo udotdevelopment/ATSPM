@@ -14,6 +14,7 @@ using System.Web.Mvc;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
+using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using Newtonsoft.Json;
@@ -185,18 +186,18 @@ namespace SPM.Controllers
                     {
                         throw result.ErrorException;
                     }
-                    if(peakResult == null)
+                    if (peakResult == null)
                     {
                         throw new NullReferenceException("Unable to get peak hours");
                     }
-                   
+
                     parameters.StartHour = peakResult.AmStartHour;
                     parameters.StartMinute = peakResult.AmStartMinute;
                     parameters.EndHour = peakResult.AmEndHour;
                     parameters.EndMinute = peakResult.AmEndMinute;
                     var approachResultAm = GetApproachResult(parameters, approachId);
 
-                   
+
                     parameters.StartHour = peakResult.PmStartHour;
                     parameters.StartMinute = peakResult.PmStartMinute;
                     parameters.EndHour = peakResult.PmEndHour;
@@ -211,26 +212,20 @@ namespace SPM.Controllers
                 }
 
                 approachResult.ApproachDescription = approach.Description;
+                var gapVsDemandChart = new GapVsDemandOptions
+                    (parameters.SignalId,
+                    parameters.StartDate,
+                    parameters.EndDate.AddDays(1),
+                    0, 
+                    0, 
+                    31, 
+                    approachResult.AcceptableGapList, 
+                    approachResult.DemandList);
+                approachResult.GapDemandChartImg = gapVsDemandChart.CreateMetric().FirstOrDefault();
                 finalGapAnalysisReportViewModel.Add(approachResult);
             }
-            var settingsRepository = ApplicationSettingsRepositoryFactory.Create();
-            var settings = settingsRepository.GetGeneralSettings();
-            var imagelocation = settings.ImagePath;
-            var pdf =  new ViewAsPdf("FinalGapAnalysisReport", finalGapAnalysisReportViewModel) { FileName = "Test.pdf" };
-            var pdfResult = new PdfResult();
-            byte[] pdfData = pdf.BuildFile(ControllerContext);
-            //var tempFilePath = Path.GetTempPath();
-            var tempFileName = Guid.NewGuid().ToString() + ".pdf";
-            //var tempFilePath = Path.Combine(Server.MapPath("~/TempPdf/"), tempFileName);
-            var tempFilePath = imagelocation + tempFileName;
-
-            using (var fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write))
-            {
-                fileStream.Write(pdfData, 0, pdfData.Length);
-            }
-            pdfResult.HTML = "<iframe src=\"" + settings.ImageUrl  + tempFileName +
-                "\"style=\"width:100%; height:500px;\" frameborder=\"0\"></iframe>";
-            pdfResult.FileName = tempFileName;
+            var pdf = new ViewAsPdf("FinalGapAnalysisReport", finalGapAnalysisReportViewModel) { FileName = "Test.pdf" };
+            PdfResult pdfResult = GetPdf(pdf);
             return Json(new { pdfResult }, JsonRequestBehavior.AllowGet);
 
             //return Content(tempFileName, "text/html");
@@ -251,6 +246,29 @@ namespace SPM.Controllers
             //}
             //return pdf;
             //return PartialView("FinalGapAnalysisReport", finalGapAnalysisReportViewModel);
+        }
+
+        private PdfResult GetPdf(ViewAsPdf pdf)
+        {
+
+            var settingsRepository = ApplicationSettingsRepositoryFactory.Create();
+            var settings = settingsRepository.GetGeneralSettings();
+            var imagelocation = settings.ImagePath;
+            var pdfResult = new PdfResult();
+            byte[] pdfData = pdf.BuildFile(ControllerContext);
+            //var tempFilePath = Path.GetTempPath();
+            var tempFileName = Guid.NewGuid().ToString() + ".pdf";
+            //var tempFilePath = Path.Combine(Server.MapPath("~/TempPdf/"), tempFileName);
+            var tempFilePath = imagelocation + tempFileName;
+
+            using (var fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write))
+            {
+                fileStream.Write(pdfData, 0, pdfData.Length);
+            }
+            pdfResult.HTML = "<iframe src=\"" + settings.ImageUrl + tempFileName +
+                "\"style=\"width:100%; height:500px;\" frameborder=\"0\"></iframe>";
+            pdfResult.FileName = tempFileName;
+            return pdfResult;
         }
 
         private static void GetCombinedResult(FinalGapAnalysisReportViewModel approachResult, FinalGapAnalysisReportViewModel approachResultAm, FinalGapAnalysisReportViewModel approachResultPm, FinalGapAnalysisReportParameters parameters)

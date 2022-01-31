@@ -224,7 +224,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 var errorLog = ApplicationEventRepositoryFactory.Create();
                 errorLog.QuickAdd(Assembly.GetExecutingAssembly().GetName().ToString(),
-                    GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
                 throw new Exception("Unable to apply signal filter");
             }
         }

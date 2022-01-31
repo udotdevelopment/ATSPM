@@ -1239,7 +1239,7 @@ namespace MOE.Common.Business.DataAggregation
             ////Console.WriteLine(memoryInformation);
             var errorLog = ApplicationEventRepositoryFactory.Create();
             errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                this.GetType().DisplayName(), "clearCollections", ApplicationEvent.SeverityLevels.Medium,
+                this.GetType().Name, "clearCollections", ApplicationEvent.SeverityLevels.Medium,
                 memoryInformation);
         }
 
@@ -1400,7 +1400,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("Unable to import Approach (Phase) Event Count Data");
                 }
@@ -1445,7 +1445,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("Unable to import Signal Event Count Data");
                 }
@@ -1488,7 +1488,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("Unable to import Signal Event Count Data");
                 }
@@ -1535,7 +1535,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("Unable to import Preempt data");
                 }
@@ -1584,7 +1584,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("Unable to import Priority Data");
                 }
@@ -1632,7 +1632,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("Unable to import Detector Data");
                 }
@@ -1684,7 +1684,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("Unable to import Approach Speed Data");
                 }
@@ -1738,7 +1738,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("Unable to import Phase Cycle Data");
                 }
@@ -1796,7 +1796,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("Unable to import Approach PCD Data");
                 }
@@ -1855,7 +1855,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("Unable to import Approach Split Fail Data");
                 }
@@ -1905,7 +1905,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("Unable to import Phase Termination Data");
                 }
@@ -1979,7 +1979,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("Unable to import Phase Termination Data");
                 }
@@ -2031,7 +2031,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("Unable to import Phase Ped Data");
                 }
@@ -2088,7 +2088,7 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                        this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("Unable to import Approach Yellow and Red Acvtivation Data");
                 }

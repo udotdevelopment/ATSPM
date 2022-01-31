@@ -1109,6 +1109,15 @@ namespace MOE.Common.Migrations
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 112
+                },
+                new MetricType
+                {
+                    MetricID = 31,
+                    ChartName = "Gap Vs Demand",
+                    Abbreviation = "GVD",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 115
                 }
             );
             context.SaveChanges();
