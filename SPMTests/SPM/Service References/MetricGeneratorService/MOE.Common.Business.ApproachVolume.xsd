@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/MOE.Common.Business.ApproachVolume" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/MOE.Common.Business.ApproachVolume" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfMetricInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MetricInfo" nillable="true" type="tns:MetricInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMetricInfo" nillable="true" type="tns:ArrayOfMetricInfo" />
+  <xs:complexType name="MetricInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CombinedPeakHourFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="CombinedPeakHourKFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="CombinedPeakHourString" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CombinedPeakHourValue" type="xs:int" />
+      <xs:element minOccurs="0" name="CombinedPeakHourVolume" type="xs:int" />
+      <xs:element minOccurs="0" name="CombinedVolume" type="xs:int" />
+      <xs:element minOccurs="0" name="Direction1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Direction1PeakHourDFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="Direction1PeakHourFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="Direction1PeakHourKFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="Direction1PeakHourMaxValue" type="xs:int" />
+      <xs:element minOccurs="0" name="Direction1PeakHourString" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Direction1PeakHourVolume" type="xs:int" />
+      <xs:element minOccurs="0" name="Direction1Volume" type="xs:int" />
+      <xs:element minOccurs="0" name="Direction2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Direction2PeakHourDFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="Direction2PeakHourFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="Direction2PeakHourKFactor" type="xs:double" />
+      <xs:element minOccurs="0" name="Direction2PeakHourMaxValue" type="xs:int" />
+      <xs:element minOccurs="0" name="Direction2PeakHourString" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Direction2PeakHourVolume" type="xs:int" />
+      <xs:element minOccurs="0" name="Direction2Volume" type="xs:int" />
+      <xs:element minOccurs="0" name="ImageLocation" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MetricInfo" nillable="true" type="tns:MetricInfo" />
+</xs:schema>

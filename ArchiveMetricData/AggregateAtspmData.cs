@@ -23,13 +23,9 @@ namespace AggregateATSPMData
         
         static void Main(string[] args)
         {
-            //var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            //var settings = config.AppSettings.Settings;
-
             var dataAggregation = new MOE.Common.Business.DataAggregation.DataAggregation();
-            dataAggregation.StartAggregation(args);
+            dataAggregation.StartAggregationSignalEventData(args);
         }
-
         
     }
 }

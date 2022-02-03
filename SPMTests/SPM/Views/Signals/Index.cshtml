@@ -1,0 +1,46 @@
+﻿@model MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel
+@{
+    ViewBag.Title = "ATSPM Configuration Tool";
+}
+@Html.AntiForgeryToken()
+<h2>ATSPM Configuration Tool</h2>
+<p>
+    <a href="javascript:CreateNewSignal()">Create New Signal</a>
+</p>
+@Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
+<div class="" id="ResultMessage"></div>
+<div id="SignalEdit"></div>
+@section Scripts
+    {
+    <script type="text/javascript" src="~/Scripts/Map.js"></script>
+    <script type="text/javascript" src="~/Scripts/AddData.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
+    <script type="text/javascript" src="~/Scripts/SPMConfigurationTool.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalEdit.js"></script>
+    <script type="text/javascript" src="~/Scripts/GetMetrics.js"></script>
+    <script type="text/javascript">
+        var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';
+        var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';
+        var urlpathGetMetricsList = '@Url.Action("GetMetricsList", "DefaultCharts")';
+        var urlpathFillSignals = '@Url.Action("FillSignals", "DefaultCharts")';
+        var urlpathGetSignalEdit = '@Url.Action("Edit", "Signals")';
+        var urlpathCopyApproach = '@Url.Action("CopyApproach", "Signals")';
+        var urlpathCreateApproach = '@Url.Action("AddApproach", "Signals")';
+        var urlpathDeleteApproach = '@Url.Action("Delete", "Approaches")';
+        var urlpathDeleteSignal = '@Url.Action("Delete", "Signals")';
+        var urlpathCreateDetector = '@Url.Action("AddDetector", "Signals")';
+        var urlpathDeleteDetector = '@Url.Action("Delete", "Detectors")';
+        var urlpathCopyDetector = '@Url.Action("CopyDetector", "Signals")';
+        var urlpathCopySignal = '@Url.Action("Copy", "Signals")';
+        var urlpathCreateSignal = '@Url.Action("Create", "Signals")';
+        var urlpathCreateMetricComments = '@Url.Action("Create", "MetricComments")';
+        var urlpathCreateDetectorComments = '@Url.Action("Create", "DetectorComments")';
+        var urlpathGetConfigurationTable = '@Url.Action("Index", "ConfigurationTable")';
+        var urlpathGetConfigurationTableForVersion = '@Url.Action("IndexByVersion", "ConfigurationTable")';
+        var urlpathGetVersionEdit = '@Url.Action("EditVersion", "Signals")';
+        var urlpathCopyVersion = '@Url.Action("AddNewVersion", "Signals")';
+        var urlpathDeleteVersion = '@Url.Action("DeleteVersion", "Signals")';
+    </script>
+
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+}

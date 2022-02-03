@@ -1,0 +1,25 @@
+﻿@model MOE.Common.Business.WCFServiceLibrary.SplitFailOptions
+<div class="card">
+    <div class="card-header">Purdue Split Fail Options</div>
+    <div class="card-body">
+        <div class="">
+            @Html.LabelFor(model => model.FirstSecondsOfRed, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.FirstSecondsOfRed, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.FirstSecondsOfRed, "", new { id = "FirstSecondsOfRed-error", @class = "text-danger" })
+    </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowFailLines, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowFailLines, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowAvgLines, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowAvgLines, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowPercentFailLines, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowPercentFailLines, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        </div></div>
+
+
+

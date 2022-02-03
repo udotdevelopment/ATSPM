@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MOE.Common.Models
 {
-    public class MetricType
+    public class MetricType : IEqualityComparer<MetricType>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -32,5 +32,30 @@ namespace MOE.Common.Models
         public virtual ICollection<DetectionType> DetectionTypes { get; set; }
         public virtual ICollection<MetricComment> Comments { get; set; }
         public virtual ICollection<ActionLog> ActionLogs { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(this, obj as MetricType);
+        }
+
+        public bool Equals(MetricType left, MetricType right)
+        {
+            if ((object)left == null && (object)right == null)
+            {
+                return true;
+            }
+            if ((object)left == null || (object)right == null)
+            {
+                return false;
+            }
+            return left.ChartName == right.ChartName && left.Abbreviation == right.Abbreviation;
+        }
+
+        public int GetHashCode(MetricType metricType)
+        {
+            return (metricType.ChartName + metricType.Abbreviation).GetHashCode();
+        }
     }
+
+   
 }

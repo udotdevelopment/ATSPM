@@ -1,0 +1,4 @@
+﻿@model MOE.Common.Models.ViewModel.Chart.MetricsListViewModel
+
+@Html.LabelFor(model => model.MetricsList)
+@Html.DropDownListFor(model => model.SelectedMetricID, Model.MetricsList, new { @id = "MetricsList", @class = "form-control", @size = Model.MetricsList.Count.ToString(), @onchange = "GetOptions()" })

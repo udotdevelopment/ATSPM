@@ -1,0 +1,46 @@
+﻿@model MOE.Common.Business.WCFServiceLibrary.YellowAndRedOptions
+<div class="panel panel-default ">
+    <div class="panel-heading">Yellow and Red Actuations</div>
+    <div class="panel-body">
+        <div class="">
+            @Html.LabelFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.SevereLevelSeconds, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.SevereLevelSeconds, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowRedLightViolations, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowRedLightViolations, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowSevereRedLightViolations, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowSevereRedLightViolations, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowPercentRedLightViolations, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowPercentRedLightViolations, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowPercentSevereRedLightViolations, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowPercentSevereRedLightViolations, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowAverageTimeRedLightViolations, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowAverageTimeRedLightViolations, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowYellowLightOccurrences, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowYellowLightOccurrences, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowPercentYellowLightOccurrences, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowPercentYellowLightOccurrences, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowAverageTimeYellowOccurences, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowAverageTimeYellowOccurences, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        </div></div>
+

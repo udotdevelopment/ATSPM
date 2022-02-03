@@ -1,0 +1,21 @@
+﻿@model IEnumerable<MOE.Common.Models.FAQ>
+
+@{
+    ViewBag.Title = "Frequently Asked Questions";
+}
+
+<h2>Frequently Asked Questions</h2>
+@foreach (var item in Model) {
+<div id="FAQ_@item.FAQID" role="tablist" aria-multiselectable="true" class="col-md-12">
+    <div class="card panel-default">
+        <div class="card-header" role="tab" id="FAQHeading_@item.FAQID">
+                <a id="FAQHeader_@item.FAQID" data-toggle="collapse" data-parent="#FAQ_@item.FAQID" href="#FAQBodyCollapse_@item.FAQID" aria-expanded="false" aria-controls="_@item.FAQID">
+                    @Html.Raw(Server.HtmlDecode(item.Header))
+                </a>
+        </div>
+        <div id="FAQBodyCollapse_@item.FAQID" class="collapse card-body" role="tabpanel">
+            @Html.Raw(Server.HtmlDecode(item.Body))
+        </div>
+    </div>
+</div>
+}

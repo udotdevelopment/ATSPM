@@ -23,7 +23,7 @@ namespace AsyncGetMaxTimeRecords
     // process data 
     public class Processing
     {
-        static int MAX_PROCESSORS = Properties.Settings.Default.MaxProcessors; 
+        static int MAX_PROCESSORS = Properties.Settings.Default.MaxProcessors;
 
         SemaphoreSlim _semaphore = new SemaphoreSlim(MAX_PROCESSORS);
         HashSet<Task> _pending = new HashSet<Task>();
@@ -43,6 +43,8 @@ namespace AsyncGetMaxTimeRecords
 
         private static void SaveToDB(XmlDocument xml, string SignalId)
         {
+            System.Collections.Specialized.NameValueCollection appSettings = ConfigurationManager.AppSettings;
+            string destTable = appSettings["DestinationTableName"];
 
             MOE.Common.Data.MOE.Controller_Event_LogDataTable elTable = new MOE.Common.Data.MOE.Controller_Event_LogDataTable();
             UniqueConstraint custUnique =
@@ -91,7 +93,8 @@ namespace AsyncGetMaxTimeRecords
                                  Properties.Settings.Default.WriteToConsole, Properties.Settings.Default.forceNonParallel, Properties.Settings.Default.MaxThreads, false,
                                  Properties.Settings.Default.EarliestAcceptableDate, Properties.Settings.Default.BulkCopyBatchSize, Properties.Settings.Default.BulkCopyTimeOut);
 
-            MOE.Common.Business.SignalFtp.BulktoDb(elTable, Options);
+            MOE.Common.Business.SignalFtp.BulktoDb(elTable, Options, destTable);
+
 
 
         }

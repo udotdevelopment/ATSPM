@@ -1,0 +1,48 @@
+﻿@model MOE.Common.Models.ViewModel.RouteEdit.RouteCreateViewModel
+
+@Html.AntiForgeryToken()
+@Html.HiddenFor(model => model.Route.Id)
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.SignalSelectList, new SelectList(Model.SignalSelectList, "Item1", "Item2"), new {@id = "SelectedSignalsList", @class = "form-control", @size = 10, @onchange = "DisplayApproaches(this.value)", @title = "Selected Signal List"})
+                <div class="row">
+                    <div class="col-12">
+                        <a class="ui-button" href="javascript:MoveUp()">Move Up<span class="fa fa-arrow-circle-up"></span></a>
+                        <a class="ui-button" href="javascript:MoveDown()">Move Down<span class="fa fa-arrow-circle-down"></span></a>
+                        <a class="ui-button" href="javascript:Remove()">Remove<span class="fa fa-minus-square"></span></a>
+                    </div>
+                </div>
+            </div>
+            <div id="DeleteConfirmation"></div>
+            <div id="ApproachList" class="col-md-4"></div>
+            <div id="RouteApproachList" onload="DisplayRouteApproaches" class="col-md-4">
+
+            </div>
+        </div>
+    </div>
+    </div>
+<div class="row">
+    <div id="SignalSearchContainer" class="col-md-6 panel-min-width">
+        @Html.Partial("RouteMap", new ViewDataDictionary(Model.RouteMap))
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript" src="~/Scripts/AddRouteData.js"></script>
+    <script type="text/javascript" src="~/Scripts/RouteEdit.js"></script>
+    <script type="text/javascript" src="~/Scripts/Map.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
+    <script> var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';</script>
+    <script> var urlpathApproaches = '@Url.Action("ApproachList", "RouteSignals")';</script>
+    <script> var urlpathRouteApproaches = '@Url.Action("ApproachesForRoute", "RouteSignals")';</script>
+    <script> var urlpathCreateRouteSignal = '@Url.Action("Create", "RouteSignals")';</script>
+    <script> var urlpathUpdateApproach = '@Url.Action("UpdateApproach", "RouteSignals")';</script>
+    <script> var urlpathDeleteSignal = '@Url.Action("Delete", "RouteSignals")';</script>
+    <script> var urlpathMoveSignalUp = '@Url.Action("MoveSignalUp", "RouteSignals")';</script>
+    <script> var urlpathMoveSignalDown = '@Url.Action("MoveSignalDown", "RouteSignals")';</script>
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+}

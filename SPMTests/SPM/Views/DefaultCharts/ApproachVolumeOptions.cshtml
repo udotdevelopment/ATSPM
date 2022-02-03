@@ -1,0 +1,44 @@
+﻿@model MOE.Common.Business.WCFServiceLibrary.ApproachVolumeOptions
+<div class="card">
+    <div class="card-header">Approach Volume Options</div>
+    <div class="card-body">
+        <div class="">
+            @Html.LabelFor(model => model.YAxisMin, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.YAxisMin, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.EditorFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
+        </div>
+        <div class="">
+            @Html.LabelFor(model => model.SelectedBinSize, new { htmlAttributes = new { @class = "control-label" } })
+            @Html.DropDownListFor(model => model.SelectedBinSize,
+            new SelectList(Model.BinSizeList, 15), new { @id = "SelectedBinSize", @class = "form-control col-md-6" })
+            @Html.ValidationMessageFor(model => model.SelectedBinSize, "", new { id = "SelectedBinSize-error", @class = "text-danger" })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowDirectionalSplits, new { htmlAttributes = new { @id = "ShowDirectionalSplits", @class = "" } })
+            @Html.LabelFor(model => model.ShowDirectionalSplits, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowTotalVolume, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowTotalVolume, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowSbWbVolume, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowSbWbVolume, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowNbEbVolume, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowNbEbVolume, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowTMCDetection, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowTMCDetection, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowAdvanceDetection, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowAdvanceDetection, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+        
+        </div></div>

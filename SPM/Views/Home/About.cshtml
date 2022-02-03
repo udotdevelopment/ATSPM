@@ -21,33 +21,41 @@
             <p>
                 You can download the software for our site by clicking the button below.
             </p>
-            <p><a class="btn btn-dark" href="https://www.itsforge.net/">Download &raquo;</a></p>
+            <p><a class="btn btn-dark" href="https://github.com/udotdevelopment/ATSPM/releases">Download &raquo;</a></p>
         </div>
         <div class="col-md-4">
             <h2>What's New</h2>
-            <p>Version 4.2.3 (January 2020)</p>
-            <p>Updated the following libraries:</p>
+            <p>Version 4.2.4 (January 2021)</p>
+            <p>Changes:</p>
             <ul>
-                <li>New GDOT Left Turn Gap Analysis Metric</li>
-                <Li>New Web API</Li>
-                <li>Changed the options on Timing And Actuations, to include time before and after the display for the system to look for events</li>
-                <li>Fixed several bugs</li>
+                <li>Build fixes for MOE.Common and AsyncGetMaxTimeRecords. *Note: Test products have to be unloaded for solution to build</li>
+                <Li>Remove SpmApi project - seems to have been replaced by AtspmApi project but was still referenced in sln file.</Li>
+                <li>Change Left Turn Gap Analysis Options display to use cards instead of panels to support bootstrap update.</li>
+                <li>Change seed method and get metric type by signal to only include Left Turn Gap Analysis report for signals with detection types 4 or 6. </li>
+                <li>Update to Left Turn Gap Analysis calculations. Report had been using rolling 15-minute windows regardless of the bin size the user specified - this update changes the rolling window to match the user's bin size.</li>
+                <li>New installer provided by Georgia Department of Transportation. This will be located in the Installer folder in the download.</li>
+                <li>Installations/Updates will only update core menu items reducing duplication and changes to customization of menus.</li>
+                <li>Re-order of metric type in the metric selection.</li>
             </ul>
         </div>
         <div class="col-md-4">
             <h2>What's Next</h2>
-            <p>Version 4.2.4 (Anticipated Release Summer/Fall 2020)</p>
+            <p>Version 4.2.5 (Anticipated Release Spring 2021)</p>
             <ul>
-                <Li>GDOT to enhance the source code to add an installer program</Li>
-                <Li> All pull requests from other entities</Li>
-                <li>Higher level dashboards of performance measures using aggregated data</li>
-                <li>All pull requests from other entities (github)</li>
-                <li>Fix minor bugs</li>
+                <li>All pull requests from other entities</li>
+                <li>Fix Minor Bugs</li>
+                <li>GDOT Enhancements including</li>
+                <ul>
+                    <li>New metric "Wait Time".</li>
+                    <li>Old to New MVID migration and updates.</li>
+                    <li>Some SIGOPS (previously MARK1) integration.</li>
+                    </ul>
             </ul>
-            <p>Version 4.2.5 (Anticipated Summer/Fall 2020)</p>
+            <p>Version 4.2.6 (Anticipated Summer/Fall 2021)</p>
             <ul>
-                <li>Higher level dashboards of performance measures using aggregated data. </li>
-                <li>All pull requests from other entities (github).</li>
+                <li>SIGOPS Dashboard & Reports integration into ATSPM.</li>
+                <li>Adding an Area & Jurisdiction category to ATSPM Configuration.</li>
+                <li>Adding a new ATSPM Report titled, "Left Turn Gap Analyzer</li>
             </ul>
         </div>
     </div>

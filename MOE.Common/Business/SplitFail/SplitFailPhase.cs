@@ -23,10 +23,14 @@ namespace MOE.Common.Business.SplitFail
             Approach = approach;
             GetPermissivePhase = getPermissivePhase;
             PhaseNumberSort = getPermissivePhase ? approach.PermissivePhaseNumber.Value.ToString()+"-1": approach.ProtectedPhaseNumber.ToString()+"-2";
-            Cycles = CycleFactory.GetSplitFailCycles(options, approach, getPermissivePhase);
-            SetDetectorActivations(options);
-            AddDetectorActivationsToCycles();
-            Plans = PlanFactory.GetSplitFailPlans(Cycles, options, Approach);
+
+            using (var db = new SPM())
+            {
+                Cycles = CycleFactory.GetSplitFailCycles(options, approach, getPermissivePhase, db);
+                SetDetectorActivations(options, db);
+                AddDetectorActivationsToCycles();
+                Plans = PlanFactory.GetSplitFailPlans(Cycles, options, Approach, db);
+            }
             TotalFails = Cycles.Count(c => c.IsSplitFail);
             Statistics = new Dictionary<string, string>();
             Statistics.Add("Total Split Failures", TotalFails.ToString());
@@ -112,9 +116,9 @@ namespace MOE.Common.Business.SplitFail
             }
         }
 
-        private void SetDetectorActivations(SplitFailOptions options)
+        private void SetDetectorActivations(SplitFailOptions options, SPM db)
         {
-            var controllerEventsRepository = ControllerEventLogRepositoryFactory.Create();
+            var controllerEventsRepository = ControllerEventLogRepositoryFactory.Create(db);
             var phaseNumber = GetPermissivePhase ? Approach.PermissivePhaseNumber.Value : Approach.ProtectedPhaseNumber;
             var detectors = Approach.GetAllDetectorsOfDetectionType(6);// .GetDetectorsForMetricType(12);
 

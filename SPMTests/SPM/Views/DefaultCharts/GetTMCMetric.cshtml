@@ -1,0 +1,138 @@
+﻿@model MOE.Common.Business.TMC.TMCViewModel
+    
+<script type="text/javascript">
+    function ShowMetricUrl() {
+        @Html.Raw(Model.ShowMetricUrlJavascript)
+    }</script>
+
+@if (Model.ShowDataTable)
+{
+    if (Model.Headers.Count > 0)
+    {
+        <div class="TMCTable">
+            <table class="table table-bordered table-striped table-condensed">
+
+                <tr>
+                    <th rowspan="3" class="dashPlaceHoder">-</th>
+                    @for (int i = 0; i < Model.Headers[0].Values.Count; i++)
+                    {
+                        <th colspan="@Model.Headers[0].Spans[i]"> @Model.Headers[0].Values[i].Item1</th>
+                    }
+                </tr>
+                <tr>
+                    @for (int i = 0; i < Model.Headers[1].Values.Count; i++)
+                    {
+                        <th colspan="@Model.Headers[1].Spans[i]"> @Model.Headers[1].Values[i].Item1</th>
+                    }
+                </tr>
+                <tr>
+                    @foreach (Tuple<string, string> value in Model.Headers[2].Values)
+                    {
+                        if (value.Item2 == "DirectionTotal")
+                        {
+                            <th class="TMCDirectionTotalColumn">@value.Item1</th>
+                        }
+                        else if (value.Item2 == "LaneTypeTotal")
+                        {
+                            <th class="TMCMLaneTypeTotalColumn"> @Html.Encode(value.Item1) </th>
+                        }
+                        else
+                        {
+                            <th>@value.Item1</th>
+                        }
+                    }
+                </tr>
+
+
+
+
+                @foreach (var t in Model.Records)
+                {
+                    <tr>
+                        <td>
+                            @t.Timestamp.ToShortTimeString()
+
+                        </td>
+                        @foreach (Tuple<int, string> value in t.Values)
+                        {
+                            if (value.Item2 == "DirectionTotal")
+                            {
+                                <td class="TMCDirectionTotalColumn"> @value.Item1 </td>
+                            }
+                            else if (value.Item2 == "LaneTypeTotal")
+                            {
+                                <td class="TMCMLaneTypeTotalColumn"> @value.Item1 </td>
+                            }
+                            else
+                            {
+                                <td> @value.Item1 </td>
+                            }
+
+                        }
+                    </tr>
+                }
+                <tr>
+                    <td>@Model.Footers[0].Title</td>
+                    @foreach (int value in Model.Footers[0].Values)
+                    {
+                        <td>@value</td>
+                    }
+                </tr>
+            </table>
+            @if(Model.BinSize == 15)
+            { 
+            <table class="table table-bordered table-striped table-condensed">
+                <tr>
+                    <th rowspan="3" class="dashPlaceHoder">-</th>
+                    <th colspan="50">Peak Hour (PHF = @Model.PeakHourFactor)</th>                    
+                </tr>
+                <tr>
+                    @for (int i = 0; i < Model.PeakHourHeaders[0].Values.Count; i++)
+                    {
+                        <th colspan="@Model.PeakHourHeaders[0].Spans[i]"> @Model.PeakHourHeaders[0].Values[i].Item1</th>
+                    }
+                </tr>
+                <tr>
+                    @foreach (Tuple<string, string> value in Model.PeakHourHeaders[1].Values)
+                    {
+                        if (value.Item2 == "DirectionTotal")
+                        {
+                            <th class="TMCDirectionTotalColumn">@value.Item1</th>
+                        }
+                        else if (value.Item2 == "LaneTypeTotal")
+                        {
+                            <th class="TMCMLaneTypeTotalColumn"> @Html.Encode(value.Item1) </th>
+                        }
+                        else
+                        {
+                            <th>@value.Item1</th>
+                        }
+                    }
+                    <th class="TMCMLaneTypeTotalColumn">Vehicle Total</th>
+                </tr>
+                <tr>
+                    <td>@Model.PeakHour.Key.ToShortTimeString() - @Model.PeakHour.Key.AddHours(1).ToShortTimeString()</td>
+                    @foreach (var v in Model.PeakHourValues[0].Values)
+                    {
+                        <td class="@v.Item2">
+                            @v.Item1
+                        </td>
+                    }
+                    <td class="TMCMLaneTypeTotalColumn">@Model.PeakHour.Value</td>
+                </tr>
+
+            </table>
+            }
+        </div>
+    }
+    else
+    {
+        <h1>No Data Found</h1>
+    }
+    }
+    
+    @foreach (var record in Model.ImageLocations)
+    {
+          <img src=@record alt="TMC Chart" />
+    }
+}

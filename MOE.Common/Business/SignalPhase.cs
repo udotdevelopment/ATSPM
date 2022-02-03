@@ -101,28 +101,33 @@ namespace MOE.Common.Business
 
         private void GetSignalPhaseData()
         {
-            GetDetectorEvents(_metricTypeId);
-            GetPlansCyclesAndEvents();
+            using (var db = new SPM())
+            {
+                //db.Database.ExecuteSqlCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;");
+                GetDetectorEvents(_metricTypeId,db);
+                GetPlansCyclesAndEvents(db);
+            }
         }
 
-        private void GetPlansCyclesAndEvents()
+        private void GetPlansCyclesAndEvents(SPM db)
         {
-            Cycles = CycleFactory.GetPcdCycles(StartDate, EndDate, Approach, DetectorEvents, GetPermissivePhase, _pcdCycleTime);
-            Plans = PlanFactory.GetPcdPlans(Cycles, StartDate, EndDate, Approach);
+            Cycles = CycleFactory.GetPcdCycles(StartDate, EndDate, Approach, DetectorEvents, GetPermissivePhase, _pcdCycleTime, db);
+            Plans = PlanFactory.GetPcdPlans(Cycles, StartDate, EndDate, Approach, db);
             //GetPreemptEvents();
             if (_showVolume)
                 SetVolume(DetectorEvents, _binSize);
         }
 
-        private void GetDetectorEvents(int metricTypeId)
+        private void GetDetectorEvents(int metricTypeId, SPM db)
         {
-            var db = new SPM();
-            var celRepository = ControllerEventLogRepositoryFactory.Create(db);
-            DetectorEvents = new List<Controller_Event_Log>();
-            var detectorsForMetric = Approach.GetDetectorsForMetricType(metricTypeId);
-            foreach (var d in detectorsForMetric)
-                DetectorEvents.AddRange(celRepository.GetEventsByEventCodesParamWithOffsetAndLatencyCorrection(Approach.SignalID, StartDate,
-                    EndDate, new List<int> {82}, d.DetChannel, d.GetOffset(), d.LatencyCorrection));
+                var celRepository = ControllerEventLogRepositoryFactory.Create(db);
+                DetectorEvents = new List<Controller_Event_Log>();
+                var detectorsForMetric = Approach.GetDetectorsForMetricType(metricTypeId);
+                foreach (var d in detectorsForMetric)
+                    DetectorEvents.AddRange(celRepository.GetEventsByEventCodesParamWithOffsetAndLatencyCorrection(
+                        Approach.SignalID, StartDate,
+                        EndDate, new List<int> {82}, d.DetChannel, d.GetOffset(), d.LatencyCorrection));
+            
         }
 
 

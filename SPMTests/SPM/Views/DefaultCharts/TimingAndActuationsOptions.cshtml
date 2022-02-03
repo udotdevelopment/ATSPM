@@ -1,0 +1,134 @@
+﻿@model MOE.Common.Business.WCFServiceLibrary.TimingAndActuationsOptions
+<div class="card">
+<div class="card options-selection-min-width"></div>
+<div class="card-header">Timing and Actuation Options</div>
+<div class="card-body">
+    <div class="">
+        @Html.EditorFor(model => model.ShowLegend, new {htmlAttributes = new {@class = ""}})
+        @Html.LabelFor(model => model.ShowLegend, new {htmlAttributes = new {@class = "control-label"}})
+    </div>
+    <div class="">
+        @Html.EditorFor(model => model.ShowHeaderForEachPhase, new {htmlAttributes = new {@class = ""}})
+        @Html.LabelFor(model => model.ShowHeaderForEachPhase, new {htmlAttributes = new {@class = "control-label"}})
+    </div>
+    <div class="">
+        @Html.EditorFor(model => model.CombineLanesForEachGroup, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
+        @Html.LabelFor(model => model.CombineLanesForEachGroup, new {htmlAttributes = new {@class = "control-label"}})
+    </div>
+    <div class="">
+        @Html.EditorFor(model => model.DotAndBarSize, new {htmlAttributes = new {@class = "TimingAndAcuationsDotWidth", placeholder = "Auto"}})
+        @Html.LabelFor(model => model.DotAndBarSize, new {htmlAttributes = new {@class = "control-label"}})
+    </div>
+    <div class="">
+        @Html.LabelFor(model => model.PhaseFilter, new {htmlAttributes = new {@class = "control-label"}})
+        @Html.EditorFor(model => model.PhaseFilter, new {htmlAttributes = new {@class = "", placeholder = "Comma or Dash List"}})
+    </div>
+
+    <div class="card">
+        <div class="card-header" role="tab" id="customHeadingTwo">
+            <a id="CustomHeader" data-toggle="collapse" href="#customCollapseTwo" aria-expanded="false" aria-controls="customCollapseTwo">
+                Phase and Global Custom Codes
+            </a>
+        </div>
+        <div id="customCollapseTwo" class="collapse ">
+            <div class="card-body" id="CustomCardBody">
+                <div class="">
+                    @Html.LabelFor(model => model.PhaseEventCodes, new {htmlAttributes = new {@class = "control-label"}})
+                    @Html.EditorFor(model => model.PhaseEventCodes, new {htmlAttributes = new {@class = "", placeholder = "Comma or Dash List"}})
+                </div>
+                <div class="">
+                    @Html.LabelFor(model => model.GlobalCustomEventCodes, new {htmlAttributes = new {@class = "control-label"}})
+                    @Html.EditorFor(model => model.GlobalCustomEventCodes, new {htmlAttributes = new {@class = "", placeholder = "Comma or Dash List"}})
+                </div>
+                <div class="">
+                    @Html.LabelFor(model => model.GlobalCustomEventParams, new {htmlAttributes = new {@class = "control-label"}})
+                    @Html.EditorFor(model => model.GlobalCustomEventParams, new {htmlAttributes = new {@class = "", placeholder = "Comma or Dash List"}})
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" role="tab" id="laneheadingOne">
+            <a id="LaneHeader" data-toggle="collapse" href="#LaneCollapseOne" aria-expanded="false" aria-controls="LaneCollapseOne">
+                Chart Options
+            </a>
+        </div>
+        <div id="LaneCollapseOne" class="collapse">
+            <div class="card-body" id="LaneDetectionPlaceHolder">
+                <div class="">
+                    @Html.EditorFor(model => model.ShowAllLanesInfo, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
+                    @Html.LabelFor(model => model.ShowAllLanesInfo, new {htmlAttributes = new {@class = "control-label"}})
+                </div>
+                <div class="">
+                    @Html.EditorFor(model => model.ShowLinesStartEnd, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
+                    @Html.LabelFor(model => model.ShowLinesStartEnd, new {htmlAttributes = new {@class = "control-label"}})
+                </div>
+                <div class="">
+                    @Html.EditorFor(model => model.ShowEventPairs, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
+                    @Html.LabelFor(model => model.ShowEventPairs, new {htmlAttributes = new {@class = "control-label"}})
+                </div>
+                <div class="">
+                    @Html.EditorFor(model => model.ShowRawEventData, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+                    @Html.LabelFor(model => model.ShowRawEventData, new { htmlAttributes = new { @class = "control-label" } })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" role="tab" id="customHeadingThree">
+            <a id="CustomHeader2" data-toggle="collapse" href="#customCollapseThree" aria-expanded="false" aria-controls="customCollapseThree">
+                Vehicle Signal Display Options
+            </a>
+        </div>
+        <div id="customCollapseThree" class="collapse">
+            <div class="card-body" id="CustomCardBody2">
+                <div class="">
+                    @Html.LabelFor(model => model.ExtendVsdSearch, new {htmlAttributes = new {@class = "control-label"}})
+                    @Html.EditorFor(model => model.ExtendVsdSearch, new {htmlAttributes = new {@class = "", placeholder = "Minutes.Decimal"}})
+                </div>
+                <div class="">
+                    @Html.EditorFor(model => model.ShowVehicleSignalDisplay, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
+                    @Html.LabelFor(model => model.ShowVehicleSignalDisplay, new {htmlAttributes = new {@class = "control-label"}})
+                </div>
+                <div class="">
+                    @Html.EditorFor(model => model.ShowPedestrianIntervals, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
+                    @Html.LabelFor(model => model.ShowPedestrianIntervals, new {htmlAttributes = new {@class = "control-label"}})
+                </div>
+                <br/>
+                <div class="">
+                    @Html.LabelFor(model => model.ExtendStartStopSearch, new {htmlAttributes = new {@class = "control-label"}})
+                    @Html.EditorFor(model => model.ExtendStartStopSearch, new {htmlAttributes = new {@class = "", placeholder = "Minutes.Decimal"}})
+                </div>
+                <div class="">
+                    @Html.EditorFor(model => model.ShowPedestrianActuation, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
+                    @Html.LabelFor(model => model.ShowPedestrianActuation, new {htmlAttributes = new {@class = "control-label"}})
+                </div>
+                <div class="">
+                    @Html.EditorFor(model => model.ShowStopBarPresence, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
+                    @Html.LabelFor(model => model.ShowStopBarPresence, new {htmlAttributes = new {@class = "control-label"}})
+                </div>
+                <div class="">
+                    @Html.EditorFor(model => model.ShowLaneByLaneCount, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
+                    @Html.LabelFor(model => model.ShowLaneByLaneCount, new {htmlAttributes = new {@class = "control-label"}})
+                </div>
+                <div class="">
+                    @Html.EditorFor(model => model.ShowAdvancedDilemmaZone, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
+                    @Html.LabelFor(model => model.ShowAdvancedDilemmaZone, new {htmlAttributes = new {@class = "control-label"}})
+                </div>
+                <div class="">
+                    @Html.EditorFor(model => model.ShowAdvancedCount, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
+                    @Html.LabelFor(model => model.ShowAdvancedCount, new {htmlAttributes = new {@class = "control-label"}})
+                </div>
+                <div class="">
+                    @Html.EditorFor(model => model.AdvancedOffset, new {htmlAttributes = new {@class = "TimingAndAcuationsDotWidth", placeholder = "seconds"}})
+                    @Html.LabelFor(model => model.AdvancedOffset, new {htmlAttributes = new {@class = "control-label"}})
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    

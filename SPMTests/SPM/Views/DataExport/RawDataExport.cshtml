@@ -1,0 +1,92 @@
+﻿@using System.Web.UI.WebControls
+@model MOE.Common.Models.ViewModel.DataExportViewModel
+
+@{
+    //Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Raw Data Export</title>
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div id="SignalSearchContainer" class="panel-min-width">
+                        @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            @Html.LabelFor(model => model.EventCodes, htmlAttributes: new { @class = "control-label", @placeholder = "Signal Id", aria_label = "Signal Id" })
+                            <div class="input-group-custom">
+                                @Html.EditorFor(model => model.EventCodes, new { htmlAttributes = new { @class = "form-control", PlaceHolder = "Comma Separated List" } })
+                                @Html.ValidationMessageFor(model => model.EventCodes, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            @Html.LabelFor(model => model.EventParams, htmlAttributes: new { @class = "control-label", @placeholder = "Signal Id", aria_label = "Signal Id" })
+                            <div class="input-group-custom">
+                                @Html.EditorFor(model => model.EventParams, new { htmlAttributes = new { @class = "form-control", PlaceHolder = "Comma Separated List" } })
+                                @Html.ValidationMessageFor(model => model.SignalId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <ul>
+                                <li>Leave blank for all Event Codes/Event Parameters</li>
+                                <li>To filter on a list of codes/params, use comma and/or dash. E.g.: 1, 3, 6-8, 10</li>
+                                <li><a href=@Model.EnumerationsUrl target="_blank">@Model.EnumerationsName</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.DateTimePickerViewModel)
+                </div>
+                <br/>
+                <div class="col-md-12">
+                    <input type="submit" value="Download" class="btn btn-default" />
+                    <button id="CheckRecordCount" type="button" onclick="GetRecordCount()" class="btn btn-primary">Check Record Count<span id='RunReportSpinner' class="glyphicon"></span></button>
+                    <label>Limit of allowed record count: @Html.DisplayFor(model => model.RecordCountLimit)</label>
+                    <div id="GenerateData"></div>
+                </div>
+                @if (!String.IsNullOrEmpty(Model.RecaptchaMessage))
+                {
+                    <h1 class="text-danger">@Model.RecaptchaMessage</h1>
+                }
+                @if (!String.IsNullOrEmpty(Model.RecaptchaPublicKey))
+                {
+                    <div class="g-recaptcha" data-sitekey="@Model.RecaptchaPublicKey" data-callback="recaptchaResponse"></div>
+                }
+
+            </div>
+        </div>
+
+    }
+</body>
+</html>
+
+
+@section Scripts {
+    <script type="text/javascript" src="~/Scripts/RawDataExport.js"></script>
+    <script type="text/javascript" src="~/Scripts/Map.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
+    <script> var urlpathGetRecordCount = '@Url.Action("GetRecordCount", "DataExport")';</script>
+    <script> var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';</script>
+    <script> var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';</script>
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+}

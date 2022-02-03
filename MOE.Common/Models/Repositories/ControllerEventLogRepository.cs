@@ -12,19 +12,37 @@ namespace MOE.Common.Models.Repositories
 {
     public class ControllerEventLogRepository : IControllerEventLogRepository
     {
+       
         private readonly SPM _db = new SPM();
         public ControllerEventLogRepository(SPM db)
         {
-            //_db.Database.CommandTimeout = 180;
-            db.Database.ExecuteSqlCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;");
-            db.Configuration.AutoDetectChangesEnabled = false;
             _db = db;
+            //var i = 0;
+            //for ( i = 0; i < 10; i++)
+            //{
+            //    try
+            //    {
+
+            //        //_db.Database.CommandTimeout = 180;
+            //        db.Database.ExecuteSqlCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;");
+            //        db.Configuration.AutoDetectChangesEnabled = false;
+            //        _db = db;
+            //        break;
+            //    }
+            //    catch 
+            //    {
+            //        Console.WriteLine(" Inside a catch statement for setting the TRANSACTION ISOLATION LEVEL."
+            //                          + "  Number of times is : {0}.", i);
+            //        Console.WriteLine("Now wait for 120 seconds.");
+            //        System.Threading.Thread.Sleep(120000);
+            //    }
+            //}
         }
         public ControllerEventLogRepository()
         {
             //_db.Database.CommandTimeout = 180;
-            _db.Database.ExecuteSqlCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;");
-            _db.Configuration.AutoDetectChangesEnabled = false;
+            //_db.Database.ExecuteSqlCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;");
+            //_db.Configuration.AutoDetectChangesEnabled = false;
         }
 
         public int GetRecordCountByParameterAndEvent(string signalId, DateTime startTime, DateTime endTime,
@@ -422,6 +440,7 @@ namespace MOE.Common.Models.Repositories
             DateTime startTime, DateTime endTime, List<int> eventCodes, int param, double offset,
             double latencyCorrection)
         {
+
             try
             {
                 var events = (from s in _db.Controller_Event_Log
@@ -518,30 +537,37 @@ namespace MOE.Common.Models.Repositories
         public Controller_Event_Log GetFirstEventBeforeDateByEventCodeAndParameter(string signalId, int eventCode,
             int eventParam, DateTime date)
         {
-            try
+            if (!String.IsNullOrEmpty(signalId))
             {
-                var tempDate = date.AddDays(-1);
-                var lastEvent = _db.Controller_Event_Log.Where(c => c.SignalID == signalId &&
-                                                                    c.Timestamp >= tempDate &&
-                                                                    c.Timestamp < date &&
-                                                                    c.EventCode == eventCode &&
-                                                                    c.EventParam == eventParam)
-                    .OrderByDescending(c => c.Timestamp).FirstOrDefault();
-                return lastEvent;
+                try
+                {
+                    _db.Database.CommandTimeout = 10;
+                    var tempDate = date.AddDays(-1);
+                    var lastEvent = _db.Controller_Event_Log.Where(c => c.SignalID == signalId &&
+                                                                        c.Timestamp >= tempDate &&
+                                                                        c.Timestamp < date &&
+                                                                        c.EventCode == eventCode &&
+                                                                        c.EventParam == eventParam)
+                        .OrderByDescending(c => c.Timestamp).FirstOrDefault();
+                    return lastEvent;
+                }
+
+                catch (Exception ex)
+                {
+                    var logRepository = ApplicationEventRepositoryFactory.Create();
+                    var e = new ApplicationEvent();
+                    e.ApplicationName = "MOE.Common";
+                    e.Class = GetType().ToString();
+                    e.Function = "GetEventsByEventCodesParamWithOffsetAndLatencyCorrection";
+                    e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
+                    e.Description = ex.Message;
+                    e.Timestamp = DateTime.Now;
+                    logRepository.Add(e);
+                    return null;
+                }
             }
-            catch (Exception ex)
-            {
-                var logRepository = ApplicationEventRepositoryFactory.Create();
-                var e = new ApplicationEvent();
-                e.ApplicationName = "MOE.Common";
-                e.Class = GetType().ToString();
-                e.Function = "GetEventsByEventCodesParamWithOffsetAndLatencyCorrection";
-                e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
-                e.Description = ex.Message;
-                e.Timestamp = DateTime.Now;
-                logRepository.Add(e);
-                return null;
-            }
+
+            return null;
         }
 
         public int GetSignalEventsCountBetweenDates(string signalId, DateTime startTime, DateTime endTime)
@@ -549,6 +575,12 @@ namespace MOE.Common.Models.Repositories
             return _db.Controller_Event_Log.Count(r => r.SignalID == signalId &&
                                                 r.Timestamp >= startTime
                                                 && r.Timestamp < endTime);
+        }
+
+        public List<Controller_Event_Log> GetEventsBetweenDates(DateTime startTime, DateTime endTime)
+        {
+            return _db.Controller_Event_Log.Where(r => r.Timestamp >= startTime
+                                                       && r.Timestamp < endTime).ToList();
         }
 
         public int GetApproachEventsCountBetweenDates(int approachId, DateTime startTime, DateTime endTime,

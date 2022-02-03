@@ -1,0 +1,33 @@
+﻿@model MOE.Common.Models.ViewModel.LinkPivotPCDOptions
+@using (Ajax.BeginForm("PCDs", "LinkPivot", new AjaxOptions { UpdateTargetId = "PCDsPlaceHolder", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "StartPCDsReportSpinner()", OnSuccess = "StopPCDsReportSpinner()", OnFailure = "StopPCDsReportSpinner()" }))
+                {
+    <form>
+        <fieldset>
+            <legend>PCD Options</legend>
+            <div class="form-group">
+                <label for="SelectedStartDate" class="control-label">Dates</label>
+                @Html.ListBoxFor(m => m.SelectedStartDate, new SelectList(Model.Dates), htmlAttributes: new { @Class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.YAxis, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.YAxis, new { htmlAttributes = new { @class = "form-control", placeholder = "Max Y-Axis" } })
+                @Html.ValidationMessageFor(model => model.YAxis, "", new { id = "YAxis-error", @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Delta, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.Delta, new { htmlAttributes = new { @class = "form-control", placeholder = "Delta" } })
+                @Html.ValidationMessageFor(model => model.Delta, "", new { id = "Delta-error", @class = "text-danger" })
+            </div>
+            <div>
+                @Html.HiddenFor(model => model.DownDirection, new { id = "hdnDownDirection" })
+                @Html.HiddenFor(model => model.UpstreamDirection, new { id = "hdnUpstreamDirection" })
+                @Html.HiddenFor(model => model.SignalId, new { id = "hdnSignalId" })
+                @Html.HiddenFor(model => model.DownSignalId, new { id = "hdnDownSignalId" })
+                @Html.HiddenFor(model => model.EndDate, new { id = "hdnEndDate" })
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">View PCDs &nbsp; <span id='PCDRunReportSpinner' class="" style="font-size:18px"></span></button>
+
+            </div>
+        </fieldset>
+</form>}

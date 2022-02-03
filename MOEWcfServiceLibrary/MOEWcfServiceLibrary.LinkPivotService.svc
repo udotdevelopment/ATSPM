@@ -1,0 +1,1 @@
+<%@ ServiceHost Service="MOEWcfServiceLibrary.LinkPivotService" %>

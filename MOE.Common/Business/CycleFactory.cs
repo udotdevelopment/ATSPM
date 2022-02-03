@@ -13,7 +13,7 @@ namespace MOE.Common.Business
         public static List<RedToRedCycle> GetRedToRedCycles(Approach approach, DateTime startTime, DateTime endTime,
             bool getPermissivePhase, List<Controller_Event_Log> detectorEvents)
         {
-            var cycleEvents = GetCycleEvents(getPermissivePhase, startTime, endTime, approach);
+            var cycleEvents = GetCycleEvents(getPermissivePhase, startTime, endTime, approach,null);
             if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) !=
                 RedToRedCycle.EventType.ChangeToRed)
                 GetEventsToCompleteCycle(getPermissivePhase, endTime, approach, cycleEvents);
@@ -30,10 +30,10 @@ namespace MOE.Common.Business
         }
 
         public static List<CyclePcd> GetPcdCycles(DateTime startDate, DateTime endDate, Approach approach,
-            List<Controller_Event_Log> detectorEvents, bool getPermissivePhase, int? pcdCycleTime)
+            List<Controller_Event_Log> detectorEvents, bool getPermissivePhase, int? pcdCycleTime, SPM db)
         {
             double pcdCycleShift = pcdCycleTime ?? 0;
-            var cycleEvents = GetCycleEvents(getPermissivePhase, startDate, endDate, approach);
+            var cycleEvents = GetCycleEvents(getPermissivePhase, startDate, endDate, approach,db);
             if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) !=
                 RedToRedCycle.EventType.ChangeToRed)
                 GetEventsToCompleteCycle(getPermissivePhase, endDate, approach, cycleEvents);
@@ -140,7 +140,7 @@ namespace MOE.Common.Business
         public static List<CycleSpeed> GetSpeedCycles(DateTime startDate, DateTime endDate, bool getPermissivePhase,
             Models.Detector detector)
         {
-            var cycleEvents = GetCycleEvents(getPermissivePhase, startDate, endDate, detector.Approach);
+            var cycleEvents = GetCycleEvents(getPermissivePhase, startDate, endDate, detector.Approach, null);
             if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) !=
                 RedToRedCycle.EventType.ChangeToRed)
                 GetEventsToCompleteCycle(getPermissivePhase, endDate, detector.Approach, cycleEvents);
@@ -166,9 +166,13 @@ namespace MOE.Common.Business
         }
 
         private static List<Controller_Event_Log> GetCycleEvents(bool getPermissivePhase, DateTime startDate,
-            DateTime endDate, Approach approach)
+            DateTime endDate, Approach approach, SPM db)
         {
-            var celRepository = ControllerEventLogRepositoryFactory.Create();
+            IControllerEventLogRepository celRepository;
+            if (db != null)
+                 celRepository = ControllerEventLogRepositoryFactory.Create(db);
+            else
+                 celRepository = ControllerEventLogRepositoryFactory.Create();
             List<Controller_Event_Log> cycleEvents;
             if (getPermissivePhase)
             {
@@ -245,9 +249,9 @@ namespace MOE.Common.Business
         }
 
         public static List<CycleSplitFail> GetSplitFailCycles(SplitFailOptions options, Approach approach,
-            bool getPermissivePhase)
+            bool getPermissivePhase, SPM db)
         {
-            var cycleEvents = GetCycleEvents(getPermissivePhase, options.StartDate, options.EndDate, approach);
+            var cycleEvents = GetCycleEvents(getPermissivePhase, options.StartDate, options.EndDate, approach, db);
             if (cycleEvents != null && cycleEvents.Count > 0 && GetEventType(cycleEvents.LastOrDefault().EventCode) !=
                 RedToRedCycle.EventType.ChangeToGreen)
                 GetEventsToCompleteCycle(getPermissivePhase, options.EndDate, approach, cycleEvents);
