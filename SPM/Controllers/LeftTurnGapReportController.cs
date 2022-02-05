@@ -115,6 +115,9 @@ namespace SPM.Controllers
                 {
                     signalDataCheckReportViewModel = JsonConvert.DeserializeObject<SignalDataCheckReportViewModel>(result.Content);
                     checkResults.Add(signalDataCheckReportViewModel);
+                    signalDataCheckReportViewModel.VolumeThreshold = dataCheckPayload.VolumePerHourThreshold;
+                    signalDataCheckReportViewModel.PedThreshold = dataCheckPayload.PedestrianThreshold;
+                    signalDataCheckReportViewModel.GapOutThreshold = dataCheckPayload.GapOutThreshold;
                 }                
             }
             return PartialView("SignalDataCheckReport", checkResults);
@@ -222,6 +225,16 @@ namespace SPM.Controllers
                     approachResult.AcceptableGapList, 
                     approachResult.DemandList);
                 approachResult.GapDemandChartImg = gapVsDemandChart.CreateMetric().FirstOrDefault();
+                var pedsVsFailuresOptions = new PedsVsFailuresOptions
+                    (parameters.SignalId,
+                    parameters.StartDate,
+                    parameters.EndDate.AddDays(1),
+                    0,
+                    0,
+                    31,
+                    approachResult.AcceptableGapList,
+                    approachResult.DemandList);
+                approachResult.PedSplitFailChartImg = pedsVsFailuresOptions.CreateMetric().FirstOrDefault();
                 finalGapAnalysisReportViewModel.Add(approachResult);
             }
             var pdf = new ViewAsPdf("FinalGapAnalysisReport", finalGapAnalysisReportViewModel) { FileName = "Test.pdf" };

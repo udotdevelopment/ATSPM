@@ -10,6 +10,11 @@
         public bool InsufficientCycleAggregation { get; set; }
         public bool InsufficientPhaseTermination { get; set; }
         public bool InsufficientPedAggregations { get; set; }
+        public bool InsufficientSplitFailAggregations { get; set; }
+        public bool InsufficientLeftTurnGapAggregations { get; set; }
+        public double VolumeThreshold { get; set; }
+        public double GapOutThreshold { get; set; }
+        public double PedThreshold { get; set; }
 
         public SignalDataCheckReportViewModel(bool leftTurnVolumeOk, bool gapOutOk, bool pedCycleOk, string approachDescriptions, bool insufficientDetectorEventCount,
             bool insufficientCycleAggregation, bool insufficientPhaseTermination, bool insufficientPedAggregations)

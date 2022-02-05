@@ -12,5 +12,6 @@ namespace ATSPM.IRepositories
         List<int> GetAvailablePhaseNumbers(Signal signal, DateTime startDate, DateTime endDate);
         List<PhaseLeftTurnGapAggregation> GetPhaseLeftTurnGapAggregationBySignalIdPhaseNumberAndDateRange(string signalId, int phaseNumber, DateTime startDate, DateTime endDate);
         double GetSummedGapsBySignalIdPhaseNumberAndDateRange(string signalId, int phaseNumber, DateTime startDate, DateTime endDate, int gapCountColumn);
+        bool Exists(string signalId, int phaseNumber, DateTime dateTime1, DateTime dateTime2);
     }
 }

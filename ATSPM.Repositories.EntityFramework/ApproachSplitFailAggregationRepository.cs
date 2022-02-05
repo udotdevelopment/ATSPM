@@ -52,6 +52,13 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
                                                                 r.BinStartTime <= endDate).ToList();
         }
 
+        public bool Exists(string signalId, int phaseNumber, DateTime startDate, DateTime endDate)
+        {
+            return _db.ApproachSplitFailAggregations.Any(p =>
+                p.SignalId == signalId && p.PhaseNumber == phaseNumber && p.BinStartTime >= startDate &&
+                p.BinStartTime < endDate);
+        }
+
 
         public void Update(ApproachSplitFailAggregation approachSplitFailAggregation)
         {

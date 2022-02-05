@@ -81,47 +81,11 @@ namespace ATSPM.Application.Reports.Controllers
 
             if (approach.ProtectedPhaseNumber != 0)
             {
-                if (!_approachCycleAggregationRepository.Exists(approach.SignalId, approach.ProtectedPhaseNumber, parameters.StartDate.Add(amStartTime), parameters.StartDate.Add(amEndTime)) &&
-                    !_approachCycleAggregationRepository.Exists(approach.SignalId, approach.ProtectedPhaseNumber, parameters.StartDate.Add(pmStartTime), parameters.StartDate.Add(pmEndTime)))
-                {
-                    dataCheck.InsufficientCycleAggregation = true;
-                }
-                if (!_phaseTerminationAggregationRepository.Exists(approach.SignalId, approach.ProtectedPhaseNumber,
-                    parameters.StartDate.Add(amStartTime), parameters.StartDate.Add(amStartTime)) &&
-                       !_phaseTerminationAggregationRepository.Exists(approach.SignalId, approach.ProtectedPhaseNumber,
-                    parameters.StartDate.Add(pmStartTime), parameters.StartDate.Add(pmEndTime)))
-                {
-                    dataCheck.InsufficientPhaseTermination = true;
-                }
-                if (!_phasePedAggregationRepository.Exists(approach.SignalId, approach.ProtectedPhaseNumber,
-                    parameters.StartDate.Add(amStartTime), parameters.StartDate.Add(amStartTime)) &&
-                       !_phasePedAggregationRepository.Exists(approach.SignalId, approach.ProtectedPhaseNumber,
-                    parameters.StartDate.Add(pmStartTime), parameters.StartDate.Add(pmEndTime)))
-                {
-                    dataCheck.InsufficientPedAggregations = true;
-                }
+                CheckTablesForData(approach.SignalId, approach.ProtectedPhaseNumber, parameters, amStartTime, amEndTime, pmStartTime, pmEndTime, dataCheck);
             }
             else if(approach.PermissivePhaseNumber.HasValue)
             {
-                if (!_approachCycleAggregationRepository.Exists(approach.SignalId, approach.PermissivePhaseNumber.Value, parameters.StartDate.Add(amStartTime), parameters.StartDate.Add(amEndTime)) &&
-                    !_approachCycleAggregationRepository.Exists(approach.SignalId, approach.PermissivePhaseNumber.Value, parameters.StartDate.Add(pmStartTime), parameters.StartDate.Add(pmEndTime)))
-                {
-                    dataCheck.InsufficientCycleAggregation = true;
-                }
-                if (!_phaseTerminationAggregationRepository.Exists(approach.SignalId, approach.PermissivePhaseNumber.Value,
-                    parameters.StartDate.Add(amStartTime), parameters.StartDate.Add(amStartTime)) &&
-                       !_phaseTerminationAggregationRepository.Exists(approach.SignalId, approach.PermissivePhaseNumber.Value,
-                    parameters.StartDate.Add(pmStartTime), parameters.StartDate.Add(pmEndTime)))
-                {
-                    dataCheck.InsufficientPhaseTermination = true;
-                }
-                if (!_phasePedAggregationRepository.Exists(approach.SignalId, approach.PermissivePhaseNumber.Value,
-                    parameters.StartDate.Add(amStartTime), parameters.StartDate.Add(amStartTime)) &&
-                       !_phasePedAggregationRepository.Exists(approach.SignalId, approach.PermissivePhaseNumber.Value,
-                    parameters.StartDate.Add(pmStartTime), parameters.StartDate.Add(pmEndTime)))
-                {
-                    dataCheck.InsufficientPedAggregations = true;
-                }
+                CheckTablesForData(approach.SignalId, approach.PermissivePhaseNumber.Value, parameters, amStartTime, amEndTime, pmStartTime, pmEndTime, dataCheck);
             }
 
             if (dataCheck.InsufficientDetectorEventCount || dataCheck.InsufficientCycleAggregation || dataCheck.InsufficientPhaseTermination)
@@ -144,6 +108,43 @@ namespace ATSPM.Application.Reports.Controllers
             dataCheck.PedCycleOk = pedestrianPercentage.First().Value <= parameters.PedestrianThreshold && pedestrianPercentage.Last().Value <= parameters.PedestrianThreshold;
             
             return dataCheck;
+        }
+
+        private void CheckTablesForData(string signalId, int phaseNumber, DataCheckParameters parameters, TimeSpan amStartTime, TimeSpan amEndTime, TimeSpan pmStartTime, TimeSpan pmEndTime, DataCheckResult dataCheck)
+        {
+            if (!_approachCycleAggregationRepository.Exists(signalId, phaseNumber, parameters.StartDate.Add(amStartTime), parameters.StartDate.Add(amEndTime)) &&
+                                !_approachCycleAggregationRepository.Exists(signalId, phaseNumber, parameters.StartDate.Add(pmStartTime), parameters.StartDate.Add(pmEndTime)))
+            {
+                dataCheck.InsufficientCycleAggregation = true;
+            }
+            if (!_phaseTerminationAggregationRepository.Exists(signalId, phaseNumber,
+                parameters.StartDate.Add(amStartTime), parameters.StartDate.Add(amStartTime)) &&
+                   !_phaseTerminationAggregationRepository.Exists(signalId, phaseNumber,
+                parameters.StartDate.Add(pmStartTime), parameters.StartDate.Add(pmEndTime)))
+            {
+                dataCheck.InsufficientPhaseTermination = true;
+            }
+            if (!_phasePedAggregationRepository.Exists(signalId, phaseNumber,
+                parameters.StartDate.Add(amStartTime), parameters.StartDate.Add(amStartTime)) &&
+                   !_phasePedAggregationRepository.Exists(signalId, phaseNumber,
+                parameters.StartDate.Add(pmStartTime), parameters.StartDate.Add(pmEndTime)))
+            {
+                dataCheck.InsufficientPedAggregations = true;
+            }
+            if (!_approachSplitFailAggregationRepository.Exists(signalId, phaseNumber,
+                parameters.StartDate.Add(amStartTime), parameters.StartDate.Add(amStartTime)) &&
+                   !_phasePedAggregationRepository.Exists(signalId, phaseNumber,
+                parameters.StartDate.Add(pmStartTime), parameters.StartDate.Add(pmEndTime)))
+            {
+                dataCheck.InsufficientSplitFailAggregations = true;
+            }
+            if (!_phaseLeftTurnGapAggregationRepository.Exists(signalId, phaseNumber,
+                parameters.StartDate.Add(amStartTime), parameters.StartDate.Add(amStartTime)) &&
+                   !_phasePedAggregationRepository.Exists(signalId, phaseNumber,
+                parameters.StartDate.Add(pmStartTime), parameters.StartDate.Add(pmEndTime)))
+            {
+                dataCheck.InsufficientLeftTurnGapAggregations = true;
+            }
         }
 
         [HttpPost("/PeakHours")]

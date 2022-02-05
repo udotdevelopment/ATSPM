@@ -74,5 +74,12 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
         {
             throw new NotImplementedException();
         }
+
+        public bool Exists(string signalId, int phaseNumber, DateTime startDate, DateTime endDate)
+        {
+            return _db.PhaseLeftTurnGapAggregations.Any(p =>
+                p.SignalId == signalId && p.PhaseNumber == phaseNumber && p.BinStartTime >= startDate &&
+                p.BinStartTime < endDate);
+        }
     }
 }

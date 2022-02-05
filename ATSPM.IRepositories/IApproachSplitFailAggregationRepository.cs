@@ -15,5 +15,6 @@ namespace ATSPM.IRepositories
 
         List<ApproachSplitFailAggregation> GetApproachSplitFailsAggregationBySignalIdPhaseDateRange(string signalId,
             int phase, DateTime startDate, DateTime endDate);
+        bool Exists(string signalId, int phaseNumber, DateTime dateTime1, DateTime dateTime2);
     }
 }

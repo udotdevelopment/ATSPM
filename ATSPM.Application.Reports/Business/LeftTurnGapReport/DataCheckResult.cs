@@ -15,5 +15,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
         public bool InsufficientCycleAggregation { get; set; }
         public bool InsufficientPhaseTermination { get; set; }
         public bool InsufficientPedAggregations { get; set; }
+        public bool InsufficientSplitFailAggregations { get; internal set; }
+        public bool InsufficientLeftTurnGapAggregations { get; internal set; }
     }
 }
