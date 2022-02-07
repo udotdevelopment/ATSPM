@@ -97,8 +97,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
             CreateLaneTypeCharts(signal, "Vehicle", laneTypes, movementTypes, directions, plans, TmcInfo);
             CreateLaneTypeCharts(signal, "Exit", laneTypes, movementTypes, directions, plans, TmcInfo);
             CreateLaneTypeCharts(signal, "Bike", laneTypes, movementTypes, directions, plans, TmcInfo);
-
-
+            CreateLaneTypeCharts(signal, "Pedestrian", laneTypes, movementTypes, directions, plans, TmcInfo);
+            CreateLaneTypeCharts(signal, "Bus", laneTypes, movementTypes, directions, plans, TmcInfo);
+            CreateLaneTypeCharts(signal, "Light Rail Transit", laneTypes, movementTypes, directions, plans, TmcInfo);
+            CreateLaneTypeCharts(signal, "High Occupancy Vehicle", laneTypes, movementTypes, directions, plans, TmcInfo);
             return TmcInfo;
         }
 
