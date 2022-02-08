@@ -38,9 +38,10 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
 
         public bool Exists(string signalId, int phaseNumber, DateTime startDate, DateTime endDate)
         {
-            return _db.PhasePedAggregations.Any(p =>
+            var result =  _db.PhasePedAggregations.Any(p =>
                 p.SignalId == signalId && p.PhaseNumber == phaseNumber && p.BinStartTime >= startDate &&
                 p.BinStartTime < endDate);
+            return result;
         }
 
         public List<int> GetAvailablePhaseNumbers(Signal signal, DateTime startDate, DateTime endDate)
