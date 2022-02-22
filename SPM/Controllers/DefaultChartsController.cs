@@ -177,6 +177,8 @@ namespace SPM.Controllers
                                                           metricOptions.ShowLinesStartEnd.ToString().ToLower() + "," +
                                                           metricOptions.ShowEventPairs.ToString().ToLower() +
                                                           metricOptions.ShowRawEventData.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPermissivePhases.ToString().ToLower() + "," +
+
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
