@@ -352,6 +352,7 @@ namespace MOE.Common.Business
 
         public void GetCurrentRecordsSftpAsync()
         {
+            var errorRepository = ApplicationEventRepositoryFactory.Create();
             // Run the sftp fetch operation async
             Thread sftpFetch = new Thread(delegate () {
                 string host = Signal.IPAddress;
@@ -375,8 +376,8 @@ namespace MOE.Common.Business
                     }
                     catch (Exception ex)
                     {
-                        // to-do: add some custom error handling as fit 
-                        throw ex;
+                        errorRepository.QuickAdd("FTPFromAllControllers", "SignalFtp", "GetCurrentRecordsSftpAsync", ApplicationEvent.SeverityLevels.Medium, Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
+                        Console.WriteLine(Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
                     }
                 }
             });
