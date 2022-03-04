@@ -605,6 +605,10 @@
     <Compile Include="Migrations\201910162223114_Model-for Oct2019.Designer.cs">
       <DependentUpon>201910162223114_Model-for Oct2019.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202203041854301_AddSftpToControllerType.cs" />
+    <Compile Include="Migrations\202203041854301_AddSftpToControllerType.designer.cs">
+      <DependentUpon>202203041854301_AddSftpToControllerType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\PhasePedAggregation.cs" />
@@ -1018,6 +1022,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910162223114_Model-for Oct2019.resx">
       <DependentUpon>201910162223114_Model-for Oct2019.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202203041854301_AddSftpToControllerType.resx">
+      <DependentUpon>202203041854301_AddSftpToControllerType.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

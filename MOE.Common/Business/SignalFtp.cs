@@ -170,7 +170,7 @@ namespace MOE.Common.Business
 
         public void GetCurrentRecords()
         {
-            if (Signal.ControllerType.FTPDirectory.StartsWith("sftp://"))
+            if (Signal.ControllerType.SFTP)
             {
                 GetCurrentRecordsSftpAsync();
                 return;
@@ -345,8 +345,7 @@ namespace MOE.Common.Business
         }
 
         /*
-         * If the ControllerType FTP path starts with "sftp://" this code will run to 
-         * download files.  Adapted from code provided by Yi Che @ychehntb / FDOT ITS 
+         * Adapted from code provided by Yi Che @ychehntb / FDOT ITS 
          * https://github.com/udotdevelopment/ATSPM/issues/99
          */
 
@@ -358,7 +357,7 @@ namespace MOE.Common.Business
                 string host = Signal.IPAddress;
                 string username = Signal.ControllerType.UserName;
                 string password = Signal.ControllerType.Password;
-                string remoteDirectory = Signal.ControllerType.FTPDirectory.Replace("sftp://", "");
+                string remoteDirectory = Signal.ControllerType.FTPDirectory;
                 string localDirectory = SignalFtpOptions.LocalDirectory + Signal.SignalID + @"\";
                 using (SftpClient sftp = new SftpClient(host, username, password))
                 {

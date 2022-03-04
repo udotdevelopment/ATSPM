@@ -29,6 +29,9 @@ namespace MOE.Common.Models
 
         [DataMember]
         public bool ActiveFTP { get; set; }
+        
+        [DataMember]
+        public bool SFTP { get; set; }
 
 
         [StringLength(50)]
