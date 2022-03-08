@@ -68,8 +68,12 @@ namespace ATSPM.Application.Reports.Controllers
             dataCheck.InsufficientDetectorEventCount = false;
             dataCheck.InsufficientCycleAggregation = false;
             dataCheck.InsufficientPhaseTermination = false;
-            var movementTypes = new List<int>() { 3, 5 };
-            foreach (var detector in approach.Detectors.Where(d => d.MovementTypeId.HasValue && movementTypes.Contains(d.MovementTypeId.Value)).ToList())
+            var detectors = new List<Models.Detector>();
+            //if(approach.Detectors.Any(d => d.DetectionIDs.Contains(4)))
+            var movementTypes = new List<int>() { 3 };
+            foreach (var detector in approach.Detectors.Where(d => 
+            d.MovementTypeId.HasValue 
+            && movementTypes.Contains(d.MovementTypeId.Value)).ToList())
             {
                 if (!_detectorEventCountAggregationRepository.DetectorEventCountAggregationExists(detector.Id, parameters.StartDate.Add(amStartTime), parameters.StartDate.Add(amEndTime)) &&
                     !_detectorEventCountAggregationRepository.DetectorEventCountAggregationExists(detector.Id, parameters.StartDate.Add(pmStartTime), parameters.StartDate.Add(pmEndTime)))

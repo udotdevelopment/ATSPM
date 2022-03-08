@@ -93,10 +93,10 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
                 return 0;
         }
 
-        //public List<ApproachCycleAggregation> GetApproachCyclesAggregationByApproachIdAndDateRange(int approachId,
+        //public List<PhaseCycleAggregation> GetApproachCyclesAggregationByApproachIdAndDateRange(int approachId,
         //    DateTime startDate, DateTime endDate, bool getProtectedPhase)
         //{
-        //    return _db.ApproachCycleAggregations.Where(r => r.ApproachId == approachId
+        //    return _db.PhaseCycleAggregations.Where(r => r.ApproachId == approachId
         //                                                    && r.BinStartTime >= startDate &&
         //                                                    r.BinStartTime <= endDate
         //                                                    && r.IsProtectedPhase == getProtectedPhase).ToList();
@@ -106,6 +106,13 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
         public void Update(PhaseCycleAggregation phaseCycleAggregation)
         {
             throw new NotImplementedException();
+        }
+
+        int IApproachCycleAggregationRepository.GetCycleCountBySignalIdAndDateRange(string signalId, DateTime dateTime1, DateTime dateTime2)
+        {
+            return _db.PhaseCycleAggregations.Where(r => r.SignalId == signalId
+                                                            && r.BinStartTime >= dateTime1 &&
+                                                            r.BinStartTime <= dateTime2).Count();
         }
     }
 }

@@ -80,14 +80,7 @@ namespace ATSPM.Application.Models
 
         public List<Detector> GetDetectorsForSignal()
         {
-            var detectors = new List<Detector>();
-            if (Approaches != null)
-            {
-                foreach (var a in Approaches.OrderBy(a => a.ProtectedPhaseNumber))
-                    foreach (var d in a.Detectors)
-                        detectors.Add(d);
-            }
-
+            var detectors = Approaches.SelectMany(a => a.Detectors);
             return detectors.OrderBy(d => d.DetectorId).ToList();
         }
 
