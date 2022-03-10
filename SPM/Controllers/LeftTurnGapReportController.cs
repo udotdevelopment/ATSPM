@@ -44,7 +44,7 @@ namespace SPM.Controllers
                 new CheckModel{Id=0, Name = "All Left Turns", Checked = true} };
             foreach (var approach in signal.Approaches)
             {
-                if(approach.Detectors.Any(d => (d.MovementTypeID == 3 || d.MovementTypeID == 5) && d.DetectionTypeIDs.Contains(4)))
+                if(approach.Detectors.Any(d => (d.MovementTypeID == 3) && d.DetectionTypeIDs.Contains(4)))
                 {
                     checkModels.Add(new CheckModel { Id = approach.ApproachID, Checked = true, Name = approach.Description});
                 }
