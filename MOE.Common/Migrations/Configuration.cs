@@ -1112,7 +1112,7 @@ namespace MOE.Common.Migrations
                 },
                 new MetricType
                 {
-                    MetricID = 31,
+                    MetricID = 32,
                     ChartName = "Gap Vs Demand",
                     Abbreviation = "GVD",
                     ShowOnWebsite = false,
