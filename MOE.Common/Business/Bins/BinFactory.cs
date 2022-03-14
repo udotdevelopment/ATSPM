@@ -163,9 +163,7 @@ namespace MOE.Common.Business.Bins
                     timeOptions.TimeOfDayEndMinute.Value, 0);
             }
             var binsContainer = new BinsContainer(timeOptions.Start, timeOptions.End);
-            for (var startTime = tempStart;
-                startTime < tempEnd;
-                startTime = startTime.AddMinutes(minutes))
+            for (var startTime = tempStart; startTime < tempEnd; startTime = startTime.AddMinutes(minutes))
                 switch (timeOptions.TimeOption)
                 {
                     case BinFactoryOptions.TimeOptions.StartToEnd:
@@ -174,9 +172,9 @@ namespace MOE.Common.Business.Bins
                     case BinFactoryOptions.TimeOptions.TimePeriod:
                         var periodStartTimeSpan = new TimeSpan(0, startTime.Hour,
                             startTime.Minute, 0);
-                        if (timeOptions.DaysOfWeek.Contains(startTime.DayOfWeek) &&
-                            periodStartTimeSpan >= startTimeSpan &&
-                            periodStartTimeSpan < endTimeSpan)
+                        if (timeOptions.DaysOfWeek.Contains(startTime.DayOfWeek)
+                            && periodStartTimeSpan >= startTimeSpan 
+                            && periodStartTimeSpan < endTimeSpan)
                             binsContainer.Bins.Add(new Bin {Start = startTime, End = startTime.AddMinutes(minutes)});
                         break;
                 }
