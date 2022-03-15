@@ -237,9 +237,20 @@ namespace SPM.Controllers
                     approachResult.AcceptableGapList,
                     approachResult.DemandList);
                 approachResult.PedSplitFailChartImg = pedsVsFailuresOptions.CreateMetric().FirstOrDefault();
+                /// Fill in approachResult
+                approachResult.StartDate = parameters.StartDate;
+                approachResult.EndDate = parameters.EndDate;
+                approachResult.StartTime = new TimeSpan(parameters.StartHour ?? 0, 0, 0);
+                approachResult.EndTime = new TimeSpan(parameters.EndHour ?? 0, 0, 0);
+                approachResult.SignalId = parameters.SignalId;
+                approachResult.Location = approach.Signal.PrimaryName + " & " + approach.Signal.SecondaryName;
+                approachResult.SpeedLimit = approach.MPH;
+
+                ///
+
                 finalGapAnalysisReportViewModel.Add(approachResult);
             }
-            var pdf = new ViewAsPdf("FinalGapAnalysisReport", finalGapAnalysisReportViewModel) { FileName = "Test.pdf" };
+            var pdf = new PartialViewAsPdf("FinalGapAnalysisReport", finalGapAnalysisReportViewModel) { FileName = "Test.pdf" };
             PdfResult pdfResult = GetPdf(pdf);
             return Json(new { pdfResult }, JsonRequestBehavior.AllowGet);
 
@@ -280,7 +291,7 @@ namespace SPM.Controllers
                 fileStream.Write(pdfData, 0, pdfData.Length);
             }
             pdfResult.HTML = "<iframe src=\"" + settings.ImageUrl + tempFileName +
-                "\"style=\"width:100%; height:500px;\" frameborder=\"0\"></iframe>";
+                "\"style=\"width:100%; height:1000px;\" frameborder=\"0\"></iframe>";
             pdfResult.FileName = tempFileName;
             return pdfResult;
         }
