@@ -8,10 +8,12 @@ namespace SPM.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string ApproachDescription { get; set; }
+        public string SignalId { get; set; }
+        public string Location { get; set; }
         //public string PhaseType { get; set; }
         //public string OpposingApproach { get; set; }
         //public int NumberOfThruLanes { get; set; }
-        //public int SpeedLimit { get; set; }
+        public int? SpeedLimit { get; set; }
         //public string PeakPeriodDescription { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
