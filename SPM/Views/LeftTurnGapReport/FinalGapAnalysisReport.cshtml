@@ -1,62 +1,251 @@
 ﻿@model IEnumerable<SPM.Models.FinalGapAnalysisReportViewModel>
+<link href="C:\projects\avenue\ATSPM\SPM\Content\bootstrap.min.css" rel="stylesheet">
+<style>
+    th {
+        font-size: 20px
+    }
 
-Signal data check complete please note the following results:
+    .recommendation {
+        color: #bc6c39
+    }
+
+    .dark-blue {
+        color: #2f5597
+    }
+</style>
+<table class="table table-borderless border-bottom border-primary">
+    <tr>
+        <th class="float-left"><img src="C:\projects\avenue\ATSPM\SPM\Images\NewUDOTLogo.png" width="300" /></th>
+        <th class="text-left"><h2>Left Turn Phase</h2><h2>Analysis Report</h2></th>
+        <th class="text-right" style="font-weight: normal">
+            <p>@DateTime.Now.ToString("D")</p>
+            <p>@DateTime.Now.ToString("t")</p>
+        </th>
+    </tr>
+</table>
+
+<h4 class="border-bottom border-primary p-3">Signal ID: &nbsp; <b> ??? &emsp; ??? </b> </h4>
+<table class="table table-borderless border-bottom border-primary" style="background-color: #e8e8e8 ">
+    <tr>
+        <th style="font-weight: normal">
+            Left Turn Approach:
+        </th>
+        <th>
+            @Model.First().ApproachDescription
+        </th>
+        <th style="font-weight: normal">
+            Phase Type:
+        </th>
+        <th>
+            ???
+        </th>
+        <th style="font-weight: normal">
+            Signal Type:
+        </th>
+        <th>
+            ???
+        </th>
+        <th style="font-weight: normal">
+            Speed Limit:
+        </th>
+        <th>
+            ???
+        </th>
+    </tr>
+    <tr>
+        <th style="font-weight: normal">
+            Opposing Approach
+        </th>
+        <th>
+            ???
+        </th>
+        <th style="font-weight: normal">
+            Number of Thru Lanes:
+        </th>
+        <th>
+            ???
+        </th>
+        <th style="font-weight: normal">
+            Start Date:
+        </th>
+        <th>
+            @Model.First().StartDate
+        <th style="font-weight: normal">
+            End Date:
+        </th>
+        <th>
+            @Model.First().EndDate
+        </th>
+    </tr>
+</table>
+@{int x = 0;}
+
 @foreach (var result in Model)
 {
-    <h4>@result.ApproachDescription</h4>
     if (result.GapDurationConsiderForStudy.HasValue)
     {
-        <table class="table table-bordered table">
+        <table class="table table-borderless" style="background-color:#2f5597; color:white">
             <tr>
-                <th colspan="3">
-                    @if (result.GapDurationConsiderForStudy.Value)
+                <th style="font-weight: normal">
+                    Peak Period:
+                </th>
+                <th>
+                    ???
+                </th>
+                <th style="font-weight: normal">
+                    Start:
+                </th>
+                <th>
+                    @result.StartTime
+                </th>
+                <th style="font-weight: normal">
+                    End:
+                </th>
+                <th>
+                    @result.EndTime
+                </th>
+                <th style="font-weight: normal">
+                    Start Date:
+                </th>
+                <th>
+                    @result
+                </th>
+                <th style="font-weight: normal">
+                    End Date:
+                </th>
+                <th>
+                    @result.EndDate.Year
+                </th>
+            </tr>
+        </table>
+        <table class="table table-borderless" style="@(x++ % 2 == 0 ?  "background-color: white" : "background-color: #e8e8e8")">
+            <tr>
+                <th colspan="8" class="dark-blue">
+                    Left Turn Gap Analysis Results
+                </th>
+            </tr>
+            <tr>
+                <th style="font-weight: normal">
+                    Capacity:
+                </th>
+                <th>
+                    @result.Capacity
+                </th>
+                <th style="font-weight: normal">
+                    Demand:
+                </th>
+                <th>
+                    @result.Demand
+                </th>
+                <th style="font-weight: normal">
+                    V/C Ratio:
+                </th>
+                <th>
+                    @result.CalculatedVolumeBoundary
+                </th>
+                <th style="font-weight: normal">
+                    Phase:
+                </th>
+                <th>
+                    ???
+                </th>
+            </tr>
+            <tr>
+                <th colspan="8" class="recommendation">
+                    @(result.ConsiderForStudy ? "Consider For Study" : "Don't Consider For Study")
+                </th>
+            </tr>
+            <tr>
+                <th colspan="8" class="dark-blue">
+                    Alternative Measures Analysis Results
+                </th>
+            </tr>
+            <tr>
+                <th colspan="3" class="text-center">
+                    Split Failure and Pedestrains
+                </th>
+                <th colspan="5" class="text-center">
+                    Volume Cross Product and Boundries
+                </th>
+            </tr>
+            <tr>
+                <th style="font-weight: normal">
+                    Cycles With Split Failure:
+                </th>
+                <th colspan="2">
+                    @result.CyclesWithSplitFailNum | @result.CyclesWithSplitFailPercent
+                </th>
+                <th class="text-left" style="font-weight: normal">
+                    Left Turn Movement Volume:
+                </th>
+                <th>
+                    @result.LeftTurnVolume
+                </th>
+            </tr>
+            <tr>
+                <th colspan="3" class="recommendation">
+                    @if (result.SplitFailsConsiderForStudy.HasValue)
                     {
-                        <label class="alert-success">Gap Duration:Consider for Study</label>
-                        <br />
+                        @(result.SplitFailsConsiderForStudy.Value ? "Consider" : "Not Considered")
                     }
                     else
                     {
-                        <label class="alert-danger">Gap Duration : Do not Consider for Study</label>
-                        <br />
+                        @("Not Analyzed")
+                    }
+                </th>
+                <th class="text-left" style="font-weight: normal">
+                    Opposing Through Movement Volume:
+                </th>
+                <th>
+                    @result.OpposingThroughVolume
+                </th>
+            </tr>
+            <tr>
+                <th style="font-weight: normal">
+                    Cycles With Pedestrain Calls:
+                </th>
+                <th colspan="2">
+                    @result.CyclesWithPedCallNum
+                </th>
+                <th class="text-left" style="font-weight: normal">
+                    Cross Product Value:
+                </th>
+                <th>
+                    @result.CrossProductValue
+                </th>
+                <th colspan="3" class="recommendation">
+                    ???
+                </th>
+            </tr>
+            <tr>
+                <th colspan="3" class="recommendation">
+                    @if (result.PedActuationsConsiderForStudy.HasValue)
+                    {
+                        @(result.PedActuationsConsiderForStudy.Value ? "Ped Analysis Recommended" : "Ped Analysis not Recommended")
+                    }
+                    else
+                    {
+                        @("Not Analyzed")
+                    }
+                </th>
+                <th class="text-left" style="font-weight: normal">
+                    Calculated Volume Boundry:
+                </th>
+                <th>
+                    @result.CalculatedVolumeBoundary
+                </th>
+                <th colspan="3" class="recommendation">
+                    @if (result.VolumesConsiderForStudy.HasValue)
+                    {
+                        @(result.VolumesConsiderForStudy.Value ? "Consider" : "Not Considered")
+                    }
+                    else
+                    {
+                        @("Not Analyzed")
                     }
                 </th>
             </tr>
-            <tr>
-                <th>
-                    Capacity
-                </th>
-                <th>
-                    Demand
-                </th>
-                <th>
-                    V/C Ratio
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    @result.Capacity
-                </td>
-                <td>
-                    @result.Demand
-                </td>
-                <td>
-                    @result.GapOutPercent
-                </td>
-            </tr>
         </table>
-        @*<table class="table table-bordered table">
-            <tr>
-                <th>Date/Time</th>
-                <th>Value</th>
-            </tr>
-            @foreach (var gapListItem in result.AcceptableGapList)
-            {
-                <tr>
-                    <td>@gapListItem.Key</td>
-                    <td>@gapListItem.Value</td>
-                </tr>
-            }
-        </table>*@
     }
     if (result.SplitFailsConsiderForStudy.HasValue)
     {
@@ -93,18 +282,18 @@ Signal data check complete please note the following results:
             </tr>
         </table>
         @*<table class="table table-bordered table">
-            <tr>
-                <th>Date/Time</th>
-                <th>Value</th>
-            </tr>
-            @foreach (var item in result.PercentCyclesWithSplitFailList)
-            {
                 <tr>
-                    <td>@item.Key</td>
-                    <td>@item.Value</td>
+                    <th>Date/Time</th>
+                    <th>Value</th>
                 </tr>
-            }
-        </table>*@
+                @foreach (var item in result.PercentCyclesWithSplitFailList)
+                {
+                    <tr>
+                        <td>@item.Key</td>
+                        <td>@item.Value</td>
+                    </tr>
+                }
+            </table>*@
     }
     if (result.PedActuationsConsiderForStudy.HasValue)
     {
@@ -142,18 +331,18 @@ Signal data check complete please note the following results:
         </table>
         <img src="@result.PedSplitFailChartImg" />
         @*<table class="table table-bordered table">
-            <tr>
-                <th>Date/Time</th>
-                <th>Value</th>
-            </tr>
-            @foreach (var item in result.PercentCyclesWithPedsList)
-            {
                 <tr>
-                    <td>@item.Key</td>
-                    <td>@item.Value</td>
+                    <th>Date/Time</th>
+                    <th>Value</th>
                 </tr>
-            }
-        </table>*@
+                @foreach (var item in result.PercentCyclesWithPedsList)
+                {
+                    <tr>
+                        <td>@item.Key</td>
+                        <td>@item.Value</td>
+                    </tr>
+                }
+            </table>*@
     }
     if (result.VolumesConsiderForStudy.HasValue)
     {
@@ -221,20 +410,20 @@ Signal data check complete please note the following results:
         </table>
 
         @*<table class="table table-bordered table">
-            <tr>
-                <th>Date/Time</th>
-                <th>Value</th>
-            </tr>
-            @foreach (var item in result.DemandList)
-            {
                 <tr>
-                    <td>@item.Key</td>
-                    <td>@item.Value</td>
+                    <th>Date/Time</th>
+                    <th>Value</th>
                 </tr>
-            }
-        </table>*@
+                @foreach (var item in result.DemandList)
+                {
+                    <tr>
+                        <td>@item.Key</td>
+                        <td>@item.Value</td>
+                    </tr>
+                }
+            </table>*@
     }
 
     <img src="@result.GapDemandChartImg" />
-    <img src="@result.PedSplitFailChartImg" />
+        <img src="@result.PedSplitFailChartImg" />
 }
