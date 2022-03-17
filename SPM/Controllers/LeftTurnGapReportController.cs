@@ -244,8 +244,23 @@ namespace SPM.Controllers
                 approachResult.Location = approach.Signal.PrimaryName + " & " + approach.Signal.SecondaryName;
                 approachResult.SpeedLimit = approach.MPH;
 
-                ///
+                if (approach.ProtectedPhaseNumber > 0 && approach.PermissivePhaseNumber == null)
+                {
+                    approachResult.PhaseType = "Protected Only";
+                }
+                else if (approach.ProtectedPhaseNumber == 0 && approach.PermissivePhaseNumber > 0)
+                {
+                    approachResult.PhaseType = "Permissive Only";
+                } else
+                {
+                    approachResult.PhaseType = "Protected / Permissive";
+                }
 
+                if (parameters.GetAMPMPeakHour == false && parameters.GetAMPMPeakPeriod == false)
+                {
+                    approachResult.Is24HourReport = true;
+                }
+                ///
                 finalGapAnalysisReportViewModel.Add(approachResult);
             }
             var pdf = new PartialViewAsPdf("FinalGapAnalysisReport", finalGapAnalysisReportViewModel) { FileName = "Test.pdf" };
