@@ -14,6 +14,7 @@
 $('#RunChecks').click(function () { RunChecks(); });
 
 function RunChecks() {
+    StartChecksSpinner();
     var signalID = $("#SignalID").val(); 
     var cyclesWithPedCalls = $("#CyclesWithPedCalls").val();
     var cyclesWithGapOuts = $("#CyclesWithGapOuts").val();
@@ -67,6 +68,7 @@ function RunChecks() {
         //        $('#SignalDataCheckPlaceHolder').html(data);
         //    });
     }
+    StopChecksSpinner();
 }
 
 $('#RunReports').click(function () { RunReports(); });
@@ -99,6 +101,7 @@ function GetCheckBoxes(){
 }
 
 function RunReports() {
+    StartReportSpinner();
     var timeOptions = $("input:radio[name='TimeOptions']:checked").val();
     var GetGapReport = $('#finalGapAnalysisCheck').is(":checked");
     var GetSplitFail = $('#splitFailAnalysisCheck').is(":checked");
@@ -183,6 +186,7 @@ function RunReports() {
             $('#FinalGapAnalysisPlaceHolder').html(data.responseText);
         }
     });
+    StopReportSpinner();
 }
 
 function deleteTempFile(fileName) {
@@ -276,6 +280,22 @@ function ResetDates() {
         + d.getFullYear();
     $("#StartDate").val(output);
     $("#EndDate").val(output);
+}
+
+function StartReportSpinner() {
+    $("#RunReportSpinner").addClass("fa fa-circle-o-notch fa-spin");
+}
+
+function StopReportSpinner() {
+    $("#RunReportSpinner").removeClass("fa fa-circle-o-notch fa-spin");
+}
+
+function StartChecksSpinner() {
+    $("#RunChecksSpinner").addClass("fa fa-circle-o-notch fa-spin");
+}
+
+function StopChecksSpinner() {
+    $("#RunChecksSpinner").removeClass("fa fa-circle-o-notch fa-spin");
 }
 
 
