@@ -153,6 +153,7 @@ function GetTimingAndActuationsMetric(metricTypeID) {
     tosend.ShowLinesStartEnd = $("#ShowLinesStartEnd").is(":checked");
     tosend.ShowEventPairs = $("#ShowEventPairs").is(":checked");
     tosend.ShowRawEventData = $("#ShowRawEventData").is(":checked");
+    tosend.ShowPermissivePhases = $("#ShowPermissivePhases").is(":checked");
     tosend.ExtendVsdSearch = $("#ExtendVsdSearch").val();
     tosend.ShowVehicleSignalDisplay = $("#ShowVehicleSignalDisplay").is(":checked");
     tosend.ShowPedestrianIntervals = $("#ShowPedestrianIntervals").is(":checked");
