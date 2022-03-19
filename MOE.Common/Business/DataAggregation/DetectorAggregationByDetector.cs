@@ -15,7 +15,7 @@ namespace MOE.Common.Business.DataAggregation
         {
         }
 
-        protected override void LoadBins(Models.Detector detector, DetectorAggregationMetricOptions options)
+        public override void LoadBins(Models.Detector detector, DetectorAggregationMetricOptions options)
         {
             var detectorAggregationRepository = DetectorEventCountAggregationRepositoryFactory.Create();
             var detectorAggregations =

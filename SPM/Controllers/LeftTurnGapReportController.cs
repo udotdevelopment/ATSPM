@@ -147,6 +147,7 @@ namespace SPM.Controllers
             foreach (int approachId in parameters.ApproachIds)
             {
                 var approach = approachRepository.GetApproachByApproachID(approachId);
+                
                 var approachResult = new FinalGapAnalysisReportViewModel();
                 if (parameters.GetAMPMPeakPeriod.HasValue && parameters.GetAMPMPeakPeriod == true)
                 {

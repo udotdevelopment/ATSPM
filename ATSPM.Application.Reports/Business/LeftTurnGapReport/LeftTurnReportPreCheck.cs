@@ -40,16 +40,30 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             return GetPercentageOfPedCycles(averageCyles, averagePedCycles);
         }
 
-        private Dictionary<TimeSpan, double> GetPercentageOfPedCycles(Dictionary<TimeSpan, double> averageCyles, Dictionary<TimeSpan, double> averagePedCycles)
+        public static Dictionary<TimeSpan, double> GetPercentageOfPedCycles(
+            Dictionary<TimeSpan, double> averageCyles,
+            Dictionary<TimeSpan, double> averagePedCycles)
         {
+
+            if (averagePedCycles is null)
+            {
+                throw new ArgumentNullException(nameof(averagePedCycles));
+            }
+
+            if (averageCyles is null)
+            {
+                throw new ArgumentNullException(nameof(averageCyles));
+            }
+
             if (averageCyles.Values.Contains(0))
             {
                 throw new ArithmeticException("Average Gap Out cannot be zero");
             }
+
             if (!averageCyles.Keys.Contains(averagePedCycles.Keys.Min()) ||
                 !averageCyles.Keys.Contains(averagePedCycles.Keys.Max()))
             {
-                throw new IndexOutOfRangeException("Peak hours do not align for AM/PM peak");
+                throw new IndexOutOfRangeException("Peak hours must be the same for Cycles and Ped Cycles");
             }
             var amPeak = averagePedCycles.Keys.Min();
             var pmPeak = averagePedCycles.Keys.Max();
@@ -61,7 +75,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
 
         private Dictionary<TimeSpan, double> GetAveragePedCycles(string signalId, int phase, DateTime startDate, DateTime endDate, Dictionary<TimeSpan, int> peaks)
         {
-            //TODO: This needs to be a sum of the hour and then do average of the hour over multiple days
+            //This needs to be a sum of the hour and then do average of the hour over multiple days
             Dictionary<TimeSpan, double> averagePedCycles = new Dictionary<TimeSpan, double>();
             List<PhasePedAggregation> amAggregations = new List<PhasePedAggregation>();
             var amPeak = peaks.Min(p => p.Key);
@@ -171,16 +185,27 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             return maxCycles;
         }
 
-        private Dictionary<TimeSpan, double> GetPercentageOfGapOuts(Dictionary<TimeSpan, double> maxCycles, Dictionary<TimeSpan, double> averageGapOuts)
+        public static Dictionary<TimeSpan, double> GetPercentageOfGapOuts(Dictionary<TimeSpan, double> maxCycles, Dictionary<TimeSpan, double> averageGapOuts)
         {
-            //if (averageGapOuts.Values.Contains(0))
-            //{
-            //    throw new ArithmeticException("Average Gap Out cannot be zero");
-            //}
-            if (!averageGapOuts.Keys.Contains(averageGapOuts.Keys.Min()) ||
-                !averageGapOuts.Keys.Contains(averageGapOuts.Keys.Max()))
+            if (averageGapOuts is null)
             {
-                throw new IndexOutOfRangeException("Peak hours do not align for AM/PM peak");
+                throw new ArgumentNullException(nameof(averageGapOuts));
+            }
+
+            if (maxCycles is null)
+            {
+                throw new ArgumentNullException(nameof(maxCycles));
+            }
+
+            if (maxCycles.Values.Contains(0))
+            {
+                throw new ArithmeticException("Max Cycles cannot be zero");
+            }
+
+            if (!averageGapOuts.Keys.Contains(maxCycles.Keys.Min()) ||
+                !averageGapOuts.Keys.Contains(maxCycles.Keys.Max()))
+            {
+                throw new IndexOutOfRangeException("Peak hours must be the same for Average Gap Outs and Max Cycles");
             }
             var amPeak = averageGapOuts.Keys.Min();
             var pmPeak = averageGapOuts.Keys.Max();
@@ -214,9 +239,9 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             return averages;
         }
 
-        private static void LoadGapOutAverages(Dictionary<TimeSpan, double> averages, TimeSpan peak, List<PhaseTerminationAggregation> aggregations)
+        public static void LoadGapOutAverages(Dictionary<TimeSpan, double> averages, TimeSpan peak, List<PhaseTerminationAggregation> aggregations)
         {
-            if (aggregations.Count() > 0)
+            if (aggregations.Count > 0)
                 averages.Add(peak, aggregations.Average(a => a.GapOuts));
             else
                 averages.Add(peak, 0);
@@ -232,20 +257,20 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             {
                 amAggregations.AddRange(_phaseTerminationAggregationRepository.GetPhaseTerminationsAggregationBySignalIdPhaseNumberAndDateRange(signalId, phaseNumber, tempDate.Date.Add(amPeak), tempDate.Date.Add(amPeak).AddHours(1)));
             }
-            loadAverages(averages, amPeak, amAggregations);
+            LoadAverages(averages, amPeak, amAggregations);
 
             List<PhaseTerminationAggregation> pmAggregations = new List<PhaseTerminationAggregation>();
             for (var tempDate = startDate.Date; tempDate <= endDate; tempDate = tempDate.AddDays(1))
             {
                 pmAggregations.AddRange(_phaseTerminationAggregationRepository.GetPhaseTerminationsAggregationBySignalIdPhaseNumberAndDateRange(signalId, phaseNumber, tempDate.Date.Add(pmPeak), tempDate.Date.Add(pmPeak).AddHours(1)));
             }
-            loadAverages(averages, pmPeak, pmAggregations);
+            LoadAverages(averages, pmPeak, pmAggregations);
             return averages;
         }
 
-        private static void loadAverages(Dictionary<TimeSpan, double> averages, TimeSpan peakHour, List<PhaseTerminationAggregation> aggregations)
+        public static void LoadAverages(Dictionary<TimeSpan, double> averages, TimeSpan peakHour, List<PhaseTerminationAggregation> aggregations)
         {
-            if (aggregations.Count() > 0)
+            if (aggregations.Count > 0)
                 averages.Add(peakHour, aggregations.Average(a => a.ForceOffs + a.GapOuts + a.MaxOuts + a.Unknown));
             else
                 averages.Add(peakHour, 0);
@@ -254,7 +279,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
         private int GetLTPhaseNumberByDirection(int approachId)
         {
             var approach = _approachRepository.GetApproachByApproachID(approachId);
-            return approach.PermissivePhaseNumber.HasValue ? approach.PermissivePhaseNumber.Value : approach.ProtectedPhaseNumber;
+            return approach.PermissivePhaseNumber ?? approach.ProtectedPhaseNumber;
         }
 
         //public static Approach GetLTPhaseNumberPhaseTypeByDirection(string signalId, int approachId, IApproachRepository approachRepository)
@@ -298,8 +323,11 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             return GetAmPmPeaks(amStartTime, amEndTime, pmStartTime, pmEndTime, hourlyFlowRates);
         }
 
-        public static Dictionary<TimeSpan, int> GetAmPmPeaks(TimeSpan amStartTime, TimeSpan amEndTime, TimeSpan pmStartTime, TimeSpan pmEndTime,
-            Dictionary<TimeSpan, int> hourlyFlowRates)
+        public static Dictionary<TimeSpan, int> GetAmPmPeaks(TimeSpan amStartTime,
+                                                             TimeSpan amEndTime,
+                                                             TimeSpan pmStartTime,
+                                                             TimeSpan pmEndTime,
+                                                             Dictionary<TimeSpan, int> hourlyFlowRates)
         {
             var amPeak = hourlyFlowRates.Where(h => h.Key >= amStartTime && h.Key < amEndTime)
                             .OrderByDescending(h => h.Value)
@@ -315,7 +343,8 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             return returnPeaks;
         }
 
-        public static Dictionary<TimeSpan, int> GetHourlyFlowRates(List<TimeSpan> distinctTimeSpans, Dictionary<TimeSpan, int> averageByBin)
+        public static Dictionary<TimeSpan, int> GetHourlyFlowRates(List<TimeSpan> distinctTimeSpans,
+                                                                   Dictionary<TimeSpan, int> averageByBin)
         {
             var hourlyFlowRates = new Dictionary<TimeSpan, int>();
             foreach (var timeSpan in distinctTimeSpans)
@@ -327,7 +356,8 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             return hourlyFlowRates;
         }
 
-        public static Dictionary<TimeSpan, int> GetAveragesForBins(List<DetectorEventCountAggregation> volumeAggregations, List<TimeSpan> distinctTimeSpans)
+        public static Dictionary<TimeSpan, int> GetAveragesForBins(List<DetectorEventCountAggregation> volumeAggregations,
+                                                                   List<TimeSpan> distinctTimeSpans)
         {
             Dictionary<TimeSpan, int> averageByBin = new Dictionary<TimeSpan, int>();
 

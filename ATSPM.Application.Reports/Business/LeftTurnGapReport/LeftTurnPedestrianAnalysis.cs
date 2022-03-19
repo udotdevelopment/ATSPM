@@ -22,7 +22,14 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             _phasePedAggregationRepository = phasePedAggregationRepository;
             _approachCycleAggregationRepository = approachCycleAggregationRepository;
         }
-        public PedActuationResult GetPedestrianPercentage(string signalId, int approachId, DateTime start, DateTime end, TimeSpan startTime, TimeSpan endTime, int[] daysOfWeek)
+        public PedActuationResult GetPedestrianPercentage(
+            string signalId,
+            int approachId,
+            DateTime start,
+            DateTime end,
+            TimeSpan startTime,
+            TimeSpan endTime,
+            int[] daysOfWeek)
         {
             var detectors = LeftTurnReportPreCheck.GetLeftTurnDetectors(approachId, _approachRepository);
             var approach = _approachRepository.GetApproachByApproachID(detectors.First().ApproachId);
@@ -50,7 +57,14 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             return result;
         }
 
-        private PedCycleAverageResult GetPedCycleAverage(string signalId, DateTime start, DateTime end, TimeSpan startTime, TimeSpan endTime, int phase, int[] daysOfWeek)
+        private PedCycleAverageResult GetPedCycleAverage(
+            string signalId,
+            DateTime start,
+            DateTime end,
+            TimeSpan startTime,
+            TimeSpan endTime,
+            int phase,
+            int[] daysOfWeek)
         {
             List<Models.PhasePedAggregation> cycleAggregations = new List<Models.PhasePedAggregation>();
             for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
@@ -85,7 +99,14 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             return pedCycleAverageResult;
         }
 
-        private CycleAverageResult GetCycleAverage(string signalId, DateTime start, DateTime end, TimeSpan startTime, TimeSpan endTime, int phase, int[] daysOfWeek)
+        private CycleAverageResult GetCycleAverage(
+            string signalId,
+            DateTime start,
+            DateTime end,
+            TimeSpan startTime,
+            TimeSpan endTime,
+            int phase,
+            int[] daysOfWeek)
         {
             List<Models.PhaseCycleAggregation> cycleAggregations = new List<Models.PhaseCycleAggregation>();
             for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
@@ -93,19 +114,32 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                 if (daysOfWeek.Contains((int)start.DayOfWeek))
                     cycleAggregations.AddRange(_approachCycleAggregationRepository.GetApproachCyclesAggregationBySignalIdPhaseAndDateRange(signalId, phase, tempDate.Date.Add(startTime), tempDate.Date.Add(endTime)));
             }
-            Dictionary<DateTime, double> cycleList = new Dictionary<DateTime, double>();
-            for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
-            {
-                if (daysOfWeek.Contains((int)start.DayOfWeek)) 
-                    for (var tempstart = tempDate.Date.Add(startTime); tempstart <= tempDate.Add(endTime); tempstart = tempstart.AddMinutes(30))
-                    {
-                        cycleList.Add(tempstart, cycleAggregations.Where(c => c.BinStartTime >= tempstart && c.BinStartTime < tempstart.AddMinutes(30)).Average(c => c.TotalRedToRedCycles));
-                    }
-            }
+            Dictionary<DateTime, double> cycleList = GetAverageCycles(start, end, startTime, endTime, daysOfWeek, cycleAggregations);
             var cycleAverage = new CycleAverageResult();
             cycleAverage.CycleAverage = cycleAggregations.Average(a => a.TotalRedToRedCycles);
             cycleAverage.CycleAverageList = cycleList;
             return cycleAverage;
+        }
+
+        public static Dictionary<DateTime, double> GetAverageCycles(
+            DateTime start,
+            DateTime end,
+            TimeSpan startTime,
+            TimeSpan endTime,
+            int[] daysOfWeek,
+            List<Models.PhaseCycleAggregation> cycleAggregations)
+        {
+            Dictionary<DateTime, double> cycleList = new Dictionary<DateTime, double>();
+            for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
+            {
+                if (daysOfWeek.Contains((int)start.DayOfWeek))
+                    for (var tempstart = tempDate.Date.Add(startTime); tempstart <= tempstart.Add(endTime); tempstart = tempstart.AddMinutes(30))
+                    {
+                        cycleList.Add(tempstart, cycleAggregations.Where(c => c.BinStartTime >= tempstart && c.BinStartTime < tempstart.AddMinutes(30)).Average(c => c.TotalRedToRedCycles));
+                    }
+            }
+
+            return cycleList;
         }
     }
 
