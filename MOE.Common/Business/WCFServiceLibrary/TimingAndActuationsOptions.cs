@@ -123,6 +123,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [Required]
         [DataMember]
         public bool ShowRawEventData { get; set; }
+
+        [Display(Name = "Show Permissive Phases")]
+        [Required]
+        [DataMember]
+        public bool ShowPermissivePhases { get; set; }
         
         public List<int> GlobalEventCodesList { get; set; }
         public List<int> GlobalEventParamsList { get; set; }
@@ -160,6 +165,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             ShowHeaderForEachPhase = false;
             ShowLaneByLaneCount = true;
             ShowLinesStartEnd = true;
+            ShowPermissivePhases = true;
 
             ShowPedestrianActuation = true;
             ShowPedestrianIntervals = true;
@@ -245,7 +251,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
             //Parallel.ForEach(timingAndActuationsForPhases, timingAndActutionsForPhase =>
                 foreach (var timingAndActutionsForPhase in timingAndActuationsForPhases)
             {
-                GetChart(timingAndActutionsForPhase);
+                if (timingAndActutionsForPhase.GetPermissivePhase==false ||
+                    ShowPermissivePhases)
+                {
+                    GetChart(timingAndActutionsForPhase);
+                }
            // });
             }
 

@@ -13,14 +13,42 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
         private readonly IApproachRepository _approachRepository;
         private readonly IApproachSplitFailAggregationRepository _approachSplitFailAggregationRepository;
 
-        public LeftTurnSplitFailAnalysis(IApproachRepository approachRepository, IApproachSplitFailAggregationRepository approachSplitFailAggregationRepository)
+        public LeftTurnSplitFailAnalysis(IApproachRepository approachRepository,
+                                         IApproachSplitFailAggregationRepository approachSplitFailAggregationRepository)
         {
             _approachRepository = approachRepository;
             _approachSplitFailAggregationRepository = approachSplitFailAggregationRepository;
         }
-        public SplitFailResult GetSplitFailPercent(int approachId, DateTime start, DateTime end, TimeSpan startTime, TimeSpan endTime, int[] daysOfWeek)
+        public SplitFailResult GetSplitFailPercent(int approachId,
+                                                   DateTime start,
+                                                   DateTime end,
+                                                   TimeSpan startTime,
+                                                   TimeSpan endTime,
+                                                   int[] daysOfWeek)
         {
-            var detectors = LeftTurnReportPreCheck.GetLeftTurnDetectors( approachId, _approachRepository);
+            List<Models.ApproachSplitFailAggregation> splitFailsAggregates = GetSplitFailAggregates(approachId, start, end, startTime, endTime, daysOfWeek);
+            Dictionary<DateTime, double> percentCyclesWithSplitFail = GetPercentCyclesWithSplitFails(start, end, startTime, endTime, daysOfWeek, splitFailsAggregates);
+            int cycles = splitFailsAggregates.Sum(s => s.Cycles);
+            int splitFails = splitFailsAggregates.Sum(s => s.SplitFailures);
+            if (cycles == 0)
+                throw new ArithmeticException("Cycles cannot be zero");
+            return new SplitFailResult
+            {
+                CyclesWithSplitFails = splitFails,
+                SplitFailPercent = splitFails / cycles,
+                PercentCyclesWithSplitFailList = percentCyclesWithSplitFail
+            };
+
+        }
+
+        private List<Models.ApproachSplitFailAggregation> GetSplitFailAggregates(int approachId,
+                                                                                 DateTime start,
+                                                                                 DateTime end,
+                                                                                 TimeSpan startTime,
+                                                                                 TimeSpan endTime,
+                                                                                 int[] daysOfWeek)
+        {
+            var detectors = LeftTurnReportPreCheck.GetLeftTurnDetectors(approachId, _approachRepository);
             var approach = _approachRepository.GetApproachByApproachID(approachId);
             var phase = LeftTurnReportPreCheck.GetOpposingPhase(approach);
             List<Models.ApproachSplitFailAggregation> splitFailsAggregates = new List<Models.ApproachSplitFailAggregation>();
@@ -40,14 +68,25 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                     }
                 }
             }
+
+            return splitFailsAggregates;
+        }
+
+        public static Dictionary<DateTime, double> GetPercentCyclesWithSplitFails(DateTime start,
+                                                                                   DateTime end,
+                                                                                   TimeSpan startTime,
+                                                                                   TimeSpan endTime,
+                                                                                   int[] daysOfWeek,
+                                                                                   List<Models.ApproachSplitFailAggregation> splitFailsAggregates)
+        {
             Dictionary<DateTime, double> percentCyclesWithSplitFail = new Dictionary<DateTime, double>();
             for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
             {
                 if (daysOfWeek.Contains((int)tempDate.DayOfWeek))
                 {
-                    for (var tempstart = tempDate.Date.Add(startTime); tempstart <= tempDate.Add(endTime); tempstart = tempstart.AddMinutes(30))
+                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(30))
                     {
-                        var tempEndTime = tempDate.AddMinutes(30);
+                        var tempEndTime = tempstart.AddMinutes(30);
                         var tempSplitFails = splitFailsAggregates.Where(s => s.BinStartTime >= tempstart && s.BinStartTime < tempEndTime).Sum(s => s.SplitFailures);
                         var tempCycles = splitFailsAggregates.Where(s => s.BinStartTime >= tempstart && s.BinStartTime < tempEndTime).Sum(s => s.Cycles);
                         double tempPercentFails = 0;
@@ -57,16 +96,8 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                     }
                 }
             }
-                int cycles = splitFailsAggregates.Sum(s => s.Cycles);
-            int splitFails = splitFailsAggregates.Sum(s => s.SplitFailures);
-            if (cycles == 0)
-                throw new ArithmeticException("Cycles cannot be zero");
-            return new SplitFailResult {
-                CyclesWithSplitFails = splitFails,
-                SplitFailPercent = splitFails / cycles,
-                PercentCyclesWithSplitFailList = percentCyclesWithSplitFail
-            };
-            
+
+            return percentCyclesWithSplitFail;
         }
     }
 }

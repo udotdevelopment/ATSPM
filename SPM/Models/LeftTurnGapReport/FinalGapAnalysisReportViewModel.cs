@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace SPM.Models
 {
+
     public class FinalGapAnalysisReportViewModel
     {
         public DateTime StartDate { get; set; }

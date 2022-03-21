@@ -24,10 +24,6 @@
                     <div class="card signal-data-check-min-width">
                         <div class="card-header">Signal Data Check</div>
                         <div class="card-body">
-                            <div class="form-group">
-                                @Html.CheckBox("signalDataCheck", true, new { onclick = "signalDataCheckClick()", @class = "" })
-                                Signal Data Check
-                            </div>
                             <div id="CyclesWithPedCallsDiv" class="row mb-3">
                                 <div class="col-2 ">
                                     @Html.TextBoxFor(m => m.CyclesWithPedCalls, new { @class = "form-control LeftTurnThreshold" })
@@ -137,6 +133,7 @@
         var urlpathGetConflictingVolumesAnalysisReport =   '@Url.Action("GetConflictingVolumesAnalysisReport", "LeftTurnGapReport")';
         var urlpathGetSignalDataCheckReport = '@Url.Action("GetSignalDataCheckReport", "LeftTurnGapReport")';
         var urlpathDeleteTempPdf =   '@Url.Action("RemoveTempFile", "LeftTurnGapReport")';
+        var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';
     </script>
 
 }

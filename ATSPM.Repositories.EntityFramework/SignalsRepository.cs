@@ -33,18 +33,24 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
                 .ThenInclude(a => a.DirectionType)
                 .Where(signal => signal.SignalId == SignalId)
                 .Where(signal => signal.Start <= startDate)
-                .Where(signal => signal.VersionActionId != 3)
-                .ToList();
+                .Where(signal => signal.VersionActionId != 3).ToList();
 
+            Signal signal;
             if (signals.Count > 1)
             {
                 var orderedSignals = signals.OrderByDescending(signal => signal.Start);
-                return orderedSignals.First();
+                signal = orderedSignals.First();
             }
             else
             {
-                return signals.FirstOrDefault();
+                signal =  signals.FirstOrDefault();
             }
+            var detectors = signal.Approaches.SelectMany(s => s.Detectors);
+            foreach(var detector in detectors)
+            {
+                detector.DetectionTypeDetectors = _db.DetectionTypeDetectors.Where(d => d.Id == detector.Id).Include(d => d.DetectionType).ToList();
+            }
+            return signal;
         }
 
         public Signal GetVersionOfSignalByDateWithDetectionTypes(string SignalId, DateTime startDate)

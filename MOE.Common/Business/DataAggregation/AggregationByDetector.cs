@@ -33,6 +33,6 @@ namespace MOE.Common.Business.DataAggregation
                     Detector.ID, options.StartDate, options.EndDate);
         }
 
-        protected abstract void LoadBins(Models.Detector detector, DetectorAggregationMetricOptions options);
+        public abstract void LoadBins(Models.Detector detector, DetectorAggregationMetricOptions options);
     }
 }

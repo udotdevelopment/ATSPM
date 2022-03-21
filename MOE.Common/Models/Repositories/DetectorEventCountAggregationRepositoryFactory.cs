@@ -10,7 +10,10 @@
             if (_detectorAggregationRepository != null)
                 return _detectorAggregationRepository;
             if (_db == null)
+            {
+                _db = new SPM();
                 return new DetectorEventCountAggregationRepository(_db);
+            }
             else
                 return new DetectorEventCountAggregationRepository();
         }
