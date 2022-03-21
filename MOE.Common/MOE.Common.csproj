@@ -663,6 +663,11 @@
     <Compile Include="Migrations\202105132005112_ReCreateAggTables.designer.cs">
       <DependentUpon>202105132005112_ReCreateAggTables.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202203211837031_JurisdictionTest.cs" />
+    <Compile Include="Migrations\202203211837031_JurisdictionTest.designer.cs">
+      <DependentUpon>202203211837031_JurisdictionTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Jurisdiction.cs" />
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\PhasePedAggregation.cs" />
@@ -673,6 +678,8 @@
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\Repositories\IPhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IPhaseLeftTurnGapAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\IJurisdictionRepository.cs" />
+    <Compile Include="Models\Repositories\IJurisdictionSignalRepository.cs" />
     <Compile Include="Models\Repositories\PhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseLeftTurnGapAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseTerminationAggregationRepository.cs" />
@@ -684,6 +691,9 @@
     <Compile Include="Models\Repositories\ISignalEventCountAggregationRepository.cs" />
     <Compile Include="Models\Repositories\DetectorEventCountAggregationRepository.cs" />
     <Compile Include="Models\Repositories\DetectorEventCountAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\JurisdictionSignal.cs" />
+    <Compile Include="Models\Repositories\JurisdictionRepository.cs" />
+    <Compile Include="Models\Repositories\JurisdictionRepositoryFactory.cs" />
     <Compile Include="Models\SignalToAggregate.cs" />
     <Compile Include="Models\SignalPlanAggregation.cs" />
     <Compile Include="Models\SignalEventCountAggregation.cs" />
@@ -1120,6 +1130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105132005112_ReCreateAggTables.resx">
       <DependentUpon>202105132005112_ReCreateAggTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202203211837031_JurisdictionTest.resx">
+      <DependentUpon>202203211837031_JurisdictionTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

@@ -894,6 +894,13 @@
     <Content Include="Views\LeftTurnGapReport\PedestrianCallAnalysisReport.cshtml" />
     <Content Include="Views\LeftTurnGapReport\ConflictingVolumesAnalysisReport.cshtml" />
     <Content Include="Views\LeftTurnGapReport\ResultAsPdf.cshtml" />
+    <Content Include="Views\Agency\Create.cshtml" />
+    <Content Include="Views\Agency\Delete.cshtml" />
+    <Content Include="Views\Agency\Details.cshtml" />
+    <Content Include="Views\Agency\Edit.cshtml" />
+    <Content Include="Views\Agency\EditorTemplates\AgencyPhaseDirection.cshtml" />
+    <Content Include="Views\Agency\EditorTemplates\AgencySignal.cshtml" />
+    <Content Include="Views\Agency\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
