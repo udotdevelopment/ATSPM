@@ -55,7 +55,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             leftTurnVolumeValue.CrossProductValue = crossVolumeProduct;
             leftTurnVolumeValue.LeftTurnVolume = leftTurnVolume;
             leftTurnVolumeValue.OpposingThroughVolume = opposingPhase;
-            SetCrossProductReview(leftTurnVolumeValue, crossVolumeProduct);
+            leftTurnVolumeValue.CrossProductReview = GetCrossProductReview(crossVolumeProduct, leftTurnVolumeValue.OpposingLanes);
             ApproachType approachType = GetApproachType(approach);
             SetDecisionBoundariesReview(leftTurnVolumeValue, leftTurnVolume, opposingVolume, approachType);
             leftTurnVolumeValue.DemandList = GetDemandList(start, end, startTime, endTime, daysOfWeek, leftTurnVolumeAggregation);
@@ -65,7 +65,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
         public static Dictionary<DateTime, double> GetDemandList(DateTime start, DateTime end, TimeSpan startTime, TimeSpan endTime, int[] daysOfWeek, List<Models.DetectorEventCountAggregation> leftTurnVolumeAggregation)
         {
             var demandList = new Dictionary<DateTime, double>();
-            for (var tempDate = start.Date; tempDate < end; tempDate = tempDate.AddDays(1))
+            for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
             {
                 if (daysOfWeek.Contains((int)tempDate.DayOfWeek))
                 {
@@ -78,12 +78,12 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             return demandList;
         }
 
-        private static double GetCrossProduct(double leftTurnVolume, double opposingVolume)
+        public static double GetCrossProduct(double leftTurnVolume, double opposingVolume)
         {
             return leftTurnVolume * opposingVolume;
         }
 
-        private static List<Models.Detector> GetOpposingDetectors(int opposingPhase, Models.Signal signal, List<int> movementTypes)
+        public static List<Models.Detector> GetOpposingDetectors(int opposingPhase, Models.Signal signal, List<int> movementTypes)
         {
             return signal
                             .Approaches
@@ -93,19 +93,23 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                             .ToList();
         }
 
-        private static void SetCrossProductReview(LeftTurnVolumeValue leftTurnVolumeValue, double crossVolumeProduct)
+        public static bool GetCrossProductReview(double crossVolumeProduct, int opposingLanes)
         {
-            if (leftTurnVolumeValue.OpposingLanes == 1)
+            if (opposingLanes <= 1)
             {
-                leftTurnVolumeValue.CrossProductReview = crossVolumeProduct > 50000;
+                return crossVolumeProduct > 50000;
             }
             else
             {
-                leftTurnVolumeValue.CrossProductReview = crossVolumeProduct > 100000;
+                return crossVolumeProduct > 100000;
             }
         }
 
-        private static void SetDecisionBoundariesReview(LeftTurnVolumeValue leftTurnVolumeValue, double leftTurnVolume, double opposingVolume, ApproachType approachType)
+        public static void SetDecisionBoundariesReview(
+            LeftTurnVolumeValue leftTurnVolumeValue,
+            double leftTurnVolume,
+            double opposingVolume,
+            ApproachType approachType)
         {
             switch (approachType)
             {
@@ -153,16 +157,14 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             }
         }
 
-        private static ApproachType GetApproachType(Models.Approach approach)
+        public static ApproachType GetApproachType(Models.Approach approach)
         {
-            ApproachType approachType;
             if (approach.ProtectedPhaseNumber == 0 && approach.PermissivePhaseNumber.HasValue)
-                approachType = ApproachType.Permissive;
+                return ApproachType.Permissive;
             else if (approach.ProtectedPhaseNumber != 0 && approach.PermissivePhaseNumber.HasValue)
-                approachType = ApproachType.PermissiveProtected;
+                return ApproachType.PermissiveProtected;
             else
-                approachType = ApproachType.Protected;
-            return approachType;
+                return ApproachType.Protected;
         }
 
         public static List<Models.Detector> GetDetectorsByPhase(string signalId, int phase, IDetectorRepository detectorRepository)
@@ -201,7 +203,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
 
     }
 
-    enum ApproachType { Permissive, Protected, PermissiveProtected };
+    public enum ApproachType { Permissive, Protected, PermissiveProtected };
 }
 
 
