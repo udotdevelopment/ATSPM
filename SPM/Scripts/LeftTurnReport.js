@@ -211,17 +211,6 @@ function customTimeClick() {
 
 }
 
-function signalDataCheckClick() {
-    if ($("#signalDataCheck").is(":checked")) {
-        $('#CyclesWithPedCallsDiv').removeClass('d-none');
-        $('#CyclesWithGapOutsDiv').removeClass('d-none');
-        $('#LeftTurnVolumeDiv').removeClass('d-none');
-    } else {
-        $('#CyclesWithPedCallsDiv').addClass('d-none');
-        $('#CyclesWithGapOutsDiv').addClass('d-none');
-        $('#LeftTurnVolumeDiv').addClass('d-none');
-    }
-}
 
 function finalGapAnalysisCheckClick() {
     if ($("#finalGapAnalysisCheck").is(":checked")) {
@@ -248,6 +237,11 @@ function pedestrianCallAnalysisCheckClick() {
         $('#LtCyclesWithPedCallsDiv').addClass('d-none');
     }
 
+}
+
+function SetControlValues(signalID, selectedMetricID) {
+    $("#SignalID").val(signalID);
+    GetSignalLocation(selectedMetricID);
 }
 
 function GetSignalLocation() {

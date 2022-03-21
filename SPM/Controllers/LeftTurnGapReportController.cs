@@ -44,7 +44,7 @@ namespace SPM.Controllers
                 new CheckModel{Id=0, Name = "All Left Turns", Checked = true} };
             foreach (var approach in signal.Approaches)
             {
-                if(approach.Detectors.Any(d => d.MovementTypeID == 3 || d.MovementTypeID == 5))
+                if(approach.Detectors.Any(d => (d.MovementTypeID == 3) && d.DetectionTypeIDs.Contains(4)))
                 {
                     checkModels.Add(new CheckModel { Id = approach.ApproachID, Checked = true, Name = approach.Description});
                 }
@@ -147,6 +147,7 @@ namespace SPM.Controllers
             foreach (int approachId in parameters.ApproachIds)
             {
                 var approach = approachRepository.GetApproachByApproachID(approachId);
+                
                 var approachResult = new FinalGapAnalysisReportViewModel();
                 if (parameters.GetAMPMPeakPeriod.HasValue && parameters.GetAMPMPeakPeriod == true)
                 {
@@ -263,7 +264,6 @@ namespace SPM.Controllers
 
         private PdfResult GetPdf(ViewAsPdf pdf)
         {
-
             var settingsRepository = ApplicationSettingsRepositoryFactory.Create();
             var settings = settingsRepository.GetGeneralSettings();
             var imagelocation = settings.ImagePath;

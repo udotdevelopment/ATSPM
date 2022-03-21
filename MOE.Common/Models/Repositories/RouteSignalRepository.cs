@@ -70,6 +70,8 @@ namespace MOE.Common.Models.Repositories
         {
             var routeSignal = db.RouteSignals.Include("PhaseDirections").FirstOrDefault(r => r.Id == id);
             var signalRepository = SignalsRepositoryFactory.Create();
+            if (routeSignal == null)
+                return routeSignal;
             routeSignal.Signal = signalRepository.GetLatestVersionOfSignalBySignalID(routeSignal.SignalId);
             return routeSignal;
         }

@@ -9,74 +9,107 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
 {
     public class LeftTurnVolumeAnalysis
     {
-        public static LeftTurnVolumeValue GetLeftTurnVolumeStats(string signalId, int approachId, DateTime start, 
-            DateTime end, TimeSpan startTime, TimeSpan endTime,ISignalsRepository signalsRepository, IApproachRepository approachRepository, 
-            IDetectorRepository detectorRepository, IDetectorEventCountAggregationRepository detectorEventCountAggregationRepository, int[] daysOfWeek)
+        public static LeftTurnVolumeValue GetLeftTurnVolumeStats(
+            string signalId,
+            int approachId,
+            DateTime start,
+            DateTime end,
+            TimeSpan startTime,
+            TimeSpan endTime,
+            ISignalsRepository signalsRepository,
+            IApproachRepository approachRepository,
+            IDetectorRepository detectorRepository,
+            IDetectorEventCountAggregationRepository detectorEventCountAggregationRepository,
+            int[] daysOfWeek)
         {
 
-            Dictionary<TimeSpan, int> peaks = LeftTurnReportPreCheck.GetAMPMPeakFlowRate(signalId, approachId, start, 
-                end, new TimeSpan(6, 0, 0), new TimeSpan(9, 0, 0), new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0), 
-                daysOfWeek, signalsRepository, approachRepository, detectorEventCountAggregationRepository );
-            Dictionary<TimeSpan, int> peaksToUse = new Dictionary<TimeSpan, int>();
-            if (peaks.Keys.First() >= startTime && peaks.Keys.First() <= endTime)
-                peaksToUse.Add(peaks.First().Key, 0);
-            if (peaks.Keys.Last() >= startTime && peaks.Keys.Last() <= endTime)
-                peaksToUse.Add(peaks.Last().Key, 0);
-            if (peaks.Count == 0)
-                throw new NotSupportedException("Peak hours must be included in the selected time range");
+            Dictionary<TimeSpan, int> peaks = LeftTurnReportPreCheck.GetAMPMPeakFlowRate(
+                signalId,
+                approachId,
+                start,
+                end,
+                new TimeSpan(6, 0, 0),
+                new TimeSpan(9, 0, 0),
+                new TimeSpan(15, 0, 0),
+                new TimeSpan(18, 0, 0),
+                daysOfWeek,
+                signalsRepository,
+                approachRepository,
+                detectorEventCountAggregationRepository);
             LeftTurnVolumeValue leftTurnVolumeValue = new LeftTurnVolumeValue();
-            var detectors = LeftTurnReportPreCheck.GetLeftTurnDetectors( approachId, approachRepository);
+            var detectors = LeftTurnReportPreCheck.GetLeftTurnDetectors(approachId, approachRepository);
             var approach = approachRepository.GetApproachByApproachID(detectors.First().ApproachId);
             int opposingPhase = LeftTurnReportPreCheck.GetOpposingPhase(approach);
             var signal = signalsRepository.GetVersionOfSignalByDate(signalId, start);
             List<int> movementTypes = new List<int>() { 1, 4, 5 };
-            var opposingLanes = signal
-                .Approaches
-                .Where(a => a.ProtectedPhaseNumber == opposingPhase)
-                .SelectMany(a => a.Detectors)
-                .Where(d => d.MovementTypeId.HasValue && movementTypes.Contains(d.MovementTypeId.Value))
-                .ToList(); //GetDetectorsByPhase(signalId, opposingPhase, detectorRepository);
-            leftTurnVolumeValue.OpposingLanes = opposingLanes.Count;
-            List<Models.DetectorEventCountAggregation> leftTurnVolumeAggregation = 
+            List<Models.Detector> opposingDetectors =
+                GetOpposingDetectors(opposingPhase, signal, movementTypes);//GetDetectorsByPhase(signalId, opposingPhase, detectorRepository);
+            leftTurnVolumeValue.OpposingLanes = opposingDetectors.Count;
+            List<Models.DetectorEventCountAggregation> leftTurnVolumeAggregation =
                 GetDetectorVolumebyDetector(detectors, start, end, startTime, endTime, detectorEventCountAggregationRepository);
-            List<Models.DetectorEventCountAggregation> opposingVolumeAggregations = 
-                GetDetectorVolumebyDetector(opposingLanes, start, end, startTime, endTime, detectorEventCountAggregationRepository);
+            List<Models.DetectorEventCountAggregation> opposingVolumeAggregations =
+                GetDetectorVolumebyDetector(opposingDetectors, start, end, startTime, endTime, detectorEventCountAggregationRepository);
             double leftTurnVolume = leftTurnVolumeAggregation.Sum(l => l.EventCount);
             double opposingVolume = opposingVolumeAggregations.Sum(o => o.EventCount);
-            double crossVolumeProduct = leftTurnVolume * opposingVolume;
+            double crossVolumeProduct = GetCrossProduct(leftTurnVolume, opposingVolume);
             leftTurnVolumeValue.CrossProductValue = crossVolumeProduct;
             leftTurnVolumeValue.LeftTurnVolume = leftTurnVolume;
             leftTurnVolumeValue.OpposingThroughVolume = opposingPhase;
-            SetCrossProductReview(leftTurnVolumeValue, crossVolumeProduct);
+            leftTurnVolumeValue.CrossProductReview = GetCrossProductReview(crossVolumeProduct, leftTurnVolumeValue.OpposingLanes);
             ApproachType approachType = GetApproachType(approach);
             SetDecisionBoundariesReview(leftTurnVolumeValue, leftTurnVolume, opposingVolume, approachType);
-            leftTurnVolumeValue.DemandList = new Dictionary<DateTime, double>();
+            leftTurnVolumeValue.DemandList = GetDemandList(start, end, startTime, endTime, daysOfWeek, leftTurnVolumeAggregation);
+            return leftTurnVolumeValue;
+        }
+
+        public static Dictionary<DateTime, double> GetDemandList(DateTime start, DateTime end, TimeSpan startTime, TimeSpan endTime, int[] daysOfWeek, List<Models.DetectorEventCountAggregation> leftTurnVolumeAggregation)
+        {
+            var demandList = new Dictionary<DateTime, double>();
             for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
             {
                 if (daysOfWeek.Contains((int)tempDate.DayOfWeek))
                 {
-                    for (var tempstart = tempDate.Date.Add(startTime); tempstart <= tempDate.Add(endTime); tempstart = tempstart.AddMinutes(30))
+                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(30))
                     {
-                        leftTurnVolumeValue.DemandList.Add(tempstart, leftTurnVolumeAggregation.Where(v => v.BinStartTime >= tempstart && v.BinStartTime < tempstart.AddMinutes(30)).Sum(v=> v.EventCount));
+                        demandList.Add(tempstart, leftTurnVolumeAggregation.Where(v => v.BinStartTime >= tempstart && v.BinStartTime < tempstart.AddMinutes(30)).Sum(v => v.EventCount));
                     }
                 }
             }
-            return leftTurnVolumeValue;
+            return demandList;
         }
 
-        private static void SetCrossProductReview(LeftTurnVolumeValue leftTurnVolumeValue, double crossVolumeProduct)
+        public static double GetCrossProduct(double leftTurnVolume, double opposingVolume)
         {
-            if (leftTurnVolumeValue.OpposingLanes == 1)
+            return leftTurnVolume * opposingVolume;
+        }
+
+        public static List<Models.Detector> GetOpposingDetectors(int opposingPhase, Models.Signal signal, List<int> movementTypes)
+        {
+            return signal
+                            .Approaches
+                            .Where(a => a.ProtectedPhaseNumber == opposingPhase)
+                            .SelectMany(a => a.Detectors)
+                            .Where(d => d.MovementTypeId.HasValue && movementTypes.Contains(d.MovementTypeId.Value))
+                            .ToList();
+        }
+
+        public static bool GetCrossProductReview(double crossVolumeProduct, int opposingLanes)
+        {
+            if (opposingLanes <= 1)
             {
-                leftTurnVolumeValue.CrossProductReview = crossVolumeProduct > 50000;
+                return crossVolumeProduct > 50000;
             }
             else
             {
-                leftTurnVolumeValue.CrossProductReview = crossVolumeProduct > 100000;
+                return crossVolumeProduct > 100000;
             }
         }
 
-        private static void SetDecisionBoundariesReview(LeftTurnVolumeValue leftTurnVolumeValue, double leftTurnVolume, double opposingVolume, ApproachType approachType)
+        public static void SetDecisionBoundariesReview(
+            LeftTurnVolumeValue leftTurnVolumeValue,
+            double leftTurnVolume,
+            double opposingVolume,
+            ApproachType approachType)
         {
             switch (approachType)
             {
@@ -124,16 +157,14 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             }
         }
 
-        private static ApproachType GetApproachType(Models.Approach approach)
+        public static ApproachType GetApproachType(Models.Approach approach)
         {
-            ApproachType approachType;
             if (approach.ProtectedPhaseNumber == 0 && approach.PermissivePhaseNumber.HasValue)
-                approachType = ApproachType.Permissive;
+                return ApproachType.Permissive;
             else if (approach.ProtectedPhaseNumber != 0 && approach.PermissivePhaseNumber.HasValue)
-                approachType = ApproachType.PermissiveProtected;
+                return ApproachType.PermissiveProtected;
             else
-                approachType = ApproachType.Protected;
-            return approachType;
+                return ApproachType.Protected;
         }
 
         public static List<Models.Detector> GetDetectorsByPhase(string signalId, int phase, IDetectorRepository detectorRepository)
@@ -172,7 +203,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
 
     }
 
-    enum ApproachType { Permissive, Protected, PermissiveProtected };
+    public enum ApproachType { Permissive, Protected, PermissiveProtected };
 }
 
 
