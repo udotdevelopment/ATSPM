@@ -232,7 +232,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport.Tests
             var result = LeftTurnReportPreCheck.GetHourlyFlowRates(hourlyTimeSpans, averageByBin);
             foreach (var rate in result)
             {
-                Assert.True(rate.Value == 4);
+                Assert.Equal(4, rate.Value);
             }
         }
 
@@ -240,7 +240,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport.Tests
         public void GetAveragesForBinsTest()
         {
             List<DetectorEventCountAggregation> volumeAggregations = new List<DetectorEventCountAggregation>();
-            for(DateTime dt = DateTime.MinValue; dt < DateTime.MinValue.AddDays(3); dt = dt.AddMinutes(15))
+            for (DateTime dt = DateTime.MinValue; dt < DateTime.MinValue.AddDays(3); dt = dt.AddMinutes(15))
             {
                 volumeAggregations.Add(new DetectorEventCountAggregation { BinStartTime = dt, EventCount = 5 });
             }
@@ -254,10 +254,12 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport.Tests
                 }
             }
             var result = LeftTurnReportPreCheck.GetAveragesForBins(volumeAggregations, distinctTimeSpans);
-            foreach(var avg in result)
+            foreach (var avg in result)
             {
                 Assert.Equal(5, avg.Value);
             }
         }
+
+        
     }
 }
