@@ -907,6 +907,7 @@
     <Content Include="Views\LeftTurnGapReport\PedestrianCallAnalysisReport.cshtml" />
     <Content Include="Views\LeftTurnGapReport\ConflictingVolumesAnalysisReport.cshtml" />
     <Content Include="Views\LeftTurnGapReport\ResultAsPdf.cshtml" />
+    <Content Include="Views\DefaultCharts\WaitTimeOptions.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

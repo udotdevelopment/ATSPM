@@ -1112,6 +1112,24 @@ namespace MOE.Common.Migrations
                 },
                 new MetricType
                 {
+                    MetricID = 31,
+                    ChartName = "Left Turn Gap Analysis",
+                    Abbreviation = "LTGA",
+                    ShowOnWebsite = true,
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 112
+                },
+                new MetricType
+                {
+                    MetricID = 32,
+                    ChartName = "Wait Time",
+                    Abbreviation = "WT",
+                    ShowOnWebsite = true,
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 113
+                },
+                new MetricType
+                {
                     MetricID = 33,
                     ChartName = "Gap Vs Demand",
                     Abbreviation = "GVD",
@@ -1119,6 +1137,7 @@ namespace MOE.Common.Migrations
                     ShowOnAggregationSite = false,
                     DisplayOrder = 115
                 }
+
             );
             context.SaveChanges();
 
@@ -1140,6 +1159,7 @@ namespace MOE.Common.Migrations
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(8));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(9));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(13));
+                        detectionType.MetricTypes.Add(context.MetricTypes.Find(32));
                         break;
                     case 3:
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(10));
@@ -1155,6 +1175,7 @@ namespace MOE.Common.Migrations
                     case 6:
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(12)); 
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(31));
+                        detectionType.MetricTypes.Add(context.MetricTypes.Find(32));
                         break;
                 }
             context.SaveChanges();
