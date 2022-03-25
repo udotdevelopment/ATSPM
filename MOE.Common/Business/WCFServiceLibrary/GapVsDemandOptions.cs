@@ -95,37 +95,38 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chart.Legends.Add(chartLegend);
 
             //Create the chart area
-            ChartArea chartArea = chart.ChartAreas[0];
+            Axis X = chart.ChartAreas[0].AxisX;
+            Axis Y = chart.ChartAreas[0].AxisY;
 
             if (YAxisMax > 0)
-                chartArea.AxisY.Maximum = YAxisMax.Value;
+                Y.Maximum = YAxisMax.Value;
             else
-                chartArea.AxisY.Maximum = 60;
+                Y.Maximum = 60;
 
             if (YAxisMin > 0)
-                chartArea.AxisY.Minimum = YAxisMin;
+                Y.Minimum = YAxisMin;
             else
-                chartArea.AxisY.Minimum = 0;
+                Y.Minimum = 0;
 
-            chartArea.AxisY.Title = "Count of Vehicles";
-            chartArea.AxisY.TitleFont = new Font("Arial", 15f);
-            chartArea.AxisY.LabelStyle.Font = new Font("Arial", 10f);
-            chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.FixedCount;
-            chartArea.AxisY.Interval = 10;
-            chartArea.AxisY.MajorGrid.LineColor = chart.BackColor;
+            Y.Title = "Count of Vehicles";
+            Y.TitleFont = new Font("Arial", 15f);
+            Y.LabelStyle.Font = new Font("Arial", 10f);
+            Y.IntervalAutoMode = IntervalAutoMode.FixedCount;
+            Y.Interval = 10;
+            Y.MajorGrid.LineColor = chart.BackColor;
 
-            chartArea.AxisX.Title = "Duration by 15 Minute Bins";
-            chartArea.AxisX.TitleFont = new Font("Arial", 15f);
-            chartArea.AxisX.LabelStyle.Font = new Font("Arial", 11f);
-            chartArea.AxisX.MajorGrid.LineColor = chart.BackColor;
-            chartArea.AxisX.Minimum = StartDate.ToOADate();
-            chartArea.AxisX.Maximum = EndDate.ToOADate();
-            chartArea.AxisX.LabelStyle.Angle = -90;
+            X.Title = "Duration by 15 Minute Bins";
+            X.TitleFont = new Font("Arial", 15f);
+            X.LabelStyle.Font = new Font("Arial", 11f);
+            X.MajorGrid.LineColor = chart.BackColor;
+            X.Minimum = StartDate.ToOADate();
+            X.Maximum = EndDate.ToOADate();
+            X.LabelStyle.Angle = -90;
 
 
             var gapSeries = new Series();
             gapSeries.ChartType = SeriesChartType.Line;
-            gapSeries.Color = Color.DarkBlue;
+            gapSeries.Color = Color.FromArgb(92, 136, 218);
             gapSeries.Name = "Number of Acceptable Gaps";
             gapSeries.XValueType = ChartValueType.DateTime;
             gapSeries.BorderWidth = 3;
@@ -134,7 +135,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             
             var demandSeries = new Series();
             demandSeries.ChartType = SeriesChartType.Line;
-            demandSeries.Color = Color.Orange;
+            demandSeries.Color = Color.FromArgb(232, 119, 34);
             demandSeries.Name = "Demand List";
             demandSeries.XValueType = ChartValueType.DateTime;
             demandSeries.BorderWidth = 3;

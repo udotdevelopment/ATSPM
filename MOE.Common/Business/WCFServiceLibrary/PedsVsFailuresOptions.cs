@@ -89,6 +89,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chartLegend.Name = "MainLegend";
             chartLegend.Docking = Docking.Top;
             chartLegend.Alignment = StringAlignment.Center;
+            chartLegend.TextWrapThreshold = 50;
             chartLegend.Font = new Font(chartLegend.Font.FontFamily, 14);
             chart.Legends.Add(chartLegend);
 
@@ -124,7 +125,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             var gapSeries = new Series();
             gapSeries.ChartType = SeriesChartType.Line;
-            gapSeries.Color = Color.DarkBlue;
+            gapSeries.Color = Color.FromArgb(92,136,218);
             gapSeries.Name = "% of Accectable Cycles w/ Peds";
             gapSeries.XValueType = ChartValueType.DateTime;
             gapSeries.Font = new Font("Arial", 10f);
@@ -133,7 +134,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             
             var demandSeries = new Series();
             demandSeries.ChartType = SeriesChartType.Line;
-            demandSeries.Color = Color.Orange;
+            demandSeries.Color = Color.FromArgb(232,119,34);
             demandSeries.Name = "% of Cycles w/ Split Failure";
             demandSeries.XValueType = ChartValueType.DateTime;
             demandSeries.Font = new Font("Arial", 10f);
