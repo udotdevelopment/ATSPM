@@ -244,17 +244,69 @@ namespace SPM.Controllers
                 approachResult.Location = approach.Signal.PrimaryName + " & " + approach.Signal.SecondaryName;
                 approachResult.SpeedLimit = approach.MPH;
 
-                if (approach.ProtectedPhaseNumber > 0 && approach.PermissivePhaseNumber == null)
+                int protectedNum = approach.ProtectedPhaseNumber;
+                Nullable<int> permissiveNum = approach.PermissivePhaseNumber;
+
+                if (protectedNum > 0 && permissiveNum == null)
                 {
                     approachResult.PhaseType = "Protected Only";
+                    approachResult.SignalType = "Protected Only";
+
                 }
-                else if (approach.ProtectedPhaseNumber == 0 && approach.PermissivePhaseNumber > 0)
+                else if (protectedNum == 0 && permissiveNum > 0)
                 {
                     approachResult.PhaseType = "Permissive Only";
+                    approachResult.SignalType = "Permissive Only";
                 } else
                 {
                     approachResult.PhaseType = "Protected / Permissive";
+                    if (protectedNum == 1 && permissiveNum == 6 ||
+                        protectedNum == 3 && permissiveNum == 8 || 
+                        protectedNum == 5 && permissiveNum == 6 ||
+                        protectedNum == 7 && permissiveNum == 8)
+                    {
+                        approachResult.SignalType = "5-Head";
+                    }
+                    else
+                    {
+                        approachResult.SignalType = "FYA";
+                    }
                 }
+
+                if (approachResult.PhaseType == "Protected Only")
+                {
+                    if (approachResult.OpposingLanes == 1)
+                    {
+                        approachResult.CrossProductReview = 3696 > approachResult.CalculatedVolumeBoundary;
+                    }
+                    else
+                    {
+                        approachResult.CrossProductReview = 2312 > approachResult.CalculatedVolumeBoundary;
+                    }
+                }
+                else if (approachResult.PhaseType == "Permissive Only")
+                {
+                    if (approachResult.OpposingLanes == 1)
+                    {
+                        approachResult.CrossProductReview = 9519 > approachResult.CalculatedVolumeBoundary;
+                    }
+                    else
+                    {
+                        approachResult.CrossProductReview = 7974 > approachResult.CalculatedVolumeBoundary;
+                    }
+                }
+                else
+                {
+                    if (approachResult.OpposingLanes == 1)
+                    {
+                        approachResult.CrossProductReview = 4638 > approachResult.CalculatedVolumeBoundary;
+                    }
+                    else
+                    {
+                        approachResult.CrossProductReview = 3782 > approachResult.CalculatedVolumeBoundary;
+                    }
+                }
+
 
                 if (parameters.GetAMPMPeakHour == false && parameters.GetAMPMPeakPeriod == false)
                 {
@@ -311,13 +363,13 @@ namespace SPM.Controllers
 
         private static void GetCombinedResult(FinalGapAnalysisReportViewModel approachResult, FinalGapAnalysisReportViewModel approachResultAm, FinalGapAnalysisReportViewModel approachResultPm, FinalGapAnalysisReportParameters parameters)
         {
-            if(parameters.GetGapReport??false)
+            if(parameters.GetGapReport ?? false)
                 approachResult.GapDurationConsiderForStudy = approachResultAm.GapDurationConsiderForStudy.Value || approachResultPm.GapDurationConsiderForStudy.Value;
-            if(parameters.GetPedestrianCall??false)
+            if(parameters.GetPedestrianCall ?? false)
                 approachResult.PedActuationsConsiderForStudy = approachResultAm.PedActuationsConsiderForStudy.Value || approachResultPm.PedActuationsConsiderForStudy.Value;
-            if(parameters.GetSplitFail??false)
+            if(parameters.GetSplitFail ?? false)
                 approachResult.SplitFailsConsiderForStudy = approachResultAm.SplitFailsConsiderForStudy.Value || approachResultPm.SplitFailsConsiderForStudy.Value;
-            if(parameters.GetConflictingVolume??false)
+            if(parameters.GetConflictingVolume ?? false)
                 approachResult.VolumesConsiderForStudy = approachResultAm.VolumesConsiderForStudy.Value || approachResultPm.VolumesConsiderForStudy.Value;
         }
 
