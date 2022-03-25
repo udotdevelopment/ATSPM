@@ -13,6 +13,7 @@ namespace SPM.Models
         public string Location { get; set; }
         public bool Is24HourReport { get; set; } = false;
         public string PhaseType { get; set; }
+        public string SignalType { get; set; }
         //public string OpposingApproach { get; set; }
         //public int NumberOfThruLanes { get; set; }
         public int? SpeedLimit { get; set; }
