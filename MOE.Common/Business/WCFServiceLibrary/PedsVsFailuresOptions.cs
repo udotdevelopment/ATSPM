@@ -109,6 +109,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chartArea.AxisY.TitleFont = new Font("Arial", 15f);
             chartArea.AxisY.LabelStyle.Font = new Font("Arial", 10f);
             chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.FixedCount;
+            chartArea.AxisY.LabelStyle.Format = "{0.00} %";
             chartArea.AxisY.Interval = 10;
             chartArea.AxisY.MajorGrid.LineColor = chart.BackColor;
 
