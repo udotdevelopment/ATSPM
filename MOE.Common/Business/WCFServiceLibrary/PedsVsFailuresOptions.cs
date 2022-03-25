@@ -87,27 +87,38 @@ namespace MOE.Common.Business.WCFServiceLibrary
             //Create the chart legend
             var chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
-            chartLegend.Docking = Docking.Left;
+            chartLegend.Docking = Docking.Top;
+            chartLegend.Alignment = StringAlignment.Center;
+            chartLegend.Font = new Font(chartLegend.Font.FontFamily, 14);
             chart.Legends.Add(chartLegend);
 
             //Create the chart area
+            ChartArea chartArea = chart.ChartAreas[0];
+
             if (YAxisMax > 0)
-                chart.ChartAreas[0].AxisY.Maximum = YAxisMax.Value;
+                chartArea.AxisY.Maximum = YAxisMax.Value;
             else
-                chart.ChartAreas[0].AxisY.Maximum = 100;
+                chartArea.AxisY.Maximum = 100;
 
             if (YAxisMin > 0)
-                chart.ChartAreas[0].AxisY.Minimum = YAxisMin;
+                chartArea.AxisY.Minimum = YAxisMin;
             else
-                chart.ChartAreas[0].AxisY.Minimum = 0;
+                chartArea.AxisY.Minimum = 0;
 
-            chart.ChartAreas[0].AxisY.Title = "Percent";
-            chart.ChartAreas[0].AxisY.IntervalAutoMode = IntervalAutoMode.FixedCount;
-            chart.ChartAreas[0].AxisY.Interval = 10;
-            chart.ChartAreas[0].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
+            chartArea.AxisY.Title = "Percent";
+            chartArea.AxisY.TitleFont = new Font("Arial", 15f);
+            chartArea.AxisY.LabelStyle.Font = new Font("Arial", 10f);
+            chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.FixedCount;
+            chartArea.AxisY.Interval = 10;
+            chartArea.AxisY.MajorGrid.LineColor = chart.BackColor;
 
-            chart.ChartAreas[0].AxisX.Minimum = StartDate.ToOADate();
-            chart.ChartAreas[0].AxisX.Maximum = EndDate.ToOADate();
+            chartArea.AxisX.Title = "Duration by 15 Minute Bins";
+            chartArea.AxisX.TitleFont = new Font("Arial", 15f);
+            chartArea.AxisX.LabelStyle.Font = new Font("Arial", 11f);
+            chartArea.AxisX.Minimum = StartDate.ToOADate();
+            chartArea.AxisX.Maximum = EndDate.ToOADate();
+            chartArea.AxisX.MajorGrid.LineColor = chart.BackColor;
+            chartArea.AxisX.LabelStyle.Angle = -90;
 
 
             var gapSeries = new Series();
@@ -115,6 +126,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             gapSeries.Color = Color.DarkBlue;
             gapSeries.Name = "% of Accectable Cycles w/ Peds";
             gapSeries.XValueType = ChartValueType.DateTime;
+            gapSeries.Font = new Font("Arial", 10f);
+            gapSeries.BorderWidth = 3;
             chart.Series.Add(gapSeries);
             
             var demandSeries = new Series();
@@ -122,6 +135,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             demandSeries.Color = Color.Orange;
             demandSeries.Name = "% of Cycles w/ Split Failure";
             demandSeries.XValueType = ChartValueType.DateTime;
+            demandSeries.Font = new Font("Arial", 10f);
+            demandSeries.BorderWidth = 3;
             chart.Series.Add(demandSeries);
 
             return chart;
@@ -129,7 +144,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void SetChartTitles(Chart chart)
         {
-            chart.Titles.Add("Percent of Cycles(Pedestrians and Split Failure)");
+            Title title = new Title();
+            title.Font = new Font("Arial", 18);
+            title.Text = "Percent of Cycles(Pedestrians and Split Failure)";
+            chart.Titles.Add(title);
         }
 
         protected void AddDataToChart(Chart chart)
