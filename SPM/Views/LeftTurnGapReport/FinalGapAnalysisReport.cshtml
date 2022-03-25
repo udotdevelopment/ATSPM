@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<SPM.Models.FinalGapAnalysisReportViewModel>
-<link href="C:\projects\avenue\ATSPM\SPM\Content\bootstrap.min.css" rel="stylesheet">
+<link href="@Server.MapPath("~/Content/bootstrap.min.css")" rel="stylesheet" />
+
 <style>
     th, td {
         font-size: 13.4px;
@@ -26,7 +27,7 @@
     }
 
     table, .keep-together {
-        page-break-inside: avoid;
+        break-inside: avoid;
     }
 </style>
 
@@ -347,6 +348,7 @@
             </table>
 
         }
+
         @if (result.SplitFailsConsiderForStudy.HasValue)
         {
             <table class="table table-bordered table text-center">
@@ -382,6 +384,7 @@
                 </tr>
             </table>
         }
+
         @if (result.PedActuationsConsiderForStudy.HasValue)
         {
             <table class="table table-bordered table text-center">
@@ -418,6 +421,7 @@
             </table>
             <img src="@result.PedSplitFailChartImg" />
         }
+
         @if (result.VolumesConsiderForStudy.HasValue)
         {
             <table class="table table-bordered table text-center">
