@@ -11,6 +11,5 @@ namespace MOE.Common.Models.Repositories
         void DeleteByID(int jurisdictionID);
         void Update(Jurisdiction jurisdiction);
         void Add(Jurisdiction newJurisdiction);
-        Jurisdiction GetJurisdictionByIDAndDate(int jurisdictionId, DateTime startDate);
     }
 }

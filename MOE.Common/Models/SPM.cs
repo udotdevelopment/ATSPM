@@ -53,7 +53,6 @@ namespace MOE.Common.Models
         public virtual DbSet<Route> Routes { get; set; }
         public virtual DbSet<RouteSignal> RouteSignals { get; set; }
         public virtual DbSet<Jurisdiction> Jurisdictions { get; set; }
-        public virtual DbSet<JurisdictionSignal> JurisdictionSignals { get; set; }
         public virtual DbSet<RoutePhaseDirection> RoutePhaseDirections { get; set; }
         public virtual DbSet<ControllerType> ControllerType { get; set; }
         public virtual DbSet<Speed_Events> Speed_Events { get; set; }
@@ -128,6 +127,17 @@ namespace MOE.Common.Models
 
             modelBuilder.Entity<Signal>()
                 .Property(e => e.RegionID);
+
+         /*   modelBuilder.Entity<Signal>()
+                .Property(e => e.JurisdictionId);*/
+
+            modelBuilder.Entity<Signal>()
+                .HasRequired(e=> e.Jurisdiction)
+                .WithMany()
+                .HasForeignKey(e => e.JurisdictionId);
+
+            modelBuilder.Entity<Jurisdiction>()
+                .HasMany(e => e.Signals);
 
             modelBuilder.Entity<Approach>()
                 .HasMany(e => e.Detectors)

@@ -19,42 +19,26 @@ namespace MOE.Common.Models.Repositories
 
         public Jurisdiction GetJurisdictionByID(int jurisdictionId)
         {
-            var jurisdiction = db.Jurisdictions
-                .Include(r => r.JurisdictionSignals.Select(s => s.Signal)).FirstOrDefault(r => r.Id == jurisdictionId);
-            jurisdiction.JurisdictionSignals = jurisdiction.JurisdictionSignals.OrderBy(s => s.Order).ToList();
-            var signalRepository = Repositories.SignalsRepositoryFactory.Create();
-            foreach (var jurisdictionSignal in jurisdiction.JurisdictionSignals)
-            {
-                jurisdictionSignal.Signal = signalRepository.GetLatestVersionOfSignalBySignalID(jurisdictionSignal.SignalId);
-            }
+            var jurisdiction = (from r in db.Jurisdictions
+                                where r.Id == jurisdictionId
+                            select r).FirstOrDefault();
             if (jurisdiction != null)
                 return jurisdiction;
-            var repository =
-                ApplicationEventRepositoryFactory.Create();
-            var error = new ApplicationEvent();
-            error.ApplicationName = "MOE.Common";
-            error.Class = "Models.Repository.ApproachJurisdictionRepository";
-            error.Function = "GetByJurisdictionID";
-            error.Description = "No Jurisdiction for ID.  Attempted ID# = " + jurisdictionId;
-            error.SeverityLevel = ApplicationEvent.SeverityLevels.High;
-            error.Timestamp = DateTime.Now;
-            repository.Add(error);
-            throw new Exception("There is no Jurisdiction for this ID");
-        }
-
-        public Jurisdiction GetJurisdictionByIDAndDate(int jurisdictionId, DateTime startDate)
-        {
-            var jurisdiction = db.Jurisdictions
-                .Include(r => r.JurisdictionSignals.Select(s => s.Signal)).FirstOrDefault(r => r.Id == jurisdictionId);
-            jurisdiction.JurisdictionSignals = jurisdiction.JurisdictionSignals.OrderBy(s => s.Order).ToList();
-            var signalRepository = Repositories.SignalsRepositoryFactory.Create();
-            foreach (var jurisdictionSignal in jurisdiction.JurisdictionSignals)
             {
-                jurisdictionSignal.Signal = signalRepository.GetVersionOfSignalByDate(jurisdictionSignal.SignalId, startDate);
+                var repository =
+                    ApplicationEventRepositoryFactory.Create();
+                var error = new ApplicationEvent
+                {
+                    ApplicationName = "MOE.Common",
+                    Class = "Models.Repository.JurisdictionRepository",
+                    Function = "GetApproachByApproachID",
+                    Description = "No jurisdiction for ID.  Attempted ID# = " + jurisdictionId,
+                    SeverityLevel = ApplicationEvent.SeverityLevels.High,
+                    Timestamp = DateTime.Now
+                };
+                repository.Add(error);
+                throw new Exception("There is no Jurisdiction for this ID");
             }
-            if (jurisdiction != null)
-                return jurisdiction;
-            return jurisdiction;
         }
 
         public Jurisdiction GetJurisdictionByName(string jurisdictionName)
