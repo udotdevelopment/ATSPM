@@ -132,12 +132,9 @@ namespace MOE.Common.Models
            //     .Property(e => e.JurisdictionId);
 
             modelBuilder.Entity<Signal>()
-                .HasRequired(s=> s.Jurisdiction)
-                .WithMany()
+                .HasRequired(s => s.Jurisdiction)
+                .WithMany(s => s.Signals)
                 .HasForeignKey(u => u.JurisdictionId).WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Jurisdiction>()
-                .HasMany(e => e.Signals);
 
             modelBuilder.Entity<Approach>()
                 .HasMany(e => e.Detectors)

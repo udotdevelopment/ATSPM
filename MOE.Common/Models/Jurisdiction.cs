@@ -25,6 +25,9 @@ namespace MOE.Common.Models
         [StringLength(50)]
         public string OtherPartners { get; set; }
 
-        public virtual List<Signal> Signals { get; set; }
+
+        [Display(Name = "Signal")]
+        [DataMember]
+        public virtual ICollection<Signal> Signals { get; set; }
     }
 }

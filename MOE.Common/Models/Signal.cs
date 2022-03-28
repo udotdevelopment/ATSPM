@@ -114,7 +114,6 @@ namespace MOE.Common.Models
         [DataMember]
         public virtual Jurisdiction Jurisdiction { get; set; }
 
-
         [Required]
         [Display(Name = "ControllerType Type")]
         [DataMember]
