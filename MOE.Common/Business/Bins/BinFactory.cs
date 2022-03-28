@@ -61,7 +61,7 @@ namespace MOE.Common.Business.Bins
             var binsContainer = new BinsContainer(timeOptions.Start, timeOptions.End);
             for (var startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month, timeOptions.Start.Day, 0,
                     0, 0);
-                startTime.Date <= timeOptions.End.Date;
+                startTime.Date < timeOptions.End.Date;
                 startTime = startTime.AddDays(1))
                 if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd && timeOptions.DaysOfWeek.Contains(startTime.DayOfWeek))
                 {
@@ -115,7 +115,7 @@ namespace MOE.Common.Business.Bins
             return binsContainers;
         }
 
-        private static List<BinsContainer> GetMonthBinsForRange(BinFactoryOptions timeOptions)
+        public static List<BinsContainer> GetMonthBinsForRange(BinFactoryOptions timeOptions)
         {
             var binsContainers = new List<BinsContainer>();
             if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)

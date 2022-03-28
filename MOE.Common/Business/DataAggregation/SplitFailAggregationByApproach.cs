@@ -16,6 +16,7 @@ namespace MOE.Common.Business.DataAggregation
             bool getProtectedPhase, AggregatedDataType dataType) : base(approach, options, startDate, endDate,
             getProtectedPhase, dataType)
         {
+            LoadBins(approach, options, getProtectedPhase, dataType);
         }
 
         protected override void LoadBins(Approach approach, ApproachAggregationMetricOptions options,
@@ -24,9 +25,15 @@ namespace MOE.Common.Business.DataAggregation
         {
             var splitFailAggregationRepository =
                 ApproachSplitFailAggregationRepositoryFactory.Create();
+            var selectionEndDate = BinsContainers.Max(b => b.End);
+            //Add a day so that it gets all the data for the entire end day instead of stoping at 12:00AM
+            if (options.TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Day)
+            {
+                selectionEndDate = selectionEndDate.AddDays(1);
+            }
             var splitFails =
                 splitFailAggregationRepository.GetApproachSplitFailsAggregationByApproachIdAndDateRange(
-                    approach.ApproachID, options.TimeOptions.Start, options.TimeOptions.End, getProtectedPhase);
+                    approach.ApproachID, options.TimeOptions.Start, selectionEndDate, getProtectedPhase);
             if (splitFails != null)
             {
                 var concurrentBinContainers = new ConcurrentBag<BinsContainer>();

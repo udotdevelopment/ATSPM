@@ -17,6 +17,7 @@ namespace MOE.Common.Business.DataAggregation
             bool getProtectedPhase, AggregatedDataType dataType) : base(approach, options, startDate, endDate,
             getProtectedPhase, dataType)
         {
+            LoadBins(approach, options, getProtectedPhase, dataType);
         }
 
         protected override void LoadBins(Approach approach, ApproachAggregationMetricOptions options, 
@@ -37,7 +38,7 @@ namespace MOE.Common.Business.DataAggregation
                     var tempBinsContainer =
                         new BinsContainer(binsContainer.Start, binsContainer.End);
                     var concurrentBins = new ConcurrentBag<Bin>();
-                    var cycleAggregationRepository = Models.Repositories.ApproachCycleAggregationRepositoryFactory.Create();
+                    var cycleAggregationRepository = Models.Repositories.PhaseCycleAggregationsRepositoryFactory.Create();
                     var cycleAggregtaions =
                         cycleAggregationRepository.GetApproachCyclesAggregationByApproachIdAndDateRange(
                             approach.ApproachID, options.StartDate, options.EndDate);

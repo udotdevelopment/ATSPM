@@ -19,10 +19,15 @@ namespace MOE.Common.Business.DataAggregation
         protected override void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal)
         {
             var priorityAggregationRepository =
-                PriorityAggregationDatasRepositoryFactory.Create();
+                PriorityAggregationDatasRepositoryFactory.Create(); var selectionEndDate = BinsContainers.Max(b => b.End);
+            //Add a day so that it gets all the data for the entire end day instead of stoping at 12:00AM
+            if (options.TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Day)
+            {
+                selectionEndDate = selectionEndDate.AddDays(1);
+            }
             var priorityAggregations =
                 priorityAggregationRepository.GetPriorityBySignalIdAndDateRange(
-                    signal.SignalID, BinsContainers.Min(b => b.Start), BinsContainers.Max(b => b.End));
+                    signal.SignalID, BinsContainers.Min(b => b.Start), selectionEndDate);
             if (priorityAggregations != null)
             {
                 var concurrentBinContainers = new ConcurrentBag<BinsContainer>();

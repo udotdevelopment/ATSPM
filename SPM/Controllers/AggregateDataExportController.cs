@@ -1,17 +1,14 @@
-﻿using System;
+﻿//using Ionic.Zip;
+using MOE.Common.Business.Bins;
+using MOE.Common.Business.FilterExtensions;
+using MOE.Common.Business.WCFServiceLibrary;
+using MOE.Common.Models;
+using SPM.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.DataVisualization.Charting;
-using System.Xml;
-using Microsoft.Ajax.Utilities;
-//using Ionic.Zip;
-using MOE.Common.Business;
-using MOE.Common.Business.Bins;
-using MOE.Common.Business.FilterExtensions;
-using MOE.Common.Business.WCFServiceLibrary;
-using SPM.Models;
-using MOE.Common.Models;
 
 namespace SPM.Controllers
 {
@@ -108,6 +105,8 @@ namespace SPM.Controllers
                     return GetPhaseTerminationChart(aggDataExportViewModel);
                 case 30:
                     return GetPhasePedChart(aggDataExportViewModel);
+                case 34:
+                    return GetLeftTurnGapChart(aggDataExportViewModel);
                 default:
                     return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
             }
@@ -116,7 +115,7 @@ namespace SPM.Controllers
 
         private ActionResult GetCycleChart(AggDataExportViewModel aggDataExportViewModel)
         {
-            ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions();
+            PhaseCycleAggregationOptions options = new PhaseCycleAggregationOptions();
             return GetChart(aggDataExportViewModel, options);
         }
 
@@ -151,6 +150,11 @@ namespace SPM.Controllers
             PhasePedAggregationOptions options = new PhasePedAggregationOptions();
             return GetChart(aggDataExportViewModel, options);
         }
+        private ActionResult GetLeftTurnGapChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            PhaseLeftTurnGapAggregationOptions options = new PhaseLeftTurnGapAggregationOptions();
+            return GetChart(aggDataExportViewModel, options);
+        }
         private ActionResult GetPhaseTerminationChart(AggDataExportViewModel aggDataExportViewModel)
         {
             PhaseTerminationAggregationOptions options = new PhaseTerminationAggregationOptions();
@@ -159,13 +163,13 @@ namespace SPM.Controllers
 
         private ActionResult GetPriorityChart(AggDataExportViewModel aggDataExportViewModel)
         {
-            SignalPriorityAggregationOptions options = new SignalPriorityAggregationOptions();
+            PriorityAggregationOptions options = new PriorityAggregationOptions();
             return GetChart(aggDataExportViewModel, options);
         }
 
         private ActionResult GetPreemptionChart(AggDataExportViewModel aggDataExportViewModel)
         {
-            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
+            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
             return GetChart(aggDataExportViewModel, options);
         }
 
@@ -306,20 +310,20 @@ namespace SPM.Controllers
             switch (aggDataExportViewModel.SelectedXAxisType)
             {
                 case XAxisType.Time:
-                {
-                    timeOptions = BinFactoryOptions.TimeOptions.StartToEnd;
-                    break;
-                }
+                    {
+                        timeOptions = BinFactoryOptions.TimeOptions.StartToEnd;
+                        break;
+                    }
                 case XAxisType.TimeOfDay:
-                {
-                    timeOptions = BinFactoryOptions.TimeOptions.TimePeriod;
-                    break;
-                }
+                    {
+                        timeOptions = BinFactoryOptions.TimeOptions.TimePeriod;
+                        break;
+                    }
                 default:
-                {
-                    timeOptions = BinFactoryOptions.TimeOptions.StartToEnd;
-                    break;
-                }
+                    {
+                        timeOptions = BinFactoryOptions.TimeOptions.StartToEnd;
+                        break;
+                    }
             }
 
             options.TimeOptions = new BinFactoryOptions(
@@ -332,7 +336,7 @@ namespace SPM.Controllers
 
         private static List<DayOfWeek> getRequiredDayNames(int whichDaysAreIncluded, DateTime? startDateDay, DateTime? endDateDay)
         {
-           var numberOfDays = endDateDay - startDateDay;
+            var numberOfDays = endDateDay - startDateDay;
             int days = numberOfDays.Value.Days + 1;
             List<DayOfWeek> correctDaysOfWeek = new List<DayOfWeek>();
             var dayNumber = "";
@@ -428,7 +432,7 @@ namespace SPM.Controllers
                             }
                             break;
                         case "AllDays":
-                             switch (startDateDay.Value.DayOfWeek)
+                            switch (startDateDay.Value.DayOfWeek)
                             {
                                 case DayOfWeek.Monday:
                                     correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Monday });
@@ -590,7 +594,7 @@ namespace SPM.Controllers
                                     correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday });
                                     break;
                                 case DayOfWeek.Wednesday:
-                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday  });
+                                    correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday });
                                     break;
                                 case DayOfWeek.Thursday:
                                     correctDaysOfWeek.AddRange(new List<DayOfWeek> { DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday });
@@ -928,7 +932,7 @@ namespace SPM.Controllers
         public ActionResult Index()
         {
             AggDataExportViewModel viewModel = new AggDataExportViewModel();
-            viewModel.SelectedMetricTypeId =20;
+            viewModel.SelectedMetricTypeId = 20;
             SetAggregateDataViewModelLists(viewModel);
             viewModel.SelectedChartType = SeriesChartType.StackedColumn.ToString();
             viewModel.SelectedBinSize = 0;
@@ -938,7 +942,7 @@ namespace SPM.Controllers
             viewModel.Weekends = true;
             return View(viewModel);
         }
-        
+
         private void SetAggregateDataViewModelLists(AggDataExportViewModel viewModel)
         {
             var routeRepository = MOE.Common.Models.Repositories.RouteRepositoryFactory.Create();
@@ -959,13 +963,13 @@ namespace SPM.Controllers
 
         private int[] SplitHourMinute(String timeFromFrontEnd)
         {
-            int[] HourMinute = new int[]{0, 0};
+            int[] HourMinute = new int[] { 0, 0 };
             string[] splitted = timeFromFrontEnd.Split(':');
             int.TryParse(splitted[0], out HourMinute[0]);
             int.TryParse(splitted[1], out HourMinute[1]);
             return HourMinute;
         }
-        
+
 
         public static List<int> StringToIntList(string str)
         {
@@ -987,7 +991,7 @@ namespace SPM.Controllers
                     AggregatedDataTypes = new ApproachPcdAggregationOptions().AggregatedDataTypes;
                     break;
                 case 19:
-                    AggregatedDataTypes = new ApproachCycleAggregationOptions().AggregatedDataTypes;
+                    AggregatedDataTypes = new PhaseCycleAggregationOptions().AggregatedDataTypes;
                     break;
                 case 20:
                     AggregatedDataTypes = new ApproachSplitFailAggregationOptions().AggregatedDataTypes;
@@ -996,10 +1000,10 @@ namespace SPM.Controllers
                     AggregatedDataTypes = new ApproachYellowRedActivationsAggregationOptions().AggregatedDataTypes;
                     break;
                 case 22:
-                    AggregatedDataTypes = new SignalPreemptionAggregationOptions().AggregatedDataTypes;
+                    AggregatedDataTypes = new PreemptionAggregationOptions().AggregatedDataTypes;
                     break;
                 case 24:
-                    AggregatedDataTypes = new SignalPriorityAggregationOptions().AggregatedDataTypes;
+                    AggregatedDataTypes = new PriorityAggregationOptions().AggregatedDataTypes;
                     break;
                 case 27:
                     AggregatedDataTypes = new SignalEventCountAggregationOptions().AggregatedDataTypes;
@@ -1013,9 +1017,11 @@ namespace SPM.Controllers
                 case 30:
                     AggregatedDataTypes = new PhasePedAggregationOptions().AggregatedDataTypes;
                     break;
+                case 34:
+                    AggregatedDataTypes = new PhaseLeftTurnGapAggregationOptions().AggregatedDataTypes;
+                    break;
                 default:
                     throw new Exception("Invalid Metric Type");
-                    break;
             }
             return PartialView(AggregatedDataTypes);
         }

@@ -9,13 +9,14 @@ using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.DataAggregation
 {
-    public class CycleAggregationByApproach : AggregationByApproach
+    public class PhaseCycleAggregationByApproach : AggregationByApproach
     {
-        public CycleAggregationByApproach(Approach approach, ApproachAggregationMetricOptions options, DateTime startDate,
+        public PhaseCycleAggregationByApproach(Approach approach, ApproachAggregationMetricOptions options, DateTime startDate,
             DateTime endDate,
             bool getProtectedPhase, AggregatedDataType dataType) : base(approach, options, startDate, endDate,
             getProtectedPhase, dataType)
         {
+            LoadBins(approach, options, getProtectedPhase, dataType);
         }
 
         protected override void LoadBins(Approach approach, ApproachAggregationMetricOptions options,
@@ -23,7 +24,7 @@ namespace MOE.Common.Business.DataAggregation
             AggregatedDataType dataType)
         {
             var approachCycleAggregationRepository =
-                ApproachCycleAggregationRepositoryFactory.Create();
+                PhaseCycleAggregationsRepositoryFactory.Create();
             var approachCycles =
                 approachCycleAggregationRepository.GetApproachCyclesAggregationByApproachIdAndDateRange(
                     approach.ApproachID, options.StartDate, options.EndDate);
@@ -44,25 +45,31 @@ namespace MOE.Common.Business.DataAggregation
                             var approachCycleCount = 0;
                             switch (dataType.DataName)
                             {
-                                case "TotalCycles":
+                                case PhaseCycleAggregationOptions.TOTAL_RED_TO_RED_CYCLES:
                                     approachCycleCount =
                                         approachCycles.Where(s =>
                                                 s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.TotalRedToRedCycles);
                                     break;
-                                case "RedTime":
+                                case PhaseCycleAggregationOptions.TOTAL_GREEN_TO_GREEN_CYCLES:
+                                    approachCycleCount =
+                                        approachCycles.Where(s =>
+                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.TotalGreenToGreenCycles);
+                                    break;
+                                case PhaseCycleAggregationOptions.RED_TIME:
                                     approachCycleCount =
                                         (int) approachCycles.Where(s =>
                                                 s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.RedTime);
                                     break;
-                                case "YellowTime":
+                                case PhaseCycleAggregationOptions.YELLOW_TIME:
                                     approachCycleCount =
                                         (int) approachCycles.Where(s =>
                                                 s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.YellowTime);
                                     break;
-                                case "GreenTime":
+                                case PhaseCycleAggregationOptions.GREEN_TIME:
                                     approachCycleCount =
                                         (int) approachCycles.Where(s =>
                                                 s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)

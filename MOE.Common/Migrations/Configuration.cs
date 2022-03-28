@@ -1136,6 +1136,15 @@ namespace MOE.Common.Migrations
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = false,
                     DisplayOrder = 115
+                },
+                new MetricType
+                {
+                    MetricID = 34,
+                    ChartName = "Left Turn Gap",
+                    Abbreviation = "LTG",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 114
                 }
 
             );

@@ -385,6 +385,8 @@
     <Compile Include="Business\DataAggregation\DataAggregation.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Business\DataAggregation\PhaseLeftTurnGapAggregationByApproach.cs" />
+    <Compile Include="Business\DataAggregation\PhaseLeftTurnGapAggregationBySignal.cs" />
     <Compile Include="Business\LeftTurnGapAnalysis\LeftTurnGapAnalysis.cs" />
     <Compile Include="Business\LeftTurnGapReport\LeftTurnGapOutAnalysis.cs" />
     <Compile Include="Business\LeftTurnGapReport\LeftTurnPedestrianAnalysis.cs" />
@@ -417,11 +419,11 @@
     <Compile Include="Business\DataAggregation\AggregationByDetector.cs" />
     <Compile Include="Business\DataAggregation\AggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\DetectorAggregationByDetector.cs" />
-    <Compile Include="Business\DataAggregation\CycleAggregationByApproach.cs" />
+    <Compile Include="Business\DataAggregation\PhaseCycleAggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\DetectorAggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\PcdAggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\PcdAggregationBySignal.cs" />
-    <Compile Include="Business\DataAggregation\CycleAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\PhaseCycleAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\PhasePedAggregationByPhase.cs" />
     <Compile Include="Business\DataAggregation\PhasePedAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\SignalEventCountAggregationBySignal.cs" />
@@ -472,9 +474,10 @@
     <Compile Include="Business\WCFServiceLibrary\PedsVsFailuresOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\GapVsDemandOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\LeftTurnGapAnalysisOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PhaseLeftTurnGapAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\TimingAndActuationsOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\PhaseAggregationMetricOptions.cs" />
-    <Compile Include="Business\WCFServiceLibrary\ApproachCycleAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PhaseCycleAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSpeedAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\PhasePedAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\PhaseTerminationAggregationOptions.cs" />
@@ -483,8 +486,8 @@
     <Compile Include="Business\WCFServiceLibrary\DetectorVolumeAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\DetectorAggregationMetricOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalEventCountAggregationOptions.cs" />
-    <Compile Include="Business\WCFServiceLibrary\SignalPriorityAggregationOptions.cs" />
-    <Compile Include="Business\WCFServiceLibrary\SignalPreemptionAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PriorityAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PreemptionAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\SignalAggregationMetricOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachAggregationMetricOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptions.cs" />
@@ -719,14 +722,14 @@
     <Compile Include="Models\PriorityAggregation.cs" />
     <Compile Include="Models\Repositories\ActionChart.cs" />
     <Compile Include="Models\Repositories\SignalEventCountAggregationRepository.cs" />
-    <Compile Include="Models\Repositories\ApproachCycleAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\PhaseCycleAggregationsRepository.cs" />
     <Compile Include="Models\Repositories\SignalEventCountAggregationRepositoryFactory.cs" />
-    <Compile Include="Models\Repositories\ApproachCycleAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\PhaseCycleAggregationsRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\ApproachPcdAggregationRepository.cs" />
     <Compile Include="Models\Repositories\ApproachPcdAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\ApproachYellowRedActivationsAggregationRepository.cs" />
     <Compile Include="Models\Repositories\ApproachYellowRedActivationsAggregationRepositoryFactory.cs" />
-    <Compile Include="Models\Repositories\IApproachCycleAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\IPhaseCycleAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IApproachPcdAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IApproachYellowRedActivationsAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IRoutePhaseDirectionRepository.cs" />

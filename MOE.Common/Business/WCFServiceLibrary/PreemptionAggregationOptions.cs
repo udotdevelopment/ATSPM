@@ -8,9 +8,9 @@ using MOE.Common.Business.DataAggregation;
 namespace MOE.Common.Business.WCFServiceLibrary
 {
     [DataContract]
-    public class SignalPreemptionAggregationOptions : SignalAggregationMetricOptions
+    public class PreemptionAggregationOptions : SignalAggregationMetricOptions
     {
-        public SignalPreemptionAggregationOptions()
+        public PreemptionAggregationOptions()
         {
             MetricTypeID = 22;
             AggregatedDataTypes = new List<AggregatedDataType>();

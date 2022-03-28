@@ -216,16 +216,16 @@ namespace SPM.Models
                         AggregatedDataTypes = new ApproachPcdAggregationOptions().AggregatedDataTypes;
                         break;
                     case 19:
-                        AggregatedDataTypes = new ApproachCycleAggregationOptions().AggregatedDataTypes;
+                        AggregatedDataTypes = new PhaseCycleAggregationOptions().AggregatedDataTypes;
                         break;
                     case 20:
                         AggregatedDataTypes = new ApproachSplitFailAggregationOptions().AggregatedDataTypes;
                         break;
                     case 22:
-                        AggregatedDataTypes = new SignalPreemptionAggregationOptions().AggregatedDataTypes;
+                        AggregatedDataTypes = new PreemptionAggregationOptions().AggregatedDataTypes;
                         break;
                     case 24:
-                        AggregatedDataTypes = new SignalPriorityAggregationOptions().AggregatedDataTypes;
+                        AggregatedDataTypes = new PriorityAggregationOptions().AggregatedDataTypes;
                         break;
                     case 25:
                         AggregatedDataTypes = new ApproachSpeedAggregationOptions().AggregatedDataTypes;

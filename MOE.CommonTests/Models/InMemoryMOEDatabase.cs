@@ -12,7 +12,7 @@ namespace MOE.CommonTests.Models
         private static readonly Random rnd = new Random();
         public List<ApplicationEvent> ApplicationEvents = new List<ApplicationEvent>();
         public List<WatchDogApplicationSettings> ApplicationSettings = new List<WatchDogApplicationSettings>();
-        public List<ApproachCycleAggregation> ApproachCycleAggregations = new List<ApproachCycleAggregation>();
+        public List<PhaseCycleAggregation> ApproachCycleAggregations = new List<PhaseCycleAggregation>();
         public List<Approach> Approaches = new List<Approach>();
         public List<ApproachPcdAggregation> ApproachPcdAggregations = new List<ApproachPcdAggregation>();
         public List<ApproachSpeedAggregation> ApproachSpeedAggregations = new List<ApproachSpeedAggregation>();
@@ -37,7 +37,7 @@ namespace MOE.CommonTests.Models
         public List<PreemptionAggregation> PreemptionAggregations = new List<PreemptionAggregation>();
 
         public List<PriorityAggregation> PriorityAggregations = new List<PriorityAggregation>();
-        public List<DetectorAggregation> DetectorAggregations { get; set; } = new List<DetectorAggregation>();
+        public List<DetectorEventCountAggregation> DetectorAggregations { get; set; } = new List<DetectorEventCountAggregation>();
         public List<Region> Regions = new List<Region>();
         public List<RoutePhaseDirection> RoutePhaseDirection = new List<RoutePhaseDirection>();
         public List<Route> Routes = new List<Route>();
@@ -47,7 +47,6 @@ namespace MOE.CommonTests.Models
         public List<VersionAction> VersionActions = new List<VersionAction>();
         public List<DetectionTypeGraph_Detector> DetectionTypeDetectors = new List<DetectionTypeGraph_Detector>();
         public List<SignalEventCountAggregation> SignalEventCountAggregations { get; set; } = new List<SignalEventCountAggregation>();
-        public List<ApproachEventCountAggregation> PhaseEventCountAggregations { get; set; } = new List<ApproachEventCountAggregation>();
         public List<Speed_Events> Speed_Events { get; set; } = new List<Speed_Events>();
 
         public void SetFilterSignal(SignalAggregationMetricOptions options)
@@ -173,7 +172,6 @@ namespace MOE.CommonTests.Models
                 startTime = startTime.AddMinutes(15))
             {
                 var r = new PreemptionAggregation();
-                r.VersionId = versionId;
                 r.SignalId = signalId;
                 r.BinStartTime = startTime;
                 r.PreemptNumber = rnd.Next(1, 16);
@@ -191,14 +189,12 @@ namespace MOE.CommonTests.Models
                 startTime = startTime.AddMinutes(15))
             {
                 var r = new PriorityAggregation();
-                r.VersionId = versionId;
-                r.SignalID = signalId;
+                r.SignalId = signalId;
                 r.BinStartTime = startTime;
                 r.PriorityNumber = rnd.Next(1, 64);
                 r.PriorityRequests = rnd.Next(1, 200);
                 r.PriorityServiceEarlyGreen = rnd.Next(1, 200);
                 r.PriorityServiceExtendedGreen = rnd.Next(1, 200);
-                r.TotalCycles = rnd.Next(1, 200);
 
                 PriorityAggregations.Add(r);
             }
@@ -214,8 +210,7 @@ namespace MOE.CommonTests.Models
                 r.Speed15Th = rnd.Next(1, 5);
                 r.Speed85Th = rnd.Next(1, 100);
                 r.SpeedVolume = rnd.Next(1, 50);
-                r.SummedSpeed = rnd.Next(1, 500);              
-                r.IsProtectedPhase = true;
+                r.SummedSpeed = rnd.Next(1, 500);   
                 ApproachSpeedAggregations.Add(r);
                 if (approach.PermissivePhaseNumber != null)
                 {
@@ -226,7 +221,6 @@ namespace MOE.CommonTests.Models
                     approach2.Speed85Th = rnd.Next(1, 100);
                     approach2.SpeedVolume = rnd.Next(1, 50);
                     approach2.SummedSpeed = rnd.Next(1, 500);
-                    approach2.IsProtectedPhase = false;
                     ApproachSpeedAggregations.Add(approach2);
                 }
             }
@@ -319,25 +313,25 @@ namespace MOE.CommonTests.Models
                 r.SpeedVolume = rnd.Next(1, 200);
                 r.SummedSpeed = rnd.Next(1, 200);
 
-                r.IsProtectedPhase = false;
-
                 ApproachSpeedAggregations.Add(r);
             }
         }
 
-        public void PopulateApproachCycleAggregations(DateTime start, DateTime end, int approachId)
+        public void PopulateApproachCycleAggregations(DateTime start, DateTime end, int approachId, int phaseNumber)
         {
             for (var startTime = start.Date; startTime <= end; startTime = startTime.AddMinutes(15))
             {
-                var r = new ApproachCycleAggregation();
-                r.ApproachId = approachId;
-                r.BinStartTime = startTime;
-                r.GreenTime = rnd.Next(1, 200);
-                r.PedActuations = rnd.Next(1, 200);
-                r.RedTime = rnd.Next(1, 200);
-                r.TotalCycles = rnd.Next(1, 15);
-                r.YellowTime = rnd.Next(1, 200);
-                r.IsProtectedPhase = false;
+                var r = new PhaseCycleAggregation
+                {
+                    ApproachId = approachId,
+                    BinStartTime = startTime,
+                    GreenTime = rnd.Next(1, 200),
+                    PhaseNumber = phaseNumber,
+                    RedTime = rnd.Next(1, 200),
+                    TotalGreenToGreenCycles = rnd.Next(1, 15),
+                    TotalRedToRedCycles = rnd.Next(1, 15),
+                    YellowTime = rnd.Next(1, 200)
+                };
 
                 ApproachCycleAggregations.Add(r);
             }
@@ -1318,13 +1312,11 @@ namespace MOE.CommonTests.Models
                 var r = new PreemptionAggregation
                 {
                     BinStartTime = startTime,
-                    Signal = signal,
                     SignalId = signal.SignalID,
-                    VersionId = signal.VersionID,
                     PreemptRequests = 3,
                     PreemptNumber = 3,
-                    PreemptServices = 3,
-                    Id = id
+                    PreemptServices = 3, 
+                     
                 };
                 PreemptionAggregations.Add(r);
                 id++;
@@ -1335,10 +1327,10 @@ namespace MOE.CommonTests.Models
         {
             for (var startTime = start; startTime <= end; startTime = startTime.AddMinutes(15))
             {
-                var r = new DetectorAggregation();
+                var r = new DetectorEventCountAggregation();
                 r.DetectorPrimaryId = detector.ID;
                 r.BinStartTime = startTime;
-                r.Volume = rnd.Next(1, 5);
+                r.EventCount = rnd.Next(1, 5);
                 DetectorAggregations.Add(r);
             }
         }
@@ -1350,7 +1342,6 @@ namespace MOE.CommonTests.Models
                 startTime = startTime.AddMinutes(15))
             {
                 var r = new PreemptionAggregation();
-                r.VersionId = versionId;
                 r.SignalId = signalId;
                 r.BinStartTime = startTime;
                 r.PreemptNumber = rnd.Next(1, 64);
@@ -1366,29 +1357,27 @@ namespace MOE.CommonTests.Models
                 startTime <= end.Date.AddHours(23).AddMinutes(59);
                 startTime = startTime.AddMinutes(15))
             {
-                var protectedPhase = new ApproachCycleAggregation
+                var protectedPhase = new PhaseCycleAggregation
                 {
                     BinStartTime = startTime,
                     GreenTime = rnd.Next(1, 64),
-                    PedActuations = rnd.Next(1, 64),
                     RedTime = rnd.Next(1, 64),
                     ApproachId = approach.ApproachID,
-                    IsProtectedPhase = true,
-                    TotalCycles = rnd.Next(1, 64),
+                    TotalRedToRedCycles = rnd.Next(1, 64),
+                    TotalGreenToGreenCycles = rnd.Next(1, 64),
                     YellowTime = rnd.Next(1, 64)
                 };
                 ApproachCycleAggregations.Add(protectedPhase);
                 if (approach.PermissivePhaseNumber != null)
                 {
-                    var permissivePhase = new ApproachCycleAggregation
+                    var permissivePhase = new PhaseCycleAggregation
                     {
                         BinStartTime = startTime,
                         GreenTime = rnd.Next(1, 64),
-                        PedActuations = rnd.Next(1, 64),
                         RedTime = rnd.Next(1, 64),
                         ApproachId = approach.ApproachID,
-                        IsProtectedPhase = true,
-                        TotalCycles = rnd.Next(1, 64),
+                        TotalGreenToGreenCycles = rnd.Next(1, 64),
+                        TotalRedToRedCycles = rnd.Next(1, 64),
                         YellowTime = rnd.Next(1, 64)
                     };
                     ApproachCycleAggregations.Add(permissivePhase);
@@ -1404,45 +1393,16 @@ namespace MOE.CommonTests.Models
                 var r = new SignalEventCountAggregation()
                 {
                     BinStartTime = startTime,
-                    SignalId = signal.SignalID, EventCount = rnd.Next(500, 1000),
-                    Id = id
+                    SignalId = signal.SignalID, 
+                    EventCount = rnd.Next(500, 1000),
+                    
                 };
                 SignalEventCountAggregations.Add(r);
                 id++;
             }
         }
 
-        public void PopulateApproachEventCountwithRandomValues(DateTime start, DateTime end, Approach approach)
-        {
-            var id = 1;
-            for (var startTime = start; startTime <= end; startTime = startTime.AddMinutes(15))
-            {
-                var r = new ApproachEventCountAggregation()
-                {
-                    BinStartTime = startTime,
-                    ApproachId = approach.ApproachID,
-                    IsProtectedPhase = true,
-                    EventCount = rnd.Next(500, 1000),
-                    //Id = id
-                };
-                PhaseEventCountAggregations.Add(r);
-                id++;
-                if (approach.PermissivePhaseNumber != null)
-                {
-                    var permissivePhase = new ApproachEventCountAggregation()
-                    {
-                        BinStartTime = startTime,
-                        ApproachId = approach.ApproachID,
-                        IsProtectedPhase = false,
-                        EventCount = rnd.Next(500, 1000),
-                        //Id = id
-                    };
-                    PhaseEventCountAggregations.Add(permissivePhase);
-                    id++;
-                }
-            }
-        }
-
+       
         public void AddTestSignalForSplitFailTest()
         {
             var signal = new Signal
