@@ -6,9 +6,9 @@ namespace MOE.Common.Models.Repositories
     public interface IJurisdictionRepository
     {
         List<Jurisdiction> GetAllJurisdictions();
-        Jurisdiction GetJurisdictionByID(int jurisdictionID);
+        Jurisdiction GetJurisdictionByID(int jurisdictionId);
         Jurisdiction GetJurisdictionByName(string jurisdictionName);
-        void DeleteByID(int jurisdictionID);
+        void DeleteByID(int jurisdictionId);
         void Update(Jurisdiction jurisdiction);
         void Add(Jurisdiction newJurisdiction);
     }

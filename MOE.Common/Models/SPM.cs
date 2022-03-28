@@ -128,8 +128,8 @@ namespace MOE.Common.Models
             modelBuilder.Entity<Signal>()
                 .Property(e => e.RegionID);
 
-            modelBuilder.Entity<Signal>()
-                .Property(e => e.JurisdictionId);
+           // modelBuilder.Entity<Signal>()
+           //     .Property(e => e.JurisdictionId);
 
             modelBuilder.Entity<Signal>()
                 .HasRequired(s=> s.Jurisdiction)

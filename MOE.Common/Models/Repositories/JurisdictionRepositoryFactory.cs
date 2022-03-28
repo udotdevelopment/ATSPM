@@ -2,18 +2,18 @@
 {
     public class JurisdictionRepositoryFactory
     {
-        private static IJurisdictionRepository approachJurisdictionRepository;
+        private static IJurisdictionRepository jurisdictionRepository;
 
         public static IJurisdictionRepository Create()
         {
-            if (approachJurisdictionRepository != null)
-                return approachJurisdictionRepository;
+            if (jurisdictionRepository != null)
+                return jurisdictionRepository;
             return new JurisdictionRepository();
         }
 
-        public static void SetApproachRouteRepository(IJurisdictionRepository newRepository)
+        public static void SetJurisdictionRepository(IJurisdictionRepository newRepository)
         {
-            approachJurisdictionRepository = newRepository;
+            jurisdictionRepository = newRepository;
         }
     }
 }
