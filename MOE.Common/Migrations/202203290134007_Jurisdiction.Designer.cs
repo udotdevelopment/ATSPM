@@ -7,13 +7,13 @@ namespace MOE.Common.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class JurisdictionTest : IMigrationMetadata
+    public sealed partial class Jurisdiction : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(JurisdictionTest));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Jurisdiction));
         
         string IMigrationMetadata.Id
         {
-            get { return "202203211837031_JurisdictionTest"; }
+            get { return "202203290134007_Jurisdiction"; }
         }
         
         string IMigrationMetadata.Source

@@ -676,9 +676,9 @@
     <Compile Include="Migrations\202105132005112_ReCreateAggTables.designer.cs">
       <DependentUpon>202105132005112_ReCreateAggTables.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202203282322042_Jurisdiction.cs" />
-    <Compile Include="Migrations\202203282322042_Jurisdiction.designer.cs">
-      <DependentUpon>202203282322042_Jurisdiction.cs</DependentUpon>
+    <Compile Include="Migrations\202203290134007_Jurisdiction.cs" />
+    <Compile Include="Migrations\202203290134007_Jurisdiction.designer.cs">
+      <DependentUpon>202203290134007_Jurisdiction.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Jurisdiction.cs" />
     <Compile Include="Models\Application.cs" />
@@ -1141,6 +1141,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105132005112_ReCreateAggTables.resx">
       <DependentUpon>202105132005112_ReCreateAggTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202203290134007_Jurisdiction.resx">
+      <DependentUpon>202203290134007_Jurisdiction.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

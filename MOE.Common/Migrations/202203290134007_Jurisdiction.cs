@@ -19,7 +19,7 @@
                     })
                 .PrimaryKey(t => t.Id);
             
-            AddColumn("dbo.Signals", "JurisdictionId", c => c.Int(nullable: false));
+            AddColumn("dbo.Signals", "JurisdictionId", c => c.Int(nullable: true));
             CreateIndex("dbo.Signals", "JurisdictionId");
             AddForeignKey("dbo.Signals", "JurisdictionId", "dbo.Jurisdictions", "Id");
         }
