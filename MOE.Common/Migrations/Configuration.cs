@@ -1,27 +1,18 @@
-using System;
-using System.Data.Entity.Migrations;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using MOE.Common.Business.SiteSecurity;
-using MOE.Common.Models;
-using Action = MOE.Common.Models.Action;
-
-namespace MOE.Common.Migrations
+﻿namespace MOE.Common.Migrations
 {
-    public sealed class Configuration : DbMigrationsConfiguration<SPM>
-    {
-        private readonly bool _pendingMigrations;
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Linq;
 
+    internal sealed class Configuration : DbMigrationsConfiguration<MOE.Common.Models.SPM>
+    {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            AutomaticMigrationDataLossAllowed = false;
-            var migrator = new DbMigrator(this);
-            //_pendingMigrations = migrator.GetPendingMigrations().Any();
-            CommandTimeout = int.MaxValue;
         }
 
-        protected override void Seed(SPM context)
+        protected override void Seed(MOE.Common.Models.SPM context)
         {
             //  This method will be called after migrating to the latest version.
 
