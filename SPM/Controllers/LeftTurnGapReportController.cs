@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
-using System.Data.Entity;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using MigraDoc.DocumentObjectModel;
-using MigraDoc.DocumentObjectModel.Tables;
-using MigraDoc.Rendering;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using Newtonsoft.Json;
-using PdfSharp.Pdf;
 using RestSharp;
 using Rotativa;
 using SPM.Models;
@@ -63,28 +53,6 @@ namespace SPM.Controllers
             request.AddParameter("application/json", body, ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
             return response;
-            //System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-            //using (var client = new HttpClient())
-            //{
-            //    client.BaseAddress = u;                
-            //    client.DefaultRequestHeaders.Accept.Clear();
-            //    client.DefaultRequestHeaders.Add("Authorization", "Bearer [Access_Token]");
-            //    client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
-            //    client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
-            //    client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("br"));
-            //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            //    var result = await client.PostAsJsonAsync("DataCheck", c);
-            //    //HttpRequestMessage request = new HttpRequestMessage
-            //    //{
-            //    //    Method = HttpMethod.Post,
-            //    //    RequestUri = u,
-            //    //    Content = c
-            //    //};
-
-            //    //HttpResponseMessage result = await client.SendAsync(request);
-            //    return result;
-            //}
         }
 
         [HttpPost]
@@ -134,7 +102,7 @@ namespace SPM.Controllers
 
         private static string BuildUrlString()
         {
-            String url = ConfigurationManager.AppSettings["ReportsUrl"];
+            string url = ConfigurationManager.AppSettings["ReportsUrl"];
             string checkDataUrl = url;           
 
             return checkDataUrl;
@@ -148,197 +116,42 @@ namespace SPM.Controllers
             foreach (int approachId in parameters.ApproachIds)
             {
                 var approach = approachRepository.GetApproachByApproachID(approachId);
-                
-                var approachResult = new FinalGapAnalysisReportViewModel();
+
                 if (parameters.GetAMPMPeakPeriod.HasValue && parameters.GetAMPMPeakPeriod == true)
                 {
-                    parameters.StartHour = 6;
-                    parameters.StartMinute = 0;
-                    parameters.EndHour = 9;
-                    parameters.EndMinute = 0;
-                    var approachResultAm = GetApproachResult(parameters, approachId);
+                    SetHoursAndMinutes(parameters, 6, 0, 9, 0);
+                    var approachResultAM = GetApproachResult(parameters, approach, approachId);
+                    finalGapAnalysisReportViewModel.Add(approachResultAM);
 
-                    parameters.StartHour = 15;
-                    parameters.StartMinute = 0;
-                    parameters.EndHour = 18;
-                    parameters.EndMinute = 0;
-                    var approachResultPm = GetApproachResult(parameters, approachId);
-
-                    GetCombinedResult(approachResult, approachResultAm, approachResultPm, parameters);
+                    SetHoursAndMinutes(parameters, 15, 0, 18, 0);
+                    var approachResultPM = GetApproachResult(parameters, approach, approachId);
+                    finalGapAnalysisReportViewModel.Add(approachResultPM);
                 }
                 else if (parameters.GetAMPMPeakHour.HasValue && parameters.GetAMPMPeakHour == true)
                 {
-                    LeftTurnPeakHourResultViewModel peakResult = new LeftTurnPeakHourResultViewModel();
-                    PeakHourParameters toSendParameters = new PeakHourParameters
-                    {
-                        ApproachId = approachId,
-                        DaysOfWeek = parameters.DaysOfWeek,
-                        EndDate = parameters.EndDate,
-                        SignalId = parameters.SignalId,
-                        StartDate = parameters.StartDate
-                    };
-                    string address = BuildUrlString() + "PeakHours";
-                    Uri u = new Uri(address);
-                    var payload = JsonConvert.SerializeObject(toSendParameters);
-                    var t = Task.Run(() => SendURI(u, payload));
-                    t.Wait();
-                    var result = t.Result;
-                    if (result.ResponseStatus == ResponseStatus.Completed)
-                    {
-                        peakResult = JsonConvert.DeserializeObject<LeftTurnPeakHourResultViewModel>(result.Content);
-                    }
-                    else
-                    {
-                        throw result.ErrorException;
-                    }
-                    if (peakResult == null)
-                    {
-                        throw new NullReferenceException("Unable to get peak hours");
-                    }
+                    LeftTurnPeakHourResultViewModel peakResult = FindPeakHours(parameters, approachId);
 
-                    parameters.StartHour = peakResult.AmStartHour;
-                    parameters.StartMinute = peakResult.AmStartMinute;
-                    parameters.EndHour = peakResult.AmEndHour;
-                    parameters.EndMinute = peakResult.AmEndMinute;
-                    var approachResultAm = GetApproachResult(parameters, approachId);
+                    SetHoursAndMinutes(parameters, peakResult.AmStartHour, peakResult.AmStartMinute, peakResult.AmEndHour, peakResult.AmEndMinute);
+                    var approachResultAM = GetApproachResult(parameters, approach, approachId);
+                    finalGapAnalysisReportViewModel.Add(approachResultAM);
 
 
-                    parameters.StartHour = peakResult.PmStartHour;
-                    parameters.StartMinute = peakResult.PmStartMinute;
-                    parameters.EndHour = peakResult.PmEndHour;
-                    parameters.EndMinute = peakResult.PmEndMinute;
-                    var approachResultPm = GetApproachResult(parameters, approachId);
-
-                    GetCombinedResult(approachResult, approachResultAm, approachResultPm, parameters);
+                    SetHoursAndMinutes(parameters, peakResult.PmStartHour, peakResult.PmStartMinute, peakResult.PmEndHour, peakResult.PmEndMinute);
+                    var approachResultPM = GetApproachResult(parameters, approach, approachId);
+                    finalGapAnalysisReportViewModel.Add(approachResultPM);
                 }
                 else
                 {
-                    approachResult = GetApproachResult(parameters, approachId);
-                }
-
-                approachResult.ApproachDescription = approach.Description;
-                var gapVsDemandChart = new GapVsDemandOptions
-                    (parameters.SignalId,
-                    parameters.StartDate,
-                    parameters.EndDate.AddDays(1),
-                    0, 
-                    0, 
-                    31, 
-                    approachResult.AcceptableGapList, 
-                    approachResult.DemandList);
-                approachResult.GapDemandChartImg = gapVsDemandChart.CreateMetric().FirstOrDefault();
-                var pedsVsFailuresOptions = new PedsVsFailuresOptions
-                    (parameters.SignalId,
-                    parameters.StartDate,
-                    parameters.EndDate.AddDays(1),
-                    0,
-                    0,
-                    31,
-                    approachResult.AcceptableGapList,
-                    approachResult.DemandList);
-                approachResult.PedSplitFailChartImg = pedsVsFailuresOptions.CreateMetric().FirstOrDefault();
-                /// Fill in approachResult
-                approachResult.StartDate = parameters.StartDate;
-                approachResult.EndDate = parameters.EndDate;
-                approachResult.StartTime = new TimeSpan(parameters.StartHour ?? 0, 0, 0);
-                approachResult.EndTime = new TimeSpan(parameters.EndHour ?? 0, 0, 0);
-                approachResult.SignalId = parameters.SignalId;
-                approachResult.Location = approach.Signal.PrimaryName + " & " + approach.Signal.SecondaryName;
-                approachResult.SpeedLimit = approach.MPH;
-
-                int protectedNum = approach.ProtectedPhaseNumber;
-                Nullable<int> permissiveNum = approach.PermissivePhaseNumber;
-
-                if (protectedNum > 0 && permissiveNum == null)
-                {
-                    approachResult.PhaseType = "Protected Only";
-                    approachResult.SignalType = "Protected Only";
-
-                }
-                else if (protectedNum == 0 && permissiveNum > 0)
-                {
-                    approachResult.PhaseType = "Permissive Only";
-                    approachResult.SignalType = "Permissive Only";
-                } else
-                {
-                    approachResult.PhaseType = "Protected / Permissive";
-                    if (protectedNum == 1 && permissiveNum == 6 ||
-                        protectedNum == 3 && permissiveNum == 8 || 
-                        protectedNum == 5 && permissiveNum == 6 ||
-                        protectedNum == 7 && permissiveNum == 8)
-                    {
-                        approachResult.SignalType = "5-Head";
-                    }
-                    else
-                    {
-                        approachResult.SignalType = "FYA";
-                    }
-                }
-
-                if (approachResult.PhaseType == "Protected Only")
-                {
-                    if (approachResult.OpposingLanes == 1)
-                    {
-                        approachResult.CrossProductReview = 3696 > approachResult.CalculatedVolumeBoundary;
-                    }
-                    else
-                    {
-                        approachResult.CrossProductReview = 2312 > approachResult.CalculatedVolumeBoundary;
-                    }
-                }
-                else if (approachResult.PhaseType == "Permissive Only")
-                {
-                    if (approachResult.OpposingLanes == 1)
-                    {
-                        approachResult.CrossProductReview = 9519 > approachResult.CalculatedVolumeBoundary;
-                    }
-                    else
-                    {
-                        approachResult.CrossProductReview = 7974 > approachResult.CalculatedVolumeBoundary;
-                    }
-                }
-                else
-                {
-                    if (approachResult.OpposingLanes == 1)
-                    {
-                        approachResult.CrossProductReview = 4638 > approachResult.CalculatedVolumeBoundary;
-                    }
-                    else
-                    {
-                        approachResult.CrossProductReview = 3782 > approachResult.CalculatedVolumeBoundary;
-                    }
-                }
-
-
-                if (parameters.GetAMPMPeakHour == false && parameters.GetAMPMPeakPeriod == false)
-                {
+                    var approachResult = GetApproachResult(parameters, approach, approachId);
+                    AddCharts(approachResult, parameters, approach);
                     approachResult.Is24HourReport = true;
+                    finalGapAnalysisReportViewModel.Add(approachResult);
                 }
-                ///
-                finalGapAnalysisReportViewModel.Add(approachResult);
             }
             var pdf = new PartialViewAsPdf("FinalGapAnalysisReport", finalGapAnalysisReportViewModel) { FileName = "Test.pdf" };
             PdfResult pdfResult = GetPdf(pdf);
+
             return Json(new { pdfResult }, JsonRequestBehavior.AllowGet);
-
-            //return Content(tempFileName, "text/html");
-
-            //return Content("<iframe src=\"/TempPdf/" + tempFileName +
-            //    "\"style=\"width:600px; height:500px;\" frameborder=\"0\"></iframe>", "text/html");
-            //var pdf = new ActionAsPdf("FinalGapAnalysisReport") { FileName = "Test.pdf" };
-            //byte[] byteArray = pdf.BuildFile(ControllerContext);
-            //string imageBase64Data = Convert.ToBase64String(byteArray);
-            //string imageDataURL = string.Format("data:application/pdf;base64,{0}", imageBase64Data);
-            //return PartialView("ResultAsPdf", tempFileName);
-            //return  File(byteArray, "application/pdf");
-            //using (MemoryStream pdfStream = new MemoryStream())
-            //{
-            //    pdfStream.Write(byteArray, 0, byteArray.Length);
-            //    pdfStream.Position = 0;
-            //    return new FileStreamResult(pdfStream, "application/pdf");
-            //}
-            //return pdf;
-            //return PartialView("FinalGapAnalysisReport", finalGapAnalysisReportViewModel);
         }
 
         private PdfResult GetPdf(ViewAsPdf pdf)
@@ -348,9 +161,7 @@ namespace SPM.Controllers
             var imagelocation = settings.ImagePath;
             var pdfResult = new PdfResult();
             byte[] pdfData = pdf.BuildFile(ControllerContext);
-            //var tempFilePath = Path.GetTempPath();
             var tempFileName = Guid.NewGuid().ToString() + ".pdf";
-            //var tempFilePath = Path.Combine(Server.MapPath("~/TempPdf/"), tempFileName);
             var tempFilePath = imagelocation + tempFileName;
 
             using (var fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write))
@@ -360,22 +171,147 @@ namespace SPM.Controllers
             pdfResult.HTML = "<iframe src=\"" + settings.ImageUrl + tempFileName +
                 "\"style=\"width:100%; height:1000px;\" frameborder=\"0\"></iframe>";
             pdfResult.FileName = tempFileName;
+
             return pdfResult;
         }
 
-        private static void GetCombinedResult(FinalGapAnalysisReportViewModel approachResult, FinalGapAnalysisReportViewModel approachResultAm, FinalGapAnalysisReportViewModel approachResultPm, FinalGapAnalysisReportParameters parameters)
+        private static void SetHoursAndMinutes(FinalGapAnalysisReportParameters parameters, int startHour, int startMinute, int endHour, int endMinute)
         {
-            if(parameters.GetGapReport ?? false)
-                approachResult.GapDurationConsiderForStudy = approachResultAm.GapDurationConsiderForStudy.Value || approachResultPm.GapDurationConsiderForStudy.Value;
-            if(parameters.GetPedestrianCall ?? false)
-                approachResult.PedActuationsConsiderForStudy = approachResultAm.PedActuationsConsiderForStudy.Value || approachResultPm.PedActuationsConsiderForStudy.Value;
-            if(parameters.GetSplitFail ?? false)
-                approachResult.SplitFailsConsiderForStudy = approachResultAm.SplitFailsConsiderForStudy.Value || approachResultPm.SplitFailsConsiderForStudy.Value;
-            if(parameters.GetConflictingVolume ?? false)
-                approachResult.VolumesConsiderForStudy = approachResultAm.VolumesConsiderForStudy.Value || approachResultPm.VolumesConsiderForStudy.Value;
+            parameters.StartHour = startHour;
+            parameters.StartMinute = startMinute;
+            parameters.EndHour = endHour;
+            parameters.EndMinute = endMinute;
         }
 
-        private FinalGapAnalysisReportViewModel GetApproachResult(FinalGapAnalysisReportParameters parameters, int approachId)
+        private static LeftTurnPeakHourResultViewModel FindPeakHours(FinalGapAnalysisReportParameters parameters, int approachId)
+        {
+            LeftTurnPeakHourResultViewModel peakResult = new LeftTurnPeakHourResultViewModel();
+            PeakHourParameters toSendParameters = new PeakHourParameters
+            {
+                ApproachId = approachId,
+                DaysOfWeek = parameters.DaysOfWeek,
+                EndDate = parameters.EndDate,
+                SignalId = parameters.SignalId,
+                StartDate = parameters.StartDate
+            };
+            string address = BuildUrlString() + "PeakHours";
+            Uri u = new Uri(address);
+            var payload = JsonConvert.SerializeObject(toSendParameters);
+            var t = Task.Run(() => SendURI(u, payload));
+            t.Wait();
+            var result = t.Result;
+            if (result.ResponseStatus == ResponseStatus.Completed)
+            {
+                peakResult = JsonConvert.DeserializeObject<LeftTurnPeakHourResultViewModel>(result.Content);
+            }
+            else
+            {
+                throw result.ErrorException;
+            }
+            if (peakResult == null)
+            {
+                throw new NullReferenceException("Unable to get peak hours");
+            }
+
+            return peakResult;
+        }
+
+
+        private static void AddSignalAndPhaseType(FinalGapAnalysisReportViewModel approachResult, Approach approach)
+        {
+            int protectedNum = approach.ProtectedPhaseNumber;
+            Nullable<int> permissiveNum = approach.PermissivePhaseNumber;
+
+            if (protectedNum > 0 && permissiveNum == null)
+            {
+                approachResult.PhaseType = "Protected Only";
+                approachResult.SignalType = "Protected Only";
+
+            }
+            else if (protectedNum == 0 && permissiveNum > 0)
+            {
+                approachResult.PhaseType = "Permissive Only";
+                approachResult.SignalType = "Permissive Only";
+            }
+            else
+            {
+                approachResult.PhaseType = "Protected / Permissive";
+                if (protectedNum == 1 && permissiveNum == 6 ||
+                    protectedNum == 3 && permissiveNum == 8 ||
+                    protectedNum == 5 && permissiveNum == 6 ||
+                    protectedNum == 7 && permissiveNum == 8)
+                {
+                    approachResult.SignalType = "5-Head";
+                }
+                else
+                {
+                    approachResult.SignalType = "FYA";
+                }
+            }
+        }
+
+        private static void AddCharts(FinalGapAnalysisReportViewModel approachResult, FinalGapAnalysisReportParameters parameters, Approach approach)
+        {
+            var gapVsDemandChart = new GapVsDemandOptions
+                (parameters.SignalId,
+                parameters.StartDate,
+                parameters.EndDate.AddDays(1),
+                0,
+                0,
+                31,
+                approachResult.AcceptableGapList,
+                approachResult.DemandList);
+            approachResult.GapDemandChartImg = gapVsDemandChart.CreateMetric().FirstOrDefault();
+            var pedsVsFailuresOptions = new PedsVsFailuresOptions
+                (parameters.SignalId,
+                parameters.StartDate,
+                parameters.EndDate.AddDays(1),
+                0,
+                0,
+                31,
+                approachResult.AcceptableGapList,
+                approachResult.DemandList);
+            approachResult.PedSplitFailChartImg = pedsVsFailuresOptions.CreateMetric().FirstOrDefault();
+        }
+
+        private static void AddCrossProductReview(FinalGapAnalysisReportViewModel approachResult)
+        {
+            if (approachResult.PhaseType == "Protected Only")
+            {
+                if (approachResult.OpposingLanes == 1)
+                {
+                    approachResult.CrossProductReview = 3696 > approachResult.CalculatedVolumeBoundary;
+                }
+                else
+                {
+                    approachResult.CrossProductReview = 2312 > approachResult.CalculatedVolumeBoundary;
+                }
+            }
+            else if (approachResult.PhaseType == "Permissive Only")
+            {
+                if (approachResult.OpposingLanes == 1)
+                {
+                    approachResult.CrossProductReview = 9519 > approachResult.CalculatedVolumeBoundary;
+                }
+                else
+                {
+                    approachResult.CrossProductReview = 7974 > approachResult.CalculatedVolumeBoundary;
+                }
+            }
+            else
+            {
+                if (approachResult.OpposingLanes == 1)
+                {
+                    approachResult.CrossProductReview = 4638 > approachResult.CalculatedVolumeBoundary;
+                }
+                else
+                {
+                    approachResult.CrossProductReview = 3782 > approachResult.CalculatedVolumeBoundary;
+                }
+            }
+        }
+
+        private FinalGapAnalysisReportViewModel GetApproachResult(FinalGapAnalysisReportParameters parameters, Approach approach, int approachId)
         {
             FinalGapAnalysisReportViewModel approachResult = new FinalGapAnalysisReportViewModel();
             if (parameters.GetGapReport ?? false)
@@ -386,8 +322,17 @@ namespace SPM.Controllers
                 approachResult.Demand = gapResult.Demand;
                 approachResult.GapOutPercent = gapResult.GapOutPercent;
                 approachResult.AcceptableGapList = gapResult.AcceptableGaps;
-                approachResult.Direction = gapResult.Direction;
-                approachResult.OpposingDirection = gapResult.OpposingDirection;
+                approachResult.StartDate = parameters.StartDate;
+                approachResult.EndDate = parameters.EndDate;
+                approachResult.StartTime = new TimeSpan(parameters.StartHour ?? 0, parameters.StartMinute ?? 0, 0);
+                approachResult.EndTime = new TimeSpan(parameters.EndHour ?? 0, parameters.StartMinute ?? 0, 0);
+                approachResult.SignalId = parameters.SignalId;
+                approachResult.Location = approach.Signal.PrimaryName + " & " + approach.Signal.SecondaryName;
+                approachResult.SpeedLimit = approach.MPH;
+                approachResult.ApproachDescription = approach.Description;
+
+                AddSignalAndPhaseType(approachResult, approach);
+                AddCrossProductReview(approachResult);
             }
 
             if (parameters.GetSplitFail ?? false)
@@ -409,7 +354,7 @@ namespace SPM.Controllers
                 approachResult.Direction = PedResult.Direction;
                 approachResult.OpposingDirection = PedResult.OpposingDirection;
             }
-            if (parameters.GetConflictingVolume ?? false) 
+            if (parameters.GetConflictingVolume ?? false)
             {
                 var volumeResult = GetVolumeResult(parameters, approachId);
                 approachResult.VolumesConsiderForStudy = volumeResult.ConsiderForStudy;
@@ -558,27 +503,6 @@ namespace SPM.Controllers
             {
                 throw result.ErrorException;
             }
-
-            //string address = String.Format(GetGapUrl(parameters), approachId);
-            //client.BaseAddress = new Uri(BuildUrlString());
-
-            ////HTTP GET
-            //var responseTask = client.GetAsync(address);
-            //responseTask.Wait();
-
-            //var result = responseTask.Result;
-            //if (result.IsSuccessStatusCode)
-            //{
-            //    var readTask = result.Content.ReadAsAsync<LeftTurnGapOutViewModel>();
-            //    readTask.Wait();
-
-            //    LeftTurnGapOutViewModel gapOutResult = readTask.Result;
-            //    return gapOutResult.GapOutPercent > parameters.AcceptableGapPercentage;
-            //}
-            //else //web api sent error response 
-            //{
-            //    throw new Exception(result.ReasonPhrase);
-            //}
         }
 
         private static string GetGapUrl(FinalGapAnalysisReportParameters parameters)
