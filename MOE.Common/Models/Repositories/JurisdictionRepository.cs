@@ -59,6 +59,37 @@ namespace MOE.Common.Models.Repositories
             db.SaveChanges();
         }
 
+        public void Remove(Jurisdiction jurisdiction)
+        {
+            var g = (from r in db.Jurisdictions
+                     where r.Id == jurisdiction.Id
+                     select r).FirstOrDefault();
+            if (g != null)
+                try
+                {
+                    db.Jurisdictions.Remove(g);
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    {
+                        var repository =
+                            ApplicationEventRepositoryFactory.Create();
+                        var error = new ApplicationEvent
+                        {
+                            ApplicationName = "MOE.Common",
+                            Class = "Models.Repository.JurisdictionRepository",
+                            Function = "Remove",
+                            Description = ex.Message,
+                            SeverityLevel = ApplicationEvent.SeverityLevels.High,
+                            Timestamp = DateTime.Now
+                        };
+                        repository.Add(error);
+                        throw ex;
+                    }
+                }
+        }
+
         public void Update(Jurisdiction newJurisdiction)
         {
             var jurisdiction = (from r in db.Jurisdictions
