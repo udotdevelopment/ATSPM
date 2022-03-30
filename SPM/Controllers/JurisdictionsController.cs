@@ -51,7 +51,7 @@ namespace SPM.Controllers
         [Authorize(Roles = "Configuration, Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,JurisdictionName, CountyParrish, MPO, OtherPartners")] Jurisdiction jurisdiction)
+        public ActionResult Create([Bind(Include = "Id,JurisdictionName, CountyParish, MPO, OtherPartners")] Jurisdiction jurisdiction)
         {
             if (ModelState.IsValid)
             {
@@ -84,7 +84,7 @@ namespace SPM.Controllers
         [Authorize(Roles = "Configuration, Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,JurisdictionName, CountyParrish, MPO, OtherPartners")] Jurisdiction jurisdiction)
+        public ActionResult Edit([Bind(Include = "Id,JurisdictionName, CountyParish, MPO, OtherPartners")] Jurisdiction jurisdiction)
         {
             if (ModelState.IsValid)
             {

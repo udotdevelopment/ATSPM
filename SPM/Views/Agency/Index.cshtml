@@ -4,7 +4,7 @@
     ViewBag.Title = "Agency Configuration";
 }
 
-<h2>Route Configuration</h2>
+<h2>Agency Configuration</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -23,7 +23,7 @@
             @Html.DisplayFor(modelItem => item.JurisdictionName)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Index", "AgencySignals", new { id=item.Id }, new { }) |
+            @Html.ActionLink("Edit", "Index", new { id=item.Id }, new { }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.Id })
         </td>
     </tr>
