@@ -27,7 +27,7 @@
     }
 
     table, .keep-together {
-        break-inside: avoid;
+        page-break-inside: avoid;
     }
 </style>
 
@@ -43,101 +43,105 @@
 </table>
 
 <h4 class="p-3">Signal ID: &nbsp; <b> @Model.First().SignalId &emsp; @Model.First().Location </b> </h4>
-<table class="table table-borderless grey text-left">
-    <tr>
-        <th>
-            Left Turn Approach:
-        </th>
-        <td>
-            @Model.First().ApproachDescription.Split(' ')[0]
-        </td>
-        <th>
-            Phase Type:
-        </th>
-        <td>
-            @Model.First().PhaseType
-        </td>
-        <th>
-            Signal Type:
-        </th>
-        <td>
-            @Model.First().SignalType
-        </td>
-        @if (Model.First().Is24HourReport)
-        {
-            <th>
-                Speed Limit:
-            </th>
-            <td>
-                @Model.First().SpeedLimit
-            </td>
-        }
-    </tr>
-    <tr>
-        <th>
-            Opposing Approach:
-        </th>
-        <td>
-            ???
-        </td>
-        <th>
-            Number of Thru Lanes:
-        </th>
-        <td>
-            ???
-        </td>
-        @if (Model.First().Is24HourReport)
-        {
-            <th>
-                Start Date:
-            </th>
-            <td>
-                @Model.First().StartDate.ToShortDateString()
-            </td>
-            <th>
-                End Date:
-            </th>
-            <td>
-                @Model.First().EndDate.ToShortDateString()
-            </td>
-        }
-        else
-        {
-            <th>
-                Speed Limit:
-            </th>
-            <td>
-                @Model.First().SpeedLimit
-            </td>
-        }
-</table>
 
-@if (Model.First().Is24HourReport)
-{
-    <style>
-        th, td {
-            font-size: 20px;
-        }
-    </style>
-
-    <img src="@Model.First().GapDemandChartImg" />
-    <br />
-    <table class="table table-borderless border-bottom border-secondary">
-        <tr>
-            <td colspan="8" />
-        </tr>
-    </table>
-    <img src="@Model.First().PedSplitFailChartImg" />
-
-    return;
-}
-
+@{int i = 0;}
 @foreach (var result in Model)
 {
-    <div class="keep-together">
-        @if (result.GapDurationConsiderForStudy.HasValue)
+<div class="keep-together border border-bottom-0" style="border-color: #2f5597">
+    @if (i++ % 2 == 0)
+    {
+        <table class="table table-borderless text-left grey mb-0">
+            <tr>
+                <th>
+                    Left Turn Approach:
+                </th>
+                <td>
+                    @result.ApproachDescription.Split(' ')[0]
+                </td>
+                <th>
+                    Phase Type:
+                </th>
+                <td>
+                    @result.PhaseType
+                </td>
+                <th>
+                    Signal Type:
+                </th>
+                <td>
+                    @result.SignalType
+                </td>
+                @if (result.Is24HourReport)
+                {
+                    <th>
+                        Speed Limit:
+                    </th>
+                    <td>
+                        @result.SpeedLimit
+                    </td>
+                }
+            </tr>
+            <tr>
+                <th>
+                    Opposing Approach:
+                </th>
+                <td>
+                    ???
+                </td>
+                <th>
+                    Number of Thru Lanes:
+                </th>
+                <td>
+                    ???
+                </td>
+                @if (result.Is24HourReport)
+                {
+                    <th>
+                        Start Date:
+                    </th>
+                    <td>
+                        @result.StartDate.ToShortDateString()
+                    </td>
+                    <th>
+                        End Date:
+                    </th>
+                    <td>
+                        @result.EndDate.ToShortDateString()
+                    </td>
+                }
+                else
+                {
+                    <th>
+                        Speed Limit:
+                    </th>
+                    <td>
+                        @result.SpeedLimit
+                    </td>
+                }
+        </table>
+    }
+
+    @if (result.Is24HourReport)
+    {
+        <style>
+            th, td {
+                font-size: 20px;
+            }
+        </style>
+
+        <img src="@result.GapDemandChartImg" />
+        <br />
+        <table class="table table-borderless border-bottom border-secondary">
+            <tr>
+                <td colspan="8" />
+            </tr>
+        </table>
+        <img src="@result.PedSplitFailChartImg" />
+    }
+    else
+    {
+        if (result.GapDurationConsiderForStudy.HasValue)
         {
-            <table class="table table-borderless" style="background-color:#2f5597; color:white">
+            <table class="table table-borderless" style="background-color: #2f5597; color: white">
                 <tr>
                     <th>
                         Peak Period:
@@ -171,7 +175,8 @@
                     </td>
                 </tr>
             </table>
-            <table class="table table-borderless text-left border-bottom">
+
+            <table class="table table-borderless text-left">
                 <tr>
                     <th colspan="8" class="dark-blue text-center" style="font-weight: bolder">
                         Left Turn Gap Analysis Results
@@ -208,7 +213,7 @@
                 </tr>
                 <tr>
                     <td colspan="8" class="recommendation text-center">
-                        @if (result.ConsiderForStudy)
+                        @if (result.GapDurationConsiderForStudy.HasValue)
                         {
                             <label class="text-success">Consider for Study</label>
                         }
@@ -219,7 +224,8 @@
                     </td>
                 </tr>
             </table>
-            <table class="table table-borderless grey text-left">
+
+            <table class="table table-borderless grey text-left mb-0">
                 <tr>
                     <th colspan="8" class="dark-blue text-center" style="font-weight: bolder">
                         Alternative Measures Analysis Results
@@ -345,12 +351,15 @@
                         }
                     </td>
                 </tr>
+                <tr>
+                    <td></td>
+                </tr>
             </table>
-
         }
 
-        @if (result.SplitFailsConsiderForStudy.HasValue)
+        if (result.SplitFailsConsiderForStudy.HasValue)
         {
+            <br />
             <table class="table table-bordered table text-center">
                 <tr>
                     <td colspan="3" class="recommendation text-center grey">
@@ -385,7 +394,7 @@
             </table>
         }
 
-        @if (result.PedActuationsConsiderForStudy.HasValue)
+        if (result.PedActuationsConsiderForStudy.HasValue)
         {
             <table class="table table-bordered table text-center">
                 <tr>
@@ -422,7 +431,7 @@
             <img src="@result.PedSplitFailChartImg" />
         }
 
-        @if (result.VolumesConsiderForStudy.HasValue)
+        if (result.VolumesConsiderForStudy.HasValue)
         {
             <table class="table table-bordered table text-center">
                 <tr>
@@ -487,5 +496,6 @@
                 </tr>
             </table>
         }
-    </div>
+    }
+</div>
 }
