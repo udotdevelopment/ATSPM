@@ -1145,6 +1145,15 @@ namespace MOE.Common.Migrations
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 114
+                },
+                new MetricType
+                {
+                    MetricID = 35,
+                    ChartName = "Split Monitor",
+                    Abbreviation = "SM",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 120
                 }
 
             );

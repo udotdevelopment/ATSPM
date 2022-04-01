@@ -107,6 +107,8 @@ namespace SPM.Controllers
                     return GetPhasePedChart(aggDataExportViewModel);
                 case 34:
                     return GetLeftTurnGapChart(aggDataExportViewModel);
+                case 35:
+                    return GetSplitMonitorChart(aggDataExportViewModel);
                 default:
                     return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
             }
@@ -148,6 +150,11 @@ namespace SPM.Controllers
         private ActionResult GetPhasePedChart(AggDataExportViewModel aggDataExportViewModel)
         {
             PhasePedAggregationOptions options = new PhasePedAggregationOptions();
+            return GetChart(aggDataExportViewModel, options);
+        }
+        private ActionResult GetSplitMonitorChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            PhaseSplitMonitorAggregationOptions options = new PhaseSplitMonitorAggregationOptions();
             return GetChart(aggDataExportViewModel, options);
         }
         private ActionResult GetLeftTurnGapChart(AggDataExportViewModel aggDataExportViewModel)
@@ -1019,6 +1026,9 @@ namespace SPM.Controllers
                     break;
                 case 34:
                     AggregatedDataTypes = new PhaseLeftTurnGapAggregationOptions().AggregatedDataTypes;
+                    break;
+                case 35:
+                    AggregatedDataTypes = new PhaseSplitMonitorAggregationOptions().AggregatedDataTypes;
                     break;
                 default:
                     throw new Exception("Invalid Metric Type");

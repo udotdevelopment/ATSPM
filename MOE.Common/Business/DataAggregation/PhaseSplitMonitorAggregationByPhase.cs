@@ -9,9 +9,12 @@ using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.DataAggregation
 {
-    public class PhaseTerminationAggregationByPhase : AggregationByPhase
+    public class PhaseSplitMonitorAggregationByPhase : AggregationByPhase
     {
-        public PhaseTerminationAggregationByPhase(Models.Signal signal, int phaseNumber, PhaseTerminationAggregationOptions options, AggregatedDataType dataType) 
+        public const string EIGHTY_FIFTH_PERCENTILE_SPLIT = "EightyFifthPercentileSplit";
+        public const string SKIPPED_COUNT = "SkippedCount";
+
+        public PhaseSplitMonitorAggregationByPhase(Models.Signal signal, int phaseNumber, PhaseSplitMonitorAggregationOptions options, AggregatedDataType dataType) 
             : base(signal, phaseNumber, options, dataType)
         {
             LoadBins(signal, phaseNumber, options, dataType);
@@ -20,8 +23,8 @@ namespace MOE.Common.Business.DataAggregation
         protected override void LoadBins(Models.Signal signal, int phaseNumber, PhaseAggregationMetricOptions options,
             AggregatedDataType dataType)
         {
-            var phaseTerminationAggregationRepository = PhaseTerminationAggregationRepositoryFactory.Create();
-            var splitFails = phaseTerminationAggregationRepository.GetPhaseTerminationsAggregationBySignalIdPhaseNumberAndDateRange(
+            var phaseSplitMonitorAggregationRepository = PhaseSplitMonitorAggregationRepositoryFactory.Create();
+            var splitFails = phaseSplitMonitorAggregationRepository.GetSplitMonitorAggregationBySignalIdPhaseNumberAndDateRange(
                 signal.SignalID, phaseNumber, options.StartDate, options.EndDate);
             if (splitFails != null)
             {
@@ -40,26 +43,16 @@ namespace MOE.Common.Business.DataAggregation
                             var terminationCount = 0;
                             switch (dataType.DataName)
                             {
-                                case "GapOuts":
+                                case EIGHTY_FIFTH_PERCENTILE_SPLIT:
                                     terminationCount =
                                         splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.GapOuts);
+                                            .Sum(s => s.EightyFifthPercentileSplit);
                                     break;
-                                case "ForceOffs":
+                                case SKIPPED_COUNT:
                                     terminationCount =
                                         splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.ForceOffs);
-                                    break;
-                                case "MaxOuts":
-                                    terminationCount =
-                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.MaxOuts);
-                                    break;
-                                case "Unknown":
-                                    terminationCount =
-                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.UnknownTerminationTypes);
-                                    break;
+                                            .Sum(s => s.SkippedCount);
+                                    break;                                
                                 default:
 
                                     throw new Exception("Unknown Aggregate Data Type for Split Failure");

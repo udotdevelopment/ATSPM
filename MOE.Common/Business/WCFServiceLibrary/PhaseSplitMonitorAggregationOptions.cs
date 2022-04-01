@@ -11,18 +11,15 @@ using MOE.Common.Models;
 namespace MOE.Common.Business.WCFServiceLibrary
 {
     [DataContract]
-    public class PhasePedAggregationOptions : PhaseAggregationMetricOptions
+    public class PhaseSplitMonitorAggregationOptions : PhaseAggregationMetricOptions
     {
-        public PhasePedAggregationOptions()
+        public PhaseSplitMonitorAggregationOptions()
         {
             MetricTypeID = 29;
             AggregatedDataTypes = new List<AggregatedDataType>();
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = PhasePedAggregationByPhase.PED_CYCLES });
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = PhasePedAggregationByPhase.PED_DELAY_SUM });
-            AggregatedDataTypes.Add(new AggregatedDataType { Id = 2, DataName = PhasePedAggregationByPhase.MIN_PED_DELAY });
-            AggregatedDataTypes.Add(new AggregatedDataType { Id = 3, DataName = PhasePedAggregationByPhase.MAX_PED_DELAY });
-            AggregatedDataTypes.Add(new AggregatedDataType { Id = 4, DataName = PhasePedAggregationByPhase.PED_ACTUATIONS });
-        }
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = PhaseSplitMonitorAggregationByPhase.EIGHTY_FIFTH_PERCENTILE_SPLIT});
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = PhaseSplitMonitorAggregationByPhase.SKIPPED_COUNT});
+              }
 
         public override string ChartTitle
         {
@@ -50,7 +47,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
         }
 
-        public override string YAxisTitle => SelectedAggregationType + " of " +  Regex.Replace(
+        public override string YAxisTitle => SelectedAggregationType + " of " + Regex.Replace(
                                                  SelectedAggregatedDataType.DataName,
                                                  @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1") + " " +
                                              TimeOptions.SelectedBinSize + " bins";
@@ -58,27 +55,27 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         protected override List<int> GetAvailablePhaseNumbers(Models.Signal signal)
         {
-            var phaseTerminationRepository = Models.Repositories.PhasePedAggregationRepositoryFactory.Create();
-            return phaseTerminationRepository.GetAvailablePhaseNumbers(signal, this.StartDate, this.EndDate);
+            var phaseSplitMonitorRepository =  Models.Repositories.PhaseSplitMonitorAggregationRepositoryFactory.Create();
+            return phaseSplitMonitorRepository.GetAvailablePhaseNumbers(signal, this.StartDate, this.EndDate);
         }
 
         protected override int GetAverageByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
             var splitFailAggregationBySignal =
-                new PhasePedAggregationBySignal(this, signal);
+                new PhaseSplitMonitorAggregationBySignal(this, signal);
             return splitFailAggregationBySignal.Average;
         }
 
         protected override int GetSumByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
             var splitFailAggregationBySignal =
-                new PhasePedAggregationBySignal(this, signal);
+                new PhaseSplitMonitorAggregationBySignal(this, signal);
             return splitFailAggregationBySignal.Average;
         }
 
         protected override List<BinsContainer> GetBinsContainersBySignal(Models.Signal signal)
         {
-            var phaseTerminationAggregationBySignal = new PhasePedAggregationBySignal(this, signal);
+            var phaseTerminationAggregationBySignal = new PhaseSplitMonitorAggregationBySignal(this, signal);
             return phaseTerminationAggregationBySignal.BinsContainers;
         }
         
@@ -86,21 +83,21 @@ namespace MOE.Common.Business.WCFServiceLibrary
         protected override List<BinsContainer> GetBinsContainersByPhaseNumber(Models.Signal signal, int phaseNumber)
         {
             var phaseTerminationAggregationBySignal =
-                new PhasePedAggregationBySignal(this, signal, phaseNumber);
+                new PhaseSplitMonitorAggregationBySignal(this, signal, phaseNumber);
             return phaseTerminationAggregationBySignal.BinsContainers;
         }
 
         public override List<BinsContainer> GetBinsContainersByRoute(List<Models.Signal> signals)
         {
-            var aggregations = new ConcurrentBag<PhasePedAggregationBySignal>();
-            Parallel.ForEach(signals, signal => { aggregations.Add(new PhasePedAggregationBySignal(this, signal)); });
+            var aggregations = new ConcurrentBag<PhaseSplitMonitorAggregationBySignal>();
+            Parallel.ForEach(signals, signal => { aggregations.Add(new PhaseSplitMonitorAggregationBySignal(this, signal)); });
             var binsContainers = BinFactory.GetBins(TimeOptions);
-            foreach (var phasePedAggregationBySignal in aggregations)
+            foreach (var splitFailAggregationBySignal in aggregations)
                 for (var i = 0; i < binsContainers.Count; i++)
                 for (var binIndex = 0; binIndex < binsContainers[i].Bins.Count; binIndex++)
                 {
                     var bin = binsContainers[i].Bins[binIndex];
-                    bin.Sum += phasePedAggregationBySignal.BinsContainers[i].Bins[binIndex].Sum;
+                    bin.Sum += splitFailAggregationBySignal.BinsContainers[i].Bins[binIndex].Sum;
                     bin.Average = Convert.ToInt32(Math.Round((double) (bin.Sum / signals.Count)));
                 }
             return binsContainers;

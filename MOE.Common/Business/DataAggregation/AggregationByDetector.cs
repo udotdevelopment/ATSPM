@@ -22,7 +22,7 @@ namespace MOE.Common.Business.DataAggregation
         }
 
         public Models.Detector Detector { get; }
-        public List<BinsContainer> BinsContainers { get; set; } = new List<BinsContainer>();
+        public List<BinsContainer> BinsContainers { get; set; }
 
         protected List<DetectorEventCountAggregation> GetdetectorEventCountAggregations(DetectorAggregationMetricOptions options, Models.Detector detector)
         {

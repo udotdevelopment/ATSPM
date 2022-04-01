@@ -6,23 +6,23 @@ using MOE.Common.Models;
 
 namespace MOE.Common.Business.DataAggregation
 {
-    public class PhasePedAggregationBySignal : AggregationBySignal
+    public class PhaseSplitMonitorAggregationBySignal : AggregationBySignal
     {
 
-        public List<PhasePedAggregationByPhase> PedAggregations { get; }
-        public PhasePedAggregationBySignal(PhasePedAggregationOptions options, Models.Signal signal) : base(
+        public List<PhaseSplitMonitorAggregationByPhase> SplitMonitorAggregations { get; }
+        public PhaseSplitMonitorAggregationBySignal(PhaseSplitMonitorAggregationOptions options, Models.Signal signal) : base(
             options, signal)
         {
-            PedAggregations = new List<PhasePedAggregationByPhase>();
-            GetPhasePedAggregationContainersForAllPhases(options, signal);
+            SplitMonitorAggregations = new List<PhaseSplitMonitorAggregationByPhase>();
+            GetSplitMonitorAggregationContainersForAllPhases(options, signal);
             LoadBins(null, null);
         }
 
-        public PhasePedAggregationBySignal(PhasePedAggregationOptions options, Models.Signal signal,
+        public PhaseSplitMonitorAggregationBySignal(PhaseSplitMonitorAggregationOptions options, Models.Signal signal,
             int phaseNumber) : base(options, signal)
         {
-            PedAggregations = new List<PhasePedAggregationByPhase>();
-            PedAggregations.Add(new PhasePedAggregationByPhase(signal, phaseNumber, options, options.SelectedAggregatedDataType));
+            SplitMonitorAggregations = new List<PhaseSplitMonitorAggregationByPhase>();
+            SplitMonitorAggregations.Add(new PhaseSplitMonitorAggregationByPhase(signal, phaseNumber, options, options.SelectedAggregatedDataType));
             LoadBins(null, null);
         }
 
@@ -32,10 +32,10 @@ namespace MOE.Common.Business.DataAggregation
             for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
             {
                 var bin = BinsContainers[i].Bins[binIndex];
-                foreach (var approachSplitFailAggregationContainer in PedAggregations)
+                foreach (var approachSplitFailAggregationContainer in SplitMonitorAggregations)
                 {
                     bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
-                    bin.Average = PedAggregations.Count > 0 ? bin.Sum / PedAggregations.Count : 0;
+                    bin.Average = SplitMonitorAggregations.Count > 0 ? bin.Sum / SplitMonitorAggregations.Count : 0;
                     }
             }
         }
@@ -47,28 +47,29 @@ namespace MOE.Common.Business.DataAggregation
                 for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
                 {
                     var bin = BinsContainers[i].Bins[binIndex];
-                    foreach (var approachSplitFailAggregationContainer in PedAggregations)
+                    foreach (var approachSplitFailAggregationContainer in SplitMonitorAggregations)
                         bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
-                    bin.Average = PedAggregations.Count > 0 ? bin.Sum / PedAggregations.Count : 0;
+                    bin.Average = SplitMonitorAggregations.Count > 0 ? bin.Sum / SplitMonitorAggregations.Count : 0;
                 }
             }
         }
 
-        private void GetPhasePedAggregationContainersForAllPhases(
-            PhasePedAggregationOptions options, Models.Signal signal)
+        private void GetSplitMonitorAggregationContainersForAllPhases(
+            PhaseSplitMonitorAggregationOptions options, Models.Signal signal)
         {
             List<int> availablePhases = GetAvailablePhasesForSignal(options, signal);
             foreach (var phaseNumber in availablePhases)
             {
-                PedAggregations.Add(
-                    new PhasePedAggregationByPhase(signal, phaseNumber, options, options.SelectedAggregatedDataType));
+                SplitMonitorAggregations.Add(
+                    new PhaseSplitMonitorAggregationByPhase(signal, phaseNumber, options,
+                        options.SelectedAggregatedDataType));
             }
         }
 
-        private static List<int> GetAvailablePhasesForSignal(PhasePedAggregationOptions options, Models.Signal signal)
+        private static List<int> GetAvailablePhasesForSignal(PhaseSplitMonitorAggregationOptions options, Models.Signal signal)
         {
             var phaseTerminationAggregationRepository =
-                Models.Repositories.PhasePedAggregationRepositoryFactory.Create();
+                Models.Repositories.PhaseSplitMonitorAggregationRepositoryFactory.Create();
             var availablePhases =
                 phaseTerminationAggregationRepository.GetAvailablePhaseNumbers(signal, options.StartDate,
                     options.EndDate);

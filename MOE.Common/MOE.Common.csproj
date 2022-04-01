@@ -387,6 +387,8 @@
     </Compile>
     <Compile Include="Business\DataAggregation\PhaseLeftTurnGapAggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\PhaseLeftTurnGapAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\PhaseSplitMonitorAggregationByPhase.cs" />
+    <Compile Include="Business\DataAggregation\PhaseSplitMonitorAggregationBySignal.cs" />
     <Compile Include="Business\LeftTurnGapAnalysis\LeftTurnGapAnalysis.cs" />
     <Compile Include="Business\LeftTurnGapReport\LeftTurnGapOutAnalysis.cs" />
     <Compile Include="Business\LeftTurnGapReport\LeftTurnPedestrianAnalysis.cs" />
@@ -475,6 +477,7 @@
     <Compile Include="Business\WCFServiceLibrary\GapVsDemandOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\LeftTurnGapAnalysisOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\PhaseLeftTurnGapAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PhaseSplitMonitorAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\TimingAndActuationsOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\PhaseAggregationMetricOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\PhaseCycleAggregationOptions.cs" />
@@ -691,11 +694,14 @@
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\Repositories\IPhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IPhaseLeftTurnGapAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\IPhaseSplitMonitorAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseLeftTurnGapAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\PhaseSplitMonitorAggregationRepository .cs" />
     <Compile Include="Models\Repositories\PhaseTerminationAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhasePedAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\PhaseLeftTurnGapAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\PhaseSplitMonitorAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\PhaseTerminationAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\IPhaseTerminationAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IDetectorEventCountAggregationRepository.cs" />
