@@ -14,15 +14,18 @@ namespace MOE.Common.Models
         public int Id { get; set; }
 
         [StringLength(50)]
+        [Display(Name = "Agency Name")]
         public string JurisdictionName { get; set; }
 
         [StringLength(50)]
         public string MPO { get; set; }
 
         [StringLength(50)]
+        [Display(Name = "County/Parish Name")]
         public string CountyParish { get; set; }
 
         [StringLength(50)]
+        [Display(Name = "Other Partners")]
         public string OtherPartners { get; set; }
 
 

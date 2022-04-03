@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Data.Entity.Validation;
+using System.Web.UI.WebControls;
+
+
 
 namespace MOE.Common.Models.Repositories
 {
@@ -91,39 +95,16 @@ namespace MOE.Common.Models.Repositories
         }
 
         public void Update(Jurisdiction newJurisdiction)
-
         {
-            var jurisdiction = (from r in db.Jurisdictions
-                         where r.Id == newJurisdiction.Id
-                                select r).FirstOrDefault();
-
+            var jurisdiction = GetJurisdictionByID(newJurisdiction.Id);
             if (jurisdiction != null)
             {
-                var newjurisdiction = new Jurisdiction
-                {
-                    Id = jurisdiction.Id
-                };
-                newjurisdiction.JurisdictionName = newjurisdiction.JurisdictionName;
-                try
-                {
-                    db.Entry(jurisdiction).CurrentValues.SetValues(newjurisdiction);
-                    db.SaveChanges();
-                }
-
-                catch (Exception ex)
-                {
-                    var repository =
-                        ApplicationEventRepositoryFactory.Create();
-                    var error = new ApplicationEvent();
-                    error.ApplicationName = "MOE.Common";
-                    error.Class = "Models.Repository.ApproachJurisdictionRepository";
-                    error.Function = "UpdateByID";
-                    error.Description = ex.Message;
-                    error.SeverityLevel = ApplicationEvent.SeverityLevels.High;
-                    error.Timestamp = DateTime.Now;
-                    repository.Add(error);
-                    throw;
-                }
+                db.Entry(jurisdiction).CurrentValues.SetValues(newJurisdiction);
+                db.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("Jurisdiction Not Found");
             }
         }
 

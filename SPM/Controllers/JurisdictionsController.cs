@@ -24,7 +24,7 @@ namespace SPM.Controllers
             return View(jurisdictionRepository.GetAllJurisdictions());
         }
 
-        // GET: Jurisdictions/Details/5
+ /*       // GET: Jurisdictions/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -38,7 +38,7 @@ namespace SPM.Controllers
             }
             return PartialView(jurisdiction);
         }
-
+ */
         [Authorize(Roles = "Configuration, Admin")]
         public ActionResult Create()
         {
