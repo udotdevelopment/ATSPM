@@ -9,7 +9,7 @@ namespace MOE.Common.Models.Repositories
         Jurisdiction GetJurisdictionByID(int jurisdictionId);
         Jurisdiction GetJurisdictionByName(string jurisdictionName);
         void DeleteByID(int jurisdictionId);
-        void Update(Jurisdiction jurisdiction);
+        void Update(Jurisdiction newJurisdiction);
         void Add(Jurisdiction newJurisdiction);
     }
 }

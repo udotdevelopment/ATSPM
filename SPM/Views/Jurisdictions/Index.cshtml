@@ -17,6 +17,12 @@
         <th>
             @Html.DisplayNameFor(model => model.MPO)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CountyParish)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OtherPartners)
+        </th>
         <th>Edit/Delete</th>
     </tr>
 
@@ -28,6 +34,12 @@
     <td>
         @Html.DisplayFor(modelItem => item.MPO)
     </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CountyParish)
+    </td>
+    <th>
+        @Html.DisplayFor(modelItem => item.OtherPartners)
+    </th>
     <td>
         @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { }) |
         @Html.ActionLink("Delete", "Delete", new { id = item.Id })

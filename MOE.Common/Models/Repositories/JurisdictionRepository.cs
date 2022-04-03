@@ -91,6 +91,7 @@ namespace MOE.Common.Models.Repositories
         }
 
         public void Update(Jurisdiction newJurisdiction)
+
         {
             var jurisdiction = (from r in db.Jurisdictions
                          where r.Id == newJurisdiction.Id
@@ -98,9 +99,10 @@ namespace MOE.Common.Models.Repositories
 
             if (jurisdiction != null)
             {
-                var newjurisdiction = new Jurisdiction();
-
-                newjurisdiction.Id = jurisdiction.Id;
+                var newjurisdiction = new Jurisdiction
+                {
+                    Id = jurisdiction.Id
+                };
                 newjurisdiction.JurisdictionName = newjurisdiction.JurisdictionName;
                 try
                 {

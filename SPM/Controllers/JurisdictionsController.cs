@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Microsoft.Extensions.Logging;
 using MOE.Common.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace SPM.Controllers
 {
@@ -66,18 +67,17 @@ namespace SPM.Controllers
         [Authorize(Roles = "Configuration, Admin")]
         public ActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Jurisdiction jurisdiction = jurisdictionRepository.GetJurisdictionByID(id.Value);
+                if (jurisdiction == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(jurisdiction);
             }
-            Jurisdiction jurisdiction = jurisdictionRepository.GetJurisdictionByID(id.Value);
-            if (jurisdiction == null)
-            {
-                return HttpNotFound();
-            }
-            return View(jurisdiction);
-        }
-
         // POST: Jurisdictions/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -109,8 +109,6 @@ namespace SPM.Controllers
             }
             return View(jurisdiction);
         }
-
-
 
         // POST: Jurisdictions/Delete/5
         [Authorize(Roles = "Configuration, Admin")]
