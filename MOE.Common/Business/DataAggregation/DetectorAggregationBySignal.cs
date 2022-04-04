@@ -53,9 +53,9 @@ namespace MOE.Common.Business.DataAggregation
                 for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
                 {
                     var bin = BinsContainers[i].Bins[binIndex];
-                    foreach (var approachSplitFailAggregationContainer in ApproachDetectorVolumes)
+                    foreach (var detectorEventAggregationContainer in ApproachDetectorVolumes)
                     {
-                        bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                        bin.Sum += detectorEventAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
                     }
                     bin.Average = ApproachDetectorVolumes.Count > 0 ? bin.Sum / ApproachDetectorVolumes.Count : 0;
                 }
@@ -67,11 +67,11 @@ namespace MOE.Common.Business.DataAggregation
             for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
             {
                 var bin = BinsContainers[i].Bins[binIndex];
-                foreach (var approachSplitFailAggregationContainer in ApproachDetectorVolumes)
+                foreach (var detectorAggregationContainer in ApproachDetectorVolumes)
                 {
-                        if (approachSplitFailAggregationContainer.BinsContainers.Count > 0)
+                        if (detectorAggregationContainer.BinsContainers.Count > 0)
                         {
-                            bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                            bin.Sum += detectorAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
                         }
                 }
                 bin.Average = ApproachDetectorVolumes.Count > 0 ? bin.Sum / ApproachDetectorVolumes.Count : 0;
