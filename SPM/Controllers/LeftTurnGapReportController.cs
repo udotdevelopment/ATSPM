@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
+using MOE.Common.Business;
 using MOE.Common.Models.Repositories;
 using Newtonsoft.Json;
 using RestSharp;
@@ -58,7 +59,7 @@ namespace SPM.Controllers
         public ActionResult GetSignalDataCheckReport(string signalId, double cyclesWithPedCalls, double cyclesWithGapOuts,
             int leftTurnVolume, DateTime startDate, DateTime endDate, int[] approachIds, int[] daysOfWeek)
         {
-            Models.LeftTurnGapReport.DataCheckPayload dataCheckPayload = new Models.LeftTurnGapReport.DataCheckPayload()
+            DataCheckPayload dataCheckPayload = new DataCheckPayload()
             {
                 SignalId = signalId,
                 DaysOfWeek = daysOfWeek,
@@ -111,12 +112,10 @@ namespace SPM.Controllers
         {
             var approachRepository = ApproachRepositoryFactory.Create();
             var finalGapAnalysisReportViewModel = new List<FinalGapAnalysisReportViewModel>();
-
             foreach (int approachId in parameters.ApproachIds)
             {
                 var approach = approachRepository.GetApproachByApproachID(approachId);
-
-                if (parameters.GetAMPMPeakPeriod.HasValue && parameters.GetAMPMPeakPeriod == true)
+                if (parameters.GetAMPMPeakPeriod)
                 {
                     SetHoursAndMinutes(parameters, 6, 0, 9, 0);
                     var approachResultAM = GetApproachResult(parameters, approach, approachId);
@@ -126,7 +125,7 @@ namespace SPM.Controllers
                     var approachResultPM = GetApproachResult(parameters, approach, approachId);
                     finalGapAnalysisReportViewModel.Add(approachResultPM);
                 }
-                else if (parameters.GetAMPMPeakHour.HasValue && parameters.GetAMPMPeakHour == true)
+                else if (parameters.GetAMPMPeakHour)
                 {
                     LeftTurnPeakHourResultViewModel peakResult = FindPeakHours(parameters, approachId);
 
@@ -142,8 +141,8 @@ namespace SPM.Controllers
                 else
                 {
                     var approachResult = GetApproachResult(parameters, approach, approachId);
-                    AddCharts(approachResult, parameters, approach);
-                    approachResult.Is24HourReport = true;
+                    AddCharts(approachResult, parameters);
+                    approachResult.IsGraph = true;
                     finalGapAnalysisReportViewModel.Add(approachResult);
                 }
             }
@@ -215,7 +214,6 @@ namespace SPM.Controllers
             return peakResult;
         }
 
-
         private static void AddSignalAndPhaseType(FinalGapAnalysisReportViewModel approachResult, Approach approach)
         {
             int protectedNum = approach.ProtectedPhaseNumber;
@@ -249,13 +247,16 @@ namespace SPM.Controllers
             }
         }
 
-        private static void AddCharts(FinalGapAnalysisReportViewModel approachResult, FinalGapAnalysisReportParameters parameters, Approach approach)
+        private static void AddCharts(FinalGapAnalysisReportViewModel approachResult, FinalGapAnalysisReportParameters parameters)
         {
+            double gapVsDemandChartHeight = Math.Max(approachResult.AcceptableGapList.Values.Max(), approachResult.DemandList.Values.Max());
+            gapVsDemandChartHeight = (double)(Math.Ceiling(gapVsDemandChartHeight / 10.0) * 10) + 10;
+
             var gapVsDemandChart = new GapVsDemandOptions
                 (parameters.SignalId,
                 parameters.StartDate,
                 parameters.EndDate.AddDays(1),
-                0,
+                gapVsDemandChartHeight,
                 0,
                 31,
                 approachResult.AcceptableGapList,
@@ -273,47 +274,41 @@ namespace SPM.Controllers
             approachResult.PedSplitFailChartImg = pedsVsFailuresOptions.CreateMetric().FirstOrDefault();
         }
 
-        private static void AddCrossProductReview(FinalGapAnalysisReportViewModel approachResult)
-        {
-            if (approachResult.PhaseType == "Protected Only")
-            {
-                if (approachResult.OpposingLanes == 1)
-                {
-                    approachResult.CrossProductReview = 3696 > approachResult.CalculatedVolumeBoundary;
-                }
-                else
-                {
-                    approachResult.CrossProductReview = 2312 > approachResult.CalculatedVolumeBoundary;
-                }
-            }
-            else if (approachResult.PhaseType == "Permissive Only")
-            {
-                if (approachResult.OpposingLanes == 1)
-                {
-                    approachResult.CrossProductReview = 9519 > approachResult.CalculatedVolumeBoundary;
-                }
-                else
-                {
-                    approachResult.CrossProductReview = 7974 > approachResult.CalculatedVolumeBoundary;
-                }
-            }
-            else
-            {
-                if (approachResult.OpposingLanes == 1)
-                {
-                    approachResult.CrossProductReview = 4638 > approachResult.CalculatedVolumeBoundary;
-                }
-                else
-                {
-                    approachResult.CrossProductReview = 3782 > approachResult.CalculatedVolumeBoundary;
-                }
-            }
-        }
-
         private FinalGapAnalysisReportViewModel GetApproachResult(FinalGapAnalysisReportParameters parameters, Approach approach, int approachId)
         {
-            FinalGapAnalysisReportViewModel approachResult = new FinalGapAnalysisReportViewModel();
-            if (parameters.GetGapReport ?? false)
+            FinalGapAnalysisReportViewModel approachResult = new FinalGapAnalysisReportViewModel
+            {
+                SignalId = parameters.SignalId,
+                StartDate = parameters.StartDate,
+                EndDate = parameters.EndDate,
+                StartTime = new TimeSpan(parameters.StartHour ?? 0, parameters.StartMinute ?? 0, 0),
+                EndTime = new TimeSpan(parameters.EndHour ?? 0, parameters.StartMinute ?? 0, 0),
+                ApproachDescription = approach.Description,
+                SpeedLimit = approach.MPH,
+                Location = approach.Signal.PrimaryName + " & " + approach.Signal.SecondaryName,
+
+        };
+            approachResult.PeakPeriodDescription = approachResult.StartTime.Hours < 12 ? "AM" : "PM";
+
+            switch (approach.DirectionTypeID)
+            {
+                case 1:
+                    approachResult.OpposingApproach = "Southbound";
+                    break;
+                case 2:
+                    approachResult.OpposingApproach = "Northbound";
+                    break;
+                case 3:
+                    approachResult.OpposingApproach = "Westbound";
+                    break;
+                case 4:
+                    approachResult.OpposingApproach = "Eastbound";
+                    break;
+            }
+
+            AddSignalAndPhaseType(approachResult, approach);
+
+            if (parameters.GetGapReport)
             {
                 var gapResult = GetGapResult(parameters, approachId);
                 approachResult.GapDurationConsiderForStudy = gapResult.ConsiderForStudy;
@@ -321,20 +316,8 @@ namespace SPM.Controllers
                 approachResult.Demand = gapResult.Demand;
                 approachResult.GapOutPercent = gapResult.GapOutPercent;
                 approachResult.AcceptableGapList = gapResult.AcceptableGaps;
-                approachResult.StartDate = parameters.StartDate;
-                approachResult.EndDate = parameters.EndDate;
-                approachResult.StartTime = new TimeSpan(parameters.StartHour ?? 0, parameters.StartMinute ?? 0, 0);
-                approachResult.EndTime = new TimeSpan(parameters.EndHour ?? 0, parameters.StartMinute ?? 0, 0);
-                approachResult.SignalId = parameters.SignalId;
-                approachResult.Location = approach.Signal.PrimaryName + " & " + approach.Signal.SecondaryName;
-                approachResult.SpeedLimit = approach.MPH;
-                approachResult.ApproachDescription = approach.Description;
-
-                AddSignalAndPhaseType(approachResult, approach);
-                AddCrossProductReview(approachResult);
             }
-
-            if (parameters.GetSplitFail ?? false)
+            if (parameters.GetSplitFail)
             {
                 var splitFailResult = GetSplitFailResult(parameters, approachId);
                 approachResult.SplitFailsConsiderForStudy = splitFailResult.ConsiderForStudy;
@@ -342,7 +325,7 @@ namespace SPM.Controllers
                 approachResult.CyclesWithSplitFailPercent = splitFailResult.SplitFailPercent;
                 approachResult.PercentCyclesWithSplitFailList = splitFailResult.PercentCyclesWithSplitFailList;
             }
-            if (parameters.GetPedestrianCall ?? false)
+            if (parameters.GetPedestrianCall)
             {
                 var PedResult = GetPedActuationResult(parameters, approachId);
                 approachResult.CyclesWithPedCallNum = PedResult.CyclesWithPedCalls;
@@ -350,10 +333,16 @@ namespace SPM.Controllers
                 approachResult.PedActuationsConsiderForStudy = PedResult.ConsiderForStudy;
                 approachResult.PercentCyclesWithPedsList = PedResult.PercentCyclesWithPedsList;
             }
-            if (parameters.GetConflictingVolume ?? false)
+            if (parameters.GetConflictingVolume || parameters.GetGapReport)
             {
                 var volumeResult = GetVolumeResult(parameters, approachId);
-                approachResult.VolumesConsiderForStudy = volumeResult.ConsiderForStudy;
+
+                if (parameters.GetConflictingVolume)
+                {
+                    approachResult.CrossProductConsiderForStudy = volumeResult.ConsiderForStudy;
+                    approachResult.VolumesConsiderForStudy = volumeResult.ConsiderForStudy;
+                }
+
                 approachResult.OpposingLanes = volumeResult.OpposingLanes;
                 approachResult.CrossProductReview = volumeResult.CrossProductReview;
                 approachResult.DecisionBoundariesReview = volumeResult.DecisionBoundariesReview;
@@ -361,7 +350,6 @@ namespace SPM.Controllers
                 approachResult.OpposingThroughVolume = volumeResult.OpposingThroughVolume;
                 approachResult.CrossProductValue = volumeResult.CrossProductValue;
                 approachResult.CalculatedVolumeBoundary = volumeResult.CalculatedVolumeBoundary;
-                approachResult.ConsiderForStudy = volumeResult.ConsiderForStudy;
                 approachResult.DemandList = volumeResult.DemandList;
             }
             return approachResult;
@@ -397,8 +385,6 @@ namespace SPM.Controllers
             {
                 throw result.ErrorException;
             }
-
-           
         }
 
         private PedActuationResultViewModel GetPedActuationResult(FinalGapAnalysisReportParameters parameters, int approachId)
