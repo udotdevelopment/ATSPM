@@ -56,12 +56,12 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             Dictionary<DateTime, double> acceptableGaps = new Dictionary<DateTime, double>();
             for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
             {
-                for (var tempStart = tempDate.Date.Add(startTime); tempStart <= tempDate.Date.Add(endTime); tempStart = tempStart.AddMinutes(30))
+                for (var tempStart = tempDate.Date.Add(startTime); tempStart <= tempDate.Date.Add(endTime); tempStart = tempStart.AddMinutes(15))
                 {
                     if (daysOfWeek.Contains((int)start.DayOfWeek))
                     {
                         var leftTurnGaps = _phaseLeftTurnGapAggregationRepository.GetPhaseLeftTurnGapAggregationBySignalIdPhaseNumberAndDateRange(
-                                 signalId, phaseNumber, tempStart, tempStart.Add(startTime).AddMinutes(30));
+                                 signalId, phaseNumber, tempStart, tempStart.Add(startTime).AddMinutes(15));
                         int count = 0;
                         if(gapColumn ==12)
                             count = leftTurnGaps.Sum(l => l.GapCount6 + l.GapCount7 + l.GapCount8 + l.GapCount9);
