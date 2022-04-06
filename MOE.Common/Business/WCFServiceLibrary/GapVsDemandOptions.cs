@@ -82,7 +82,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             chart.BorderlineColor = chart.BackColor;
 
-
             //Set the chart title
             SetChartTitles(chart);
 
@@ -112,7 +111,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
             Y.TitleFont = new Font("Arial", 15f);
             Y.LabelStyle.Font = new Font("Arial", 10f);
             Y.IntervalAutoMode = IntervalAutoMode.FixedCount;
-            Y.Interval = 10;
+            if (YAxisMax <= 30)
+                Y.Interval = 5;
+            else
+                Y.Interval = 10;
+            Y.MajorTickMark.TickMarkStyle = TickMarkStyle.InsideArea;
             Y.MajorGrid.LineColor = chart.BackColor;
 
             X.Title = "Duration by 15 Minute Bins";
@@ -121,6 +124,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
             X.MajorGrid.LineColor = chart.BackColor;
             X.Minimum = StartDate.ToOADate();
             X.Maximum = EndDate.ToOADate();
+            X.MajorTickMark.TickMarkStyle = TickMarkStyle.InsideArea;
+            X.IntervalType = DateTimeIntervalType.Minutes;
+            X.Interval = 30;
             X.LabelStyle.Angle = -90;
 
 
