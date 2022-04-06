@@ -120,6 +120,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             chartArea.AxisX.Minimum = StartDate.ToOADate();
             chartArea.AxisX.Maximum = EndDate.ToOADate();
             chartArea.AxisX.MajorGrid.LineColor = chart.BackColor;
+            chartArea.AxisX.IntervalType = DateTimeIntervalType.Minutes;
+            chartArea.AxisX.Interval = 30;
             chartArea.AxisX.LabelStyle.Angle = -90;
 
 
