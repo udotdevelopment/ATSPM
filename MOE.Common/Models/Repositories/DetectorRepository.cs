@@ -74,6 +74,13 @@ namespace MOE.Common.Models.Repositories
             return det;
         }
 
+        public List<Detector> GetDetectorsByApproachID(int approachID)
+        {
+            var detectors = new List<Detector>();
+            detectors = _db.Detectors.Where(d => d.ApproachID == approachID).ToList(); 
+            return detectors.OrderBy(d => d.DetectorID).ToList();
+        }
+
         public Detector GetDetectorByID(int ID)
         {
             var det = _db.Detectors.Find(ID);
@@ -113,7 +120,6 @@ namespace MOE.Common.Models.Repositories
                 detector.DetectionTypes = new List<DetectionType>();
                 detector.DetectionTypes = _db.DetectionTypes
                     .Where(dt => detector.DetectionTypeIDs.Contains(dt.DetectionTypeID)).ToList();
-                ;
                 try
                 {
                     _db.Detectors.Add(detector);

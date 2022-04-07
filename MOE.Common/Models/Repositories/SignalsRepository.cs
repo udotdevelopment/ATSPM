@@ -29,7 +29,7 @@ namespace MOE.Common.Models.Repositories
         {
             return GetLatestVersionOfAllSignals();
         }
-
+       
         public Signal GetVersionOfSignalByDate(string signalId, DateTime startDate)
         {
             var signals = _db.Signals

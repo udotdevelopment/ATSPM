@@ -1,0 +1,174 @@
+﻿<div id="approach-page" class="page-layout carded fullwidth" layout="row" ms-scroll>
+    <div class="top-bg md-accent-bg"></div>
+
+    <div class="center" layout="column" flex ms-scroll>
+        <!-- HEADER -->
+        <div class="header" layout="row" layout-align="start center">
+            <div class="white-fg" layout="row" layout-align="start center" flex>
+                <md-button class="goto-signal-button md-icon-button" aria-label="Go to Signal"
+                           ng-click="vm.goToSignal()">
+                    <md-icon md-font-icon="icon-arrow-left"></md-icon>
+                </md-button>
+                <div layout="row" layout-align="start center">
+                    <div layout="column" layout-align="start start">
+                        <div class="h2">
+                            {{vm.headerMessage}}
+                        </div>
+                        <div class="subtitle secondary-text">
+                            <span>Back to Signal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- / HEADER -->
+        <!-- CONTENT -->
+        <md-card layout="row" ms-scroll>
+            <div class="approach-form-container md-background-bg " flex>
+                <div class="pb-16" layout="row" layout-align="start center" flex>
+                    <md-icon md-font-icon="icon-traffic-light" class="icon s24" layout-align="start center"></md-icon>
+                    <div class="h2 secondary-text" layout-align="start center">Approach</div>
+                    <span flex></span>
+                </div>
+                <md-tabs layout-fill>
+                    <md-tab>
+                        <md-tab-label>
+                            <span>Properties</span>
+                        </md-tab-label>
+                        <md-tab-body>
+                            <form id="approachForm" class="padding-top-10" name="vm.approachForm" ng-submit="vm.saveApproach()">
+                                <div class="pb-16" layout-gt-sm="row">
+                                    <md-input-container class="md-block" flex="25">
+                                        <label>ID</label>
+                                        <input type="text" ng-model="vm.approach.ApproachID" disabled>
+                                    </md-input-container>
+                                </div>
+                                <div class="pb-16" layout-gt-sm="row">
+                                    <md-input-container class="md-block" flex>
+                                        <label>Description</label>
+                                        <input type="text" ng-model="vm.approach.Description">
+                                    </md-input-container>
+                                </div>
+                                <div class="pb-16" layout-gt-sm="row">
+                                    <md-input-container class="md-block">
+                                        <label>Protected Phase Number</label>
+                                        <input type="number" min="0" ng-model="vm.approach.ProtectedPhaseNumber" title="{{vm.message}}" ng-change="vm.checkPhases(vm.approach.ProtectedPhaseNumber,vm.approach.PermissivePhaseNumber)" required>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex>
+                                        <label>Permissive Phase Number</label>
+                                        <input type="number" min="0" ng-model="vm.approach.PermissivePhaseNumber" title="{{vm.message}}" ng-change="vm.checkPhases(vm.approach.ProtectedPhaseNumber,vm.approach.PermissivePhaseNumber)">
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex>
+                                        <md-checkbox ng-model="vm.approach.IsProtectedPhaseOverlap">
+                                            Is Protected Phase Overlap
+                                        </md-checkbox>
+                                    </md-input-container>
+                                </div>
+                                <div class="pb-16" layout-gt-sm="row">
+                                    <md-input-container class="md-block" flex="25">
+                                        <label>Direction Type</label>
+                                        <md-select ng-model="vm.approach.DirectionTypeID" required>
+                                            <md-option ng-repeat="cType in vm.lookups.DirectionTypes" ng-value="cType.ID">
+                                                {{cType.Description}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex>
+                                        <label>MPH</label>
+                                        <input type="number" ng-model="vm.approach.MPH" required>
+                                    </md-input-container>
+                                </div>
+                                <div>
+                                    <!--ng-click="vm.saveSignal()" ng-disabled="!vm.enableSaveButton()"-->
+                                    <md-button class="md-raised md-accent" title="{{vm.message}}" ng-disabled="!vm.enableSaveButton() || vm.samePhases" type="submit">Save</md-button>
+                                    <md-button class="md-raised md-warn md-accent" ng-click="vm.deleteApproach()">Delete</md-button>
+                                </div>
+                            </form>
+                        </md-tab-body>
+                    </md-tab>
+                    <md-tab>
+                        <md-tab-label>
+                            <span>Detectors</span>
+                        </md-tab-label>
+                        <md-tab-body ms-scroll>
+                            <ms-widget flippable="false" layout="row" flex="100" style="box-shadow: none">
+                                <ms-widget-front class="white-bg" flex>
+                                    <md-toolbar class="md-table-toolbar md-default" ng-hide="vm.options.rowSelection && vm.selected.length">
+                                        <div class="md-toolbar-tools">
+                                            <div flex>
+                                                <form name="filter.form" layout="row" flex>
+                                                    <md-tooltip>Search</md-tooltip>
+                                                    <md-icon style="margin:0px" md-font-icon="icon-magnify"></md-icon>
+                                                    <input flex type="text" ng-model="vm.queryData.Filter" ng-model-options="vm.options.filter" placeholder="search..." ng-change="vm.searchChange(vm.queryData.filter, '{{vm.queryData.filter}}')">
+                                                </form>
+                                            </div>
+                                            <span flex></span>
+                                            <md-button class="md-icon-button" ng-click="vm.goToAddDetector(ev)" aria-label="Add detector">
+                                                <md-tooltip>Add detector</md-tooltip>
+                                                <md-icon md-font-icon="icon-plus"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button" ng-click="vm.getDetectors()" aria-label="Refresh">
+                                                <md-tooltip>Refresh Data</md-tooltip>
+                                                <md-icon md-font-icon="icon-refresh"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </md-toolbar>
+                                    <md-toolbar class="md-table-toolbar alternate" ng-show="vm.options.rowSelection && vm.selected.length">
+                                        <div class="md-toolbar-tools">
+                                            <span>Selected detector {{vm.selected[0].detectorID}}: {{vm.selected[0].description}}</span>
+                                            <div flex></div>
+                                            <md-button class="md-icon-button" ng-click="vm.goToDetectorEdit()" aria-label="Edit detector">
+                                                <md-tooltip>Edit detector</md-tooltip>
+                                                <md-icon md-font-icon="icon-pencil"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button" ng-click="vm.deleteDetector()" aria-label="Delete detector">
+                                                <md-tooltip>Delete detector</md-tooltip>
+                                                <md-icon md-font-icon="icon-delete-variant"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </md-toolbar>
+                                    <md-table-container flex ms-scroll>
+                                        <table md-table md-row-select ng-model="vm.selected" md-progress="vm.detectorPromise" ms-scroll>
+                                            <thead md-head md-order="vm.queryData.OrderBy" md-on-reorder="vm.getDetectors">
+                                                <tr md-row>
+                                                    <th md-column md-order-by="DetectorID"><span>Detector ID</span></th>
+                                                    <th md-column md-order-by="DetChannel"><span>Channel</span></th>
+                                                    <th md-column md-order-by="Description"><span>Description</span></th>
+                                                    <th md-column md-order-by="DistanceFromStopBar"><span>Distance from Stop Bar</span></th>
+                                                    <th md-column md-order-by="MinSpeedFilter"><span>Min Speed</span></th>
+                                                    <th md-column md-order-by="LaneNumber"><span>Lane Number</span></th>
+                                                    <th md-column md-order-by="LaneType"><span>Lane Type</span></th>
+                                                    <th md-column md-order-by="DecisionPoint"><span>Decision Point</span></th>
+                                                    <th md-column md-order-by="MovementType"><span>Movement Type</span></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody md-body ms-scroll>
+                                                <tr md-row md-select="detector" md-select-id="detectorID" md-auto-select ng-repeat="detector in vm.detectors" ng-class-odd="'odd-row'" ng-class-even="'even-row'">
+                                                    <td md-cell>{{detector.DetectorID}}</td>
+                                                    <td md-cell>{{detector.DetChannel}}</td>
+                                                    <td md-cell>{{detector.Description}}</td>
+                                                    <td md-cell>{{detector.DistanceFromStopBar}}</td>
+                                                    <td md-cell>{{detector.MinSpeedFilter}}</td>
+                                                    <td md-cell>{{detector.LaneNumber}}</td>
+                                                    <td md-cell>{{detector.LaneTypeDesc}}</td>
+                                                    <td md-cell>{{detector.DecisionPoint}}</td>
+                                                    <td md-cell>{{detector.MovementTypeDesc}}</td>
+                                                    <td md-cell layout="row">
+                                                        <span flex></span>
+                                                        <edit-context-menu edit-action="vm.goToDetectorEdit(obj)" delete-action="vm.deleteDetector(obj)" edit-object="detector" no-excel="true"></edit-context-menu>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </md-table-container>
+                                    <md-table-pagination md-limit="vm.queryData.PageSize" md-limit-options="[5, 10, 15]" md-page="vm.queryData.PageIndex" md-on-paginate="vm.getDetectors" md-total="{{vm.totalDetectorCount}}" md-page-select></md-table-pagination>
+                                </ms-widget-front>
+                            </ms-widget>
+                        </md-tab-body>
+                    </md-tab>
+                </md-tabs>
+            </div>
+        </md-card>
+        <!-- / CONTENT -->
+    </div>
+</div>

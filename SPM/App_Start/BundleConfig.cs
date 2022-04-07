@@ -14,6 +14,11 @@ namespace SPM
                         "~/Scripts/jquery.unobtrusive-ajax.js",
                         "~/Scripts/Chart.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
+                        "~/Scripts/angular.js",
+                        "~/Scripts/angular-route.js",
+                        "~/Scripts/angular-resource.js"
+                        ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate.min.js",

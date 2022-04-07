@@ -1,0 +1,511 @@
+﻿
+.page-layout
+{
+    position: relative;
+    overflow: hidden;
+}
+
+.page-layout .top-bg {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 64px;
+    background-size: cover;
+}
+
+.page-layout .top-bg-dialog {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 100px;
+    background-size: cover;
+}
+
+.page-layout md-backdrop {
+    z-index: 50;
+}
+
+.page-layout > .header .breadcrumb {
+    margin-bottom: 16px;
+    font-weight: 500;
+    color: #6A7B8B;
+    visibility: collapse;
+}
+
+    .page-layout > .header .breadcrumb md-icon {
+        margin: 0;
+    }
+
+    .page-layout > .header .breadcrumb .separator {
+        margin: 0 8px;
+    }
+
+.page-layout > .header .title {
+    font-size: 34px;
+}
+
+.page-layout.carded {
+    min-height: 100%;
+    height: 100%;
+}
+
+    .page-layout.carded.fullwidth.single-scroll {
+        height: auto;
+    }
+
+        .page-layout.carded.fullwidth.single-scroll > .center .content-card .content {
+            overflow: hidden;
+        }
+
+    .page-layout.carded.fullwidth > .center {
+        position: relative;
+        z-index: 2;
+        margin-left: 32px;
+        margin-right: 32px;
+    }
+
+        .page-layout.carded.fullwidth > .center .header {
+            height: 64px;
+            min-height: 64px;
+            max-height: 64px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+            .page-layout.carded.fullwidth > .center .header .search {
+                position: relative;
+                padding-left: 24px;
+                max-width: 480px;
+            }
+
+                .page-layout.carded.fullwidth > .center .header .search .search-icon {
+                    margin: 0 -24px 0 0;
+                }
+
+                .page-layout.carded.fullwidth > .center .header .search .search-input {
+                    margin: 0 0 0 32px;
+                    background: none;
+                    font-size: 16px;
+                    line-height: 40px;
+                    height: 40px;
+                    color: #FFFFFF;
+                    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+                    transition: border-color 300ms ease;
+                }
+
+                    .page-layout.carded.fullwidth > .center .header .search .search-input:focus {
+                        border-color: white;
+                    }
+
+                    .page-layout.carded.fullwidth > .center .header .search .search-input::-webkit-input-placeholder {
+                        color: rgba(255, 255, 255, 0.5);
+                    }
+
+        .page-layout.carded.fullwidth > .center .content-card {
+            background: #FFFFFF;
+            box-shadow: 7px;
+            overflow: hidden;
+        }
+
+            .page-layout.carded.fullwidth > .center .content-card .toolbar {
+                padding: 8px 24px;
+                height: 64px;
+                min-height: 64px;
+                max-height: 64px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+            }
+
+            .page-layout.carded.fullwidth > .center .content-card .content {
+                padding: 24px;
+                background: #FFFFFF;
+            }
+
+    .page-layout.carded.left-sidenav.single-scroll {
+        height: auto;
+    }
+
+        .page-layout.carded.left-sidenav.single-scroll > .center .content-card .content {
+            overflow: hidden;
+        }
+
+    .page-layout.carded.left-sidenav > .sidenav {
+        width: 240px;
+        min-width: 240px;
+        max-width: 240px;
+        box-shadow: 7px;
+        z-index: 51;
+    }
+
+        .page-layout.carded.left-sidenav > .sidenav .header {
+            height: 200px;
+            min-height: 200px;
+            max-height: 200px;
+            padding: 24px;
+        }
+
+        .page-layout.carded.left-sidenav > .sidenav .content {
+            background: transparent;
+            padding: 24px;
+        }
+
+        .page-layout.carded.left-sidenav > .sidenav.md-locked-open {
+            width: 220px;
+            min-width: 220px;
+            max-width: 220px;
+            z-index: 2;
+            background: transparent;
+            box-shadow: none;
+        }
+
+            .page-layout.carded.left-sidenav > .sidenav.md-locked-open + .center {
+                margin-left: 0;
+            }
+
+        .page-layout.carded.left-sidenav > .sidenav:not(.md-locked-open) .header {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+        }
+
+        .page-layout.carded.left-sidenav > .sidenav:not(.md-locked-open) .content {
+            overflow: hidden;
+        }
+
+    .page-layout.carded.left-sidenav > .center {
+        position: relative;
+        z-index: 2;
+        margin-left: 32px;
+        margin-right: 32px;
+    }
+
+        .page-layout.carded.left-sidenav > .center .header {
+            height: 136px;
+            min-height: 136px;
+            max-height: 136px;
+            padding: 24px;
+        }
+
+        .page-layout.carded.left-sidenav > .center .content-card {
+            background: #FFFFFF;
+            box-shadow: 7px;
+            overflow: hidden;
+        }
+
+            .page-layout.carded.left-sidenav > .center .content-card .toolbar {
+                padding: 8px 24px;
+                height: 64px;
+                min-height: 64px;
+                max-height: 64px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+            }
+
+                .page-layout.carded.left-sidenav > .center .content-card .toolbar .sidenav-toggle {
+                    margin: 0 8px 0 0 !important;
+                    padding: 0 !important;
+                    border-radius: 0;
+                }
+
+            .page-layout.carded.left-sidenav > .center .content-card .content {
+                padding: 24px;
+                background: #FFFFFF;
+            }
+
+    .page-layout.carded.right-sidenav.single-scroll {
+        height: auto;
+    }
+
+        .page-layout.carded.right-sidenav.single-scroll > .center .content-card .content {
+            overflow: hidden;
+        }
+
+    .page-layout.carded.right-sidenav > .sidenav {
+        width: 240px;
+        min-width: 240px;
+        max-width: 240px;
+        box-shadow: 7px;
+        z-index: 51;
+    }
+
+        .page-layout.carded.right-sidenav > .sidenav .header {
+            height: 200px;
+            min-height: 200px;
+            max-height: 200px;
+            padding: 24px 24px 24px 0;
+        }
+
+        .page-layout.carded.right-sidenav > .sidenav .content {
+            background: transparent;
+            padding: 24px 24px 24px 0;
+        }
+
+        .page-layout.carded.right-sidenav > .sidenav.md-locked-open {
+            width: 196px;
+            min-width: 196px;
+            max-width: 196px;
+            z-index: 2;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .page-layout.carded.right-sidenav > .sidenav:not(.md-locked-open) .header {
+            padding: 24px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+        }
+
+        .page-layout.carded.right-sidenav > .sidenav:not(.md-locked-open) .content {
+            overflow: hidden;
+            padding: 24px;
+        }
+
+    .page-layout.carded.right-sidenav > .center {
+        position: relative;
+        z-index: 2;
+        margin-left: 32px;
+        margin-right: 32px;
+    }
+
+        .page-layout.carded.right-sidenav > .center .header {
+            height: 136px;
+            min-height: 136px;
+            max-height: 136px;
+            padding: 24px;
+        }
+
+        .page-layout.carded.right-sidenav > .center .content-card {
+            background: #FFFFFF;
+            box-shadow: 7px;
+            overflow: hidden;
+        }
+
+            .page-layout.carded.right-sidenav > .center .content-card .toolbar {
+                padding: 8px 24px;
+                height: 64px;
+                min-height: 64px;
+                max-height: 64px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+            }
+
+                .page-layout.carded.right-sidenav > .center .content-card .toolbar .sidenav-toggle {
+                    margin: 0 0 0 8px !important;
+                    padding: 0 !important;
+                    border-radius: 0;
+                }
+
+            .page-layout.carded.right-sidenav > .center .content-card .content {
+                padding: 24px;
+                background: #FFFFFF;
+            }
+
+.page-layout.simple.fullwidth, .page-layout.simple.inner-sidenav {
+    min-height: 100%;
+}
+
+    .page-layout.simple.fullwidth > .header, .page-layout.simple.inner-sidenav > .header {
+        height: 200px;
+        min-height: 200px;
+        max-height: 200px;
+        padding: 24px;
+        background-size: cover;
+    }
+
+    .page-layout.simple.fullwidth > .content, .page-layout.simple.inner-sidenav > .content {
+        padding: 24px;
+    }
+
+.page-layout.simple.left-sidenav {
+    min-height: 100%;
+    height: 100%;
+}
+
+    .page-layout.simple.left-sidenav.single-scroll {
+        height: auto;
+    }
+
+        .page-layout.simple.left-sidenav.single-scroll > .center {
+            overflow: hidden;
+        }
+
+    .page-layout.simple.left-sidenav.inner-sidenav > .content > md-sidenav {
+        margin-right: 24px;
+    }
+
+    .page-layout.simple.left-sidenav .sidenav {
+        width: 240px;
+        min-width: 240px;
+        max-width: 240px;
+        padding: 24px;
+        z-index: 51;
+        box-shadow: 7px;
+    }
+
+        .page-layout.simple.left-sidenav .sidenav.md-locked-open {
+            width: 220px;
+            min-width: 220px;
+            max-width: 220px;
+            z-index: 2;
+            box-shadow: none;
+            background: transparent;
+        }
+
+    .page-layout.simple.left-sidenav > .center {
+        position: relative;
+        overflow: auto;
+        z-index: 3;
+        box-shadow: 7px;
+    }
+
+        .page-layout.simple.left-sidenav > .center .header {
+            height: 200px;
+            min-height: 200px;
+            max-height: 200px;
+            padding: 24px;
+            background-size: cover;
+        }
+
+        .page-layout.simple.left-sidenav > .center .content {
+            padding: 24px;
+            background: #FFFFFF;
+        }
+
+.page-layout.simple.right-sidenav {
+    min-height: 100%;
+    height: 100%;
+}
+
+    .page-layout.simple.right-sidenav.single-scroll {
+        height: auto;
+    }
+
+        .page-layout.simple.right-sidenav.single-scroll > .center {
+            overflow: hidden;
+        }
+
+    .page-layout.simple.right-sidenav.inner-sidenav > .content > md-sidenav {
+        margin-left: 24px;
+    }
+
+    .page-layout.simple.right-sidenav .sidenav {
+        width: 240px;
+        min-width: 240px;
+        max-width: 240px;
+        padding: 24px;
+        z-index: 51;
+        box-shadow: 7px;
+    }
+
+        .page-layout.simple.right-sidenav .sidenav.md-locked-open {
+            width: 220px;
+            min-width: 220px;
+            max-width: 220px;
+            z-index: 2;
+            box-shadow: none;
+            background: transparent;
+        }
+
+    .page-layout.simple.right-sidenav > .center {
+        position: relative;
+        overflow: auto;
+        z-index: 3;
+        box-shadow: 7px;
+    }
+
+        .page-layout.simple.right-sidenav > .center .header {
+            height: 200px;
+            min-height: 200px;
+            max-height: 200px;
+            padding: 24px;
+            background-size: cover;
+        }
+
+        .page-layout.simple.right-sidenav > .center .small-header {
+            height: 200px !important;
+            min-height: 200px !important;
+            max-height: 200px !important;
+            padding: 24px;
+        }
+
+        .page-layout.simple.right-sidenav > .center .content {
+            padding: 24px;
+            background: #FFFFFF;
+        }
+
+.page-layout.simple.inner-sidenav {
+    height: auto;
+}
+
+    .page-layout.simple.inner-sidenav > .content > md-sidenav.md-locked-open {
+        padding: 0;
+    }
+
+.page-layout.simple.tabbed {
+    min-height: 100%;
+}
+
+    .page-layout.simple.tabbed > .header {
+        height: 200px;
+        min-height: 200px;
+        max-height: 200px;
+        padding: 24px;
+        background-size: cover;
+    }
+
+    .page-layout.simple.tabbed > .content > md-tabs > md-tabs-wrapper {
+        background: #FFFFFF;
+        box-shadow: 1px;
+        padding: 0 24px;
+    }
+
+        .page-layout.simple.tabbed > .content > md-tabs > md-tabs-wrapper md-tabs-canvas {
+            height: 56px;
+        }
+
+            .page-layout.simple.tabbed > .content > md-tabs > md-tabs-wrapper md-tabs-canvas md-pagination-wrapper {
+                height: 56px;
+            }
+
+            .page-layout.simple.tabbed > .content > md-tabs > md-tabs-wrapper md-tabs-canvas .md-tab {
+                padding: 16px 24px;
+                text-transform: none;
+            }
+
+    .page-layout.simple.tabbed > .content > md-tabs:not(.md-dynamic-height) md-tabs-content-wrapper {
+        top: 56px;
+    }
+
+    .page-layout.simple.tabbed > .content > md-tabs > md-tabs-content-wrapper > md-tab-content {
+        padding: 24px;
+    }
+
+    .page-layout.simple.tabbed > .content > md-nav-bar .md-nav-bar {
+        background: #FFFFFF;
+        box-shadow: 1px;
+        border: none;
+        height: 56px;
+    }
+
+        .page-layout.simple.tabbed > .content > md-nav-bar .md-nav-bar nav {
+            margin: 0 12px;
+        }
+
+            .page-layout.simple.tabbed > .content > md-nav-bar .md-nav-bar nav .md-nav-item {
+                height: 56px;
+            }
+
+                .page-layout.simple.tabbed > .content > md-nav-bar .md-nav-bar nav .md-nav-item ._md-nav-button {
+                    height: 56px;
+                    line-height: 32px;
+                }
+
+                .page-layout.simple.tabbed > .content > md-nav-bar .md-nav-bar nav .md-nav-item ._md-nav-button-text {
+                    text-transform: none;
+                }
+
+.page-layout.blank {
+    min-height: 100%;
+    padding: 24px;
+}
+.md-accent-bg {
+    background-color: #0F75DB !important;
+}

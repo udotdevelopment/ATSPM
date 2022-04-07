@@ -1,0 +1,53 @@
+﻿<md-dialog ng-cloak>
+    <md-dialog-content class="md-dialog-content" ng-cloak>
+        <h2 class="md-title">Add New Approach</h2>
+        <form id="approachForm" class="padding-top-10" name="approachForm">
+            <div class="pb-16" layout-gt-sm="row">
+
+                <md-input-container class="md-block" flex>
+                    <label>Description</label>
+                    <input type="text" ng-model="vm.approach.Description" required>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Direction Type</label>
+                    <md-select ng-model="vm.approach.DirectionTypeID" required>
+                        <md-option ng-repeat="cType in vm.lookups.DirectionTypes" ng-value="cType.ID">
+                            {{cType.Description}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+
+            <div class="pb-16" layout-gt-sm="row">
+                <md-input-container class="md-block">
+                    <label>Protected Phase Number</label>
+                    <input type="number" min="0" title="{{vm.message}}" ng-model="vm.approach.ProtectedPhaseNumber" ng-change="vm.checkPhases(vm.approach.ProtectedPhaseNumber,vm.approach.PermissivePhaseNumber)" required>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <md-checkbox ng-model="vm.approach.IsProtectedPhaseOverlap">
+                        Protected Overlap
+                    </md-checkbox>
+                </md-input-container>
+            </div>
+            <div class="pb-16" layout-gt-sm="row">
+                <md-input-container class="md-block" flex>
+                    <label>Permissive Phase Number</label>
+                    <input type="number" title="{{vm.message}}" ng-model="vm.approach.PermissivePhaseNumber" ng-change="vm.checkPhases(vm.approach.ProtectedPhaseNumber,vm.approach.PermissivePhaseNumber)">
+                </md-input-container>
+                <md-input-container class="md-block" flex="25" required>
+                    <label>MPH</label>
+                    <input type="number" min="0" ng-model="vm.approach.MPH" required>
+                </md-input-container>
+            </div>
+            <md-dialog-actions>
+                <md-button class="md-raised md-warn md-accent md-button md-ink-ripple" ng-click="vm.close()">
+                    Cancel
+                </md-button>
+                <md-button class="md-accent md-raised" title="{{vm.message}}" ng-click="vm.saveApproach()"
+                           ng-disabled="approachForm.$invalid || vm.samePhases" disabled="disabled">
+                    Save Approach
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog-content>
+</md-dialog>

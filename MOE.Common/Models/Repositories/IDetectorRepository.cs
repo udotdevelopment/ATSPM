@@ -11,6 +11,7 @@ namespace MOE.Common.Models.Repositories
         Detector GetDetectorByDetectorID(string DetectorID);
         List<Detector> GetDetectorsBySignalID(string SignalID);
 
+        List<Detector> GetDetectorsByApproachID(int approachID);
         Detector GetDetectorByID(int ID);
 
         //List<MOE.Common.Models.Detectors> GetDetectorsBySignalIDAndPhase(string SignalID, int PhaseNumber);

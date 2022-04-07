@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Enhanced Signal Configuration";
+}
+
+@section scripts{
+    <script src="~/Scripts/vendor.js"></script>
+    <link href="~/Content/vendor-traffop.css" rel="stylesheet" />
+    <link href="~/Content/app-traffop.css" rel="stylesheet" />
+    <script src="~/Scripts/global.module.js"></script>
+    <script src="~/Scripts/init.controller.js"></script>
+    <script type="text/javascript" src="~/Scripts/signal-list.controller.js"></script>
+    <script type="text/javascript" src="~/Scripts/edit-context-menu.directive.js"></script>
+    <link href="~/Content/enhanced-config.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/Scripts/signal-add.controller.js"></script>
+    <script type="text/javascript" src="~/Scripts/signal.controller.js"></script>
+    <script type="text/javascript" src="~/Scripts/version-add.controller.js"></script>
+    <script type="text/javascript" src="~/Scripts/approach-add.controller.js"></script>
+    <script type="text/javascript" src="~/Scripts/approach.controller.js"></script>
+    <script type="text/javascript" src="~/Scripts/detector-add.controller.js"></script>
+    <script type="text/javascript" src="~/Scripts/detector.controller.js"></script>
+    <script type="text/javascript" src="~/Scripts/delete-version-signal.controller.js"></script>
+
+}
+
+<body>
+    <div ng-app="MyApp" ng-controller="InitController as vm">
+        <div ui-view></div>
+    </div>
+</body>

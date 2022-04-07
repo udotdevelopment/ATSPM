@@ -329,126 +329,136 @@ namespace MOE.Common.Migrations
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 20
                 },
-                //new Menu
-                //{
-                //    MenuId =42,
-                //    MenuName = "GDOT ATSPM Installation Manual",
-                //    Controller = "Images",
-                //    Action = "ATSPM_Installation_Manual_2020-01-28.pdf",
-                //    ParentId = 6,
-                //    Application = "SignalPerformanceMetrics",
-                //    DisplayOrder = 10
-                //},
-                //new Menu
-                //{
-                //    MenuId = 34,
-                //    MenuName = "GDOT ATSPM Component Details",
-                //    Controller = "Images",
-                //    Action = "ATSPM_Component_Details_20200120.pdf",
-                //    ParentId = 6,
-                //    Application = "SignalPerformanceMetrics",
-                //    DisplayOrder = 20
-                //},
-                //new Menu
-                //{
-                //    MenuId = 43,
-                //    MenuName = "GDOT ATSPM Reporting Details",
-                //    Controller = "Images",
-                //    Action = "ATSPM_Reporting_Details_20200121.pdf",
-                //    ParentId = 6,
-                //    Application = "SignalPerformanceMetrics",
-                //    DisplayOrder = 30
-                //},
-                //new Menu
-                //{
-                //    MenuId = 70,
-                //    MenuName = "ATSPM_User Case Examples_Manual",
-                //    Controller = "Images",
-                //    Action = "ATSPM_User Case Examples_Manual_20200128.pdf",
-                //    ParentId = 6,
-                //    Application = "SignalPerformanceMetrics",
-                //    DisplayOrder = 40
-                //},
-                //new Menu
-                //{
-                //    MenuId = 38,
-                //    MenuName = "ATSPM ITS California 9-21-16",
-                //    Controller = "Images",
-                //    Action = "ATSPM_ITS_CA_9-21-16.pdf",
-                //    ParentId = 7,
-                //    Application = "SignalPerformanceMetrics",
-                //    DisplayOrder = 10
-                //},
-                //new Menu
-                //{
-                //    MenuId = 37,
-                //    MenuName = "ATSPM CO WY ITE & Rocky Mtn 10-20-16",
-                //    Controller = "Images",
-                //    Action = "ATSPM_CO-WY_ITE___ITS_Rocky_Mtn_10-20-16.pdf",
-                //    ParentId = 7,
-                //    Application = "SignalPerformanceMetrics",
-                //    DisplayOrder = 20
-                //},
-                //new Menu
-                //{
-                //    MenuId = 36,
-                //    MenuName = "ATSPM EDC4 Minnesota 10-25-16",
-                //    Controller = "Images",
-                //    Action = "ATSPM_EDC4_Minnesota_10-25-16.pdf",
-                //    ParentId = 7,
-                //    Application = "SignalPerformanceMetrics",
-                //    DisplayOrder = 30
-                //},
-                //new Menu
-                //{
-                //    MenuId = 35,
-                //    MenuName = "ATSPM UDOT Conference 11-2-16",
-                //    Controller = "Images",
-                //    Action = "ATSPM_UDOT_Conference_11-2-16.pdf",
-                //    ParentId = 7,
-                //    Application = "SignalPerformanceMetrics",
-                //    DisplayOrder = 40
-                //},
-                //new Menu
-                //{
-                //    MenuId = 45,
-                //    MenuName = "Mark Taylor",
-                //    Controller = "Images",
-                //    Action = "TTTMarkTaylor.pdf",
-                //    ParentId = 7,
-                //    Application = "SignalPerformanceMetrics",
-                //    DisplayOrder = 50
-                //},
-                //new Menu
-                //{
-                //    MenuId = 62,
-                //    MenuName = "ATSPM UDOT Conference 11-6-18",
-                //    Controller = "Images",
-                //    Action = "Session 27_ATSPMs_UDOT Conference_20181106.pdf",
-                //    ParentId = 7,
-                //    Application = "SignalPerformanceMetrics",
-                //    DisplayOrder = 60
-                //},
-                //new Menu
-                //{
-                //    MenuId = 46,
-                //    MenuName = "Jamie Mackey",
-                //    Controller = "Images",
-                //    Action = "TTTJamieMackey.pdf",
-                //    ParentId = 7,
-                //    Application = "SignalPerformanceMetrics",
-                //    DisplayOrder = 70
-                //},
-                //new Menu
-                //{
-                //    MenuId = 47,
-                //    MenuName = "Derek Lowe & Shane Johnson",
-                //    Controller = "Images",
-                //    Action = "TTTDerekLoweShaneJohnson.pdf",
-                //    ParentId = 7,
-                //    Application = "SignalPerformanceMetrics",
-                //    DisplayOrder = 80
-                //},
+                                //new Menu
+                                //{
+                                //    MenuId =42,
+                                //    MenuName = "GDOT ATSPM Installation Manual",
+                                //    Controller = "Images",
+                                //    Action = "ATSPM_Installation_Manual_2020-01-28.pdf",
+                                //    ParentId = 6,
+                                //    Application = "SignalPerformanceMetrics",
+                                //    DisplayOrder = 10
+                                //},
+                                //new Menu
+                                //{
+                                //    MenuId = 34,
+                                //    MenuName = "GDOT ATSPM Component Details",
+                                //    Controller = "Images",
+                                //    Action = "ATSPM_Component_Details_20200120.pdf",
+                                //    ParentId = 6,
+                                //    Application = "SignalPerformanceMetrics",
+                                //    DisplayOrder = 20
+                                //},
+                                //new Menu
+                                //{
+                                //    MenuId = 43,
+                                //    MenuName = "GDOT ATSPM Reporting Details",
+                                //    Controller = "Images",
+                                //    Action = "ATSPM_Reporting_Details_20200121.pdf",
+                                //    ParentId = 6,
+                                //    Application = "SignalPerformanceMetrics",
+                                //    DisplayOrder = 30
+                                //},
+                                //new Menu
+                                //{
+                                //    MenuId = 70,
+                                //    MenuName = "ATSPM_User Case Examples_Manual",
+                                //    Controller = "Images",
+                                //    Action = "ATSPM_User Case Examples_Manual_20200128.pdf",
+                                //    ParentId = 6,
+                                //    Application = "SignalPerformanceMetrics",
+                                //    DisplayOrder = 40
+                                //},
+                                //new Menu
+                                //{
+                                //    MenuId = 38,
+                                //    MenuName = "ATSPM ITS California 9-21-16",
+                                //    Controller = "Images",
+                                //    Action = "ATSPM_ITS_CA_9-21-16.pdf",
+                                //    ParentId = 7,
+                                //    Application = "SignalPerformanceMetrics",
+                                //    DisplayOrder = 10
+                                //},
+                                //new Menu
+                                //{
+                                //    MenuId = 37,
+                                //    MenuName = "ATSPM CO WY ITE & Rocky Mtn 10-20-16",
+                                //    Controller = "Images",
+                                //    Action = "ATSPM_CO-WY_ITE___ITS_Rocky_Mtn_10-20-16.pdf",
+                                //    ParentId = 7,
+                                //    Application = "SignalPerformanceMetrics",
+                                //    DisplayOrder = 20
+                                //},
+                                //new Menu
+                                //{
+                                //    MenuId = 36,
+                                //    MenuName = "ATSPM EDC4 Minnesota 10-25-16",
+                                //    Controller = "Images",
+                                //    Action = "ATSPM_EDC4_Minnesota_10-25-16.pdf",
+                                //    ParentId = 7,
+                                //    Application = "SignalPerformanceMetrics",
+                                //    DisplayOrder = 30
+                                //},
+                                //new Menu
+                                //{
+                                //    MenuId = 35,
+                                //    MenuName = "ATSPM UDOT Conference 11-2-16",
+                                //    Controller = "Images",
+                                //    Action = "ATSPM_UDOT_Conference_11-2-16.pdf",
+                                //    ParentId = 7,
+                                //    Application = "SignalPerformanceMetrics",
+                                //    DisplayOrder = 40
+                                //},
+                                //new Menu
+                                //{
+                                //    MenuId = 45,
+                                //    MenuName = "Mark Taylor",
+                                //    Controller = "Images",
+                                //    Action = "TTTMarkTaylor.pdf",
+                                //    ParentId = 7,
+                                //    Application = "SignalPerformanceMetrics",
+                                //    DisplayOrder = 50
+                                //},
+                                //new Menu
+                                //{
+                                //    MenuId = 62,
+                                //    MenuName = "ATSPM UDOT Conference 11-6-18",
+                                //    Controller = "Images",
+                                //    Action = "Session 27_ATSPMs_UDOT Conference_20181106.pdf",
+                                //    ParentId = 7,
+                                //    Application = "SignalPerformanceMetrics",
+                                //    DisplayOrder = 60
+                                //},
+                                //new Menu
+                                //{
+                                //    MenuId = 46,
+                                //    MenuName = "Jamie Mackey",
+                                //    Controller = "Images",
+                                //    Action = "TTTJamieMackey.pdf",
+                                //    ParentId = 7,
+                                //    Application = "SignalPerformanceMetrics",
+                                //    DisplayOrder = 70
+                                //},
+                                //new Menu
+                                //{
+                                //    MenuId = 47,
+                                //    MenuName = "Derek Lowe & Shane Johnson",
+                                //    Controller = "Images",
+                                //    Action = "TTTDerekLoweShaneJohnson.pdf",
+                                //    ParentId = 7,
+                                //    Application = "SignalPerformanceMetrics",
+                                //    DisplayOrder = 80
+                                //},
+                new Menu
+                {
+                    MenuId = 99,
+                    MenuName = "Enhanced Configuration",
+                    Controller = "EnhancedConfiguration",
+                    Action = "Index",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 10
+                },
                 new Menu
                 {
                     MenuId = 12,
