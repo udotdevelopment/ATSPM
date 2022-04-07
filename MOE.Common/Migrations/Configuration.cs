@@ -329,6 +329,16 @@ namespace MOE.Common.Migrations
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 20
                 },
+                new Menu
+                {
+                    MenuId = 100,
+                    MenuName = "Left Turn Gap Analysis",
+                    Controller = "LeftTurnGapReport",
+                    Action = "Index",
+                    ParentId = 2,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 25
+                },
                 //new Menu
                 //{
                 //    MenuId =42,
@@ -1519,6 +1529,8 @@ namespace MOE.Common.Migrations
                 userManager.AddToRole(user.Id, "Data");
                 roleManager.Create(new IdentityRole("Configuration"));
                 userManager.AddToRole(user.Id, "Configuration");
+                roleManager.Create(new IdentityRole("Restricted Configuration"));
+                userManager.AddToRole(user.Id, "Restricted Configuration");
             }
             else
             {
@@ -1529,6 +1541,8 @@ namespace MOE.Common.Migrations
                 userManager.AddToRole(user.Id, "Data");
                 roleManager.Create(new IdentityRole("Configuration"));
                 userManager.AddToRole(user.Id, "Configuration");
+                roleManager.Create(new IdentityRole("Restricted Configuration"));
+                userManager.AddToRole(user.Id, "Restricted Configuration");
             }
 
             context.SaveChanges();
