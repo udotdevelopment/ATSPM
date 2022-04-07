@@ -11,7 +11,7 @@ namespace SPM.Models
         public string ApproachDescription { get; set; }
         public string SignalId { get; set; }
         public string Location { get; set; }
-        public bool IsGraph { get; set; } = false;
+        public bool Get24HourPeriod { get; set; }
         public string PhaseType { get; set; }
         public string SignalType { get; set; }
         public string OpposingApproach { get; set; }
