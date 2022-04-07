@@ -113,6 +113,7 @@ function RunReports() {
     var EndMinute;
     var GetAMPMPeakHour = false;
     var GetAMPMPeakPeriod = false;
+    var Get24HourPeriod = false;
     if (timeOptions == "customTimeRadiobutton") {
         StartHour = $("#StartTimeHour :selected").val();
         var StartAMPM = $("#StartAMPM :selected").val();
@@ -134,6 +135,7 @@ function RunReports() {
         GetAMPMPeakPeriod = true;
     }
     else if (timeOptions == "FullDayRadiobutton") {
+        Get24HourPeriod = true;
         StartHour = 0;
         EndHour = 24;
         StartMinute = 0;
@@ -160,6 +162,7 @@ function RunReports() {
     tosend.EndMinute = EndMinute;
     tosend.GetAMPMPeakPeriod = GetAMPMPeakPeriod;
     tosend.GetAMPMPeakHour = GetAMPMPeakHour;
+    tosend.Get24HourPeriod = Get24HourPeriod;
     tosend.AcceptableGapPercentage = AcceptableGapPercentage;
     tosend.GetGapReport = GetGapReport;
     tosend.GetSplitFail = GetSplitFail;
