@@ -2,9 +2,6 @@
 <link href="@Server.MapPath("~/Content/bootstrap.min.css")" rel="stylesheet" />
 
 <style>
-    th, td {
-        font-size: 13.4px;
-    }
 
     th {
         font-weight: normal;
@@ -29,14 +26,21 @@
     table, .keep-together {
         page-break-inside: avoid;
     }
+
+    .approach {
+        border: solid;
+        border-width: 2px; 
+        border-color: #2f5597;
+    }
+
 </style>
 
-<table class="table table-borderless border-bottom border-primary @(Model.First().IsGraph ? "text-center" : "text-left")">
-    <tr>
-        <th class="float-left">
+<table class="table table-borderless border-bottom border-primary">
+    <tr class="col-8">
+        <th class="text-left">
             <img src="C:\projects\avenue\ATSPM\SPM\Images\NewUDOTLogo.png" width="200" />
         </th>
-        <th>
+        <th class="pr-4 mr-4 pl-0">
             <h3>Left Turn Phase</h3>
             <h3>Analysis Report</h3>
         </th>
@@ -47,11 +51,12 @@
     </tr>
 </table>
 
-<h4 class="p-3">Signal ID: &nbsp; <b> @Model.First().SignalId &emsp; @Model.First().Location </b> </h4>
+<h4 class="p-0 m-0">Signal ID: &nbsp; <b> @Model.First().SignalId &emsp; @Model.First().Location </b> </h4>
 
 @foreach (var result in Model)
 {
-    <div class="keep-together border border-bottom-0" style="border-color: #2f5597">
+    <br />
+    <div class="keep-together approach">
         @if (result.PeakPeriodDescription == "AM")
         {
             <table class="table table-borderless text-left grey mb-0">
@@ -74,7 +79,7 @@
                     <td>
                         @result.SignalType
                     </td>
-                    @if (result.IsGraph)
+                    @if (result.Get24HourPeriod)
                     {
                         <th>
                             Speed Limit:
@@ -97,7 +102,7 @@
                     <td>
                         @result.OpposingLanes
                     </td>
-                    @if (result.IsGraph)
+                    @if (result.Get24HourPeriod)
                     {
                         <th>
                             Start Date:
@@ -124,7 +129,7 @@
             </table>
         }
 
-        @if (result.IsGraph)
+        @if (result.Get24HourPeriod)
         {
             <style>
                 th, td {
@@ -144,8 +149,10 @@
             <img src="@result.PedSplitFailChartImg" />
             continue;
         }
+        <table class="table table-borderless p-0 m-0">
 
-        <table class="table table-borderless" style="background-color: #2f5597; color: white">
+        </table>
+        <table class="table table-borderless grey" style="background-color: #2f5597; color: white">
             <tr>
                 <th>
                     Peak Period:
@@ -180,9 +187,9 @@
             </tr>
         </table>
 
-        <table class="table table-borderless text-left">
+        <table class="table table-borderless text-left p-0 m-0">
             <tr>
-                <th colspan="8" class="dark-blue text-center" style="font-weight: bolder">
+                <th colspan="8" class="dark-blue text-center p-0" style="font-weight: bolder">
                     Left Turn Gap Analysis Results
                 </th>
             </tr>
