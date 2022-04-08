@@ -10,26 +10,25 @@ on:
 jobs:  
   build:    
     runs-on: windows-latest
-    
-    steps:      
-      - uses: actions/checkout@v2
-      
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
 
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v1.0.5
-        
-      - name: Setup VSTest
-        uses: darenm/Setup-VSTest@v1
+    steps:
+    - name: Checkout code.
+      uses: actions/checkout@v2
+          
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 4.7.x
 
-      - name: Navigate to Workspace
-        run: cd $GITHUB_WORKSPACE
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
 
-      - name: Restore Packages
-        run: nuget restore "Signal Performance Metrics.sln"
+    - name: Setup Nuget
+      uses: Nuget/setup-nuget@v1.0.5
 
-      - name: Build Solution
-        run: |
-          msbuild.exe "Signal Performance Metrics.sln" /p:platform="Any CPU" /p:configuration="Release"
+    - name: Restore nuget packages
+      run: nuget restore "Signal Performance Metrics.sln"
+
+    - name: Build
+      run: msbuild "Signal Perfromance Metrics/MOE.Common.csproj" /p:Configuration=Release
 
