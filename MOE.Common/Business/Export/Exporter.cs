@@ -19,12 +19,12 @@ namespace MOE.Common.Business.Export
                     //using (var csv = new CsvWriter(new StreamWriter(filePath)))
                     //{
 
-                    csv.Configuration.RegisterClassMap<ApproachCycleAggregation.ApproachCycleAggregationClassMap>();
+                    csv.Configuration.RegisterClassMap<PhaseCycleAggregation.ApproachCycleAggregationClassMap>();
                     csv.Configuration.RegisterClassMap<ApproachPcdAggregation.ApproachPcdAggregationClassMap>();
                     csv.Configuration.RegisterClassMap<ApproachSpeedAggregation.ApproachSpeedAggregationClassMap>();
                     csv.Configuration.RegisterClassMap<ApproachSplitFailAggregation.ApproachSplitFailAggregationClassMap>();
                     csv.Configuration.RegisterClassMap<ApproachYellowRedActivationAggregation.ApproachYellowRedActivationAggregationClassMap>();
-                    csv.Configuration.RegisterClassMap<DetectorAggregation.DetectorAggregationClassMap>();
+                    csv.Configuration.RegisterClassMap<DetectorEventCountAggregation.DetectorEventCountAggregationClassMap>();
                     csv.Configuration.RegisterClassMap<PreemptionAggregation.PreemptionAggregationClassMap>();
                     csv.Configuration.RegisterClassMap<PriorityAggregation.PriorityAggregationClassMap>();
                 }

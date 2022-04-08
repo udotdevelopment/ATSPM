@@ -56,3 +56,4 @@ function GetSignals(page) {
 
     });
 }
+

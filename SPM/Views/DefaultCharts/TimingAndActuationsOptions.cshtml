@@ -57,20 +57,24 @@
         <div id="LaneCollapseOne" class="collapse">
             <div class="card-body" id="LaneDetectionPlaceHolder">
                 <div class="">
-                    @Html.EditorFor(model => model.ShowAllLanesInfo, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
-                    @Html.LabelFor(model => model.ShowAllLanesInfo, new {htmlAttributes = new {@class = "control-label"}})
+                    @Html.EditorFor(model => model.ShowAllLanesInfo, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+                    @Html.LabelFor(model => model.ShowAllLanesInfo, new { htmlAttributes = new { @class = "control-label" } })
                 </div>
                 <div class="">
-                    @Html.EditorFor(model => model.ShowLinesStartEnd, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
-                    @Html.LabelFor(model => model.ShowLinesStartEnd, new {htmlAttributes = new {@class = "control-label"}})
+                    @Html.EditorFor(model => model.ShowLinesStartEnd, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+                    @Html.LabelFor(model => model.ShowLinesStartEnd, new { htmlAttributes = new { @class = "control-label" } })
                 </div>
                 <div class="">
-                    @Html.EditorFor(model => model.ShowEventPairs, new {htmlAttributes = new {@class = "", placeholder = "Auto"}})
-                    @Html.LabelFor(model => model.ShowEventPairs, new {htmlAttributes = new {@class = "control-label"}})
+                    @Html.EditorFor(model => model.ShowEventPairs, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+                    @Html.LabelFor(model => model.ShowEventPairs, new { htmlAttributes = new { @class = "control-label" } })
                 </div>
                 <div class="">
                     @Html.EditorFor(model => model.ShowRawEventData, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
                     @Html.LabelFor(model => model.ShowRawEventData, new { htmlAttributes = new { @class = "control-label" } })
+                </div>
+                <div class="">
+                    @Html.EditorFor(model => model.ShowPermissivePhases, new { htmlAttributes = new { @class = "", placeholder = "Auto" } })
+                    @Html.LabelFor(model => model.ShowPermissivePhases, new { htmlAttributes = new { @class = "control-label" } })
                 </div>
             </div>
         </div>

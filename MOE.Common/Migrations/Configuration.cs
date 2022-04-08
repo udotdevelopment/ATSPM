@@ -329,6 +329,16 @@ namespace MOE.Common.Migrations
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 20
                 },
+                new Menu
+                {
+                    MenuId = 100,
+                    MenuName = "Left Turn Gap Analysis",
+                    Controller = "LeftTurnGapReport",
+                    Action = "Index",
+                    ParentId = 2,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 25
+                },
                 //new Menu
                 //{
                 //    MenuId =42,
@@ -671,75 +681,75 @@ namespace MOE.Common.Migrations
                 //}
             );
 
-            context.ExternalLinks.AddOrUpdate(
-                c => c.DisplayOrder,
-                new ExternalLink
-                {
-                    Name = "Indiana Hi Resolution Data Logger Enumerations",
-                    DisplayOrder = 1,
-                    Url = " https://docs.lib.purdue.edu/jtrpdata/3/"
-                },
-                new ExternalLink
-                {
-                    Name = "Florida ATSPM",
-                    DisplayOrder = 2,
-                    Url = "https://atspm.cflsmartroads.com/ATSPM"
-                },
-                new ExternalLink
-                {
-                    Name = "FAST (Southern Nevada)",
-                    DisplayOrder = 3,
-                    Url = "http://challenger.nvfast.org/spm"
-                },
-                new ExternalLink
-                {
-                    Name = "Georgia ATSPM",
-                    DisplayOrder = 4,
-                    Url = "https://traffic.dot.ga.gov/atspm"
-                },
-                new ExternalLink
-                {
-                    Name = "Arizona ATSPM",
-                    DisplayOrder = 5,
-                    Url = "http://spmapp01.mcdot-its.com/ATSPM"
-                },
-                new ExternalLink
-                {
-                    Name = "Alabama ATSPM",
-                    DisplayOrder = 6,
-                    Url = "http://signalmetrics.ua.edu"
-                },
-                new ExternalLink
-                {
-                    Name = "ATSPM Workshop 2016 SLC",
-                    DisplayOrder = 7,
-                    Url = "http://docs.lib.purdue.edu/atspmw/2016"
-                },
-                new ExternalLink
-                {
-                    Name = "Train The Trainer Webinar Day 1 - Morning",
-                    DisplayOrder = 8,
-                    Url = "https://connectdot.connectsolutions.com/p75dwqefphk   "
-                },
-                new ExternalLink
-                {
-                    Name = "Train The Trainer Webinar Day 1 - Afternoon",
-                    DisplayOrder = 9,
-                    Url = "https://connectdot.connectsolutions.com/p6l6jaoy3gj"
-                },
-                new ExternalLink
-                {
-                    Name = "Train The Trainer Webinar Day 2 - Morning",
-                    DisplayOrder = 10,
-                    Url = "https://connectdot.connectsolutions.com/p6mlkvekogo/"
-                },
-                new ExternalLink
-                {
-                    Name = "Train The Trainer Webinar Day 2 - Mid Morning",
-                    DisplayOrder = 11,
-                    Url = "https://connectdot.connectsolutions.com/p3ua8gtj09r/"
-                }
-            );
+            //context.ExternalLinks.AddOrUpdate(
+            //    c => c.DisplayOrder,
+            //    new ExternalLink
+            //    {
+            //        Name = "Indiana Hi Resolution Data Logger Enumerations",
+            //        DisplayOrder = 1,
+            //        Url = " https://docs.lib.purdue.edu/jtrpdata/3/"
+            //    },
+            //    new ExternalLink
+            //    {
+            //        Name = "Florida ATSPM",
+            //        DisplayOrder = 2,
+            //        Url = "https://atspm.cflsmartroads.com/ATSPM"
+            //    },
+            //    new ExternalLink
+            //    {
+            //        Name = "FAST (Southern Nevada)",
+            //        DisplayOrder = 3,
+            //        Url = "http://challenger.nvfast.org/spm"
+            //    },
+            //    new ExternalLink
+            //    {
+            //        Name = "Georgia ATSPM",
+            //        DisplayOrder = 4,
+            //        Url = "https://traffic.dot.ga.gov/atspm"
+            //    },
+            //    new ExternalLink
+            //    {
+            //        Name = "Arizona ATSPM",
+            //        DisplayOrder = 5,
+            //        Url = "http://spmapp01.mcdot-its.com/ATSPM"
+            //    },
+            //    new ExternalLink
+            //    {
+            //        Name = "Alabama ATSPM",
+            //        DisplayOrder = 6,
+            //        Url = "http://signalmetrics.ua.edu"
+            //    },
+            //    new ExternalLink
+            //    {
+            //        Name = "ATSPM Workshop 2016 SLC",
+            //        DisplayOrder = 7,
+            //        Url = "http://docs.lib.purdue.edu/atspmw/2016"
+            //    },
+            //    new ExternalLink
+            //    {
+            //        Name = "Train The Trainer Webinar Day 1 - Morning",
+            //        DisplayOrder = 8,
+            //        Url = "https://connectdot.connectsolutions.com/p75dwqefphk   "
+            //    },
+            //    new ExternalLink
+            //    {
+            //        Name = "Train The Trainer Webinar Day 1 - Afternoon",
+            //        DisplayOrder = 9,
+            //        Url = "https://connectdot.connectsolutions.com/p6l6jaoy3gj"
+            //    },
+            //    new ExternalLink
+            //    {
+            //        Name = "Train The Trainer Webinar Day 2 - Morning",
+            //        DisplayOrder = 10,
+            //        Url = "https://connectdot.connectsolutions.com/p6mlkvekogo/"
+            //    },
+            //    new ExternalLink
+            //    {
+            //        Name = "Train The Trainer Webinar Day 2 - Mid Morning",
+            //        DisplayOrder = 11,
+            //        Url = "https://connectdot.connectsolutions.com/p3ua8gtj09r/"
+            //    }
+            //);
             context.ControllerType.AddOrUpdate(
                 c => c.ControllerTypeID,
                 new ControllerType
@@ -827,7 +837,7 @@ namespace MOE.Common.Migrations
                     ControllerTypeID = 9,
                     Description = "EOS",
                     SNMPPort = 161,
-                    FTPDirectory = "/set1",
+                    FTPDirectory = "/econolite/set1",
                     ActiveFTP = true,
                     UserName = "econolite",
                     Password = "ecpi2ecpi"
@@ -1127,6 +1137,33 @@ namespace MOE.Common.Migrations
                     ShowOnWebsite = true,
                     ShowOnAggregationSite = false,
                     DisplayOrder = 113
+                },
+                new MetricType
+                {
+                    MetricID = 33,
+                    ChartName = "Gap Vs Demand",
+                    Abbreviation = "GVD",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 115
+                },
+                new MetricType
+                {
+                    MetricID = 34,
+                    ChartName = "Left Turn Gap",
+                    Abbreviation = "LTG",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 114
+                },
+                new MetricType
+                {
+                    MetricID = 35,
+                    ChartName = "Split Monitor",
+                    Abbreviation = "SM",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 120
                 }
 
             );
@@ -1232,8 +1269,9 @@ namespace MOE.Common.Migrations
                 {
                     ApplicationID = 4,
                     RawDataCountLimit = 1048576,
-                    ImageUrl = "http://defaultWebServer/spmimages/",
-                    ImagePath = @"\\defaultWebserver\SPMImages\"
+                    //ImageUrl = "http://defaultWebServer/spmimages/",
+                    //ImagePath = @"\\defaultWebserver\SPMImages\",
+                    CycleCompletionSeconds = 900
                 }
             );
 
@@ -1332,94 +1370,94 @@ namespace MOE.Common.Migrations
             //    }
             );
 
-            context.ToBeProcessededTables.AddOrUpdate(t => t.PartitionedTableName,
-                new ToBeProcessededTable()
-                {
-                    PartitionedTableName = "Controller_Event_Log",
-                    UpdatedTime = Convert.ToDateTime("2018-05-13 00:20:00.000"),
-                    PreserveDataSelect = "SELECT [SignalID], [Timestamp], [EventCode], [EventParam]",
-                    TableId = 1,
-                    PreserveDataWhere =
-                        "WHERE SignalID in (select SignalID from  [dbo].[DatabaseArchiveExcludedSignals] )",
-                    InsertValues = "INSERT INTO [SignalID], [Timestamp], [EventCode], [EventParam]",
-                    DataBaseName = "Moe",
-                    Verbose = true,
+            //context.ToBeProcessededTables.AddOrUpdate(t => t.PartitionedTableName,
+            //    new ToBeProcessededTable()
+            //    {
+            //        PartitionedTableName = "Controller_Event_Log",
+            //        UpdatedTime = Convert.ToDateTime("2018-05-13 00:20:00.000"),
+            //        PreserveDataSelect = "SELECT [SignalID], [Timestamp], [EventCode], [EventParam]",
+            //        TableId = 1,
+            //        PreserveDataWhere =
+            //            "WHERE SignalID in (select SignalID from  [dbo].[DatabaseArchiveExcludedSignals] )",
+            //        InsertValues = "INSERT INTO [SignalID], [Timestamp], [EventCode], [EventParam]",
+            //        DataBaseName = "Moe",
+            //        Verbose = true,
 
-                                //CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, 
-                                //                        [Timestamp] [datetime2](7) NOT NULL, [EventCode] [int] NOT NULL, [EventParam] [int] NOT NULL"
-                                CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS, 
-                                                        [Timestamp] [datetime2](7), [EventCode] [int], [EventParam] [int]"
-                },
-                new ToBeProcessededTable()
-                {
-                    PartitionedTableName = "Speed_Events",
-                    UpdatedTime = Convert.ToDateTime("2018-05-13 00:20:00.000"),
-                    PreserveDataSelect = "SELECT [DetectorID], [MPH], [KPH], [Timestamp]",
-                    TableId = 2,
-                    PreserveDataWhere = @" WHERE  DetectorID  in 
-                                                        (SELECT [DetectorID]   
-                                                        FROM [dbo].[Detectors]   
-                                                         WHERE  [ApproachID]  in  
-                                                            (SELECT [ApproachID]  
-                                                             FROM  [dbo].[Approaches]   
-                                                             WHERE [SignalID]  in  
-                                                                (Select [SignalId]  
-                                                                 FROM  [dbo].[DatabaseArchiveExcludedSignals] )))",
-                    InsertValues = "Insert into [DetectorID], [MPH], [KPH], [Timestamp]",
-                    DataBaseName = "MoePartition",
-                    Verbose = true,
-                    CreateColumns4Table =
-                        "[DetectorID] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, [MPH] [int] NOT NULL, [KPH] [int] NOT NULL, [Timestamp] [datetime2](7) NOT NULL"
-                }
-            );
+            //                    //CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, 
+            //                    //                        [Timestamp] [datetime2](7) NOT NULL, [EventCode] [int] NOT NULL, [EventParam] [int] NOT NULL"
+            //                    CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS, 
+            //                                            [Timestamp] [datetime2](7), [EventCode] [int], [EventParam] [int]"
+            //    },
+            //    new ToBeProcessededTable()
+            //    {
+            //        PartitionedTableName = "Speed_Events",
+            //        UpdatedTime = Convert.ToDateTime("2018-05-13 00:20:00.000"),
+            //        PreserveDataSelect = "SELECT [DetectorID], [MPH], [KPH], [Timestamp]",
+            //        TableId = 2,
+            //        PreserveDataWhere = @" WHERE  DetectorID  in 
+            //                                            (SELECT [DetectorID]   
+            //                                            FROM [dbo].[Detectors]   
+            //                                             WHERE  [ApproachID]  in  
+            //                                                (SELECT [ApproachID]  
+            //                                                 FROM  [dbo].[Approaches]   
+            //                                                 WHERE [SignalID]  in  
+            //                                                    (Select [SignalId]  
+            //                                                     FROM  [dbo].[DatabaseArchiveExcludedSignals] )))",
+            //        InsertValues = "Insert into [DetectorID], [MPH], [KPH], [Timestamp]",
+            //        DataBaseName = "MoePartition",
+            //        Verbose = true,
+            //        CreateColumns4Table =
+            //            "[DetectorID] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, [MPH] [int] NOT NULL, [KPH] [int] NOT NULL, [Timestamp] [datetime2](7) NOT NULL"
+            //    }
+            //);
 
-            context.ToBeProcessededIndexes.AddOrUpdate(t => t.IndexName,
-                new ToBeProcessedTableIndex()
-                {
-                    TableId = 1,
-                    IndexId = 1,
-                    ClusteredText = "Clustered",
-                    TextForIndex =
-                        "([Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
-                    IndexName = "IX_Clustered_Controller_Event_Log_Temp"
-                },
-                new ToBeProcessedTableIndex()
-                {
-                    TableId = 1,
-                    IndexId = 2,
-                    ClusteredText = "NonClustered",
-                    TextForIndex =
-                        "([SignalID] ASC, [Timestamp] ASC, [EventCode] ASC, [EventParam] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
-                    IndexName = "IX_Controller_Event_Log"
-                },
-                new ToBeProcessedTableIndex()
-                {
-                    TableId = 2,
-                    IndexId = 1,
-                    ClusteredText = "Clustered",
-                    TextForIndex =
-                        "([Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
-                    IndexName = "IX_Clustered_Speed_Events"
-                },
-                new ToBeProcessedTableIndex()
-                {
-                    TableId = 2,
-                    IndexId = 2,
-                    ClusteredText = "NonClustered",
-                    TextForIndex =
-                        "([DetectorID] ASC, [Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
-                    IndexName = "IX_ByDetID"
-                },
-                new ToBeProcessedTableIndex()
-                {
-                    TableId = 2,
-                    IndexId = 3,
-                    ClusteredText = "NonClustered",
-                    TextForIndex =
-                        "([Timestamp] ASC, [DetectorID] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
-                    IndexName = "ByTimestampByDetID"
-                }
-            );
+            //context.ToBeProcessededIndexes.AddOrUpdate(t => t.IndexName,
+            //    new ToBeProcessedTableIndex()
+            //    {
+            //        TableId = 1,
+            //        IndexId = 1,
+            //        ClusteredText = "Clustered",
+            //        TextForIndex =
+            //            "([Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+            //        IndexName = "IX_Clustered_Controller_Event_Log_Temp"
+            //    },
+            //    new ToBeProcessedTableIndex()
+            //    {
+            //        TableId = 1,
+            //        IndexId = 2,
+            //        ClusteredText = "NonClustered",
+            //        TextForIndex =
+            //            "([SignalID] ASC, [Timestamp] ASC, [EventCode] ASC, [EventParam] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+            //        IndexName = "IX_Controller_Event_Log"
+            //    },
+            //    new ToBeProcessedTableIndex()
+            //    {
+            //        TableId = 2,
+            //        IndexId = 1,
+            //        ClusteredText = "Clustered",
+            //        TextForIndex =
+            //            "([Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+            //        IndexName = "IX_Clustered_Speed_Events"
+            //    },
+            //    new ToBeProcessedTableIndex()
+            //    {
+            //        TableId = 2,
+            //        IndexId = 2,
+            //        ClusteredText = "NonClustered",
+            //        TextForIndex =
+            //            "([DetectorID] ASC, [Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+            //        IndexName = "IX_ByDetID"
+            //    },
+            //    new ToBeProcessedTableIndex()
+            //    {
+            //        TableId = 2,
+            //        IndexId = 3,
+            //        ClusteredText = "NonClustered",
+            //        TextForIndex =
+            //            "([Timestamp] ASC, [DetectorID] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+            //        IndexName = "ByTimestampByDetID"
+            //    }
+            //);
 
             context.Regions.AddOrUpdate(
                 new Region { ID = 1, Description = "Region 1" },
@@ -1491,6 +1529,8 @@ namespace MOE.Common.Migrations
                 userManager.AddToRole(user.Id, "Data");
                 roleManager.Create(new IdentityRole("Configuration"));
                 userManager.AddToRole(user.Id, "Configuration");
+                roleManager.Create(new IdentityRole("Restricted Configuration"));
+                userManager.AddToRole(user.Id, "Restricted Configuration");
             }
             else
             {
@@ -1501,6 +1541,8 @@ namespace MOE.Common.Migrations
                 userManager.AddToRole(user.Id, "Data");
                 roleManager.Create(new IdentityRole("Configuration"));
                 userManager.AddToRole(user.Id, "Configuration");
+                roleManager.Create(new IdentityRole("Restricted Configuration"));
+                userManager.AddToRole(user.Id, "Restricted Configuration");
             }
 
             context.SaveChanges();

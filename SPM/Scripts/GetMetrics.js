@@ -6,9 +6,9 @@
 
 function GetMetric(urlPath, tosend)
 {
-    GetChartComment(tosend.MetricTypeID, tosend.SignalID);
+    GetChartComment(tosend.metricTypeID, tosend.SignalID);
     dataLayer.push({
-        'MetricTypeId': tosend.MetricTypeID,
+        'MetricTypeId': tosend.metricTypeID,
         'SignalId': tosend.SignalID
     });
     $.ajax({
@@ -153,6 +153,7 @@ function GetTimingAndActuationsMetric(metricTypeID) {
     tosend.ShowLinesStartEnd = $("#ShowLinesStartEnd").is(":checked");
     tosend.ShowEventPairs = $("#ShowEventPairs").is(":checked");
     tosend.ShowRawEventData = $("#ShowRawEventData").is(":checked");
+    tosend.ShowPermissivePhases = $("#ShowPermissivePhases").is(":checked");
     tosend.ExtendVsdSearch = $("#ExtendVsdSearch").val();
     tosend.ShowVehicleSignalDisplay = $("#ShowVehicleSignalDisplay").is(":checked");
     tosend.ShowPedestrianIntervals = $("#ShowPedestrianIntervals").is(":checked");
