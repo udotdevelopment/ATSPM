@@ -27,7 +27,7 @@ jobs:
       run: mkdir _build
       
     - name: Restore Packages
-      run: nuget restore EzRep.sln
+      run: nuget restore "Signal Performance Metrics.sln"
 
     - name: Build Solution
       run: |
