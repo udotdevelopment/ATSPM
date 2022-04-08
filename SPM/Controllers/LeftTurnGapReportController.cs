@@ -177,7 +177,7 @@ namespace SPM.Controllers
                 fileStream.Write(pdfData, 0, pdfData.Length);
             }
             pdfResult.HTML = "<iframe src=\"" + settings.ImageUrl + tempFileName +
-                "\"style=\"width:100%; height:500px;\" frameborder=\"0\"></iframe>";
+                "\"style=\"width:100%; height:1000px;\" frameborder=\"0\"></iframe>";
             pdfResult.FileName = tempFileName;
 
             return pdfResult;
@@ -257,24 +257,6 @@ namespace SPM.Controllers
             }
         }
 
-        private static string GetOpposingApproach(int id)
-        {
-            return "???";
-            switch (id)
-            {
-                case 1:
-                    return "SB";
-                case 2:
-                    return "NB";
-                case 3:
-                    return "WB";
-                case 4:
-                    return "EB";
-                default:
-                    return "Error";
-            }
-        }
-
         private static void AddCharts(FinalGapAnalysisReportViewModel approachResult, FinalGapAnalysisReportParameters parameters)
         {
             double gapVsDemandChartHeight = Math.Max(approachResult.AcceptableGapList.Values.Max(), approachResult.DemandList.Values.Max());
@@ -316,7 +298,7 @@ namespace SPM.Controllers
                 Location = approach.Signal.PrimaryName + " & " + approach.Signal.SecondaryName,
 
         };
-            approachResult.OpposingApproach = GetOpposingApproach(approach.DirectionTypeID);
+            approachResult.OpposingApproach = "???";
 
             AddSignalAndPhaseType(approachResult, approach);
 
