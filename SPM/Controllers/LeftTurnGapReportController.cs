@@ -17,6 +17,7 @@ using SPM.Models.LeftTurnGapReport;
 
 namespace SPM.Controllers
 {
+    [Authorize(Roles = "Admin, Restricted")]
     public class LeftTurnGapReportController : Controller
     {
 
@@ -119,10 +120,12 @@ namespace SPM.Controllers
                 {
                     SetHoursAndMinutes(parameters, 6, 0, 9, 0);
                     var approachResultAM = GetApproachResult(parameters, approach, approachId);
+                    approachResultAM.PeakPeriodDescription = "AM Peak";
                     finalGapAnalysisReportViewModel.Add(approachResultAM);
 
                     SetHoursAndMinutes(parameters, 15, 0, 18, 0);
                     var approachResultPM = GetApproachResult(parameters, approach, approachId);
+                    approachResultPM.PeakPeriodDescription = "PM Peak";
                     finalGapAnalysisReportViewModel.Add(approachResultPM);
                 }
                 else if (parameters.GetAMPMPeakHour)
@@ -131,11 +134,13 @@ namespace SPM.Controllers
 
                     SetHoursAndMinutes(parameters, peakResult.AmStartHour, peakResult.AmStartMinute, peakResult.AmEndHour, peakResult.AmEndMinute);
                     var approachResultAM = GetApproachResult(parameters, approach, approachId);
+                    approachResultAM.PeakPeriodDescription = "AM Peak";
                     finalGapAnalysisReportViewModel.Add(approachResultAM);
 
 
                     SetHoursAndMinutes(parameters, peakResult.PmStartHour, peakResult.PmStartMinute, peakResult.PmEndHour, peakResult.PmEndMinute);
                     var approachResultPM = GetApproachResult(parameters, approach, approachId);
+                    approachResultPM.PeakPeriodDescription = "PM Peak";
                     finalGapAnalysisReportViewModel.Add(approachResultPM);
                 }
                 else if (parameters.Get24HourPeriod)
@@ -147,6 +152,7 @@ namespace SPM.Controllers
                 } else
                 {
                     var approachResult = GetApproachResult(parameters, approach, approachId);
+                    approachResult.PeakPeriodDescription = "Custom";
                     finalGapAnalysisReportViewModel.Add(approachResult);
                 }
             }
@@ -171,7 +177,7 @@ namespace SPM.Controllers
                 fileStream.Write(pdfData, 0, pdfData.Length);
             }
             pdfResult.HTML = "<iframe src=\"" + settings.ImageUrl + tempFileName +
-                "\"style=\"width:100%; height:1000px;\" frameborder=\"0\"></iframe>";
+                "\"style=\"width:100%; height:500px;\" frameborder=\"0\"></iframe>";
             pdfResult.FileName = tempFileName;
 
             return pdfResult;
@@ -253,16 +259,17 @@ namespace SPM.Controllers
 
         private static string GetOpposingApproach(int id)
         {
+            return "???";
             switch (id)
             {
                 case 1:
-                    return "Southbound";
+                    return "SB";
                 case 2:
-                    return "Northbound";
+                    return "NB";
                 case 3:
-                    return "Westbound";
+                    return "WB";
                 case 4:
-                    return "Eastbound";
+                    return "EB";
                 default:
                     return "Error";
             }
@@ -309,7 +316,6 @@ namespace SPM.Controllers
                 Location = approach.Signal.PrimaryName + " & " + approach.Signal.SecondaryName,
 
         };
-            approachResult.PeakPeriodDescription = approachResult.StartTime.Hours < 12 ? "AM" : "PM";
             approachResult.OpposingApproach = GetOpposingApproach(approach.DirectionTypeID);
 
             AddSignalAndPhaseType(approachResult, approach);
