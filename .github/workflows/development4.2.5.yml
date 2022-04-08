@@ -1,25 +1,35 @@
-name: .NET
 
-on:
+name: Build and Tests
+
+on:  
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
-jobs:
-  build:
+jobs:  
+  build:    
+    runs-on: windows-latest
+    
+    steps:      
+      - uses: actions/checkout@v2
+      
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
 
-    runs-on: ubuntu-latest
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.5
+        
+      - name: Setup VSTest
+        uses: darenm/Setup-VSTest@v1
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 4.7.2
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      - name: Navigate to Workspace
+        run: cd $GITHUB_WORKSPACE
+
+      - name: Restore Packages
+        run: nuget restore "Signal Performance Metrics.sln"
+
+      - name: Build Solution
+        run: |
+          msbuild.exe "Signal Performance Metrics.sln" /p:platform="Any CPU" /p:configuration="Release"
+
