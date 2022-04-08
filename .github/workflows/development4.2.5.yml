@@ -12,23 +12,25 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout code.
-      uses: actions/checkout@v2
-          
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 4.7.x
+    - uses: actions/checkout@v2
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
 
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+      
+    - name: Navigate to Workspace
+      run: cd $GITHUB_WORKSPACE
 
-    - name: Setup Nuget
-      uses: Nuget/setup-nuget@v1.0.5
+    - name: Create Build Directory
+      run: mkdir _build
+      
+    - name: Restore Packages
+      run: nuget restore EzRep.sln
 
-    - name: Restore nuget packages
-      run: nuget restore "Signal Performance Metrics.sln"
-
-    - name: Build
-      run: msbuild "Signal Perfromance Metrics/MOE.Common.csproj" /p:Configuration=Release
+    - name: Build Solution
+      run: |
+        msbuild.exe "Signal Performance Metrics.sln" /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
+      
 
