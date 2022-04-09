@@ -73,5 +73,17 @@ namespace MOE.Common.Models.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public List<PhaseLeftTurnGapAggregation> GetAggregationByApproachIdAndDateRange(int approachId, DateTime start, DateTime end)
+        {
+            if (_db.PhaseLeftTurnGapAggregations.Any(r => r.ApproachId == approachId
+                                                      && r.BinStartTime >= start && r.BinStartTime <= end))
+                return _db.PhaseLeftTurnGapAggregations.Where(r => r.ApproachId == approachId
+                                                                 && r.BinStartTime >= start &&
+                                                                 r.BinStartTime <= end)
+                    .ToList();
+            else
+                return new List<PhaseLeftTurnGapAggregation>();
+        }
     }
 }

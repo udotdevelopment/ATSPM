@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
-    public interface IApproachCycleAggregationRepository
+    public interface IPhaseCycleAggregationRepository
     {
         int GetApproachCycleCountAggregationByApproachIdAndDateRange(int versionId, DateTime start,
             DateTime end);

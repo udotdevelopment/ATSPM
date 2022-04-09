@@ -12,11 +12,18 @@ namespace MOE.Common.Business.DataAggregation
 {
     public class PcdAggregationByApproach : AggregationByApproach
     {
+        public const string VOLUME = "Volume";
+        public const string TOTAL_DELAY = "TotalDelay";
+        public const string ARRIVALS_ON_YELLOW = "ArrivalsOnYellow";
+        public const string ARRIVALS_ON_RED = "ArrivalsOnRed";
+        public const string ARRIVALS_ON_GREEN = "ArrivalsOnGreen";
+
         public PcdAggregationByApproach(Approach approach, ApproachPcdAggregationOptions options, DateTime startDate,
             DateTime endDate,
             bool getProtectedPhase, AggregatedDataType dataType) : base(approach, options, startDate, endDate,
             getProtectedPhase, dataType)
         {
+            LoadBins(approach, options, getProtectedPhase, dataType);
         }
 
         protected override void LoadBins(Approach approach, ApproachAggregationMetricOptions options, 
@@ -37,7 +44,7 @@ namespace MOE.Common.Business.DataAggregation
                     var tempBinsContainer =
                         new BinsContainer(binsContainer.Start, binsContainer.End);
                     var concurrentBins = new ConcurrentBag<Bin>();
-                    var cycleAggregationRepository = Models.Repositories.ApproachCycleAggregationRepositoryFactory.Create();
+                    var cycleAggregationRepository = Models.Repositories.PhaseCycleAggregationsRepositoryFactory.Create();
                     var cycleAggregtaions =
                         cycleAggregationRepository.GetApproachCyclesAggregationByApproachIdAndDateRange(
                             approach.ApproachID, options.StartDate, options.EndDate);
@@ -49,38 +56,26 @@ namespace MOE.Common.Business.DataAggregation
                             double pcdCount = 0;
                             switch (dataType.DataName)
                             {
-                                case "ArrivalsOnGreen":
+                                case ARRIVALS_ON_GREEN:
                                     pcdCount =
                                         pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.ArrivalsOnGreen);
                                     break;
-                                case "ArrivalsOnRed":
+                                case ARRIVALS_ON_RED:
                                     pcdCount =
                                         pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.ArrivalsOnRed);
                                     break;
-                                case "ArrivalsOnYellow":
+                                case ARRIVALS_ON_YELLOW:
                                     pcdCount =
                                         pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.ArrivalsOnYellow);
                                     break;
-                                case "PercentArrivalsOnGreen":
-                                    pcdCount = Convert.ToInt32(Math.Round(GetPercentArrivalOnGreen(bin, pcdAggregations)*100));
+                                case TOTAL_DELAY:
+                                    pcdCount = pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.TotalDelay);
                                     break;
-                                case "PlatoonRatio":
-                                    double percentArrivalOnGreen = GetPercentArrivalOnGreen(bin, pcdAggregations);
-                                    //var aggregations = cycleAggregtaions.Where(s =>
-                                    //    s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).ToList();
-
-                                    //double greenTime = aggregations.Sum(s => s.GreenTime);
-                                    //double totalTime = greenTime + aggregations.Sum(s=> s.YellowTime) + aggregations.Sum(s => s.RedTime);
-                                    //if (greenTime > 0)
-                                    //    pcdCount = percentArrivalOnGreen / (greenTime/totalTime);
-                                    break;
-                                case "ApproachVolume":
-                                    pcdCount = pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.ArrivalsOnYellow)
-                                    + pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.ArrivalsOnGreen)
-                                    + pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.ArrivalsOnRed);
+                                case VOLUME:
+                                    pcdCount = pcdAggregations.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End).Sum(s => s.Volume);
                                     break;
                                 default:
                                     throw new Exception("Unknown Aggregate Data Type for Split Failure");

@@ -395,7 +395,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
 
         public static List<Models.Detector> GetLeftTurnDetectors(int approachId, IApproachRepository approachRepository)
         {
-            var movementTypes = new List<int>() { 3, 5 };
+            var movementTypes = new List<int>() { 3 };
             //only return detector types of type 4
             return approachRepository.GetApproachByApproachID(approachId).Detectors.Where(d => 
             d.DetectionTypeDetectors.Select(t => t.DetectionTypeId).Contains(4)

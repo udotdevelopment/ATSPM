@@ -36,7 +36,8 @@ namespace MOE.Common.Business.DataAggregation
         public AggregationByApproach(Approach approach, ApproachAggregationMetricOptions options, DateTime startDate,
             DateTime endDate, bool getProtectedPhase, AggregatedDataType dataType)
         {
-            
+            Approach = approach;
+            BinsContainers = BinFactory.GetBins(options.TimeOptions);
         }
 
        

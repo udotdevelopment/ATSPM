@@ -33,7 +33,7 @@ namespace MOE.Common.Business.LeftTurnGapReport
 
         private static double GetCycleAverage(string signalId, DateTime start, DateTime end, TimeSpan startTime, TimeSpan endTime, int phase)
         {
-            var repository = Models.Repositories.ApproachCycleAggregationRepositoryFactory.Create();
+            var repository = Models.Repositories.PhaseCycleAggregationsRepositoryFactory.Create();
             List<Models.PhaseCycleAggregation> cycleAggregations = new List<Models.PhaseCycleAggregation>();
             for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
             {

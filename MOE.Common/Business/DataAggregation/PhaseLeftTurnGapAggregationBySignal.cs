@@ -7,53 +7,53 @@ using MOE.Common.Models;
 
 namespace MOE.Common.Business.DataAggregation
 {
-    public class CycleAggregationBySignal : AggregationBySignal
+    public class PhaseLeftTurnGapAggregationBySignal : AggregationBySignal
     {
-        public List<CycleAggregationByApproach> ApproachCycles { get; }
+        public List<PhaseLeftTurnGapAggregationByApproach> ApproachLeftTurnGaps { get; }
 
-        public CycleAggregationBySignal(ApproachCycleAggregationOptions options, Models.Signal signal) : base(
+        public PhaseLeftTurnGapAggregationBySignal(PhaseLeftTurnGapAggregationOptions options, Models.Signal signal) : base(
             options, signal)
         {
-            ApproachCycles = new List<CycleAggregationByApproach>();
-            GetApproachCycleAggregationContainersForAllApporaches(options, signal);
+            ApproachLeftTurnGaps = new List<PhaseLeftTurnGapAggregationByApproach>();
+            GetApproachLeftTurnGapAggregationContainersForAllApporaches(options, signal);
             LoadBins(null, null);
         }
 
 
-        public CycleAggregationBySignal(ApproachCycleAggregationOptions options, Models.Signal signal,
+        public PhaseLeftTurnGapAggregationBySignal(PhaseLeftTurnGapAggregationOptions options, Models.Signal signal,
             int phaseNumber) : base(options, signal)
         {
-            ApproachCycles = new List<CycleAggregationByApproach>();
+            ApproachLeftTurnGaps = new List<PhaseLeftTurnGapAggregationByApproach>();
             foreach (var approach in signal.Approaches)
                 if (approach.ProtectedPhaseNumber == phaseNumber)
                 {
-                    ApproachCycles.Add(
-                        new CycleAggregationByApproach(approach, options, options.StartDate,
+                    ApproachLeftTurnGaps.Add(
+                        new PhaseLeftTurnGapAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber == phaseNumber)
-                        ApproachCycles.Add(
-                            new CycleAggregationByApproach(approach, options, options.StartDate,
+                        ApproachLeftTurnGaps.Add(
+                            new PhaseLeftTurnGapAggregationByApproach(approach, options, options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
                 }
             LoadBins(null, null);
         }
 
-        public CycleAggregationBySignal(ApproachCycleAggregationOptions options, Models.Signal signal,
+        public PhaseLeftTurnGapAggregationBySignal(PhaseLeftTurnGapAggregationOptions options, Models.Signal signal,
             DirectionType direction) : base(options, signal)
         {
-            ApproachCycles = new List<CycleAggregationByApproach>();
+            ApproachLeftTurnGaps = new List<PhaseLeftTurnGapAggregationByApproach>();
             foreach (var approach in signal.Approaches)
                 if (approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
                 {
-                    ApproachCycles.Add(
-                        new CycleAggregationByApproach(approach, options, options.StartDate,
+                    ApproachLeftTurnGaps.Add(
+                        new PhaseLeftTurnGapAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             true, options.SelectedAggregatedDataType));
                     if (approach.PermissivePhaseNumber != null)
-                        ApproachCycles.Add(
-                            new CycleAggregationByApproach(approach, options, options.StartDate,
+                        ApproachLeftTurnGaps.Add(
+                            new PhaseLeftTurnGapAggregationByApproach(approach, options, options.StartDate,
                                 options.EndDate,
                                 false, options.SelectedAggregatedDataType));
                 }
@@ -67,10 +67,10 @@ namespace MOE.Common.Business.DataAggregation
             for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
             {
                 var bin = BinsContainers[i].Bins[binIndex];
-                foreach (var approachCycleAggregationContainer in ApproachCycles)
+                foreach (var approachLeftTurnGapAggregationContainer in ApproachLeftTurnGaps)
                 {
-                    bin.Sum += approachCycleAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
-                    bin.Average = ApproachCycles.Count > 0 ? bin.Sum / ApproachCycles.Count : 0;
+                    bin.Sum += approachLeftTurnGapAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                    bin.Average = ApproachLeftTurnGaps.Count > 0 ? bin.Sum / ApproachLeftTurnGaps.Count : 0;
                 }
 
             }
@@ -83,49 +83,49 @@ namespace MOE.Common.Business.DataAggregation
                 for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
                 {
                     var bin = BinsContainers[i].Bins[binIndex];
-                    foreach (var approachCycleAggregationContainer in ApproachCycles)
-                        bin.Sum += approachCycleAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
-                    bin.Average = ApproachCycles.Count > 0 ? bin.Sum / ApproachCycles.Count : 0;
+                    foreach (var approachLeftTurnGapAggregationContainer in ApproachLeftTurnGaps)
+                        bin.Sum += approachLeftTurnGapAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                    bin.Average = ApproachLeftTurnGaps.Count > 0 ? bin.Sum / ApproachLeftTurnGaps.Count : 0;
                 }
             }
         }
 
 
-        private void GetApproachCycleAggregationContainersForAllApporaches(
-            ApproachCycleAggregationOptions options, Models.Signal signal)
+        private void GetApproachLeftTurnGapAggregationContainersForAllApporaches(
+            PhaseLeftTurnGapAggregationOptions options, Models.Signal signal)
         {
             foreach (var approach in signal.Approaches)
             {
-                ApproachCycles.Add(
-                    new CycleAggregationByApproach(approach, options, options.StartDate,
+                ApproachLeftTurnGaps.Add(
+                    new PhaseLeftTurnGapAggregationByApproach(approach, options, options.StartDate,
                         options.EndDate,
                         true, options.SelectedAggregatedDataType));
                 if (approach.PermissivePhaseNumber != null)
-                    ApproachCycles.Add(
-                        new CycleAggregationByApproach(approach, options, options.StartDate,
+                    ApproachLeftTurnGaps.Add(
+                        new PhaseLeftTurnGapAggregationByApproach(approach, options, options.StartDate,
                             options.EndDate,
                             false, options.SelectedAggregatedDataType));
             }
         }
 
 
-        public double GetCyclesByDirection(DirectionType direction)
+        public double GetLeftTurnGapByDirection(DirectionType direction)
         {
             double splitFails = 0;
-            if (ApproachCycles != null)
-                splitFails = ApproachCycles
+            if (ApproachLeftTurnGaps != null)
+                splitFails = ApproachLeftTurnGaps
                     .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID)
                     .Sum(a => a.BinsContainers.FirstOrDefault().SumValue);
             return splitFails;
         }
 
-        public int GetAverageCyclesByDirection(DirectionType direction)
+        public int GetAverageGapByDirection(DirectionType direction)
         {
-            var approachCyclesByDirection = ApproachCycles
+            var approachLeftTurnGapByDirection = ApproachLeftTurnGaps
                 .Where(a => a.Approach.DirectionType.DirectionTypeID == direction.DirectionTypeID);
             var splitFails = 0;
-            if (approachCyclesByDirection.Any())
-                splitFails = Convert.ToInt32(Math.Round(approachCyclesByDirection
+            if (approachLeftTurnGapByDirection.Any())
+                splitFails = Convert.ToInt32(Math.Round(approachLeftTurnGapByDirection
                     .Average(a => a.BinsContainers.FirstOrDefault().SumValue)));
             return splitFails;
         }

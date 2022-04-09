@@ -60,7 +60,7 @@ namespace MOE.Common.Business.LeftTurnGapReport
 
         private static Dictionary<TimeSpan, double> GetAverageCycles(string signalId, int phase, DateTime startDate, DateTime endDate, Dictionary<TimeSpan, int> peaks)
         {
-            var repository = Models.Repositories.ApproachCycleAggregationRepositoryFactory.Create();
+            var repository = Models.Repositories.PhaseCycleAggregationsRepositoryFactory.Create();
             Dictionary<TimeSpan, double> averageCycles = new Dictionary<TimeSpan, double>();
             List<PhaseCycleAggregation> amAggregations = new List<PhaseCycleAggregation>();
             var amPeak = peaks.Min(p => p.Key);

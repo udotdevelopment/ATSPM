@@ -36,6 +36,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                 signalsRepository,
                 approachRepository,
                 detectorEventCountAggregationRepository);
+            //Need a test that looks at the volume and the opposing volume
             LeftTurnVolumeValue leftTurnVolumeValue = new LeftTurnVolumeValue();
             var detectors = LeftTurnReportPreCheck.GetLeftTurnDetectors(approachId, approachRepository);
             var approach = approachRepository.GetApproachByApproachID(detectors.First().ApproachId);

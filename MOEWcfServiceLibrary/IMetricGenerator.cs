@@ -23,18 +23,20 @@ namespace MOEWcfServiceLibrary
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.SignalAggregationMetricOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachAggregationMetricOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachSplitFailAggregationOptions))]
-    [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.SignalPreemptionAggregationOptions))]
-    [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.SignalPriorityAggregationOptions))]
+    [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.PreemptionAggregationOptions))]
+    [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.PriorityAggregationOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachPcdAggregationOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachYellowRedActivationsAggregationOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.DetectorAggregationMetricOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.DetectorVolumeAggregationOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachSpeedAggregationOptions))]
-    [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.ApproachCycleAggregationOptions))]
+    [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.PhaseCycleAggregationOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.SignalEventCountAggregationOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.PhaseTerminationAggregationOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.PhasePedAggregationOptions))]
     [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.TimingAndActuationsOptions))]
+    [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.PhaseLeftTurnGapAggregationOptions))]
+    [ServiceKnownType(typeof(MOE.Common.Business.WCFServiceLibrary.PhaseSplitMonitorAggregationOptions))]
 
 
     public interface IMetricGenerator

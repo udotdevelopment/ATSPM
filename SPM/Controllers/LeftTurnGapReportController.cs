@@ -26,6 +26,7 @@ using SPM.Models.LeftTurnGapReport;
 
 namespace SPM.Controllers
 {
+    [Authorize(Roles = "Restricted Configuration, Admin")]
     public class LeftTurnGapReportController : Controller
     {
 

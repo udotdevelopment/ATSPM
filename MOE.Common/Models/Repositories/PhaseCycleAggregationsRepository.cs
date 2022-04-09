@@ -4,16 +4,16 @@ using System.Linq;
 
 namespace MOE.Common.Models.Repositories
 {
-    public class ApproachCycleAggregationRepository : IApproachCycleAggregationRepository
+    public class PhaseCycleAggregationsRepository : IPhaseCycleAggregationRepository
     {
         private readonly SPM _db;
 
-        public ApproachCycleAggregationRepository()
+        public PhaseCycleAggregationsRepository()
         {
             _db = new SPM();
         }
 
-        public ApproachCycleAggregationRepository(SPM context)
+        public PhaseCycleAggregationsRepository(SPM context)
         {
             _db = context;
         }

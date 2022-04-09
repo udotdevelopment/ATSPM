@@ -14,22 +14,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
     public class DetectorAggregationByDetectorTests
 
     {
-        [Fact()]
-        public void DetectorAggregationByDetectorTest()
-        {
-            Assert.True(false, "This test needs an implementation");
-        }
-
-        [Fact()]
-        public void LoadBinsTest()
-        {
-            var fakeRepository = new DetectorEventCountAggregationRepositoryTest();
-            DetectorEventCountAggregationRepositoryFactory.SetApplicationEventRepository(fakeRepository);
-            var detectorMock = new Moq.Mock<Models.Detector>();
-            var optionsMok = new Moq.Mock<DetectorVolumeAggregationOptions>();
-            var detectorAgg = new DetectorAggregationByDetector(detectorMock.Object, optionsMok.Object);
-            Assert.True(false, "This test needs an implementation");
-        }
+        
     }
 }
 

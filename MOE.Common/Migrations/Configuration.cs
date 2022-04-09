@@ -347,6 +347,16 @@ namespace MOE.Common.Migrations
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 20
                 },
+                new Menu
+                {
+                    MenuId = 100,
+                    MenuName = "Left Turn Gap Analysis",
+                    Controller = "LeftTurnGapReport",
+                    Action = "Index",
+                    ParentId = 2,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 25
+                },
                 //new Menu
                 //{
                 //    MenuId =42,
@@ -1157,6 +1167,33 @@ namespace MOE.Common.Migrations
                     ShowOnWebsite = true,
                     ShowOnAggregationSite = false,
                     DisplayOrder = 113
+                },
+                new MetricType
+                {
+                    MetricID = 33,
+                    ChartName = "Gap Vs Demand",
+                    Abbreviation = "GVD",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = false,
+                    DisplayOrder = 115
+                },
+                new MetricType
+                {
+                    MetricID = 34,
+                    ChartName = "Left Turn Gap",
+                    Abbreviation = "LTG",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 114
+                },
+                new MetricType
+                {
+                    MetricID = 35,
+                    ChartName = "Split Monitor",
+                    Abbreviation = "SM",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 120
                 }
 
             );
@@ -1362,94 +1399,94 @@ namespace MOE.Common.Migrations
             //    }
             );
 
-            context.ToBeProcessededTables.AddOrUpdate(t => t.PartitionedTableName,
-                new ToBeProcessededTable()
-                {
-                    PartitionedTableName = "Controller_Event_Log",
-                    UpdatedTime = Convert.ToDateTime("2018-05-13 00:20:00.000"),
-                    PreserveDataSelect = "SELECT [SignalID], [Timestamp], [EventCode], [EventParam]",
-                    TableId = 1,
-                    PreserveDataWhere =
-                        "WHERE SignalID in (select SignalID from  [dbo].[DatabaseArchiveExcludedSignals] )",
-                    InsertValues = "INSERT INTO [SignalID], [Timestamp], [EventCode], [EventParam]",
-                    DataBaseName = "Moe",
-                    Verbose = true,
+            //context.ToBeProcessededTables.AddOrUpdate(t => t.PartitionedTableName,
+            //    new ToBeProcessededTable()
+            //    {
+            //        PartitionedTableName = "Controller_Event_Log",
+            //        UpdatedTime = Convert.ToDateTime("2018-05-13 00:20:00.000"),
+            //        PreserveDataSelect = "SELECT [SignalID], [Timestamp], [EventCode], [EventParam]",
+            //        TableId = 1,
+            //        PreserveDataWhere =
+            //            "WHERE SignalID in (select SignalID from  [dbo].[DatabaseArchiveExcludedSignals] )",
+            //        InsertValues = "INSERT INTO [SignalID], [Timestamp], [EventCode], [EventParam]",
+            //        DataBaseName = "Moe",
+            //        Verbose = true,
 
-                    //CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, 
-                    //                        [Timestamp] [datetime2](7) NOT NULL, [EventCode] [int] NOT NULL, [EventParam] [int] NOT NULL"
-                    CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS, 
-                                                        [Timestamp] [datetime2](7), [EventCode] [int], [EventParam] [int]"
-                },
-                new ToBeProcessededTable()
-                {
-                    PartitionedTableName = "Speed_Events",
-                    UpdatedTime = Convert.ToDateTime("2018-05-13 00:20:00.000"),
-                    PreserveDataSelect = "SELECT [DetectorID], [MPH], [KPH], [Timestamp]",
-                    TableId = 2,
-                    PreserveDataWhere = @" WHERE  DetectorID  in 
-                                                        (SELECT [DetectorID]   
-                                                        FROM [dbo].[Detectors]   
-                                                         WHERE  [ApproachID]  in  
-                                                            (SELECT [ApproachID]  
-                                                             FROM  [dbo].[Approaches]   
-                                                             WHERE [SignalID]  in  
-                                                                (Select [SignalId]  
-                                                                 FROM  [dbo].[DatabaseArchiveExcludedSignals] )))",
-                    InsertValues = "Insert into [DetectorID], [MPH], [KPH], [Timestamp]",
-                    DataBaseName = "MoePartition",
-                    Verbose = true,
-                    CreateColumns4Table =
-                        "[DetectorID] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, [MPH] [int] NOT NULL, [KPH] [int] NOT NULL, [Timestamp] [datetime2](7) NOT NULL"
-                }
-            );
+            //                    //CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, 
+            //                    //                        [Timestamp] [datetime2](7) NOT NULL, [EventCode] [int] NOT NULL, [EventParam] [int] NOT NULL"
+            //                    CreateColumns4Table = @"[SignalID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS, 
+            //                                            [Timestamp] [datetime2](7), [EventCode] [int], [EventParam] [int]"
+            //    },
+            //    new ToBeProcessededTable()
+            //    {
+            //        PartitionedTableName = "Speed_Events",
+            //        UpdatedTime = Convert.ToDateTime("2018-05-13 00:20:00.000"),
+            //        PreserveDataSelect = "SELECT [DetectorID], [MPH], [KPH], [Timestamp]",
+            //        TableId = 2,
+            //        PreserveDataWhere = @" WHERE  DetectorID  in 
+            //                                            (SELECT [DetectorID]   
+            //                                            FROM [dbo].[Detectors]   
+            //                                             WHERE  [ApproachID]  in  
+            //                                                (SELECT [ApproachID]  
+            //                                                 FROM  [dbo].[Approaches]   
+            //                                                 WHERE [SignalID]  in  
+            //                                                    (Select [SignalId]  
+            //                                                     FROM  [dbo].[DatabaseArchiveExcludedSignals] )))",
+            //        InsertValues = "Insert into [DetectorID], [MPH], [KPH], [Timestamp]",
+            //        DataBaseName = "MoePartition",
+            //        Verbose = true,
+            //        CreateColumns4Table =
+            //            "[DetectorID] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, [MPH] [int] NOT NULL, [KPH] [int] NOT NULL, [Timestamp] [datetime2](7) NOT NULL"
+            //    }
+            //);
 
-            context.ToBeProcessededIndexes.AddOrUpdate(t => t.IndexName,
-                new ToBeProcessedTableIndex()
-                {
-                    TableId = 1,
-                    IndexId = 1,
-                    ClusteredText = "Clustered",
-                    TextForIndex =
-                        "([Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
-                    IndexName = "IX_Clustered_Controller_Event_Log_Temp"
-                },
-                new ToBeProcessedTableIndex()
-                {
-                    TableId = 1,
-                    IndexId = 2,
-                    ClusteredText = "NonClustered",
-                    TextForIndex =
-                        "([SignalID] ASC, [Timestamp] ASC, [EventCode] ASC, [EventParam] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
-                    IndexName = "IX_Controller_Event_Log"
-                },
-                new ToBeProcessedTableIndex()
-                {
-                    TableId = 2,
-                    IndexId = 1,
-                    ClusteredText = "Clustered",
-                    TextForIndex =
-                        "([Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
-                    IndexName = "IX_Clustered_Speed_Events"
-                },
-                new ToBeProcessedTableIndex()
-                {
-                    TableId = 2,
-                    IndexId = 2,
-                    ClusteredText = "NonClustered",
-                    TextForIndex =
-                        "([DetectorID] ASC, [Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
-                    IndexName = "IX_ByDetID"
-                },
-                new ToBeProcessedTableIndex()
-                {
-                    TableId = 2,
-                    IndexId = 3,
-                    ClusteredText = "NonClustered",
-                    TextForIndex =
-                        "([Timestamp] ASC, [DetectorID] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
-                    IndexName = "ByTimestampByDetID"
-                }
-            );
+            //context.ToBeProcessededIndexes.AddOrUpdate(t => t.IndexName,
+            //    new ToBeProcessedTableIndex()
+            //    {
+            //        TableId = 1,
+            //        IndexId = 1,
+            //        ClusteredText = "Clustered",
+            //        TextForIndex =
+            //            "([Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+            //        IndexName = "IX_Clustered_Controller_Event_Log_Temp"
+            //    },
+            //    new ToBeProcessedTableIndex()
+            //    {
+            //        TableId = 1,
+            //        IndexId = 2,
+            //        ClusteredText = "NonClustered",
+            //        TextForIndex =
+            //            "([SignalID] ASC, [Timestamp] ASC, [EventCode] ASC, [EventParam] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+            //        IndexName = "IX_Controller_Event_Log"
+            //    },
+            //    new ToBeProcessedTableIndex()
+            //    {
+            //        TableId = 2,
+            //        IndexId = 1,
+            //        ClusteredText = "Clustered",
+            //        TextForIndex =
+            //            "([Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+            //        IndexName = "IX_Clustered_Speed_Events"
+            //    },
+            //    new ToBeProcessedTableIndex()
+            //    {
+            //        TableId = 2,
+            //        IndexId = 2,
+            //        ClusteredText = "NonClustered",
+            //        TextForIndex =
+            //            "([DetectorID] ASC, [Timestamp] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+            //        IndexName = "IX_ByDetID"
+            //    },
+            //    new ToBeProcessedTableIndex()
+            //    {
+            //        TableId = 2,
+            //        IndexId = 3,
+            //        ClusteredText = "NonClustered",
+            //        TextForIndex =
+            //            "([Timestamp] ASC, [DetectorID] ASC) WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)",
+            //        IndexName = "ByTimestampByDetID"
+            //    }
+            //);
 
             context.Regions.AddOrUpdate(
                 new Region { ID = 1, Description = "Region 1" },
@@ -1521,6 +1558,8 @@ namespace MOE.Common.Migrations
                 userManager.AddToRole(user.Id, "Data");
                 roleManager.Create(new IdentityRole("Configuration"));
                 userManager.AddToRole(user.Id, "Configuration");
+                roleManager.Create(new IdentityRole("Restricted Configuration"));
+                userManager.AddToRole(user.Id, "Restricted Configuration");
             }
             else
             {
@@ -1531,6 +1570,8 @@ namespace MOE.Common.Migrations
                 userManager.AddToRole(user.Id, "Data");
                 roleManager.Create(new IdentityRole("Configuration"));
                 userManager.AddToRole(user.Id, "Configuration");
+                roleManager.Create(new IdentityRole("Restricted Configuration"));
+                userManager.AddToRole(user.Id, "Restricted Configuration");
             }
 
             context.SaveChanges();

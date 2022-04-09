@@ -17,12 +17,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             MetricTypeID = 20;
             AggregatedDataTypes = new List<AggregatedDataType>();
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "ArrivalsOnGreen"});
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = "ArrivalsOnRed"});
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 2, DataName = "ArrivalsOnYellow"});
-            AggregatedDataTypes.Add(new AggregatedDataType { Id = 3, DataName = "PercentArrivalsOnGreen" });
-            AggregatedDataTypes.Add(new AggregatedDataType { Id = 4, DataName = "PlatoonRatio" });
-            AggregatedDataTypes.Add(new AggregatedDataType { Id = 5, DataName = "ApproachVolume" });
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = PcdAggregationByApproach.ARRIVALS_ON_GREEN});
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = PcdAggregationByApproach.ARRIVALS_ON_RED});
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 2, DataName = PcdAggregationByApproach.ARRIVALS_ON_YELLOW});
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 3, DataName = PcdAggregationByApproach.VOLUME});
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 4, DataName = PcdAggregationByApproach.TOTAL_DELAY});
         }
 
         public override string ChartTitle

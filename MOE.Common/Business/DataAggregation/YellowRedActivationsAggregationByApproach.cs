@@ -17,6 +17,7 @@ namespace MOE.Common.Business.DataAggregation
             bool getProtectedPhase, AggregatedDataType dataType) : base(approach, options, startDate, endDate,
             getProtectedPhase, dataType)
         {
+            LoadBins(approach, options, getProtectedPhase, dataType);
         }
 
         protected override void LoadBins(Approach approach, ApproachAggregationMetricOptions options,
@@ -57,6 +58,24 @@ namespace MOE.Common.Business.DataAggregation
                                         yellowRedActivations.Where(s =>
                                                 s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.TotalRedLightViolations);
+                                    break;
+                                case "YellowActivations":
+                                    yellowRedActivationCount =
+                                        yellowRedActivations.Where(s =>
+                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.YellowActivations);
+                                    break;
+                                case "ViolationTime":
+                                    yellowRedActivationCount =
+                                        yellowRedActivations.Where(s =>
+                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.ViolationTime);
+                                    break;
+                                case "Cycles":
+                                    yellowRedActivationCount =
+                                        yellowRedActivations.Where(s =>
+                                                s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.Cycles);
                                     break;
                                 default:
 

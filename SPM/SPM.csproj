@@ -915,6 +915,7 @@
     <Content Include="Views\Jurisdictions\EditorTemplates\AgencyPhaseDirection.cshtml" />
     <Content Include="Views\Jurisdictions\EditorTemplates\AgencySignal.cshtml" />
     <Content Include="Views\Jurisdictions\Index.cshtml" />
+    <Content Include="Views\DefaultCharts\WaitTimeOptions.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

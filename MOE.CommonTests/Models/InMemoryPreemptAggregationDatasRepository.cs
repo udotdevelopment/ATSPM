@@ -11,31 +11,31 @@ namespace MOE.CommonTests.Models
     {
         private InMemoryMOEDatabase _db;
 
-        public List<PreemptionAggregation> GetPreemptAggregationByVersionIdAndDateRange(int versionId, DateTime start, DateTime end)
+        public List<PreemptionAggregation> GetPreemptAggregationByVersionIdAndDateRange(string signalId, DateTime start, DateTime end)
         {
             var records = (from r in this._db.PreemptionAggregations
-                where r.VersionId == versionId
+                where r.SignalId == signalId
                       && r.BinStartTime >= start && r.BinStartTime <= end
                 select r).ToList();
 
             return records;
         }
 
-        public int GetPreemptAggregationTotalByVersionIdAndDateRange(int versionId, DateTime start, DateTime end)
+        public int GetPreemptAggregationTotalByVersionIdAndDateRange(string signalId, DateTime start, DateTime end)
         {
             int serviced = (from r in this._db.PreemptionAggregations
-                where r.VersionId == versionId
+                where r.SignalId == signalId
                       && r.BinStartTime >= start && r.BinStartTime <= end
                 select r.PreemptServices).Sum();
 
             return serviced;
         }
 
-        public int GetPreemptAggregationTotalByVersionIdPreemptNumberAndDateRange(int versionId, DateTime start, DateTime end,
+        public int GetPreemptAggregationTotalByVersionIdPreemptNumberAndDateRange(string signalId, DateTime start, DateTime end,
             int preemptNumber)
         {
             int serviced = (from r in this._db.PreemptionAggregations
-                where r.VersionId == versionId && r.PreemptNumber == preemptNumber
+                where r.SignalId == signalId && r.PreemptNumber == preemptNumber
                       && r.BinStartTime >= start && r.BinStartTime <= end
                 select r.PreemptServices).Sum();
 
@@ -71,6 +71,21 @@ namespace MOE.CommonTests.Models
         }
 
         public void Update(PreemptionAggregation preemptionAggregation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<PreemptionAggregation> GetPreemptAggregationByVersionIdAndDateRange(DateTime start, DateTime end)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetPreemptAggregationTotalByVersionIdAndDateRange(DateTime start, DateTime end)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetPreemptAggregationTotalByVersionIdPreemptNumberAndDateRange(DateTime start, DateTime end, int preemptNumber)
         {
             throw new NotImplementedException();
         }
