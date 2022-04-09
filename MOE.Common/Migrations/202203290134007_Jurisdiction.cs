@@ -19,16 +19,16 @@
                     })
                 .PrimaryKey(t => t.Id);
             
-            AddColumn("dbo.Signals", "JurisdictionId", c => c.Int(nullable: false, defaultValue: 1));
-            CreateIndex("dbo.Signals", "JurisdictionId");
-            AddForeignKey("dbo.Signals", "JurisdictionId", "dbo.Jurisdictions", "Id");
+            //AddColumn("dbo.Signals", "JurisdictionId", c => c.Int(nullable: false, defaultValue: 1));
+            //CreateIndex("dbo.Signals", "JurisdictionId");
+            //AddForeignKey("dbo.Signals", "JurisdictionId", "dbo.Jurisdictions", "Id");
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.Signals", "JurisdictionId", "dbo.Jurisdictions");
-            DropIndex("dbo.Signals", new[] { "JurisdictionId" });
-            DropColumn("dbo.Signals", "JurisdictionId");
+            //DropForeignKey("dbo.Signals", "JurisdictionId", "dbo.Jurisdictions");
+            //DropIndex("dbo.Signals", new[] { "JurisdictionId" });
+            //DropColumn("dbo.Signals", "JurisdictionId");
             DropTable("dbo.Jurisdictions");
         }
     }

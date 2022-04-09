@@ -25,10 +25,10 @@ namespace MOE.Common.Migrations
         {
             //  This method will be called after migrating to the latest version.
             context.Jurisdictions.AddOrUpdate(
-                j => j.Id,
+                j => j.JurisdictionName,
                 new Models.Jurisdiction
                 {
-                    JurisdictionName = "Defaul Name",
+                    JurisdictionName = "Default Name",
                     MPO = "",
                     OtherPartners = "",
                     CountyParish = ""

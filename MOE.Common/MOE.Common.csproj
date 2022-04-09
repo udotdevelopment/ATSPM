@@ -680,6 +680,10 @@
     <Compile Include="Migrations\202203290134007_Jurisdiction.designer.cs">
       <DependentUpon>202203290134007_Jurisdiction.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202204091703032_SignalJurisdiction.cs" />
+    <Compile Include="Migrations\202204091703032_SignalJurisdiction.designer.cs">
+      <DependentUpon>202204091703032_SignalJurisdiction.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Jurisdiction.cs" />
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
@@ -1144,6 +1148,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202203290134007_Jurisdiction.resx">
       <DependentUpon>202203290134007_Jurisdiction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204091703032_SignalJurisdiction.resx">
+      <DependentUpon>202204091703032_SignalJurisdiction.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
