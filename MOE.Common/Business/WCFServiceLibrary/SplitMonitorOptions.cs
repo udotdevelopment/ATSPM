@@ -35,7 +35,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public SplitMonitorOptions()
         {
-            SetDefaults();
+            SetPercentSplitsList();
         }
 
         [DataMember]
@@ -70,17 +70,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         [Display(Name = "Adjust Y Axis")]
         public bool AdjustYAxis { get; set; }
-
-        private void SetDefaults()
-        {
-            SetPercentSplitsList();
-            ShowPlanStripes = true;
-            ShowPedActivity = true;
-            ShowAverageSplit = true;
-            ShowPercentMaxOutForceOff = true;
-            ShowPercentGapOuts = true;
-            ShowPercentSkip = true;
-        }
 
         private void SetPercentSplitsList()
         {

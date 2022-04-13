@@ -681,16 +681,24 @@
     <Compile Include="Migrations\202105132005112_ReCreateAggTables.designer.cs">
       <DependentUpon>202105132005112_ReCreateAggTables.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202204112034383_AddDefaultValuesTable.cs" />
+    <Compile Include="Migrations\202204112034383_AddDefaultValuesTable.designer.cs">
+      <DependentUpon>202204112034383_AddDefaultValuesTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
+    <Compile Include="Models\MetricTypesDefaultValues.cs" />
     <Compile Include="Models\PhasePedAggregation.cs" />
     <Compile Include="Models\PhaseSplitMonitorAggregation.cs" />
     <Compile Include="Models\PhaseLeftTurnGapAggregation.cs" />
     <Compile Include="Models\PhaseTerminationAggregation.cs" />
     <Compile Include="Models\DetectorEventCountAggregation.cs" />
     <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\Repositories\IMetricTypesDefaultValuesRepository.cs" />
     <Compile Include="Models\Repositories\IPhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IPhaseLeftTurnGapAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\MetricTypesDefaultValuesRepositortFactory.cs" />
+    <Compile Include="Models\Repositories\MetricTypesDefaultValuesRepository.cs" />
     <Compile Include="Models\Repositories\PhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseLeftTurnGapAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseTerminationAggregationRepository.cs" />
@@ -1138,6 +1146,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105132005112_ReCreateAggTables.resx">
       <DependentUpon>202105132005112_ReCreateAggTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204112034383_AddDefaultValuesTable.resx">
+      <DependentUpon>202204112034383_AddDefaultValuesTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

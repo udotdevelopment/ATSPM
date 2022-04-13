@@ -123,6 +123,33 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return new List<string>();
         }
 
+        public void SetDefaults(List<MetricTypesDefaultValues> defaults)
+        {
+            foreach (MetricTypesDefaultValues option in defaults)
+            {
+                var type = GetType().GetProperty(option.Option).PropertyType;
+                var converted = ChangeType(option.Value, type);
+                GetType().GetProperty(option.Option).SetValue(this, converted, null);
+            }
+        }
+
+        public static object ChangeType(object value, Type conversion)
+        {
+            var t = conversion;
+
+            if (t.IsGenericType && t.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            {
+                if (value == null)
+                {
+                    return null;
+                }
+
+                t = Nullable.GetUnderlyingType(t);
+            }
+
+            return Convert.ChangeType(value, t);
+        }
+
 
         protected void LogMetricRun()
         {

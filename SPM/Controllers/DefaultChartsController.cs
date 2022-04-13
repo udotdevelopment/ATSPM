@@ -7,11 +7,14 @@ using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Business.ApproachVolume;
 using System.Data.Entity.Migrations;
 using System.Text;
+using MOE.Common.Models;
 
 namespace SPM.Controllers
 {
     public class DefaultChartsController : Controller
     {
+        MOE.Common.Models.Repositories.IMetricTypesDefaultValuesRepository metricTypesDefaultValuesRepository =
+            MOE.Common.Models.Repositories.MetricTypesDefaultValuesRepositoryFactory.Create();
         // GET: DefaultCharts
         public ActionResult Index()
         {
@@ -84,14 +87,15 @@ namespace SPM.Controllers
             {
                 case 1:
                     PhaseTerminationOptions phaseTerminationOptions = new PhaseTerminationOptions();
-                    phaseTerminationOptions.SetDefaults();
+                    phaseTerminationOptions.SetDefaults(metricTypesDefaultValuesRepository.GetChartDefaults("PhaseTermination"));
                     return PartialView("PhaseTerminationOptions", phaseTerminationOptions);
                 case 2:
                     SplitMonitorOptions SplitMonitorOptions = new SplitMonitorOptions();
+                    SplitMonitorOptions.SetDefaults(metricTypesDefaultValuesRepository.GetChartDefaults("SplitMonitor"));
                     return PartialView("SplitMonitorOptions", SplitMonitorOptions);
                 case 3:
                     PedDelayOptions pedDelayOptions = new PedDelayOptions();
-                    pedDelayOptions.SetDefaults();
+                    pedDelayOptions.SetDefaults(metricTypesDefaultValuesRepository.GetChartDefaults("PedDelay"));
                     return PartialView("PedDelayOptions", pedDelayOptions);
                 case 4:
                     MetricOptions preemptOptions = new MetricOptions();
@@ -606,8 +610,9 @@ namespace SPM.Controllers
 
         public ActionResult PhaseTerminationOptions(int id)
         {
+            var defaults = metricTypesDefaultValuesRepository.GetChartDefaults("PhaseTermination");
             PhaseTerminationOptions phaseTerminationOptions = new PhaseTerminationOptions(); 
-            phaseTerminationOptions.SetDefaults();
+            phaseTerminationOptions.SetDefaults(defaults);
             return PartialView("PhaseTerminationOptions", phaseTerminationOptions);
         }
 

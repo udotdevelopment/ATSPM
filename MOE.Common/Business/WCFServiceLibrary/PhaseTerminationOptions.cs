@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Runtime.Serialization;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Models;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
@@ -39,7 +40,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             ConsecutiveCountList.Add(5);
             MetricTypeID = 1;
             ShowArrivalsOnGreen = true;
-            SetDefaults();
         }
 
         [Required]
@@ -60,14 +60,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         [DataMember]
         public bool ShowArrivalsOnGreen { get; set; }
-
-        public void SetDefaults()
-        {
-            ShowPlanStripes = true;
-            ShowPedActivity = true;
-            SelectedConsecutiveCount = 1;
-            //CreateLegend();
-        }
 
         private void CreateLegend()
         {
