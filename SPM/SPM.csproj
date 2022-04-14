@@ -423,6 +423,7 @@
     <Compile Include="Controllers\ApproachesController.cs" />
     <Compile Include="Controllers\ArchiveSettingsOldController.cs" />
     <Compile Include="Controllers\ConfigurationTableController.cs" />
+    <Compile Include="Controllers\JurisdictionsController.cs" />
     <Compile Include="Models\ConflictingVolumesAnalysisReportParameters.cs" />
     <Compile Include="Models\ConflictingVolumesAnalysisReportViewModel.cs" />
     <Compile Include="Controllers\DatabaseArchiveSettingsController.cs" />
@@ -907,6 +908,13 @@
     <Content Include="Views\LeftTurnGapReport\PedestrianCallAnalysisReport.cshtml" />
     <Content Include="Views\LeftTurnGapReport\ConflictingVolumesAnalysisReport.cshtml" />
     <Content Include="Views\LeftTurnGapReport\ResultAsPdf.cshtml" />
+    <Content Include="Views\Jurisdictions\Create.cshtml" />
+    <Content Include="Views\Jurisdictions\Delete.cshtml" />
+    <Content Include="Views\Jurisdictions\Details.cshtml" />
+    <Content Include="Views\Jurisdictions\Edit.cshtml" />
+    <Content Include="Views\Jurisdictions\EditorTemplates\AgencyPhaseDirection.cshtml" />
+    <Content Include="Views\Jurisdictions\EditorTemplates\AgencySignal.cshtml" />
+    <Content Include="Views\Jurisdictions\Index.cshtml" />
     <Content Include="Views\DefaultCharts\WaitTimeOptions.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

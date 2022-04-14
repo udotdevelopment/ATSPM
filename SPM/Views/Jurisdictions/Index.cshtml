@@ -1,0 +1,50 @@
+﻿@model IEnumerable<MOE.Common.Models.Jurisdiction>
+
+@{
+    ViewBag.Title = "Agency Configuration";
+}
+
+<h2>Agency Configuration</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.JurisdictionName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MPO)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CountyParish)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OtherPartners)
+        </th>
+        <th>Edit/Delete</th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.JurisdictionName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.MPO)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CountyParish)
+    </td>
+    <th>
+        @Html.DisplayFor(modelItem => item.OtherPartners)
+    </th>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+    </td>
+</tr>
+}
+
+</table>
