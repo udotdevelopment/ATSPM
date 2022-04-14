@@ -14,7 +14,7 @@ namespace MOE.Common.Models.Repositories
         SignalFTPInfo GetSignalFTPInfoByID(string signalID);
         List<SignalFTPInfo> GetSignalFTPInfoForAllFTPSignals();
         void AddOrUpdate(Signal signal);
-        List<Pin> GetPinInfo();
+        //List<Pin> GetPinInfo();
         string GetSignalLocation(string signalID);
         void AddList(List<Signal> signals);
         Signal CopySignalToNewVersion(Signal originalVersion);

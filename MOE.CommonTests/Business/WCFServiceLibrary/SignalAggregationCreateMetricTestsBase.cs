@@ -28,8 +28,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary
             ApplicationEventRepositoryFactory.SetApplicationEventRepository(new InMemoryApplicationEventRepository(Db));
             Common.Models.Repositories.DirectionTypeRepositoryFactory.SetDirectionsRepository(new InMemoryDirectionTypeRepository());
             ApproachRepositoryFactory.SetApproachRepository(new InMemoryApproachRepository(Db));
-            MOE.Common.Models.Repositories.ApproachEventCountAggregationRepositoryFactory.SetRepository
-                (new InMemoryApproachEventCountAggregationRepository(Db));
+            
 
             MOE.Common.Models.Repositories.SignalEventCountAggregationRepositoryFactory.SetRepository
                 (new InMemorySignalEventCountAggregationRepository(Db));

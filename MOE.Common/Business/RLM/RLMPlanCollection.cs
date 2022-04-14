@@ -16,12 +16,12 @@ namespace MOE.Common.Business
         /// <param name="enddate"></param>
         /// <param name="signalId"></param>
         /// <param name="region"></param>
-        public RLMPlanCollection(List<Controller_Event_Log> cycleEvents, DateTime startdate,
+        public RLMPlanCollection(List<RLMCycle> cycles, DateTime startdate,
             DateTime enddate, double srlvSeconds, Approach approach, SPM db)
         {
             Approach = approach;
             SRLVSeconds = srlvSeconds;
-            GetPlanCollection(startdate, enddate, cycleEvents, db);
+            GetPlanCollection(startdate, enddate, cycles, db);
         }
 
 
@@ -38,7 +38,7 @@ namespace MOE.Common.Business
 
 
         public void GetPlanCollection(DateTime startDate, DateTime endDate,
-            List<Controller_Event_Log> cycleEvents, SPM db)
+            List<RLMCycle> cycles, SPM db)
         {
             var ds =
                 new ControllerEventLogs(Approach.SignalID, startDate, endDate, new List<int> {131}, db);
@@ -67,7 +67,7 @@ namespace MOE.Common.Business
                     if (ds.Events[i].Timestamp != endDate)
                     {
                         var plan = new RLMPlan(ds.Events[i].Timestamp, endDate, ds.Events[i].EventParam,
-                            cycleEvents, SRLVSeconds, Approach);
+                            cycles, SRLVSeconds, Approach);
                         AddItem(plan);
                     }
                 }
@@ -77,7 +77,7 @@ namespace MOE.Common.Business
                     if (ds.Events[i].Timestamp != ds.Events[i + 1].Timestamp)
                     {
                         var plan = new RLMPlan(ds.Events[i].Timestamp,
-                            ds.Events[i + 1].Timestamp, ds.Events[i].EventParam, cycleEvents, SRLVSeconds, Approach);
+                            ds.Events[i + 1].Timestamp, ds.Events[i].EventParam, cycles, SRLVSeconds, Approach);
                         AddItem(plan);
                     }
                 }

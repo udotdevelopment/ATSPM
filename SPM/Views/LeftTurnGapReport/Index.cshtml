@@ -1,0 +1,139 @@
+﻿@model SPM.Models.LeftTurnGapReportViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Left Turn Gap Analysis Report</h2>
+<form id="MainForm" class="card card-body bg-light">
+    <div class="row">
+        <div id="SignalSearchContainer" class="col-sm-12 col-md-12 col-lg-12 col-xl-5 panel-min-width">
+            @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-7">
+            <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <div class="card">
+                    <div class="card-header">Left Turn Gap Options</div>
+                    <div class="card-body">
+                        <div id="LeftTurnCheckBoxesDiv">Please Select a Signal</div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="card signal-data-check-min-width">
+                        <div class="card-header">Signal Data Check</div>
+                        <div class="card-body">
+                            <div id="CyclesWithPedCallsDiv" class="row mb-3">
+                                <div class="col-2 ">
+                                    @Html.TextBoxFor(m => m.CyclesWithPedCalls, new { @class = "form-control LeftTurnThreshold" })
+                                </div>
+                                @Html.LabelFor(m => m.CyclesWithPedCalls, htmlAttributes: new { @class = "col-sm-8 col-form-label" })
+                            </div>
+                            <div id="CyclesWithGapOutsDiv" class="row mb-3">
+                                <div class="col-2 ">
+                                    @Html.TextBoxFor(m => m.CyclesWithGapOuts, new { @class = "form-control LeftTurnThreshold" })
+                                </div>
+                                @Html.LabelFor(m => m.CyclesWithGapOuts, htmlAttributes: new { @class = "col-sm-8 col-form-label" })
+                            </div>
+                            <div id="LeftTurnVolumeDiv" class="row mb-3">
+                                <div class="col-2 ">
+                                    @Html.TextBoxFor(m => m.LeftTurnVolume, new { @class = "form-control LeftTurnThreshold" })
+                                </div>
+                                @Html.LabelFor(m => m.LeftTurnVolume, htmlAttributes: new { @class = "col-sm-8 col-form-label" })
+                            </div>
+                            <div>
+                                <button id="RunChecks" type="button" class="btn btn-primary">Run Checks &nbsp;<span id='RunChecksSpinner' class="" style="font-size:18px"></span></button>
+                            </div>
+                            <br />
+                            <div id="SignalDataCheckPlaceHolder"></div>
+                        </div>
+                    </div>
+                    @*</div>*@
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="card report-Info-min-width">
+                        <div class="card-header">Report Information</div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                @Html.CheckBox("finalGapAnalysisCheck", true, new { onclick = "finalGapAnalysisCheckClick()", @class = "" })
+                                Final Gap Analysis Report
+                            </div>
+                            <div id="AcceptableGapsDiv" class="row mb-3">
+                                <div class="col-2 ">
+                                    @Html.TextBoxFor(m => m.AcceptableGaps, new { @class = "form-control LeftTurnThreshold" })
+                                </div>
+                                @Html.LabelFor(m => m.AcceptableGaps, htmlAttributes: new { @class = "col-sm-9 col-form-label" })
+                            </div>
+                            <div class="form-group">
+                                @Html.CheckBox("splitFailAnalysisCheck", false, new { onclick = "splitFailAnalysisCheckClick()", @class = "" })
+                                Split Fail Analysis
+                            </div>
+                            <div id="CyclesWithSplitFailDiv" class="row mb-3 d-none">
+                                <div class="col-2 ">
+                                    @Html.TextBoxFor(m => m.CyclesWithSplitFail, new { @class = "form-control LeftTurnThreshold" })
+                                </div>
+                                @Html.LabelFor(m => m.CyclesWithSplitFail, htmlAttributes: new { @class = "col-sm-8 col-form-label" })
+                            </div>
+                            <div class="form-group">
+                                @Html.CheckBox("pedestrianCallAnalysisCheck", false, new { onclick = "pedestrianCallAnalysisCheckClick()", @class = "" })
+                                Pedestrian Call Analysis
+                            </div>
+                            <div id="LtCyclesWithPedCallsDiv" class="row mb-3 d-none">
+                                <div class="col-2 ">
+                                    @Html.TextBoxFor(m => m.LtCyclesWithPedCalls, new { @class = "form-control LeftTurnThreshold" })
+                                </div>
+                                @Html.LabelFor(m => m.LtCyclesWithPedCalls, htmlAttributes: new { @class = "col-sm-8 col-form-label" })
+                            </div>
+                            <div class="form-group">
+                                @Html.CheckBox("conflictingVolumesAnalysisCheck", false, new { @class = "" })
+                                Conflicting Volumes Analysis
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">Date Selection</div>
+                        <div class="card-body">
+                            <div class="row">
+                                    <div class="col-12  panel-min-width-lt">
+                                        @Html.Partial("~/Views/LeftTurnGapReport/DateSelection.cshtml", new ViewDataDictionary(Model.DateSelectorViewModel))
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button id="RunReports" type="button" class="btn btn-primary">Run Report &nbsp;<span id='RunReportSpinner' class="" style="font-size:18px"></span></button>
+                     
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div id="FinalGapAnalysisPlaceHolder"></div>
+
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/Scripts/Map.js"></script>
+    <script type="text/javascript" src="~/Scripts/AddData.js"></script>
+    <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
+    <script type="text/javascript" src="~/Scripts/LeftTurnReport.js"></script>
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <script>
+        var urlpathGetSignalLocation =   '@Url.Action("GetSignalLocation", "DefaultCharts")';
+        var urlpathGetLeftTurnCheckBoxes =   '@Url.Action("GetLeftTurnCheckBoxes", "LeftTurnGapReport")';
+        var urlpathGetFinalGapAnalysisReport =   '@Url.Action("GetFinalGapAnalysisReport", "LeftTurnGapReport")';
+        var urlpathGetSplitFailAnalysisReport =   '@Url.Action("GetSplitFailAnalysisReport", "LeftTurnGapReport")';
+        var urlpathGetPedestrianCallAnalysisReport =   '@Url.Action("GetPedestrianCallAnalysisReport", "LeftTurnGapReport")';
+        var urlpathGetConflictingVolumesAnalysisReport =   '@Url.Action("GetConflictingVolumesAnalysisReport", "LeftTurnGapReport")';
+        var urlpathGetSignalDataCheckReport = '@Url.Action("GetSignalDataCheckReport", "LeftTurnGapReport")';
+        var urlpathDeleteTempPdf =   '@Url.Action("RemoveTempFile", "LeftTurnGapReport")';
+        var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';
+    </script>
+
+}

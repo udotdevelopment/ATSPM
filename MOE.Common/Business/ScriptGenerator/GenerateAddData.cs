@@ -1,16 +1,68 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity;
 using System.IO;
+using System.Threading.Tasks;
+using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
+
+using Microsoft.EntityFrameworkCore.Internal;
+
+using System.Linq;
 
 namespace MOE.Common.Business.ScriptGenerator
 {
     public class GenerateAddData
     {
-        private static List<Pin> GetPins()
+        //private static List<Pin> GetPins()
+        //{
+        //    var repository = SignalsRepositoryFactory.Create();
+        //    return repository.GetPinInfo();
+        //}
+
+        public static List<Pin> GetPinInfo()
         {
-            var repository = SignalsRepositoryFactory.Create();
-            return repository.GetPinInfo();
+            var pins = new List<Pin>();
+            List<Signal> signals = GetSignalVersionByDate(DateTime.Now);
+                //foreach (var signal in signals)
+                Parallel.ForEach(signals, signal =>
+                {
+                    var pin = new Pin(signal.SignalID, signal.Latitude,
+                        signal.Longitude,
+                        signal.PrimaryName + " " + signal.SecondaryName, signal.RegionID.ToString());
+                    pin.MetricTypes = signal.GetMetricTypesString();
+                    pins.Add(pin);
+                    //Console.WriteLine(pin.SignalID);
+                });
+            return pins;
+        }
+
+
+        private static List<Signal> GetSignalVersionByDate(DateTime dt)
+        {
+            using (var db = new SPM())
+            {
+                db.Configuration.LazyLoadingEnabled = false;
+
+                List<int> versionIds = new List<int>();
+                    List<string> restrictedSignalList = db.SignalsToAggregate.Select(s => s.SignalID).ToList();
+                    versionIds = db.Signals.Where(
+                            r => r.VersionActionId != 3 && r.Start < dt //&&(r.SignalID != "8204" || r.SignalID != "8215"|| r.SignalID != "8206")
+                        ).GroupBy(r => r.SignalID).Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault())
+                        .Select(s => s.VersionID).ToList();
+
+                var signals = db.Signals.Where(signal => versionIds.Contains(signal.VersionID))
+                    .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
+                    .Include(signal => signal.Approaches.Select(a =>
+                        a.Detectors.Select(d => d.DetectionTypes.Select(det => det.MetricTypes))))
+                    .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
+                    .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                    .Where(s => s.Enabled)
+                    .OrderBy(signal => signal.SignalID).ToList();
+
+                return signals;
+            }
         }
 
         public static void CreateScript()
@@ -26,11 +78,12 @@ namespace MOE.Common.Business.ScriptGenerator
             var reportTypeFilter = 0; if (reportType.options[reportType.selectedIndex].value != '')
                 { reportTypeFilter = ','+reportType.options[reportType.selectedIndex].value;}";
 
-            var pins = GetPins();
+            var pins = GetPinInfo();
 
 
             foreach (var pin in pins)
             {
+                Console.WriteLine(pin.SignalID);
                 var PinName = "pin" + pin.SignalID;
 
                 //The script string is appended for every pin in the collection.
@@ -71,7 +124,7 @@ return pins;}";
             var reportType = $('#MetricTypes')[0]; 
             var reportTypeFilter = 0; if (reportType.options[reportType.selectedIndex].value != '')
                 { reportTypeFilter = ','+reportType.options[reportType.selectedIndex].value;}";
-            var pins = GetPins();
+            var pins = GetPinInfo();
             foreach (var pin in pins)
             {
                 var PinName = "pin" + pin.SignalID;

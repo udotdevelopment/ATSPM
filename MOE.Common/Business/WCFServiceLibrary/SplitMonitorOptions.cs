@@ -212,7 +212,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var plan in plans)
             {
                 var Cycles = from cycle in phase.Cycles.Items
-                             where cycle.StartTime > plan.StartTime && cycle.EndTime < plan.EndTime
+                             where cycle.StartTime >= plan.StartTime && cycle.EndTime < plan.EndTime
                              orderby cycle.Duration
                              select cycle;
 

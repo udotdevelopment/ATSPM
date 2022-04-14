@@ -42,7 +42,7 @@ namespace MOE.Common.Business.PEDDelay
             {
                 var errorLog = ApplicationEventRepositoryFactory.Create();
                 errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                    this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
                 
             }
         }

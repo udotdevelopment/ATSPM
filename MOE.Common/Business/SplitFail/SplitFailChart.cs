@@ -17,6 +17,12 @@ namespace MOE.Common.Business.SplitFail
             SplitFailPhase = splitFailPhase;
             GetPermissivePhase = getPermissivePhase;
             Chart = ChartFactory.CreateSplitFailureChart(Options);
+            Chart.ChartAreas[0].AxisX.Minimum = splitFailPhase.Cycles.Any()
+                ? splitFailPhase.Cycles.First().StartTime.ToOADate()
+                : Options.StartDate.ToOADate();
+            Chart.ChartAreas[0].AxisX.Maximum = splitFailPhase.Cycles.Any()
+                ? splitFailPhase.Cycles.Last().EndTime.ToOADate()
+                : Options.EndDate.ToOADate();
             AddSeries(Chart);
             AddDataToChart(Chart);
         }

@@ -1,0 +1,170 @@
+﻿@model IEnumerable<SPM.Models.SignalDataCheckReportViewModel>
+
+Signal data check complete please note the following results:
+
+
+
+<table class="table table-striped">
+    <tr>
+        <th>Checks</th>
+        <th>Acceptable Range (Threshold)</th>
+        @foreach (var check in Model)
+        {
+            <th>@check.ApproachDescriptions</th>
+        }
+    </tr>
+    <tr>
+        <td>Left Turn Gap Data</td>
+        <td>N/A</td>
+        @foreach (var check in Model)
+        {
+            <td>
+                @if (check.InsufficientLeftTurnGapAggregations)
+                {
+                    <label class="alert-danger">Check Left Turn Gap Data</label>
+                }
+                else
+                {
+                    <label class="alert-success">OK</label>
+                }
+            </td>
+        }
+    </tr>
+    <tr>
+        <td>Split Fail Data</td>
+        <td>N/A</td>
+        @foreach (var check in Model)
+        {
+            <td>
+                @if (check.InsufficientSplitFailAggregations)
+                {
+                    <label class="alert-danger">Check Split Fail Data</label>
+                }
+                else
+                {
+                    <label class="alert-success">OK</label>
+                }
+            </td>
+        }
+    </tr>
+    <tr>
+        <td>Cycle Data</td>
+        <td>N/A</td>
+        @foreach (var check in Model)
+        {
+            <td>
+                @if (check.InsufficientCycleAggregation)
+                {
+                    <label class="alert-danger">Check Cycle Data</label>
+                }
+                else
+                {
+                    <label class="alert-success">OK</label>
+                }
+            </td>
+        }
+    </tr>
+    <tr>
+        <td>Detector Event Count</td>
+        <td>N/A</td>
+        @foreach (var check in Model)
+        {
+            <td>
+                @if (check.InsufficientDetectorEventCount)
+                {
+                    <label class="alert-danger">Check Detector Data</label>
+                }
+                else
+                {
+                    <label class="alert-success">OK</label>
+                }
+            </td>
+        }
+    </tr>
+    <tr>
+        <td>Phase Termination Data</td>
+        <td>N/A</td>
+        @foreach (var check in Model)
+        {
+            <td>
+                @if (check.InsufficientPhaseTermination)
+                {
+                    <label class="alert-danger">Check Phase Termination Data</label>
+                }
+                else
+                {
+                    <label class="alert-success">OK</label>
+                }
+            </td>
+        }
+    </tr>
+    <tr>
+        <td>Ped Data</td>
+        <td>N/A</td>
+        @foreach (var check in Model)
+        {
+            <td>
+                @if (check.InsufficientPedAggregations)
+                {
+                    <label class="alert-danger">Check Ped Data</label>
+                }
+                else
+                {
+                    <label class="alert-success">OK</label>
+                }
+            </td>
+        }
+    </tr>
+    <tr>
+        <td>Left Turn Volume</td>
+        <td> @Convert.ToInt32(Model.First().VolumeThreshold) vph</td>
+        @foreach (var check in Model)
+        {
+            <td>
+                @if (check.LeftTurnVolumeOk)
+                {
+                    <label class="alert-danger">Check Data</label>
+                }
+                else
+                {
+                    <label class="alert-success">OK</label>
+                }
+            </td>
+        }
+    </tr>
+    <tr>
+        <td>Gap Out %</td>
+        <td>< @Convert.ToInt32(Model.First().GapOutThreshold*100)%</td>
+        @foreach (var check in Model)
+        {
+            <td>
+                @if (check.GapOutOk)
+                {
+                    <label class="alert-danger">Check Detector</label>
+                }
+                else
+                {
+                    <label class="alert-success">OK</label>
+                }
+            </td>
+        }
+    </tr>
+    <tr>
+        <td>% Cycles with Peds</td>
+        <td> < @Convert.ToInt32(Model.First().PedThreshold*100)%</td>
+        @foreach (var check in Model)
+        {
+            <td>
+                @if (check.PedCycleOk)
+                {
+                    <label class="alert-danger">Check Detector</label>
+                }
+                else
+                {
+                    <label class="alert-success">OK</label>
+                }
+            </td>
+        }
+    </tr>
+</table>
+<label class="BoldText">It is always good practice to review the Split Pattern performance in conjunction with using this report.</label>
