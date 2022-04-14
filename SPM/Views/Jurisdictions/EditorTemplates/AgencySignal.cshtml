@@ -1,0 +1,39 @@
+﻿@model MOE.Common.Models.AgencySignals
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+<div>
+    <h4>AgencySignal</h4>
+    <hr />
+    <dl class="dl-horizontal">
+    
+        <dt>
+            @Html.DisplayNameFor(model => model.Order)
+        </dt>
+    
+        <dd>
+            @Html.DisplayFor(model => model.Order)
+        </dd>
+    
+        <dt>
+            @Html.DisplayNameFor(model => model.SignalId)
+        </dt>
+    
+        <dd>
+            @Html.DisplayFor(model => model.SignalId)
+        </dd>
+    
+    </dl>
+</div>
+</body>
+</html>

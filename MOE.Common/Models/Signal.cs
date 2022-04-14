@@ -105,6 +105,15 @@ namespace MOE.Common.Models
         [DataMember]
         public virtual Region Region { get; set; }
 
+
+        [Required]
+        [Display(Name = "Jurisdiction")]
+        [DataMember]
+        public int JurisdictionId { get; set; }
+
+        [DataMember]
+        public virtual Jurisdiction Jurisdiction { get; set; }
+
         [Required]
         [Display(Name = "ControllerType Type")]
         [DataMember]
