@@ -87,15 +87,12 @@ namespace SPM.Controllers
             {
                 case 1:
                     PhaseTerminationOptions phaseTerminationOptions = new PhaseTerminationOptions();
-                    phaseTerminationOptions.SetDefaults(metricTypesDefaultValuesRepository.GetChartDefaults("PhaseTermination"));
                     return PartialView("PhaseTerminationOptions", phaseTerminationOptions);
                 case 2:
                     SplitMonitorOptions SplitMonitorOptions = new SplitMonitorOptions();
-                    SplitMonitorOptions.SetDefaults(metricTypesDefaultValuesRepository.GetChartDefaults("SplitMonitor"));
                     return PartialView("SplitMonitorOptions", SplitMonitorOptions);
                 case 3:
                     PedDelayOptions pedDelayOptions = new PedDelayOptions();
-                    pedDelayOptions.SetDefaults(metricTypesDefaultValuesRepository.GetChartDefaults("PedDelay"));
                     return PartialView("PedDelayOptions", pedDelayOptions);
                 case 4:
                     MetricOptions preemptOptions = new MetricOptions();
@@ -104,7 +101,6 @@ namespace SPM.Controllers
                     return PartialView("PreemptOptions", preemptOptions);
                 case 5:
                     TMCOptions tMCOptions = new TMCOptions();
-                    tMCOptions.SetDefaults();
                     return PartialView("TMCOptions", tMCOptions);
                 case 6:
                     PCDOptions pcdOptions = new PCDOptions();
@@ -114,34 +110,27 @@ namespace SPM.Controllers
                     return PartialView("ApproachVolumeOptions", approachVolumeOptions);
                 case 8:
                     ApproachDelayOptions approachDelayOptions = new ApproachDelayOptions();
-                    approachDelayOptions.SetDefaults();
                     return PartialView("ApproachDelayOptions", approachDelayOptions);
                 case 9:
                     AoROptions aoROptions = new AoROptions();
-                    aoROptions.SetDefaults();
                     return PartialView("AoROptions", aoROptions);
                 case 10:
                     ApproachSpeedOptions approachSpeedOptions = new ApproachSpeedOptions();
-                    approachSpeedOptions.SetDefaults();
                     return PartialView("ApproachSpeedOptions", approachSpeedOptions);
                 case 11:
                     YellowAndRedOptions yellowAndRedOptions = new YellowAndRedOptions();
-                    yellowAndRedOptions.SetDefaults();
                     return PartialView("YellowAndRedOptions", yellowAndRedOptions);
                 case 31:
                     LeftTurnGapAnalysisOptions leftTurnGapAnalysisOptions = new LeftTurnGapAnalysisOptions();
-                    leftTurnGapAnalysisOptions.SetDefaults();
                     return PartialView("LeftTurnGapAnalysisOptions", leftTurnGapAnalysisOptions);
                 case 32:
                     WaitTimeOptions waitTimeOptions = new WaitTimeOptions();
-                    waitTimeOptions.SetDefaults();
                     return PartialView("WaitTimeOptions", waitTimeOptions);
                 case 17:
                     TimingAndActuationsOptions timingAndActuationsOptions = new TimingAndActuationsOptions();
                     return PartialView("TimingAndActuationsOptions", timingAndActuationsOptions);
                 case 12: default:
                     SplitFailOptions splitFailOptions = new SplitFailOptions();
-                    splitFailOptions.SetDefaults();
                     return PartialView("SplitFailOptions", splitFailOptions);
             }
         }
@@ -367,9 +356,7 @@ namespace SPM.Controllers
 
         public ActionResult YellowAndRedOptions(int id)
         {
-            YellowAndRedOptions yellowAndRedOptions =
-                new YellowAndRedOptions();
-            yellowAndRedOptions.SetDefaults();
+            YellowAndRedOptions yellowAndRedOptions = new YellowAndRedOptions();
             return PartialView("YellowAndRedOptions", yellowAndRedOptions);
         }
 
@@ -425,7 +412,6 @@ namespace SPM.Controllers
         public ActionResult SplitFailOptions(int id)
         {
             SplitFailOptions splitFailOptions = new SplitFailOptions();
-            splitFailOptions.SetDefaults();
             return PartialView("SplitFailOptions", splitFailOptions);
         }
 
@@ -472,7 +458,6 @@ namespace SPM.Controllers
         {
             ApproachSpeedOptions approachSpeedOptions =
                 new ApproachSpeedOptions();
-            approachSpeedOptions.SetDefaults();
             return PartialView("ApproachSpeedOptions", approachSpeedOptions);
         }
 
@@ -520,7 +505,6 @@ namespace SPM.Controllers
         public ActionResult AoROptions(int id)
         {
             AoROptions aoROptions = new AoROptions();
-            aoROptions.SetDefaults();
             return PartialView("AoROptions", aoROptions);
         }
 
@@ -565,7 +549,6 @@ namespace SPM.Controllers
         public ActionResult ApproachDelayOptions(int id)
         {
             ApproachDelayOptions approachDelayOptions = new ApproachDelayOptions();
-            approachDelayOptions.SetDefaults();
             return PartialView("ApproachDelayOptions", approachDelayOptions);
         }
 
@@ -610,9 +593,7 @@ namespace SPM.Controllers
 
         public ActionResult PhaseTerminationOptions(int id)
         {
-            var defaults = metricTypesDefaultValuesRepository.GetChartDefaults("PhaseTermination");
             PhaseTerminationOptions phaseTerminationOptions = new PhaseTerminationOptions(); 
-            phaseTerminationOptions.SetDefaults(defaults);
             return PartialView("PhaseTerminationOptions", phaseTerminationOptions);
         }
 
@@ -738,7 +719,6 @@ namespace SPM.Controllers
         public ActionResult TMCOptions(int id)
         {
             TMCOptions tMCOptions = new TMCOptions();
-            tMCOptions.SetDefaults();
             return PartialView("TMCOptions", tMCOptions);
         }
 
@@ -791,7 +771,6 @@ namespace SPM.Controllers
         public ActionResult ApproachVolumeOptions(int id)
         {
             ApproachVolumeOptions approachVolumeOptions = new ApproachVolumeOptions();
-            approachVolumeOptions.SetDefaults();
             return PartialView("ApproachVolumeOptions", approachVolumeOptions);
         }
 
@@ -882,7 +861,6 @@ namespace SPM.Controllers
         public ActionResult PedDelayOptions(int id)
         {
             PedDelayOptions pedDelayOptions = new PedDelayOptions();
-            pedDelayOptions.SetDefaults();
             return PartialView("PedDelayOptions", pedDelayOptions);
         }
 
