@@ -36,6 +36,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public SplitMonitorOptions()
         {
             SetPercentSplitsList();
+            SetDefaults();
         }
 
         [DataMember]

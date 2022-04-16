@@ -83,21 +83,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         [Display(Name = "Average Time Yellow Occurences")]
         public bool ShowAverageTimeYellowOccurences { get; set; }
-
-        public void SetDefaults()
-        {
-            YAxisMax = 15;
-            SevereLevelSeconds = 4.0;
-            ShowRedLightViolations = true;
-            ShowSevereRedLightViolations = true;
-            ShowPercentRedLightViolations = true;
-            ShowPercentSevereRedLightViolations = true;
-            ShowAverageTimeRedLightViolations = true;
-            ShowYellowLightOccurrences = true;
-            ShowPercentYellowLightOccurrences = true;
-            ShowAverageTimeYellowOccurences = true;
-        }
-
         public override List<string> CreateMetric()
         {
             base.CreateMetric();

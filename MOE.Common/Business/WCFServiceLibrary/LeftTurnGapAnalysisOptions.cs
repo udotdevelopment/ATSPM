@@ -75,6 +75,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public LeftTurnGapAnalysisOptions()
         {
+            YAxisMax = 60;
             SetDefaults();
         }
 
@@ -181,20 +182,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         [DataMember]
         public double BinSize { get; set; }
-
-        public void SetDefaults()
-        {
-            YAxisMax = 60;
-            Gap1Min = 1;
-            Gap1Max = 3.3;
-            Gap2Min = 3.3;
-            Gap2Max = 3.7;
-            Gap3Min = 3.7;
-            Gap3Max = 7.4;
-            Gap4Min = 7.4;
-            TrendLineGapThreshold = 7.4;
-            BinSize = 15;
-        }
 
         public override List<string> CreateMetric()
         {

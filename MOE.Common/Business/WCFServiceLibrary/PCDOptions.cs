@@ -34,9 +34,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public PCDOptions()
         {
-            VolumeBinSizeList = new List<int>();
-            VolumeBinSizeList.Add(15);
-            VolumeBinSizeList.Add(5);
+            VolumeBinSizeList = new List<int>() { 5, 15 };
             DotSizeList = new List<DotSizeItem>();
             DotSizeList.Add(new DotSizeItem(1, "Small"));
             DotSizeList.Add(new DotSizeItem(2, "Large"));
@@ -75,15 +73,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember] public bool ShowArrivalsOnGreen { get; set; }
 
         public Models.Signal Signal { get; set; }
-
-        public void SetDefaults()
-        {
-            YAxisMax = 150;
-            Y2AxisMax = 2000;
-            ShowPlanStatistics = true;
-            ShowVolumes = true;
-            MetricTypeID = 6;
-        }
 
         public override List<string> CreateMetric()
         {

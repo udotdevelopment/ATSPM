@@ -32,14 +32,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public PhaseTerminationOptions()
         {
-            ConsecutiveCountList = new List<int>();
-            ConsecutiveCountList.Add(1);
-            ConsecutiveCountList.Add(2);
-            ConsecutiveCountList.Add(3);
-            ConsecutiveCountList.Add(4);
-            ConsecutiveCountList.Add(5);
+            ConsecutiveCountList = new List<int>() { 1, 2, 3, 4, 5};
             MetricTypeID = 1;
             ShowArrivalsOnGreen = true;
+            SetDefaults();
         }
 
         [Required]
