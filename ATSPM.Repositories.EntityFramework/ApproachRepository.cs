@@ -41,6 +41,7 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
             {
                 var approach = _db.Approaches
                     .Include(approach => approach.Detectors)
+                    .Include(approach => approach.DirectionType)
                     .Where(a => a.ApproachId == approachId).FirstOrDefault();
                 if(approach== null)
                     throw new Exception("There is no Approach for this ID");

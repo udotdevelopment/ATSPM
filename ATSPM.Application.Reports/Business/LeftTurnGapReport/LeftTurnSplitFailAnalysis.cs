@@ -32,12 +32,16 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             int splitFails = splitFailsAggregates.Sum(s => s.SplitFailures);
             if (cycles == 0)
                 throw new ArithmeticException("Cycles cannot be zero");
+
+            var approach = _approachRepository.GetApproachByApproachID(approachId);
             return new SplitFailResult
             {
                 CyclesWithSplitFails = splitFails,
                 SplitFailPercent = splitFails / cycles,
-                PercentCyclesWithSplitFailList = percentCyclesWithSplitFail
-            };
+                PercentCyclesWithSplitFailList = percentCyclesWithSplitFail,
+                Direction = approach.DirectionType.Description,
+                Movement = String.Join(",", approach.Detectors.Select(d => d.MovementType.Description).ToList())
+        };
 
         }
 

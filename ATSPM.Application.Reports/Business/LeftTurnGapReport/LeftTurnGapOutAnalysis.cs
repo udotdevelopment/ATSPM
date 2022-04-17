@@ -38,6 +38,8 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             gapOutResult.AcceptableGaps = GetGapsList(signalId, opposingPhase, start, end, startTime, endTime, criticalGap, daysOfWeek);
             gapOutResult.DetectorCount = GetGapsList(signalId, opposingPhase, start, end, startTime, endTime, criticalGap, daysOfWeek);
             gapOutResult.Demand = GetGapDemand(approachId, start, end, startTime, endTime, criticalGap);
+            gapOutResult.Direction = approach.DirectionType.Description;
+            gapOutResult.Movement = String.Join(",", approach.Detectors.Select(d => d.MovementType.Description).ToList());
             if (gapOutResult.Capacity == 0)
                 throw new ArithmeticException("Gap Count cannot be zero");
             gapOutResult.GapOutPercent = gapOutResult.Demand / gapOutResult.Capacity;

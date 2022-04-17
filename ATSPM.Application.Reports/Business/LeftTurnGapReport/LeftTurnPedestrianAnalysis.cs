@@ -53,6 +53,8 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                 result.PedActuationPercent = pedCycleAverage.PedCycleAverage / cycleAverage.CycleAverage;
             result.CyclesWithPedCalls = Convert.ToInt32(Math.Round(pedCycleAverage.PedCycleAverage));
             result.PercentCyclesWithPedsList = cycleList;
+            result.Direction = approach.DirectionType.Description;
+            result.Movement = String.Join(",", approach.Detectors.Select(d => d.MovementType.Description).ToList());
 
             return result;
         }

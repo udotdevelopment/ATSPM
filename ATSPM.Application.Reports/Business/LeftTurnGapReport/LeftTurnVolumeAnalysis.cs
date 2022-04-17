@@ -60,6 +60,8 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             ApproachType approachType = GetApproachType(approach);
             SetDecisionBoundariesReview(leftTurnVolumeValue, leftTurnVolume, opposingVolume, approachType);
             leftTurnVolumeValue.DemandList = GetDemandList(start, end, startTime, endTime, daysOfWeek, leftTurnVolumeAggregation);
+            leftTurnVolumeValue.Direction = approach.DirectionType.Description;
+            leftTurnVolumeValue.Movement = String.Join(",", approach.Detectors.Select(d => d.MovementType.Description).ToList());
             return leftTurnVolumeValue;
         }
 
@@ -201,7 +203,8 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
         public double CrossProductValue { get; set; }
         public double CalculatedVolumeBoundary { get; set; }
         public Dictionary<DateTime, double> DemandList { get; set; }
-
+        public string Direction { get; internal set; }
+        public string Movement { get; internal set; }
     }
 
     public enum ApproachType { Permissive, Protected, PermissiveProtected };

@@ -10,5 +10,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
         public double PedActuationPercent { get; set; }
         public int CyclesWithPedCalls { get; set; }
         public Dictionary<DateTime, double> PercentCyclesWithPedsList { get; set; }
+        public string Direction { get; internal set; }
+        public string Movement { get; internal set; }
     }
 }
