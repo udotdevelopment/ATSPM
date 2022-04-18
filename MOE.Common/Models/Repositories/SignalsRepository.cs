@@ -460,7 +460,7 @@ namespace MOE.Common.Models.Repositories
 
         public List<Signal> GetLatestVersionOfAllSignalsForFtp()
         {
-            List<int> controllerTypes = new List<int>{4,5};
+            List<int> controllerTypes = new List<int>{4};
             var activeSignals = _db.Signals.Where(r => r.VersionActionId != 3)
                 .Include(s => s.ControllerType)
                 //.Where(s => !controllerTypes.Contains(s.ControllerTypeID))

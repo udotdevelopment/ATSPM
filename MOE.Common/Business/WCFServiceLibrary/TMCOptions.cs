@@ -53,7 +53,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public List<int> BinSizeList { get; set; }
 
         [DataMember]
-        [Display(Name = "Show MovementType Volume")]
+        [Display(Name = "Show Movement Type Volume")]
         public bool ShowLaneVolumes { get; set; }
 
         [DataMember]
@@ -66,8 +66,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public void SetDefaults()
         {
-            Y2AxisMax = 300;
-            YAxisMax = 1000;
+            Y2AxisMax = null;
+            YAxisMax = null;
             ShowLaneVolumes = true;
             ShowTotalVolumes = true;
             ShowDataTable = false;
