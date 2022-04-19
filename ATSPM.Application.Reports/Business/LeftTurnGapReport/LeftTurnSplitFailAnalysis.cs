@@ -32,7 +32,6 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             int splitFails = splitFailsAggregates.Sum(s => s.SplitFailures);
             if (cycles == 0)
                 throw new ArithmeticException("Cycles cannot be zero");
-
             var approach = _approachRepository.GetApproachByApproachID(approachId);
             return new SplitFailResult
             {
@@ -40,7 +39,6 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                 SplitFailPercent = splitFails / cycles,
                 PercentCyclesWithSplitFailList = percentCyclesWithSplitFail,
                 Direction = approach.DirectionType.Description,
-                Movement = String.Join(",", approach.Detectors.Select(d => d.MovementType.Description).ToList())
         };
 
         }
@@ -52,9 +50,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                                                                                  TimeSpan endTime,
                                                                                  int[] daysOfWeek)
         {
-            var detectors = LeftTurnReportPreCheck.GetLeftTurnDetectors(approachId, _approachRepository);
             var approach = _approachRepository.GetApproachByApproachID(approachId);
-            var phase = LeftTurnReportPreCheck.GetOpposingPhase(approach);
             List<Models.ApproachSplitFailAggregation> splitFailsAggregates = new List<Models.ApproachSplitFailAggregation>();
             for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
             {

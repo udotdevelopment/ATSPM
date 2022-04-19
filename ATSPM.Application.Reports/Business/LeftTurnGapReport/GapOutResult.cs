@@ -13,6 +13,6 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
         public Dictionary<DateTime, Double> AcceptableGaps { get; set; }
         public Dictionary<DateTime, Double> DetectorCount { get; set; }
         public String Direction { get; set; }
-        public String Movement { get; set; }
+        public string OpposingDirection { get; internal set; }
     }
 }
