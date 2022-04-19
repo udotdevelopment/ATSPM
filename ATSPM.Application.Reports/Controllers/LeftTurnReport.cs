@@ -209,7 +209,7 @@ namespace ATSPM.Application.Reports.Controllers
             var startTime = new TimeSpan(parameters.StartHour, parameters.StartMinute, 0);
             var endTime = new TimeSpan(parameters.EndHour, parameters.EndMinute, 0);
 
-            var pedAnalysis = new LeftTurnPedestrianAnalysis(_approachRepository, _detectorRepository, _phasePedAggregationRepository,
+            var pedAnalysis = new LeftTurnPedestrianAnalysis(_signalRepository, _approachRepository, _phasePedAggregationRepository,
                 _approachCycleAggregationRepository);
             var pedActuationResult = new PedActuationResult();
             pedActuationResult = pedAnalysis.GetPedestrianPercentage(parameters.SignalId, parameters.ApproachId, parameters.StartDate, parameters.EndDate, startTime, endTime, parameters.DaysOfWeek);

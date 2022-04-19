@@ -37,11 +37,11 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                 approachRepository,
                 detectorEventCountAggregationRepository);
             //Need a test that looks at the volume and the opposing volume
+            var signal = signalsRepository.GetVersionOfSignalByDate(signalId, start);
+            var approach = signal.Approaches.Where(a => a.ApproachId == approachId).FirstOrDefault();
             LeftTurnVolumeValue leftTurnVolumeValue = new LeftTurnVolumeValue();
             var detectors = LeftTurnReportPreCheck.GetLeftTurnDetectors(approachId, approachRepository);
-            var approach = approachRepository.GetApproachByApproachID(detectors.First().ApproachId);
             int opposingPhase = LeftTurnReportPreCheck.GetOpposingPhase(approach);
-            var signal = signalsRepository.GetVersionOfSignalByDate(signalId, start);
             List<int> movementTypes = new List<int>() { 1, 4, 5 };
             List<Models.Detector> opposingDetectors =
                 GetOpposingDetectors(opposingPhase, signal, movementTypes);//GetDetectorsByPhase(signalId, opposingPhase, detectorRepository);
@@ -60,6 +60,8 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             ApproachType approachType = GetApproachType(approach);
             SetDecisionBoundariesReview(leftTurnVolumeValue, leftTurnVolume, opposingVolume, approachType);
             leftTurnVolumeValue.DemandList = GetDemandList(start, end, startTime, endTime, daysOfWeek, leftTurnVolumeAggregation);
+            leftTurnVolumeValue.Direction = approach.DirectionType.Description;
+            leftTurnVolumeValue.OpposingDirection = signal.Approaches.Where(a => a.ProtectedPhaseNumber == opposingPhase).FirstOrDefault()?.DirectionType.Description;
             return leftTurnVolumeValue;
         }
 
@@ -201,7 +203,8 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
         public double CrossProductValue { get; set; }
         public double CalculatedVolumeBoundary { get; set; }
         public Dictionary<DateTime, double> DemandList { get; set; }
-
+        public string Direction { get; internal set; }
+        public string OpposingDirection { get; internal set; }
     }
 
     public enum ApproachType { Permissive, Protected, PermissiveProtected };

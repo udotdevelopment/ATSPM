@@ -935,15 +935,6 @@ namespace MOE.Common.Migrations
                 },
                 new MetricType
                 {
-                    MetricID = 31,
-                    ChartName = "Left Turn Gap Analysis",
-                    Abbreviation = "LTGA",
-                    ShowOnWebsite = true,
-                    ShowOnAggregationSite = false,
-                    DisplayOrder = 25
-                },
-                new MetricType
-                {
                     MetricID = 12,
                     ChartName = "Purdue Split Failure",
                     Abbreviation = "SF",
