@@ -41,7 +41,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public YellowAndRedOptions()
         {
             MetricTypeID = 11;
-            BinSize = 15; //TODO: this is not even an option on the front end!
+            BinSize = 15;
             SetDefaults();
         }
 
