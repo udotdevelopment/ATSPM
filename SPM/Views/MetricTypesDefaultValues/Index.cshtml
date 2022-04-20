@@ -1,153 +1,36 @@
 ﻿@model SPM.Models.MetricTypesDefaultValuesViewModel
 
-<h2>Default Options For Charts</h2>
-<div id="PhaseTerminationOptions" role="tablist" aria-multiselectable="true" class="col-md-12 card panel-defaults">
-    <div class="card-header" role="tab" id="PhaseTerminationOptionsHeading">
-        <a id="PhaseTerminationOptionsHeader" data-toggle="collapse" data-parent="#PhaseTerminationOptions" href="#PhaseTerminationOptionsCollapse" aria-expanded="false" aria-controls="PhaseTerminationOptionsCollapse">
-            Phase Termination
-        </a>
+@{
+    ViewBag.Title = "Default Chart Settings";
+}
+
+<h2 class="mt-2 text-center">Default Chart Settings</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="col-6 mx-auto">
+                <input type="submit" value="Save Changes" class="btn btn-outline-secondary ml-4 m-2" />
+
+        @Html.Partial("~/Views/MetricTypesDefaultValues/PhaseTerminationOptions.cshtml")
+        @Html.Partial("~/Views/MetricTypesDefaultValues/SplitMonitorOptions.cshtml")
+        @Html.Partial("~/Views/MetricTypesDefaultValues/PedDelayOptions.cshtml")
+        @Html.Partial("~/Views/MetricTypesDefaultValues/ApproachDelayOptions.cshtml")
+        @Html.Partial("~/Views/MetricTypesDefaultValues/LeftTurnGapAnalysisOptions.cshtml")
+        @Html.Partial("~/Views/MetricTypesDefaultValues/SplitFailOptions.cshtml")
+        @Html.Partial("~/Views/MetricTypesDefaultValues/YellowAndRedOptions.cshtml")
+        @Html.Partial("~/Views/MetricTypesDefaultValues/TMCOptions.cshtml")
+        @Html.Partial("~/Views/MetricTypesDefaultValues/ApproachVolumeOptions.cshtml")
+        @Html.Partial("~/Views/MetricTypesDefaultValues/AoROptions.cshtml")
+        @Html.Partial("~/Views/MetricTypesDefaultValues/PCDOptions.cshtml")
+        @Html.Partial("~/Views/MetricTypesDefaultValues/ApproachSpeedOptions.cshtml")
+        @Html.Partial("~/Views/MetricTypesDefaultValues/WaitTimeOptions.cshtml")
+        @Html.Partial("~/Views/MetricTypesDefaultValues/TimingAndActuationsOptions.cshtml")
     </div>
-    <div id="PhaseTerminationOptionsCollapse" class="collapse" role="tabpanel">
-        <div class="card-body row">
-            <div class="form-group-configuration-tool  form-group m-2">
-                @Html.LabelFor(model => model.PhaseTermination.YAxisMax, htmlAttributes: new { @class = "control-label"})
-                <div>
-                    @Html.EditorFor(model => model.PhaseTermination.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
-                    @Html.ValidationMessageFor(model => model.PhaseTermination.YAxisMax, "", new { id = "Description-error", @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group-configuration-tool  form-group m-2">
-                @Html.LabelFor(model => model.PhaseTermination.SelectedConsecutiveCount, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.DropDownListFor(model => model.PhaseTermination.SelectedConsecutiveCount, Enumerable.Range(1, 5).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }), new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PhaseTermination.SelectedConsecutiveCount, "", new { id = "Description-error", @class = "text-danger" })
-                    @*@Html.DropDownListFor(model => model.PhaseTerminationSelectedConsecutiveCount, (SelectList)ViewBag.BinSize, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.PhaseTerminationSelectedConsecutiveCount, "", new { id = "Description-error", @class = "text-danger" })
-        </div>*@
-                </div>
-            </div>
-            <div class="form-group-configuration-tool  form-group m-2">
-                @Html.LabelFor(model => model.PhaseTermination.ShowPlanStripes, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.EditorFor(model => model.PhaseTermination.ShowPlanStripes)
-                    @Html.ValidationMessageFor(model => model.PhaseTermination.ShowPlanStripes, "", new { id = "Description-error", @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group-configuration-tool  form-group m-2">
-                @Html.LabelFor(model => model.PhaseTermination.ShowPedActivity, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.EditorFor(model => model.PhaseTermination.ShowPedActivity, new { htmlAttributes = new { @class = "form -control" } })
-                    @Html.ValidationMessageFor(model => model.PhaseTermination.ShowPedActivity, "", new { id = "Description-error", @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="SplitMonitorOptions" role="tablist" aria-multiselectable="true" class="col-md-12 card panel-defaults">
-    <div class="card-header" role="tab" id="SplitMonitorOptionsHeading">
-        <a id="SplitMonitorOptionsHeader" data-toggle="collapse" data-parent="#SplitMonitorOptions" href="#SplitMonitorOptionsCollapse" aria-expanded="false" aria-controls="SplitMonitorOptionsCollapse">
-            Split Monitor
-        </a>
-    </div>
-    <div id="SplitMonitorOptionsCollapse" class="collapse" role="tabpanel">
-        <div class="row card-body">
-            <div class="form-group-configuration-tool  form-group m-2">
-                @Html.LabelFor(model => model.SplitMonitor.YAxisMax, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.EditorFor(model => model.SplitMonitor.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
-                    @Html.ValidationMessageFor(model => model.SplitMonitor.YAxisMax, "", new { id = "Description-error", @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group-configuration-tool  form-group m-2">
-                @Html.LabelFor(model => model.SplitMonitor.SelectedPercentileSplit, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.EditorFor(model => model.SplitMonitor.SelectedPercentileSplit, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.SplitMonitor.SelectedPercentileSplit, "", new { id = "Description-error", @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group-configuration-tool  form-group m-2">
-                @Html.LabelFor(model => model.SplitMonitor.ShowPlanStripes, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.EditorFor(model => model.SplitMonitor.ShowPlanStripes, new { htmlAttributes = new {placeholder = "Auto" } })
-                    @Html.ValidationMessageFor(model => model.SplitMonitor.ShowPlanStripes, "", new { id = "Description-error", @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group-configuration-tool  form-group m-2">
-                @Html.LabelFor(model => model.SplitMonitor.ShowPedActivity, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.EditorFor(model => model.SplitMonitor.ShowPedActivity, new { htmlAttributes = new {placeholder = "Auto" } })
-                    @Html.ValidationMessageFor(model => model.SplitMonitor.ShowPedActivity, "", new { id = "Description-error", @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group-configuration-tool  form-group m-2">
-                @Html.LabelFor(model => model.SplitMonitor.ShowAverageSplit, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.EditorFor(model => model.SplitMonitor.ShowAverageSplit, new { htmlAttributes = new {placeholder = "Auto" } })
-                    @Html.ValidationMessageFor(model => model.SplitMonitor.ShowAverageSplit, "", new { id = "Description-error", @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group-configuration-tool  form-group m-2">
-                @Html.LabelFor(model => model.SplitMonitor.ShowPercentMaxOutForceOff, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.EditorFor(model => model.SplitMonitor.ShowPercentMaxOutForceOff, new { htmlAttributes = new {placeholder = "Auto" } })
-                    @Html.ValidationMessageFor(model => model.SplitMonitor.ShowPercentMaxOutForceOff, "", new { id = "Description-error", @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group-configuration-tool  form-group m-2">
-                @Html.LabelFor(model => model.SplitMonitor.ShowPercentGapOuts, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.EditorFor(model => model.SplitMonitor.ShowPercentGapOuts, new { htmlAttributes = new {placeholder = "Auto" } })
-                    @Html.ValidationMessageFor(model => model.SplitMonitor.ShowPercentGapOuts, "", new { id = "Description-error", @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group-configuration-tool  form-group m-2">
-                @Html.LabelFor(model => model.SplitMonitor.ShowPercentSkip, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.EditorFor(model => model.SplitMonitor.ShowPercentSkip, new { htmlAttributes = new {placeholder = "Auto" } })
-                    @Html.ValidationMessageFor(model => model.SplitMonitor.ShowPercentSkip, "", new { id = "Description-error", @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="PedDelayOptions" role="tablist" aria-multiselectable="true" class="col-md-12 card panel-defaults">
-    <div class="card-header" role="tab" id="PedDelayOptionsHeading">
-        <a id="PedDelayOptionsHeader" data-toggle="collapse" data-parent="#PedDelayOptions" href="#PedDelayOptionsCollapse" aria-expanded="false" aria-controls="PedDelayOptionsCollapse">
-            Ped Delay
-        </a>
-    </div>
-    <div id="PedDelayOptionsCollapse" class="collapse" role="tabpanel">
-        <div class="card-body row">
-            <div class="form-group-configuration-tool  form-group m-2">
-                @Html.LabelFor(model => model.PedDelay.YAxisMax, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.EditorFor(model => model.PedDelay.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
-                    @Html.ValidationMessageFor(model => model.PedDelay.YAxisMax, "", new { id = "Description-error", @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+}
 
+@section Scripts
+{
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    @Scripts.Render("~/Scripts/ChangeDefaultsMenu.js")
+}
 
-
-
-
-
-
-        @*<div class="card-header" role="tab" id="PedDelayOptionsHeading">
-            <a id="PedDelayHeader" data-toggle="collapse" data-parent="#PedDelay" href="#PedDelayCollapse" aria-expanded="false" aria-controls="PedDelayCollapse">
-                Ped Delay
-            </a>
-        </div>
-        <div id="PedDelayCollapse" class="collapse card-body" role="tabpanel">
-            <div class="row">
-                <div class="form-group-configuration-tool  form-group m-2">
-                    @Html.LabelFor(model => model.PedDelay.YAxisMax, htmlAttributes: new { @class = "control-label" })
-                    <div>
-                        @Html.EditorFor(model => model.PedDelay.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
-                        @Html.ValidationMessageFor(model => model.PedDelay.YAxisMax, "", new { id = "Description-error", @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-        </div>*@
