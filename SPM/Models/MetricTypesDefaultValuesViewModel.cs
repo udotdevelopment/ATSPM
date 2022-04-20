@@ -8,14 +8,6 @@ using System.ComponentModel;
 
 namespace SPM.Models
 {
-    public enum BinSizeOptions
-    {
-        [Display(Name = "5")]
-        n1 = 5,
-        [Display(Name = "15")]
-        n2 = 15,
-    }
-
     public class MetricTypesDefaultValuesViewModel
     {
         public PhaseTerminationDefaultValuesViewModel PhaseTermination { get; set; }
@@ -35,87 +27,90 @@ namespace SPM.Models
     }
     public class PhaseTerminationDefaultValuesViewModel
     {
-        [Display(Name = "Selected Consecutive Count")]
-        [Range(1, 5)]
+        [Display(Name = "Consecutive Count")]
         public int SelectedConsecutiveCount { get; set; }
         [Display(Name = "Show Ped Activity")]
         public bool ShowPedActivity { get; set; }
-        [Display(Name = "Show Plan Stripes")]
+        [Display(Name = "Show Plans")]
         public bool ShowPlanStripes { get; set; }
-        [Display(Name = "Y Axis Max")]
-        public int? YAxisMax { get; set; }
+        [Display(Name = "Y-axis Max")]
+        public double? YAxisMax { get; set; }
     }
 
     public class AoRDefaultValuesViewModel
     {
-        [Display(Name = "Selected Bin Size")]
-        public BinSizeOptions SelectedBinSize { get; set; }
-        [Display(Name = "Show Plan Statistics")]
+        [Display(Name = "Volume Bin Size")]
+        public int SelectedBinSize { get; set; }
+        [Display(Name = "Y-axis Max")]
+        public double? YAxisMax { get; set; }
+        [Display(Name = "Show Plans")]
         public bool ShowPlanStatistics { get; set; }
     }
 
     public class ApproachDelayDefaultValuesViewModel
     {
-        [Display(Name = "Selected Bin Size")]
-        public BinSizeOptions SelectedBinSize { get; set; }
+        [Display(Name = "Volume Bin Size")]
+        public int SelectedBinSize { get; set; }
         [Display(Name = "Show Delay Per Vehicle")]
         public bool ShowDelayPerVehicle { get; set; }
-        [Display(Name = "Show Plan Statistics")]
+        [Display(Name = "Show Plans")]
         public bool ShowPlanStatistics { get; set; }
         [Display(Name = "Show Total Delay Per Hour")]
         public bool ShowTotalDelayPerHour { get; set; }
-        [Display(Name = "Y Axis Max")]
-        public int YAxisMax { get; set; }
-        [Display(Name = "Y2 Axis Max")]
-        public int Y2AxisMax { get; set; }
+        [Display(Name = "Y-axis Max")]
+        public double YAxisMax { get; set; }
+        [Display(Name = "Secondary Y-Axis Max")]
+        public double Y2AxisMax { get; set; }
 
     }
 
     public class ApproachSpeedDefaultValuesViewModel
     {
-        [Display(Name = "Bin Size")]
-        public BinSizeOptions BinSize { get; set; }
-        [Display(Name = "Show 15 Percentile")]
+        [Display(Name = "Volume Bin Size")]
+        public int SelectedBinSize { get; set; }
+        [Display(Name = "Show 15% Speeds")]
         public bool Show15Percentile { get; set; }
-        [Display(Name = "Show 85 Percentile")]
+        [Display(Name = "Show 85% Speeds")]
         public bool Show85Percentile { get; set; }
         [Display(Name = "Show Average Speed")]
         public bool ShowAverageSpeed { get; set; }
-        [Display(Name = "Show Plan Statistics")]
+        [Display(Name = "Show Plans")]
         public bool ShowPlanStatistics { get; set; }
         [Display(Name = "Show Posted Speed")]
         public bool ShowPostedSpeed { get; set; }
-        [Display(Name = "Y Axis Max")]
-        public int YAxisMax { get; set; }
-        [Display(Name = "Y2 Axis Max")]
-        public int YAxisMin { get; set; }
+        [Display(Name = "Y-axis Max")]
+        public double YAxisMax { get; set; }
+        [Display(Name = "Y-axis Min")]
+        public double YAxisMin { get; set; }
     }
 
     public class ApproachVolumeDefaultValuesViewModel
     {
         [Display(Name = "Selected Bin Size")]
-        public BinSizeOptions SelectedBinSize { get; set; }
+        public int SelectedBinSize { get; set; }
         [Display(Name = "Show Advance Detection")]
         public bool ShowAdvanceDetection { get; set; }
         [Display(Name = "Show Directional Splits")]
         public bool ShowDirectionalSplits { get; set; }
-        [Display(Name = "Show Northbound/Eastbound Volume")]
+        [Display(Name = "Show NB/EB Volume")]
         public bool ShowNbEbVolume { get; set; }
-        [Display(Name = "Show Southbound/Westbound Volume")]
+        [Display(Name = "Show SB/WB Volume")]
         public bool ShowSbWbVolume { get; set; }
-        [Display(Name = "Show Turning Movement Counts Detection")]
+        [Display(Name = "Show TMC Detection")]
         public bool ShowTMCDetection { get; set; }
         [Display(Name = "Show Total Volume")]
         public bool ShowTotalVolume { get; set; }
-        [Display(Name = "Y Axis Min")]
-        public int YAxisMin { get; set; }
+        [Display(Name = "Y-axis Min")]
+        public double YAxisMin { get; set; }
+        [Display(Name = "Y-axis Max")]
+        public double? YAxisMax { get; set; }
 
     }
 
     public class LeftTurnGapAnalysisDefaulValuesViewModel
     {
         [Display(Name = "Bin Size")]
-        public BinSizeOptions BinSize { get; set;}
+        public int BinSize { get; set;}
         [Display(Name = "Gap 1 Max")]
         public double Gap1Max { get; set;}
         [Display(Name = "Gap 1 Min")]
@@ -135,41 +130,47 @@ namespace SPM.Models
     }
 
     public class PCDefaulValuesViewModel
-    {
-        public enum LineSizeOptions
-        {
-            Small,
-            Large,
-        }
-
-        public BinSizeOptions SelectedBinSize { get; set; }          
+    { 
+        [Display(Name = "Volume Bin Size")]
+        public int SelectedBinSize { get; set; }
+        [Display(Name = "Dot Size")]
         public int SelectedDotSize { get; set; }
+        [Display(Name = "Line Size")]
         public int SelectedLineSize { get; set; }
+        [Display(Name = "Show Plans")]
         public bool ShowPlanStatistics { get; set; }
+        [Display(Name = "Show Volumes")]
         public bool ShowVolumes { get; set; }
-        public int Y2AxisMax { get; set; }
-        public int YAxisMax { get; set; }
+        [Display(Name = "Secondary Y-axis Max")]
+        public double Y2AxisMax { get; set; }
+        [Display(Name = "Y-axis Max")]
+        public double YAxisMax { get; set; }
     }       
     
     public class PedDelayDefaulValuesViewModel
     {
-        public int YAxisMax { get; set; }
+        [Display(Name = "Y-axis Max")]
+        public double? YAxisMax { get; set; }
     }
 
     public class SplitFailDefaultValuesViewModel
     {
+        [Display(Name = "First Seconds Of Red")]
         public int FirstSecondsOfRed { get; set; }
+        [Display(Name = "Show Average Lines")]
         public bool ShowAvgLines { get; set; }
+        [Display(Name = " Show Fail Lines")]
         public bool ShowFailLines { get; set; }
+        [Display(Name = "Show Percent Fail Lines")]
         public bool ShowPercentFailLines { get; set; }
     }
 
     public class SplitMonitorDefaultValuesViewModel
     {
         [Display(Name = "Y Axis Max")]
-        public int YAxisMax { get; set; }
+        public double? YAxisMax { get; set; }
         [Display(Name = "Selected Percentile Split")]
-        public int SelectedPercentileSplit { get; set; }
+        public int? SelectedPercentileSplit { get; set; }
         [Display(Name = "Show Average Split")]
         public bool ShowAverageSplit { get; set; }
         [Display(Name = "Show Ped Activity")]
@@ -186,52 +187,89 @@ namespace SPM.Models
 
     public class TimingAndActuationsDefaulValuesViewModel
     {
+        [Display(Name = " Advanced Count Offset")]
         public int AdvancedOffset { get; set; }
+        [Display(Name = "Combine Lanes for Phase")]
         public bool CombineLanesForEachGroup { get; set; }
+        [Display(Name = "Dot and Marker Size")]
         public int DotAndBarSize { get; set; }
+        [Display(Name = "Extend Start/Stop Search Minutes.decimal")]
         public int ExtendStartStopSearch { get; set; }
+        [Display(Name = "Extend Search (left) Minutes.decimal")]
         public int ExtendVsdSearch { get; set; }
+        [Display(Name = "Advanced Count")]
         public bool ShowAdvancedCount { get; set; }
+        [Display(Name = "Advanced Presence")]
         public bool ShowAdvancedDilemmaZone { get; set; }
+        [Display(Name = "All Lanes For Each Phase")]
         public bool ShowAllLanesInfo { get; set; }
+        [Display(Name = "Event Start Stop Pairs")]
         public bool ShowEventPairs { get; set; }
+        [Display(Name = "Header For Each Phase")]
         public bool ShowHeaderForEachPhase { get; set; }
+        [Display(Name = "Lane-by-lane Count")]
         public bool ShowLaneByLaneCount { get; set; }
+        [Display(Name = "Legend")]
         public bool ShowLegend { get; set; }
+        [Display(Name = "On/Off Lines")]
         public bool ShowLinesStartEnd { get; set; }
+        [Display(Name = "Pedestrian Actuations")]
         public bool ShowPedestrianActuation { get; set; }
-        public bool ShowPedestrianboolervals { get; set; }
+        [Display(Name = "Pedestrian Intervals")]
+        public bool ShowPedestrianIntervals { get; set; }
+        [Display(Name = "Show Permissive Phases")]
         public bool ShowPermissivePhases { get; set; }
+        [Display(Name = "Raw Data Display")]
         public bool ShowRawEventData { get; set; }
+        [Display(Name = "Stop Bar Presence")]
         public bool ShowStopBarPresence { get; set; }
+        [Display(Name = " Vehicle Signal Display")]
         public bool ShowVehicleSignalDisplay { get; set; }
     }
 
     public class TMCDefaultValuesViewModel
     {
-        public BinSizeOptions SelectedBinSize { get; set; }
+        [Display(Name = "Volume Bin Size")]
+        public int SelectedBinSize { get; set; }
+        [Display(Name = "Show Data Table")]
         public bool ShowDataTable { get; set; }
+        [Display(Name = " Show Movement Type Volume")]
         public bool ShowLaneVolumes { get; set; }
+        [Display(Name = " Show Total Volume")]
         public bool ShowTotalVolumes { get; set; }
-        public int Y2AxisMax { get; set; }
-        public int YAxisMax { get; set; }
+        [Display(Name = "Turn Movement Y-axis Max")]
+        public double Y2AxisMax { get; set; }
+        [Display(Name = "Thru Movement Y-axis Max")]
+        public double YAxisMax { get; set; }
     }
 
     public class WaitTimeDefaultValuesViewModel
     {
+        [Display(Name = "Show Plan")]
         public bool ShowPlanStripes { get; set; }
     }
 
     public class YellowAndRedDefaultValuesViewModel
     {
+        [Display(Name = "Average Time Red Light Violations")]
         public bool ShowAverageTimeRedLightViolations { get; set; }
+        [Display(Name = "Severe Red Light Violations")]
+        public double SevereLevelSeconds { get; set; }
+        [Display(Name = "Average Time Yellow Occurences")]
         public bool ShowAverageTimeYellowOccurences { get; set; }
+        [Display(Name = "Percent Red Light Violations")]
         public bool ShowPercentRedLightViolations { get; set; }
+        [Display(Name = "Percent Severe Red Light Violations")]
         public bool ShowPercentSevereRedLightViolations { get; set; }
+        [Display(Name = "Percent Yellow Light Occurrences")]
         public bool ShowPercentYellowLightOccurrences { get; set; }
+        [Display(Name = "Red Light Violations")]
         public bool ShowRedLightViolations { get; set; }
+        [Display(Name = "Severe Red Light Violations")]
         public bool ShowSevereRedLightViolations { get; set; }
+        [Display(Name = "Yellow Light Occurrences")]
         public bool ShowYellowLightOccurrences { get; set; }
-        public int YAxisMax { get; set; }
+        [Display(Name = "Y-axis Max")]
+        public double YAxisMax { get; set; }
     }
 }
