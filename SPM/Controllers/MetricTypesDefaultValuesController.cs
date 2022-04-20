@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using MOE.Common.Models;
@@ -11,6 +12,7 @@ using SPM.Models;
 
 namespace SPM.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class MetricTypesDefaultValuesController : Controller
     {
         MOE.Common.Models.Repositories.IMetricTypesDefaultValuesRepository metricTypesDefaultValuesRepository =
@@ -62,10 +64,66 @@ namespace SPM.Controllers
             viewModel.YellowAndRed = new YellowAndRedDefaultValuesViewModel();
             AddValuesToViewModel(viewModel.YellowAndRed, "YellowAndRed");
 
-            var list = new List<int>() { 5, 15 };
-            ViewBag.BinSize = new SelectList(list);
+            AddDropDownValuesToViewBag();
 
             return View(viewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(MetricTypesDefaultValuesViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            UpdateChartDefaults("PhaseTermination", viewModel.PhaseTermination);
+            UpdateChartDefaults("PedDelay", viewModel.PedDelay);
+            UpdateChartDefaults("SplitFail", viewModel.SplitFail);
+            UpdateChartDefaults("SplitMonitor", viewModel.SplitMonitor);
+            UpdateChartDefaults("ApproachDelay", viewModel.ApproachDelay);
+            UpdateChartDefaults("ApproachSpeed", viewModel.ApproachSpeed);
+            UpdateChartDefaults("ApproachVolume", viewModel.ApproachVolume);
+            UpdateChartDefaults("LeftTurnGapAnalysis", viewModel.LeftTurnGapAnalysis);
+            UpdateChartDefaults("YellowAndRed", viewModel.YellowAndRed);
+            UpdateChartDefaults("TimingAndActuations", viewModel.TimingAndActuations);
+            UpdateChartDefaults("WaitTime", viewModel.WaitTime);
+            UpdateChartDefaults("AoR", viewModel.AoR);
+            UpdateChartDefaults("TMC", viewModel.TMC);
+            UpdateChartDefaults("PCD", viewModel.PCD);
+
+            return RedirectToAction("Index");
+        }
+
+        public void AddDropDownValuesToViewBag()
+        {
+            var binSize = new List<int>() { 5, 15 };
+            ViewBag.BinSize = new SelectList(binSize);
+
+            var consecutiveCount = new List<int>() { 1, 2, 3, 4, 5 };
+            ViewBag.ConsecutiveCount = new SelectList(consecutiveCount);
+
+            var lineAndDotSize = new List<SelectListItem>()
+                {
+                    new SelectListItem() {Text = "Small", Value = "1"},
+                    new SelectListItem() {Text = "Large", Value = "2"}
+                };
+            ViewBag.LineAndDotSize = new SelectList(lineAndDotSize, "Value", "Text");
+
+            var percentileSplit = new List<int>() { 50, 75, 85, 90, 95 };
+            ViewBag.PercentileSplit = new SelectList(percentileSplit);
+        }
+
+        public void UpdateChartDefaults<T>(string chartName, T viewModel)
+        {
+            foreach (var prop in viewModel.GetType().GetProperties())
+            {
+                var metricTypesDefaultValuesModel = new MetricTypesDefaultValues();
+                metricTypesDefaultValuesModel.Chart = chartName;
+                metricTypesDefaultValuesModel.Option = prop.Name;
+                metricTypesDefaultValuesModel.Value = prop.GetValue(viewModel, null)?.ToString();
+                metricTypesDefaultValuesRepository.Update(metricTypesDefaultValuesModel);
+            }
         }
 
         public void AddValuesToViewModel<T>(T viewModel, string chart)
@@ -73,18 +131,17 @@ namespace SPM.Controllers
             var charts = metricTypesDefaultValuesRepository.GetChartDefaultsAsDictionary(chart);
             foreach (var option in charts)
             {
-                if (option.Value != null)
+                var type = viewModel.GetType().GetProperty(option.Key)?.PropertyType;
+
+                if (option.Value == null || type == null) continue;
+
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
-                    if (viewModel.GetType().GetProperty(option.Key) != null)
-                    {
-                        var type = viewModel.GetType().GetProperty(option.Key).PropertyType;
-                        if (type != null && !type.IsEnum)
-                        {
-                            var converted = Convert.ChangeType(option.Value, type);
-                            viewModel.GetType().GetProperty(option.Key).SetValue(viewModel, converted);
-                        }
-                    }
+                    type = Nullable.GetUnderlyingType(type);
                 }
+
+                var converted = Convert.ChangeType(option.Value, type);
+                viewModel.GetType().GetProperty(option.Key).SetValue(viewModel, converted);
             }
 
         }

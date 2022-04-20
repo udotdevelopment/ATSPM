@@ -10,5 +10,6 @@ namespace MOE.Common.Models.Repositories
         List<MetricTypesDefaultValues> GetChartDefaults(string chart);
         Dictionary<string, string> GetAllAsDictionary();
         Dictionary<string, string> GetChartDefaultsAsDictionary(string chart);
+        void Update(MetricTypesDefaultValues option);
     }
 }

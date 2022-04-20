@@ -63,5 +63,12 @@ namespace MOE.Common.Models.Repositories
 
             return defaults;
         }
+
+        public void Update(MetricTypesDefaultValues option)
+        {
+            var optiontoUpDate = _db.MetricTypesDefaultValues.Find(option.Chart, option.Option);
+            _db.Entry(optiontoUpDate).CurrentValues.SetValues(option);
+            _db.SaveChanges();
+        }
     }
 }
