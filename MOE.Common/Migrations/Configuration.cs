@@ -548,6 +548,16 @@ namespace MOE.Common.Migrations
                     ParentId = 11,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 100
+                },
+                new Menu
+                {
+                    MenuId = 100,
+                    MenuName = "Default Charts Settings",
+                    Controller = "MetricTypesDefaultValues",
+                    Action = "Index",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 45
                 }
                 //new Menu
                 //{
