@@ -20,6 +20,7 @@ namespace SPM.Controllers
         private MOE.Common.Models.Repositories.IMovementTypeRepository _movementTypeRepository;
         private MOE.Common.Models.Repositories.ILaneTypeRepository _laneTypeRepository;
         private MOE.Common.Models.Repositories.IDetectionHardwareRepository _detectionHardwareRepository;
+        private MOE.Common.Models.Repositories.IJurisdictionRepository _jurisdictionRepository;
         private MOE.Common.Models.Repositories.ISignalsRepository _signalsRepository;
         private MOE.Common.Models.Repositories.IDetectorRepository _detectorRepository; 
         private MOE.Common.Models.Repositories.IDetectionTypeRepository _detectionTypeRepository; 
@@ -40,6 +41,7 @@ namespace SPM.Controllers
             _movementTypeRepository = MOE.Common.Models.Repositories.MovementTypeRepositoryFactory.Create();
             _laneTypeRepository = MOE.Common.Models.Repositories.LaneTypeRepositoryFactory.Create();
             _detectionHardwareRepository = MOE.Common.Models.Repositories.DetectionHardwareRepositoryFactory.Create();
+            _jurisdictionRepository = MOE.Common.Models.Repositories.JurisdictionRepositoryFactory.Create();
         }
 
         public SignalsController(
@@ -96,7 +98,6 @@ namespace SPM.Controllers
 
             Signal signal = _signalsRepository.CopySignalToNewVersion(existingSignal);
             signal.VersionList = _signalsRepository.GetAllVersionsOfSignalBySignalID(signal.SignalID);
-            
             try
                 {
                     _signalsRepository.AddOrUpdate(signal);
@@ -254,7 +255,6 @@ namespace SPM.Controllers
             var existingSignal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             if (existingSignal == null)
             {
-
                 Signal signal = CreateNewSignal(id);
                 try
                 {
@@ -292,6 +292,7 @@ namespace SPM.Controllers
             signal.Enabled = true;
             signal.VersionList = new List<Signal>();
             signal.VersionActionId = 1;
+            signal.JurisdictionId = 1;
             return signal;
         }
                 
@@ -619,7 +620,7 @@ namespace SPM.Controllers
             ViewBag.MovementType = new SelectList(_movementTypeRepository.GetAllMovementTypes(), "MovementTypeID", "Description");
             ViewBag.LaneType = new SelectList(_laneTypeRepository.GetAllLaneTypes(), "LaneTypeID", "Description");
             ViewBag.DetectionHardware = new SelectList(_detectionHardwareRepository.GetAllDetectionHardwares(), "ID", "Name");
-            
+            ViewBag.Jurisdictions = new SelectList(_jurisdictionRepository.GetAllJurisdictions(),"Id", "JurisdictionName");
         }
 
         // GET: Signals/Delete/5
