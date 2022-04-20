@@ -257,6 +257,7 @@ namespace MOE.Common.Models
             newSignal.ControllerTypeID = origSignal.ControllerTypeID;
             newSignal.Enabled = origSignal.Enabled;
             newSignal.Approaches = new List<Approach>();
+            newSignal.JurisdictionId = origSignal.JurisdictionId;
 
             if (origSignal.Approaches != null)
                 foreach (var a in origSignal.Approaches)

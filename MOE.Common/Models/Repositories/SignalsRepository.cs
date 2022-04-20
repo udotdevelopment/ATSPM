@@ -165,6 +165,7 @@ namespace MOE.Common.Models.Repositories
             newVersion.Enabled = originalVersion.Enabled;
             newVersion.Latitude = originalVersion.Latitude;
             newVersion.Longitude = originalVersion.Longitude;
+            newVersion.JurisdictionId = originalVersion.JurisdictionId;
             _db.Signals.Add(newVersion);
             _db.SaveChanges();
 
@@ -371,6 +372,7 @@ namespace MOE.Common.Models.Repositories
         {
             var returnSignal = _db.Signals
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
+                .Include(signal => signal.Jurisdiction)
                 .Include(signal =>
                     signal.Approaches.Select(
                         a => a.Detectors.Select(d => d.DetectionTypes.Select(dt => dt.MetricTypes))))
