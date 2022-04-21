@@ -28,6 +28,15 @@ namespace MOE.Common.Models.Repositories
             return null;
         }
 
+        public List<DetectorComment> GetDetectorsCommentsByDetectorID(int ID)
+        {
+            var comment = db.DetectorComments.Where(r => r.ID == ID).OrderBy(r => r.TimeStamp).ToList();
+
+            if (comment != null)
+                return comment;
+            return null;
+        }
+
         public DetectorComment GetDetectorCommentByDetectorCommentID(int detectorCommentID)
         {
             var detectorComment = from r in db.DetectorComments

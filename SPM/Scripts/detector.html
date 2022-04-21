@@ -39,8 +39,8 @@
                         </md-input-container>
                         <md-input-container class="md-block" flex>
                             <label>Detection Type</label>
-                            <md-select disabled ng-model="vm.detector.DetectionTypeID"
-                                       ng-change="vm.checkDetectionType(vm.detector.DetectionTypeID)" required>
+                            <md-select ng-model="vm.detector.DetectionTypeID"
+                                       ng-change="vm.checkDetectionType(vm.detector.DetectionTypeID)">
                                 <md-option ng-repeat="cType in vm.lookups.DetectionTypes" ng-value="cType.ID">
                                     {{cType.Description}}
                                 </md-option>
@@ -48,7 +48,7 @@
                         </md-input-container>
                         <md-input-container class="md-block" flex>
                             <label>Channel</label>
-                            <input disabled type="number" name="detChannel" min="0" ng-model="vm.detector.DetChannel" required>
+                            <input type="number" name="detChannel" min="0" ng-model="vm.detector.DetChannel" required>
                             <div ng-messages="detectorForm.detChannel.$error" role="alert" multiple>
                                 <div ng-message="required">{{vm.showDetChError}}</div>
                             </div>
@@ -104,6 +104,10 @@
                         <md-input-container class="md-block" flex>
                             <label>Movement Delay</label>
                             <input type="number" min="0" ng-model="vm.detector.MovementDelay">
+                        </md-input-container>
+                        <md-input-container class="md-block" flex>
+                            <label>Comment</label>
+                            <input type="text" ng-model="vm.detectorCommentText">
                         </md-input-container>
                     </div>
                     <div>

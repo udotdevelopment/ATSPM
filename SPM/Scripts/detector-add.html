@@ -6,7 +6,7 @@
                 <md-input-container class="md-block" flex="50">
                     <label>Detection Type</label>
                     <md-select ng-model="vm.detector.DetectionTypeID"
-                               ng-change="vm.checkDetectionType(vm.detector.DetectionTypeID)" required>
+                               ng-change="vm.checkDetectionType(vm.detector.DetectionTypeID)">
                         <md-option ng-repeat="cType in vm.lookups.DetectionTypes" ng-value="cType.ID">
                             {{cType.Description}}
                         </md-option>

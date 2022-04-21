@@ -185,6 +185,7 @@
             );
         }
 
+
         function goToAddDetector(ev) {
             var confirm = $mdDialog.show({
                 locals: { lookups: vm.lookups, signal: vm.signal, approach: vm.approach },
@@ -232,11 +233,26 @@
                 }
             }).then(function (res, status, headers, config) {
                 vm.errorMessage = "";
+                showApproachEditedToast();
                 $scope.ok();
             }).catch(function (e, status, headers, config) {
-                console.log("here is the error : " + e);
+                errorToast();
                 vm.errorMessage = 'Error: ' + e.data + '!';
             });
+        };
+
+        function showApproachEditedToast() {
+            $mdToast.show(
+                $mdToast.simple()
+                    .parent(document.querySelectorAll('#content'))
+                    .textContent('Aprroach successfully edited.')
+                    .position("top right")
+                    .hideDelay(3000)
+            );
+        }
+
+        $scope.ok = function () {
+            $mdDialog.hide({ message: 'Success' });
         };
 
         function setupDataTable() {

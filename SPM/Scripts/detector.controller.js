@@ -43,8 +43,9 @@
         vm.showWarning = showWarning;
         vm.showDetChError = "";
         vm.detectorUpdatedSucceeded = detectorUpdatedSucceeded;
-
-        vm.detector.DetectionTypeID = vm.detector.DetectionTypeID == 0 ? vm.detector.DetectionTypes[0].DetectionTypeID : vm.detector.DetectionTypeID;
+        vm.saveDetectorComments = saveDetectorComments;
+        vm.getDetectorComments =  getDetectorComments;
+        vm.detector.DetectionTypeID = (vm.detector.DetectionTypeID == 0) && vm.detector.DetectionTypes.length > 0 ? vm.detector.DetectionTypes[0].DetectionTypeID : vm.detector.DetectionTypeID;
         vm.checkDetectionType(vm.detector.DetectionTypeID);
         //set options for the search bar
         vm.searchBarConfig = {};
@@ -60,6 +61,24 @@
 
         vm.goToApproach = goToApproach;
 
+        vm.getDetectorComments(vm.detector.ID);
+
+        function getDetectorComments(id) {
+            $http({
+                method: 'GET',
+                url: 'EnhancedConfiguration/GetDetectorComments/',
+                dataType: 'json',
+                params: { id: id },
+                headers: {
+                    "Content-Type": "application/json , Access-Control-Allow-Headers: Content-Type Access- Control - Allow - Methods: GET, POST, OPTIONS Access- Control - Allow - Origin: *"
+                }
+            }).then(function (res, status, headers, config) {
+                vm.detector.CommentText = res.data;
+                vm.detectorCommentText = vm.detector.CommentText;
+            }).catch(function (data, status, headers, config) {
+                errorToast();
+            });
+        }
 
         function goToApproach() {
             var params = { signal: vm.signal, approach: vm.approach, lookups: vm.lookups };
@@ -125,11 +144,57 @@
         function saveDetector() {
             vm.detector.ApproachID = vm.approach.ApproachID;
             vm.detector.DetectionTypeIDs = [vm.detector.DetectionTypeID];
+            var laneType = vm.lookups.LaneTypes.find(x => x.ID == vm.detector.LaneTypeID);
+            var movementType = vm.lookups.MovementTypes.find(x => x.ID == vm.detector.MovementTypeID);
+
+            vm.detector.MovementType = {
+                Abbreviation: movementType.ExtraData,
+                Description: movementType.Description,
+                MovementTypeID: movementType.ID
+            }
+
+            vm.detector.LaneType = {
+                Abbreviation: laneType.ExtraData,
+                Description: laneType.Description,
+                MovementTypeID: laneType.ID
+            }
+            vm.LaneTypeDesc = laneType.Description;
+            vm.MovementTypeDesc = movementType.Description;
+
             $http({
                 method: 'POST',
                 url: 'EnhancedConfiguration/AddUpdateDetector', //signal?&SignalID=' + vm.signal.SignalID + '&PrimaryName=' + vm.signal.PrimaryName + '&SecondaryName=' + vm.signal.SecondaryName + '&IPAddress=' + vm.signal.IPAddress + '&Latitude=' + vm.signal.Latitude + '&Longitude=' + vm.signal.Longitude + '&ControllerTypeID=' + vm.signal.ControllerTypeID + '&Enabled=' + vm.signal.Enabled,
                 dataType: 'json',
                 data: { det: vm.detector },
+                headers: {
+                    "Content-Type": "application/json , Access-Control-Allow-Headers: Content-Type Access- Control - Allow - Methods: GET, POST, OPTIONS Access- Control - Allow - Origin: *"
+                }
+            }).then(function (res, status, headers, config) {
+                if (vm.detector.CommentText != vm.detectorCommentText) {
+                    vm.saveDetectorComments(vm.detector.ID, vm.detectorCommentText);
+                }
+                else {
+                    vm.goToApproach();
+                    vm.errorMessage = "";
+                }
+                vm.errorMessage = "";
+                $scope.ok();
+            }).catch(function (e, status, headers, config) {
+                errorToast();
+                vm.errorMessage = 'Error: ' + e.data + '!';
+            });
+        }
+
+        function saveDetectorComments(id, comment) {
+            var detectorComment = {
+                ID: id,
+                CommentText: comment
+            }
+            $http({
+                method: 'POST',
+                url: 'EnhancedConfiguration/SaveDetectorComments',
+                dataType: 'json',
+                data: { detectorComment: detectorComment },
                 headers: {
                     "Content-Type": "application/json , Access-Control-Allow-Headers: Content-Type Access- Control - Allow - Methods: GET, POST, OPTIONS Access- Control - Allow - Origin: *"
                 }

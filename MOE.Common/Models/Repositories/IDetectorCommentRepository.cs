@@ -10,5 +10,6 @@ namespace MOE.Common.Models.Repositories
         void AddOrUpdate(DetectorComment detectorComment);
         void Add(DetectorComment detectorComment);
         void Remove(DetectorComment detectorComment);
+        List<DetectorComment> GetDetectorsCommentsByDetectorID(int ID);
     }
 }

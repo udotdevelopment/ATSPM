@@ -556,45 +556,96 @@ namespace SPM.Controllers
             var approach = _approachRepository.GetApproachByApproachID(det.ApproachID);
             Signal signal = _signalsRepository.GetSignalVersionByVersionId(approach.VersionID);
 
-
-
-            //det.AllHardwareTypes = detectionHardwareRepository.GetAllDetectionHardwares();
-            //det.DetectionHardware = new DetectionHardware();
             det.ApproachID = approach.ApproachID;
             det.AllDetectionTypes = detectionTypeRepository.GetAllDetectionTypesNoBasic();
-            //det.DetectionTypeIDs = new List<int>();
+
             det.DetectionTypes = new List<DetectionType>();
+            List<DetectionType> allDetTypes = detectionTypeRepository.GetAllDetectionTypes();
             det.Index = det.ApproachID + "Detectors[" + approach.Detectors.Count.ToString() + "].";
             det.DetectorComments = new List<DetectorComment>();
             det.DateAdded = DateTime.Now;
-            //det.DetChannel = _detectorRepository.GetMaximumDetectorChannel(approach.VersionID) + 1;
             det.DetectorID = signal.SignalID + det.DetChannel.ToString("D2");
 
-            if (signal.Approaches.Count == 0)
+            foreach (var appr in signal.Approaches)
             {
-                signal.Approaches = _approachRepository.GetAllApproaches().Where(a => a.VersionID == signal.VersionID).ToList();
+                if (appr.ApproachID == det.ApproachID)
+                {
+                    var index = 0;
+                    foreach (var d in appr.Detectors.ToArray())
+                    {
+                        if (d.ID == det.ID)
+                        {
+                            d.DetectionTypeIDs = det.DetectionTypeIDs;
+                            d.DetectionTypes = null;
+                            d.DetChannel = det.DetChannel;
+                            d.DistanceFromStopBar = det.DistanceFromStopBar;
+                            d.MinSpeedFilter = det.MinSpeedFilter;
+                            d.DecisionPoint = det.DecisionPoint;
+                            d.LaneNumber = det.LaneNumber;
+                            d.MovementDelay = det.MovementDelay;
+                            d.LaneTypeID = det.LaneTypeID;
+                            //d.LaneType = det.LaneType;
+                            d.MovementTypeID = det.MovementTypeID;
+                            //d.MovementType = det.MovementType;
+                        }
+                        index++;
+                    }
+                }
             }
 
-            if(approach.Detectors.Where(d => det.ID == d.ID).FirstOrDefault() == null)
-            {
-                try
+            if (signal.Approaches.Count == 0)
                 {
-                    _detectorRepository.Add(det);
+                    signal.Approaches = _approachRepository.GetAllApproaches().Where(a => a.VersionID == signal.VersionID).ToList();
+                }
+
+                if (approach.Detectors.Where(d => det.ID == d.ID).FirstOrDefault() == null)
+                {
+                    try
+                    {
+                        _detectorRepository.Add(det);
+                        return HttpStatusCode.OK;
+                    }
+                    catch (Exception e)
+                    {
+                        return HttpStatusCode.BadRequest;
+                    }
+                }
+                else
+                {
+                    _signalsRepository.AddOrUpdate(signal);
                     return HttpStatusCode.OK;
                 }
-                catch (Exception e)
-                {
-                    return HttpStatusCode.BadRequest;
-                }
-            }
-            else
+        }
+
+        [System.Web.Http.HttpPost]
+        public HttpStatusCode SaveDetectorComments(DetectorComment detectorComment)
+        {
+            var detectorCommentRepository = DetectorCommentRepositoryFactory.Create();
+            detectorComment.TimeStamp = DateTime.Now;
+
+            try
             {
-                _detectorRepository.Update(det);
+                detectorCommentRepository.AddOrUpdate(detectorComment);
                 return HttpStatusCode.OK;
             }
-
-
+            catch (Exception e)
+            {
+                return HttpStatusCode.BadRequest;
+            }
         }
+
+        [System.Web.Http.HttpGet]
+        public String GetDetectorComments(int id)
+        {
+            var detectorCommentRepository = DetectorCommentRepositoryFactory.Create();
+            var detectorComments = detectorCommentRepository.GetDetectorsCommentsByDetectorID(id);
+            var comment = detectorComments.OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+
+            if (comment != null )
+                return comment.CommentText;
+            else return "";
+        }
+
 
         public SignalsQueryResults GetAllDetector(QueryDetails query)
         {
