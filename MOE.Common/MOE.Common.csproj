@@ -685,6 +685,10 @@
     <Compile Include="Migrations\202204112034383_AddDefaultValuesTable.designer.cs">
       <DependentUpon>202204112034383_AddDefaultValuesTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202204141600287_RemoveValueFromKeyInDefaultsTable.cs" />
+    <Compile Include="Migrations\202204141600287_RemoveValueFromKeyInDefaultsTable.designer.cs">
+      <DependentUpon>202204141600287_RemoveValueFromKeyInDefaultsTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\MetricTypesDefaultValues.cs" />
@@ -1149,6 +1153,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202204112034383_AddDefaultValuesTable.resx">
       <DependentUpon>202204112034383_AddDefaultValuesTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204141600287_RemoveValueFromKeyInDefaultsTable.resx">
+      <DependentUpon>202204141600287_RemoveValueFromKeyInDefaultsTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
