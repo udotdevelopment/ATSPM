@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<MOE.Common.Models.ViewModel._MainMenu.MenuItem>
+@using AuthorizedActionLink
+
 @foreach (var m in Model)
 {
     @RenderMenuItems(m)
@@ -10,12 +12,12 @@
         if (m.MenuObject.ParentId == 0)
         {
             <li class="nav-item">
-                @AuthorizedActionLink.AuthorizedActionLinkHtmlHelper.AuthorizedActionLink(Html, m.MenuObject.MenuName, m.MenuObject.Action, m.MenuObject.Controller, new { id = UrlParameter.Optional }, new { @class = "nav-link" })
+                @Html.AuthorizedActionLink(m.MenuObject.MenuName, m.MenuObject.Action, m.MenuObject.Controller, new { id = UrlParameter.Optional }, new { @class = "nav-link" })
             </li>
         }
         else
         {
-            @AuthorizedActionLink.AuthorizedActionLinkHtmlHelper.AuthorizedActionLink(Html, m.MenuObject.MenuName, m.MenuObject.Action, m.MenuObject.Controller, new { id = UrlParameter.Optional }, new { @class = "dropdown-item" })
+            @Html.AuthorizedActionLink(m.MenuObject.MenuName, m.MenuObject.Action, m.MenuObject.Controller, new { id = UrlParameter.Optional }, new { @class = "dropdown-item" })
         }
     }
     else
