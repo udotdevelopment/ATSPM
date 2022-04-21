@@ -54,6 +54,9 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="AuthorizedActionLink, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AuthorizedActionLink.2.2.0.0\lib\net40\AuthorizedActionLink.dll</HintPath>
+    </Reference>
     <Reference Include="Caseiro.Mvc.PagedList, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Caseiro.Mvc.PagedList.1.0.2\lib\net40\Caseiro.Mvc.PagedList.dll</HintPath>
       <Private>True</Private>
