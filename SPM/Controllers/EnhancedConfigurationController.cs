@@ -10,12 +10,12 @@ using System.Web.Http;
 using System.Web.Mvc;
 using Udot.Utils.Extensions;
 using Udot.Utils.HelperFunctions;
-
+using AuthorizeAttribute = System.Web.Mvc.AuthorizeAttribute;
 
 namespace SPM.Controllers
 {
 
-    //[Authorize(Roles = "Technician, Admin, Configuration")]
+    [Authorize(Roles = "Technician, Admin, Configuration")]
     public class EnhancedConfigurationController : Controller
     {
 
@@ -28,45 +28,6 @@ namespace SPM.Controllers
         {
 
             return View();
-        }
-
-        [System.Web.Http.HttpGet]
-        public JsonResult GetAllSignals()
-        {
-            SignalsRepository sr = new SignalsRepository();
-            var res = sr.GetAllSignalsRange(0,50);
-            var signalsVM = res.Signals.Select(Mapper.Map<Signal, SignalViewModel>).ToList();
-            ControllerTypeRepository ctr = new ControllerTypeRepository();
-            DetectionTypeRepository dtr = new DetectionTypeRepository();
-            MovementTypeRepository mtr = new MovementTypeRepository();
-            LaneTypeRepository ltr = new LaneTypeRepository();
-            DirectionTypeRepository dirtr = new  DirectionTypeRepository();
-
-            var slvm = new SignalsListViewModel
-            {
-                TotalCount = res.TotalCount,
-                TotalCountInQuery = res.TotalCountInQuery,
-                Signals = signalsVM,
-                Lookups =
-                {
-                    ControllerTypes =
-                        Mapper.Map<List<ControllerType>, List<LookupTypeViewModel>>(
-                            ctr.GetControllerTypes()),
-                    DetectionTypes =
-                        Mapper.Map<List<DetectionType>, List<LookupTypeViewModel>>(
-                            dtr.GetAllDetectionTypes()),
-                    MovementTypes =
-                        Mapper.Map<List<MovementType>, List<LookupTypeViewModel>>(
-                            mtr.GetAllMovementTypes()),
-                    LaneTypes = Mapper.Map<List<LaneType>, List<LookupTypeViewModel>>(
-                        ltr.GetAllLaneTypes()),
-                    DirectionTypes =
-                        Mapper.Map<List<DirectionType>, List<LookupTypeViewModel>>(
-                            dirtr.GetAllDirections())
-                }
-            };
-
-            return Json(slvm, JsonRequestBehavior.AllowGet);
         }
 
         [System.Web.Http.HttpGet]
@@ -688,5 +649,11 @@ namespace SPM.Controllers
             return res;
         }
 
+    }
+    public class SignalsQueryResults
+    {
+        public List<Signal> Signals { get; set; }
+        public int TotalCount { get; set; }
+        public int TotalCountInQuery { get; set; }
     }
 }

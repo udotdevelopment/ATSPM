@@ -452,7 +452,7 @@ namespace MOE.Common.Migrations
                 new Menu
                 {
                     MenuId = 99,
-                    MenuName = "Enhanced configuration",
+                    MenuName = "Enhanced Configuration",
                     Controller = "EnhancedConfiguration",
                     Action = "Index",
                     ParentId = 11,
