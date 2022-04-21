@@ -44,7 +44,7 @@ namespace MOE.Common.Business
             _opposingPhase = opposingPhase;
 
             options.Y2AxisMax = 100;
-            options.Y2AxisTitle = $"% Of Gap Time > {options.TrendLineGapThreshold} seconds";
+            options.Y2AxisTitle = $"% of Green Time where Gap ≥ {options.TrendLineGapThreshold} seconds";
 
             Chart = ChartFactory.CreateDefaultChartNoX2Axis(options);
             SetChartTitle(Chart, options, GapData.Approach.Signal, GapData.Approach, GapData.DetectionTypeStr);
@@ -62,7 +62,9 @@ namespace MOE.Common.Business
             chart.Titles.Add(ChartTitleFactory.GetChartName(options.MetricTypeID));
             chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(signal.SignalID, options.StartDate,
                 options.EndDate));
-            chart.Titles.Add(ChartTitleFactory.GetPhase(_opposingPhase));
+            Title phaseTitle = ChartTitleFactory.GetPhase(_opposingPhase);
+            phaseTitle.Text = ("Left Turn Crossing " + phaseTitle.Text);
+            chart.Titles.Add(phaseTitle);
             chart.Titles.Add(detectionType);
         }
 
