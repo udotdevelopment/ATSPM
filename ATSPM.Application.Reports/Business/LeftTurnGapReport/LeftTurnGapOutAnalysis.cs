@@ -60,8 +60,13 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                     if (daysOfWeek.Contains((int)start.DayOfWeek))
                     {
                         var leftTurnGaps = _phaseLeftTurnGapAggregationRepository.GetPhaseLeftTurnGapAggregationBySignalIdPhaseNumberAndDateRange(
-                                 signalId, phaseNumber, tempStart, tempStart.Add(startTime).AddMinutes(30));
-                        acceptableGaps.Add(tempStart, SumGapColumns(gapColumn, leftTurnGaps));
+                                 signalId, phaseNumber, tempStart, tempStart.Add(startTime).AddMinutes(15));
+                        int count = 0;
+                        if(gapColumn ==12)
+                            count = leftTurnGaps.Sum(l => l.GapCount6 + l.GapCount7 + l.GapCount8 + l.GapCount9);
+                        else
+                            count = leftTurnGaps.Sum(l => l.GapCount7 + l.GapCount8 + l.GapCount9);
+                        acceptableGaps.Add(tempStart, count);
                     }
                 }
             }
