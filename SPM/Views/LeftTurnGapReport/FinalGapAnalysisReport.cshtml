@@ -194,30 +194,21 @@
                     <th>
                         Capacity:
                     </th>
-                    @if (result.GapDurationConsiderForStudy.HasValue)
-                    {
-                        <td>
-                            @result.Capacity.ToString("N")
-                        </td>
-                    }
+                    <td>
+                        @(result.GapDurationConsiderForStudy.HasValue ? result.Capacity.ToString("N") : "–")
+                    </td>
                     <th>
                         Demand:
                     </th>
-                    @if (result.GapDurationConsiderForStudy.HasValue)
-                    {
-                        <td>
-                            @result.Demand.ToString("N")
-                        </td>
-                    }
+                    <td>
+                        @(result.GapDurationConsiderForStudy.HasValue ? result.Demand.ToString("N") : "–")
+                    </td>
                     <th>
                         V/C Ratio:
                     </th>
-                    @if (result.GapDurationConsiderForStudy.HasValue)
-                    {
-                        <td>
-                            @((result.Demand / result.Capacity).ToString("N"))
-                        </td>
-                    }
+                    <td>
+                        @(result.GapDurationConsiderForStudy.HasValue ? (result.Demand / result.Capacity).ToString("N") : "–")
+                    </td>
                     @if (result.PhaseType == "Protected Only")
                     {
                         <th>
@@ -267,31 +258,15 @@
                     <th colspan="2">
                         Cycles With Split Failure:
                     </th>
-                    @if (result.SplitFailsConsiderForStudy.HasValue)
-                    {
-                        <td>
-                            @result.CyclesWithSplitFailNum | @result.CyclesWithSplitFailPercent
-                        </td>
-                    }
-                    else
-                    {
-                        <td> – </td>
-                    }
-
+                    <td>
+                        @(result.SplitFailsConsiderForStudy.HasValue ? result.CyclesWithSplitFailNum + "|" + result.CyclesWithSplitFailPercent : "–")
+                    </td>
                     <th class="text-left">
                         Left Turn Movement Volume:
                     </th>
-
-                    @if (result.CrossProductConsiderForStudy.HasValue)
-                    {
-                        <td>
-                            @result.LeftTurnVolume
-                        </td>
-                    }
-                    else
-                    {
-                        <td> – </td>
-                    }
+                    <td>
+                        @(result.CrossProductConsiderForStudy.HasValue ? result.LeftTurnVolume.ToString() : "–")
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="3" class="recommendation text-center">
@@ -314,31 +289,17 @@
                     <th class="text-left">
                         Opposing Through Movement Volume:
                     </th>
-                    @if(result.CrossProductConsiderForStudy.HasValue)
-                    {
-                        <td>
-                            @result.OpposingThroughVolume
-                        </td>
-                    }
-                    else
-                    {
-                        <td> – </td>
-                    }
+                    <td>
+                        @(result.CrossProductConsiderForStudy.HasValue ? result.OpposingThroughVolume.ToString() : "–")
+                    </td>
                 </tr>
                 <tr>
                     <th>
                         Cycles With Pedestrain Calls:
                     </th>
-                    @if(result.PedActuationsConsiderForStudy.HasValue)
-                    {
-                        <td colspan="2">
-                            @result.CyclesWithPedCallNum
-                        </td>
-                    }
-                    else
-                    {
-                        <td colspan="2"> – </td>
-                    }
+                    <td colspan="2">
+                        @(result.PedActuationsConsiderForStudy.HasValue ? result.CyclesWithPedCallNum.ToString() : "–")
+                    </td>
                     <th class="text-left">
                         Cross Product Value:
                     </th>
