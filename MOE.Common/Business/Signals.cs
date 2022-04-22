@@ -7,18 +7,6 @@ namespace MOE.Common.Business
 {
     public class Signals
     {
-        public enum SignalType
-        {
-            [Description("Protected Only")]
-            ProtectedOnly,
-            [Description("Permissive Only")]
-            PermissiveOnly,
-            [Description("5-Head")]
-            FiveHead,
-            [Description("Flashing Yellow Arrow")]
-            FYA
-        }
-
         /// <summary>
         ///     Gets all the signals based on the region
         /// </summary>
@@ -77,35 +65,5 @@ namespace MOE.Common.Business
         //    //adapter.Fill(table, signalId.ToString(), reporttype);
         //    //return table;
         //}
-
-        /// <summary>
-        /// Gets the signal type for a signal
-        /// </summary>
-        /// <param name="protectedPhaseNumber"></param>
-        /// <param name="permissivePhaseNumber"></param>
-        /// <returns>Data.Signal.SignalType</returns>
-        public static SignalType GetSignalType(int protectedPhaseNumber, int? permissivePhaseNumber)
-        {
-            if (protectedPhaseNumber > 0 && permissivePhaseNumber == null)
-            {
-                return SignalType.ProtectedOnly;
-
-            }
-
-            if (protectedPhaseNumber == 0 && permissivePhaseNumber > 0)
-            {
-                return SignalType.PermissiveOnly;
-            }
-
-            if (protectedPhaseNumber == 1 && permissivePhaseNumber == 6 ||
-                protectedPhaseNumber == 3 && permissivePhaseNumber == 8 ||
-                protectedPhaseNumber == 5 && permissivePhaseNumber == 6 ||
-                protectedPhaseNumber == 7 && permissivePhaseNumber == 8)
-            {
-                return SignalType.FiveHead;
-            }
-
-            return SignalType.FYA;
-        }
     }
 }

@@ -224,39 +224,6 @@ namespace SPM.Controllers
             return peakResult;
         }
 
-        private static void AddSignalAndPhaseType(FinalGapAnalysisReportViewModel approachResult, Approach approach)
-        {
-            int protectedNum = approach.ProtectedPhaseNumber;
-            Nullable<int> permissiveNum = approach.PermissivePhaseNumber;
-
-            if (protectedNum > 0 && permissiveNum == null)
-            {
-                approachResult.PhaseType = "Protected Only";
-                approachResult.SignalType = "Protected Only";
-
-            }
-            else if (protectedNum == 0 && permissiveNum > 0)
-            {
-                approachResult.PhaseType = "Permissive Only";
-                approachResult.SignalType = "Permissive Only";
-            }
-            else
-            {
-                approachResult.PhaseType = "Protected / Permissive";
-                if (protectedNum == 1 && permissiveNum == 6 ||
-                    protectedNum == 3 && permissiveNum == 8 ||
-                    protectedNum == 5 && permissiveNum == 6 ||
-                    protectedNum == 7 && permissiveNum == 8)
-                {
-                    approachResult.SignalType = "5-Head";
-                }
-                else
-                {
-                    approachResult.SignalType = "FYA";
-                }
-            }
-        }
-
         private static void AddCharts(FinalGapAnalysisReportViewModel approachResult, FinalGapAnalysisReportParameters parameters)
         {
             double gapVsDemandChartHeight = Math.Max(approachResult.AcceptableGapList.Values.Max(), approachResult.DemandList.Values.Max());
@@ -284,7 +251,7 @@ namespace SPM.Controllers
             approachResult.PedSplitFailChartImg = pedsVsFailuresOptions.CreateMetric().FirstOrDefault();
         }
 
-        private FinalGapAnalysisReportViewModel GetApproachResult(FinalGapAnalysisReportParameters parameters, Approach approach, int approachId)
+        private FinalGapAnalysisReportViewModel GetApproachResult(FinalGapAnalysisReportParameters parameters, MOE.Common.Models.Approach approach, int approachId)
         {
             FinalGapAnalysisReportViewModel approachResult = new FinalGapAnalysisReportViewModel
             {
@@ -296,11 +263,9 @@ namespace SPM.Controllers
                 ApproachDescription = approach.Description,
                 SpeedLimit = approach.MPH,
                 Location = approach.Signal.PrimaryName + " & " + approach.Signal.SecondaryName,
-
-        };
-            approachResult.OpposingApproach = "???";
-
-            AddSignalAndPhaseType(approachResult, approach);
+                PhaseType = approach.GetPhaseType().GetDescription(),
+                SignalType = approach.GetSignalHeadType().GetDescription()
+            };
 
             if (parameters.GetGapReport)
             {
