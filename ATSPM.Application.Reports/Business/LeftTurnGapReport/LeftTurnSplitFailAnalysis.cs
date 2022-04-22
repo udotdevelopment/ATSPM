@@ -10,12 +10,15 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
 
     public class LeftTurnSplitFailAnalysis
     {
+        private readonly ISignalsRepository _signalRepository;
         private readonly IApproachRepository _approachRepository;
         private readonly IApproachSplitFailAggregationRepository _approachSplitFailAggregationRepository;
 
-        public LeftTurnSplitFailAnalysis(IApproachRepository approachRepository,
+        public LeftTurnSplitFailAnalysis(ISignalsRepository signalRepository, 
+                                         IApproachRepository approachRepository,
                                          IApproachSplitFailAggregationRepository approachSplitFailAggregationRepository)
         {
+            _signalRepository = signalRepository;
             _approachRepository = approachRepository;
             _approachSplitFailAggregationRepository = approachSplitFailAggregationRepository;
         }
@@ -33,13 +36,16 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             if (cycles == 0)
                 throw new ArithmeticException("Cycles cannot be zero");
             var approach = _approachRepository.GetApproachByApproachID(approachId);
+            var signal = _signalRepository.GetVersionOfSignalByDate(approach.SignalId, start);
+            int opposingPhase = LeftTurnReportPreCheck.GetOpposingPhase(approach);
             return new SplitFailResult
             {
                 CyclesWithSplitFails = splitFails,
                 SplitFailPercent = splitFails / cycles,
                 PercentCyclesWithSplitFailList = percentCyclesWithSplitFail,
-                Direction = approach.DirectionType.Description,
-        };
+                Direction = approach.DirectionType.Abbreviation + approach.Detectors.FirstOrDefault()?.MovementType.Abbreviation,
+                OpposingDirection = signal.Approaches.Where(a => a.ProtectedPhaseNumber == opposingPhase).FirstOrDefault()?.DirectionType.Abbreviation
+            };
 
         }
 

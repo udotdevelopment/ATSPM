@@ -40,7 +40,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             gapOutResult.AcceptableGaps = GetGapsList(signalId, opposingPhase, start, end, startTime, endTime, criticalGap, daysOfWeek);
             gapOutResult.DetectorCount = GetGapsList(signalId, opposingPhase, start, end, startTime, endTime, criticalGap, daysOfWeek);
             gapOutResult.Demand = GetGapDemand(approachId, start, end, startTime, endTime, criticalGap);
-            gapOutResult.Direction = approach.DirectionType.Description;
+            gapOutResult.Direction = approach.DirectionType.Abbreviation + approach.Detectors.FirstOrDefault()?.MovementType.Abbreviation;
             gapOutResult.OpposingDirection = GetOpposingPhaseDirection(signal, opposingPhase);
             if (gapOutResult.Capacity == 0)
                 throw new ArithmeticException("Gap Count cannot be zero");
@@ -111,7 +111,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             return signal
                 .Approaches
                 .Where(d => d.ProtectedPhaseNumber == opposingPhase)
-                .FirstOrDefault()?.DirectionType.Description;
+                .FirstOrDefault()?.DirectionType.Abbreviation;
         }
 
         //static functions
