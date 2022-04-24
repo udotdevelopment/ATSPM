@@ -24,7 +24,8 @@ namespace SPM.Controllers
         private MOE.Common.Models.Repositories.IDetectorRepository _detectorRepository; 
         private MOE.Common.Models.Repositories.IDetectionTypeRepository _detectionTypeRepository; 
         private MOE.Common.Models.Repositories.IApproachRepository _approachRepository; 
-        private MOE.Common.Models.Repositories.IMetricTypeRepository _metricTypeRepository; 
+        private MOE.Common.Models.Repositories.IMetricTypeRepository _metricTypeRepository;
+        private MOE.Common.Models.Repositories.IJurisdictionRepository _jurisdictionRepository;
 
         public SignalsController()
         {
@@ -40,6 +41,7 @@ namespace SPM.Controllers
             _movementTypeRepository = MOE.Common.Models.Repositories.MovementTypeRepositoryFactory.Create();
             _laneTypeRepository = MOE.Common.Models.Repositories.LaneTypeRepositoryFactory.Create();
             _detectionHardwareRepository = MOE.Common.Models.Repositories.DetectionHardwareRepositoryFactory.Create();
+            _jurisdictionRepository = MOE.Common.Models.Repositories.JurisdictionRepositoryFactory.Create();
         }
 
         public SignalsController(
@@ -53,7 +55,8 @@ namespace SPM.Controllers
          MOE.Common.Models.Repositories.IDetectorRepository detectorRepository,
          MOE.Common.Models.Repositories.IDetectionTypeRepository detectionTypeRepository,
          MOE.Common.Models.Repositories.IApproachRepository approachRepository,
-         MOE.Common.Models.Repositories.IMetricTypeRepository metricTypeRepository)
+         MOE.Common.Models.Repositories.IMetricTypeRepository metricTypeRepository,
+         MOE.Common.Models.Repositories.IJurisdictionRepository jurisdictionRepository)
         {
             _signalsRepository = signalsRepository;
             _detectorRepository = detectorRepository;
@@ -66,12 +69,13 @@ namespace SPM.Controllers
             _laneTypeRepository = laneTypeRepository;
             _detectionHardwareRepository = detectionHardwareRepository;
             _metricTypeRepository = metricTypeRepository;
+            _jurisdictionRepository = jurisdictionRepository;
         }
 
         public ActionResult Index()
         {
             MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel wctv =
-                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository);
+                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository, _jurisdictionRepository);
 
             return View(wctv);
         }
@@ -81,7 +85,7 @@ namespace SPM.Controllers
         public ActionResult SignalDetail()
         {
             MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel wctv =
-                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository);
+                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository, _jurisdictionRepository);
             return View(wctv);
         }
 
@@ -634,7 +638,7 @@ namespace SPM.Controllers
 
 
             MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel wctv =
-                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository);
+                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository, _jurisdictionRepository);
 
             return null;//View(wctv);
         }

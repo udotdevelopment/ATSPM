@@ -935,15 +935,6 @@ namespace MOE.Common.Migrations
                 },
                 new MetricType
                 {
-                    MetricID = 31,
-                    ChartName = "Left Turn Gap Analysis",
-                    Abbreviation = "LTGA",
-                    ShowOnWebsite = true,
-                    ShowOnAggregationSite = false,
-                    DisplayOrder = 25
-                },
-                new MetricType
-                {
                     MetricID = 12,
                     ChartName = "Purdue Split Failure",
                     Abbreviation = "SF",
@@ -1250,7 +1241,8 @@ namespace MOE.Common.Migrations
                 c => c.FilterName,
                 new MetricsFilterType { FilterName = "Signal ID" },
                 new MetricsFilterType { FilterName = "Primary Name" },
-                new MetricsFilterType { FilterName = "Secondary Name" }
+                new MetricsFilterType { FilterName = "Secondary Name" },
+                new MetricsFilterType { FilterName = "Agency" }
             );
 
             context.Applications.AddOrUpdate(
