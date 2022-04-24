@@ -6,9 +6,9 @@
 
 function GetMetric(urlPath, tosend)
 {
-    GetChartComment(tosend.metricTypeID, tosend.SignalID);
+    GetChartComment(tosend.MetricTypeID, tosend.SignalID);
     dataLayer.push({
-        'MetricTypeId': tosend.metricTypeID,
+        'MetricTypeId': tosend.MetricTypeID,
         'SignalId': tosend.SignalID
     });
     $.ajax({
@@ -248,7 +248,7 @@ function GetLeftTurnGapAnalysisMetric(metricTypeID) {
 
 function GetWaitTimeMetric(metricTypeID) {
     var toSend = GetCommonValues();
-    toSend.metricTypeID = metricTypeID;
+    toSend.MetricTypeID = metricTypeID;
     toSend.ShowPlanStripes = $("#ShowPlanStripes").is(":checked");
     GetMetric(urlpathWaitTime, toSend);
 }
