@@ -1241,7 +1241,8 @@ namespace MOE.Common.Migrations
                 c => c.FilterName,
                 new MetricsFilterType { FilterName = "Signal ID" },
                 new MetricsFilterType { FilterName = "Primary Name" },
-                new MetricsFilterType { FilterName = "Secondary Name" }
+                new MetricsFilterType { FilterName = "Secondary Name" },
+                new MetricsFilterType { FilterName = "Agency" }
             );
 
             context.Applications.AddOrUpdate(
