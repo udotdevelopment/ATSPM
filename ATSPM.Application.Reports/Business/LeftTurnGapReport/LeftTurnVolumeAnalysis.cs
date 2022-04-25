@@ -72,9 +72,9 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             {
                 if (daysOfWeek.Contains((int)tempDate.DayOfWeek))
                 {
-                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(30))
+                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(15))
                     {
-                        demandList.Add(tempstart, leftTurnVolumeAggregation.Where(v => v.BinStartTime >= tempstart && v.BinStartTime < tempstart.AddMinutes(30)).Sum(v => v.EventCount));
+                        demandList.Add(tempstart, leftTurnVolumeAggregation.Where(v => v.BinStartTime >= tempstart && v.BinStartTime < tempstart.AddMinutes(15)).Sum(v => v.EventCount));
                     }
                 }
             }

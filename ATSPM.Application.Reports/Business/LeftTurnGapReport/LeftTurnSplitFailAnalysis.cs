@@ -90,9 +90,9 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             {
                 if (daysOfWeek.Contains((int)tempDate.DayOfWeek))
                 {
-                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(30))
+                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(15))
                     {
-                        var tempEndTime = tempstart.AddMinutes(30);
+                        var tempEndTime = tempstart.AddMinutes(15);
                         var tempSplitFails = splitFailsAggregates.Where(s => s.BinStartTime >= tempstart && s.BinStartTime < tempEndTime).Sum(s => s.SplitFailures);
                         var tempCycles = splitFailsAggregates.Where(s => s.BinStartTime >= tempstart && s.BinStartTime < tempEndTime).Sum(s => s.Cycles);
                         double tempPercentFails = 0;

@@ -83,11 +83,11 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
             {
                 if (daysOfWeek.Contains((int)start.DayOfWeek))
-                    for (var tempstart = tempDate.Date.Add(startTime); tempstart <= tempDate.Add(endTime); tempstart = tempstart.AddMinutes(30))
+                    for (var tempstart = tempDate.Date.Add(startTime); tempstart <= tempDate.Add(endTime); tempstart = tempstart.AddMinutes(15))
                     {
-                        if (cycleAggregations.Where(c => c.BinStartTime >= tempstart && c.BinStartTime < tempstart.AddMinutes(30)).Any())
+                        if (cycleAggregations.Where(c => c.BinStartTime >= tempstart && c.BinStartTime < tempstart.AddMinutes(15)).Any())
                         {
-                            cycleList.Add(tempstart, cycleAggregations.Where(c => c.BinStartTime >= tempstart && c.BinStartTime < tempstart.AddMinutes(30)).Average(c => c.PedCycles));
+                            cycleList.Add(tempstart, cycleAggregations.Where(c => c.BinStartTime >= tempstart && c.BinStartTime < tempstart.AddMinutes(15)).Average(c => c.PedCycles));
                         }
                         else
                         {
@@ -135,9 +135,9 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             for (var tempDate = start.Date; tempDate < end; tempDate = tempDate.AddDays(1))
             {
                 if (daysOfWeek.Contains((int)start.DayOfWeek))
-                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(30))
+                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(15))
                     {
-                        cycleList.Add(tempstart, cycleAggregations.Where(c => c.BinStartTime >= tempstart && c.BinStartTime < tempstart.AddMinutes(30)).Average(c => c.TotalRedToRedCycles));
+                        cycleList.Add(tempstart, cycleAggregations.Where(c => c.BinStartTime >= tempstart && c.BinStartTime < tempstart.AddMinutes(15)).Average(c => c.TotalRedToRedCycles));
                     }
             }
 
