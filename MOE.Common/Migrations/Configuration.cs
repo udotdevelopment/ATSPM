@@ -588,16 +588,6 @@ namespace MOE.Common.Migrations
                     ParentId = 11,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 100
-                },
-                new Menu
-                {
-                    MenuId = 100,
-                    MenuName = "Left Turn Gap Report",
-                    Controller = "LeftTurnGapReport",
-                    Action = "Index",
-                    ParentId = 2,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 50
                 }
                 //new Menu
                 //{
