@@ -251,7 +251,7 @@ namespace SPM.Controllers
             approachResult.PedSplitFailChartImg = pedsVsFailuresOptions.CreateMetric().FirstOrDefault();
         }
 
-        private FinalGapAnalysisReportViewModel GetApproachResult(FinalGapAnalysisReportParameters parameters, MOE.Common.Models.Approach approach, int approachId)
+        private FinalGapAnalysisReportViewModel GetApproachResult(FinalGapAnalysisReportParameters parameters, Approach approach, int approachId)
         {
             FinalGapAnalysisReportViewModel approachResult = new FinalGapAnalysisReportViewModel
             {
@@ -270,6 +270,7 @@ namespace SPM.Controllers
             if (parameters.GetGapReport)
             {
                 var gapResult = GetGapResult(parameters, approachId);
+
                 approachResult.GapDurationConsiderForStudy = gapResult.ConsiderForStudy;
                 approachResult.Capacity = gapResult.Capacity;
                 approachResult.Demand = gapResult.Demand;
@@ -279,6 +280,7 @@ namespace SPM.Controllers
             if (parameters.GetSplitFail)
             {
                 var splitFailResult = GetSplitFailResult(parameters, approachId);
+
                 approachResult.SplitFailsConsiderForStudy = splitFailResult.ConsiderForStudy;
                 approachResult.CyclesWithSplitFailNum = splitFailResult.CyclesWithSplitFails;
                 approachResult.CyclesWithSplitFailPercent = splitFailResult.SplitFailPercent;
@@ -289,6 +291,7 @@ namespace SPM.Controllers
             if (parameters.GetPedestrianCall)
             {
                 var PedResult = GetPedActuationResult(parameters, approachId);
+
                 approachResult.CyclesWithPedCallNum = PedResult.CyclesWithPedCalls;
                 approachResult.CyclesWithPedCallPercent = PedResult.PedActuationPercent;
                 approachResult.PedActuationsConsiderForStudy = PedResult.ConsiderForStudy;
