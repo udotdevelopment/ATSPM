@@ -59,6 +59,7 @@ function RunChecks() {
             data: tosend,
             traditional: true,
             success: function (data) {
+                StopChecksSpinner();
                 $('#FinalGapAnalysisPlaceHolder').html(data);
             }
         });
@@ -68,7 +69,6 @@ function RunChecks() {
         //        $('#SignalDataCheckPlaceHolder').html(data);
         //    });
     }
-    StopChecksSpinner();
 }
 
 $('#RunReports').click(function () { RunReports(); });
@@ -177,19 +177,18 @@ function RunReports() {
         traditional: true,
        
         success: function (data) {
+            StopReportSpinner();
             var result = data.pdfResult;
             $('#FinalGapAnalysisPlaceHolder').html(result.HTML);
             //$('#FinalGapAnalysisPlaceHolder').html("<iframe src=\"http://localhost/spmImages/" + data +
             //    "\"style=\"width:100%; height:600px;\" frameborder=\"0\"></iframe>");
             deleteTempFile(result.FileName);
-        
-    },
-        
+        },
         error: function (data) {
+            StopReportSpinner();
             $('#FinalGapAnalysisPlaceHolder').html(data.responseText);
         }
     });
-    StopReportSpinner();
 }
 
 function deleteTempFile(fileName) {
