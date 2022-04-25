@@ -507,18 +507,6 @@ namespace MOE.Common.Migrations
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 30
                 },
-
-                new Menu
-                {
-                    MenuId = 14,
-                    MenuName = "Agency Configuration",
-                    Controller = "Jurisdcitions",
-                    Action = "Index",
-                    ParentId = 11,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 30
-                },
-
                 new Menu
                 {
                     MenuId = 57,
