@@ -11,6 +11,5 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
         public int CyclesWithSplitFails { get; set; }
         public Dictionary<DateTime, double> PercentCyclesWithSplitFailList { get; internal set; }
         public string Direction { get; set; }
-        public string OpposingDirection { get; set; }
     }
 }

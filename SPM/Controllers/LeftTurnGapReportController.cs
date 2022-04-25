@@ -286,7 +286,6 @@ namespace SPM.Controllers
                 approachResult.CyclesWithSplitFailPercent = splitFailResult.SplitFailPercent;
                 approachResult.PercentCyclesWithSplitFailList = splitFailResult.PercentCyclesWithSplitFailList;
                 approachResult.Direction = splitFailResult.Direction;
-                approachResult.OpposingDirection = splitFailResult.OpposingDirection;
             }
             if (parameters.GetPedestrianCall)
             {

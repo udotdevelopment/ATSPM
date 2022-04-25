@@ -12,6 +12,5 @@ namespace SPM.Models
         public bool ConsiderForStudy { get; set; }
         public Dictionary<DateTime, double> PercentCyclesWithSplitFailList { get; set; }
         public string Direction { get; set; }
-        public string OpposingDirection { get; set; }
     }
 }
