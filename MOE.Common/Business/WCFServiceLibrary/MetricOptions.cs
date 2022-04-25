@@ -128,15 +128,20 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public void SetDefaults()
         {
             var chart = GetType().Name.Replace("Options", "");
-            var defaults = metricTypesDefaultValuesRepository.GetChartDefaults(chart);
-            foreach (MetricTypesDefaultValues option in defaults)
+            var defaults = metricTypesDefaultValuesRepository.GetChartDefaultsAsDictionary(chart);
+            foreach (var option in defaults)
             {
-                if (option.Value != null)
+                var type = GetType().GetProperty(option.Key)?.PropertyType;
+
+                if (option.Value == null || type == null) continue;
+
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
-                    var type = GetType().GetProperty(option.Option).PropertyType;
-                    var converted = ChangeType(option.Value, type);
-                    GetType().GetProperty(option.Option).SetValue(this, converted);
+                    type = Nullable.GetUnderlyingType(type);
                 }
+
+                var converted = Convert.ChangeType(option.Value, type);
+                GetType().GetProperty(option.Key).SetValue(this, converted);
             }
         }
 
