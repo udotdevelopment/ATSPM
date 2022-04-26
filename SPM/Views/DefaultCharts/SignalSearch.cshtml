@@ -48,10 +48,10 @@
                                 @Html.DropDownList("MetricTypes", Model.MapMetricsList, "--Select a Metric--", new { @id = "MetricTypes", @class = "form-control", @onchange = "ReportTypeChange()" })
                             </div>
                             <div class="col-md-4">
-                                <label class="control-label" for="Agency">Agency</label>
+                                <label class="control-label" for="JurisdictionList">Jurisdiction</label>
                                 @Html.DropDownListFor(model => model.SelectedJurisdictionId, 
                                new SelectList(Model.JurisdictionList, "Id", "JurisdictionName"),
-                               "--Select an Agency--", 
+                               "--Select a Jurisdiction--", 
                                new { @id = "Agencies", @class = "form-control", @onchange = "ReportTypeChange()" })
                             </div>
                         </div>
