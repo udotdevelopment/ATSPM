@@ -165,6 +165,7 @@ namespace MOE.Common.Models.Repositories
             newVersion.Enabled = originalVersion.Enabled;
             newVersion.Latitude = originalVersion.Latitude;
             newVersion.Longitude = originalVersion.Longitude;
+            newVersion.JurisdictionId = originalVersion.JurisdictionId;
             _db.Signals.Add(newVersion);
             _db.SaveChanges();
 
@@ -371,6 +372,7 @@ namespace MOE.Common.Models.Repositories
         {
             var returnSignal = _db.Signals
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
+                .Include(signal => signal.Jurisdiction)
                 .Include(signal =>
                     signal.Approaches.Select(
                         a => a.Detectors.Select(d => d.DetectionTypes.Select(dt => dt.MetricTypes))))
@@ -432,15 +434,18 @@ namespace MOE.Common.Models.Repositories
         public List<Signal> GetLatestVersionOfAllSignals()
         {
             var activeSignals = _db.Signals.Where(r => r.VersionActionId != 3)
+                .Include(signal => signal.Jurisdiction)
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
                 .Include(signal =>
                     signal.Approaches.Select(
                         a => a.Detectors.Select(d => d.DetectionTypes.Select(dt => dt.MetricTypes))))
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
-                .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                .Include(signal => signal.Approaches.Select(a => a.DirectionType)).ToList();
+            activeSignals
                 .GroupBy(r => r.SignalID)
                 .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).ToList();
             return activeSignals;
+
         }
 
         public List<Signal> GetLatestVersionOfAllSignalsForFtp()

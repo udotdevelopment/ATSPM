@@ -20,11 +20,13 @@ namespace SPM.Controllers
         private MOE.Common.Models.Repositories.IMovementTypeRepository _movementTypeRepository;
         private MOE.Common.Models.Repositories.ILaneTypeRepository _laneTypeRepository;
         private MOE.Common.Models.Repositories.IDetectionHardwareRepository _detectionHardwareRepository;
+        private MOE.Common.Models.Repositories.IJurisdictionRepository _jurisdictionRepository;
         private MOE.Common.Models.Repositories.ISignalsRepository _signalsRepository;
         private MOE.Common.Models.Repositories.IDetectorRepository _detectorRepository; 
         private MOE.Common.Models.Repositories.IDetectionTypeRepository _detectionTypeRepository; 
         private MOE.Common.Models.Repositories.IApproachRepository _approachRepository; 
-        private MOE.Common.Models.Repositories.IMetricTypeRepository _metricTypeRepository; 
+        private MOE.Common.Models.Repositories.IMetricTypeRepository _metricTypeRepository;
+        private MOE.Common.Models.Repositories.IJurisdictionRepository _jurisdictionRepository;
 
         public SignalsController()
         {
@@ -40,6 +42,7 @@ namespace SPM.Controllers
             _movementTypeRepository = MOE.Common.Models.Repositories.MovementTypeRepositoryFactory.Create();
             _laneTypeRepository = MOE.Common.Models.Repositories.LaneTypeRepositoryFactory.Create();
             _detectionHardwareRepository = MOE.Common.Models.Repositories.DetectionHardwareRepositoryFactory.Create();
+            _jurisdictionRepository = MOE.Common.Models.Repositories.JurisdictionRepositoryFactory.Create();
         }
 
         public SignalsController(
@@ -53,7 +56,8 @@ namespace SPM.Controllers
          MOE.Common.Models.Repositories.IDetectorRepository detectorRepository,
          MOE.Common.Models.Repositories.IDetectionTypeRepository detectionTypeRepository,
          MOE.Common.Models.Repositories.IApproachRepository approachRepository,
-         MOE.Common.Models.Repositories.IMetricTypeRepository metricTypeRepository)
+         MOE.Common.Models.Repositories.IMetricTypeRepository metricTypeRepository,
+         MOE.Common.Models.Repositories.IJurisdictionRepository jurisdictionRepository)
         {
             _signalsRepository = signalsRepository;
             _detectorRepository = detectorRepository;
@@ -66,12 +70,13 @@ namespace SPM.Controllers
             _laneTypeRepository = laneTypeRepository;
             _detectionHardwareRepository = detectionHardwareRepository;
             _metricTypeRepository = metricTypeRepository;
+            _jurisdictionRepository = jurisdictionRepository;
         }
 
         public ActionResult Index()
         {
             MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel wctv =
-                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository);
+                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository, _jurisdictionRepository);
 
             return View(wctv);
         }
@@ -81,7 +86,7 @@ namespace SPM.Controllers
         public ActionResult SignalDetail()
         {
             MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel wctv =
-                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository);
+                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository, _jurisdictionRepository);
             return View(wctv);
         }
 
@@ -96,7 +101,6 @@ namespace SPM.Controllers
 
             Signal signal = _signalsRepository.CopySignalToNewVersion(existingSignal);
             signal.VersionList = _signalsRepository.GetAllVersionsOfSignalBySignalID(signal.SignalID);
-            
             try
                 {
                     _signalsRepository.AddOrUpdate(signal);
@@ -254,7 +258,6 @@ namespace SPM.Controllers
             var existingSignal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             if (existingSignal == null)
             {
-
                 Signal signal = CreateNewSignal(id);
                 try
                 {
@@ -292,6 +295,7 @@ namespace SPM.Controllers
             signal.Enabled = true;
             signal.VersionList = new List<Signal>();
             signal.VersionActionId = 1;
+            signal.JurisdictionId = 1;
             return signal;
         }
                 
@@ -619,7 +623,7 @@ namespace SPM.Controllers
             ViewBag.MovementType = new SelectList(_movementTypeRepository.GetAllMovementTypes(), "MovementTypeID", "Description");
             ViewBag.LaneType = new SelectList(_laneTypeRepository.GetAllLaneTypes(), "LaneTypeID", "Description");
             ViewBag.DetectionHardware = new SelectList(_detectionHardwareRepository.GetAllDetectionHardwares(), "ID", "Name");
-            
+            ViewBag.Jurisdictions = new SelectList(_jurisdictionRepository.GetAllJurisdictions(),"Id", "JurisdictionName");
         }
 
         // GET: Signals/Delete/5
@@ -634,7 +638,7 @@ namespace SPM.Controllers
 
 
             MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel wctv =
-                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository);
+                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository, _jurisdictionRepository);
 
             return null;//View(wctv);
         }

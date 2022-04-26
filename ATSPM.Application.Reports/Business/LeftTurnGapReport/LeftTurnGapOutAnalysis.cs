@@ -1,4 +1,5 @@
-﻿using ATSPM.IRepositories;
+﻿using ATSPM.Application.Models;
+using ATSPM.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,15 +30,18 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
         }
         public GapOutResult GetPercentOfGapDuration(string signalId, int approachId, DateTime start, DateTime end, TimeSpan startTime, TimeSpan endTime, int[] daysOfWeek)
         {
-            var approach = _approachRepository.GetApproachByApproachID(approachId); 
+            var signal = _signalsRepository.GetVersionOfSignalByDate(signalId, start);
+            var approach = signal.Approaches.Where(a => a.ApproachId == approachId).FirstOrDefault();
             int opposingPhase = LeftTurnReportPreCheck.GetOpposingPhase(approach);
-            int numberOfOposingLanes = GetNumberOfOpposingLanes(signalId, start, opposingPhase);
+            int numberOfOposingLanes = GetNumberOfOpposingLanes(signal, opposingPhase);
             double criticalGap = GetCriticalGap(numberOfOposingLanes);
             var gapOutResult = new GapOutResult();
             gapOutResult.Capacity = GetGapSummedTotal(signalId, opposingPhase, start, end, startTime, endTime, criticalGap, daysOfWeek);
             gapOutResult.AcceptableGaps = GetGapsList(signalId, opposingPhase, start, end, startTime, endTime, criticalGap, daysOfWeek);
             gapOutResult.DetectorCount = GetGapsList(signalId, opposingPhase, start, end, startTime, endTime, criticalGap, daysOfWeek);
             gapOutResult.Demand = GetGapDemand(approachId, start, end, startTime, endTime, criticalGap);
+            gapOutResult.Direction = approach.DirectionType.Description;
+            gapOutResult.OpposingDirection = GetOpposingPhaseDirection(signal, opposingPhase);
             if (gapOutResult.Capacity == 0)
                 throw new ArithmeticException("Gap Count cannot be zero");
             gapOutResult.GapOutPercent = gapOutResult.Demand / gapOutResult.Capacity;
@@ -94,13 +98,20 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
 
         
 
-        public int GetNumberOfOpposingLanes(string signalId, DateTime startDate, int opposingPhase)
+        public int GetNumberOfOpposingLanes(Signal signal,  int opposingPhase)
         {
-            return _signalsRepository
-                .GetVersionOfSignalByDate(signalId, startDate)
+            return signal
                 .Approaches
                 .SelectMany(a => a.Detectors)
                 .Count(d => d.Approach.ProtectedPhaseNumber == opposingPhase);            
+        }
+
+        public string GetOpposingPhaseDirection(Signal signal, int opposingPhase)
+        {
+            return signal
+                .Approaches
+                .Where(d => d.ProtectedPhaseNumber == opposingPhase)
+                .FirstOrDefault()?.DirectionType.Description;
         }
 
         //static functions

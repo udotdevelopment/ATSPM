@@ -18,6 +18,7 @@
                         OtherPartners = c.String(maxLength: 50),
                     })
                 .PrimaryKey(t => t.Id);
+            Sql("insert into Jurisdictions(JurisdictionName) values ('Default')");
             
             //AddColumn("dbo.Signals", "JurisdictionId", c => c.Int(nullable: false, defaultValue: 1));
             //CreateIndex("dbo.Signals", "JurisdictionId");
