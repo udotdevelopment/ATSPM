@@ -96,7 +96,7 @@ namespace MOE.Common.Business.ScriptGenerator
 
                     //The script string is appended for every pin in the collection.
                     script +=
-                        " if((regionFilter == -1 && reportTypeFilter == -1 && agencyFilter == -1) || (regionFilter == " + pin.Region + " || agencyFilter == " + pin.Agency + " || '" + pin.MetricTypes + "'.indexOf(reportTypeFilter) > -1)) " +
+                        " if(PinFilterCheck(regionFilter, reportTypeFilter, agencyFilter,"+ pin.Region +"," + pin.Agency + ",'" + pin.MetricTypes +"')) " +
                         "{var " + PinName + " = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(" +
                         pin.Latitude + ", " + pin.Longitude +
                         "));" + PinName +

@@ -26,7 +26,6 @@ namespace SPM.Controllers
         private MOE.Common.Models.Repositories.IDetectionTypeRepository _detectionTypeRepository; 
         private MOE.Common.Models.Repositories.IApproachRepository _approachRepository; 
         private MOE.Common.Models.Repositories.IMetricTypeRepository _metricTypeRepository;
-        private MOE.Common.Models.Repositories.IJurisdictionRepository _jurisdictionRepository;
 
         public SignalsController()
         {
