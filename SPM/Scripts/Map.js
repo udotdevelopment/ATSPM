@@ -293,5 +293,17 @@ function EndRequest(sender, args) {
     if (postBackElement.id == 'uxCreateChartButton') {
         $get('UpdateProgress1').style.display = 'none';
     }
+
+    function PinFilterCheck(regionFilter, reportTypeFilter, agencyFilter, pinRegion, pinAgency, pinMetricTypes) {
+        return ((regionFilter == -1 && reportTypeFilter == -1 && agencyFilter == -1) ||
+            (regionFilter == pinRegion && agencyFilter == pinAgency && pin.MetricTypes.indexOf(reportTypeFilter) > -1) ||
+            (regionFilter == -1 && agencyFilter == -1 && pin.MetricTypes.indexOf(reportTypeFilter) > -1) ||
+            (regionFilter == -1 && agencyFilter == pinAgency && pin.MetricTypes == -1) ||
+            (regionFilter == pinRegion && agencyFilter == -1 && pin.MetricTypes == -1) ||
+            (regionFilter == pinRegion && agencyFilter == pinAgency && pin.MetricTypes == -1) ||
+            (regionFilter == pinRegion && agencyFilter == -1 && pin.MetricTypes.indexOf(reportTypeFilter) > -1) ||
+            (regionFilter == -1 && agencyFilter == pinAgency && pin.MetricTypes.indexOf(reportTypeFilter) > -1)
+            );
+    }
 }
 
