@@ -55,7 +55,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             double crossVolumeProduct = GetCrossProduct(leftTurnVolume, opposingVolume);
             leftTurnVolumeValue.CrossProductValue = crossVolumeProduct;
             leftTurnVolumeValue.LeftTurnVolume = leftTurnVolume;
-            leftTurnVolumeValue.OpposingThroughVolume = opposingPhase;
+            leftTurnVolumeValue.OpposingThroughVolume = opposingVolume;
             leftTurnVolumeValue.CrossProductReview = GetCrossProductReview(crossVolumeProduct, leftTurnVolumeValue.OpposingLanes);
             ApproachType approachType = GetApproachType(approach);
             SetDecisionBoundariesReview(leftTurnVolumeValue, leftTurnVolume, opposingVolume, approachType);
@@ -92,7 +92,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                             .Approaches
                             .Where(a => a.ProtectedPhaseNumber == opposingPhase)
                             .SelectMany(a => a.Detectors)
-                            .Where(d => d.MovementTypeId.HasValue && movementTypes.Contains(d.MovementTypeId.Value))
+                            .Where(d => d.MovementTypeId.HasValue && movementTypes.Contains(d.MovementTypeId.Value) && d.DetectionTypeDetectors.First().DetectionTypeId == 4)
                             .ToList();
         }
 
