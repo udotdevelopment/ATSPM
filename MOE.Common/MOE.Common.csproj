@@ -387,6 +387,8 @@
     </Compile>
     <Compile Include="Business\DataAggregation\PhaseLeftTurnGapAggregationByApproach.cs" />
     <Compile Include="Business\DataAggregation\PhaseLeftTurnGapAggregationBySignal.cs" />
+    <Compile Include="Business\DataAggregation\PhaseSplitMonitorAggregationByPhase.cs" />
+    <Compile Include="Business\DataAggregation\PhaseSplitMonitorAggregationBySignal.cs" />
     <Compile Include="Business\LeftTurnGapAnalysis\LeftTurnGapAnalysis.cs" />
     <Compile Include="Business\LeftTurnGapReport\LeftTurnGapOutAnalysis.cs" />
     <Compile Include="Business\LeftTurnGapReport\LeftTurnPedestrianAnalysis.cs" />
@@ -475,6 +477,7 @@
     <Compile Include="Business\WCFServiceLibrary\GapVsDemandOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\LeftTurnGapAnalysisOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\PhaseLeftTurnGapAggregationOptions.cs" />
+    <Compile Include="Business\WCFServiceLibrary\PhaseSplitMonitorAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\TimingAndActuationsOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\PhaseAggregationMetricOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\PhaseCycleAggregationOptions.cs" />
@@ -681,6 +684,15 @@
     <Compile Include="Migrations\202105132005112_ReCreateAggTables.designer.cs">
       <DependentUpon>202105132005112_ReCreateAggTables.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202203290134007_Jurisdiction.cs" />
+    <Compile Include="Migrations\202203290134007_Jurisdiction.designer.cs">
+      <DependentUpon>202203290134007_Jurisdiction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204091703032_SignalJurisdiction.cs" />
+    <Compile Include="Migrations\202204091703032_SignalJurisdiction.designer.cs">
+      <DependentUpon>202204091703032_SignalJurisdiction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Jurisdiction.cs" />
     <Compile Include="Migrations\202204112034383_AddDefaultValuesTable.cs" />
     <Compile Include="Migrations\202204112034383_AddDefaultValuesTable.designer.cs">
       <DependentUpon>202204112034383_AddDefaultValuesTable.cs</DependentUpon>
@@ -705,19 +717,25 @@
     <Compile Include="Models\Repositories\IMeasuresDefaultsRepository.cs" />
     <Compile Include="Models\Repositories\IPhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IPhaseLeftTurnGapAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\IJurisdictionRepository.cs" />
+    <Compile Include="Models\Repositories\IPhaseSplitMonitorAggregationRepository.cs" />
     <Compile Include="Models\Repositories\MeasuresDefaultsRepositortFactory.cs" />
     <Compile Include="Models\Repositories\MeasuresDefaultsRepository.cs" />
     <Compile Include="Models\Repositories\PhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseLeftTurnGapAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\PhaseSplitMonitorAggregationRepository .cs" />
     <Compile Include="Models\Repositories\PhaseTerminationAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhasePedAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\PhaseLeftTurnGapAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\PhaseSplitMonitorAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\PhaseTerminationAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\IPhaseTerminationAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IDetectorEventCountAggregationRepository.cs" />
     <Compile Include="Models\Repositories\ISignalEventCountAggregationRepository.cs" />
     <Compile Include="Models\Repositories\DetectorEventCountAggregationRepository.cs" />
     <Compile Include="Models\Repositories\DetectorEventCountAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\JurisdictionRepository.cs" />
+    <Compile Include="Models\Repositories\JurisdictionRepositoryFactory.cs" />
     <Compile Include="Models\SignalToAggregate.cs" />
     <Compile Include="Models\SignalPlanAggregation.cs" />
     <Compile Include="Models\SignalEventCountAggregation.cs" />
@@ -1163,6 +1181,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.resx">
       <DependentUpon>202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202203290134007_Jurisdiction.resx">
+      <DependentUpon>202203290134007_Jurisdiction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204091703032_SignalJurisdiction.resx">
+      <DependentUpon>202204091703032_SignalJurisdiction.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

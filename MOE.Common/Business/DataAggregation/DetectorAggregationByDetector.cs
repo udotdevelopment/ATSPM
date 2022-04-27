@@ -15,6 +15,7 @@ namespace MOE.Common.Business.DataAggregation
         public DetectorAggregationByDetector(Models.Detector detector, DetectorVolumeAggregationOptions options) : base(
             detector, options)
         {
+            LoadBins(detector, options);
         }
 
         public override void LoadBins(Models.Detector detector, DetectorAggregationMetricOptions options)
@@ -22,10 +23,10 @@ namespace MOE.Common.Business.DataAggregation
             var detectorAggregationRepository = DetectorEventCountAggregationRepositoryFactory.Create();
             var detectorAggregations = detectorAggregationRepository.GetDetectorEventCountAggregationByDetectorIdAndDateRange(
                     detector.ID, options.StartDate, options.EndDate);
-            SetBinsContainers(options, detectorAggregations, BinsContainers);
+            BinsContainers = GetBinsContainers(options, detectorAggregations, BinsContainers);
         }
 
-        public static void SetBinsContainers(
+        public static List<BinsContainer> GetBinsContainers(
             DetectorAggregationMetricOptions options,
             List<DetectorEventCountAggregation> detectorAggregations,
             List<BinsContainer> binsContainers
@@ -81,7 +82,7 @@ namespace MOE.Common.Business.DataAggregation
                     concurrentBinContainers.Add(tempBinsContainer);
                 });
             }
-            binsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
+            return concurrentBinContainers.OrderBy(b => b.Start).ToList();
         }
     }
 }

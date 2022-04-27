@@ -86,7 +86,7 @@ namespace SPM.Controllers
                 case 25:
                     return GetApproachSpeedAggregationChart(aggDataExportViewModel);
                 case 18:
-                    return GetArrivalOnGreenChart(aggDataExportViewModel);
+                    return GetPCDChart(aggDataExportViewModel);
                 case 19:
                     return GetCycleChart(aggDataExportViewModel);
                 case 20:
@@ -107,6 +107,8 @@ namespace SPM.Controllers
                     return GetPhasePedChart(aggDataExportViewModel);
                 case 34:
                     return GetLeftTurnGapChart(aggDataExportViewModel);
+                case 35:
+                    return GetSplitMonitorChart(aggDataExportViewModel);
                 default:
                     return Content("<h1 class='text-danger'>Unkown Chart Type</h1>");
             }
@@ -148,6 +150,11 @@ namespace SPM.Controllers
         private ActionResult GetPhasePedChart(AggDataExportViewModel aggDataExportViewModel)
         {
             PhasePedAggregationOptions options = new PhasePedAggregationOptions();
+            return GetChart(aggDataExportViewModel, options);
+        }
+        private ActionResult GetSplitMonitorChart(AggDataExportViewModel aggDataExportViewModel)
+        {
+            PhaseSplitMonitorAggregationOptions options = new PhaseSplitMonitorAggregationOptions();
             return GetChart(aggDataExportViewModel, options);
         }
         private ActionResult GetLeftTurnGapChart(AggDataExportViewModel aggDataExportViewModel)
@@ -193,7 +200,7 @@ namespace SPM.Controllers
             ApproachYellowRedActivationsAggregationOptions options = new ApproachYellowRedActivationsAggregationOptions();
             return GetChart(aggDataExportViewModel, options);
         }
-        private ActionResult GetArrivalOnGreenChart(AggDataExportViewModel aggDataExportViewModel)
+        private ActionResult GetPCDChart(AggDataExportViewModel aggDataExportViewModel)
         {
             ApproachPcdAggregationOptions options = new ApproachPcdAggregationOptions();
             return GetChart(aggDataExportViewModel, options);
@@ -243,13 +250,13 @@ namespace SPM.Controllers
         {
             string[] startTime;
             string[] endTime;
-            int? startHour = null;
-            int? startMinute = null;
-            int? endHour = null;
-            int? endMinute = null;
             BinFactoryOptions.TimeOptions timeOptions = BinFactoryOptions.TimeOptions.StartToEnd;
-            if (!String.IsNullOrEmpty(aggDataExportViewModel.StartTime) &&
-                !String.IsNullOrEmpty(aggDataExportViewModel.EndTime))
+            int? startHour;
+            int? startMinute;
+            int? endHour;
+            int? endMinute;
+            if (!string.IsNullOrEmpty(aggDataExportViewModel.StartTime) &&
+                !string.IsNullOrEmpty(aggDataExportViewModel.EndTime))
             {
                 startTime = aggDataExportViewModel.StartTime.Split(':');
                 startHour = Convert.ToInt32(startTime[0]);
@@ -285,8 +292,8 @@ namespace SPM.Controllers
                 startMinute = 0;
                 endHour = 23;
                 endMinute = 59;
-                aggDataExportViewModel.EndDateDay = aggDataExportViewModel.EndDateDay.Value
-                    .AddHours(23).AddMinutes(59);
+                aggDataExportViewModel.EndDateDay = aggDataExportViewModel.EndDateDay.Value.AddDays(1);
+                    //.AddHours(23).AddMinutes(59);
             }
             List<DayOfWeek> daysOfWeek = new List<DayOfWeek>();
             // three cases 1) Week Day, 2) Week End, 3) time or WeekDay and Weekend Andre
@@ -1019,6 +1026,9 @@ namespace SPM.Controllers
                     break;
                 case 34:
                     AggregatedDataTypes = new PhaseLeftTurnGapAggregationOptions().AggregatedDataTypes;
+                    break;
+                case 35:
+                    AggregatedDataTypes = new PhaseSplitMonitorAggregationOptions().AggregatedDataTypes;
                     break;
                 default:
                     throw new Exception("Invalid Metric Type");

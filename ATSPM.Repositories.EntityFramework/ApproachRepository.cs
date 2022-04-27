@@ -41,12 +41,16 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
             {
                 var approach = _db.Approaches
                     .Include(approach => approach.Detectors)
+                    .Include(approach => approach.DirectionType)
                     .Where(a => a.ApproachId == approachId).FirstOrDefault();
                 if(approach== null)
                     throw new Exception("There is no Approach for this ID");
                 foreach (var detector in approach.Detectors)
                 {
-                    detector.DetectionTypeDetectors = _db.DetectionTypeDetectors.Where(d => d.Id == detector.Id).Include(d => d.DetectionType).ToList();
+                    detector.DetectionTypeDetectors = _db.DetectionTypeDetectors
+                        .Where(d => d.Id == detector.Id).Include(d => d.DetectionType).ToList();
+                    detector.MovementType = _db.MovementTypes
+                        .Where(m => m.MovementTypeId == detector.MovementTypeId).FirstOrDefault();
                 }
                 return approach;
             }

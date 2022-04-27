@@ -56,6 +56,31 @@ namespace MOE.Common.Business.DataAggregation
                                         splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.SplitFailures);
                                     break;
+                                case "GreenOccupancySum":
+                                    splitFailCount =
+                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.GreenOccupancySum);
+                                    break;
+                                case "RedOccupancySum":
+                                    splitFailCount =
+                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.RedOccupancySum);
+                                    break;
+                                case "GreenTimeSum":
+                                    splitFailCount =
+                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.GreenTimeSum);
+                                    break;
+                                case "RedTimeSum":
+                                    splitFailCount =
+                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.RedTimeSum);
+                                    break;
+                                case "Cycles":
+                                    splitFailCount =
+                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.Cycles);
+                                    break;
                                 default:
 
                                     throw new Exception("Unknown Aggregate Data Type for Split Failure");

@@ -17,11 +17,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             MetricTypeID = 29;
             AggregatedDataTypes = new List<AggregatedDataType>();
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "PedCycles"});
-            AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = "PedDelaySum"});
-            AggregatedDataTypes.Add(new AggregatedDataType { Id = 2, DataName = "MinPedDelay" });
-            AggregatedDataTypes.Add(new AggregatedDataType { Id = 3, DataName = "MaxPedDelay" });
-            AggregatedDataTypes.Add(new AggregatedDataType { Id = 4, DataName = "PedActuations" });
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = PhasePedAggregationByPhase.PED_CYCLES });
+            AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = PhasePedAggregationByPhase.PED_DELAY_SUM });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 2, DataName = PhasePedAggregationByPhase.MIN_PED_DELAY });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 3, DataName = PhasePedAggregationByPhase.MAX_PED_DELAY });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 4, DataName = PhasePedAggregationByPhase.PED_ACTUATIONS });
         }
 
         public override string ChartTitle

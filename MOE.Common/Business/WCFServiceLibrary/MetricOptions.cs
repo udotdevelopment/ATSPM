@@ -45,6 +45,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(PhasePedAggregationOptions))]
     [KnownType(typeof(TimingAndActuationsOptions))]
     [KnownType(typeof(PhaseLeftTurnGapAggregationOptions))]
+    [KnownType(typeof(PhaseSplitMonitorAggregationOptions))]
     [KnownType(typeof(string[]))]
     public class MetricOptions
     {

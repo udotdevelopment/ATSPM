@@ -26,6 +26,7 @@ using SPM.Models.LeftTurnGapReport;
 
 namespace SPM.Controllers
 {
+    [Authorize(Roles = "Restricted Configuration, Admin")]
     public class LeftTurnGapReportController : Controller
     {
 
@@ -307,6 +308,8 @@ namespace SPM.Controllers
                 approachResult.Demand = gapResult.Demand;
                 approachResult.GapOutPercent = gapResult.GapOutPercent;
                 approachResult.AcceptableGapList = gapResult.AcceptableGaps;
+                approachResult.Direction = gapResult.Direction;
+                approachResult.OpposingDirection = gapResult.OpposingDirection;
             }
 
             if (parameters.GetSplitFail ?? false)
@@ -316,6 +319,7 @@ namespace SPM.Controllers
                 approachResult.CyclesWithSplitFailNum = splitFailResult.CyclesWithSplitFails;
                 approachResult.CyclesWithSplitFailPercent = splitFailResult.SplitFailPercent;
                 approachResult.PercentCyclesWithSplitFailList = splitFailResult.PercentCyclesWithSplitFailList;
+                approachResult.Direction = splitFailResult.Direction;
             }
             if (parameters.GetPedestrianCall ?? false)
             {
@@ -324,6 +328,8 @@ namespace SPM.Controllers
                 approachResult.CyclesWithPedCallPercent = PedResult.PedActuationPercent;
                 approachResult.PedActuationsConsiderForStudy = PedResult.ConsiderForStudy;
                 approachResult.PercentCyclesWithPedsList = PedResult.PercentCyclesWithPedsList;
+                approachResult.Direction = PedResult.Direction;
+                approachResult.OpposingDirection = PedResult.OpposingDirection;
             }
             if (parameters.GetConflictingVolume ?? false) 
             {
@@ -338,6 +344,8 @@ namespace SPM.Controllers
                 approachResult.CalculatedVolumeBoundary = volumeResult.CalculatedVolumeBoundary;
                 approachResult.ConsiderForStudy = volumeResult.ConsiderForStudy;
                 approachResult.DemandList = volumeResult.DemandList;
+                approachResult.Direction = volumeResult.Direction;
+                approachResult.OpposingDirection = volumeResult.OpposingDirection;
             }
             return approachResult;
         }

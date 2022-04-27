@@ -53,6 +53,9 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="AuthorizedActionLink, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AuthorizedActionLink.2.2.0.0\lib\net40\AuthorizedActionLink.dll</HintPath>
+    </Reference>
     <Reference Include="Caseiro.Mvc.PagedList, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Caseiro.Mvc.PagedList.1.0.2\lib\net40\Caseiro.Mvc.PagedList.dll</HintPath>
       <Private>True</Private>
@@ -65,6 +68,9 @@
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Identity.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Identity.Extensions.1.0.4\lib\net45\Identity.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -422,7 +428,7 @@
     <Compile Include="Controllers\ApproachesController.cs" />
     <Compile Include="Controllers\ArchiveSettingsOldController.cs" />
     <Compile Include="Controllers\ConfigurationTableController.cs" />
-    <Compile Include="Controllers\MeasuresDefaultsController.cs" />
+    <Compile Include="Controllers\JurisdictionsController.cs" />
     <Compile Include="Models\ConflictingVolumesAnalysisReportParameters.cs" />
     <Compile Include="Models\ConflictingVolumesAnalysisReportViewModel.cs" />
     <Compile Include="Controllers\DatabaseArchiveSettingsController.cs" />
@@ -909,6 +915,13 @@
     <Content Include="Views\LeftTurnGapReport\PedestrianCallAnalysisReport.cshtml" />
     <Content Include="Views\LeftTurnGapReport\ConflictingVolumesAnalysisReport.cshtml" />
     <Content Include="Views\LeftTurnGapReport\ResultAsPdf.cshtml" />
+    <Content Include="Views\Jurisdictions\Create.cshtml" />
+    <Content Include="Views\Jurisdictions\Delete.cshtml" />
+    <Content Include="Views\Jurisdictions\Details.cshtml" />
+    <Content Include="Views\Jurisdictions\Edit.cshtml" />
+    <Content Include="Views\Jurisdictions\EditorTemplates\AgencyPhaseDirection.cshtml" />
+    <Content Include="Views\Jurisdictions\EditorTemplates\AgencySignal.cshtml" />
+    <Content Include="Views\Jurisdictions\Index.cshtml" />
     <Content Include="Views\DefaultCharts\WaitTimeOptions.cshtml" />
     <Content Include="Views\MeasuresDefaults\Index.cshtml" />
     <Content Include="Views\MeasuresDefaults\PhaseTerminationOptions.cshtml" />

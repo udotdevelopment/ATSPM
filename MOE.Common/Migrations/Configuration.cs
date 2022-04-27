@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data.Entity.Migrations;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -24,8 +24,16 @@ namespace MOE.Common.Migrations
         protected override void Seed(SPM context)
         {
             //  This method will be called after migrating to the latest version.
-
-
+            context.Jurisdictions.AddOrUpdate(
+                j => j.JurisdictionName,
+                new Models.Jurisdiction
+                {
+                    JurisdictionName = "Default Name",
+                    MPO = "",
+                    OtherPartners = "",
+                    CountyParish = ""
+                }
+                );
             context.FAQs.AddOrUpdate(
                 f => f.Header,
                 new FAQ
@@ -129,8 +137,53 @@ namespace MOE.Common.Migrations
                 {
                     OrderNumber = 17,
                     Header = @"<b>What are the detection requirements for each metric?</b> ",
-                    Body = @" < table >< tr >< td >< b > MEASURE </ b ></ td >< td >< b > DETECTION NEEDED </ b ></ td ></ tr >< tr >< td > Purdue Coordination Diagram & nbsp; &nbsp; &nbsp; &nbsp;</ td >< td > Setback count(350 ft – 400 ft) </ td ></ tr >< tr >< td > Approach Volume </ td >< td > Setback count(350 ft – 400 ft) </ td ></ tr >< tr >< td > Approach Speed </ td >< td > Setback count(350 ft – 400 ft) using radar </ td ></ tr >< tr >< td > Purdue Phase Termination</ td >< td > No detection needed or used</ td ></ tr >< tr >< td > Split Monitor </ td >< td > No detection needed or used</ td ></ tr >< tr >< td > Turning Movement Counts</ td >< td > Stop bar(lane - by - lane) count </ td ></ tr >< tr >< td > Approach Delay </ td >< td > Setback count(350 ft – 400 ft) </ td ></ tr >< tr >< td > Arrivals on Red</ td >< td > Setback count(350 ft – 400 ft) </ td ></ tr >< tr >< td > Yellow and Red Actuations </ td >< td > Stop bar(lane - by - lane) count that is either in front of the stop bar or has a speed filter enabled </ td ></ tr >>< tr >< td > Purdue Split Failure</ td >< td > Stop bar presence detection, either by lane group or individual lane </ td ></ tr >
-                    </ table >< br />< br />< b > Automated Traffic Signal Performance Measures will work with any type of detector that is capable of counting vehicles(i.e.loops, video, pucks, radar).  The only exception to this is the speed measure, where UDOT’s Automated Signal Performance Measures for speeds will only work with the Wavetronix Advance Smartsensor).Please note that two of the measures(Purdue Phase Termination and Split Monitor) do not use detection and are extremely useful measures.</ b > "
+                    Body = @"<table class='table table-bordered'>
+ 	                            <tr>
+                                    <th> MEASURE </th>
+                                    <th> DETECTION NEEDED </th>
+                                </tr>
+                                <tr>
+                                    <td> Purdue Coordination Diagram </td>
+                                    <td> Setback count (350 ft – 400 ft) </td>
+                                </tr>
+                                <tr>
+                                    <td> Approach Volume </td>
+                                    <td> Setback count (350 ft – 400 ft) </td>
+                                </tr>
+                                <tr>
+                                    <td> Approach Speed </td>
+                                    <td> Setback count (350 ft – 400 ft) using radar </td>
+                                </tr>
+                                <tr>
+                                    <td> Purdue Phase Termination </td>
+                                    <td> No detection needed or used </td>
+                                </tr>
+                                <tr>
+                                    <td> Split Monitor </td>
+                                    <td> No detection needed or used </td>
+                                </tr>
+                                <tr>
+                                    <td> Turning Movement Counts </td>
+                                    <td> Stop bar (lane-by-lane) count </td>
+                                </tr>
+                                <tr>
+                                    <td> Approach Delay </td>
+                                    <td> Setback count (350 ft – 400 ft) </td>
+                                </tr>
+                                <tr>
+                                    <td> Arrivals on Red </td>
+                                    <td> Setback count (350 ft – 400 ft) </td>
+                                </tr>
+                                <tr>
+                                    <td> Yellow and Red Actuations </td>
+                                    <td> Stop bar (lane-by-lane) count that is either in front of the stop bar or has a speed filter enabled </td>
+                                </tr>
+                                <tr>
+                                    <td> Purdue Split Failure </td>
+                                    <td> Stop bar presence detection, either by lane group or individual lane </td>
+                                </tr>
+                        </table>
+                        <b> Automated Traffic Signal Performance Measures will work with any type of detector that is capable of counting vehicles, e.g., loops, video, pucks, radar. (The only exception to this is the speed measure, where UDOT’s Automated Signal Performance Measures for speeds will only work with the Wavetronix Advance SmartSensor.) Please note that two of the measures (Purdue Phase Termination and Split Monitor) do not use detection and are extremely useful measures.</b>"
                 },
                 new FAQ
                 {
@@ -198,7 +251,7 @@ namespace MOE.Common.Migrations
                     ParentId = 0,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 20
-                }, 
+                },
                 new Menu
                 {
                     MenuId = 3,
@@ -259,6 +312,16 @@ namespace MOE.Common.Migrations
                 //    Application = "SignalPerformanceMetrics",
                 //    DisplayOrder = 80
                 //},
+                new Menu
+                {
+                    MenuId = 17,
+                    MenuName = "Agency Configuration",
+                    Controller = "Jurisdictions",
+                    Action = "Index",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 80
+                },
                 new Menu
                 {
                     MenuId = 27,
@@ -328,6 +391,16 @@ namespace MOE.Common.Migrations
                     ParentId = 2,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 20
+                },
+                new Menu
+                {
+                    MenuId = 100,
+                    MenuName = "Left Turn Gap Analysis",
+                    Controller = "LeftTurnGapReport",
+                    Action = "Index",
+                    ParentId = 2,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 25
                 },
                 //new Menu
                 //{
@@ -479,6 +552,18 @@ namespace MOE.Common.Migrations
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 30
                 },
+
+                new Menu
+                {
+                    MenuId = 14,
+                    MenuName = "Agency Configuration",
+                    Controller = "Jurisdcitions",
+                    Action = "Index",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 30
+                },
+
                 new Menu
                 {
                     MenuId = 57,
@@ -681,75 +766,75 @@ namespace MOE.Common.Migrations
                 //}
             );
 
-            //context.ExternalLinks.AddOrUpdate(
-            //    c => c.DisplayOrder,
-            //    new ExternalLink
-            //    {
-            //        Name = "Indiana Hi Resolution Data Logger Enumerations",
-            //        DisplayOrder = 1,
-            //        Url = " https://docs.lib.purdue.edu/jtrpdata/3/"
-            //    },
-            //    new ExternalLink
-            //    {
-            //        Name = "Florida ATSPM",
-            //        DisplayOrder = 2,
-            //        Url = "https://atspm.cflsmartroads.com/ATSPM"
-            //    },
-            //    new ExternalLink
-            //    {
-            //        Name = "FAST (Southern Nevada)",
-            //        DisplayOrder = 3,
-            //        Url = "http://challenger.nvfast.org/spm"
-            //    },
-            //    new ExternalLink
-            //    {
-            //        Name = "Georgia ATSPM",
-            //        DisplayOrder = 4,
-            //        Url = "https://traffic.dot.ga.gov/atspm"
-            //    },
-            //    new ExternalLink
-            //    {
-            //        Name = "Arizona ATSPM",
-            //        DisplayOrder = 5,
-            //        Url = "http://spmapp01.mcdot-its.com/ATSPM"
-            //    },
-            //    new ExternalLink
-            //    {
-            //        Name = "Alabama ATSPM",
-            //        DisplayOrder = 6,
-            //        Url = "http://signalmetrics.ua.edu"
-            //    },
-            //    new ExternalLink
-            //    {
-            //        Name = "ATSPM Workshop 2016 SLC",
-            //        DisplayOrder = 7,
-            //        Url = "http://docs.lib.purdue.edu/atspmw/2016"
-            //    },
-            //    new ExternalLink
-            //    {
-            //        Name = "Train The Trainer Webinar Day 1 - Morning",
-            //        DisplayOrder = 8,
-            //        Url = "https://connectdot.connectsolutions.com/p75dwqefphk   "
-            //    },
-            //    new ExternalLink
-            //    {
-            //        Name = "Train The Trainer Webinar Day 1 - Afternoon",
-            //        DisplayOrder = 9,
-            //        Url = "https://connectdot.connectsolutions.com/p6l6jaoy3gj"
-            //    },
-            //    new ExternalLink
-            //    {
-            //        Name = "Train The Trainer Webinar Day 2 - Morning",
-            //        DisplayOrder = 10,
-            //        Url = "https://connectdot.connectsolutions.com/p6mlkvekogo/"
-            //    },
-            //    new ExternalLink
-            //    {
-            //        Name = "Train The Trainer Webinar Day 2 - Mid Morning",
-            //        DisplayOrder = 11,
-            //        Url = "https://connectdot.connectsolutions.com/p3ua8gtj09r/"
-            //    }
-            //);
+            context.ExternalLinks.AddOrUpdate(
+                c => c.DisplayOrder,
+                new ExternalLink
+                {
+                    Name = "Indiana Hi Resolution Data Logger Enumerations",
+                    DisplayOrder = 1,
+                    Url = " https://docs.lib.purdue.edu/jtrpdata/3/"
+                },
+                new ExternalLink
+                {
+                    Name = "Florida ATSPM",
+                    DisplayOrder = 2,
+                    Url = "https://atspm.cflsmartroads.com/ATSPM"
+                },
+                new ExternalLink
+                {
+                    Name = "FAST (Southern Nevada)",
+                    DisplayOrder = 3,
+                    Url = "http://challenger.nvfast.org/spm"
+                },
+                new ExternalLink
+                {
+                    Name = "Georgia ATSPM",
+                    DisplayOrder = 4,
+                    Url = "https://traffic.dot.ga.gov/atspm"
+                },
+                new ExternalLink
+                {
+                    Name = "Arizona ATSPM",
+                    DisplayOrder = 5,
+                    Url = "http://spmapp01.mcdot-its.com/ATSPM"
+                },
+                new ExternalLink
+                {
+                    Name = "Alabama ATSPM",
+                    DisplayOrder = 6,
+                    Url = "http://signalmetrics.ua.edu"
+                },
+                new ExternalLink
+                {
+                    Name = "ATSPM Workshop 2016 SLC",
+                    DisplayOrder = 7,
+                    Url = "http://docs.lib.purdue.edu/atspmw/2016"
+                },
+                new ExternalLink
+                {
+                    Name = "Train The Trainer Webinar Day 1 - Morning",
+                    DisplayOrder = 8,
+                    Url = "https://connectdot.connectsolutions.com/p75dwqefphk   "
+                },
+                new ExternalLink
+                {
+                    Name = "Train The Trainer Webinar Day 1 - Afternoon",
+                    DisplayOrder = 9,
+                    Url = "https://connectdot.connectsolutions.com/p6l6jaoy3gj"
+                },
+                new ExternalLink
+                {
+                    Name = "Train The Trainer Webinar Day 2 - Morning",
+                    DisplayOrder = 10,
+                    Url = "https://connectdot.connectsolutions.com/p6mlkvekogo/"
+                },
+                new ExternalLink
+                {
+                    Name = "Train The Trainer Webinar Day 2 - Mid Morning",
+                    DisplayOrder = 11,
+                    Url = "https://connectdot.connectsolutions.com/p3ua8gtj09r/"
+                }
+            );
             context.ControllerType.AddOrUpdate(
                 c => c.ControllerTypeID,
                 new ControllerType
@@ -837,7 +922,7 @@ namespace MOE.Common.Migrations
                     ControllerTypeID = 9,
                     Description = "EOS",
                     SNMPPort = 161,
-                    FTPDirectory = "/econolite/set1",
+                    FTPDirectory = "/set1",
                     ActiveFTP = true,
                     UserName = "econolite",
                     Password = "ecpi2ecpi"
@@ -902,15 +987,6 @@ namespace MOE.Common.Migrations
                     ShowOnWebsite = true,
                     ShowOnAggregationSite = false,
                     DisplayOrder = 20
-                },
-                new MetricType
-                {
-                    MetricID = 31,
-                    ChartName = "Left Turn Gap Analysis",
-                    Abbreviation = "LTGA",
-                    ShowOnWebsite = true,
-                    ShowOnAggregationSite = false,
-                    DisplayOrder = 25
                 },
                 new MetricType
                 {
@@ -1020,13 +1096,13 @@ namespace MOE.Common.Migrations
                     ShowOnAggregationSite = true,
                     DisplayOrder = 85
                 },
-                
+
                 new MetricType
                 {
                     MetricID = 18,
                     ChartName = "Approach Pcd", //"Purdue Coodination",
-                                Abbreviation = "APCD", // "PCDA",
-                                ShowOnWebsite = false,
+                    Abbreviation = "APCD", // "PCDA",
+                    ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 102
                 },
@@ -1034,7 +1110,7 @@ namespace MOE.Common.Migrations
                 {
                     MetricID = 19,
                     ChartName = "Approach Cycle", // "Cycle"
-                                Abbreviation = "CA",
+                    Abbreviation = "CA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 103
@@ -1043,7 +1119,7 @@ namespace MOE.Common.Migrations
                 {
                     MetricID = 20,
                     ChartName = "Approach Split Fail", //"Purdue Split Failure",
-                                Abbreviation = "SFA",
+                    Abbreviation = "SFA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 104
@@ -1052,7 +1128,7 @@ namespace MOE.Common.Migrations
                 {
                     MetricID = 22,
                     ChartName = "Signal Preemption", //"Preemption",
-                                Abbreviation = "PreemptA",
+                    Abbreviation = "PreemptA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 105
@@ -1061,7 +1137,7 @@ namespace MOE.Common.Migrations
                 {
                     MetricID = 24,
                     ChartName = "Signal Priority", // "Transit Signal Priority",
-                                Abbreviation = "TSPA",
+                    Abbreviation = "TSPA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 106
@@ -1079,7 +1155,7 @@ namespace MOE.Common.Migrations
                 {
                     MetricID = 26,
                     ChartName = "Approach Yellow Red Activations", //"Yellow Red Activations",
-                                Abbreviation = "YRAA",
+                    Abbreviation = "YRAA",
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 108
@@ -1155,6 +1231,15 @@ namespace MOE.Common.Migrations
                     ShowOnWebsite = false,
                     ShowOnAggregationSite = true,
                     DisplayOrder = 114
+                },
+                new MetricType
+                {
+                    MetricID = 35,
+                    ChartName = "Split Monitor",
+                    Abbreviation = "SM",
+                    ShowOnWebsite = false,
+                    ShowOnAggregationSite = true,
+                    DisplayOrder = 120
                 }
 
             );
@@ -1185,14 +1270,14 @@ namespace MOE.Common.Migrations
                         break;
                     case 4:
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(5));
-                        detectionType.MetricTypes.Add(context.MetricTypes.Find(7)); 
+                        detectionType.MetricTypes.Add(context.MetricTypes.Find(7));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(31));
                         break;
                     case 5:
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(11));
                         break;
                     case 6:
-                        detectionType.MetricTypes.Add(context.MetricTypes.Find(12)); 
+                        detectionType.MetricTypes.Add(context.MetricTypes.Find(12));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(31));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(32));
                         break;
@@ -1260,9 +1345,8 @@ namespace MOE.Common.Migrations
                 {
                     ApplicationID = 4,
                     RawDataCountLimit = 1048576,
-                    //ImageUrl = "http://defaultWebServer/spmimages/",
-                    //ImagePath = @"\\defaultWebserver\SPMImages\",
-                    CycleCompletionSeconds = 900
+                    ImageUrl = "http://defaultWebServer/spmimages/",
+                    ImagePath = @"\\defaultWebserver\SPMImages\"
                 }
             );
 
@@ -1520,6 +1604,8 @@ namespace MOE.Common.Migrations
                 userManager.AddToRole(user.Id, "Data");
                 roleManager.Create(new IdentityRole("Configuration"));
                 userManager.AddToRole(user.Id, "Configuration");
+                roleManager.Create(new IdentityRole("Restricted Configuration"));
+                userManager.AddToRole(user.Id, "Restricted Configuration");
             }
             else
             {
@@ -1530,10 +1616,11 @@ namespace MOE.Common.Migrations
                 userManager.AddToRole(user.Id, "Data");
                 roleManager.Create(new IdentityRole("Configuration"));
                 userManager.AddToRole(user.Id, "Configuration");
+                roleManager.Create(new IdentityRole("Restricted Configuration"));
+                userManager.AddToRole(user.Id, "Restricted Configuration");
             }
 
             context.SaveChanges();
         }
     }
 }
-

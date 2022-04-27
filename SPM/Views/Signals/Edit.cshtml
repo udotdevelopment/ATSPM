@@ -16,6 +16,7 @@
         <div class="form-horizontal">
             @{
                 var selectList = new SelectList(Model.VersionList, "VersionId", "SelectListName", Model.VersionID);
+                
             }
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.HiddenFor(model => model.SignalID, new { @id = "editSignalID" })
@@ -89,6 +90,13 @@
                         @Html.ValidationMessageFor(model => model.Region, "", new { id = "Region-error", @class = "text-danger" })
                     </div>
                 </div>
+                <div class="form-group-configuration-tool  form-group col-md-2">
+                    @Html.LabelFor(model => model.JurisdictionId, htmlAttributes: new { @class = "control-label" })
+                    <div class="">
+                        @Html.DropDownListFor(model => model.JurisdictionId, (SelectList)ViewBag.Jurisdictions, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Jurisdiction, "", new { id = "Region-error", @class = "text-danger" })
+                    </div>
+                </div>
                 <div class="form-group-configuration-tool  form-group col-md-3">
                     @Html.LabelFor(model => model.ControllerTypeID, "Controller Type", htmlAttributes: new { @class = "control-label" })
                     <div class="">
@@ -115,7 +123,7 @@
                         @Html.EditorFor(model => model.Comments, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Comments, "", new { id = "Comments-error", @class = "text-danger" })
                     </div>
-                    <br/>
+                    <br />
                 </div>
                 <div class="col-md-12">
                     <div id="ConfigurationTable" role="tablist" aria-multiselectable="true" class="col-md-12">
