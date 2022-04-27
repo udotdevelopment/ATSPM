@@ -108,6 +108,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             return signal
                 .Approaches
                 .SelectMany(a => a.Detectors)
+                .Where(d => d.DetectionTypeDetectors.First().DetectionTypeId == 4)
                 .Count(d => d.Approach.ProtectedPhaseNumber == opposingPhase);            
         }
 
