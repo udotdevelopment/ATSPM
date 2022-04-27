@@ -48,8 +48,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(string[]))]
     public class MetricOptions
     {
-        MOE.Common.Models.Repositories.IMetricTypesDefaultValuesRepository metricTypesDefaultValuesRepository =
-           MOE.Common.Models.Repositories.MetricTypesDefaultValuesRepositoryFactory.Create();
+        MOE.Common.Models.Repositories.IMeasuresDefaultsRepository measuresDefaultsRepository =
+           MOE.Common.Models.Repositories.MeasuresDefaultsRepositoryFactory.Create();
         public MetricOptions()
         {
             var applicationSettingRepository = ApplicationSettingsRepositoryFactory.Create();
@@ -128,7 +128,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public void SetDefaults()
         {
             var chart = GetType().Name.Replace("Options", "");
-            var defaults = metricTypesDefaultValuesRepository.GetChartDefaultsAsDictionary(chart);
+            var defaults = measuresDefaultsRepository.GetMeasureDefaultsAsDictionary(chart);
             foreach (var option in defaults)
             {
                 var type = GetType().GetProperty(option.Key)?.PropertyType;

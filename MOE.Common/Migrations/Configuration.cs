@@ -552,8 +552,8 @@ namespace MOE.Common.Migrations
                 new Menu
                 {
                     MenuId = 100,
-                    MenuName = "Default Charts Settings",
-                    Controller = "MetricTypesDefaultValues",
+                    MenuName = "Measure Defaults Settings",
+                    Controller = "MeasuresDefaults",
                     Action = "Index",
                     ParentId = 11,
                     Application = "SignalPerformanceMetrics",

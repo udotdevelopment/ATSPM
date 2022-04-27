@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MOE.Common.Models
 {
-    public class MetricTypesDefaultValues
+    public class MeasuresDefaults
     {
         [Key, Column(Order = 0)]
-        public string Chart { get; set; }
+        public string Measure { get; set; }
         [Key, Column(Order = 1)]
-        public string Option { get; set; }
+        public string OptionName { get; set; }
         public string Value { get; set; }
     }
 }

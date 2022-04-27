@@ -422,7 +422,7 @@
     <Compile Include="Controllers\ApproachesController.cs" />
     <Compile Include="Controllers\ArchiveSettingsOldController.cs" />
     <Compile Include="Controllers\ConfigurationTableController.cs" />
-    <Compile Include="Controllers\MetricTypesDefaultValuesController.cs" />
+    <Compile Include="Controllers\MeasuresDefaultsController.cs" />
     <Compile Include="Models\ConflictingVolumesAnalysisReportParameters.cs" />
     <Compile Include="Models\ConflictingVolumesAnalysisReportViewModel.cs" />
     <Compile Include="Controllers\DatabaseArchiveSettingsController.cs" />
@@ -437,7 +437,7 @@
     <Compile Include="Models\LeftTurnGapReport\PdfResult.cs" />
     <Compile Include="Models\LeftTurnGapReport\PeakHourParameters.cs" />
     <Compile Include="Models\LeftTurnGapReport\ReportParameters.cs" />
-    <Compile Include="Models\MetricTypesDefaultValuesViewModel.cs" />
+    <Compile Include="Models\MeasuresDefaultsViewModel.cs" />
     <Compile Include="Models\PedActuationResultViewModel.cs" />
     <Compile Include="Models\LeftTurnGapReport\SplitFailResultViewModel.cs" />
     <Compile Include="Models\LeftTurnGapReport\LeftTurnGapOutViewModel.cs" />
@@ -910,21 +910,21 @@
     <Content Include="Views\LeftTurnGapReport\ConflictingVolumesAnalysisReport.cshtml" />
     <Content Include="Views\LeftTurnGapReport\ResultAsPdf.cshtml" />
     <Content Include="Views\DefaultCharts\WaitTimeOptions.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\Index.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\PhaseTerminationOptions.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\SplitMonitorOptions.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\PedDelayOptions.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\SplitFailOptions.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\ApproachDelayOptions.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\ApproachSpeedOptions.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\YellowAndRedOptions.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\LeftTurnGapAnalysisOptions.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\TMCOptions.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\ApproachVolumeOptions.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\AoROptions.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\PCDOptions.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\WaitTimeOptions.cshtml" />
-    <Content Include="Views\MetricTypesDefaultValues\TimingAndActuationsOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\Index.cshtml" />
+    <Content Include="Views\MeasuresDefaults\PhaseTerminationOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\SplitMonitorOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\PedDelayOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\SplitFailOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\ApproachDelayOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\ApproachSpeedOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\YellowAndRedOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\LeftTurnGapAnalysisOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\TMCOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\ApproachVolumeOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\AoROptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\PCDOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\WaitTimeOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\TimingAndActuationsOptions.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

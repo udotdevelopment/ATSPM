@@ -689,20 +689,24 @@
     <Compile Include="Migrations\202204141600287_RemoveValueFromKeyInDefaultsTable.designer.cs">
       <DependentUpon>202204141600287_RemoveValueFromKeyInDefaultsTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.cs" />
+    <Compile Include="Migrations\202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.designer.cs">
+      <DependentUpon>202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
-    <Compile Include="Models\MetricTypesDefaultValues.cs" />
+    <Compile Include="Models\MeasuresDefaults.cs" />
     <Compile Include="Models\PhasePedAggregation.cs" />
     <Compile Include="Models\PhaseSplitMonitorAggregation.cs" />
     <Compile Include="Models\PhaseLeftTurnGapAggregation.cs" />
     <Compile Include="Models\PhaseTerminationAggregation.cs" />
     <Compile Include="Models\DetectorEventCountAggregation.cs" />
     <Compile Include="Models\Region.cs" />
-    <Compile Include="Models\Repositories\IMetricTypesDefaultValuesRepository.cs" />
+    <Compile Include="Models\Repositories\IMeasuresDefaultsRepository.cs" />
     <Compile Include="Models\Repositories\IPhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IPhaseLeftTurnGapAggregationRepository.cs" />
-    <Compile Include="Models\Repositories\MetricTypesDefaultValuesRepositortFactory.cs" />
-    <Compile Include="Models\Repositories\MetricTypesDefaultValuesRepository.cs" />
+    <Compile Include="Models\Repositories\MeasuresDefaultsRepositortFactory.cs" />
+    <Compile Include="Models\Repositories\MeasuresDefaultsRepository.cs" />
     <Compile Include="Models\Repositories\PhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseLeftTurnGapAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseTerminationAggregationRepository.cs" />
@@ -1156,6 +1160,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202204141600287_RemoveValueFromKeyInDefaultsTable.resx">
       <DependentUpon>202204141600287_RemoveValueFromKeyInDefaultsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.resx">
+      <DependentUpon>202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

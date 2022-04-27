@@ -13,14 +13,14 @@ using SPM.Models;
 namespace SPM.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class MetricTypesDefaultValuesController : Controller
+    public class MeasuresDefaultsController : Controller
     {
-        MOE.Common.Models.Repositories.IMetricTypesDefaultValuesRepository metricTypesDefaultValuesRepository =
-        MOE.Common.Models.Repositories.MetricTypesDefaultValuesRepositoryFactory.Create();
-        // GET: MetricTypesDefaultValues
+        MOE.Common.Models.Repositories.IMeasuresDefaultsRepository measuresDefaultsRepository =
+        MOE.Common.Models.Repositories.MeasuresDefaultsRepositoryFactory.Create();
+        // GET: MeasuresDefaults
         public ActionResult Index()
         {
-            var viewModel = new MetricTypesDefaultValuesViewModel();
+            var viewModel = new MeasuresDefaultsViewModel();
 
             viewModel.AoR = new AoRDefaultValuesViewModel();
             AddValuesToViewModel(viewModel.AoR, "AoR");
@@ -70,7 +70,7 @@ namespace SPM.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(MetricTypesDefaultValuesViewModel viewModel)
+        public ActionResult Index(MeasuresDefaultsViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -118,22 +118,22 @@ namespace SPM.Controllers
         {
             foreach (var prop in viewModel.GetType().GetProperties())
             {
-                var metricTypesDefaultValuesModel = new MetricTypesDefaultValues();
-                metricTypesDefaultValuesModel.Chart = chartName;
-                metricTypesDefaultValuesModel.Option = prop.Name;
-                metricTypesDefaultValuesModel.Value = prop.GetValue(viewModel, null)?.ToString();
-                metricTypesDefaultValuesRepository.Update(metricTypesDefaultValuesModel);
+                var measuresDefaultsModel = new MeasuresDefaults();
+                measuresDefaultsModel.Measure = chartName;
+                measuresDefaultsModel.OptionName = prop.Name;
+                measuresDefaultsModel.Value = prop.GetValue(viewModel, null)?.ToString();
+                measuresDefaultsRepository.Update(measuresDefaultsModel);
             }
         }
 
         public void AddValuesToViewModel<T>(T viewModel, string chart)
         {
-            var charts = metricTypesDefaultValuesRepository.GetChartDefaultsAsDictionary(chart);
+            var charts = measuresDefaultsRepository.GetMeasureDefaultsAsDictionary(chart);
             foreach (var option in charts)
             {
                 var type = viewModel.GetType().GetProperty(option.Key)?.PropertyType;
 
-                if (option.Value == null || type == null) continue;
+                if (option.Value == null || option.Value == "null") continue;
 
                 if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {

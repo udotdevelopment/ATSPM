@@ -13,8 +13,6 @@ namespace SPM.Controllers
 {
     public class DefaultChartsController : Controller
     {
-        MOE.Common.Models.Repositories.IMetricTypesDefaultValuesRepository metricTypesDefaultValuesRepository =
-            MOE.Common.Models.Repositories.MetricTypesDefaultValuesRepositoryFactory.Create();
         // GET: DefaultCharts
         public ActionResult Index()
         {

@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace SPM.Models
 {
-    public class MetricTypesDefaultValuesViewModel
+    public class MeasuresDefaultsViewModel
     {
         public PhaseTerminationDefaultValuesViewModel PhaseTermination { get; set; }
         public AoRDefaultValuesViewModel AoR { get; set; }
