@@ -127,13 +127,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public void SetDefaults()
         {
-            var chart = GetType().Name.Replace("Options", "");
-            var defaults = measuresDefaultsRepository.GetMeasureDefaultsAsDictionary(chart);
+            var measure = GetType().Name.Replace("Options", "");
+            var defaults = measuresDefaultsRepository.GetMeasureDefaultsAsDictionary(measure);
             foreach (var option in defaults)
             {
                 var type = GetType().GetProperty(option.Key)?.PropertyType;
 
-                if (option.Value == null || type == null) continue;
+                if (option.Value == null || option.Value == "null") continue;
 
                 if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
@@ -144,17 +144,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 GetType().GetProperty(option.Key).SetValue(this, converted);
             }
         }
-
-        public static object ChangeType(object value, Type conversion)
-        {
-            var t = conversion;
-            if (t.IsGenericType && t.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-            {
-                t = Nullable.GetUnderlyingType(t);
-            }
-            return Convert.ChangeType(value, t);
-        }
-
 
         protected void LogMetricRun()
         {

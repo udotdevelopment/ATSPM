@@ -126,10 +126,10 @@ namespace SPM.Controllers
             }
         }
 
-        public void AddValuesToViewModel<T>(T viewModel, string chart)
+        public void AddValuesToViewModel<T>(T viewModel, string measure)
         {
-            var charts = measuresDefaultsRepository.GetMeasureDefaultsAsDictionary(chart);
-            foreach (var option in charts)
+            var measures = measuresDefaultsRepository.GetMeasureDefaultsAsDictionary(measure);
+            foreach (var option in measures)
             {
                 var type = viewModel.GetType().GetProperty(option.Key)?.PropertyType;
 
