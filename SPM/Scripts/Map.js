@@ -295,3 +295,16 @@ function EndRequest(sender, args) {
     }
 }
 
+function PinFilterCheck(regionFilter, reportTypeFilter, agencyFilter, pinRegion, pinAgency, pinMetricTypes) {
+    return ((regionFilter == -1 && reportTypeFilter == -1 && agencyFilter == -1) ||
+        (regionFilter == pinRegion && agencyFilter == pinAgency && pinMetricTypes.indexOf(reportTypeFilter) > -1) ||
+        (regionFilter == -1 && agencyFilter == -1 && pinMetricTypes.indexOf(reportTypeFilter) > -1) ||
+        (regionFilter == -1 && agencyFilter == pinAgency && reportTypeFilter == -1) ||
+        (regionFilter == pinRegion && agencyFilter == -1 && reportTypeFilter == -1) ||
+        (regionFilter == pinRegion && agencyFilter == pinAgency && reportTypeFilter == -1) ||
+        (regionFilter == pinRegion && agencyFilter == -1 && pinMetricTypes.indexOf(reportTypeFilter) > -1) ||
+        (regionFilter == -1 && agencyFilter == pinAgency && pinMetricTypes.indexOf(reportTypeFilter) > -1)
+        );
+}
+
+
