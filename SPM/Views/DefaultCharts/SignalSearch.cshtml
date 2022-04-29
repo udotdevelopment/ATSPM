@@ -36,16 +36,23 @@
                 <div id="collapseTwo" class="collapse show" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="control-label" for="Regions" id="Regions-error">Region</label>
                                 @Html.DropDownListFor(model => model.SelectedRegionID,
                                     new SelectList(Model.Regions, "ID", "Description"),
                                     "--Select Region--", new {@id = "Regions", @class = "form-control", @onchange = "RegionChange(this)"})
                                 @Html.ValidationMessageFor(model => model.SelectedRegionID, "", new { id = "SelectedRegionID-error", @class = "text-danger" })
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="control-label" for="MetricTypes">Metric Type</label>
                                 @Html.DropDownList("MetricTypes", Model.MapMetricsList, "--Select a Metric--", new { @id = "MetricTypes", @class = "form-control", @onchange = "ReportTypeChange()" })
+                            </div>
+                            <div class="col-md-4">
+                                <label class="control-label" for="JurisdictionList">Jurisdiction</label>
+                                @Html.DropDownListFor(model => model.SelectedJurisdictionId, 
+                               new SelectList(Model.JurisdictionList, "Id", "JurisdictionName"),
+                               "--Select a Jurisdiction--", 
+                               new { @id = "Agencies", @class = "form-control", @onchange = "ReportTypeChange()" })
                             </div>
                         </div>
 

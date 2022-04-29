@@ -19,8 +19,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             double yAxisMax,
             double yAxisMin,
             int metricTypeID, 
-            Dictionary<DateTime, double> acceptableGapList, 
-            Dictionary<DateTime, double> demandList)
+            Dictionary<DateTime, double> percentCyclesWithPeds, 
+            Dictionary<DateTime, double> percentCyclesWithSplitFails)
         {
             SignalID = signalID;
             StartDate = startDate;
@@ -28,8 +28,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             YAxisMax = yAxisMax;
             YAxisMin = yAxisMin;
             MetricTypeID = metricTypeID;
-            PercentPedsList = acceptableGapList;
-            PercentFailuresList = demandList;
+            PercentPedsList = percentCyclesWithPeds;
+            PercentFailuresList = percentCyclesWithSplitFails;
         }
 
 

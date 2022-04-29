@@ -137,8 +137,53 @@ namespace MOE.Common.Migrations
                 {
                     OrderNumber = 17,
                     Header = @"<b>What are the detection requirements for each metric?</b> ",
-                    Body = @" < table >< tr >< td >< b > MEASURE </ b ></ td >< td >< b > DETECTION NEEDED </ b ></ td ></ tr >< tr >< td > Purdue Coordination Diagram & nbsp; &nbsp; &nbsp; &nbsp;</ td >< td > Setback count(350 ft – 400 ft) </ td ></ tr >< tr >< td > Approach Volume </ td >< td > Setback count(350 ft – 400 ft) </ td ></ tr >< tr >< td > Approach Speed </ td >< td > Setback count(350 ft – 400 ft) using radar </ td ></ tr >< tr >< td > Purdue Phase Termination</ td >< td > No detection needed or used</ td ></ tr >< tr >< td > Split Monitor </ td >< td > No detection needed or used</ td ></ tr >< tr >< td > Turning Movement Counts</ td >< td > Stop bar(lane - by - lane) count </ td ></ tr >< tr >< td > Approach Delay </ td >< td > Setback count(350 ft – 400 ft) </ td ></ tr >< tr >< td > Arrivals on Red</ td >< td > Setback count(350 ft – 400 ft) </ td ></ tr >< tr >< td > Yellow and Red Actuations </ td >< td > Stop bar(lane - by - lane) count that is either in front of the stop bar or has a speed filter enabled </ td ></ tr >>< tr >< td > Purdue Split Failure</ td >< td > Stop bar presence detection, either by lane group or individual lane </ td ></ tr >
-                    </ table >< br />< br />< b > Automated Traffic Signal Performance Measures will work with any type of detector that is capable of counting vehicles(i.e.loops, video, pucks, radar).  The only exception to this is the speed measure, where UDOT’s Automated Signal Performance Measures for speeds will only work with the Wavetronix Advance Smartsensor).Please note that two of the measures(Purdue Phase Termination and Split Monitor) do not use detection and are extremely useful measures.</ b > "
+                    Body = @"<table class='table table-bordered'>
+ 	                            <tr>
+                                    <th> MEASURE </th>
+                                    <th> DETECTION NEEDED </th>
+                                </tr>
+                                <tr>
+                                    <td> Purdue Coordination Diagram </td>
+                                    <td> Setback count (350 ft – 400 ft) </td>
+                                </tr>
+                                <tr>
+                                    <td> Approach Volume </td>
+                                    <td> Setback count (350 ft – 400 ft) </td>
+                                </tr>
+                                <tr>
+                                    <td> Approach Speed </td>
+                                    <td> Setback count (350 ft – 400 ft) using radar </td>
+                                </tr>
+                                <tr>
+                                    <td> Purdue Phase Termination </td>
+                                    <td> No detection needed or used </td>
+                                </tr>
+                                <tr>
+                                    <td> Split Monitor </td>
+                                    <td> No detection needed or used </td>
+                                </tr>
+                                <tr>
+                                    <td> Turning Movement Counts </td>
+                                    <td> Stop bar (lane-by-lane) count </td>
+                                </tr>
+                                <tr>
+                                    <td> Approach Delay </td>
+                                    <td> Setback count (350 ft – 400 ft) </td>
+                                </tr>
+                                <tr>
+                                    <td> Arrivals on Red </td>
+                                    <td> Setback count (350 ft – 400 ft) </td>
+                                </tr>
+                                <tr>
+                                    <td> Yellow and Red Actuations </td>
+                                    <td> Stop bar (lane-by-lane) count that is either in front of the stop bar or has a speed filter enabled </td>
+                                </tr>
+                                <tr>
+                                    <td> Purdue Split Failure </td>
+                                    <td> Stop bar presence detection, either by lane group or individual lane </td>
+                                </tr>
+                        </table>
+                        <b> Automated Traffic Signal Performance Measures will work with any type of detector that is capable of counting vehicles, e.g., loops, video, pucks, radar. (The only exception to this is the speed measure, where UDOT’s Automated Signal Performance Measures for speeds will only work with the Wavetronix Advance SmartSensor.) Please note that two of the measures (Purdue Phase Termination and Split Monitor) do not use detection and are extremely useful measures.</b>"
                 },
                 new FAQ
                 {
@@ -507,18 +552,6 @@ namespace MOE.Common.Migrations
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 30
                 },
-
-                new Menu
-                {
-                    MenuId = 14,
-                    MenuName = "Agency Configuration",
-                    Controller = "Jurisdcitions",
-                    Action = "Index",
-                    ParentId = 11,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 30
-                },
-
                 new Menu
                 {
                     MenuId = 57,
@@ -1241,7 +1274,8 @@ namespace MOE.Common.Migrations
                 c => c.FilterName,
                 new MetricsFilterType { FilterName = "Signal ID" },
                 new MetricsFilterType { FilterName = "Primary Name" },
-                new MetricsFilterType { FilterName = "Secondary Name" }
+                new MetricsFilterType { FilterName = "Secondary Name" },
+                new MetricsFilterType { FilterName = "Agency" }
             );
 
             context.Applications.AddOrUpdate(

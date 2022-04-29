@@ -336,7 +336,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var hugeGapSeries = CreateChartSeries(Color.LightSeaGreen, SeriesChartType.StackedColumn,
                 ChartValueType.DateTime, AxisType.Primary, $"{Gap4Min}+ seconds");
             var percentTurnableSeries = CreateChartSeries(Color.Blue, SeriesChartType.Line, ChartValueType.DateTime,
-                AxisType.Secondary, $"% Green Time > {TrendLineGapThreshold} seconds");
+                AxisType.Secondary, $"% of Green Time where Gaps ≥ {TrendLineGapThreshold} seconds");
 
             //Reverse order for the legend
             dummyChart.Series.Add(percentTurnableSeries);
@@ -353,7 +353,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 IsDockedInsideChartArea = true,
                 Title = "Chart Legend",
                 Docking = Docking.Top,
-                Alignment = StringAlignment.Center
+                Alignment = StringAlignment.Center,
+                TextWrapThreshold = 0
             };
 
             dummyChart.Legends.Add(dummyChartLegend);

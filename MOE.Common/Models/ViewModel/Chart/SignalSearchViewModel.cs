@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
@@ -11,19 +12,28 @@ namespace MOE.Common.Models.ViewModel.Chart
         private readonly IMetricTypeRepository _metricRepository;
 
         private readonly IRegionsRepository _regionRepository;
+        private readonly IJurisdictionRepository _jurisdictionsRepository;
 
         public SignalSearchViewModel()
         {
             _regionRepository = RegionsRepositoryFactory.Create();
             _metricRepository = MetricTypeRepositoryFactory.Create();
+            _jurisdictionsRepository = JurisdictionRepositoryFactory.Create();
             GetRegions(_regionRepository);
             GetMetrics(_metricRepository);
+            GetJurisdictions(_jurisdictionsRepository);
         }
 
-        public SignalSearchViewModel(IRegionsRepository regionRepositry, IMetricTypeRepository metricRepository)
+        private void GetJurisdictions(IJurisdictionRepository jurisdictionsRepository)
+        {
+            JurisdictionList = jurisdictionsRepository.GetAllJurisdictions();
+        }
+
+        public SignalSearchViewModel(IRegionsRepository regionRepositry, IMetricTypeRepository metricRepository, IJurisdictionRepository jurisdictionRepository)
         {
             GetRegions(regionRepositry);
             GetMetrics(metricRepository);
+            GetJurisdictions(jurisdictionRepository);
         }
 
         //public List<Models.Signal> Signals { get; set; }       
@@ -33,8 +43,10 @@ namespace MOE.Common.Models.ViewModel.Chart
 
         public List<Region> Regions { get; set; }
         public int? SelectedRegionID { get; set; }
+        public int? SelectedJurisdictionId { get; set; }
 
         public List<SelectListItem> MapMetricsList { get; set; }
+        public List<Jurisdiction> JurisdictionList { get; set; }
         public List<string> ImageLocation { get; set; }
 
         public void GetMetrics(IMetricTypeRepository metricRepository)
