@@ -695,18 +695,34 @@
       <DependentUpon>202204091703032_SignalJurisdiction.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Jurisdiction.cs" />
+    <Compile Include="Migrations\202204112034383_AddDefaultValuesTable.cs" />
+    <Compile Include="Migrations\202204112034383_AddDefaultValuesTable.designer.cs">
+      <DependentUpon>202204112034383_AddDefaultValuesTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204141600287_RemoveValueFromKeyInDefaultsTable.cs" />
+    <Compile Include="Migrations\202204141600287_RemoveValueFromKeyInDefaultsTable.designer.cs">
+      <DependentUpon>202204141600287_RemoveValueFromKeyInDefaultsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.cs" />
+    <Compile Include="Migrations\202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.designer.cs">
+      <DependentUpon>202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
+    <Compile Include="Models\MeasuresDefaults.cs" />
     <Compile Include="Models\PhasePedAggregation.cs" />
     <Compile Include="Models\PhaseSplitMonitorAggregation.cs" />
     <Compile Include="Models\PhaseLeftTurnGapAggregation.cs" />
     <Compile Include="Models\PhaseTerminationAggregation.cs" />
     <Compile Include="Models\DetectorEventCountAggregation.cs" />
     <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\Repositories\IMeasuresDefaultsRepository.cs" />
     <Compile Include="Models\Repositories\IPhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IPhaseLeftTurnGapAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IJurisdictionRepository.cs" />
     <Compile Include="Models\Repositories\IPhaseSplitMonitorAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\MeasuresDefaultsRepositortFactory.cs" />
+    <Compile Include="Models\Repositories\MeasuresDefaultsRepository.cs" />
     <Compile Include="Models\Repositories\PhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseLeftTurnGapAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseSplitMonitorAggregationRepository .cs" />
@@ -1158,6 +1174,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105132005112_ReCreateAggTables.resx">
       <DependentUpon>202105132005112_ReCreateAggTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204112034383_AddDefaultValuesTable.resx">
+      <DependentUpon>202204112034383_AddDefaultValuesTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204141600287_RemoveValueFromKeyInDefaultsTable.resx">
+      <DependentUpon>202204141600287_RemoveValueFromKeyInDefaultsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.resx">
+      <DependentUpon>202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202203290134007_Jurisdiction.resx">
       <DependentUpon>202203290134007_Jurisdiction.cs</DependentUpon>
