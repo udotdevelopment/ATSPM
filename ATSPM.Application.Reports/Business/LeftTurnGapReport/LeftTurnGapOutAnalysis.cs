@@ -40,7 +40,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             gapOutResult.AcceptableGaps = GetGapsList(signalId, opposingPhase, start, end, startTime, endTime, criticalGap, daysOfWeek);
             gapOutResult.DetectorCount = GetGapsList(signalId, opposingPhase, start, end, startTime, endTime, criticalGap, daysOfWeek);
             gapOutResult.Demand = GetGapDemand(approachId, start, end, startTime, endTime, criticalGap);
-            gapOutResult.Direction = approach.DirectionType.Description;
+            gapOutResult.Direction = approach.DirectionType.Abbreviation + approach.Detectors.FirstOrDefault()?.MovementType.Abbreviation;
             gapOutResult.OpposingDirection = GetOpposingPhaseDirection(signal, opposingPhase);
             if (gapOutResult.Capacity == 0)
                 throw new ArithmeticException("Gap Count cannot be zero");
@@ -55,13 +55,18 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             Dictionary<DateTime, double> acceptableGaps = new Dictionary<DateTime, double>();
             for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
             {
-                for (var tempStart = tempDate.Date.Add(startTime); tempStart <= tempDate.Date.Add(endTime); tempStart = tempStart.AddMinutes(30))
+                for (var tempStart = tempDate.Date.Add(startTime); tempStart <= tempDate.Date.Add(endTime); tempStart = tempStart.AddMinutes(15))
                 {
                     if (daysOfWeek.Contains((int)start.DayOfWeek))
                     {
                         var leftTurnGaps = _phaseLeftTurnGapAggregationRepository.GetPhaseLeftTurnGapAggregationBySignalIdPhaseNumberAndDateRange(
-                                 signalId, phaseNumber, tempStart, tempStart.Add(startTime).AddMinutes(30));
-                        acceptableGaps.Add(tempStart, SumGapColumns(gapColumn, leftTurnGaps));
+                                 signalId, phaseNumber, tempStart, tempStart.Add(startTime).AddMinutes(15));
+                        int count = 0;
+                        if(gapColumn ==12)
+                            count = leftTurnGaps.Sum(l => l.GapCount6 + l.GapCount7 + l.GapCount8 + l.GapCount9);
+                        else
+                            count = leftTurnGaps.Sum(l => l.GapCount7 + l.GapCount8 + l.GapCount9);
+                        acceptableGaps.Add(tempStart, count);
                     }
                 }
             }
@@ -103,6 +108,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             return signal
                 .Approaches
                 .SelectMany(a => a.Detectors)
+                .Where(d => d.DetectionTypeDetectors.First().DetectionTypeId == 4)
                 .Count(d => d.Approach.ProtectedPhaseNumber == opposingPhase);            
         }
 
@@ -111,7 +117,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             return signal
                 .Approaches
                 .Where(d => d.ProtectedPhaseNumber == opposingPhase)
-                .FirstOrDefault()?.DirectionType.Description;
+                .FirstOrDefault()?.DirectionType.Abbreviation;
         }
 
         //static functions

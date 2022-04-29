@@ -368,6 +368,7 @@
     <Compile Include="Business\ActionLog\ChartData.cs" />
     <Compile Include="Business\AnalysisPhaseCycle.cs" />
     <Compile Include="Business\AnalysisPhaseCycleCollection.cs" />
+    <Compile Include="Business\Approaches.cs" />
     <Compile Include="Business\ApproachVolume\ApproachVolume.cs" />
     <Compile Include="Business\ApproachVolume\ApproachVolumeViewModel.cs" />
     <Compile Include="Business\ApproachVolume\MetricInfo.cs" />
@@ -389,6 +390,7 @@
     <Compile Include="Business\DataAggregation\PhaseLeftTurnGapAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\PhaseSplitMonitorAggregationByPhase.cs" />
     <Compile Include="Business\DataAggregation\PhaseSplitMonitorAggregationBySignal.cs" />
+    <Compile Include="Business\ExtensionMethods.cs" />
     <Compile Include="Business\LeftTurnGapAnalysis\LeftTurnGapAnalysis.cs" />
     <Compile Include="Business\LeftTurnGapReport\LeftTurnGapOutAnalysis.cs" />
     <Compile Include="Business\LeftTurnGapReport\LeftTurnPedestrianAnalysis.cs" />

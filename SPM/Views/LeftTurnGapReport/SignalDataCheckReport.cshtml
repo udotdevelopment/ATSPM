@@ -21,11 +21,11 @@ Signal data check complete please note the following results:
             <td>
                 @if (check.InsufficientLeftTurnGapAggregations)
                 {
-                    <label class="alert-danger">Check Left Turn Gap Data</label>
+                    <label class="text-danger">Check Left Turn Gap Data</label>
                 }
                 else
                 {
-                    <label class="alert-success">OK</label>
+                    <label class="text-success">OK</label>
                 }
             </td>
         }
@@ -38,11 +38,11 @@ Signal data check complete please note the following results:
             <td>
                 @if (check.InsufficientSplitFailAggregations)
                 {
-                    <label class="alert-danger">Check Split Fail Data</label>
+                    <label class="text-danger">Check Split Fail Data</label>
                 }
                 else
                 {
-                    <label class="alert-success">OK</label>
+                    <label class="text-success">OK</label>
                 }
             </td>
         }
@@ -55,11 +55,11 @@ Signal data check complete please note the following results:
             <td>
                 @if (check.InsufficientCycleAggregation)
                 {
-                    <label class="alert-danger">Check Cycle Data</label>
+                    <label class="text-danger">Check Cycle Data</label>
                 }
                 else
                 {
-                    <label class="alert-success">OK</label>
+                    <label class="text-success">OK</label>
                 }
             </td>
         }
@@ -72,11 +72,11 @@ Signal data check complete please note the following results:
             <td>
                 @if (check.InsufficientDetectorEventCount)
                 {
-                    <label class="alert-danger">Check Detector Data</label>
+                    <label class="text-danger">Check Detector Data</label>
                 }
                 else
                 {
-                    <label class="alert-success">OK</label>
+                    <label class="text-success">OK</label>
                 }
             </td>
         }
@@ -89,11 +89,11 @@ Signal data check complete please note the following results:
             <td>
                 @if (check.InsufficientPhaseTermination)
                 {
-                    <label class="alert-danger">Check Phase Termination Data</label>
+                    <label class="text-danger">Check Phase Termination Data</label>
                 }
                 else
                 {
-                    <label class="alert-success">OK</label>
+                    <label class="text-success">OK</label>
                 }
             </td>
         }
@@ -106,11 +106,11 @@ Signal data check complete please note the following results:
             <td>
                 @if (check.InsufficientPedAggregations)
                 {
-                    <label class="alert-danger">Check Ped Data</label>
+                    <label class="text-danger">Check Ped Data</label>
                 }
                 else
                 {
-                    <label class="alert-success">OK</label>
+                    <label class="text-success">OK</label>
                 }
             </td>
         }
@@ -120,16 +120,16 @@ Signal data check complete please note the following results:
         <td> @Convert.ToInt32(Model.First().VolumeThreshold) vph</td>
         @foreach (var check in Model)
         {
-            <td>
-                @if (check.LeftTurnVolumeOk)
-                {
-                    <label class="alert-danger">Check Data</label>
-                }
-                else
-                {
-                    <label class="alert-success">OK</label>
-                }
-            </td>
+    <td>
+        @if (check.LeftTurnVolumeOk)
+        {
+            <label class="text-success">OK</label>
+        }
+        else
+        {
+            <label class="text-danger">Check Detector</label>
+        }
+    </td>
         }
     </tr>
     <tr>
@@ -137,16 +137,16 @@ Signal data check complete please note the following results:
         <td>< @Convert.ToInt32(Model.First().GapOutThreshold*100)%</td>
         @foreach (var check in Model)
         {
-            <td>
-                @if (check.GapOutOk)
-                {
-                    <label class="alert-danger">Check Detector</label>
-                }
-                else
-                {
-                    <label class="alert-success">OK</label>
-                }
-            </td>
+    <td>
+        @if (check.GapOutOk)
+        {
+            <label class="text-success">OK</label>
+        }
+        else
+        {
+            <label class="text-danger">Check Detector</label>
+        }
+    </td>
         }
     </tr>
     <tr>
@@ -154,16 +154,16 @@ Signal data check complete please note the following results:
         <td> < @Convert.ToInt32(Model.First().PedThreshold*100)%</td>
         @foreach (var check in Model)
         {
-            <td>
-                @if (check.PedCycleOk)
-                {
-                    <label class="alert-danger">Check Detector</label>
-                }
-                else
-                {
-                    <label class="alert-success">OK</label>
-                }
-            </td>
+    <td>
+        @if (check.PedCycleOk)
+        {
+            <label class="text-success">OK</label>
+        }
+        else
+        {
+            <label class="text-danger">Review Crash History</label>
+        }
+    </td>
         }
     </tr>
 </table>

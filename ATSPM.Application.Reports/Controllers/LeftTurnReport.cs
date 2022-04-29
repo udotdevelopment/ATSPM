@@ -197,7 +197,7 @@ namespace ATSPM.Application.Reports.Controllers
             var startTime = new TimeSpan(parameters.StartHour, parameters.StartMinute, 0);
             var endTime = new TimeSpan(parameters.EndHour, parameters.EndMinute, 0);
             var splitFailResult = new SplitFailResult();
-            var splitFailAnalysis = new LeftTurnSplitFailAnalysis(_approachRepository,_approachSplitFailAggregationRepository);
+            var splitFailAnalysis = new LeftTurnSplitFailAnalysis(_approachRepository, _approachSplitFailAggregationRepository);
             splitFailResult = splitFailAnalysis.GetSplitFailPercent(parameters.ApproachId, parameters.StartDate, parameters.EndDate, startTime, endTime, parameters.DaysOfWeek);
 
             return splitFailResult;

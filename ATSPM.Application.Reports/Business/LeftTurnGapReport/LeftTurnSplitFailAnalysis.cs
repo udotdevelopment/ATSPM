@@ -30,16 +30,17 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             Dictionary<DateTime, double> percentCyclesWithSplitFail = GetPercentCyclesWithSplitFails(start, end, startTime, endTime, daysOfWeek, splitFailsAggregates);
             int cycles = splitFailsAggregates.Sum(s => s.Cycles);
             int splitFails = splitFailsAggregates.Sum(s => s.SplitFailures);
+            double doubleSplitFails = splitFails;
             if (cycles == 0)
                 throw new ArithmeticException("Cycles cannot be zero");
             var approach = _approachRepository.GetApproachByApproachID(approachId);
             return new SplitFailResult
             {
                 CyclesWithSplitFails = splitFails,
-                SplitFailPercent = splitFails / cycles,
+                SplitFailPercent = doubleSplitFails / cycles,
                 PercentCyclesWithSplitFailList = percentCyclesWithSplitFail,
-                Direction = approach.DirectionType.Description,
-        };
+                Direction = approach.DirectionType.Abbreviation + approach.Detectors.FirstOrDefault()?.MovementType.Abbreviation,
+            };
 
         }
 
@@ -84,10 +85,10 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             {
                 if (daysOfWeek.Contains((int)tempDate.DayOfWeek))
                 {
-                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(30))
+                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(15))
                     {
-                        var tempEndTime = tempstart.AddMinutes(30);
-                        var tempSplitFails = splitFailsAggregates.Where(s => s.BinStartTime >= tempstart && s.BinStartTime < tempEndTime).Sum(s => s.SplitFailures);
+                        var tempEndTime = tempstart.AddMinutes(15);
+                        double tempSplitFails = splitFailsAggregates.Where(s => s.BinStartTime >= tempstart && s.BinStartTime < tempEndTime).Sum(s => s.SplitFailures);
                         var tempCycles = splitFailsAggregates.Where(s => s.BinStartTime >= tempstart && s.BinStartTime < tempEndTime).Sum(s => s.Cycles);
                         double tempPercentFails = 0;
                         if (tempCycles != 0)

@@ -55,13 +55,13 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             double crossVolumeProduct = GetCrossProduct(leftTurnVolume, opposingVolume);
             leftTurnVolumeValue.CrossProductValue = crossVolumeProduct;
             leftTurnVolumeValue.LeftTurnVolume = leftTurnVolume;
-            leftTurnVolumeValue.OpposingThroughVolume = opposingPhase;
+            leftTurnVolumeValue.OpposingThroughVolume = opposingVolume;
             leftTurnVolumeValue.CrossProductReview = GetCrossProductReview(crossVolumeProduct, leftTurnVolumeValue.OpposingLanes);
             ApproachType approachType = GetApproachType(approach);
             SetDecisionBoundariesReview(leftTurnVolumeValue, leftTurnVolume, opposingVolume, approachType);
             leftTurnVolumeValue.DemandList = GetDemandList(start, end, startTime, endTime, daysOfWeek, leftTurnVolumeAggregation);
-            leftTurnVolumeValue.Direction = approach.DirectionType.Description;
-            leftTurnVolumeValue.OpposingDirection = signal.Approaches.Where(a => a.ProtectedPhaseNumber == opposingPhase).FirstOrDefault()?.DirectionType.Description;
+            leftTurnVolumeValue.Direction = approach.DirectionType.Abbreviation + approach.Detectors.FirstOrDefault()?.MovementType.Abbreviation;
+            leftTurnVolumeValue.OpposingDirection = signal.Approaches.Where(a => a.ProtectedPhaseNumber == opposingPhase).FirstOrDefault()?.DirectionType.Abbreviation;
             return leftTurnVolumeValue;
         }
 
@@ -72,9 +72,9 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             {
                 if (daysOfWeek.Contains((int)tempDate.DayOfWeek))
                 {
-                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(30))
+                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(15))
                     {
-                        demandList.Add(tempstart, leftTurnVolumeAggregation.Where(v => v.BinStartTime >= tempstart && v.BinStartTime < tempstart.AddMinutes(30)).Sum(v => v.EventCount));
+                        demandList.Add(tempstart, leftTurnVolumeAggregation.Where(v => v.BinStartTime >= tempstart && v.BinStartTime < tempstart.AddMinutes(15)).Sum(v => v.EventCount));
                     }
                 }
             }
@@ -92,7 +92,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                             .Approaches
                             .Where(a => a.ProtectedPhaseNumber == opposingPhase)
                             .SelectMany(a => a.Detectors)
-                            .Where(d => d.MovementTypeId.HasValue && movementTypes.Contains(d.MovementTypeId.Value))
+                            .Where(d => d.MovementTypeId.HasValue && movementTypes.Contains(d.MovementTypeId.Value) && d.DetectionTypeDetectors.First().DetectionTypeId == 4)
                             .ToList();
         }
 

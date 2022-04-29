@@ -1,240 +1,378 @@
 ﻿@model IEnumerable<SPM.Models.FinalGapAnalysisReportViewModel>
+<link href="@Server.MapPath("~/Content/bootstrap.min.css")" rel="stylesheet" />
 
-Signal data check complete please note the following results:
+<style>
+
+    th {
+        font-weight: normal;
+    }
+
+    td {
+        font-weight: bold;
+    }
+
+    .recommendation {
+        color: #bc6c39;
+    }
+
+    .dark-blue {
+        color: #2f5597;
+    }
+
+    .grey {
+        background-color: #e8e8e8;
+    }
+
+    .keep-together {
+        page-break-inside: avoid;
+    }
+
+    .approach {
+        border: solid;
+        border-width: 2px;
+        border-color: #2f5597;
+    }
+
+    hr {
+        border-top: 1px solid;
+    }
+
+</style>
+
+<table class="table table-borderless border-bottom border-primary">
+    <tr class="col-8">
+        <th class="text-left">
+            <img src="C:\projects\avenue\ATSPM\SPM\Images\NewUDOTLogo.png" width="200" />
+        </th>
+        <th class="pr-4 mr-4 pl-0">
+            <h3>Left Turn Phase</h3>
+            <h3>Analysis Report</h3>
+        </th>
+        <th class="text-right">
+            <p>@DateTime.Now.ToString("D")</p>
+            <p>@DateTime.Now.ToString("t")</p>
+        </th>
+    </tr>
+</table>
+
+<h4 class="p-0 m-0">Signal ID: &nbsp; <b> @Model.First().SignalId &emsp; @Model.First().Location </b> </h4>
+
 @foreach (var result in Model)
 {
-    <h4>@result.ApproachDescription</h4>
-    if (result.GapDurationConsiderForStudy.HasValue)
-    {
-        <table class="table table-bordered table">
-            <tr>
-                <th colspan="3">
-                    @if (result.GapDurationConsiderForStudy.Value)
-                    {
-                        <label class="alert-success">Gap Duration:Consider for Study</label>
-                        <br />
-                    }
-                    else
-                    {
-                        <label class="alert-danger">Gap Duration : Do not Consider for Study</label>
-                        <br />
-                    }
-                </th>
-            </tr>
-            <tr>
-                <th>
-                    Capacity
-                </th>
-                <th>
-                    Demand
-                </th>
-                <th>
-                    V/C Ratio
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    @result.Capacity
-                </td>
-                <td>
-                    @result.Demand
-                </td>
-                <td>
-                    @result.GapOutPercent
-                </td>
-            </tr>
-        </table>
-        @*<table class="table table-bordered table">
-            <tr>
-                <th>Date/Time</th>
-                <th>Value</th>
-            </tr>
-            @foreach (var gapListItem in result.AcceptableGapList)
-            {
+    <br />
+    <div class="keep-together @(result.Get24HourPeriod ? "" : "approach")">
+        @if (result.PeakPeriodDescription != "PM Peak")
+        {
+            <table class="table table-borderless text-left grey mb-0">
                 <tr>
-                    <td>@gapListItem.Key</td>
-                    <td>@gapListItem.Value</td>
+                    <th>
+                        Left Turn Approach:
+                    </th>
+                    <td>
+                        @result.Direction
+                    </td>
+                    <th>
+                        Phase Type:
+                    </th>
+                    <td>
+                        @result.PhaseType
+                    </td>
+                    <th>
+                        Signal Head Type:
+                    </th>
+                    <td>
+                        @result.SignalType
+                    </td>
+                    @if (result.Get24HourPeriod)
+                    {
+                        <th>
+                            Speed Limit:
+                        </th>
+                        <td>
+                            @result.SpeedLimit
+                        </td>
+                    }
                 </tr>
-            }
-        </table>*@
-    }
-    if (result.SplitFailsConsiderForStudy.HasValue)
-    {
-        <table class="table table-bordered table">
-            <tr>
-                <th colspan="3">
-                    @if (result.SplitFailsConsiderForStudy.Value)
-                    {
-                        <label class="alert-success">Split Fails: Consider for Study</label>
-                        <br />
-                    }
-                    else
-                    {
-                        <label class="alert-danger">Split Fails: Do not Consider for Study</label>
-                        <br />
-                    }
-                </th>
-            </tr>
-            <tr>
-                <th>
-                    Cycles with Split Fails
-                </th>
-                <th>
-                    Percent Cycles with Split Fails
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    @result.CyclesWithSplitFailNum
-                </td>
-                <td>
-                    @result.CyclesWithSplitFailPercent
-                </td>
-            </tr>
-        </table>
-        @*<table class="table table-bordered table">
-            <tr>
-                <th>Date/Time</th>
-                <th>Value</th>
-            </tr>
-            @foreach (var item in result.PercentCyclesWithSplitFailList)
-            {
                 <tr>
-                    <td>@item.Key</td>
-                    <td>@item.Value</td>
-                </tr>
-            }
-        </table>*@
-    }
-    if (result.PedActuationsConsiderForStudy.HasValue)
-    {
-        <table class="table table-bordered table">
-            <tr>
-                <th colspan="2">
-                    @if (result.PedActuationsConsiderForStudy.Value)
+                    <th>
+                        Opposing Approach:
+                    </th>
+                    <td>
+                        @result.OpposingDirection
+                    </td>
+                    <th>
+                        Number of Thru Lanes:
+                    </th>
+                    <td>
+                        @result.OpposingLanes
+                    </td>
+                    @if (result.Get24HourPeriod)
                     {
-                        <label class="alert-success">Ped Actuations: Consider for Study</label>
-                        <br />
+                        <th>
+                            Start Date:
+                        </th>
+                        <td>
+                            @result.StartDate.ToShortDateString()
+                        </td>
+                        <th>
+                            End Date:
+                        </th>
+                        <td>
+                            @result.EndDate.ToShortDateString()
+                        </td>
                     }
                     else
                     {
-                        <label class="alert-danger">Ped Actuations: Do not Consider for Study</label>
-                        <br />
+                        <th>
+                            Speed Limit:
+                        </th>
+                        <td>
+                            @result.SpeedLimit
+                        </td>
                     }
-                </th>
-            </tr>
-            <tr>
-                <th>
-                    Cycles with Pedestrian Calls
-                </th>
-                <th>
-                    Percent Cycles with Pedestrian Calls
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    @result.CyclesWithPedCallNum
-                </td>
-                <td>
-                    @result.CyclesWithPedCallPercent
-                </td>
-            </tr>
-        </table>
-        <img src="@result.PedSplitFailChartImg" />
-        @*<table class="table table-bordered table">
-            <tr>
-                <th>Date/Time</th>
-                <th>Value</th>
-            </tr>
-            @foreach (var item in result.PercentCyclesWithPedsList)
-            {
-                <tr>
-                    <td>@item.Key</td>
-                    <td>@item.Value</td>
-                </tr>
-            }
-        </table>*@
-    }
-    if (result.VolumesConsiderForStudy.HasValue)
-    {
-        <table class="table table-bordered table">
-            <tr>
-                <th colspan="7">
-                    @if (result.VolumesConsiderForStudy.Value)
-                    {
-                        <label class="alert-success">Volumes: Consider for Study</label>
-                        <br />
-                    }
-                    else
-                    {
-                        <label class="alert-danger">Volumes: Do not Consider for Study</label>
-                        <br />
-                    }
-                </th>
-            </tr>
-            <tr>
-                <th>
-                    Opposing Lanes
-                </th>
-                <th>
-                    Cross Product Review
-                </th>
-                <th>
-                    Decision Boundaries Review
-                </th>
-                <th>
-                    Left Turn Volume
-                </th>
-                <th>
-                    Opposing Through Volume
-                </th>
-                <th>
-                    Cross Poduct Value
-                </th>
-                <th>
-                    Calculated Volume Boundary
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    @result.OpposingLanes
-                </td>
-                <td>
-                    @result.CrossProductReview
-                </td>
-                <td>
-                    @result.DecisionBoundariesReview
-                </td>
-                <td>
-                    @result.LeftTurnVolume
-                </td>
-                <td>
-                    @result.OpposingThroughVolume
-                </td>
-                <td>
-                    @result.CrossProductValue
-                </td>
-                <td>
-                    @result.CalculatedVolumeBoundary
-                </td>
-            </tr>
-        </table>
+            </table>
+        }
 
-        @*<table class="table table-bordered table">
-            <tr>
-                <th>Date/Time</th>
-                <th>Value</th>
-            </tr>
-            @foreach (var item in result.DemandList)
-            {
-                <tr>
-                    <td>@item.Key</td>
-                    <td>@item.Value</td>
-                </tr>
-            }
-        </table>*@
-    }
+        @if (result.Get24HourPeriod)
+        {
+            <style>
+                th, td {
+                    font-size: 20px;
+                }
+            </style>
 
-    <img src="@result.GapDemandChartImg" />
-    <img src="@result.PedSplitFailChartImg" />
+            <img src="@result.GapDemandChartImg" />
+
+            <hr class="solid" />
+
+            <img src="@result.PedSplitFailChartImg" />
+        }
+        else
+        {
+            <table class="table table-borderless" style="background-color: #2f5597; color: white">
+                <tr>
+                    <th>
+                        Period:
+                    </th>
+                    <td>
+                        @result.PeakPeriodDescription
+                    </td>
+                    <th>
+                        Start:
+                    </th>
+                    <td>
+                        @DateTime.Today.Add(result.StartTime).ToString("hh:mm tt")
+                    </td>
+                    <th>
+                        End:
+                    </th>
+                    <td>
+                        @DateTime.Today.Add(result.EndTime).ToString("hh:mm tt")
+                    </td>
+                    <th>
+                        Start Date:
+                    </th>
+                    <td>
+                        @result.StartDate.ToShortDateString()
+                    </td>
+                    <th>
+                        End Date:
+                    </th>
+                    <td>
+                        @result.EndDate.ToShortDateString()
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table table-borderless text-left p-0 m-0">
+                <tr>
+                    <th colspan="8" class="dark-blue text-center p-0" style="font-weight: bolder">
+                        Left Turn Gap Analysis Results
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        Capacity:
+                    </th>
+                    <td>
+                        @(result.GapDurationConsiderForStudy.HasValue ? result.Capacity.ToString("N") : "–")
+                    </td>
+                    <th>
+                        Demand:
+                    </th>
+                    <td>
+                        @(result.GapDurationConsiderForStudy.HasValue ? result.Demand.ToString("N") : "–")
+                    </td>
+                    <th>
+                        V/C Ratio:
+                    </th>
+                    <td>
+                        @(result.GapDurationConsiderForStudy.HasValue ? (result.Demand / result.Capacity).ToString("N") : "–")
+                    </td>
+                    @if (result.PhaseType == "Protected Only")
+                    {
+                        <th>
+                            Phase:
+                        </th>
+                        <td>
+                            Protected Only
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <td colspan="8" class="recommendation text-center">
+                        @if(result.GapDurationConsiderForStudy.HasValue)
+                        {
+                            if(result.GapDurationConsiderForStudy.Value)
+                            {
+                                <label class="text-success">Consider for Study</label>
+                            }
+                            else
+                            {
+                                <label class="text-danger">Don't Consider for Study</label>
+                            }
+                        }
+                        else
+                        {
+                            @("Not Analyzed")
+                        }
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table table-borderless grey text-left mb-0">
+                <tr>
+                    <th colspan="8" class="dark-blue text-center" style="font-weight: bolder">
+                        Alternative Measures Analysis Results
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="3" class="text-center" style="font-weight: bolder">
+                        Split Failure and Pedestrains
+                    </th>
+                    <th colspan="5" class="text-center" style="font-weight: bolder">
+                        Volume Cross Product and Boundries
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                        Cycles With Split Failure:
+                    </th>
+                    <td>
+                        @(result.SplitFailsConsiderForStudy.HasValue ? result.CyclesWithSplitFailNum + "|" + result.CyclesWithSplitFailPercent : "–")
+                    </td>
+                    <th class="text-left">
+                        Left Turn Movement Volume:
+                    </th>
+                    <td>
+                        @(result.CrossProductConsiderForStudy.HasValue ? result.LeftTurnVolume.ToString() : "–")
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="recommendation text-center">
+                        @if (result.SplitFailsConsiderForStudy.HasValue)
+                        {
+                            if (result.SplitFailsConsiderForStudy.Value)
+                            {
+                                <label class="text-success">Consider for Study</label>
+                            }
+                            else
+                            {
+                                <label class="text-danger">Don't Consider for Study</label>
+                            }
+                        }
+                        else
+                        {
+                            @("Not Analyzed")
+                        }
+                    </td>
+                    <th class="text-left">
+                        Opposing Through Movement Volume:
+                    </th>
+                    <td>
+                        @(result.CrossProductConsiderForStudy.HasValue ? result.OpposingThroughVolume.ToString() : "–")
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Cycles With Pedestrain Calls:
+                    </th>
+                    <td colspan="2">
+                        @(result.PedActuationsConsiderForStudy.HasValue ? result.CyclesWithPedCallNum.ToString() : "–")
+                    </td>
+                    <th class="text-left">
+                        Cross Product Value:
+                    </th>
+                    @if(result.CrossProductConsiderForStudy.HasValue)
+                    {
+                        <td>
+                            @result.CrossProductValue.ToString("N0")
+                        </td>
+                    }
+                    <td colspan="3" class="recommendation">
+                        @if (result.CrossProductConsiderForStudy.HasValue)
+                        {
+                            if (result.CrossProductConsiderForStudy.Value)
+                            {
+                                <label class="text-success">Consider for Study</label>
+                            }
+                            else
+                            {
+                                <label class="text-danger">Don't Consider for Study</label>
+                            }
+                        }
+                        else
+                        {
+                            @("Not Analyzed")
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="recommendation text-center">
+                        @if (result.PedActuationsConsiderForStudy.HasValue)
+                        {
+                            if (result.PedActuationsConsiderForStudy.Value)
+                            {
+                                <label class="text-success">Ped Analysis Recommended</label>
+                            }
+                            else
+                            {
+                                <label class="text-danger"> Ped Analysis not Recommended</label>
+                            }
+                        }
+                        else
+                        {
+                            @("Not Analyzed")
+                        }
+                    </td>
+                    <th class="text-left">
+                        Calculated Volume Boundry:
+                    </th>
+                    @if(result.VolumesConsiderForStudy.HasValue)
+                    {
+                        <td>
+                            @result.CalculatedVolumeBoundary.ToString("N")
+                        </td>
+                    }
+                    <td colspan="3" class="recommendation">
+                        @if (result.VolumesConsiderForStudy.HasValue)
+                        {
+                            if (result.VolumesConsiderForStudy.Value)
+                            {
+                                <label class="text-success">Consider for Study</label>
+                            }
+                            else
+                            {
+                                <label class="text-danger">Don't Consider for Study</label>
+                            }
+                        }
+                        else
+                        {
+                            @("Not Analyzed")
+                        }
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
 }
