@@ -234,8 +234,8 @@ namespace SPM.Controllers
                     0,
                     0,
                     31,
-                    approachResult.AcceptableGapList,
-                    approachResult.DemandList);
+                    approachResult.PercentCyclesWithPedsList,
+                    approachResult.PercentCyclesWithSplitFailList);
                 approachResult.PedSplitFailChartImg = pedsVsFailuresOptions.CreateMetric().FirstOrDefault();
                 finalGapAnalysisReportViewModel.Add(approachResult);
             }

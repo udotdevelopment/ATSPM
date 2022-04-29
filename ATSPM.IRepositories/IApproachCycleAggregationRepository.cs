@@ -19,6 +19,6 @@ namespace ATSPM.IRepositories
         List<PhaseCycleAggregation> GetApproachCyclesAggregationBySignalIdPhaseAndDateRange(string signalId, int phase, DateTime start,
             DateTime end);
         bool Exists(string signalId, int phaseNumber, DateTime start, DateTime end);
-        int GetCycleCountBySignalIdAndDateRange(string signalId, DateTime dateTime1, DateTime dateTime2);
+        int GetCycleCountBySignalIdAndDateRange(string signalId, int phaseNumber, DateTime dateTime1, DateTime dateTime2);
     }
 }

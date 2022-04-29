@@ -1,5 +1,5 @@
-﻿using ATSPM.IRepositories;
-using ATSPM.Application.Models;
+﻿using ATSPM.Application.Models;
+using ATSPM.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +31,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
         public Dictionary<TimeSpan, double> GetAMPMPeakPedCyclesPercentages(string signalId, int approachId, DateTime startDate, DateTime endDate, TimeSpan amStartTime,
            TimeSpan amEndTime, TimeSpan pmStartTime, TimeSpan pmEndTime, int[] daysOfWeek)
         {
-            Dictionary<TimeSpan, int> peaks = GetAMPMPeakFlowRate(signalId, approachId, startDate, endDate, 
+            Dictionary<TimeSpan, int> peaks = GetAMPMPeakFlowRate(signalId, approachId, startDate, endDate,
                 amStartTime, amEndTime, pmStartTime, pmEndTime, daysOfWeek, _signalRepository, _approachRepository, _detectorEventCountAggregationRepository);
             Approach approach = _approachRepository.GetApproachByApproachID(approachId);
             int opposingPhase = GetOpposingPhase(approach);
@@ -82,7 +82,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             {
                 amAggregations.Add(_phasePedAggregationRepository.GetPhasePedsAggregationBySignalIdPhaseNumberAndDateRange(signalId, phase, tempDate.Date.Add(amPeak), tempDate.Date.Add(amPeak).AddHours(1)).Sum(a => a.PedCycles));
             }
-            if(amAggregations.Count > 0)
+            if (amAggregations.Count > 0)
                 averagePedCycles.Add(amPeak, amAggregations.Average(a => a));
             else
                 averagePedCycles.Add(amPeak, 0);
@@ -92,7 +92,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             {
                 pmAggregations.Add(_phasePedAggregationRepository.GetPhasePedsAggregationBySignalIdPhaseNumberAndDateRange(signalId, phase, tempDate.Date.Add(pmPeak), tempDate.Date.Add(pmPeak).AddHours(1)).Sum(a => a.PedCycles));
             }
-            if(pmAggregations.Count > 0)
+            if (pmAggregations.Count > 0)
                 averagePedCycles.Add(pmPeak, pmAggregations.Average(a => a));
             else
                 averagePedCycles.Add(pmPeak, 0);
@@ -138,9 +138,9 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             {
                 switch (approach.ProtectedPhaseNumber)
                 {
-                    case 1: return 2;                   
-                    case 3: return 4;                  
-                    case 5: return 6;                   
+                    case 1: return 2;
+                    case 3: return 4;
+                    case 5: return 6;
                     case 7: return 8;
                     case 2: return 6;
                     case 4: return 8;
@@ -158,29 +158,35 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             Dictionary<TimeSpan, int> peaks = GetAMPMPeakFlowRate(signalId, approachId, startDate, endDate,
                 amStartTime, amEndTime, pmStartTime, pmEndTime, daysOfWeek, _signalRepository, _approachRepository,
                 _detectorEventCountAggregationRepository);
-            var maxCycles = GetMaxCycles(signalId, startDate, endDate, peaks);
             int phaseNumber = GetLTPhaseNumberByDirection(approachId);
+            var maxCycles = GetMaxCycles(signalId, phaseNumber, startDate, endDate, peaks);
             //Dictionary<TimeSpan, double> averageTerminations = GetAverageTerminationsForPhase(signalId, phaseNumber, startDate, endDate, peaks);
             Dictionary<TimeSpan, double> averageGapOuts = GetAverageGapOutsForPhase(signalId, phaseNumber, startDate, endDate, amStartTime, peaks);
             return GetPercentageOfGapOuts(maxCycles, averageGapOuts);
 
         }
 
-        private Dictionary<TimeSpan, double> GetMaxCycles(string signalId, DateTime startDate, DateTime endDate, Dictionary<TimeSpan, int> peaks)
+        private Dictionary<TimeSpan, double> GetMaxCycles(string signalId, int phaseNumber, DateTime startDate, DateTime endDate, Dictionary<TimeSpan, int> peaks)
         {
             var maxCycles = new Dictionary<TimeSpan, double>();
             var amCycleCount = new List<int>();
+            var amMaxCycle = 0;
+            var pmMaxCycle = 0;
             for (var tempDate = startDate; tempDate <= endDate; tempDate = tempDate.AddDays(1))
             {
-                amCycleCount.Add(_approachCycleAggregationRepository.GetCycleCountBySignalIdAndDateRange(signalId, tempDate.Add(peaks.First().Key), tempDate.Add(peaks.First().Key).AddHours(1)));
+                var result = _approachCycleAggregationRepository.GetCycleCountBySignalIdAndDateRange(signalId, phaseNumber, tempDate.Add(peaks.First().Key), tempDate.Add(peaks.First().Key).AddHours(1));
+                if (result > amMaxCycle)
+                    amMaxCycle = result;
             }
-            maxCycles.Add(peaks.First().Key, amCycleCount.Average());
+            maxCycles.Add(peaks.First().Key, amMaxCycle);
             var pmCycleCount = new List<int>();
             for (var tempDate = startDate; tempDate <= endDate; tempDate = tempDate.AddDays(1))
             {
-                pmCycleCount.Add(_approachCycleAggregationRepository.GetCycleCountBySignalIdAndDateRange(signalId, tempDate.Add(peaks.Last().Key), tempDate.Add(peaks.Last().Key).AddHours(1)));
+                var result = _approachCycleAggregationRepository.GetCycleCountBySignalIdAndDateRange(signalId, phaseNumber, tempDate.Add(peaks.Last().Key), tempDate.Add(peaks.Last().Key).AddHours(1));
+                if (result > pmMaxCycle)
+                    pmMaxCycle = result;
             }
-            maxCycles.Add(peaks.Last().Key, pmCycleCount.Average());
+            maxCycles.Add(peaks.Last().Key, pmMaxCycle);
             return maxCycles;
         }
 
@@ -293,7 +299,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
         //}
 
         public static Dictionary<TimeSpan, int> GetAMPMPeakFlowRate(string signalId, int approachId, DateTime startDate, DateTime endDate, TimeSpan amStartTime,
-            TimeSpan amEndTime, TimeSpan pmStartTime, TimeSpan pmEndTime, int[] daysOfWeek, ISignalsRepository signalsRepository, 
+            TimeSpan amEndTime, TimeSpan pmStartTime, TimeSpan pmEndTime, int[] daysOfWeek, ISignalsRepository signalsRepository,
             IApproachRepository approachRepository, IDetectorEventCountAggregationRepository detectorEventCountAggregationRepository)
         {
             if (!signalsRepository.Exists(signalId))
@@ -432,9 +438,9 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
         {
             var movementTypes = new List<int>() { 3 };
             //only return detector types of type 4
-            return approachRepository.GetApproachByApproachID(approachId).Detectors.Where(d => 
+            return approachRepository.GetApproachByApproachID(approachId).Detectors.Where(d =>
             d.DetectionTypeDetectors.Select(t => t.DetectionTypeId).Contains(4)
-            &&  movementTypes.Contains(d.MovementTypeId.Value)).ToList();
+            && movementTypes.Contains(d.MovementTypeId.Value)).ToList();
         }
 
         public static List<Models.Detector> GetAllLaneByLaneDetectorsForSignal(string signalId, DateTime date, ISignalsRepository signalsRepository)
@@ -474,7 +480,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             if (detectorsList.Count > 0)
                 return detectorsList;
 
-            foreach (var detector in detectors )
+            foreach (var detector in detectors)
             {
                 var detectionTypeIdList = detector.DetectionTypeDetectors.Select(d => d.DetectionTypeId).ToList();
                 if (detectionTypeIdList.Contains(6) && detector.MovementTypeId == 3)
