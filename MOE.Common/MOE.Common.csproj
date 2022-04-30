@@ -686,27 +686,11 @@
     <Compile Include="Migrations\202105132005112_ReCreateAggTables.designer.cs">
       <DependentUpon>202105132005112_ReCreateAggTables.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202203290134007_Jurisdiction.cs" />
-    <Compile Include="Migrations\202203290134007_Jurisdiction.designer.cs">
-      <DependentUpon>202203290134007_Jurisdiction.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202204091703032_SignalJurisdiction.cs" />
-    <Compile Include="Migrations\202204091703032_SignalJurisdiction.designer.cs">
-      <DependentUpon>202204091703032_SignalJurisdiction.cs</DependentUpon>
+    <Compile Include="Migrations\202204300103177_4_3.cs" />
+    <Compile Include="Migrations\202204300103177_4_3.designer.cs">
+      <DependentUpon>202204300103177_4_3.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Jurisdiction.cs" />
-    <Compile Include="Migrations\202204112034383_AddDefaultValuesTable.cs" />
-    <Compile Include="Migrations\202204112034383_AddDefaultValuesTable.designer.cs">
-      <DependentUpon>202204112034383_AddDefaultValuesTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202204141600287_RemoveValueFromKeyInDefaultsTable.cs" />
-    <Compile Include="Migrations\202204141600287_RemoveValueFromKeyInDefaultsTable.designer.cs">
-      <DependentUpon>202204141600287_RemoveValueFromKeyInDefaultsTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.cs" />
-    <Compile Include="Migrations\202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.designer.cs">
-      <DependentUpon>202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.cs</DependentUpon>
-    </Compile>
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\MeasuresDefaults.cs" />
@@ -1175,20 +1159,8 @@
     <EmbeddedResource Include="Migrations\202105132005112_ReCreateAggTables.resx">
       <DependentUpon>202105132005112_ReCreateAggTables.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202204112034383_AddDefaultValuesTable.resx">
-      <DependentUpon>202204112034383_AddDefaultValuesTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202204141600287_RemoveValueFromKeyInDefaultsTable.resx">
-      <DependentUpon>202204141600287_RemoveValueFromKeyInDefaultsTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.resx">
-      <DependentUpon>202204271605573_RenameMetricTypeDefaultValuesToMeasuresDefaults.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202203290134007_Jurisdiction.resx">
-      <DependentUpon>202203290134007_Jurisdiction.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202204091703032_SignalJurisdiction.resx">
-      <DependentUpon>202204091703032_SignalJurisdiction.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202204300103177_4_3.resx">
+      <DependentUpon>202204300103177_4_3.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
