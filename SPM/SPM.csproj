@@ -438,6 +438,7 @@
     <Compile Include="Controllers\DetectorsController.cs" />
     <Compile Include="Controllers\FAQsController.cs" />
     <Compile Include="Models\LeftTurnGapReport\DataCheckPayload.cs" />
+    <Compile Include="Models\LeftTurnGapReport\LeftTurnGapDurationViewModel.cs" />
     <Compile Include="Models\LeftTurnGapReport\LeftTurnPeakHourResultViewModel.cs" />
     <Compile Include="Models\LeftTurnGapReport\LeftTurnVolumeResultViewModel.cs" />
     <Compile Include="Models\LeftTurnGapReport\PdfResult.cs" />
@@ -446,7 +447,6 @@
     <Compile Include="Models\MeasuresDefaultsViewModel.cs" />
     <Compile Include="Models\PedActuationResultViewModel.cs" />
     <Compile Include="Models\LeftTurnGapReport\SplitFailResultViewModel.cs" />
-    <Compile Include="Models\LeftTurnGapReport\LeftTurnGapOutViewModel.cs" />
     <Compile Include="Models\PedestrianCallAnalysisReportParameters.cs" />
     <Compile Include="Models\PedestrianCallAnalysisReportViewModel.cs" />
     <Compile Include="Models\SplitFailAnalysisReportParameters.cs" />
