@@ -160,7 +160,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 foreach (var bucket in PercentPedsList)
                 {
-                    chart.Series["% Cycles w/ Peds"].Points.AddXY(bucket.Key.ToOADate(), bucket.Value * 100);
+                    chart.Series["% of Accectable Cycles w/ Peds"].Points.AddXY(bucket.Key.ToOADate(), bucket.Value * 100);
                 }
             }
             if (PercentFailuresList != null)
