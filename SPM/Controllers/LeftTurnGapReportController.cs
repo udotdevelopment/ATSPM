@@ -292,7 +292,6 @@ namespace SPM.Controllers
                 var PedResult = GetPedActuationResult(parameters, approachId);
 
                 approachResult.CyclesWithPedCallNum = PedResult.CyclesWithPedCalls;
-                approachResult.CyclesWithPedCallPercent = PedResult.PedActuationPercent;
                 approachResult.PedActuationsConsiderForStudy = PedResult.ConsiderForStudy;
                 approachResult.PercentCyclesWithPedsList = PedResult.PercentCyclesWithPedsList;
                 approachResult.Direction = PedResult.Direction;
@@ -336,7 +335,7 @@ namespace SPM.Controllers
             string url = "PedActuation";
             var result = GetResult(parameters, approachId, url);
             PedActuationResultViewModel pedActuationResult = JsonConvert.DeserializeObject<PedActuationResultViewModel>(result.Content);
-            pedActuationResult.ConsiderForStudy = pedActuationResult.PedActuationPercent > 0.3d;
+            pedActuationResult.ConsiderForStudy = pedActuationResult.CyclesWithPedCalls > 0.3d;
             return pedActuationResult;
         }
 
