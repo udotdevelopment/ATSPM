@@ -177,18 +177,17 @@ namespace ATSPM.Application.Reports.Controllers
             return result;
         }
 
-            [HttpPost("/GapOut")]
-        public GapOutResult GetGapOutAnalysis(ReportParameters parameters)
+            [HttpPost("/GapDuration")]
+        public GapDurationResult GetGapDurationAnalysis(ReportParameters parameters)
         {
             var startTime = new TimeSpan(parameters.StartHour, parameters.StartMinute, 0);
             var endTime = new TimeSpan(parameters.EndHour, parameters.EndMinute, 0);
-            var gapOutResult = new GapOutResult();
-            var gapOutAnalysis = new LeftTurnGapOutAnalysis(_approachRepository, _detectorRepository, _detectorEventCountAggregationRepository,
+            var gapOutAnalysis = new LeftTurnGapDurationAnalysis(_approachRepository, _detectorRepository, _detectorEventCountAggregationRepository,
                 _phaseLeftTurnGapAggregationRepository, _signalRepository);
-            gapOutResult = gapOutAnalysis.GetPercentOfGapDuration(parameters.SignalId, parameters.ApproachId, parameters.StartDate, parameters.EndDate,
+            GapDurationResult gapDurationResult = gapOutAnalysis.GetPercentOfGapDuration(parameters.SignalId, parameters.ApproachId, parameters.StartDate, parameters.EndDate,
                 startTime, endTime, parameters.DaysOfWeek);
 
-           return gapOutResult;
+            return gapDurationResult;
         }
 
         [HttpPost("/SplitFail")]

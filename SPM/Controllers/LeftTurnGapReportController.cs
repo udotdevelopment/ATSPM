@@ -274,7 +274,7 @@ namespace SPM.Controllers
                 approachResult.GapDurationConsiderForStudy = gapResult.ConsiderForStudy;
                 approachResult.Capacity = gapResult.Capacity;
                 approachResult.Demand = gapResult.Demand;
-                approachResult.GapOutPercent = gapResult.GapOutPercent;
+                approachResult.GapOutPercent = gapResult.GapDurationPercent;
                 approachResult.AcceptableGapList = gapResult.AcceptableGaps;
             }
             if (parameters.GetSplitFail)
@@ -349,12 +349,12 @@ namespace SPM.Controllers
             return splitFailResult;
         }
 
-        private LeftTurnGapOutViewModel GetGapResult(FinalGapAnalysisReportParameters parameters, int approachId)
+        private LeftTurnGapDurationViewModel GetGapResult(FinalGapAnalysisReportParameters parameters, int approachId)
         {
-            string url = "GapOut";
+            string url = "GapDuration";
             var result = GetResult(parameters, approachId, url);
-            LeftTurnGapOutViewModel gapOutResult = JsonConvert.DeserializeObject<LeftTurnGapOutViewModel>(result.Content);
-            gapOutResult.ConsiderForStudy = gapOutResult.GapOutPercent > parameters.AcceptableGapPercentage;
+            LeftTurnGapDurationViewModel gapOutResult = JsonConvert.DeserializeObject<LeftTurnGapDurationViewModel>(result.Content);
+            gapOutResult.ConsiderForStudy = gapOutResult.GapDurationPercent > parameters.AcceptableGapPercentage;
             return gapOutResult;
         }
 
