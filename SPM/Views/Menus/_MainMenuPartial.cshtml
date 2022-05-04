@@ -1,5 +1,4 @@
-﻿@model IEnumerable<MOE.Common.Models.ViewModel._MainMenu.MenuItem>
-@using AuthorizedActionLink
+@model IEnumerable<MOE.Common.Models.ViewModel._MainMenu.MenuItem>
 
 @foreach (var m in Model)
 {
@@ -12,42 +11,78 @@
         if (m.MenuObject.ParentId == 0)
         {
             <li class="nav-item">
-                @Html.AuthorizedActionLink(m.MenuObject.MenuName, m.MenuObject.Action, m.MenuObject.Controller, new { id = UrlParameter.Optional }, new { @class = "nav-link" })
+                @Html.ActionLink(m.MenuObject.MenuName, m.MenuObject.Action, m.MenuObject.Controller, new { id = UrlParameter.Optional }, new { @class = "nav-link" })
             </li>
         }
         else
         {
-            @Html.AuthorizedActionLink(m.MenuObject.MenuName, m.MenuObject.Action, m.MenuObject.Controller, new { id = UrlParameter.Optional }, new { @class = "dropdown-item" })
+            @Html.ActionLink(m.MenuObject.MenuName, m.MenuObject.Action, m.MenuObject.Controller, new { id = UrlParameter.Optional }, new { @class = "dropdown-item" })
+
         }
+
     }
     else
     {
         if (@m.MenuObject.ParentId == 0)
         {
-            if (m.MenuObject.MenuName != "Admin" || m.IsAdmin || m.IsConfiguration || m.IsTechnician || m.IsData)
+            if (m.MenuObject.MenuName != "Admin" || (m.MenuObject.MenuName == "Admin" && m.IsAdmin))
             {
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">@m.MenuObject.MenuName </a>
                     <div class="dropdown-menu">
                         @foreach (var s in m.SubMenuItems)
                         {
+                            if (s.MenuObject.MenuName == "Left Turn Gap Analysis" && !m.IsConfiguration) { continue; }
                             @RenderMenuItems(s)
                         }
                         @if (m.MenuObject.MenuName == "Links")
                         {
                             foreach (MOE.Common.Models.ExternalLink e in m.ExternalLinks.OrderBy(x => x.DisplayOrder).ToList())
                             {
-
                                 <a href="@e.Url" class="dropdown-item">@e.Name</a>
                             }
                         }
                     </div>
                 </li>
             }
+            else
+            {
+                if ((m.MenuObject.MenuName == "Admin" && m.IsTechnician) || (m.MenuObject.MenuName == "Admin" && m.IsConfiguration))
+                {
+                    <li>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">@m.MenuObject.MenuName </a>
+                        <ul class="dropdown-menu">
+                            @foreach (var s in m.SubMenuItems)
+                            {
+                                if (s.MenuObject.MenuName == "Signal Configuration" || s.MenuObject.MenuName == "Route Configuration" || (s.MenuObject.MenuName == "Raw Data Export" && m.IsData))
+                                {
+                                    @RenderMenuItems(s)
+                                }
+                            }
+                        </ul>
+                    </li>
+                }
+                else if (m.MenuObject.MenuName == "Admin" && m.IsData)
+                {
+                    <li>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">@m.MenuObject.MenuName </a>
+                        <ul class="dropdown-menu">
+                            @foreach (var s in m.SubMenuItems)
+                            {
+                                if (s.MenuObject.MenuName == "Raw Data Export")
+                                {
+                                    @RenderMenuItems(s)
+                                }
+                            }
+                        </ul>
+                    </li>
+                }
+            }
         }
         else
         {
             <li class="dropdown-menu">
+                @*<a tabindex="-1" href="@Url.Action(m.MenuObject.Action, m.MenuObject.Controller, new { id = UrlParameter.Optional }, this.Request.Url.Scheme)" class=" dropdown-toggle menuitem" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@m.MenuObject.MenuName <span class="caret"></span></a>*@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">@m.MenuObject.MenuName </a>
                 <ul class="dropdown-menu">
                     @foreach (var s in m.SubMenuItems)
