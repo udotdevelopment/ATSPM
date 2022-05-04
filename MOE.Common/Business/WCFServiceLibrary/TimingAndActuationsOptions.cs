@@ -153,33 +153,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             SetDefaults();
         }
 
-        public void SetDefaults()
-        {
-            ShowLegend = false;
-            CombineLanesForEachGroup = false;
-            ShowAdvancedCount = true;
-            ShowAdvancedDilemmaZone = true;
-            ShowAllLanesInfo = true;
-
-            ShowEventPairs = false;
-            ShowHeaderForEachPhase = false;
-            ShowLaneByLaneCount = true;
-            ShowLinesStartEnd = true;
-            ShowPermissivePhases = true;
-
-            ShowPedestrianActuation = true;
-            ShowPedestrianIntervals = true;
-            ShowStopBarPresence = true;
-            ShowRawEventData = false;
-            ShowVehicleSignalDisplay = true;
-
-            DotAndBarSize = 6;
-            AdvancedOffset = 0.0;
-            ExtendStartStopSearch = 2.0;
-
-            ExtendVsdSearch = 5.0;
-        }
-
         public override List<string> CreateMetric()
         {
             base.CreateMetric();

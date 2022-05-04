@@ -1,0 +1,67 @@
+﻿@model SPM.Models.MeasuresDefaultsViewModel
+
+<div id="tmc-options" role="tablist" aria-multiselectable="true" class="card mr-4 ml-4">
+    <div class="card-header" role="tab">
+        <a onclick="rotate(this)" data-toggle="collapse" data-parent="#tmc-options" href="#tmc-options-collapse" aria-expanded="false" aria-controls="tmc-options-collapse">
+            <i class="fa fa-chevron-right mr-3" aria-hidden="true"></i> Turning Movement Counts
+        </a>
+    </div>
+    <div id="tmc-options-collapse" class="collapse" role="tabpanel">
+        <div class="card-body">
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.TMC.YAxisMax, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.TMC.YAxisMax, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TMC.YAxisMax, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.TMC.Y2AxisMax, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.TMC.Y2AxisMax, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TMC.Y2AxisMax, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.TMC.SelectedBinSize, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.DropDownListFor(model => model.TMC.SelectedBinSize, (SelectList)ViewBag.BinSize, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TMC.SelectedBinSize, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.TMC.ShowLaneVolumes, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.TMC.ShowLaneVolumes)
+                    @Html.ValidationMessageFor(model => model.TMC.ShowLaneVolumes, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.TMC.ShowTotalVolumes, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.TMC.ShowTotalVolumes)
+                    @Html.ValidationMessageFor(model => model.TMC.ShowTotalVolumes, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.TMC.ShowDataTable, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.TMC.ShowDataTable)
+                    @Html.ValidationMessageFor(model => model.TMC.ShowDataTable, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

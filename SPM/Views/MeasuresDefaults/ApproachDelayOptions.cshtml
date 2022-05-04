@@ -1,0 +1,67 @@
+﻿@model SPM.Models.MeasuresDefaultsViewModel
+
+<div id="approach-delay-options" role="tablist" aria-multiselectable="true" class="card ml-4 mr-4">
+    <div class="card-header" role="tab">
+        <a onclick="rotate(this)" data-toggle="collapse" data-parent="#approach-delay-options" href="#approach-delay-options-collapse" aria-expanded="false" aria-controls="approach-delay-options-collapse">
+            <i class="fa fa-chevron-right mr-3" aria-hidden="true"></i> Approach Delay
+        </a>
+    </div>
+    <div id="approach-delay-options-collapse" class="collapse" role="tabpanel">
+        <div class="card-body">
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachDelay.YAxisMax, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3">
+                    @Html.EditorFor(model => model.ApproachDelay.YAxisMax, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ApproachDelay.YAxisMax, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachDelay.Y2AxisMax, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachDelay.Y2AxisMax, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ApproachDelay.Y2AxisMax, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachDelay.SelectedBinSize, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.DropDownListFor(model => model.ApproachDelay.SelectedBinSize, (SelectList)ViewBag.BinSize, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ApproachDelay.SelectedBinSize, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachDelay.ShowPlanStatistics, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachDelay.ShowPlanStatistics)
+                    @Html.ValidationMessageFor(model => model.ApproachDelay.ShowPlanStatistics, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachDelay.ShowDelayPerVehicle, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachDelay.ShowDelayPerVehicle)
+                    @Html.ValidationMessageFor(model => model.ApproachDelay.ShowDelayPerVehicle, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachDelay.ShowTotalDelayPerHour, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachDelay.ShowTotalDelayPerHour)
+                    @Html.ValidationMessageFor(model => model.ApproachDelay.ShowTotalDelayPerHour, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

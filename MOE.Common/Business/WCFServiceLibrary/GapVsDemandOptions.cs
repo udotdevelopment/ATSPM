@@ -80,6 +80,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var chart = ChartFactory.CreateDefaultChartNoX2Axis(this);
             ChartFactory.SetImageProperties(chart);
 
+            chart.BorderlineColor = chart.BackColor;
 
             //Set the chart title
             SetChartTitles(chart);
@@ -87,41 +88,64 @@ namespace MOE.Common.Business.WCFServiceLibrary
             //Create the chart legend
             var chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
-            chartLegend.Docking = Docking.Left;
+            chartLegend.Docking = Docking.Top;
+            chartLegend.Alignment = StringAlignment.Center;
+            chartLegend.Font = new Font(chartLegend.Font.FontFamily, 14);
             chart.Legends.Add(chartLegend);
 
             //Create the chart area
+            Axis X = chart.ChartAreas[0].AxisX;
+            Axis Y = chart.ChartAreas[0].AxisY;
+
             if (YAxisMax > 0)
-                chart.ChartAreas[0].AxisY.Maximum = YAxisMax.Value;
+                Y.Maximum = YAxisMax.Value;
             else
-                chart.ChartAreas[0].AxisY.Maximum = 60;
+                Y.Maximum = 60;
 
             if (YAxisMin > 0)
-                chart.ChartAreas[0].AxisY.Minimum = YAxisMin;
+                Y.Minimum = YAxisMin;
             else
-                chart.ChartAreas[0].AxisY.Minimum = 0;
+                Y.Minimum = 0;
 
-            chart.ChartAreas[0].AxisY.Title = "Count of Vehicles";
-            chart.ChartAreas[0].AxisY.IntervalAutoMode = IntervalAutoMode.FixedCount;
-            chart.ChartAreas[0].AxisY.Interval = 10;
-            chart.ChartAreas[0].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
+            Y.Title = "Count of Vehicles";
+            Y.TitleFont = new Font("Arial", 15f);
+            Y.LabelStyle.Font = new Font("Arial", 10f);
+            Y.IntervalAutoMode = IntervalAutoMode.FixedCount;
+            if (YAxisMax <= 30)
+                Y.Interval = 5;
+            else
+                Y.Interval = 10;
+            Y.MajorTickMark.TickMarkStyle = TickMarkStyle.InsideArea;
+            Y.MajorGrid.LineColor = chart.BackColor;
 
-            chart.ChartAreas[0].AxisX.Minimum = StartDate.ToOADate();
-            chart.ChartAreas[0].AxisX.Maximum = EndDate.ToOADate();
+            X.Title = "Duration by 15 Minute Bins";
+            X.TitleFont = new Font("Arial", 15f);
+            X.LabelStyle.Font = new Font("Arial", 11f);
+            X.MajorGrid.LineColor = chart.BackColor;
+            X.Minimum = StartDate.ToOADate();
+            X.Maximum = EndDate.ToOADate();
+            X.MajorTickMark.TickMarkStyle = TickMarkStyle.InsideArea;
+            X.IntervalType = DateTimeIntervalType.Minutes;
+            X.Interval = 30;
+            X.LabelStyle.Angle = -90;
 
 
             var gapSeries = new Series();
             gapSeries.ChartType = SeriesChartType.Line;
-            gapSeries.Color = Color.DarkBlue;
-            gapSeries.Name = "Number of Aceptable Gaps";
+            gapSeries.Color = Color.FromArgb(92, 136, 218);
+            gapSeries.Name = "Number of Acceptable Gaps";
             gapSeries.XValueType = ChartValueType.DateTime;
+            gapSeries.BorderWidth = 3;
+            gapSeries.Font = new Font("Arial", 10f);
             chart.Series.Add(gapSeries);
             
             var demandSeries = new Series();
             demandSeries.ChartType = SeriesChartType.Line;
-            demandSeries.Color = Color.Orange;
+            demandSeries.Color = Color.FromArgb(232, 119, 34);
             demandSeries.Name = "Demand List";
             demandSeries.XValueType = ChartValueType.DateTime;
+            demandSeries.BorderWidth = 3;
+            demandSeries.Font = new Font("Arial", 10f);
             chart.Series.Add(demandSeries);
 
             return chart;
@@ -129,7 +153,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void SetChartTitles(Chart chart)
         {
-            chart.Titles.Add("Acceptable Gaps versus Demand");
+            Title title = new Title();
+            title.Font = new Font("Arial", 18);
+            title.Text = "Acceptable Gaps versus Demand";
+            chart.Titles.Add(title);
         }
 
         protected void AddDataToChart(Chart chart)
@@ -138,7 +165,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 foreach (var bucket in AcceptableGapList)
                 {
-                    chart.Series["Number of Aceptable Gaps"].Points.AddXY(bucket.Key.ToOADate(), bucket.Value);
+                    chart.Series["Number of Acceptable Gaps"].Points.AddXY(bucket.Key.ToOADate(), bucket.Value);
                 }
             }
             if (DemandList != null)

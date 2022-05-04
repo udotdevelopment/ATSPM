@@ -18,13 +18,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public PedDelayOptions()
         {
-            SetDefaults();
-        }
-
-        public void SetDefaults()
-        {
-            YAxisMax = 3;
             Y2AxisMax = 10;
+            SetDefaults();
         }
 
         public override List<string> CreateMetric()

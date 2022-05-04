@@ -800,15 +800,12 @@ namespace MOE.Common.Business.DataAggregation
                     {
                         Parallel.ForEach(signals, options, signal =>
                         {
-                            var phases = signal.Approaches.Select(a => a.ProtectedPhaseNumber).Distinct();
+                            //var phases = signal.Approaches.Select(a => a.ProtectedPhaseNumber).Distinct();
                             Console.Write(signal.SignalID + "    \r");
-                            Parallel.ForEach(phases, options, phase =>
+                            Parallel.ForEach(signal.Approaches, options, approach =>
                             {
-                                if (phase > 0)
-                                {
                                     SetApproachSplitFailData(startDateTime, startDateTime.AddMinutes(_binSize),
-                                        signal.Approaches.FirstOrDefault(a => a.ProtectedPhaseNumber == phase));
-                                }
+                                        approach);
                             });
                         });
                         signals = new List<Signal>();
@@ -1194,7 +1191,7 @@ namespace MOE.Common.Business.DataAggregation
                 else
                 {
                     versionIds = db.Signals.Where(
-                            r => r.VersionActionId != 3 && r.Start < dt && (r.SignalID == "4395")
+                            r => r.VersionActionId != 3 && r.Start < dt //&& (r.SignalID == "4395")
                         ).GroupBy(r => r.SignalID).Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault())
                         .Select(s => s.VersionID).ToList();
                 }

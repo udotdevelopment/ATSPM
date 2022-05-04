@@ -14,6 +14,7 @@
 $('#RunChecks').click(function () { RunChecks(); });
 
 function RunChecks() {
+    StartChecksSpinner();
     var signalID = $("#SignalID").val(); 
     var cyclesWithPedCalls = $("#CyclesWithPedCalls").val();
     var cyclesWithGapOuts = $("#CyclesWithGapOuts").val();
@@ -58,6 +59,7 @@ function RunChecks() {
             data: tosend,
             traditional: true,
             success: function (data) {
+                StopChecksSpinner();
                 $('#FinalGapAnalysisPlaceHolder').html(data);
             }
         });
@@ -99,6 +101,7 @@ function GetCheckBoxes(){
 }
 
 function RunReports() {
+    StartReportSpinner();
     var timeOptions = $("input:radio[name='TimeOptions']:checked").val();
     var GetGapReport = $('#finalGapAnalysisCheck').is(":checked");
     var GetSplitFail = $('#splitFailAnalysisCheck').is(":checked");
@@ -110,6 +113,7 @@ function RunReports() {
     var EndMinute;
     var GetAMPMPeakHour = false;
     var GetAMPMPeakPeriod = false;
+    var Get24HourPeriod = false;
     if (timeOptions == "customTimeRadiobutton") {
         StartHour = $("#StartTimeHour :selected").val();
         var StartAMPM = $("#StartAMPM :selected").val();
@@ -131,6 +135,7 @@ function RunReports() {
         GetAMPMPeakPeriod = true;
     }
     else if (timeOptions == "FullDayRadiobutton") {
+        Get24HourPeriod = true;
         StartHour = 0;
         EndHour = 24;
         StartMinute = 0;
@@ -157,6 +162,7 @@ function RunReports() {
     tosend.EndMinute = EndMinute;
     tosend.GetAMPMPeakPeriod = GetAMPMPeakPeriod;
     tosend.GetAMPMPeakHour = GetAMPMPeakHour;
+    tosend.Get24HourPeriod = Get24HourPeriod;
     tosend.AcceptableGapPercentage = AcceptableGapPercentage;
     tosend.GetGapReport = GetGapReport;
     tosend.GetSplitFail = GetSplitFail;
@@ -171,15 +177,15 @@ function RunReports() {
         traditional: true,
        
         success: function (data) {
+            StopReportSpinner();
             var result = data.pdfResult;
             $('#FinalGapAnalysisPlaceHolder').html(result.HTML);
             //$('#FinalGapAnalysisPlaceHolder').html("<iframe src=\"http://localhost/spmImages/" + data +
             //    "\"style=\"width:100%; height:600px;\" frameborder=\"0\"></iframe>");
             deleteTempFile(result.FileName);
-        
-    },
-        
+        },
         error: function (data) {
+            StopReportSpinner();
             $('#FinalGapAnalysisPlaceHolder').html(data.responseText);
         }
     });
@@ -276,6 +282,22 @@ function ResetDates() {
         + d.getFullYear();
     $("#StartDate").val(output);
     $("#EndDate").val(output);
+}
+
+function StartReportSpinner() {
+    $("#RunReportSpinner").addClass("fa fa-circle-o-notch fa-spin");
+}
+
+function StopReportSpinner() {
+    $("#RunReportSpinner").removeClass("fa fa-circle-o-notch fa-spin");
+}
+
+function StartChecksSpinner() {
+    $("#RunChecksSpinner").addClass("fa fa-circle-o-notch fa-spin");
+}
+
+function StopChecksSpinner() {
+    $("#RunChecksSpinner").removeClass("fa fa-circle-o-notch fa-spin");
 }
 
 

@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
 {
@@ -26,24 +24,27 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                                                    TimeSpan endTime,
                                                    int[] daysOfWeek)
         {
-            List<Models.ApproachSplitFailAggregation> splitFailsAggregates = GetSplitFailAggregates(approachId, start, end, startTime, endTime, daysOfWeek);
+
+            var approach = _approachRepository.GetApproachByApproachID(approachId);
+            var phaseNumber = approach.PermissivePhaseNumber.HasValue ? approach.PermissivePhaseNumber.Value : approach.ProtectedPhaseNumber;
+            List<Models.ApproachSplitFailAggregation> splitFailsAggregates = GetSplitFailAggregates(approachId, phaseNumber, start, end, startTime, endTime, daysOfWeek);
             Dictionary<DateTime, double> percentCyclesWithSplitFail = GetPercentCyclesWithSplitFails(start, end, startTime, endTime, daysOfWeek, splitFailsAggregates);
             int cycles = splitFailsAggregates.Sum(s => s.Cycles);
             int splitFails = splitFailsAggregates.Sum(s => s.SplitFailures);
             if (cycles == 0)
                 throw new ArithmeticException("Cycles cannot be zero");
-            var approach = _approachRepository.GetApproachByApproachID(approachId);
             return new SplitFailResult
             {
                 CyclesWithSplitFails = splitFails,
-                SplitFailPercent = splitFails / cycles,
+                SplitFailPercent = Convert.ToDouble(splitFails) / Convert.ToDouble(cycles),
                 PercentCyclesWithSplitFailList = percentCyclesWithSplitFail,
-                Direction = approach.DirectionType.Description,
-        };
+                Direction = approach.DirectionType.Abbreviation + approach.Detectors.FirstOrDefault()?.MovementType.Abbreviation,
+            };
 
         }
 
         private List<Models.ApproachSplitFailAggregation> GetSplitFailAggregates(int approachId,
+                                                                                 int phaseNumber,
                                                                                  DateTime start,
                                                                                  DateTime end,
                                                                                  TimeSpan startTime,
@@ -56,16 +57,8 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             {
                 if (daysOfWeek.Contains((int)start.DayOfWeek))
                 {
-                    if (approach.ProtectedPhaseNumber != 0)
-                    {
-                        splitFailsAggregates.AddRange(_approachSplitFailAggregationRepository.GetApproachSplitFailsAggregationBySignalIdPhaseDateRange(
-                            approach.SignalId, approach.ProtectedPhaseNumber, tempDate.Date.Add(startTime), tempDate.Date.Add(endTime)));
-                    }
-                    else if (approach.PermissivePhaseNumber.HasValue)
-                    {
-                        splitFailsAggregates.AddRange(_approachSplitFailAggregationRepository.GetApproachSplitFailsAggregationBySignalIdPhaseDateRange(
-                            approach.SignalId, approach.PermissivePhaseNumber.Value, tempDate.Date.Add(startTime), tempDate.Date.Add(endTime)));
-                    }
+                    splitFailsAggregates.AddRange(_approachSplitFailAggregationRepository.GetApproachSplitFailsAggregationBySignalIdPhaseDateRange(
+                        approach.SignalId, phaseNumber, tempDate.Date.Add(startTime), tempDate.Date.Add(endTime)));
                 }
             }
 
@@ -84,10 +77,10 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             {
                 if (daysOfWeek.Contains((int)tempDate.DayOfWeek))
                 {
-                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(30))
+                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(15))
                     {
-                        var tempEndTime = tempstart.AddMinutes(30);
-                        var tempSplitFails = splitFailsAggregates.Where(s => s.BinStartTime >= tempstart && s.BinStartTime < tempEndTime).Sum(s => s.SplitFailures);
+                        var tempEndTime = tempstart.AddMinutes(15);
+                        double tempSplitFails = splitFailsAggregates.Where(s => s.BinStartTime >= tempstart && s.BinStartTime < tempEndTime).Sum(s => s.SplitFailures);
                         var tempCycles = splitFailsAggregates.Where(s => s.BinStartTime >= tempstart && s.BinStartTime < tempEndTime).Sum(s => s.Cycles);
                         double tempPercentFails = 0;
                         if (tempCycles != 0)

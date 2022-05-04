@@ -92,6 +92,7 @@ namespace MOE.Common.Models
         public virtual DbSet<PhaseSplitMonitorAggregation> PhaseSplitMonitorAggregationsAggregations { get; set; }
         public virtual DbSet<PhaseLeftTurnGapAggregation> PhaseLeftTurnGapAggregations { get; set; }
         public virtual DbSet<SignalToAggregate> SignalsToAggregate { get; set; }
+        public virtual DbSet<MeasuresDefaults> MeasuresDefaults { get; set; }
 
         public static SPM Create()
         {

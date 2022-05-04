@@ -394,7 +394,7 @@ namespace MOE.Common.Migrations
                 },
                 new Menu
                 {
-                    MenuId = 100,
+                    MenuId = 58,
                     MenuName = "Left Turn Gap Analysis",
                     Controller = "LeftTurnGapReport",
                     Action = "Index",
@@ -621,6 +621,16 @@ namespace MOE.Common.Migrations
                     ParentId = 11,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 100
+                },
+                new Menu
+                {
+                    MenuId = 100,
+                    MenuName = "Measure Defaults Settings",
+                    Controller = "MeasuresDefaults",
+                    Action = "Index",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 45
                 }
                 //new Menu
                 //{
@@ -1318,16 +1328,16 @@ namespace MOE.Common.Migrations
                 }
             );
 
-            context.GeneralSettings.AddOrUpdate(
-                c => c.ApplicationID,
-                new Models.GeneralSettings
-                {
-                    ApplicationID = 4,
-                    RawDataCountLimit = 1048576,
-                    ImageUrl = "http://defaultWebServer/spmimages/",
-                    ImagePath = @"\\defaultWebserver\SPMImages\"
-                }
-            );
+            //context.GeneralSettings.AddOrUpdate(
+            //    c => c.ApplicationID,
+            //    new Models.GeneralSettings
+            //    {
+            //        ApplicationID = 4,
+            //        RawDataCountLimit = 1048576,
+            //        ImageUrl = "http://defaultWebServer/spmimages/",
+            //        ImagePath = @"\\defaultWebserver\SPMImages\"
+            //    }
+            //);
 
             context.LaneTypes.AddOrUpdate(
                 new LaneType { LaneTypeID = 1, Description = "Vehicle", Abbreviation = "V" },

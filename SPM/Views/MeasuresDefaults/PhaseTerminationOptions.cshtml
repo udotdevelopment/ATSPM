@@ -1,0 +1,49 @@
+﻿@model SPM.Models.MeasuresDefaultsViewModel
+
+<div id="phase-termination-options" role="tablist" aria-multiselectable="true" class="card mr-4 ml-4">
+    <div class="card-header" role="tab">
+        <a onclick="rotate(this)" data-toggle="collapse" data-parent="#phase-termination-options" href="#phase-termination-options-collapse" aria-expanded="false" aria-controls="phase-termination-options-collapse">
+            <i class="fa fa-chevron-right mr-3" aria-hidden="true"></i> Phase Termination
+        </a>
+    </div>
+    <div id="phase-termination-options-collapse" class="collapse" role="tabpanel">
+        <div class="card-body">
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PhaseTermination.YAxisMax, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.PhaseTermination.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
+                    @Html.ValidationMessageFor(model => model.PhaseTermination.YAxisMax, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PhaseTermination.SelectedConsecutiveCount, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-center">
+                    @Html.DropDownListFor(model => model.PhaseTermination.SelectedConsecutiveCount, (SelectList)ViewBag.ConsecutiveCount, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PhaseTermination.SelectedConsecutiveCount, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PhaseTermination.ShowPlanStripes, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.PhaseTermination.ShowPlanStripes, new { htmlAttributes = new { @class = "form-check-inline m-0" } })
+                    @Html.ValidationMessageFor(model => model.PhaseTermination.ShowPlanStripes, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PhaseTermination.ShowPedActivity, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.PhaseTermination.ShowPedActivity, new { htmlAttributes = new { @class = "form-check-inline m-0" } })
+                    @Html.ValidationMessageFor(model => model.PhaseTermination.ShowPedActivity, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

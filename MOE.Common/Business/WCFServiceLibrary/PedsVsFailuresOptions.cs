@@ -19,8 +19,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             double yAxisMax,
             double yAxisMin,
             int metricTypeID, 
-            Dictionary<DateTime, double> acceptableGapList, 
-            Dictionary<DateTime, double> demandList)
+            Dictionary<DateTime, double> percentCyclesWithPeds, 
+            Dictionary<DateTime, double> percentCyclesWithSplitFails)
         {
             SignalID = signalID;
             StartDate = startDate;
@@ -28,8 +28,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             YAxisMax = yAxisMax;
             YAxisMin = yAxisMin;
             MetricTypeID = metricTypeID;
-            PercentPedsList = acceptableGapList;
-            PercentFailuresList = demandList;
+            PercentPedsList = percentCyclesWithPeds;
+            PercentFailuresList = percentCyclesWithSplitFails;
         }
 
 
@@ -87,41 +87,60 @@ namespace MOE.Common.Business.WCFServiceLibrary
             //Create the chart legend
             var chartLegend = new Legend();
             chartLegend.Name = "MainLegend";
-            chartLegend.Docking = Docking.Left;
+            chartLegend.Docking = Docking.Top;
+            chartLegend.Alignment = StringAlignment.Center;
+            chartLegend.TextWrapThreshold = 50;
+            chartLegend.Font = new Font(chartLegend.Font.FontFamily, 14);
             chart.Legends.Add(chartLegend);
 
             //Create the chart area
+            ChartArea chartArea = chart.ChartAreas[0];
+
             if (YAxisMax > 0)
-                chart.ChartAreas[0].AxisY.Maximum = YAxisMax.Value;
+                chartArea.AxisY.Maximum = YAxisMax.Value;
             else
-                chart.ChartAreas[0].AxisY.Maximum = 100;
+                chartArea.AxisY.Maximum = 100;
 
             if (YAxisMin > 0)
-                chart.ChartAreas[0].AxisY.Minimum = YAxisMin;
+                chartArea.AxisY.Minimum = YAxisMin;
             else
-                chart.ChartAreas[0].AxisY.Minimum = 0;
+                chartArea.AxisY.Minimum = 0;
 
-            chart.ChartAreas[0].AxisY.Title = "Percent";
-            chart.ChartAreas[0].AxisY.IntervalAutoMode = IntervalAutoMode.FixedCount;
-            chart.ChartAreas[0].AxisY.Interval = 10;
-            chart.ChartAreas[0].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
+            chartArea.AxisY.Title = "Percent";
+            chartArea.AxisY.TitleFont = new Font("Arial", 15f);
+            chartArea.AxisY.LabelStyle.Font = new Font("Arial", 10f);
+            chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.FixedCount;
+            chartArea.AxisY.LabelStyle.Format = "{0.00} %";
+            chartArea.AxisY.Interval = 10;
+            chartArea.AxisY.MajorGrid.LineColor = chart.BackColor;
 
-            chart.ChartAreas[0].AxisX.Minimum = StartDate.ToOADate();
-            chart.ChartAreas[0].AxisX.Maximum = EndDate.ToOADate();
+            chartArea.AxisX.Title = "Duration by 15 Minute Bins";
+            chartArea.AxisX.TitleFont = new Font("Arial", 15f);
+            chartArea.AxisX.LabelStyle.Font = new Font("Arial", 11f);
+            chartArea.AxisX.Minimum = StartDate.ToOADate();
+            chartArea.AxisX.Maximum = EndDate.ToOADate();
+            chartArea.AxisX.MajorGrid.LineColor = chart.BackColor;
+            chartArea.AxisX.IntervalType = DateTimeIntervalType.Minutes;
+            chartArea.AxisX.Interval = 30;
+            chartArea.AxisX.LabelStyle.Angle = -90;
 
 
             var gapSeries = new Series();
             gapSeries.ChartType = SeriesChartType.Line;
-            gapSeries.Color = Color.DarkBlue;
+            gapSeries.Color = Color.FromArgb(92,136,218);
             gapSeries.Name = "% of Accectable Cycles w/ Peds";
             gapSeries.XValueType = ChartValueType.DateTime;
+            gapSeries.Font = new Font("Arial", 10f);
+            gapSeries.BorderWidth = 3;
             chart.Series.Add(gapSeries);
             
             var demandSeries = new Series();
             demandSeries.ChartType = SeriesChartType.Line;
-            demandSeries.Color = Color.Orange;
+            demandSeries.Color = Color.FromArgb(232,119,34);
             demandSeries.Name = "% of Cycles w/ Split Failure";
             demandSeries.XValueType = ChartValueType.DateTime;
+            demandSeries.Font = new Font("Arial", 10f);
+            demandSeries.BorderWidth = 3;
             chart.Series.Add(demandSeries);
 
             return chart;
@@ -129,7 +148,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void SetChartTitles(Chart chart)
         {
-            chart.Titles.Add("Percent of Cycles(Pedestrians and Split Failure)");
+            Title title = new Title();
+            title.Font = new Font("Arial", 18);
+            title.Text = "Percent of Cycles(Pedestrians and Split Failure)";
+            chart.Titles.Add(title);
         }
 
         protected void AddDataToChart(Chart chart)
@@ -138,14 +160,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 foreach (var bucket in PercentPedsList)
                 {
-                    chart.Series["% of Accectable Cycles w/ Peds"].Points.AddXY(bucket.Key.ToOADate(), bucket.Value *100);
+                    chart.Series["% of Accectable Cycles w/ Peds"].Points.AddXY(bucket.Key.ToOADate(), bucket.Value * 100);
                 }
             }
             if (PercentFailuresList != null)
             {
                 foreach (var bucket in PercentFailuresList)
                 {
-                    chart.Series["% of Cycles w/ Split Failure"].Points.AddXY(bucket.Key.ToOADate(), bucket.Value *100);
+                    chart.Series["% of Cycles w/ Split Failure"].Points.AddXY(bucket.Key.ToOADate(), bucket.Value * 100);
                 }
             }
         }

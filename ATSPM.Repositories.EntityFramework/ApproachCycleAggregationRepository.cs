@@ -108,11 +108,12 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
             throw new NotImplementedException();
         }
 
-        int IApproachCycleAggregationRepository.GetCycleCountBySignalIdAndDateRange(string signalId, DateTime dateTime1, DateTime dateTime2)
+        int IApproachCycleAggregationRepository.GetCycleCountBySignalIdAndDateRange(string signalId, int phaseNumber, DateTime dateTime1, DateTime dateTime2)
         {
             return _db.PhaseCycleAggregations.Where(r => r.SignalId == signalId
+                                                            && r.PhaseNumber == phaseNumber
                                                             && r.BinStartTime >= dateTime1 &&
-                                                            r.BinStartTime <= dateTime2).Count();
+                                                            r.BinStartTime <= dateTime2).ToList().Sum(p => p.TotalGreenToGreenCycles);
         }
     }
 }

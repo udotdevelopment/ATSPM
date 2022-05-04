@@ -25,13 +25,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public WaitTimeOptions()
         {
-            SetDefaults();
-        }
-
-        public void SetDefaults()
-        {
-            ShowPlanStripes = true;
             Y2AxisMax = 2000;
+            SetDefaults();
         }
 
         [DataMember]
