@@ -58,7 +58,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                 if (daysOfWeek.Contains((int)start.DayOfWeek))
                 {
                     splitFailsAggregates.AddRange(_approachSplitFailAggregationRepository.GetApproachSplitFailsAggregationBySignalIdPhaseDateRange(
-                        approach.SignalId, phaseNumber, tempDate.Date.Add(startTime), tempDate.Date.Add(endTime)));
+                        approach.SignalId, approach.ApproachId, phaseNumber, tempDate.Date.Add(startTime), tempDate.Date.Add(endTime)));
                 }
             }
 
