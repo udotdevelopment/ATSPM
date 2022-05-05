@@ -295,16 +295,24 @@ function EndRequest(sender, args) {
     }
 }
 
-function PinFilterCheck(regionFilter, reportTypeFilter, agencyFilter, pinRegion, pinAgency, pinMetricTypes) {
-    return ((regionFilter == -1 && reportTypeFilter == -1 && agencyFilter == -1) ||
-        (regionFilter == pinRegion && agencyFilter == pinAgency && pinMetricTypes.indexOf(reportTypeFilter) > -1) ||
-        (regionFilter == -1 && agencyFilter == -1 && pinMetricTypes.indexOf(reportTypeFilter) > -1) ||
-        (regionFilter == -1 && agencyFilter == pinAgency && reportTypeFilter == -1) ||
-        (regionFilter == pinRegion && agencyFilter == -1 && reportTypeFilter == -1) ||
-        (regionFilter == pinRegion && agencyFilter == pinAgency && reportTypeFilter == -1) ||
-        (regionFilter == pinRegion && agencyFilter == -1 && pinMetricTypes.indexOf(reportTypeFilter) > -1) ||
-        (regionFilter == -1 && agencyFilter == pinAgency && pinMetricTypes.indexOf(reportTypeFilter) > -1)
-        );
+//function PinFilterCheck(regionFilter, reportTypeFilter, agencyFilter, pinRegion, pinAgency, pinMetricTypes) {
+//    return ((regionFilter == -1 && reportTypeFilter == -1 && agencyFilter == -1) ||
+//        (regionFilter == pinRegion && agencyFilter == pinAgency && pinMetricTypes.indexOf(reportTypeFilter) > -1) ||
+//        (regionFilter == -1 && agencyFilter == -1 && pinMetricTypes.indexOf(reportTypeFilter) > -1) ||
+//        (regionFilter == -1 && agencyFilter == pinAgency && reportTypeFilter == -1) ||
+//        (regionFilter == pinRegion && agencyFilter == -1 && reportTypeFilter == -1) ||
+//        (regionFilter == pinRegion && agencyFilter == pinAgency && reportTypeFilter == -1) ||
+//        (regionFilter == pinRegion && agencyFilter == -1 && pinMetricTypes.indexOf(reportTypeFilter) > -1) ||
+//        (regionFilter == -1 && agencyFilter == pinAgency && pinMetricTypes.indexOf(reportTypeFilter) > -1)
+//        );
+//}
+
+function PinFilterCheck(regionFilter, reportTypeFilter, agencyFilter, areaFilter, pinRegion, pinAgency, areas, pinMetricTypes) {
+    if (regionFilter != -1 && regionFilter != pinRegion) return false;
+    if (agencyFilter != -1 && agencyFilter != pinAgency) return false;
+    if (areaFilter != -1 && areas.indexOf(areaFilter) == -1) return false;
+    if (reportTypeFilter != -1 && pinMetricTypes.indexOf(reportTypeFilter) == -1) return false;
+    return true;
 }
 
 

@@ -24,6 +24,14 @@ namespace MOE.Common.Migrations
         protected override void Seed(SPM context)
         {
             //  This method will be called after migrating to the latest version.
+
+            context.Areas.AddOrUpdate(
+               a => a.AreaName,
+               new Models.Area
+               {
+                   AreaName = "Default Name"
+               }
+            );
             context.Jurisdictions.AddOrUpdate(
                 j => j.JurisdictionName,
                 new Models.Jurisdiction
@@ -631,6 +639,16 @@ namespace MOE.Common.Migrations
                     ParentId = 11,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 45
+                },
+                new Menu
+                {
+                    MenuId = 66,
+                    MenuName = "Area Configuration",
+                    Controller = "Areas",
+                    Action = "Index",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 31
                 }
                 //new Menu
                 //{

@@ -61,6 +61,20 @@ namespace MOE.Common.Models
             return metricTypesString;
         }
 
+        public string GetAreasString()
+        {
+            var areasString = string.Empty;
+            foreach (var area in GetAreas())
+                areasString += area.Id + ",";
+
+            if (!string.IsNullOrEmpty(areasString))
+                areasString = areasString.TrimEnd(',');
+            else
+                areasString = "null";
+
+            return areasString;
+        }
+
         public List<int> GetPhasesForSignal()
         {
             var phases = new List<int>();
@@ -200,6 +214,15 @@ namespace MOE.Common.Models
                     foreach (var m in dt.MetricTypes)
                         availableMetrics.Add(m);
             return availableMetrics.Distinct().ToList();
+        }
+
+        public List<Area> GetAreas()
+        {
+            var repository =
+                AreaRepositoryFactory.Create();
+
+            var areas = repository.GetListOfAreasForSignal(SignalID);
+            return areas.ToList();
         }
 
         private List<MetricType> GetBasicMetrics()

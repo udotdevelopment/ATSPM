@@ -16,6 +16,7 @@ namespace SPM.Controllers
     {
         private MOE.Common.Models.Repositories.IControllerTypeRepository _controllerTypeRepository; 
         private MOE.Common.Models.Repositories.IRegionsRepository _regionRepository;
+        private MOE.Common.Models.Repositories.IAreaRepository _areaRepository;
         private MOE.Common.Models.Repositories.IDirectionTypeRepository _directionTypeRepository;
         private MOE.Common.Models.Repositories.IMovementTypeRepository _movementTypeRepository;
         private MOE.Common.Models.Repositories.ILaneTypeRepository _laneTypeRepository;
@@ -37,6 +38,7 @@ namespace SPM.Controllers
             _metricTypeRepository = MOE.Common.Models.Repositories.MetricTypeRepositoryFactory.Create();
             _controllerTypeRepository = MOE.Common.Models.Repositories.ControllerTypeRepositoryFactory.Create();
             _regionRepository = MOE.Common.Models.Repositories.RegionsRepositoryFactory.Create();
+            _areaRepository = MOE.Common.Models.Repositories.AreaRepositoryFactory.Create();
             _directionTypeRepository = MOE.Common.Models.Repositories.DirectionTypeRepositoryFactory.Create();
             _movementTypeRepository = MOE.Common.Models.Repositories.MovementTypeRepositoryFactory.Create();
             _laneTypeRepository = MOE.Common.Models.Repositories.LaneTypeRepositoryFactory.Create();
@@ -47,6 +49,7 @@ namespace SPM.Controllers
         public SignalsController(
          MOE.Common.Models.Repositories.IControllerTypeRepository controllerTypeRepository,
          MOE.Common.Models.Repositories.IRegionsRepository regionRepository,
+         MOE.Common.Models.Repositories.IAreaRepository areaRepository,
          MOE.Common.Models.Repositories.IDirectionTypeRepository directionTypeRepository,
          MOE.Common.Models.Repositories.IMovementTypeRepository movementTypeRepository,
          MOE.Common.Models.Repositories.ILaneTypeRepository laneTypeRepository,
@@ -64,6 +67,7 @@ namespace SPM.Controllers
             _approachRepository = approachRepository;
             _controllerTypeRepository = controllerTypeRepository;
             _regionRepository = regionRepository;
+            _areaRepository = areaRepository;
             _directionTypeRepository = directionTypeRepository;
             _movementTypeRepository = movementTypeRepository;
             _laneTypeRepository = laneTypeRepository;
@@ -75,7 +79,7 @@ namespace SPM.Controllers
         public ActionResult Index()
         {
             MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel wctv =
-                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository, _jurisdictionRepository);
+                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository, _jurisdictionRepository, _areaRepository);
 
             return View(wctv);
         }
@@ -85,7 +89,7 @@ namespace SPM.Controllers
         public ActionResult SignalDetail()
         {
             MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel wctv =
-                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository, _jurisdictionRepository);
+                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository, _jurisdictionRepository, _areaRepository);
             return View(wctv);
         }
 
@@ -405,6 +409,7 @@ namespace SPM.Controllers
             }
             Signal signal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             signal.Approaches = signal.Approaches.OrderBy(a => a.ProtectedPhaseNumber).ThenBy(a => a.DirectionType.Description).ToList();
+            signal.Areas = signal.Areas.OrderBy(a => a.AreaName).ToList();
 
             if (signal.Approaches == null)
             {
@@ -561,9 +566,9 @@ namespace SPM.Controllers
             {
                 ModelState.Clear();
                 signal = SetDetectionTypes(signal);
-              
+
                 //var modelStateErrors = this.ModelState.Keys.SelectMany(key => this.ModelState[key].Errors);
-                
+
                 if (TryValidateModel(signal))
                 {
                     MOE.Common.Models.Repositories.ISignalsRepository signalRepository =
@@ -627,8 +632,18 @@ namespace SPM.Controllers
 
         private void AddSelectListsToViewBag(Signal signal)
         {
+            var ids = new List<int>();
+            if (signal.Areas != null && signal.Areas.FirstOrDefault() != null)
+            {
+                foreach (var a in signal.Areas)
+                {
+                    ids.Add(a.Id);
+                }
+            }
+            ViewBag.AreaIds = ids;
             ViewBag.ControllerType = new SelectList(_controllerTypeRepository.GetControllerTypes(), "ControllerTypeID", "Description", signal.ControllerTypeID);
             ViewBag.Region = new SelectList(_regionRepository.GetAllRegions(), "ID", "Description", signal.RegionID);
+            ViewBag.Areas = new MultiSelectList(_areaRepository.GetAllAreas(), "Id", "AreaName", _areaRepository.GetListOfAreasForSignal(signal.SignalID));
             ViewBag.DirectionType = new SelectList(_directionTypeRepository.GetAllDirections(), "DirectionTypeID", "Abbreviation");
             ViewBag.MovementType = new SelectList(_movementTypeRepository.GetAllMovementTypes(), "MovementTypeID", "Description");
             ViewBag.LaneType = new SelectList(_laneTypeRepository.GetAllLaneTypes(), "LaneTypeID", "Description");
@@ -648,7 +663,7 @@ namespace SPM.Controllers
 
 
             MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel wctv =
-                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository, _jurisdictionRepository);
+                new MOE.Common.Models.ViewModel.WebConfigTool.WebConfigToolViewModel(_regionRepository, _metricTypeRepository, _jurisdictionRepository, _areaRepository);
 
             return null;//View(wctv);
         }

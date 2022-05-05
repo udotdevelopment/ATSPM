@@ -12,12 +12,15 @@
 <div id="SignalEdit"></div>
 @section Scripts
     {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/chosen")
     <script type="text/javascript" src="~/Scripts/Map.js"></script>
     <script type="text/javascript" src="~/Scripts/AddData.js"></script>
     <script type="text/javascript" src="~/Scripts/SignalsSearch.js"></script>
     <script type="text/javascript" src="~/Scripts/SPMConfigurationTool.js"></script>
     <script type="text/javascript" src="~/Scripts/SignalEdit.js"></script>
     <script type="text/javascript" src="~/Scripts/GetMetrics.js"></script>
+    <script type="text/javascript" src="~/Scripts/chosen.jquery.js"></script>
     <script type="text/javascript">
         var urlpathGetSignalLocation = '@Url.Action("GetSignalLocation", "DefaultCharts")';
         var urlpathSignalInfoBox = '@Url.Action("SignalInfoBox", "DefaultCharts")';
@@ -42,5 +45,6 @@
         var urlpathDeleteVersion = '@Url.Action("DeleteVersion", "Signals")';
     </script>
 
+    <link href="~/Content/chosen.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
 }

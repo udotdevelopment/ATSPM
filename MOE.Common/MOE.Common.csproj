@@ -497,6 +497,15 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachAggregationMetricOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\WaitTimeOptions.cs" />
+    <Compile Include="Migrations\202204271748218_AddAreaAndUpdateSignals.cs" />
+    <Compile Include="Migrations\202204271748218_AddAreaAndUpdateSignals.designer.cs">
+      <DependentUpon>202204271748218_AddAreaAndUpdateSignals.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202205021858538_RemoveAreaIdFromSignals.cs" />
+    <Compile Include="Migrations\202205021858538_RemoveAreaIdFromSignals.designer.cs">
+      <DependentUpon>202205021858538_RemoveAreaIdFromSignals.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Area.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>
     </Compile>
@@ -701,6 +710,9 @@
     <Compile Include="Models\DetectorEventCountAggregation.cs" />
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\Repositories\IMeasuresDefaultsRepository.cs" />
+    <Compile Include="Models\Repositories\AreaRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\AreaRepository.cs" />
+    <Compile Include="Models\Repositories\IAreaRepository.cs" />
     <Compile Include="Models\Repositories\IPhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IPhaseLeftTurnGapAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IJurisdictionRepository.cs" />
@@ -1159,8 +1171,14 @@
     <EmbeddedResource Include="Migrations\202105132005112_ReCreateAggTables.resx">
       <DependentUpon>202105132005112_ReCreateAggTables.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202204300103177_4_3.resx">
-      <DependentUpon>202204300103177_4_3.cs</DependentUpon>
+	<EmbeddedResource Include="Migrations\202204300103177_4_3.resx">
+		<DependentUpon>202204300103177_4_3.cs</DependentUpon>
+	</EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204271748218_AddAreaAndUpdateSignals.resx">
+      <DependentUpon>202204271748218_AddAreaAndUpdateSignals.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202205021858538_RemoveAreaIdFromSignals.resx">
+      <DependentUpon>202205021858538_RemoveAreaIdFromSignals.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

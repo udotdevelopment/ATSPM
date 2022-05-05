@@ -16,6 +16,7 @@ namespace MOE.Common.Business
 
         protected string agency;
 
+
         protected string signalID;
 
 
@@ -60,6 +61,7 @@ namespace MOE.Common.Business
         public string SignalID => signalID;
 
         public string Region => region;
+        public string Areas { get; set; }
 
         public string Agency => agency;
 
