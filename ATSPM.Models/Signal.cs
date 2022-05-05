@@ -16,6 +16,7 @@ namespace ATSPM.Application.Models
         public int RegionId { get; set; }
         public int ControllerTypeId { get; set; }
         public bool Enabled { get; set; }
+        public bool Pedsare1to1 { get; set; }
         public int VersionId { get; set; }  
         public int VersionActionId { get; set; }
         public VersionAction VersionAction { get; set; }

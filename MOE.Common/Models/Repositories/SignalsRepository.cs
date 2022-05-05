@@ -163,6 +163,7 @@ namespace MOE.Common.Models.Repositories
             newVersion.ControllerTypeID = originalVersion.ControllerTypeID;
             newVersion.RegionID = originalVersion.RegionID;
             newVersion.Enabled = originalVersion.Enabled;
+            newVersion.Pedsare1to1 = originalVersion.Pedsare1to1;
             newVersion.Latitude = originalVersion.Latitude;
             newVersion.Longitude = originalVersion.Longitude;
             newVersion.JurisdictionId = originalVersion.JurisdictionId;

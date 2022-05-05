@@ -16,7 +16,7 @@
             <input type="hidden" name="@(Model.Index)ID" id="ID_@Model.ID" value="@Model.ID" />
                    @Html.HiddenFor(model => model.DetectorID, new { Name = Model.Index + "DetectorID" })
                    @Html.HiddenFor(model => model.ApproachID, new { Name = Model.Index + "ApproachID" })
-    @Html.HiddenFor(model => model.Approach.VersionID, new { Name = "versionId" })
+                   @Html.HiddenFor(model => model.Approach.VersionID, new { Name = "versionId" })
               
                     
     <div class="row">
@@ -76,10 +76,6 @@
                     @Html.DropDownListFor(model => model.LaneTypeID, (SelectList)ViewBag.LaneType, htmlAttributes: new { Name = Model.Index + "LaneTypeID", @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.LaneTypeID, "", new { id = "LaneTypeID-error", @class = "text-danger" })
                 </div>
-            </div>
-            <div id="MPHDiv_@Model.ID" class="@(Model.DetectionTypeIDs.Contains(2) ? "" : "invisible") @(Model.DetectionTypeIDs.Contains(3) ? "" : "invisible")">
-                <label for="mph_@Model.ID" class="control-label mph">MPH (Advanced Count, Advanced Speed)</label>
-                <input id="mph_@Model.ID" name="@Model.Index+'MPH'" class="form-control mph_@Model.ApproachID" onkeyup="SyncText(this, @Model.ApproachID)" type="text" value="@Model.Approach.MPH" />
             </div>
             <div id="DistanceFromStopBar_@Model.ID" class="PCD_@Model.ID @(Model.DetectionTypeIDs.Contains(2) ? "" : "invisible")">
                 @Html.LabelFor(model => model.DistanceFromStopBar, htmlAttributes: new { @class = "control-label" })

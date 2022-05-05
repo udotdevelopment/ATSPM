@@ -22,6 +22,7 @@ namespace MOE.Common.ModelGenerator
                         SecondaryName = "Secondary Test 1",
                         ControllerTypeID = 1,
                         Enabled = true,
+                        Pedsare1to1 = true,
                         IPAddress = "127.0.0.1",
                         Latitude = "40.75854665",
                         Longitude = "-111.8824063",

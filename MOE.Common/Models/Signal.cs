@@ -127,6 +127,11 @@ namespace MOE.Common.Models
         [DataMember]
         public bool Enabled { get; set; }
 
+        [Required]
+        [Display(Name = "All Peds are 1:1")]
+        [DataMember]
+        public bool Pedsare1to1 { get; set; }
+
         [Display(Name = "Chart Notes")]
         public virtual ICollection<MetricComment> Comments { get; set; }
 

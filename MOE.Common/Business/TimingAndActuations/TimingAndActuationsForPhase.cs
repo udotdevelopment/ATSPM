@@ -35,8 +35,9 @@ namespace MOE.Common.Business.TimingAndActuations
         public Dictionary<string, List<Controller_Event_Log>> LaneByLanes { get; set; }
         public Dictionary<string, List<Controller_Event_Log>> PhaseCustomEvents { get; set; }
 
-        public TimingAndActuationsForPhase(int phaseNumber, bool phaseOrOverlap, TimingAndActuationsOptions options)
+        public TimingAndActuationsForPhase(Approach approach, int phaseNumber, bool phaseOrOverlap, TimingAndActuationsOptions options)
         {
+            Approach = approach;
             PhaseNumber = phaseNumber;
             Options = options;
             PhaseOrOverlap = phaseOrOverlap;
@@ -479,11 +480,21 @@ namespace MOE.Common.Business.TimingAndActuations
 
         private void GetPedestrianEvents()
         {
+            var pedDetectors = GetPedDetectorsFromApproach();
             var extendStartTime = Options.ExtendVsdSearch * 60.0;
             var controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
-            PedestrianEvents = controllerEventLogRepository.GetEventsByEventCodesParam(Options.SignalID,
-                Options.StartDate.AddSeconds(-extendStartTime), Options.EndDate,
-                        new List<int> {89, 90}, PhaseNumber);
+            PedestrianEvents = new List<Controller_Event_Log>();
+            foreach(var pedDetector in pedDetectors)
+            {
+                PedestrianEvents.AddRange(controllerEventLogRepository.GetEventsByEventCodesParam(Options.SignalID,
+                    Options.StartDate.AddSeconds(-extendStartTime), Options.EndDate,
+                            new List<int> { 89, 90 }, pedDetector));
+            }
+        }
+
+        public List<int> GetPedDetectorsFromApproach()
+        {
+            return !String.IsNullOrEmpty(Approach.PedestrianDetectors) ? Approach.PedestrianDetectors.Split(',').Select(Int32.Parse).ToList() : new List<int>() { Approach.ProtectedPhaseNumber };
         }
 
         public void GetPedestrianIntervals(bool phaseOrOverlap)
@@ -496,7 +507,7 @@ namespace MOE.Common.Business.TimingAndActuations
             }
             var controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
             PedestrianIntervals = controllerEventLogRepository.GetEventsByEventCodesParam(Options.SignalID,
-                Options.StartDate.AddSeconds(- extendStartSearch), Options.EndDate.AddSeconds( extendStartSearch),
+                Options.StartDate.AddSeconds(-extendStartSearch), Options.EndDate.AddSeconds(extendStartSearch),
                 overlapCodes, PhaseNumber);
         }
     }

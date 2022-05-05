@@ -22,7 +22,7 @@
             @Html.HiddenFor(model => model.SignalID, new { @id = "editSignalID" })
             @*@Html.HiddenFor(model => model.VersionID, new {@versionId = "editVersionID"})*@
             <div class="row">
-                <div class="form-group-configuration-tool  form-group col-md-4">
+                <div class="form-group-configuration-tool  form-group col-md-3">
                     @Html.LabelFor(model => model.VersionID, htmlAttributes: new { @class = "control-label" })
                     <div class="">
                         @Html.DropDownListFor(model => model.VersionID, selectList, new { @class = "form-control", @onchange = "LoadVersionByVersionID(this.value)" })
@@ -30,14 +30,14 @@
                     </div>
                 </div>
 
-                <div class="form-group-configuration-tool  form-group col-md-4">
+                <div class="form-group-configuration-tool  form-group col-md-3">
                     @Html.LabelFor(model => model.Start, htmlAttributes: new { @class = "control-label" })
                     <div class="">
                         @Html.EditorFor(model => model.Start, new { htmlAttributes = new { @class = "form-control datepicker" } })
                         @Html.ValidationMessageFor(model => model.Start, "", new { id = "Start-error", @class = "text-danger" })
                     </div>
                 </div>
-                <div class="form-group-configuration-tool  form-group col-md-4">
+                <div class="form-group-configuration-tool  form-group col-md-6">
                     @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label" })
                     <div class="">
                         @Html.EditorFor(model => model.Note, new { htmlAttributes = new { @class = "form-control" } })
@@ -110,7 +110,14 @@
                         @Html.EditorFor(model => model.Enabled, new { @class = "control-label" })
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-1 form-group" >
+                    @Html.LabelFor(model => model.Pedsare1to1, htmlAttributes: new { @class = "control-label" })
+                    <div class="center-block">
+                        @Html.CheckBox("Pedsare1to1", new { id = "Pedsare1to1-value", @class = "control-label", onchange = "UpdatePedsare1to1()"})
+                        @*@Html.EditorFor(model => model.Pedsare1to1, new {htmlAttributes = new { @class = "control-label", id = "Pedsare1to1-value" }, onchange = "UpdatePedsare1to1()" } )*@
+                    </div>
+                </div>
+                <div class="col-md-5">
                     <br />
                     @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label" })
                     <button type="button" class="btn btn-info" onclick="GetCreateComment()">Add Comment&nbsp;<span class="" aria-hidden="true"></span></button>

@@ -166,16 +166,25 @@ namespace MOE.Common.Business.WCFServiceLibrary
             PhaseFilterList = ExtractListOfNumbers(PhaseFilter);
             if (ShowRawEventData)
             {
-                for (int i = 1; i <= 16; i++)
+                foreach(var approach in Signal.Approaches)
                 {
-                    if (PhaseFilterList.Any() && PhaseFilterList.Contains(i) || PhaseFilterList.Count == 0)
+                    if (PhaseFilterList.Any() && PhaseFilterList.Contains(approach.ProtectedPhaseNumber) || PhaseFilterList.Count == 0)
                     {
                         var phaseOrOverlap = true;
-                        timingAndActuationsForPhases.Add(new TimingAndActuationsForPhase(i, phaseOrOverlap, this));
-                        timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort = "Phase - " + i.ToString("D2");
+                        timingAndActuationsForPhases.Add(new TimingAndActuationsForPhase(approach, approach.ProtectedPhaseNumber, phaseOrOverlap, this));
+                        timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort = "Phase - " + approach.ProtectedPhaseNumber.ToString("D2");
                         phaseOrOverlap = false;
-                        timingAndActuationsForPhases.Add(new TimingAndActuationsForPhase(i, phaseOrOverlap, this));
-                        timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort = "zOverlap - " + i.ToString("D2");
+                        timingAndActuationsForPhases.Add(new TimingAndActuationsForPhase(approach, approach.ProtectedPhaseNumber, phaseOrOverlap, this));
+                        timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort = "zOverlap - " + approach.ProtectedPhaseNumber.ToString("D2");
+                    }
+                    if (approach.PermissivePhaseNumber.HasValue && (PhaseFilterList.Any() && PhaseFilterList.Contains(approach.PermissivePhaseNumber.Value) || PhaseFilterList.Count == 0))
+                    {
+                        var phaseOrOverlap = true;
+                        timingAndActuationsForPhases.Add(new TimingAndActuationsForPhase(approach, approach.PermissivePhaseNumber.Value, phaseOrOverlap, this));
+                        timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort = "Phase - " + approach.PermissivePhaseNumber.Value.ToString("D2");
+                        phaseOrOverlap = false;
+                        timingAndActuationsForPhases.Add(new TimingAndActuationsForPhase(approach, approach.PermissivePhaseNumber.Value, phaseOrOverlap, this));
+                        timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort = "zOverlap - " + approach.PermissivePhaseNumber.Value.ToString("D2");
                     }
                 }
             }

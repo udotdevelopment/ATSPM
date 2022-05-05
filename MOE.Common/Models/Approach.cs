@@ -42,7 +42,7 @@ namespace MOE.Common.Models
         public string Description { get;
             set; }
 
-        [Display(Name = "MPH (Advanced Count, Advanced Speed)")]
+        [Display(Name = "Approach Speed (MPH)s")]
         [DataMember]
         public int? MPH { get; set; }
 
@@ -62,6 +62,18 @@ namespace MOE.Common.Models
         [Display(Name = "Perm. Phase Overlap")]
         [DataMember]
         public bool IsPermissivePhaseOverlap { get; set; }
+
+        [Display(Name = "Pedestrian Phase")]
+        [DataMember]
+        public int? PedestrianPhaseNumber { get; set; }
+
+        [Display(Name = "Ped. Phase Overlap")]
+        [DataMember]
+        public bool IsPedestrianPhaseOverlap { get; set; }
+
+        [Display(Name = "Ped. Detector(s)")]
+        [DataMember]
+        public string PedestrianDetectors { get; set; }
 
         [DataMember]
         public virtual ICollection<Detector> Detectors { get; set; }

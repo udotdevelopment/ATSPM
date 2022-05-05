@@ -45,7 +45,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             };
             if (gapDurationResult.Capacity == 0)
                 throw new ArithmeticException("Gap Count cannot be zero");
-            gapDurationResult.GapDurationPercent = gapDurationResult.Demand / (gapDurationResult.Capacity/criticalGap);
+            gapDurationResult.GapDurationPercent = gapDurationResult.Demand / (gapDurationResult.Capacity);
             return gapDurationResult;
         }
 
@@ -67,12 +67,12 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                         if (gapColumn == 12)
                         {
                             count = leftTurnGaps.Sum(l => l.GapCount6 + l.GapCount7 + l.GapCount8 + l.GapCount9);
-                            sum = leftTurnGaps.Sum(l => (l.GapCount6 * 4.1) + (l.GapCount7 * 5.3) + (l.GapCount8 * 5.5) + (l.GapCount9 * 6.5));
+                            sum = leftTurnGaps.Sum(l => (l.SumGapDuration1/4.1));
                         }
                         else
                         {
                             count = leftTurnGaps.Sum(l => l.GapCount7 + l.GapCount8 + l.GapCount9);
-                            sum = leftTurnGaps.Sum(l => (l.GapCount7 * 5.3) + (l.GapCount8 * 5.5) + (l.GapCount9 * 6.5));
+                            sum = leftTurnGaps.Sum(l => (l.SumGapDuration2/5.3));
                         }
 
                         acceptableGaps.Add(tempStart, sum);

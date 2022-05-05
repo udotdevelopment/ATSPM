@@ -226,6 +226,7 @@ namespace MOE.Common.Models
                 && RegionID == signalToCompare.RegionID
                 && ControllerTypeID == signalToCompare.ControllerTypeID
                 && Enabled == signalToCompare.Enabled
+                && Pedsare1to1 == signalToCompare.Pedsare1to1
                 && Approaches.Count() == signalToCompare.Approaches.Count()
             )
                 return true;
@@ -256,6 +257,7 @@ namespace MOE.Common.Models
             newSignal.RegionID = origSignal.RegionID;
             newSignal.ControllerTypeID = origSignal.ControllerTypeID;
             newSignal.Enabled = origSignal.Enabled;
+            newSignal.Pedsare1to1 = origSignal.Pedsare1to1;
             newSignal.Approaches = new List<Approach>();
             newSignal.JurisdictionId = origSignal.JurisdictionId;
 

@@ -28,9 +28,13 @@
                         Value = c.String(),
                     })
                 .PrimaryKey(t => new { t.Measure, t.OptionName });
-
-            Sql("insert into Jurisdictions(JurisdictionName) values ('Default')");
+            
             AddColumn("dbo.Signals", "JurisdictionId", c => c.Int(nullable: false, defaultValue:1));
+            AddColumn("dbo.Signals", "Pedsare1to1", c => c.Boolean(nullable: false));
+            AddColumn("dbo.Approaches", "PedestrianPhaseNumber", c => c.Int());
+            AddColumn("dbo.Approaches", "IsPedestrianPhaseOverlap", c => c.Boolean(nullable: false));
+            AddColumn("dbo.Approaches", "PedestrianDetectors", c => c.String());
+            Sql("insert into Jurisdictions(JurisdictionName) values ('Default')");
             CreateIndex("dbo.Signals", "JurisdictionId");
             AddForeignKey("dbo.Signals", "JurisdictionId", "dbo.Jurisdictions", "Id");
         }
@@ -39,6 +43,10 @@
         {
             DropForeignKey("dbo.Signals", "JurisdictionId", "dbo.Jurisdictions");
             DropIndex("dbo.Signals", new[] { "JurisdictionId" });
+            DropColumn("dbo.Approaches", "PedestrianDetectors");
+            DropColumn("dbo.Approaches", "IsPedestrianPhaseOverlap");
+            DropColumn("dbo.Approaches", "PedestrianPhaseNumber");
+            DropColumn("dbo.Signals", "Pedsare1to1");
             DropColumn("dbo.Signals", "JurisdictionId");
             DropTable("dbo.MeasuresDefaults");
             DropTable("dbo.Jurisdictions");
