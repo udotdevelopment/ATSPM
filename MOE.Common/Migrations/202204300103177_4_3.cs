@@ -68,6 +68,7 @@
             DropForeignKey("dbo.AreaSignals", "Area_Id", "dbo.Areas");
             DropIndex("dbo.AreaSignals", new[] { "Signal_VersionID" });
             DropIndex("dbo.AreaSignals", new[] { "Area_Id" });
+
             DropIndex("dbo.Signals", new[] { "JurisdictionId" });
             DropColumn("dbo.Approaches", "PedestrianDetectors");
             DropColumn("dbo.Approaches", "IsPedestrianPhaseOverlap");
