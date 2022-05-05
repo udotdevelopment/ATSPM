@@ -51,7 +51,8 @@
                 .Index(t => t.Area_Id)
                 .Index(t => t.Signal_VersionID);
             
-            AddColumn("dbo.Signals", "JurisdictionId", c => c.Int(nullable: false));
+            Sql("insert into Jurisdictions(JurisdictionName) values ('Default')");
+            AddColumn("dbo.Signals", "JurisdictionId", c => c.Int(nullable: false, defaultValue:1));
             AddColumn("dbo.Signals", "Pedsare1to1", c => c.Boolean(nullable: false));
             AddColumn("dbo.Approaches", "PedestrianPhaseNumber", c => c.Int());
             AddColumn("dbo.Approaches", "IsPedestrianPhaseOverlap", c => c.Boolean(nullable: false));
