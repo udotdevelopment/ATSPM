@@ -1,0 +1,41 @@
+﻿@model SPM.Models.MeasuresDefaultsViewModel
+
+<div id="arrivals-on-red-options" role="tablist" aria-multiselectable="true" class="card mr-4 ml-4">
+    <div class="card-header" role="tab">
+        <a onclick="rotate(this)" data-toggle="collapse" data-parent="#arrivals-on-red-options" href="#arrivals-on-red-options-collapse" aria-expanded="false" aria-controls="arrivals-on-red-optionsCollapse">
+            <i class="fa fa-chevron-right mr-3" aria-hidden="true"></i> Arrivals On Red
+        </a>
+    </div>
+    <div id="arrivals-on-red-options-collapse" class="collapse" role="tabpanel">
+        <div class="card-body">
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.AoR.YAxisMax, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3">
+                    @Html.EditorFor(model => model.AoR.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
+                    @Html.ValidationMessageFor(model => model.AoR.YAxisMax, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.AoR.SelectedBinSize, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3">
+                    @Html.DropDownListFor(model => model.AoR.SelectedBinSize, (SelectList)ViewBag.BinSize, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.AoR.SelectedBinSize, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.AoR.ShowPlanStatistics, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.AoR.ShowPlanStatistics, new { htmlAttributes = new { @class = "form-check-inline m-0" } })
+                    @Html.ValidationMessageFor(model => model.AoR.ShowPlanStatistics, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

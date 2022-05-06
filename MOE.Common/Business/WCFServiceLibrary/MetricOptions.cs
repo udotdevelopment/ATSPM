@@ -49,6 +49,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(string[]))]
     public class MetricOptions
     {
+        MOE.Common.Models.Repositories.IMeasuresDefaultsRepository measuresDefaultsRepository =
+           MOE.Common.Models.Repositories.MeasuresDefaultsRepositoryFactory.Create();
         public MetricOptions()
         {
             var applicationSettingRepository = ApplicationSettingsRepositoryFactory.Create();
@@ -124,6 +126,25 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return new List<string>();
         }
 
+        public void SetDefaults()
+        {
+            var measure = GetType().Name.Replace("Options", "");
+            var defaults = measuresDefaultsRepository.GetMeasureDefaultsAsDictionary(measure);
+            foreach (var option in defaults)
+            {
+                var type = GetType().GetProperty(option.Key)?.PropertyType;
+
+                if (option.Value == null || option.Value == "null") continue;
+
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    type = Nullable.GetUnderlyingType(type);
+                }
+
+                var converted = Convert.ChangeType(option.Value, type);
+                GetType().GetProperty(option.Key).SetValue(this, converted);
+            }
+        }
 
         protected void LogMetricRun()
         {

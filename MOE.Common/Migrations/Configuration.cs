@@ -24,6 +24,14 @@ namespace MOE.Common.Migrations
         protected override void Seed(SPM context)
         {
             //  This method will be called after migrating to the latest version.
+
+            context.Areas.AddOrUpdate(
+               a => a.AreaName,
+               new Models.Area
+               {
+                   AreaName = "Default Name"
+               }
+            );
             context.Jurisdictions.AddOrUpdate(
                 j => j.JurisdictionName,
                 new Models.Jurisdiction
@@ -137,8 +145,53 @@ namespace MOE.Common.Migrations
                 {
                     OrderNumber = 17,
                     Header = @"<b>What are the detection requirements for each metric?</b> ",
-                    Body = @" < table >< tr >< td >< b > MEASURE </ b ></ td >< td >< b > DETECTION NEEDED </ b ></ td ></ tr >< tr >< td > Purdue Coordination Diagram & nbsp; &nbsp; &nbsp; &nbsp;</ td >< td > Setback count(350 ft – 400 ft) </ td ></ tr >< tr >< td > Approach Volume </ td >< td > Setback count(350 ft – 400 ft) </ td ></ tr >< tr >< td > Approach Speed </ td >< td > Setback count(350 ft – 400 ft) using radar </ td ></ tr >< tr >< td > Purdue Phase Termination</ td >< td > No detection needed or used</ td ></ tr >< tr >< td > Split Monitor </ td >< td > No detection needed or used</ td ></ tr >< tr >< td > Turning Movement Counts</ td >< td > Stop bar(lane - by - lane) count </ td ></ tr >< tr >< td > Approach Delay </ td >< td > Setback count(350 ft – 400 ft) </ td ></ tr >< tr >< td > Arrivals on Red</ td >< td > Setback count(350 ft – 400 ft) </ td ></ tr >< tr >< td > Yellow and Red Actuations </ td >< td > Stop bar(lane - by - lane) count that is either in front of the stop bar or has a speed filter enabled </ td ></ tr >>< tr >< td > Purdue Split Failure</ td >< td > Stop bar presence detection, either by lane group or individual lane </ td ></ tr >
-                    </ table >< br />< br />< b > Automated Traffic Signal Performance Measures will work with any type of detector that is capable of counting vehicles(i.e.loops, video, pucks, radar).  The only exception to this is the speed measure, where UDOT’s Automated Signal Performance Measures for speeds will only work with the Wavetronix Advance Smartsensor).Please note that two of the measures(Purdue Phase Termination and Split Monitor) do not use detection and are extremely useful measures.</ b > "
+                    Body = @"<table class='table table-bordered'>
+ 	                            <tr>
+                                    <th> MEASURE </th>
+                                    <th> DETECTION NEEDED </th>
+                                </tr>
+                                <tr>
+                                    <td> Purdue Coordination Diagram </td>
+                                    <td> Setback count (350 ft – 400 ft) </td>
+                                </tr>
+                                <tr>
+                                    <td> Approach Volume </td>
+                                    <td> Setback count (350 ft – 400 ft) </td>
+                                </tr>
+                                <tr>
+                                    <td> Approach Speed </td>
+                                    <td> Setback count (350 ft – 400 ft) using radar </td>
+                                </tr>
+                                <tr>
+                                    <td> Purdue Phase Termination </td>
+                                    <td> No detection needed or used </td>
+                                </tr>
+                                <tr>
+                                    <td> Split Monitor </td>
+                                    <td> No detection needed or used </td>
+                                </tr>
+                                <tr>
+                                    <td> Turning Movement Counts </td>
+                                    <td> Stop bar (lane-by-lane) count </td>
+                                </tr>
+                                <tr>
+                                    <td> Approach Delay </td>
+                                    <td> Setback count (350 ft – 400 ft) </td>
+                                </tr>
+                                <tr>
+                                    <td> Arrivals on Red </td>
+                                    <td> Setback count (350 ft – 400 ft) </td>
+                                </tr>
+                                <tr>
+                                    <td> Yellow and Red Actuations </td>
+                                    <td> Stop bar (lane-by-lane) count that is either in front of the stop bar or has a speed filter enabled </td>
+                                </tr>
+                                <tr>
+                                    <td> Purdue Split Failure </td>
+                                    <td> Stop bar presence detection, either by lane group or individual lane </td>
+                                </tr>
+                        </table>
+                        <b> Automated Traffic Signal Performance Measures will work with any type of detector that is capable of counting vehicles, e.g., loops, video, pucks, radar. (The only exception to this is the speed measure, where UDOT’s Automated Signal Performance Measures for speeds will only work with the Wavetronix Advance SmartSensor.) Please note that two of the measures (Purdue Phase Termination and Split Monitor) do not use detection and are extremely useful measures.</b>"
                 },
                 new FAQ
                 {
@@ -349,7 +402,7 @@ namespace MOE.Common.Migrations
                 },
                 new Menu
                 {
-                    MenuId = 100,
+                    MenuId = 58,
                     MenuName = "Left Turn Gap Analysis",
                     Controller = "LeftTurnGapReport",
                     Action = "Index",
@@ -507,18 +560,6 @@ namespace MOE.Common.Migrations
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 30
                 },
-
-                new Menu
-                {
-                    MenuId = 14,
-                    MenuName = "Agency Configuration",
-                    Controller = "Jurisdcitions",
-                    Action = "Index",
-                    ParentId = 11,
-                    Application = "SignalPerformanceMetrics",
-                    DisplayOrder = 30
-                },
-
                 new Menu
                 {
                     MenuId = 57,
@@ -588,6 +629,26 @@ namespace MOE.Common.Migrations
                     ParentId = 11,
                     Application = "SignalPerformanceMetrics",
                     DisplayOrder = 100
+                },
+                new Menu
+                {
+                    MenuId = 100,
+                    MenuName = "Measure Defaults Settings",
+                    Controller = "MeasuresDefaults",
+                    Action = "Index",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 45
+                },
+                new Menu
+                {
+                    MenuId = 66,
+                    MenuName = "Area Configuration",
+                    Controller = "Areas",
+                    Action = "Index",
+                    ParentId = 11,
+                    Application = "SignalPerformanceMetrics",
+                    DisplayOrder = 31
                 }
                 //new Menu
                 //{
@@ -935,15 +996,6 @@ namespace MOE.Common.Migrations
                 },
                 new MetricType
                 {
-                    MetricID = 31,
-                    ChartName = "Left Turn Gap Analysis",
-                    Abbreviation = "LTGA",
-                    ShowOnWebsite = true,
-                    ShowOnAggregationSite = false,
-                    DisplayOrder = 25
-                },
-                new MetricType
-                {
                     MetricID = 12,
                     ChartName = "Purdue Split Failure",
                     Abbreviation = "SF",
@@ -1250,7 +1302,8 @@ namespace MOE.Common.Migrations
                 c => c.FilterName,
                 new MetricsFilterType { FilterName = "Signal ID" },
                 new MetricsFilterType { FilterName = "Primary Name" },
-                new MetricsFilterType { FilterName = "Secondary Name" }
+                new MetricsFilterType { FilterName = "Secondary Name" },
+                new MetricsFilterType { FilterName = "Agency" }
             );
 
             context.Applications.AddOrUpdate(
@@ -1293,16 +1346,16 @@ namespace MOE.Common.Migrations
                 }
             );
 
-            context.GeneralSettings.AddOrUpdate(
-                c => c.ApplicationID,
-                new Models.GeneralSettings
-                {
-                    ApplicationID = 4,
-                    RawDataCountLimit = 1048576,
-                    ImageUrl = "http://defaultWebServer/spmimages/",
-                    ImagePath = @"\\defaultWebserver\SPMImages\"
-                }
-            );
+            //context.GeneralSettings.AddOrUpdate(
+            //    c => c.ApplicationID,
+            //    new Models.GeneralSettings
+            //    {
+            //        ApplicationID = 4,
+            //        RawDataCountLimit = 1048576,
+            //        ImageUrl = "http://defaultWebServer/spmimages/",
+            //        ImagePath = @"\\defaultWebserver\SPMImages\"
+            //    }
+            //);
 
             context.LaneTypes.AddOrUpdate(
                 new LaneType { LaneTypeID = 1, Description = "Vehicle", Abbreviation = "V" },

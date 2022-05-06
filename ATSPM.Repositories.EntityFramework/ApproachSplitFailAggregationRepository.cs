@@ -44,9 +44,10 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
         }
 
         public List<ApproachSplitFailAggregation> GetApproachSplitFailsAggregationBySignalIdPhaseDateRange(
-            string signalId, int phase, DateTime startDate, DateTime endDate)
+            string signalId, int approachID, int phase, DateTime startDate, DateTime endDate)
         {
             return _db.ApproachSplitFailAggregations.Where(r => r.SignalId == signalId
+                                                                && r.ApproachId == approachID
                                                                 && r.PhaseNumber == phase
                                                                 && r.BinStartTime >= startDate &&
                                                                 r.BinStartTime <= endDate).ToList();

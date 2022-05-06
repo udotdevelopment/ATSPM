@@ -49,6 +49,10 @@ namespace ATSPM.Application.Models
                 && ProtectedPhaseNumber == approachToCompare.ProtectedPhaseNumber
                 && IsProtectedPhaseOverlap == approachToCompare.IsProtectedPhaseOverlap
                 && PermissivePhaseNumber == approachToCompare.PermissivePhaseNumber
+                && PedestrianPhaseNumber == approachToCompare.PedestrianPhaseNumber
+                && IsPedestrianPhaseOverlap == approachToCompare.IsPedestrianPhaseOverlap
+                && PedestrianDetectors == approachToCompare.PedestrianDetectors
+
             )
                 return true;
             return false;
@@ -100,6 +104,9 @@ namespace ATSPM.Application.Models
             newApproach.IsProtectedPhaseOverlap = approachToCopy.IsProtectedPhaseOverlap;
             newApproach.IsPermissivePhaseOverlap = approachToCopy.IsPermissivePhaseOverlap;
             newApproach.PermissivePhaseNumber = approachToCopy.PermissivePhaseNumber;
+            newApproach.PedestrianPhaseNumber = approachToCopy.PedestrianPhaseNumber;
+            newApproach.IsPedestrianPhaseOverlap = approachToCopy.IsPedestrianPhaseOverlap;
+            newApproach.PedestrianDetectors = approachToCopy.PedestrianDetectors;
             newApproach.Detectors = new List<Detector>();
             return newApproach;
         }

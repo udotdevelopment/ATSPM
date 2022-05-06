@@ -164,6 +164,7 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
             newVersion.ControllerTypeId = originalVersion.ControllerTypeId;
             newVersion.RegionId = originalVersion.RegionId;
             newVersion.Enabled = originalVersion.Enabled;
+            newVersion.Pedsare1to1 = originalVersion.Pedsare1to1;
             newVersion.Latitude = originalVersion.Latitude;
             newVersion.Longitude = originalVersion.Longitude;
             _db.Signals.Add(newVersion);

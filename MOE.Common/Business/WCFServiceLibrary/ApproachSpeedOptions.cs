@@ -34,9 +34,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public ApproachSpeedOptions()
         {
-            BinSizeList = new List<int>();
-            BinSizeList.Add(15);
-            BinSizeList.Add(5);
+            BinSizeList = new List<int>() { 5, 15 };
             MetricTypeID = 10;
             SetDefaults();
         }
@@ -68,17 +66,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         [Display(Name = "Show 15% Speeds")]
         public bool Show15Percentile { get; set; }
-
-        public void SetDefaults()
-        {
-            YAxisMax = 60;
-            YAxisMin = 0;
-            ShowPlanStatistics = true;
-            ShowAverageSpeed = true;
-            ShowPostedSpeed = true;
-            Show85Percentile = true;
-            Show15Percentile = true;
-        }
 
         public List<DetectorSpeed> SpeedDetectors { get; set; } = new List<DetectorSpeed>();
 

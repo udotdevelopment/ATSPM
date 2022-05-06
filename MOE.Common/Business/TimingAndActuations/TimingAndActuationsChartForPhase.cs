@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Web.UI.DataVisualization.Charting;
@@ -86,7 +87,7 @@ namespace MOE.Common.Business.TimingAndActuations
                 && (!getPermissivePhase
                 || TimingAndActuationsForPhase.Options.ShowRawEventData))
             {
-                SetPedestrianActuation();
+                SetPedestrianActuation(timingAndActuationsForPhase.PhaseNumber, String.Join(",", TimingAndActuationsForPhase.GetPedDetectorsFromApproach()));
             }
             if (TimingAndActuationsForPhase.Options.ShowPedestrianIntervals
                 && (!getPermissivePhase || TimingAndActuationsForPhase.Options.ShowRawEventData))
@@ -459,7 +460,7 @@ namespace MOE.Common.Business.TimingAndActuations
             _yValue += 1.0;
         }
 
-        private void SetPedestrianActuation()
+        private void SetPedestrianActuation(int phaseNumber, string pedDetectors)
         {
             if (TimingAndActuationsForPhase.PedestrianEvents == null) return;
             if (!TimingAndActuationsForPhase.PedestrianEvents.Any()) return;
@@ -467,7 +468,7 @@ namespace MOE.Common.Business.TimingAndActuations
             {
                 ChartType = SeriesChartType.Point,
                 XValueType = ChartValueType.DateTime,
-                Name = "Pedestrian Detector Actuations"
+                Name = $"Ped Det. Actuations ph {phaseNumber}, ch {pedDetectors}"
             };
             if (TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
             {

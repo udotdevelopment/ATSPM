@@ -57,7 +57,10 @@
                         @Html.DisplayNameFor(model => model.Longitude)
                     </th>
                     <th>
-                        @Html.LabelFor(model => model.Enabled, new{id="EnabledHeader"})
+                        @Html.LabelFor(model => model.Enabled, new { id = "EnabledHeader" })
+                    </th>
+                    <th>
+                        @Html.LabelFor(model => model.Pedsare1to1, new { id = "Pedsare1to1Header" })
                     </th>
                 </tr>
                 <tr>
@@ -80,7 +83,10 @@
                         @Html.DisplayFor(model => model.Longitude)
                     </td>
                     <td>
-                        @Html.CheckBoxFor(model => model.Enabled, new { aria_labelledby="EnabledHeader" })
+                        @Html.CheckBoxFor(model => model.Enabled, new { aria_labelledby = "EnabledHeader" })
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(model => model.Pedsare1to1, new { aria_labelledby = "Pedsare1to1Header" })
                     </td>
                 </tr>
             </table>
@@ -100,10 +106,22 @@
                         @Html.DisplayNameFor(model => model.Approaches.First().PermissivePhaseNumber)
                     </th>
                     <th>
-                        @Html.LabelFor(model => model.Approaches.First().IsProtectedPhaseOverlap, new { id = "IsProtectedPhaseOverlapHeader",  })
+                        @Html.DisplayNameFor(model => model.Approaches.First().PedestrianPhaseNumber)
+                    </th>
+                    <th>
+                        @Html.LabelFor(model => model.Approaches.First().IsProtectedPhaseOverlap, new { id = "IsProtectedPhaseOverlapHeader", })
                     </th>
                     <th>
                         @Html.LabelFor(model => model.Approaches.First().IsPermissivePhaseOverlap, new { id = "IsPermissivePhaseOverlapHeader" })
+                    </th>
+                    <th>
+                        @Html.LabelFor(model => model.Approaches.First().IsPedestrianPhaseOverlap, new { id = "IsPedestrianPhaseOverlapHeader" })
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Approaches.First().PedestrianDetectors)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Approaches.First().MPH)
                     </th>
                 </tr>
 
@@ -123,10 +141,22 @@
                             @Html.DisplayFor(modelItem => item.PermissivePhaseNumber)
                         </td>
                         <td>
+                            @Html.DisplayFor(modelItem => item.PedestrianPhaseNumber)
+                        </td>
+                        <td>
                             @Html.CheckBoxFor(modelItem => item.IsProtectedPhaseOverlap, new { aria_labelledby = "IsProtectedPhaseOverlapHeader" })
                         </td>
                         <td>
                             @Html.CheckBoxFor(modelItem => item.IsPermissivePhaseOverlap, new { aria_labelledby = "IsPermissivePhaseOverlapHeader" })
+                        </td>
+                        <td>
+                            @Html.CheckBoxFor(modelItem => item.IsPedestrianPhaseOverlap, new { aria_labelledby = "IsPedestrianPhaseOverlapHeader" })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PedestrianDetectors)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MPH, new {aria_labelledby = "MPHHeader" })
                         </td>
                     </tr>
                 }

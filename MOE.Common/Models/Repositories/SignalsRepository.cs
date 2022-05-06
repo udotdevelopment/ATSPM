@@ -163,8 +163,10 @@ namespace MOE.Common.Models.Repositories
             newVersion.ControllerTypeID = originalVersion.ControllerTypeID;
             newVersion.RegionID = originalVersion.RegionID;
             newVersion.Enabled = originalVersion.Enabled;
+            newVersion.Pedsare1to1 = originalVersion.Pedsare1to1;
             newVersion.Latitude = originalVersion.Latitude;
             newVersion.Longitude = originalVersion.Longitude;
+            newVersion.JurisdictionId = originalVersion.JurisdictionId;
             _db.Signals.Add(newVersion);
             _db.SaveChanges();
 
@@ -371,6 +373,8 @@ namespace MOE.Common.Models.Repositories
         {
             var returnSignal = _db.Signals
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
+                .Include(signal => signal.Areas)
+                .Include(signal => signal.Jurisdiction)
                 .Include(signal =>
                     signal.Approaches.Select(
                         a => a.Detectors.Select(d => d.DetectionTypes.Select(dt => dt.MetricTypes))))
@@ -433,14 +437,18 @@ namespace MOE.Common.Models.Repositories
         {
             var activeSignals = _db.Signals.Where(r => r.VersionActionId != 3)
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
+                .Include(signal => signal.Areas)
                 .Include(signal =>
                     signal.Approaches.Select(
                         a => a.Detectors.Select(d => d.DetectionTypes.Select(dt => dt.MetricTypes))))
                 .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionHardware)))
-                .Include(signal => signal.Approaches.Select(a => a.DirectionType))
+                .Include(signal => signal.Approaches.Select(a => a.DirectionType)).ToList();
+
+            activeSignals
                 .GroupBy(r => r.SignalID)
                 .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).ToList();
             return activeSignals;
+
         }
 
         public List<Signal> GetLatestVersionOfAllSignalsForFtp()
@@ -549,6 +557,18 @@ namespace MOE.Common.Models.Repositories
                 select r).FirstOrDefault();
             if (signalFromDatabase != null)
             {
+                foreach (var area in signalFromDatabase.Areas.ToList())
+                {
+                    signalFromDatabase.Areas.Remove(area);
+                }
+                if (incomingSignal.AreaIds != null && incomingSignal.AreaIds.Count > 0)
+                {
+                    foreach (var id in incomingSignal.AreaIds)
+                    {
+                        var area = _db.Areas.Where(a => a.Id == id).FirstOrDefault();
+                        signalFromDatabase.Areas.Add(area);
+                    }
+                }
                 if (incomingSignal.VersionActionId == 0)
                     incomingSignal.VersionActionId = signalFromDatabase.VersionActionId;
                 _db.Entry(signalFromDatabase).CurrentValues.SetValues(incomingSignal);

@@ -22,6 +22,9 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework.Repositories
         public int? PermissivePhaseNumber { get; set; }
         public int VersionId { get; set; }
         public bool IsPermissivePhaseOverlap { get; set; }
+        public int? PedestrianPhaseNumber { get; set; }
+        public bool IsPedestrianPhaseOverlap { get; set; }
+        public string PedestrianDetectors { get; set; }
 
         public virtual DirectionType DirectionType { get; set; }
         public virtual ICollection<Detector> Detectors { get; set; }

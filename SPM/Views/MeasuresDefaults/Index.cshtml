@@ -1,0 +1,36 @@
+﻿@model SPM.Models.MeasuresDefaultsViewModel
+
+@{
+    ViewBag.Title = "Default Chart Settings";
+}
+
+<h2 class="mt-2 text-center">Default Chart Settings</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+        <div class="col-6 mx-auto">
+        <input type="submit" value="Save Changes" class="btn btn-outline-secondary ml-4 m-2" />
+
+        @Html.Partial("~/Views/MeasuresDefaults/PhaseTerminationOptions.cshtml")
+        @Html.Partial("~/Views/MeasuresDefaults/SplitMonitorOptions.cshtml")
+        @Html.Partial("~/Views/MeasuresDefaults/PedDelayOptions.cshtml")
+        @Html.Partial("~/Views/MeasuresDefaults/TimingAndActuationsOptions.cshtml")
+        @Html.Partial("~/Views/MeasuresDefaults/SplitFailOptions.cshtml")
+        @Html.Partial("~/Views/MeasuresDefaults/YellowAndRedOptions.cshtml")
+        @Html.Partial("~/Views/MeasuresDefaults/TMCOptions.cshtml")
+        @Html.Partial("~/Views/MeasuresDefaults/ApproachVolumeOptions.cshtml")
+        @Html.Partial("~/Views/MeasuresDefaults/ApproachDelayOptions.cshtml")
+        @Html.Partial("~/Views/MeasuresDefaults/AoROptions.cshtml")
+        @Html.Partial("~/Views/MeasuresDefaults/PCDOptions.cshtml")
+        @Html.Partial("~/Views/MeasuresDefaults/ApproachSpeedOptions.cshtml")
+        @Html.Partial("~/Views/MeasuresDefaults/LeftTurnGapAnalysisOptions.cshtml")
+        @Html.Partial("~/Views/MeasuresDefaults/WaitTimeOptions.cshtml")
+    </div>
+}
+
+@section Scripts
+{
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    @Scripts.Render("~/Scripts/ChangeDefaultsMenu.js")
+}
+

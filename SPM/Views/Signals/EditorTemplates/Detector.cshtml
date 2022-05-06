@@ -17,119 +17,112 @@
             @Html.HiddenFor(model => model.DetectorID)
             @Html.HiddenFor(model => model.ApproachID)
             <div class="row">
-            <div class="form-group col-md-4">
-                <div class="">
-                    @Html.LabelFor(model => model.DetChannel, htmlAttributes: new { @class = "control-label" })
+                <div class="form-group col-md-4">
                     <div class="">
-                        @Html.EditorFor(model => model.DetChannel, new { htmlAttributes = new { @class = "form-control detectorChannel", @onblur = "CheckForDuplicatChannels()" } })
-                        @Html.ValidationMessageFor(model => model.DetChannel, "", new { id = "DetChannel-error", @class = "text-danger" })
+                        @Html.LabelFor(model => model.DetChannel, htmlAttributes: new { @class = "control-label" })
+                        <div class="">
+                            @Html.EditorFor(model => model.DetChannel, new { htmlAttributes = new { @class = "form-control detectorChannel", @onblur = "CheckForDuplicatChannels()" } })
+                            @Html.ValidationMessageFor(model => model.DetChannel, "", new { id = "DetChannel-error", @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
-                <div class="">
-                    @Html.LabelFor(model => model.DetectionTypes, htmlAttributes: new { @class = "control-label" })
-                    <div>
+                    <div class="">
+                        @Html.LabelFor(model => model.DetectionTypes, htmlAttributes: new { @class = "control-label" })
+                        <div>
 
-                        @Html.CheckBoxListFor(x => x.DetectionIDs,
-                                x => x.AllDetectionTypes,
-                                x => x.DetectionTypeID,
-                                x => x.Description,
-                                x => x.DetectionTypes,
-                                         Position.Vertical,
-                                                  x => new {@class="DetectionTypes_"+@Model.ID, @onclick = "ShowHideDetectionTypeOptions(this,'" + @Model.ID + "')" })
+                            @Html.CheckBoxListFor(x => x.DetectionIDs,
+                                    x => x.AllDetectionTypes,
+                                    x => x.DetectionTypeID,
+                                    x => x.Description,
+                                    x => x.DetectionTypes,
+                                             Position.Vertical,
+                                                      x => new { @class = "DetectionTypes_" + @Model.ID, @onclick = "ShowHideDetectionTypeOptions(this,'" + @Model.ID + "')" })
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group form-group col-md-4">
-                <div class="DetectionHardware_@Model.ID ">
-                    @Html.LabelFor(model => model.DetectionHardwareID, htmlAttributes: new { @class = "control-label" })
+                <div class="form-group form-group col-md-4">
+                    <div class="DetectionHardware_@Model.ID ">
+                        @Html.LabelFor(model => model.DetectionHardwareID, htmlAttributes: new { @class = "control-label" })
+                        <div class="">
+                            @Html.DropDownListFor(model => model.DetectionHardwareID, (SelectList)ViewBag.DetectionHardware, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.DetectionHardwareID, "", new { id = "DetectionHardwareID-error", @class = "text-danger" })
+                        </div>
+                    </div>
                     <div class="">
-                        @Html.DropDownListFor(model => model.DetectionHardwareID, (SelectList)ViewBag.DetectionHardware, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.DetectionHardwareID, "", new { id = "DetectionHardwareID-error", @class = "text-danger" })
+                        @Html.LabelFor(model => model.LatencyCorrection, htmlAttributes: new { @class = "control-label" })
+                        <div class="">
+                            @Html.EditorFor(model => model.LatencyCorrection, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.LatencyCorrection, "", new { id = "LatencyCorrection-error", @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
-                <div class="">
-                    @Html.LabelFor(model => model.LatencyCorrection, htmlAttributes: new { @class = "control-label" })
-                    <div class="">
-                        @Html.EditorFor(model => model.LatencyCorrection, new { htmlAttributes = new { @class = "form-control"} })
-                        @Html.ValidationMessageFor(model => model.LatencyCorrection, "", new { id = "LatencyCorrection-error", @class = "text-danger" })
+                    <div id="LaneNumber_@Model.ID" class="">
+                        @Html.LabelFor(model => model.LaneNumber, htmlAttributes: new { @class = "control-label" })
+                        <div class="">
+                            @Html.EditorFor(model => model.LaneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.LaneNumber, "", new { id = "LaneNumber-error", @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
-                <div id="LaneNumber_@Model.ID" class="">
-                    @Html.LabelFor(model => model.LaneNumber, htmlAttributes: new { @class = "control-label" })
-                    <div class="">
-                        @Html.EditorFor(model => model.LaneNumber, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.LaneNumber, "", new { id = "LaneNumber-error", @class = "text-danger" })
+                    <div class="Lanes_@Model.ID">
+                        @Html.LabelFor(model => model.MovementTypeID, htmlAttributes: new { @class = "control-label" })
+                        <div class="">
+                            @Html.DropDownListFor(model => model.MovementTypeID, (SelectList)ViewBag.MovementType, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.MovementTypeID, "", new { id = "MovementTypeID-error", @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
-                <div class="Lanes_@Model.ID">
-                    @Html.LabelFor(model => model.MovementTypeID, htmlAttributes: new { @class = "control-label" })
-                    <div class="">
-                        @Html.DropDownListFor(model => model.MovementTypeID, (SelectList)ViewBag.MovementType, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.MovementTypeID, "", new { id = "MovementTypeID-error", @class = "text-danger" })
+                    <div class="Lanes_@Model.ID ">
+                        @Html.LabelFor(model => model.LaneTypeID, htmlAttributes: new { @class = "control-label" })
+                        <div class="">
+                            @Html.DropDownListFor(model => model.LaneTypeID, (SelectList)ViewBag.LaneType, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.LaneTypeID, "", new { id = "LaneTypeID-error", @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
-                <div class="Lanes_@Model.ID ">
-                    @Html.LabelFor(model => model.LaneTypeID, htmlAttributes: new { @class = "control-label" })
-                    <div class="">
-                        @Html.DropDownListFor(model => model.LaneTypeID, (SelectList)ViewBag.LaneType, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.LaneTypeID, "", new { id = "LaneTypeID-error", @class = "text-danger" })
+                    <div id="DistanceFromStopBar_@Model.ID" class="PCD_@Model.ID @(Model.DetectionTypeIDs.Contains(2) ? "" : "invisible")">
+                        @Html.LabelFor(model => model.DistanceFromStopBar, htmlAttributes: new { @class = "control-label" })
+                        <div class="">
+                            @Html.EditorFor(model => model.DistanceFromStopBar, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.DistanceFromStopBar, "", new { id = "DistanceFromStopBar-error", @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
+                    <div id="Min_Speed_Filter_@Model.ID" class="Speed_@Model.ID  @(Model.DetectionTypeIDs.Contains(3) ? "" : "invisible")">
+                        @Html.LabelFor(model => model.MinSpeedFilter, htmlAttributes: new { @class = "control-label" })
+                        <div class="">
+                            @Html.EditorFor(model => model.MinSpeedFilter, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.MinSpeedFilter, "", new { id = "MinSpeedFilter-error", @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="PCD_@Model.ID @(Model.DetectionTypeIDs.Contains(2) ? "" : "invisible")">
+                        @Html.LabelFor(model => model.DecisionPoint, htmlAttributes: new { @class = "control-label" })
+                        <div class="">
+                            @Html.EditorFor(model => model.DecisionPoint, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.DecisionPoint, "", new { id = "DecisionPoint-error", @class = "text-danger" })
+                        </div>
+                    </div>
 
-                <div id="MPHDiv_@Model.ID" class="@(Model.DetectionTypeIDs.Contains(2) ? "" : "invisible"), @(Model.DetectionTypeIDs.Contains(3) ? "" : "invisible")">
-               
-                    <label for="mph_@Model.ID" class="control-label mph">MPH (Advanced Count, Advanced Speed)</label>
-                    <input id="mph_@Model.ID" class="form-control mph_@Model.ApproachID" onkeyup="SyncText(this, @Model.ApproachID)" type="text" value="@Model.Approach.MPH" />
+                    <div class="Speed_@Model.ID @(Model.DetectionTypeIDs.Contains(3) ? "" : "invisible")">
+                        @Html.LabelFor(model => model.MovementDelay, htmlAttributes: new { @class = "control-label" })
+                        <div class="">
+                            @Html.EditorFor(model => model.MovementDelay, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.MovementDelay, "", new { id = "MovementDelay-error", @class = "text-danger" })
+                        </div>
+                    </div>
                 </div>
+                <div class="form-group col-md-4">
+                    <div class="">
+                        @Html.LabelFor(model => model.DateAdded, htmlAttributes: new { @class = "control-label" })
+                        <div class="">
+                            @Html.EditorFor(model => model.DateAdded, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                            @Html.ValidationMessageFor(model => model.DateAdded, "", new { id = "DateAdded-error", @class = "text-danger" })
+                        </div>
+                    </div>
 
-                <div id="DistanceFromStopBar_@Model.ID" class="PCD_@Model.ID @(Model.DetectionTypeIDs.Contains(2) ? "" : "invisible")">
-                    @Html.LabelFor(model => model.DistanceFromStopBar, htmlAttributes: new { @class = "control-label" })
                     <div class="">
-                        @Html.EditorFor(model => model.DistanceFromStopBar, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.DistanceFromStopBar, "", new { id = "DistanceFromStopBar-error", @class = "text-danger" })
+                        @Html.LabelFor(model => model.DetectorComments, htmlAttributes: new { @class = "control-label" })
+                        <a class="" href="javascript:GetCreateDetectorComment('@Model.ID')"><span class="fa fa-plus" style='font-size:14px' aria-hidden="true"> Add Detector Comment</span></a>
+                        <div id="NewDetectorComment_@Model.ID"></div>
+                        <div class="comments col-md-12">
+                            <div id="AddedDetectorComment_@Model.ID"></div>
+                            @Html.EditorFor(model => model.DetectorComments, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
                     </div>
-                </div>
-                <div id="Min_Speed_Filter_@Model.ID" class="Speed_@Model.ID  @(Model.DetectionTypeIDs.Contains(3) ? "" : "invisible")">
-                    @Html.LabelFor(model => model.MinSpeedFilter, htmlAttributes: new { @class = "control-label" })
-                    <div class="">
-                        @Html.EditorFor(model => model.MinSpeedFilter, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.MinSpeedFilter, "", new { id = "MinSpeedFilter-error", @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="PCD_@Model.ID @(Model.DetectionTypeIDs.Contains(2) ? "" : "invisible")">
-                    @Html.LabelFor(model => model.DecisionPoint, htmlAttributes: new { @class = "control-label" })
-                    <div class="">
-                        @Html.EditorFor(model => model.DecisionPoint, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.DecisionPoint, "", new { id = "DecisionPoint-error", @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="Speed_@Model.ID @(Model.DetectionTypeIDs.Contains(3) ? "" : "invisible")">
-                    @Html.LabelFor(model => model.MovementDelay, htmlAttributes: new { @class = "control-label" })
-                    <div class="">
-                        @Html.EditorFor(model => model.MovementDelay, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.MovementDelay, "", new { id = "MovementDelay-error", @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-md-4">
-                <div class="">
-                    @Html.LabelFor(model => model.DateAdded, htmlAttributes: new { @class = "control-label" })
-                    <div class="">
-                        @Html.EditorFor(model => model.DateAdded, new { htmlAttributes = new { @class = "form-control datepicker" } })
-                        @Html.ValidationMessageFor(model => model.DateAdded, "", new { id = "DateAdded-error", @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="">
-                    @Html.LabelFor(model => model.DetectorComments, htmlAttributes: new { @class = "control-label" })
-                    <a class="" href="javascript:GetCreateDetectorComment('@Model.ID')"><span class="fa fa-plus" style='font-size:14px' aria-hidden="true"> Add Detector Comment</span></a>
-                    <div id="NewDetectorComment_@Model.ID"></div>
-                    <div class="comments col-md-12">
-                        <div id="AddedDetectorComment_@Model.ID"></div>
-                        @Html.EditorFor(model => model.DetectorComments, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
                 </div>
             </div>
         </div>

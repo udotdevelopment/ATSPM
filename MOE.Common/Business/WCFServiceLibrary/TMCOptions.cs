@@ -35,11 +35,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public TMCOptions()
         {
-            BinSizeList = new List<int>();
-            BinSizeList.Add(60);
-            BinSizeList.Add(15);
-            BinSizeList.Add(5);
-            SelectedBinSize = 15;
+            BinSizeList = new List<int>() { 5, 15, 60 };
             MetricTypeID = 5;
             SetDefaults();
         }
@@ -63,15 +59,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         [Display(Name = "Show Data Table")]
         public bool ShowDataTable { get; set; }
-
-        public void SetDefaults()
-        {
-            Y2AxisMax = 300;
-            YAxisMax = 1000;
-            ShowLaneVolumes = true;
-            ShowTotalVolumes = true;
-            ShowDataTable = false;
-        }
 
         public TMCInfo CreateMetric()
         {

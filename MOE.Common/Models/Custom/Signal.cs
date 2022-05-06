@@ -61,6 +61,20 @@ namespace MOE.Common.Models
             return metricTypesString;
         }
 
+        public string GetAreasString()
+        {
+            var areasString = string.Empty;
+            foreach (var area in GetAreas())
+                areasString += area.Id + ",";
+
+            if (!string.IsNullOrEmpty(areasString))
+                areasString = areasString.TrimEnd(',');
+            else
+                areasString = "null";
+
+            return areasString;
+        }
+
         public List<int> GetPhasesForSignal()
         {
             var phases = new List<int>();
@@ -202,6 +216,15 @@ namespace MOE.Common.Models
             return availableMetrics.Distinct().ToList();
         }
 
+        public List<Area> GetAreas()
+        {
+            var repository =
+                AreaRepositoryFactory.Create();
+
+            var areas = repository.GetListOfAreasForSignal(SignalID);
+            return areas.ToList();
+        }
+
         private List<MetricType> GetBasicMetrics()
         {
             var repository =
@@ -226,6 +249,7 @@ namespace MOE.Common.Models
                 && RegionID == signalToCompare.RegionID
                 && ControllerTypeID == signalToCompare.ControllerTypeID
                 && Enabled == signalToCompare.Enabled
+                && Pedsare1to1 == signalToCompare.Pedsare1to1
                 && Approaches.Count() == signalToCompare.Approaches.Count()
             )
                 return true;
@@ -256,7 +280,9 @@ namespace MOE.Common.Models
             newSignal.RegionID = origSignal.RegionID;
             newSignal.ControllerTypeID = origSignal.ControllerTypeID;
             newSignal.Enabled = origSignal.Enabled;
+            newSignal.Pedsare1to1 = origSignal.Pedsare1to1;
             newSignal.Approaches = new List<Approach>();
+            newSignal.JurisdictionId = origSignal.JurisdictionId;
 
             if (origSignal.Approaches != null)
                 foreach (var a in origSignal.Approaches)

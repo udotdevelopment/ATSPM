@@ -14,13 +14,14 @@ namespace SPM.Models
         public int? StartMinute { get; set; }
         public int? EndHour { get; set; }
         public int? EndMinute { get; set; }
-        public bool? GetAMPMPeakPeriod { get; set; }
-        public bool? GetAMPMPeakHour { get; set; }
-        public bool? GetGapReport { get; set; }
+        public bool GetAMPMPeakPeriod { get; set; }
+        public bool GetAMPMPeakHour { get; set; }
+        public bool Get24HourPeriod { get; set; }
+        public bool GetGapReport { get; set; }
         public double AcceptableGapPercentage { get; set; }
-        public bool? GetSplitFail { get; set; }
+        public bool GetSplitFail { get; set; }
         public double AcceptableSplitFailPercentage { get; set; }
-        public bool? GetPedestrianCall { get; set; }
-        public bool? GetConflictingVolume { get; set; }
+        public bool GetPedestrianCall { get; set; }
+        public bool GetConflictingVolume { get; set; }
     }
 }

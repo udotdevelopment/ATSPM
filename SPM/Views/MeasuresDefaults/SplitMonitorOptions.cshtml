@@ -1,0 +1,85 @@
+﻿@model SPM.Models.MeasuresDefaultsViewModel
+
+<div id="split-monitor-options" role="tablist" aria-multiselectable="true" class="card ml-4 mr-4">
+    <div class="card-header" role="tab" id="split-monitor-optionsHeading">
+        <a onclick="rotate(this)" id="split-monitor-optionsHeader" data-toggle="collapse" data-parent="#split-monitor-options" href="#split-monitor-options-collapse" aria-expanded="false" aria-controls="split-monitor-options-collapse">
+            <i class="fa fa-chevron-right mr-3" aria-hidden="true"></i> Split Monitor
+        </a>
+    </div>
+    <div id="split-monitor-options-collapse" class="collapse" role="tabpanel">
+        <div class="card-body">
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.SplitMonitor.YAxisMax, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.SplitMonitor.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
+                    @Html.ValidationMessageFor(model => model.SplitMonitor.YAxisMax, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.SplitMonitor.SelectedPercentileSplit, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.DropDownListFor(model => model.SplitMonitor.SelectedPercentileSplit, (SelectList)ViewBag.PercentileSplit, "No Percentile Split", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SplitMonitor.SelectedPercentileSplit, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.SplitMonitor.ShowPlanStripes, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.SplitMonitor.ShowPlanStripes)
+                    @Html.ValidationMessageFor(model => model.SplitMonitor.ShowPlanStripes, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.SplitMonitor.ShowPedActivity, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.SplitMonitor.ShowPedActivity)
+                    @Html.ValidationMessageFor(model => model.SplitMonitor.ShowPedActivity, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.SplitMonitor.ShowAverageSplit, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.SplitMonitor.ShowAverageSplit)
+                    @Html.ValidationMessageFor(model => model.SplitMonitor.ShowAverageSplit, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.SplitMonitor.ShowPercentMaxOutForceOff, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.SplitMonitor.ShowPercentMaxOutForceOff)
+                    @Html.ValidationMessageFor(model => model.SplitMonitor.ShowPercentMaxOutForceOff, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.SplitMonitor.ShowPercentGapOuts, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.SplitMonitor.ShowPercentGapOuts)
+                    @Html.ValidationMessageFor(model => model.SplitMonitor.ShowPercentGapOuts, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.SplitMonitor.ShowPercentSkip, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.SplitMonitor.ShowPercentSkip)
+                    @Html.ValidationMessageFor(model => model.SplitMonitor.ShowPercentSkip, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
