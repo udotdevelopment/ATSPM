@@ -122,7 +122,7 @@ namespace SPM.Controllers
                 measuresDefaultsModel.Measure = chartName;
                 measuresDefaultsModel.OptionName = prop.Name;
                 measuresDefaultsModel.Value = prop.GetValue(viewModel, null)?.ToString();
-                measuresDefaultsRepository.Update(measuresDefaultsModel);
+                measuresDefaultsRepository.AddOrUpdate(measuresDefaultsModel);
             }
         }
 
@@ -133,7 +133,7 @@ namespace SPM.Controllers
             {
                 var type = viewModel.GetType().GetProperty(option.Key)?.PropertyType;
 
-                if (option.Value == null || option.Value == "null") continue;
+                if (option.Value == null || option.Value.ToLower() == "null") continue;
 
                 if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
