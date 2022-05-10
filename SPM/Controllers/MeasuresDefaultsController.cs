@@ -122,7 +122,7 @@ namespace SPM.Controllers
                 measuresDefaultsModel.Measure = chartName;
                 measuresDefaultsModel.OptionName = prop.Name;
                 measuresDefaultsModel.Value = prop.GetValue(viewModel, null)?.ToString();
-                measuresDefaultsRepository.AddOrUpdate(measuresDefaultsModel);
+                measuresDefaultsRepository.Update(measuresDefaultsModel);
             }
         }
 
