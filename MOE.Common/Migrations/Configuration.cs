@@ -323,7 +323,7 @@ namespace MOE.Common.Migrations
                 new Menu
                 {
                     MenuId = 17,
-                    MenuName = "Agency Configuration",
+                    MenuName = "Jurisdiction Configuration",
                     Controller = "Jurisdictions",
                     Action = "Index",
                     ParentId = 11,

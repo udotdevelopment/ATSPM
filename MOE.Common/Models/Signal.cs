@@ -105,7 +105,6 @@ namespace MOE.Common.Models
         [DataMember]
         public virtual Region Region { get; set; }
 
-
         [Required]
         [Display(Name = "Jurisdiction")]
         [DataMember]
