@@ -133,7 +133,7 @@ namespace SPM.Controllers
             {
                 var type = viewModel.GetType().GetProperty(option.Key)?.PropertyType;
 
-                if (option.Value == null || option.Value == "null") continue;
+                if (option.Value == null || option.Value.ToLower() == "null") continue;
 
                 if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {

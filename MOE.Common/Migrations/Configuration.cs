@@ -323,7 +323,7 @@ namespace MOE.Common.Migrations
                 new Menu
                 {
                     MenuId = 17,
-                    MenuName = "Agency Configuration",
+                    MenuName = "Jurisdiction Configuration",
                     Controller = "Jurisdictions",
                     Action = "Index",
                     ParentId = 11,
@@ -946,6 +946,118 @@ namespace MOE.Common.Migrations
                 new DetectionType { DetectionTypeID = 7, Description = "Advanced Presence" }
             );
 
+            context.MeasuresDefaults.AddOrUpdate(
+                new MeasuresDefaults { Measure = "AoR", OptionName = "SelectedBinSize", Value = "15" },
+                new MeasuresDefaults { Measure = "AoR", OptionName = "ShowPlanStatistics", Value = "True" },
+                new MeasuresDefaults { Measure = "AoR", OptionName = "YAxisMax", Value = null },
+
+                new MeasuresDefaults { Measure = "ApproachDelay", OptionName = "SelectedBinSize", Value = "15" },
+                new MeasuresDefaults { Measure = "ApproachDelay", OptionName = "ShowDelayPerVehicle", Value = "True" },
+                new MeasuresDefaults { Measure = "ApproachDelay", OptionName = "ShowPlanStatistics", Value = "True" },
+                new MeasuresDefaults { Measure = "ApproachDelay", OptionName = "ShowTotalDelayPerHour", Value = "True" },
+                new MeasuresDefaults { Measure = "ApproachDelay", OptionName = "Y2AxisMax", Value = "10" },
+                new MeasuresDefaults { Measure = "ApproachDelay", OptionName = "YAxisMax", Value = "15" },
+
+                new MeasuresDefaults { Measure = "ApproachSpeed", OptionName = "SelectedBinSize", Value = "15" },
+                new MeasuresDefaults { Measure = "ApproachSpeed", OptionName = "Show15Percentile", Value = "True" },
+                new MeasuresDefaults { Measure = "ApproachSpeed", OptionName = "Show85Percentile", Value = "True" },
+                new MeasuresDefaults { Measure = "ApproachSpeed", OptionName = "ShowAverageSpeed", Value = "True" },
+                new MeasuresDefaults { Measure = "ApproachSpeed", OptionName = "ShowPostedSpeed", Value = "True" },
+                new MeasuresDefaults { Measure = "ApproachSpeed", OptionName = "ShowPlanStatistics", Value = "True" },
+                new MeasuresDefaults { Measure = "ApproachSpeed", OptionName = "YAxisMax", Value = "60" },
+                new MeasuresDefaults { Measure = "ApproachSpeed", OptionName = "YAxisMin", Value = "0" },
+
+                new MeasuresDefaults { Measure = "ApproachVolume", OptionName = "YAxisMin", Value = "0" },
+                new MeasuresDefaults { Measure = "ApproachVolume", OptionName = "YAxisMax", Value = null },
+                new MeasuresDefaults { Measure = "ApproachVolume", OptionName = "SelectedBinSize", Value = "15" },
+                new MeasuresDefaults { Measure = "ApproachVolume", OptionName = "ShowDirectionalSplits", Value = "True" },
+                new MeasuresDefaults { Measure = "ApproachVolume", OptionName = "ShowTotalVolume", Value = "False" },
+                new MeasuresDefaults { Measure = "ApproachVolume", OptionName = "ShowNbEbVolume", Value = "True" },
+                new MeasuresDefaults { Measure = "ApproachVolume", OptionName = "ShowSbWbVolume", Value = "True" },
+                new MeasuresDefaults { Measure = "ApproachVolume", OptionName = "ShowTMCDetection", Value = "True" },
+                new MeasuresDefaults { Measure = "ApproachVolume", OptionName = "ShowAdvanceDetection", Value = "True" },
+
+
+                new MeasuresDefaults { Measure = "LeftTurnGapAnalysis", OptionName = "BinSize", Value = "15" },
+                new MeasuresDefaults { Measure = "LeftTurnGapAnalysis", OptionName = "Gap1Max", Value = "3.3" },
+                new MeasuresDefaults { Measure = "LeftTurnGapAnalysis", OptionName = "Gap1Min", Value = "1" },
+                new MeasuresDefaults { Measure = "LeftTurnGapAnalysis", OptionName = "Gap2Max", Value = "3.7" },
+                new MeasuresDefaults { Measure = "LeftTurnGapAnalysis", OptionName = "Gap2Min", Value = "3.3" },
+                new MeasuresDefaults { Measure = "LeftTurnGapAnalysis", OptionName = "Gap3Max", Value = "7.4" },
+                new MeasuresDefaults { Measure = "LeftTurnGapAnalysis", OptionName = "Gap3Min", Value = "3.7" },
+                new MeasuresDefaults { Measure = "LeftTurnGapAnalysis", OptionName = "Gap4Min", Value = "7.4" },
+                new MeasuresDefaults { Measure = "LeftTurnGapAnalysis", OptionName = "TrendLineGapThreshold", Value = "7.4" },
+
+                new MeasuresDefaults { Measure = "PCD", OptionName = "SelectedBinSize", Value = "15" },
+                new MeasuresDefaults { Measure = "PCD", OptionName = "SelectedDotSize", Value = "1" },
+                new MeasuresDefaults { Measure = "PCD", OptionName = "SelectedLineSize", Value = "1" },
+                new MeasuresDefaults { Measure = "PCD", OptionName = "ShowPlanStatistics", Value = "True" },
+                new MeasuresDefaults { Measure = "PCD", OptionName = "ShowVolumes", Value = "True" },
+                new MeasuresDefaults { Measure = "PCD", OptionName = "Y2AxisMax", Value = "2000" },
+                new MeasuresDefaults { Measure = "PCD", OptionName = "YAxisMax", Value = "150" },
+
+                new MeasuresDefaults { Measure = "PedDelay", OptionName = "YAxisMax", Value = "3" },
+
+                new MeasuresDefaults { Measure = "PhaseTermination", OptionName = "SelectedConsecutiveCount", Value = "3" },
+                new MeasuresDefaults { Measure = "PhaseTermination", OptionName = "ShowPedActivity", Value = "True" },
+                new MeasuresDefaults { Measure = "PhaseTermination", OptionName = "ShowPlanStripes", Value = "True" },
+                new MeasuresDefaults { Measure = "PhaseTermination", OptionName = "YAxisMax", Value = null },
+
+                new MeasuresDefaults { Measure = "SplitFail", OptionName = "FirstSecondsOfRed", Value = "5" },
+                new MeasuresDefaults { Measure = "SplitFail", OptionName = "ShowAvgLines", Value = "True" },
+                new MeasuresDefaults { Measure = "SplitFail", OptionName = "ShowFailLines", Value = "True" },
+                new MeasuresDefaults { Measure = "SplitFail", OptionName = "ShowPercentFailLines", Value = "False" },
+
+                new MeasuresDefaults { Measure = "SplitMonitor", OptionName = "SelectedPercentileSplit", Value = "85" },
+                new MeasuresDefaults { Measure = "SplitMonitor", OptionName = "ShowAverageSplit", Value = "True" },
+                new MeasuresDefaults { Measure = "SplitMonitor", OptionName = "ShowPedActivity", Value = "True" },
+                new MeasuresDefaults { Measure = "SplitMonitor", OptionName = "ShowPercentGapOuts", Value = "True" },
+                new MeasuresDefaults { Measure = "SplitMonitor", OptionName = "ShowPercentMaxOutForceOff", Value = "True" },
+                new MeasuresDefaults { Measure = "SplitMonitor", OptionName = "ShowPercentSkip", Value = "True" },
+                new MeasuresDefaults { Measure = "SplitMonitor", OptionName = "ShowPlanStripes", Value = "True" },
+                new MeasuresDefaults { Measure = "SplitMonitor", OptionName = "YAxisMax", Value = null },
+
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "AdvancedOffset", Value = "0" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "CombineLanesForEachGroup", Value = "False" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "DotAndBarSize", Value = "6" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ExtendStartStopSearch", Value = "2" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ExtendVsdSearch", Value = "5" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowAdvancedCount", Value = "True" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowAdvancedDilemmaZone", Value = "True" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowAllLanesInfo", Value = "False" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowEventPairs", Value = "False" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowHeaderForEachPhase", Value = "False" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowLaneByLaneCount", Value = "True" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowLegend", Value = "False" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowLinesStartEnd", Value = "False" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowPedestrianActuation", Value = "True" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowPedestrianIntervals", Value = "True" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowPermissivePhases", Value = "True" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowRawEventData", Value = "False" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowStopBarPresence", Value = "True" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowVehicleSignalDisplay", Value = "True" },
+
+                new MeasuresDefaults { Measure = "TMC", OptionName = "SelectedBinSize", Value = "15" },
+                new MeasuresDefaults { Measure = "TMC", OptionName = "ShowDataTable", Value = "False" },
+                new MeasuresDefaults { Measure = "TMC", OptionName = "ShowLaneVolumes", Value = "True" },
+                new MeasuresDefaults { Measure = "TMC", OptionName = "ShowTotalVolumes", Value = "True" },
+                new MeasuresDefaults { Measure = "TMC", OptionName = "Y2AxisMax", Value = "300" },
+                new MeasuresDefaults { Measure = "TMC", OptionName = "YAxisMax", Value = "1000" },
+
+                new MeasuresDefaults { Measure = "WaitTime", OptionName = "ShowPlanStripes", Value = "True" },
+
+                new MeasuresDefaults { Measure = "YellowAndRed", OptionName = "SevereLevelSeconds", Value = "4" },
+                new MeasuresDefaults { Measure = "YellowAndRed", OptionName = "ShowAverageTimeRedLightViolations", Value = "True" },
+                new MeasuresDefaults { Measure = "YellowAndRed", OptionName = "ShowAverageTimeYellowOccurences", Value = "True" },
+                new MeasuresDefaults { Measure = "YellowAndRed", OptionName = "ShowPercentRedLightViolations", Value = "True" },
+                new MeasuresDefaults { Measure = "YellowAndRed", OptionName = "ShowPercentSevereRedLightViolations", Value = "True" },
+                new MeasuresDefaults { Measure = "YellowAndRed", OptionName = "ShowPercentYellowLightOccurrences", Value = "True" },
+                new MeasuresDefaults { Measure = "YellowAndRed", OptionName = "ShowRedLightViolations", Value = "True" },
+                new MeasuresDefaults { Measure = "YellowAndRed", OptionName = "ShowSevereRedLightViolations", Value = "True" },
+                new MeasuresDefaults { Measure = "YellowAndRed", OptionName = "ShowYellowLightOccurrences", Value = "True" },
+                new MeasuresDefaults { Measure = "YellowAndRed", OptionName = "YAxisMax", Value = "15" }
+                );
+
 
             context.MetricTypes.AddOrUpdate(
                 c => c.MetricID,
@@ -988,7 +1100,7 @@ namespace MOE.Common.Migrations
                 new MetricType
                 {
                     MetricID = 17,
-                    ChartName = "Timing And Actuation",
+                    ChartName = "Timing and Actuation",
                     Abbreviation = "TAA",
                     ShowOnWebsite = true,
                     ShowOnAggregationSite = false,
@@ -1042,7 +1154,7 @@ namespace MOE.Common.Migrations
                 new MetricType
                 {
                     MetricID = 9,
-                    ChartName = "Arrivals On Red",
+                    ChartName = "Arrivals on Red",
                     Abbreviation = "AoR",
                     ShowOnWebsite = true,
                     ShowOnAggregationSite = false,
@@ -1346,16 +1458,16 @@ namespace MOE.Common.Migrations
                 }
             );
 
-            //context.GeneralSettings.AddOrUpdate(
-            //    c => c.ApplicationID,
-            //    new Models.GeneralSettings
-            //    {
-            //        ApplicationID = 4,
-            //        RawDataCountLimit = 1048576,
-            //        ImageUrl = "http://defaultWebServer/spmimages/",
-            //        ImagePath = @"\\defaultWebserver\SPMImages\"
-            //    }
-            //);
+            context.GeneralSettings.AddOrUpdate(
+                c => c.ApplicationID,
+                new Models.GeneralSettings
+                {
+                    ApplicationID = 4,
+                    RawDataCountLimit = 1048576,
+                    ImageUrl = "http://defaultWebServer/spmimages/",
+                    ImagePath = @"\\defaultWebserver\SPMImages\"
+                }
+            );
 
             context.LaneTypes.AddOrUpdate(
                 new LaneType { LaneTypeID = 1, Description = "Vehicle", Abbreviation = "V" },

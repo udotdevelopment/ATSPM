@@ -48,7 +48,7 @@
                                 @Html.DropDownListFor(model => model.SelectedJurisdictionId,
                                          new SelectList(Model.JurisdictionList, "Id", "JurisdictionName"),
                                          "--Select a Jurisdiction--",
-                                         new { @id = "Agencies", @class = "form-control", @onchange = "ReportTypeChange()" })
+                                         new { @id = "Jurisdictions", @class = "form-control", @onchange = "ReportTypeChange()" })
                             </div>
                         </div>
 

@@ -3,7 +3,7 @@
 <div id="timing-and-actuations-options" role="tablist" aria-multiselectable="true" class="card mr-4 ml-4">
     <div class="card-header" role="tab">
         <a onclick="rotate(this)" data-toggle="collapse" data-parent="#timing-and-actuations-options" href="#timing-and-actuations-options-collapse" aria-expanded="false" aria-controls="timing-and-actuations-optionsCollapse">
-            <i class="fa fa-chevron-right mr-3" aria-hidden="true"></i> Timing And Acutations
+            <i class="fa fa-chevron-right mr-3" aria-hidden="true"></i> Timing and Acutation
         </a>
     </div>
     <div id="timing-and-actuations-options-collapse" class="collapse" role="tabpanel">
@@ -55,38 +55,47 @@
                 <div class="card-body">
                     <div class="row p-1">
                         <div class="col-9">
-                            @Html.LabelFor(model => model.TimingAndActuations.ShowLegend, htmlAttributes: new { @class = "control-label" })
+                            @Html.LabelFor(model => model.TimingAndActuations.ShowAllLanesInfo, htmlAttributes: new { @class = "control-label" })
                         </div>
                         <div class="col-3 text-right">
-                            @Html.EditorFor(model => model.TimingAndActuations.ShowLegend)
-                            @Html.ValidationMessageFor(model => model.TimingAndActuations.ShowLegend, "", new { id = "Description-error", @class = "text-danger" })
+                            @Html.EditorFor(model => model.TimingAndActuations.ShowAllLanesInfo)
+                            @Html.ValidationMessageFor(model => model.TimingAndActuations.ShowAllLanesInfo, "", new { id = "Description-error", @class = "text-danger" })
                         </div>
                     </div>
                     <div class="row p-1">
                         <div class="col-9">
-                            @Html.LabelFor(model => model.TimingAndActuations.ShowHeaderForEachPhase, htmlAttributes: new { @class = "control-label" })
+                            @Html.LabelFor(model => model.TimingAndActuations.ShowLinesStartEnd, htmlAttributes: new { @class = "control-label" })
                         </div>
                         <div class="col-3 text-right">
-                            @Html.EditorFor(model => model.TimingAndActuations.ShowHeaderForEachPhase)
-                            @Html.ValidationMessageFor(model => model.TimingAndActuations.ShowHeaderForEachPhase, "", new { id = "Description-error", @class = "text-danger" })
+                            @Html.EditorFor(model => model.TimingAndActuations.ShowLinesStartEnd)
+                            @Html.ValidationMessageFor(model => model.TimingAndActuations.ShowLinesStartEnd, "", new { id = "Description-error", @class = "text-danger" })
                         </div>
                     </div>
                     <div class="row p-1">
                         <div class="col-9">
-                            @Html.LabelFor(model => model.TimingAndActuations.CombineLanesForEachGroup, htmlAttributes: new { @class = "control-label" })
+                            @Html.LabelFor(model => model.TimingAndActuations.ShowEventPairs, htmlAttributes: new { @class = "control-label" })
                         </div>
                         <div class="col-3 text-right">
-                            @Html.EditorFor(model => model.TimingAndActuations.CombineLanesForEachGroup)
-                            @Html.ValidationMessageFor(model => model.TimingAndActuations.CombineLanesForEachGroup, "", new { id = "Description-error", @class = "text-danger" })
+                            @Html.EditorFor(model => model.TimingAndActuations.ShowEventPairs)
+                            @Html.ValidationMessageFor(model => model.TimingAndActuations.ShowEventPairs, "", new { id = "Description-error", @class = "text-danger" })
                         </div>
                     </div>
                     <div class="row p-1">
                         <div class="col-9">
-                            @Html.LabelFor(model => model.TimingAndActuations.DotAndBarSize, htmlAttributes: new { @class = "control-label" })
+                            @Html.LabelFor(model => model.TimingAndActuations.ShowRawEventData, htmlAttributes: new { @class = "control-label" })
                         </div>
                         <div class="col-3 text-right">
-                            @Html.EditorFor(model => model.TimingAndActuations.DotAndBarSize, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.TimingAndActuations.DotAndBarSize, "", new { id = "Description-error", @class = "text-danger" })
+                            @Html.EditorFor(model => model.TimingAndActuations.ShowRawEventData)
+                            @Html.ValidationMessageFor(model => model.TimingAndActuations.ShowRawEventData, "", new { id = "Description-error", @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col-9">
+                            @Html.LabelFor(model => model.TimingAndActuations.ShowPermissivePhases, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-3 text-right">
+                            @Html.EditorFor(model => model.TimingAndActuations.ShowPermissivePhases)
+                            @Html.ValidationMessageFor(model => model.TimingAndActuations.ShowPermissivePhases, "", new { id = "Description-error", @class = "text-danger" })
                         </div>
                     </div>
                 </div>

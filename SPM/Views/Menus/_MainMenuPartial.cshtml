@@ -49,8 +49,8 @@
             {
                 if ((m.MenuObject.MenuName == "Admin" && m.IsTechnician) || (m.MenuObject.MenuName == "Admin" && m.IsConfiguration))
                 {
-                    <li>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">@m.MenuObject.MenuName </a>
+                    <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">@m.MenuObject.MenuName </a>
                         <ul class="dropdown-menu">
                             @foreach (var s in m.SubMenuItems)
                             {
@@ -64,8 +64,8 @@
                 }
                 else if (m.MenuObject.MenuName == "Admin" && m.IsData)
                 {
-                    <li>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">@m.MenuObject.MenuName </a>
+                    <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">@m.MenuObject.MenuName </a>
                         <ul class="dropdown-menu">
                             @foreach (var s in m.SubMenuItems)
                             {

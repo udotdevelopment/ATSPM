@@ -77,13 +77,13 @@ namespace MOE.Common.Business.ScriptGenerator
             var script = @"function AddData() {var pinColor =new Microsoft.Maps.Color(255, 238, 118, 35);
             var iconURL = './images/orangePin.png';
             var regionDdl = $('#Regions')[0];
-            var agencyDdl = $('#Agencies')[0];
+            var jurisdictionDdl = $('#Jurisdictions')[0];
             var areaDdl = $('#Areas')[0];
             var pins = [];
             var regionFilter = -1; if (regionDdl.options[regionDdl.selectedIndex].value != '') 
                 {regionFilter = regionDdl.options[regionDdl.selectedIndex].value;}
-            var agencyFilter = -1; if (agencyDdl.options[agencyDdl.selectedIndex].value != '') 
-                {agencyFilter = agencyDdl.options[agencyDdl.selectedIndex].value;}
+            var jurisdictionFilter = -1; if (jurisdictionDdl.options[jurisdictionDdl.selectedIndex].value != '') 
+                {jurisdictionFilter = jurisdictionDdl.options[jurisdictionDdl.selectedIndex].value;}
             var areaFilter = -1; if (areaDdl.options[areaDdl.selectedIndex].value != '') 
                 {areaFilter = areaDdl.options[areaDdl.selectedIndex].value;}
             var reportType = $('#MetricTypes')[0]; 
@@ -102,7 +102,7 @@ namespace MOE.Common.Business.ScriptGenerator
 
                     //The script string is appended for every pin in the collection.
                     script +=
-                        " if(PinFilterCheck(regionFilter, reportTypeFilter, agencyFilter, areaFilter," + pin.Region + ", " + pin.Agency + ", '" + pin.Areas + "', '" + pin.MetricTypes +"')) " +
+                        " if(PinFilterCheck(regionFilter, reportTypeFilter, jurisdictionFilter, areaFilter," + pin.Region + ", " + pin.Jurisdiction + ", '" + pin.Areas + "', '" + pin.MetricTypes +"')) " +
                         "{var " + PinName + " = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(" +
                         pin.Latitude + ", " + pin.Longitude +
                         "));" + PinName +
