@@ -1032,7 +1032,7 @@ namespace MOE.Common.Migrations
                 new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowLinesStartEnd", Value = "False" },
                 new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowPedestrianActuation", Value = "True" },
                 new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowPedestrianIntervals", Value = "True" },
-                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowPermissivePhases", Value = "False" },
+                new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowPermissivePhases", Value = "True" },
                 new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowRawEventData", Value = "False" },
                 new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowStopBarPresence", Value = "True" },
                 new MeasuresDefaults { Measure = "TimingAndActuations", OptionName = "ShowVehicleSignalDisplay", Value = "True" },
@@ -1100,7 +1100,7 @@ namespace MOE.Common.Migrations
                 new MetricType
                 {
                     MetricID = 17,
-                    ChartName = "Timing And Actuation",
+                    ChartName = "Timing and Actuation",
                     Abbreviation = "TAA",
                     ShowOnWebsite = true,
                     ShowOnAggregationSite = false,
@@ -1154,7 +1154,7 @@ namespace MOE.Common.Migrations
                 new MetricType
                 {
                     MetricID = 9,
-                    ChartName = "Arrivals On Red",
+                    ChartName = "Arrivals on Red",
                     Abbreviation = "AoR",
                     ShowOnWebsite = true,
                     ShowOnAggregationSite = false,

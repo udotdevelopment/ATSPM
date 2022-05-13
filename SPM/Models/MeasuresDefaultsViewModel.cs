@@ -245,7 +245,7 @@ namespace SPM.Models
 
     public class WaitTimeDefaultValuesViewModel
     {
-        [Display(Name = "Show Plan")]
+        [Display(Name = "Show Plan Stripes")]
         public bool ShowPlanStripes { get; set; }
     }
 
