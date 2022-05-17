@@ -664,6 +664,20 @@ function UpdatePedsare1to1() {
     }
 }
 
+function onProtectedPhaseNumberInput() {
+    var pedchecked = document.getElementById('Pedsare1to1-value');
+    var pedphases = document.getElementsByClassName('ped-phase-value');
+    var protphases = document.getElementsByClassName('protected-phase-value');
+    var peddetectors = document.getElementsByClassName('ped-detectors-string');
+
+    if (pedchecked.checked) {
+        for (let i = 0; i < pedphases.length; i++) {
+            pedphases[i].value = protphases[i].value
+            peddetectors[i].value = protphases[i].value
+        }
+    }
+}
+
 function CheckboxReadOnly() {
     var pedchecked = document.getElementById('Pedsare1to1-value');
     var pedoverlap = document.getElementsByClassName('ped-overlap-checkbox');
