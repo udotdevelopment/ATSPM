@@ -67,6 +67,7 @@ namespace MOE.Common.Models
         [Display(Name = "Version Start")]
         [DataMember]
         [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Start { get; set; }
 
         [Required]
