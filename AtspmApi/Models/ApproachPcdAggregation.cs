@@ -52,9 +52,9 @@ namespace AtspmApi.Models
         //        Map(m => m.Id).Name("Record Number");
                 Map(m => m.BinStartTime).Name("Bin Start Time");
                 Map(m => m.ApproachId).Name("Approach ID");
-                Map(m => m.ArrivalsOnRed).Name("Arrivals On Red");
-                Map(m => m.ArrivalsOnGreen).Name("Arrivals On Green");
-                Map(m => m.ArrivalsOnYellow).Name("Arrivals On Yellow");
+                Map(m => m.ArrivalsOnRed).Name("Arrivals on Red");
+                Map(m => m.ArrivalsOnGreen).Name("Arrivals on Green");
+                Map(m => m.ArrivalsOnYellow).Name("Arrivals on Yellow");
                 Map(m => m.IsProtectedPhase).Name("Is Protected Phase");
                 Map(m => m.Volume).Name("Volume");
             }
