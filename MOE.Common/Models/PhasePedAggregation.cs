@@ -42,6 +42,18 @@ namespace MOE.Common.Models
         [Column(Order = 7)]
         public int PedActuations { get; set; }
 
+        [Required]
+        public int ImputedPedCallsRegistered { get; set; }
+
+        [Required]
+        public int UniquePedDetections { get; set; }
+
+        [Required]
+        public int PedBeginWalkCount { get; set; }
+
+        [Required]
+        public int PedCallsRegisteredCount { get; set; }
+
         public sealed class PhasePedAggregationClassMap : ClassMap<PhasePedAggregation>
         {
             public PhasePedAggregationClassMap()
@@ -54,6 +66,10 @@ namespace MOE.Common.Models
                 Map(m => m.MinPedDelay).Name("Min Ped Delay");
                 Map(m => m.MaxPedDelay).Name("Max Ped Delay");
                 Map(m => m.PedActuations).Name("Ped Actuations");
+                Map(m => m.ImputedPedCallsRegistered).Name("Imputed Ped Calls Registered");
+                Map(m => m.UniquePedDetections).Name("Unique Ped Detections");
+                Map(m => m.PedBeginWalkCount).Name("Ped Begin Walk Count");
+                Map(m => m.PedCallsRegisteredCount).Name("Ped Calls Registered Count");
             }
         }
     }

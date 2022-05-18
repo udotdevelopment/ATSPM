@@ -497,6 +497,10 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachAggregationMetricOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\WaitTimeOptions.cs" />
+    <Compile Include="Migrations\202205122134008_PhasePedAggregationUpdate.cs" />
+    <Compile Include="Migrations\202205122134008_PhasePedAggregationUpdate.designer.cs">
+      <DependentUpon>202205122134008_PhasePedAggregationUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Area.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>
@@ -1165,6 +1169,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202204300103177_4_3.resx">
       <DependentUpon>202204300103177_4_3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202205122134008_PhasePedAggregationUpdate.resx">
+      <DependentUpon>202205122134008_PhasePedAggregationUpdate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

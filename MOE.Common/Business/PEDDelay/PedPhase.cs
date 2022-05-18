@@ -14,7 +14,6 @@ namespace MOE.Common.Business.PEDDelay
             StartDate = startDate;
             EndDate = endDate;
             PhaseNumber = phaseNumber;
-            StartDate = startDate;
             EndDate = endDate;
             Plans = new List<PedPlan>();
             Cycles = new List<PedCycle>();
@@ -22,14 +21,14 @@ namespace MOE.Common.Business.PEDDelay
 
             for (var i = 0; i < plansData.Events.Count; i++)
                 //if this is the last plan then we want the end of the plan
-                //to cooincide with the end of the graph
+                //to coincide with the end of the graph
                 if (plansData.Events.Count - 1 == i)
                 {
                     var plan = new PedPlan(SignalID, phaseNumber, plansData.Events[i].Timestamp, endDate,
                         plansData.Events[i].EventParam);
                     Plans.Add(plan);
                 }
-                //else we add the plan with the next plans' time stamp as the end of the plan
+                //else we add the plan with the next plan's timestamp as the end of the plan
                 else
                 {
                     var plan = new PedPlan(SignalID, phaseNumber, plansData.Events[i].Timestamp,
@@ -38,19 +37,14 @@ namespace MOE.Common.Business.PEDDelay
                     Plans.Add(plan);
                 }
 
-            GetCycles(signal);
+            GetCycles();
             AddCyclesToPlans();
             SetHourlyTotals();
         }
 
         public int PhaseNumber { get; }
         public string SignalID { get; }
-
-        public double PedActuations
-        {
-            get; private set;
-        }
-
+        public double PedActuations { get; private set; }
         public List<PedCycle> Cycles { get; }
         public List<PedPlan> Plans { get; }
         public List<PedHourlyTotal> HourlyTotals { get; }
@@ -58,41 +52,43 @@ namespace MOE.Common.Business.PEDDelay
         public double AverageDelay { get; private set; }
         public double MaxDelay { get; private set; }
         public double TotalDelay { get; set; }
+        public int ImputedPedCallsRegistered { get; set; }
+        public int UniquePedDetections { get; set; }
+        public int PedBeginWalkCount { get; set; }
+        public int PedCallsRegisteredCount { get; set; }
 
         private void AddCyclesToPlans()
         {
             foreach (var p in Plans)
             {
                 var cycles = (from c in Cycles
-                    where c.CallRegistered >= p.StartDate &&
-                          c.CallRegistered < p.EndDate
-                    select c).ToList();
+                              where c.CallRegistered >= p.StartDate &&
+                                    c.CallRegistered < p.EndDate
+                              select c).ToList();
                 p.Cycles = cycles;
             }
         }
 
-        private void GetCycles(Signal signal)
+        private void GetCycles()
         {
-            // both types work the same by only looking at code 90 between 21 and 22
-            //if (signal.ControllerTypeID == 4)
-            //{
-                GetCyclesForMaxtimeControllers();
-            //}
-            //else
-            //{
-              //  GetCyclesForNonMaxtimeControllers();
-            //}
-        }
+            //count before combining 90s
+            AddUniquePedDetections();
 
-        private void GetCyclesForMaxtimeControllers()
-        {
+            CombineSequential90s();
+
             PedActuations = Convert.ToDouble(Events.Count(e => e.EventCode == 90));
-            CombineSequential90Events();
+            PedCallsRegisteredCount = Events.Count(e => e.EventCode == 45);
+
+            Remove45s();
+
+            PedBeginWalkCount = Events.Count(e => e.EventCode == 21);
+            AddImputedPedCalls();
+
             if (Events[0].EventCode == 90 && Events[1].EventCode == 21)
             {
                 Cycles.Add(new PedCycle(Events[1].Timestamp, Events[0].Timestamp));  // Middle of the event
             }
-            for (var i = 0; i < Events.Count -2; i++)
+            for (var i = 0; i < Events.Count - 2; i++)
             {
                 // there are four possibilities:
                 // 1) 22, 90 , 21
@@ -105,13 +101,15 @@ namespace MOE.Common.Business.PEDDelay
                 //    time betweeen 90 and last 21, count++
                 //
                 if (Events[i].EventCode == 22 &&
-                    Events[i + 1].EventCode == 90 && Events[i + 2].EventCode == 21)
+                    Events[i + 1].EventCode == 90 &&
+                    Events[i + 2].EventCode == 21)
                 {
                     Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));  // this is case 1
                     i++;
                 }
                 else if (Events[i].EventCode == 21 &&
-                         Events[i + 1].EventCode == 90 && Events[i + 2].EventCode == 22)
+                         Events[i + 1].EventCode == 90 &&
+                         Events[i + 2].EventCode == 22)
                 {
                     Cycles.Add(new PedCycle(Events[i + 1].Timestamp, Events[i + 1].Timestamp));  // this is case 2
                     i++;
@@ -130,69 +128,111 @@ namespace MOE.Common.Business.PEDDelay
             }
         }
 
-        private void CombineSequential90Events()
+        private void CombineSequential90s()
         {
             var tempEvents = new List<Models.Controller_Event_Log>();
-            for (int i = 0;  i < Events.Count; i++)
+            for (int i = 0; i < Events.Count; i++)
             {
-                if (i < Events.Count - 3)
-                {
-                    var eventCode1 = Events[i].EventCode;
-                    var eventCode2 = Events[i + 1].EventCode;
-                    var eventCode3 = Events[i + 2].EventCode;
-                    var eventCode4 = Events[i + 3].EventCode;
-                }
                 if (Events[i].EventCode == 90)
                 {
                     tempEvents.Add(Events[i]);
-                    int count = 1;
-                    while (i < Events.Count && Events[i].EventCode == 90)
+
+                    while (i + 1 < Events.Count && Events[i + 1].EventCode == 90)
                     {
                         i++;
-                        count++;
-                    }
-
-                    if (count > 1)
-                    {
-                        i--;
                     }
                 }
                 else
                 {
-                    if(Events[i].EventCode != 45)
-                        tempEvents.Add(Events[i]);
+                    tempEvents.Add(Events[i]);
                 }
             }
-            Events = tempEvents.OrderBy(t =>t.Timestamp).ToList();
+            Events = tempEvents.OrderBy(t => t.Timestamp).ToList();
         }
 
-        private void GetCyclesForNonMaxtimeControllers()
+        private void Remove45s()
         {
-            CombineSequential90Events();
+            var tempEvents = new List<Models.Controller_Event_Log>();
+            for (int i = 0; i < Events.Count; i++)
+            {
+                if (Events[i].EventCode == 45)
+                {
+                    continue;
+                }
+
+                tempEvents.Add(Events[i]);
+            }
+            Events = tempEvents.OrderBy(t => t.Timestamp).ToList();
+        }
+
+        private void AddImputedPedCalls()
+        {
+            var tempEvents = new List<Models.Controller_Event_Log>();
 
             for (var i = 0; i < Events.Count; i++)
             {
-                if (i < Events.Count - 3)
+                if (Events[i].EventCode == 21 || Events[i].EventCode == 90)
                 {
-                    var eventCode1 = Events[i].EventCode;
-                    var eventCode2 = Events[i + 1].EventCode;
-                    var eventCode3 = Events[i + 2].EventCode;
-                    var ecentcode4 = Events[i + 3].EventCode;
-                }
-
-                if (i < Events.Count - 2 && Events[i].EventCode == 22 &&
-                    Events[i + 1].EventCode == 90 && Events[i + 2].EventCode == 21)
-                {
-                    Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));  // this is good
-                    i = i + 2;
-                }
-                else if (i < Events.Count - 2 && Events[i].EventCode == 21 &&
-                         Events[i + 1].EventCode == 90 && Events[i + 2].EventCode == 22)
-                {
-                    Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));
-                    i = i + 2;
+                    tempEvents.Add(Events[i]);
                 }
             }
+
+            var previousEventCode = GetEventFromPreviousBin(SignalID, PhaseNumber, Events.FirstOrDefault().Timestamp, new List<int> { 21, 90 }, TimeSpan.FromMinutes(15));
+            tempEvents.Insert(0, previousEventCode);
+
+            int pedCalls = 0;
+
+            for (var i = 1; i < tempEvents.Count; i++)
+            {
+                if (tempEvents[i].EventCode == 90 && tempEvents[i - 1]?.EventCode == 21)
+                {
+                    pedCalls++;
+                }
+            }
+            ImputedPedCallsRegistered = pedCalls;
+
+        }
+
+        private void AddUniquePedDetections()
+        {
+            List<Controller_Event_Log> list = new List<Controller_Event_Log>();
+
+            for (var i = 0; i < Events.Count; i++)
+            {
+                if (Events[i].EventCode == 90)
+                {
+                    list.Add(Events[i]);
+                }
+            }
+
+            if (list.Count == 0)
+            {
+                UniquePedDetections = 0;
+                return;
+            }
+
+            int pedDetections = 0;
+            var previousEventCode = GetEventFromPreviousBin(SignalID, PhaseNumber, Events.FirstOrDefault().Timestamp, new List<int> { 90 }, TimeSpan.FromSeconds(15));
+
+            if (previousEventCode != null)
+            {
+                list.Insert(0, previousEventCode);
+            }
+            else
+            {
+                pedDetections++;
+            }
+
+
+            for (var i = 1; i < list.Count; i++)
+            {
+                if (list[i].Timestamp.Subtract(list[i - 1].Timestamp).TotalSeconds >= 15)
+                {
+                    pedDetections++;
+                }
+            }
+
+            UniquePedDetections = pedDetections;
         }
 
         private void SetHourlyTotals()
@@ -210,9 +250,9 @@ namespace MOE.Common.Business.PEDDelay
                 while (dt < EndDate)
                 {
                     var hourDelay = (from c in Cycles
-                        where c.CallRegistered >= dt &&
-                              c.CallRegistered < nextDt
-                        select c.Delay).Sum();
+                                     where c.CallRegistered >= dt &&
+                                           c.CallRegistered < nextDt
+                                     select c.Delay).Sum();
                     HourlyTotals.Add(new PedHourlyTotal(dt, hourDelay));
                     dt = dt.AddHours(1);
                     nextDt = nextDt.AddHours(1);

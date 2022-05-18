@@ -1996,6 +1996,10 @@ namespace MOE.Common.Business.DataAggregation
             phasePedAggregationTable.Columns.Add(new DataColumn("MinPedDelay", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("MaxPedDelay", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("PedActuations", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("ImputedPedCallsRegistered", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("UniquePedDetections", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("PedBeginWalkCount", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("PedCallsRegisteredCount", typeof(int)));
             while (_phasePedAggregations.TryDequeue(out var phasePedAggregation))
             {
                 var dataRow = phasePedAggregationTable.NewRow();
@@ -2007,6 +2011,10 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["MinPedDelay"] = phasePedAggregation.MinPedDelay;
                 dataRow["MaxPedDelay"] = phasePedAggregation.MaxPedDelay;
                 dataRow["PedActuations"] = phasePedAggregation.PedActuations;
+                dataRow["ImputedPedCallsRegistered"] = phasePedAggregation.ImputedPedCallsRegistered;
+                dataRow["UniquePedDetections"] = phasePedAggregation.UniquePedDetections;
+                dataRow["PedBeginWalkCount"] = phasePedAggregation.PedBeginWalkCount;
+                dataRow["PedCallsRegisteredCount"] = phasePedAggregation.PedCallsRegisteredCount;
                 phasePedAggregationTable.Rows.Add(dataRow);
             }
 
@@ -2511,7 +2519,11 @@ namespace MOE.Common.Business.DataAggregation
                     PedDelaySum = Convert.ToInt32(Math.Round(pedPhase.TotalDelay)),
                     MinPedDelay = Convert.ToInt32(Math.Round(pedPhase.MinDelay)),
                     MaxPedDelay = Convert.ToInt32(Math.Round(pedPhase.MaxDelay)),
-                    PedActuations = Convert.ToInt32(Math.Round(pedPhase.PedActuations))
+                    PedActuations = Convert.ToInt32(Math.Round(pedPhase.PedActuations)),
+                    ImputedPedCallsRegistered = Convert.ToInt32(pedPhase.ImputedPedCallsRegistered),
+                    UniquePedDetections = Convert.ToInt32(pedPhase.UniquePedDetections),
+                    PedBeginWalkCount = Convert.ToInt32(pedPhase.PedBeginWalkCount),
+                    PedCallsRegisteredCount = Convert.ToInt32(pedPhase.PedCallsRegisteredCount)
                 };
                 _phasePedAggregations.Enqueue(pedAggregation);
             }
