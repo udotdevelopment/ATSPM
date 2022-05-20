@@ -24,24 +24,6 @@ namespace MOE.Common.Migrations
         protected override void Seed(SPM context)
         {
             //  This method will be called after migrating to the latest version.
-
-            context.Areas.AddOrUpdate(
-               a => a.AreaName,
-               new Models.Area
-               {
-                   AreaName = "Default Name"
-               }
-            );
-            context.Jurisdictions.AddOrUpdate(
-                j => j.JurisdictionName,
-                new Models.Jurisdiction
-                {
-                    JurisdictionName = "Default Name",
-                    MPO = "",
-                    OtherPartners = "",
-                    CountyParish = ""
-                }
-                );
             context.FAQs.AddOrUpdate(
                 f => f.Header,
                 new FAQ
@@ -810,34 +792,40 @@ namespace MOE.Common.Migrations
                     DisplayOrder = 6,
                     Url = "http://signalmetrics.ua.edu"
                 },
+                 new ExternalLink
+                {
+                    Name = "PennDOT ATSPM Interface",
+                    DisplayOrder = 7,
+                    Url = "https://www.dot.state.pa.us/public/Bureaus/BOMO/Portal/ATSPM/index.html"
+                },
                 new ExternalLink
                 {
                     Name = "ATSPM Workshop 2016 SLC",
-                    DisplayOrder = 7,
+                    DisplayOrder = 8,
                     Url = "http://docs.lib.purdue.edu/atspmw/2016"
                 },
                 new ExternalLink
                 {
                     Name = "Train The Trainer Webinar Day 1 - Morning",
-                    DisplayOrder = 8,
+                    DisplayOrder = 9,
                     Url = "https://connectdot.connectsolutions.com/p75dwqefphk   "
                 },
                 new ExternalLink
                 {
                     Name = "Train The Trainer Webinar Day 1 - Afternoon",
-                    DisplayOrder = 9,
+                    DisplayOrder = 10,
                     Url = "https://connectdot.connectsolutions.com/p6l6jaoy3gj"
                 },
                 new ExternalLink
                 {
                     Name = "Train The Trainer Webinar Day 2 - Morning",
-                    DisplayOrder = 10,
+                    DisplayOrder = 11,
                     Url = "https://connectdot.connectsolutions.com/p6mlkvekogo/"
                 },
                 new ExternalLink
                 {
                     Name = "Train The Trainer Webinar Day 2 - Mid Morning",
-                    DisplayOrder = 11,
+                    DisplayOrder = 12,
                     Url = "https://connectdot.connectsolutions.com/p3ua8gtj09r/"
                 }
             );
