@@ -18,15 +18,29 @@
         <dd>
             @Html.DisplayFor(model => model.JurisdictionName)
         </dd>
-
     </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
+    @if (Model.Signals.Count > 0)
+    {
+        <h4 class="alert-warning text-center">Warning: This Jurisdiction is connected to @Model.Signals.Count signal@(Model.Signals.Count > 1 ? "s" : ""). Please assign the following signal@(Model.Signals.Count > 1 ? "s" : "") to a different jurisdiction before deleting:</h4>
+        <table class="table table-bordered">
+            @foreach (var signal in Model.Signals)
+            {
+                <tr>
+                    <td>@signal.SignalDescription</td>
+                </tr>
+            }
+        </table>
     }
+    else
+    {
+        using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" />
+            </div>
+        }
+    }
+    @Html.ActionLink("Back to List", "Index")
 </div>
