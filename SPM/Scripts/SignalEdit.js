@@ -294,6 +294,9 @@ function PostCreateDetectorComment(ID) {
 
 function CreateNewSignal() {
     var newSignalID = prompt("Please enter the new SignalID", "123456");
+
+    if (newSignalID == null) return;
+
     $.ajax({
         type: "POST",
         cache: false,
