@@ -46,8 +46,7 @@ new SelectList(Model.Filters, "FilterID", "FilterName"),
                 <table>
                     <tr>
                         <td>
-                            <a class="glyphicon glyphicon-fast-backward"  href="javascript:GetSignals(1)"></a>
-                            &nbsp;&nbsp;
+                            <a href="javascript:GetSignals(1)"><i class="fa fa-fast-backward"></i></a>
                         </td>
                         @{
                             int pageNumber = 0;
@@ -72,7 +71,7 @@ new SelectList(Model.Filters, "FilterID", "FilterName"),
                             }
                         }
                         <td>
-                            &nbsp;&nbsp;<a class="glyphicon glyphicon-fast-forward" href="javascript:GetSignals(@Model.Signals.PageCount)"></a>
+                            <a href="javascript:GetSignals(@Model.Signals.PageCount)"><i class="fa fa-fast-forward"></i></a>
                         </td>
                         <td>
                             &nbsp;&nbsp;@Model.Signals.TotalCount.ToString() Signals
