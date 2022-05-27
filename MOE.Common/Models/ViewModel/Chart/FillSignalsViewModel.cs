@@ -53,7 +53,7 @@ namespace MOE.Common.Models.ViewModel.Chart
                 SignalsRepositoryFactory.Create();
             //MOE.Common.Models.Repositories.SignalsRepositoryTest repository = 
             //    new MOE.Common.Models.Repositories.SignalsRepositoryTest();
-            var queryable = repository.GetLatestVersionOfAllSignalsAsQueryable().AsQueryable();
+            var queryable = repository.GetLatestVersionOfAllSignalsAsQueryable();
             if (SelectedFilterID != null)
                 switch (SelectedFilterID)
                 {
