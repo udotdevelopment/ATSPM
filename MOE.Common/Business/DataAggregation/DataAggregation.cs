@@ -274,6 +274,7 @@ namespace MOE.Common.Business.DataAggregation
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
+            int _timeBuffer = Convert.ToInt32(appSettings["TimeBuffer"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
             SetStartEndDate(args);
 
@@ -299,7 +300,7 @@ namespace MOE.Common.Business.DataAggregation
                     {
                         Parallel.ForEach(signals, options, signal =>
                         {
-                            ProcessSignalPedDelayData(signal, startDateTime, startDateTime.AddMinutes(_binSize), options);
+                            ProcessSignalPedDelayData(signal, startDateTime, startDateTime.AddMinutes(_binSize), _timeBuffer, options);
                         });
                         signals = new List<Signal>();
                     }
@@ -658,6 +659,7 @@ namespace MOE.Common.Business.DataAggregation
             var dbRepository = MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
             var settings = dbRepository.GetGeneralSettings();
             if (settings != null)
+                _startDate = DateTime.Parse("2020-01-09 17:00:00");
             for (var startDateTime = _startDate; startDateTime < _endDate; startDateTime = startDateTime.AddMinutes(_binSize))
             {
                 Console.WriteLine("Starting Aggregation:for {0} to {1} ",
@@ -2312,14 +2314,14 @@ namespace MOE.Common.Business.DataAggregation
             // );
         }
 
-        private void ProcessSignalPedDelayData(Signal signal, DateTime startTime, DateTime endTime, ParallelOptions options)
+        private void ProcessSignalPedDelayData(Signal signal, DateTime startTime, DateTime endTime, int _timeBuffer, ParallelOptions options)
         {
             Console.Write(signal.SignalID + "    \r");
             try
             {
                 if (!string.IsNullOrEmpty(signal.SignalID) && signal.SignalID != "null")
                 {
-                    AggregatePedDelay(startTime, endTime, signal);
+                    AggregatePedDelay(startTime, endTime, signal, _timeBuffer);
                 }
             }
             catch (Exception e)
@@ -2505,9 +2507,9 @@ namespace MOE.Common.Business.DataAggregation
         }
 
 
-        private void AggregatePedDelay(DateTime startTime, DateTime endTime, Models.Signal signal)
+        private void AggregatePedDelay(DateTime startTime, DateTime endTime, Models.Signal signal, int timeBuffer)
         {
-            PedDelaySignal pedDelaySignal = new PedDelaySignal(signal, startTime, endTime);
+            PedDelaySignal pedDelaySignal = new PedDelaySignal(signal, timeBuffer, startTime, endTime);
             foreach (var pedPhase in pedDelaySignal.PedPhases)
             {
                 PhasePedAggregation pedAggregation = new PhasePedAggregation

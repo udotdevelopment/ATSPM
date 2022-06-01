@@ -15,12 +15,14 @@ namespace MOE.Common.Business.PEDDelay
         protected List<PedPhase> _PedPhases = new List<PedPhase>();
         protected PlansBase _Plans;
         protected string _SignalID;
+        protected int _TimeBuffer;
         protected DateTime _StartDate;
 
-        public PedDelaySignal(Signal signal, DateTime startDate,
+        public PedDelaySignal(Signal signal, int timeBuffer, DateTime startDate,
             DateTime endDate)
         {
             _SignalID = signal.SignalID;
+            _TimeBuffer = timeBuffer;
             _StartDate = startDate;
             _EndDate = endDate;
             try
@@ -28,12 +30,10 @@ namespace MOE.Common.Business.PEDDelay
                 _Plans = new PlansBase(_SignalID, startDate, endDate);
                 var pedPhaseNumbers = ControllerEventLogs.GetPedPhases(_SignalID, startDate, endDate);
                 ConcurrentBag<PedPhase> pedPhases = new ConcurrentBag<PedPhase>();
-                //Parallel.ForEach(pedPhaseNumbers, currentPhase =>
                 foreach (int currentPhase in pedPhaseNumbers)
                 {
-                    var pedPhase = new PedPhase(currentPhase, signal, startDate, endDate, _Plans);
+                    var pedPhase = new PedPhase(currentPhase, signal, timeBuffer, startDate, endDate, _Plans);
                     pedPhases.Add(pedPhase);
-                    //});
                 }
 
                 _PedPhases = pedPhases.OrderBy(x => x.PhaseNumber).ToList();
@@ -48,6 +48,7 @@ namespace MOE.Common.Business.PEDDelay
         }
 
         public string SignalID => _SignalID;
+        public int TimeBuffer => _TimeBuffer;
         public DateTime StartDate => _StartDate;
         public DateTime EndDate => _EndDate;
         public List<PedPhase> PedPhases => _PedPhases;

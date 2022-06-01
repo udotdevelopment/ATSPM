@@ -6,4 +6,8 @@
             @Html.LabelFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "control-label" } })
             @Html.EditorFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
         </div>
-        </div></div>
+        <div class="">
+            @Html.LabelFor(model => model.TimeBuffer, new { htmlAttributes = new { @id="TimeBuffer", @class = "control-label" } })
+            @Html.EditorFor(model => model.TimeBuffer, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div></div>
