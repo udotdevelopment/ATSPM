@@ -151,6 +151,8 @@ namespace SPM.Models
     {
         [Display(Name = "Y-axis Max")]
         public double? YAxisMax { get; set; }
+        [Display(Name = "Time Buffer Between Unique Pedestrian Detections")]
+        public int TimeBuffer { get; set; }
     }
 
     public class SplitFailDefaultValuesViewModel

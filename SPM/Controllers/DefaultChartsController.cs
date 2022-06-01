@@ -198,7 +198,8 @@ namespace SPM.Controllers
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 3); " +
-                                                          "CreateMetric();";
+                                                          "SetPedDelayMetric(" + metricOptions.TimeBuffer.ToString() +
+                                                          "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -884,6 +885,7 @@ namespace SPM.Controllers
             StringBuilder sb = new StringBuilder();
             sb.Append("/DefaultCharts/GetPedDelayMetricByUrl?");
             sb.Append("&SignalID=" + metricOptions.SignalID);
+            sb.Append("&TimeBuffer=" + metricOptions.TimeBuffer);
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();

@@ -72,12 +72,24 @@ namespace MOE.Common.Business.PEDDelay
             //Add the point series
             var PedestrianDelaySeries = new Series();
             PedestrianDelaySeries.ChartType = SeriesChartType.Column;
-            PedestrianDelaySeries.BorderDashStyle = ChartDashStyle.Dash;
+            //PedestrianDelaySeries.BorderDashStyle = ChartDashStyle.Dash;
             PedestrianDelaySeries.Color = Color.Blue;
             PedestrianDelaySeries.Name = "Pedestrian Delay\nby Actuation";
             PedestrianDelaySeries.XValueType = ChartValueType.DateTime;
             Chart.Series.Add(PedestrianDelaySeries);
             Chart.Series["Pedestrian Delay\nby Actuation"]["PixelPointWidth"] = "2";
+
+
+            var PedWalkSeries = new Series();
+            PedWalkSeries.ChartType = SeriesChartType.Point;
+            PedWalkSeries.MarkerStyle = MarkerStyle.Square;
+            PedWalkSeries.MarkerColor = Color.Orange;
+            PedWalkSeries.Name = "Start of Begin Walk";
+            PedWalkSeries.XValueType = ChartValueType.DateTime;
+            PedWalkSeries.MarkerSize = 5;
+            Chart.Series.Add(PedWalkSeries);
+
+
             AddDataToChart();
             SetPlanStrips();
         }
@@ -90,6 +102,7 @@ namespace MOE.Common.Business.PEDDelay
             chart.Titles.Add(ChartTitleFactory.GetPhase(pp.PhaseNumber));
             var statistics = new Dictionary<string, string>();
             statistics.Add("Ped Actuations(PA)", pp.PedActuations.ToString());
+            statistics.Add("Time Buffered " + pp.TimeBuffer + "s Presses", pp.UniquePedDetections.ToString());
             statistics.Add("Min Delay", DateTime.Today.AddMinutes(pp.MinDelay / 60).ToString("mm:ss"));
             statistics.Add("Max Delay", DateTime.Today.AddMinutes(pp.MaxDelay / 60).ToString("mm:ss"));
             statistics.Add("Average Delay(AD)", DateTime.Today.AddMinutes(pp.AverageDelay / 60).ToString("mm:ss"));
@@ -100,9 +113,22 @@ namespace MOE.Common.Business.PEDDelay
         protected void AddDataToChart()
         {
             foreach (var pp in PedPhase.Plans)
-            foreach (var pc in pp.Cycles)
-                Chart.Series["Pedestrian Delay\nby Actuation"].Points
+            {
+                foreach (var pc in pp.Cycles)
+                {
+                    Chart.Series["Pedestrian Delay\nby Actuation"].Points
                     .AddXY(pc.BeginWalk, DateTime.Today.AddMinutes(pc.Delay / 60));
+
+                    Chart.Series["Start of Begin Walk"].Points
+                       .AddXY(pc.BeginWalk, DateTime.Today.AddMinutes(pc.Delay / 60).AddSeconds(2));
+                }
+            }
+            
+            foreach (var e in PedPhase.PedBeginWalkEvents)
+            {
+                Chart.Series["Start of Begin Walk"].Points
+                        .AddXY(e.Timestamp, DateTime.Today.AddSeconds(2));
+            }
         }
 
 
