@@ -227,12 +227,14 @@ namespace MOE.Common.Business.PEDDelay
                 pedDetections++;
             }
 
+            var previousSelectedTimestamp = 0;
 
             for (var i = 1; i < list.Count; i++)
             {
-                if (list[i].Timestamp.Subtract(list[i - 1].Timestamp).TotalSeconds >= TimeBuffer)
+                if (list[i].Timestamp.Subtract(list[previousSelectedTimestamp].Timestamp).TotalSeconds >= 15)
                 {
                     pedDetections++;
+                    previousSelectedTimestamp = i;
                 }
             }
 
