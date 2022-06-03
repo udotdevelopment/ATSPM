@@ -179,6 +179,17 @@ namespace MOE.Common.Business.PEDDelay
 
                 Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(Plannumberlabel);
 
+                var pedRecallLabel = new CustomLabel();
+                pedRecallLabel.FromPosition = plan.StartDate.ToOADate();
+                pedRecallLabel.ToPosition = plan.EndDate.ToOADate();
+                string pedRecall = "Ped Recall Off";
+                if (plan.PedBeginWalkCount / (plan.PedCallsRegisteredCount + plan.PedBeginWalkCount) * 100 >= 80)
+                {
+                    pedRecall = "Ped Recall On";
+                }
+                pedRecallLabel.Text = pedRecall;
+                pedRecallLabel.RowIndex = 4;
+                Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(pedRecallLabel);
 
                 var pedActuationsLabel = new CustomLabel();
                 pedActuationsLabel.FromPosition = plan.StartDate.ToOADate();
