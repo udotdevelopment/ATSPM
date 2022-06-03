@@ -28,6 +28,11 @@ namespace MOE.Common.Business.PEDDelay
                 {
                     var plan = new PedPlan(SignalID, phaseNumber, plansData.Events[i].Timestamp, endDate,
                         plansData.Events[i].EventParam);
+                    var events = (from e in Events
+                                  where e.Timestamp >= plan.StartDate && e.Timestamp < plan.EndDate
+                                  select e.EventCode).ToList();
+                    plan.PedBeginWalkCount = events.Where(e => e == 21).Sum();
+                    plan.PedCallsRegisteredCount = events.Where(e => e == 45).Sum();
                     Plans.Add(plan);
                 }
                 //else we add the plan with the next plan's timestamp as the end of the plan
@@ -35,7 +40,11 @@ namespace MOE.Common.Business.PEDDelay
                 {
                     var plan = new PedPlan(SignalID, phaseNumber, plansData.Events[i].Timestamp,
                         plansData.Events[i + 1].Timestamp, plansData.Events[i].EventParam);
-
+                    var events = (from e in Events
+                              where e.Timestamp >= plan.StartDate && e.Timestamp < plan.EndDate
+                              select e.EventCode).ToList();
+                    plan.PedBeginWalkCount = events.Where(e => e == 21).Sum();
+                    plan.PedCallsRegisteredCount = events.Where(e => e == 45).Sum();
                     Plans.Add(plan);
                 }
 

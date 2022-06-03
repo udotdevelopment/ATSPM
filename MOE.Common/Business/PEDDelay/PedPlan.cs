@@ -21,6 +21,9 @@ namespace MOE.Common.Business.PEDDelay
 
         public int PhaseNumber { get; }
 
+        public double PedBeginWalkCount { get; set; }
+        public double PedCallsRegisteredCount { get; set; }
+
         public double PedActuations => Cycles.Count;
 
         public double MinDelay
