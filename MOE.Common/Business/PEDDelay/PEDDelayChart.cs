@@ -10,19 +10,20 @@ namespace MOE.Common.Business.PEDDelay
     {
         public Chart Chart;
         private readonly PedPhase PedPhase;
+        private readonly List<RedToRedCycle> RedToRedCycles;
 
         public PEDDelayChart(PedDelayOptions options,
-            PedPhase pp)
+            PedPhase pedPhase, List<RedToRedCycle> redToRedCycles)
         {
             Chart = ChartFactory.CreateDefaultChartNoX2AxisNoY2Axis(options);
-            PedPhase = pp;
-            var reportTimespan = options.EndDate - options.StartDate;
+            PedPhase = pedPhase;
+            RedToRedCycles = redToRedCycles;
 
             //Set the chart properties
             ChartFactory.SetImageProperties(Chart);
 
 
-            SetChartTitle(Chart, pp, options);
+            SetChartTitle(Chart, pedPhase, options);
 
             //Create the chart legend
             var chartLegend = new Legend();
@@ -33,46 +34,18 @@ namespace MOE.Common.Business.PEDDelay
 
             //Create the chart area
             //var chartArea = new ChartArea();
-            //chartArea.Name = "ChartArea1";
             Chart.ChartAreas[0].AxisY.Title = "Pedestrian Delay\nby Actuation(minutes)";
             Chart.ChartAreas[0].AxisY.IntervalType = DateTimeIntervalType.Minutes;
-            //chartArea.AxisY.Interval = 1;
             Chart.ChartAreas[0].AxisY.Minimum = DateTime.Today.ToOADate();
             Chart.ChartAreas[0].AxisY.LabelStyle.Format = "mm:ss";
             if (options.YAxisMax != null)
                 Chart.ChartAreas[0].AxisY.Maximum = DateTime.Today.AddMinutes(options.YAxisMax.Value).ToOADate();
 
-            //chartArea.AxisX.Title = "Time (Hour of Day)";
-            //chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
-            //chartArea.AxisX.LabelStyle.Format = "HH";
-            //chartArea.AxisX2.LabelStyle.Format = "HH";
-            //chartArea.AxisX.Minimum = PedPhase.StartDate.ToOADate();
-            //chartArea.AxisX.Maximum = PedPhase.EndDate.ToOADate();
-            //if (reportTimespan.Days < 1)
-            //    if (reportTimespan.Hours > 1)
-            //    {
-            //        chartArea.AxisX2.Interval = 1;
-            //        chartArea.AxisX.Interval = 1;
-            //    }
-            //    else
-            //    {
-            //        chartArea.AxisX.LabelStyle.Format = "HH:mm";
-            //        chartArea.AxisX2.LabelStyle.Format = "HH:mm";
-            //    }
-            //chartArea.AxisX2.Enabled = AxisEnabled.True;
-            //chartArea.AxisX2.MajorTickMark.Enabled = true;
-            //chartArea.AxisX2.IntervalType = DateTimeIntervalType.Hours;
-            //chartArea.AxisX2.LabelAutoFitStyle = LabelAutoFitStyles.None;
-            //chartArea.AxisX2.Minimum = PedPhase.StartDate.ToOADate();
-            //chartArea.AxisX2.Maximum = PedPhase.EndDate.ToOADate();
-
-            //Chart.ChartAreas.Add(chartArea);
 
 
             //Add the point series
             var PedestrianDelaySeries = new Series();
             PedestrianDelaySeries.ChartType = SeriesChartType.Column;
-            //PedestrianDelaySeries.BorderDashStyle = ChartDashStyle.Dash;
             PedestrianDelaySeries.Color = Color.Blue;
             PedestrianDelaySeries.Name = "Pedestrian Delay\nby Actuation";
             PedestrianDelaySeries.XValueType = ChartValueType.DateTime;
@@ -89,6 +62,12 @@ namespace MOE.Common.Business.PEDDelay
             PedWalkSeries.MarkerSize = 5;
             Chart.Series.Add(PedWalkSeries);
 
+            var CycleDelay = new Series();
+            CycleDelay.ChartType = SeriesChartType.Line;
+            CycleDelay.Color = Color.Red;
+            CycleDelay.Name = "Cycle Length";
+            CycleDelay.XValueType = ChartValueType.DateTime;
+            Chart.Series.Add(CycleDelay);
 
             AddDataToChart();
             SetPlanStrips();
@@ -129,6 +108,11 @@ namespace MOE.Common.Business.PEDDelay
                 Chart.Series["Start of Begin Walk"].Points
                         .AddXY(e.Timestamp, DateTime.Today.AddSeconds(2));
             }
+
+            foreach (var cycle in RedToRedCycles)
+            {
+                Chart.Series["Cycle Length"].Points.AddXY(cycle.EndTime, DateTime.Today.AddSeconds(cycle.RedLineY));
+            }
         }
 
 
@@ -153,7 +137,7 @@ namespace MOE.Common.Business.PEDDelay
 
                 Chart.ChartAreas["ChartArea1"].AxisX.StripLines.Add(stripline);
 
-                //Add a corrisponding custom label for each strip
+                //Add a corresponding custom label for each strip
                 var Plannumberlabel = new CustomLabel();
                 Plannumberlabel.FromPosition = plan.StartDate.ToOADate();
                 Plannumberlabel.ToPosition = plan.EndDate.ToOADate();
@@ -198,7 +182,6 @@ namespace MOE.Common.Business.PEDDelay
                 pedActuationsLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 pedActuationsLabel.RowIndex = 2;
                 Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(pedActuationsLabel);
-
 
                 var avgDelayLabel = new CustomLabel();
                 avgDelayLabel.FromPosition = plan.StartDate.ToOADate();
