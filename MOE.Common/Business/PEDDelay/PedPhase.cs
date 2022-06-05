@@ -240,7 +240,7 @@ namespace MOE.Common.Business.PEDDelay
 
             for (var i = 1; i < list.Count; i++)
             {
-                if (list[i].Timestamp.Subtract(list[previousSelectedTimestamp].Timestamp).TotalSeconds >= 15)
+                if (list[i].Timestamp.Subtract(list[previousSelectedTimestamp].Timestamp).TotalSeconds >= TimeBuffer)
                 {
                     pedDetections++;
                     previousSelectedTimestamp = i;
