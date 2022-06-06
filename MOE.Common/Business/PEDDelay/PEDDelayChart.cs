@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Web.UI.DataVisualization.Charting;
+using System.Linq;
 using MOE.Common.Business.WCFServiceLibrary;
 
 namespace MOE.Common.Business.PEDDelay
@@ -11,11 +12,12 @@ namespace MOE.Common.Business.PEDDelay
         public Chart Chart;
         private readonly PedPhase PedPhase;
         private readonly List<RedToRedCycle> RedToRedCycles;
+        private Dictionary<DateTime, double> PedDelayCycles;
 
         public PEDDelayChart(PedDelayOptions options,
             PedPhase pedPhase, List<RedToRedCycle> redToRedCycles)
         {
-            Chart = ChartFactory.CreateDefaultChartNoX2AxisNoY2Axis(options);
+            Chart = ChartFactory.CreateDefaultChartNoX2Axis(options);
             PedPhase = pedPhase;
             RedToRedCycles = redToRedCycles;
 
@@ -38,10 +40,15 @@ namespace MOE.Common.Business.PEDDelay
             Chart.ChartAreas[0].AxisY.IntervalType = DateTimeIntervalType.Minutes;
             Chart.ChartAreas[0].AxisY.Minimum = DateTime.Today.ToOADate();
             Chart.ChartAreas[0].AxisY.LabelStyle.Format = "mm:ss";
+            Chart.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.LightGray;
+            Chart.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.LightGray;
             if (options.YAxisMax != null)
                 Chart.ChartAreas[0].AxisY.Maximum = DateTime.Today.AddMinutes(options.YAxisMax.Value).ToOADate();
 
-
+            Chart.ChartAreas[0].AxisY2.Title = "% Delay by Cycle Length";
+            Chart.ChartAreas[0].AxisY2.IntervalType = (int)IntervalType.Number;
+            Chart.ChartAreas[0].AxisY2.Interval = 20;
+            Chart.ChartAreas[0].AxisY2.Maximum = 100;
 
             //Add the point series
             var PedestrianDelaySeries = new Series();
@@ -55,7 +62,7 @@ namespace MOE.Common.Business.PEDDelay
 
             var PedWalkSeries = new Series();
             PedWalkSeries.ChartType = SeriesChartType.Point;
-            PedWalkSeries.MarkerStyle = MarkerStyle.Square;
+            PedWalkSeries.MarkerStyle = MarkerStyle.Circle;
             PedWalkSeries.MarkerColor = Color.Orange;
             PedWalkSeries.Name = "Start of Begin Walk";
             PedWalkSeries.XValueType = ChartValueType.DateTime;
@@ -68,6 +75,15 @@ namespace MOE.Common.Business.PEDDelay
             CycleDelay.Name = "Cycle Length";
             CycleDelay.XValueType = ChartValueType.DateTime;
             Chart.Series.Add(CycleDelay);
+
+            var DelayByCycleLength = new Series();
+            DelayByCycleLength.ChartType = SeriesChartType.StepLine;
+            DelayByCycleLength.BorderDashStyle = ChartDashStyle.Dash;
+            DelayByCycleLength.Color = Color.FromArgb(51, 153, 255);
+            DelayByCycleLength.BorderWidth = 1;
+            DelayByCycleLength.Name = "% Delay By Cycle Length";
+            DelayByCycleLength.YAxisType = AxisType.Secondary;
+            Chart.Series.Add(DelayByCycleLength);
 
             AddDataToChart();
             SetPlanStrips();
@@ -84,25 +100,37 @@ namespace MOE.Common.Business.PEDDelay
             statistics.Add("Time Buffered " + pp.TimeBuffer + "s Presses", pp.UniquePedDetections.ToString());
             statistics.Add("Min Delay", DateTime.Today.AddMinutes(pp.MinDelay / 60).ToString("mm:ss"));
             statistics.Add("Max Delay", DateTime.Today.AddMinutes(pp.MaxDelay / 60).ToString("mm:ss"));
-            statistics.Add("Average Delay(AD)", DateTime.Today.AddMinutes(pp.AverageDelay / 60).ToString("mm:ss"));
+            statistics.Add("Average Delay(AD)", Math.Round(pp.AverageDelay, 2).ToString());
             chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
 
 
         protected void AddDataToChart()
         {
-            foreach (var pp in PedPhase.Plans)
+            int i = 0;
+            var stepChart = new Dictionary<DateTime, double>();
+
+            foreach (var pedPlan in PedPhase.Plans)
             {
-                foreach (var pc in pp.Cycles)
+                foreach (var pedCycle in pedPlan.Cycles)
                 {
                     Chart.Series["Pedestrian Delay\nby Actuation"].Points
-                    .AddXY(pc.BeginWalk, DateTime.Today.AddMinutes(pc.Delay / 60));
+                    .AddXY(pedCycle.BeginWalk, DateTime.Today.AddMinutes(pedCycle.Delay / 60));
 
                     Chart.Series["Start of Begin Walk"].Points
-                       .AddXY(pc.BeginWalk, DateTime.Today.AddMinutes(pc.Delay / 60).AddSeconds(2));
+                       .AddXY(pedCycle.BeginWalk, DateTime.Today.AddMinutes(pedCycle.Delay / 60).AddSeconds(3)); //add ped walk to top of delay
+
+                    AddDataPointToStepChart(pedCycle, i, stepChart);
                 }
             }
-            
+
+            CreatePedDelayList(stepChart);
+            foreach (var cycle in PedDelayCycles)
+            {
+                Chart.Series["% Delay By Cycle Length"].Points
+                                .AddXY(cycle.Key, cycle.Value);
+            }
+
             foreach (var e in PedPhase.PedBeginWalkEvents)
             {
                 Chart.Series["Start of Begin Walk"].Points
@@ -113,6 +141,55 @@ namespace MOE.Common.Business.PEDDelay
             {
                 Chart.Series["Cycle Length"].Points.AddXY(cycle.EndTime, DateTime.Today.AddSeconds(cycle.RedLineY));
             }
+        }
+
+        protected void AddDataPointToStepChart(PedCycle pc, int i, Dictionary<DateTime, double> stepChart)
+        {
+            while (i < RedToRedCycles.Count)
+            {
+                if (RedToRedCycles[i].EndTime > pc.BeginWalk)
+                {
+                    double cycle1;
+                    if (i > 0)
+                    {
+                        cycle1 = RedToRedCycles[i - 1].RedLineY;
+                    }
+                    else
+                    {
+                        cycle1 = RedToRedCycles[i].RedLineY;
+                    }
+                    var cycle2 = RedToRedCycles[i].RedLineY;
+                    var average = (cycle1 + cycle2) / 2;
+                    var cycleLength = pc.Delay;
+
+                    if (pc.Delay / 60 > 60)
+                    {
+                        cycleLength += 60;
+                    }
+                    stepChart.Add(pc.BeginWalk, cycleLength / average * 100);
+                    break;
+                }
+                i++;
+            }
+        }
+
+        protected void CreatePedDelayList(Dictionary<DateTime, double> stepChart)
+        {
+            var bins = new Dictionary<DateTime, double>();
+            var startTime = PedPhase.StartDate;
+            while (startTime < PedPhase.EndDate)
+            {
+                var endTime = startTime.AddMinutes(30);
+                var cycles = stepChart.Where(c => c.Key >= startTime && c.Key < endTime).ToList();
+                double average = 0;
+                if (cycles.Count > 0)
+                {
+                    average = cycles.Average(c => c.Value);
+                }
+                bins.Add(startTime, average);
+                startTime = startTime.AddMinutes(30);
+            }
+            PedDelayCycles = bins;
         }
 
 
@@ -186,7 +263,7 @@ namespace MOE.Common.Business.PEDDelay
                 var avgDelayLabel = new CustomLabel();
                 avgDelayLabel.FromPosition = plan.StartDate.ToOADate();
                 avgDelayLabel.ToPosition = plan.EndDate.ToOADate();
-                avgDelayLabel.Text = Math.Round(plan.AvgDelay / 60) + " AD";
+                avgDelayLabel.Text = Math.Round(plan.AvgDelay, 2) + " AD";
                 avgDelayLabel.RowIndex = 1;
                 Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(avgDelayLabel);
 
