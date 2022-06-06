@@ -13,12 +13,21 @@ namespace MOE.Common.Business.PEDDelay
         private readonly PedPhase PedPhase;
         private readonly List<RedToRedCycle> RedToRedCycles;
         private Dictionary<DateTime, double> PedDelayCycles;
+        private readonly PedDelayOptions Options;
 
         public PEDDelayChart(PedDelayOptions options,
             PedPhase pedPhase, List<RedToRedCycle> redToRedCycles)
         {
-            Chart = ChartFactory.CreateDefaultChartNoX2Axis(options);
+            if (options.ShowPercentDelay)
+            {
+                Chart = ChartFactory.CreateDefaultChartNoX2Axis(options);
+            }
+            else
+            {
+                Chart = ChartFactory.CreateDefaultChartNoX2AxisNoY2Axis(options);
+            }
             PedPhase = pedPhase;
+            Options = options;
             RedToRedCycles = redToRedCycles;
 
             //Set the chart properties
@@ -116,30 +125,44 @@ namespace MOE.Common.Business.PEDDelay
                 {
                     Chart.Series["Pedestrian Delay\nby Actuation"].Points
                     .AddXY(pedCycle.BeginWalk, DateTime.Today.AddMinutes(pedCycle.Delay / 60));
+                    if (Options.ShowPedBeginWalk)
+                    {
+                        Chart.Series["Start of Begin Walk"].Points
+                            .AddXY(pedCycle.BeginWalk, DateTime.Today.AddMinutes(pedCycle.Delay / 60).AddSeconds(3)); //add ped walk to top of delay
+                    }
 
-                    Chart.Series["Start of Begin Walk"].Points
-                       .AddXY(pedCycle.BeginWalk, DateTime.Today.AddMinutes(pedCycle.Delay / 60).AddSeconds(3)); //add ped walk to top of delay
-
-                    AddDataPointToStepChart(pedCycle, i, stepChart);
+                    if (Options.ShowPercentDelay)
+                    {
+                        AddDataPointToStepChart(pedCycle, i, stepChart);
+                    }
                 }
             }
 
-            CreatePedDelayList(stepChart);
-            foreach (var cycle in PedDelayCycles)
+            if (Options.ShowPedBeginWalk)
             {
-                Chart.Series["% Delay By Cycle Length"].Points
-                                .AddXY(cycle.Key, cycle.Value);
+                foreach (var e in PedPhase.PedBeginWalkEvents)
+                {
+                    Chart.Series["Start of Begin Walk"].Points
+                            .AddXY(e.Timestamp, DateTime.Today.AddSeconds(2));
+                }
             }
 
-            foreach (var e in PedPhase.PedBeginWalkEvents)
+            if (Options.ShowPercentDelay)
             {
-                Chart.Series["Start of Begin Walk"].Points
-                        .AddXY(e.Timestamp, DateTime.Today.AddSeconds(2));
+                CreatePedDelayList(stepChart);
+                foreach (var cycle in PedDelayCycles)
+                {
+                    Chart.Series["% Delay By Cycle Length"].Points
+                                    .AddXY(cycle.Key, cycle.Value);
+                }
             }
 
-            foreach (var cycle in RedToRedCycles)
+            if (Options.ShowCycleLength)
             {
-                Chart.Series["Cycle Length"].Points.AddXY(cycle.EndTime, DateTime.Today.AddSeconds(cycle.RedLineY));
+                foreach (var cycle in RedToRedCycles)
+                {
+                    Chart.Series["Cycle Length"].Points.AddXY(cycle.EndTime, DateTime.Today.AddSeconds(cycle.RedLineY));
+                }
             }
         }
 
