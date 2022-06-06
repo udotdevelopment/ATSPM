@@ -13,12 +13,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [DataContract]
     public class PedDelayOptions : MetricOptions
     {
-        public PedDelayOptions(string signalId, DateTime startDate, DateTime endDate, int timeBuffer, double? yAxisMax)
+        public PedDelayOptions(string signalId, DateTime startDate, DateTime endDate, int timeBuffer, bool showPedBeginWalk, bool showCycleLength, bool showPercentDelay, double? yAxisMax)
         {
             SignalID = signalId;
             StartDate = startDate;
             EndDate = endDate;
             TimeBuffer = timeBuffer;
+            ShowPedBeginWalk = showPedBeginWalk;
+            ShowCycleLength = showCycleLength;
+            ShowPercentDelay = showPercentDelay;
             YAxisMax = yAxisMax;
         }
 
@@ -32,11 +35,23 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [Display(Name = "Time Buffer Between Unique Ped Detections")]
         public int TimeBuffer { get; set; }
 
+        [DataMember]
+        [Display(Name = "Show Ped Begin Walk")]
+        public bool ShowPedBeginWalk { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Cycle Length")]
+        public bool ShowCycleLength { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Percent Delay")]
+        public bool ShowPercentDelay { get; set; }
+
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
             var signalRepository = SignalsRepositoryFactory.Create();
-            Signal signal= signalRepository.GetVersionOfSignalByDate(SignalID, StartDate);
+            Signal signal = signalRepository.GetVersionOfSignalByDate(SignalID, StartDate);
 
             var pedDelaySignal = new PedDelaySignal(signal, TimeBuffer, StartDate, EndDate);
 
@@ -53,9 +68,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     var cycleEvents = cel.GetEventsByEventCodesParam(approach.SignalID, StartDate, EndDate.AddSeconds(900),
                         cycleEventNumbers,
                         approach.ProtectedPhaseNumber);
-                    var redCycles = CycleFactory.GetRedToRedCycles(approach, StartDate, EndDate, false, cycleEvents);
-
-                    var pdc = new PEDDelayChart(this, pedPhase, redCycles);
+                    var cycleLength = CycleFactory.GetRedToRedCycles(approach, StartDate, EndDate, false, cycleEvents);
+                    var pdc = new PEDDelayChart(this, pedPhase, cycleLength);
                     var chart = pdc.Chart;
                     var chartName = CreateFileName();
                     chart.SaveImage(MetricFileLocation + chartName);

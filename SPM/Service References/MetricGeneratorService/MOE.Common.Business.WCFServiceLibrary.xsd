@@ -182,6 +182,9 @@
       <xs:extension base="tns:MetricOptions">
         <xs:sequence>
 			<xs:element minOccurs="0" name="TimeBuffer" type="xs:int" />
+			<xs:element minOccurs="0" name="ShowPedBeginWalk" type="xs:boolean" />
+			<xs:element minOccurs="0" name="ShowCycleLength" type="xs:boolean" />
+			<xs:element minOccurs="0" name="ShowPercentDelay" type="xs:boolean" />
 		</xs:sequence>
       </xs:extension>
     </xs:complexContent>

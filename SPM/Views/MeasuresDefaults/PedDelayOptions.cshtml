@@ -26,6 +26,33 @@
                     @Html.ValidationMessageFor(model => model.PedDelay.TimeBuffer, "", new { id = "Description-error", @class = "text-danger" })
                 </div>
             </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PedDelay.ShowPedBeginWalk, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.PedDelay.ShowPedBeginWalk)
+                    @Html.ValidationMessageFor(model => model.PedDelay.ShowPedBeginWalk, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PedDelay.ShowCycleLength, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.PedDelay.ShowCycleLength)
+                    @Html.ValidationMessageFor(model => model.PedDelay.ShowCycleLength, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PedDelay.ShowPercentDelay, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.PedDelay.ShowPercentDelay)
+                    @Html.ValidationMessageFor(model => model.PedDelay.ShowPercentDelay, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
         </div>
     </div>
 </div>
