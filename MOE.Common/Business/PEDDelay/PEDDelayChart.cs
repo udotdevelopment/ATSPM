@@ -98,18 +98,18 @@ namespace MOE.Common.Business.PEDDelay
             SetPlanStrips();
         }
 
-        private void SetChartTitle(Chart chart, PedPhase pp, PedDelayOptions options)
+        private void SetChartTitle(Chart chart, PedPhase pedPhase, PedDelayOptions options)
         {
             chart.Titles.Add(ChartTitleFactory.GetChartName(options.MetricTypeID));
             chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
                 options.SignalID, options.StartDate, options.EndDate));
-            chart.Titles.Add(ChartTitleFactory.GetPhase(pp.PhaseNumber));
+            chart.Titles.Add(ChartTitleFactory.GetPhase(pedPhase.PhaseNumber));
             var statistics = new Dictionary<string, string>();
-            statistics.Add("Ped Actuations(PA)", pp.PedActuations.ToString());
-            statistics.Add("Time Buffered " + pp.TimeBuffer + "s Presses", pp.UniquePedDetections.ToString());
-            statistics.Add("Min Delay", DateTime.Today.AddMinutes(pp.MinDelay / 60).ToString("mm:ss"));
-            statistics.Add("Max Delay", DateTime.Today.AddMinutes(pp.MaxDelay / 60).ToString("mm:ss"));
-            statistics.Add("Average Delay(AD)", Math.Round(pp.AverageDelay, 2).ToString());
+            statistics.Add("Ped Presses(PP)", pedPhase.Plans.Sum(p => p.PedPresses).ToString());
+            statistics.Add("Time Buffered " + pedPhase.TimeBuffer + "s Presses", pedPhase.UniquePedDetections.ToString());
+            statistics.Add("Min Delay", DateTime.Today.AddMinutes(pedPhase.MinDelay / 60).ToString("mm:ss"));
+            statistics.Add("Max Delay", DateTime.Today.AddMinutes(pedPhase.MaxDelay / 60).ToString("mm:ss"));
+            statistics.Add("Average Delay(AD)", Math.Round(pedPhase.AverageDelay, 2).ToString());
             chart.Titles.Add(ChartTitleFactory.GetStatistics(statistics));
         }
 
@@ -275,13 +275,13 @@ namespace MOE.Common.Business.PEDDelay
                 pedRecallLabel.RowIndex = 4;
                 Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(pedRecallLabel);
 
-                var pedActuationsLabel = new CustomLabel();
-                pedActuationsLabel.FromPosition = plan.StartDate.ToOADate();
-                pedActuationsLabel.ToPosition = plan.EndDate.ToOADate();
-                pedActuationsLabel.Text = plan.PedActuations + " PA";
-                pedActuationsLabel.LabelMark = LabelMarkStyle.LineSideMark;
-                pedActuationsLabel.RowIndex = 2;
-                Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(pedActuationsLabel);
+                var pedPressesLabel = new CustomLabel();
+                pedPressesLabel.FromPosition = plan.StartDate.ToOADate();
+                pedPressesLabel.ToPosition = plan.EndDate.ToOADate();
+                pedPressesLabel.Text = plan.PedPresses + " PP";
+                pedPressesLabel.LabelMark = LabelMarkStyle.LineSideMark;
+                pedPressesLabel.RowIndex = 2;
+                Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(pedPressesLabel);
 
                 var avgDelayLabel = new CustomLabel();
                 avgDelayLabel.FromPosition = plan.StartDate.ToOADate();
