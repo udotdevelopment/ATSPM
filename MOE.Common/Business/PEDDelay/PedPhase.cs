@@ -33,7 +33,7 @@ namespace MOE.Common.Business.PEDDelay
                                   select e).ToList();
                     plan.PedBeginWalkCount = events.Where(e => e.EventCode == 21).Count();
                     plan.PedCallsRegisteredCount = events.Where(e => e.EventCode == 45).Count();
-                    plan.ImputedPedCallsRegistered = CountImputedPedCalls(events);
+                    plan.ImputedPedCallsRegistered = CountUniquePedDetections(events);
                     Plans.Add(plan);
                 }
                 //else we add the plan with the next plan's timestamp as the end of the plan
@@ -46,7 +46,7 @@ namespace MOE.Common.Business.PEDDelay
                                   select e).ToList();
                     plan.PedBeginWalkCount = events.Where(e => e.EventCode == 21).Count();
                     plan.PedCallsRegisteredCount = events.Where(e => e.EventCode == 45).Count();
-                    plan.ImputedPedCallsRegistered = CountImputedPedCalls(events);
+                    plan.ImputedPedCallsRegistered = CountUniquePedDetections(events);
                     Plans.Add(plan);
                 }
 
