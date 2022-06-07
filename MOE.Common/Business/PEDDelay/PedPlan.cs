@@ -23,6 +23,7 @@ namespace MOE.Common.Business.PEDDelay
 
         public double PedBeginWalkCount { get; set; }
         public double PedCallsRegisteredCount { get; set; }
+        public int ImputedPedCallsRegistered { get; set; }
 
         public double PedPresses => Cycles.Count;
 
