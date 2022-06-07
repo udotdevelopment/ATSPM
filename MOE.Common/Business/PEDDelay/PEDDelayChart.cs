@@ -265,19 +265,18 @@ namespace MOE.Common.Business.PEDDelay
                 Chart.ChartAreas["ChartArea1"].AxisX2.LabelAutoFitStyle = LabelAutoFitStyles.DecreaseFont;
                 Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(Plannumberlabel);
 
-                var pedRecallLabel = new CustomLabel();
-                pedRecallLabel.FromPosition = plan.StartDate.ToOADate();
-                pedRecallLabel.ToPosition = plan.EndDate.ToOADate();
-                pedRecallLabel.LabelMark = LabelMarkStyle.LineSideMark;
-                string pedRecall = "Ped Recall Off";
                 if (plan.PedBeginWalkCount / (plan.PedCallsRegisteredCount + plan.PedBeginWalkCount) * 100 >= 80)
                 {
-                    pedRecall = "Ped Recall On";
+                    var pedRecallLabel = new CustomLabel();
+                    pedRecallLabel.FromPosition = plan.StartDate.ToOADate();
+                    pedRecallLabel.ToPosition = plan.EndDate.ToOADate();
+                    pedRecallLabel.LabelMark = LabelMarkStyle.LineSideMark;
+                    string pedRecall = "Ped Recall On";
+                    pedRecallLabel.Text = pedRecall;
+                    pedRecallLabel.RowIndex = 6;
+                    pedRecallLabel.LabelMark = LabelMarkStyle.LineSideMark;
+                    Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(pedRecallLabel);
                 }
-                pedRecallLabel.Text = pedRecall;
-                pedRecallLabel.RowIndex = 5;
-                pedRecallLabel.LabelMark = LabelMarkStyle.LineSideMark;
-                Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(pedRecallLabel);
 
                 var timeBufferedPressesLabel = new CustomLabel();
                 timeBufferedPressesLabel.FromPosition = plan.StartDate.ToOADate();
@@ -302,7 +301,7 @@ namespace MOE.Common.Business.PEDDelay
                     cycleLengthLabel.ToPosition = plan.EndDate.ToOADate();
                     cycleLengthLabel.Text = "CL: " + Math.Round(RedToRedCycles.Where(r => r.StartTime >= plan.StartDate && r.EndTime < plan.EndDate).Average(r => r.RedLineY)).ToString() + "s";
                     cycleLengthLabel.LabelMark = LabelMarkStyle.LineSideMark;
-                    cycleLengthLabel.RowIndex = 6;
+                    cycleLengthLabel.RowIndex = 5;
                     Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(cycleLengthLabel);
                 }
 
