@@ -56,7 +56,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             Dictionary<DateTime, double> acceptableGaps = new Dictionary<DateTime, double>();
             for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
             {
-                for (var tempStart = tempDate.Date.Add(startTime); tempStart <= tempDate.Date.Add(endTime); tempStart = tempStart.AddMinutes(15))
+                for (var tempStart = tempDate.Date.Add(startTime); tempStart < tempDate.Date.Add(endTime); tempStart = tempStart.AddMinutes(15))
                 {
                     if (daysOfWeek.Contains((int)start.DayOfWeek))
                     {

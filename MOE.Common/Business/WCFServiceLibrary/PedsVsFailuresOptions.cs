@@ -40,7 +40,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         [Required]
         [DataMember]
-        [Display(Name = "Percent Acceptable Cycles w/ Peds")]
+        [Display(Name = "Percent of Cycles w/ Peds")]
         public Dictionary<DateTime, double> PercentPedsList { get; internal set; }
         [Required]
         [DataMember]
@@ -128,7 +128,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var gapSeries = new Series();
             gapSeries.ChartType = SeriesChartType.Line;
             gapSeries.Color = Color.FromArgb(92,136,218);
-            gapSeries.Name = "% of Accectable Cycles w/ Peds";
+            gapSeries.Name = "% of Acceptable Cycles w/ Peds";
             gapSeries.XValueType = ChartValueType.DateTime;
             gapSeries.Font = new Font("Arial", 10f);
             gapSeries.BorderWidth = 3;
@@ -160,7 +160,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 foreach (var bucket in PercentPedsList)
                 {
-                    chart.Series["% of Accectable Cycles w/ Peds"].Points.AddXY(bucket.Key.ToOADate(), bucket.Value * 100);
+                    chart.Series["% of Cycles w/ Peds"].Points.AddXY(bucket.Key.ToOADate(), bucket.Value * 100);
                 }
             }
             if (PercentFailuresList != null)

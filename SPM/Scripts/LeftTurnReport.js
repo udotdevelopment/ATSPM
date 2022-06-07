@@ -121,11 +121,13 @@ function RunReports() {
     if (timeOptions == "customTimeRadiobutton") {
         StartHour = $("#StartTimeHour :selected").val();
         var StartAMPM = $("#StartAMPM :selected").val();
+        StartHour = parseInt(StartHour);
         if (StartAMPM == "PM") {
             StartHour += 12;
         }
         EndHour = $("#EndTimeHour :selected").val();
         var EndAMPM = $("#EndAMPM :selected").val();
+        EndHour = parseInt(EndHour)
         if (EndAMPM == "PM") {
             EndHour += 12;
         }
