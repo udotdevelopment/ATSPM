@@ -106,7 +106,7 @@ namespace MOE.Common.Business.PEDDelay
             chart.Titles.Add(ChartTitleFactory.GetPhase(pedPhase.PhaseNumber));
             var statistics = new Dictionary<string, string>();
             statistics.Add("Ped Presses(PP)", pedPhase.Plans.Sum(p => p.PedPresses).ToString());
-            statistics.Add("Time Buffered " + pedPhase.TimeBuffer + "s Presses", pedPhase.UniquePedDetections.ToString());
+            statistics.Add("Time Buffered " + pedPhase.TimeBuffer + "s Presses(TBP)", pedPhase.UniquePedDetections.ToString());
             statistics.Add("Min Delay", DateTime.Today.AddMinutes(pedPhase.MinDelay / 60).ToString("mm:ss"));
             statistics.Add("Max Delay", DateTime.Today.AddMinutes(pedPhase.MaxDelay / 60).ToString("mm:ss"));
             statistics.Add("Average Delay(AD)", Math.Round(pedPhase.AverageDelay, 2).ToString());
@@ -241,6 +241,7 @@ namespace MOE.Common.Business.PEDDelay
                 var Plannumberlabel = new CustomLabel();
                 Plannumberlabel.FromPosition = plan.StartDate.ToOADate();
                 Plannumberlabel.ToPosition = plan.EndDate.ToOADate();
+                Plannumberlabel.LabelMark = LabelMarkStyle.LineSideMark;
                 switch (plan.PlanNumber)
                 {
                     case 254:
@@ -261,19 +262,30 @@ namespace MOE.Common.Business.PEDDelay
                 Plannumberlabel.ForeColor = Color.Black;
                 Plannumberlabel.RowIndex = 3;
 
+                Chart.ChartAreas["ChartArea1"].AxisX2.LabelAutoFitStyle = LabelAutoFitStyles.DecreaseFont;
                 Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(Plannumberlabel);
 
                 var pedRecallLabel = new CustomLabel();
                 pedRecallLabel.FromPosition = plan.StartDate.ToOADate();
                 pedRecallLabel.ToPosition = plan.EndDate.ToOADate();
+                pedRecallLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 string pedRecall = "Ped Recall Off";
                 if (plan.PedBeginWalkCount / (plan.PedCallsRegisteredCount + plan.PedBeginWalkCount) * 100 >= 80)
                 {
                     pedRecall = "Ped Recall On";
                 }
                 pedRecallLabel.Text = pedRecall;
-                pedRecallLabel.RowIndex = 4;
+                pedRecallLabel.RowIndex = 5;
+                pedRecallLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(pedRecallLabel);
+
+                var timeBufferedPressesLabel = new CustomLabel();
+                timeBufferedPressesLabel.FromPosition = plan.StartDate.ToOADate();
+                timeBufferedPressesLabel.ToPosition = plan.EndDate.ToOADate();
+                timeBufferedPressesLabel.Text = plan.ImputedPedCallsRegistered + " TBP";
+                timeBufferedPressesLabel.RowIndex = 4;
+                timeBufferedPressesLabel.LabelMark = LabelMarkStyle.LineSideMark;
+                Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(timeBufferedPressesLabel);
 
                 var pedPressesLabel = new CustomLabel();
                 pedPressesLabel.FromPosition = plan.StartDate.ToOADate();
@@ -283,11 +295,23 @@ namespace MOE.Common.Business.PEDDelay
                 pedPressesLabel.RowIndex = 2;
                 Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(pedPressesLabel);
 
+                if (Options.ShowCycleLength)
+                {
+                    var cycleLengthLabel = new CustomLabel();
+                    cycleLengthLabel.FromPosition = plan.StartDate.ToOADate();
+                    cycleLengthLabel.ToPosition = plan.EndDate.ToOADate();
+                    cycleLengthLabel.Text = "CL: " + Math.Round(RedToRedCycles.Where(r => r.StartTime >= plan.StartDate && r.EndTime < plan.EndDate).Average(r => r.RedLineY)).ToString() + "s";
+                    cycleLengthLabel.LabelMark = LabelMarkStyle.LineSideMark;
+                    cycleLengthLabel.RowIndex = 6;
+                    Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(cycleLengthLabel);
+                }
+
                 var avgDelayLabel = new CustomLabel();
                 avgDelayLabel.FromPosition = plan.StartDate.ToOADate();
                 avgDelayLabel.ToPosition = plan.EndDate.ToOADate();
                 avgDelayLabel.Text = Math.Round(plan.AvgDelay, 2) + " AD";
                 avgDelayLabel.RowIndex = 1;
+                avgDelayLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(avgDelayLabel);
 
                 //Change the background color counter for alternating color
