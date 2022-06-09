@@ -105,7 +105,9 @@ namespace MOE.Common.Business.PEDDelay
                 options.SignalID, options.StartDate, options.EndDate));
             chart.Titles.Add(ChartTitleFactory.GetPhase(pedPhase.PhaseNumber));
             var statistics = new Dictionary<string, string>();
+            statistics.Add("Ped Presses(PP)", pedPhase.PedPresses.ToString());
             statistics.Add("Cycles With Ped Requests(PR)", pedPhase.Plans.Sum(p => p.CyclesWithPedRequests).ToString());
+            statistics.Add("Ped Requests(PR)", pedPhase.PedRequests.ToString());
             statistics.Add("Time Buffered " + pedPhase.TimeBuffer + "s Presses(TBP)", pedPhase.UniquePedDetections.ToString());
             statistics.Add("Min Delay", Math.Round(pedPhase.MinDelay) + "s");
             statistics.Add("Max Delay", Math.Round(pedPhase.MaxDelay) + "s");
@@ -133,6 +135,7 @@ namespace MOE.Common.Business.PEDDelay
                 {
                     Chart.Series["Pedestrian Delay per Ped Requests"].Points
                     .AddXY(pedCycle.BeginWalk, pedCycle.Delay);
+
                     if (Options.ShowPedBeginWalk)
                     {
                         Chart.Series["Start of Begin Walk"].Points

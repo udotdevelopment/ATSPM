@@ -40,7 +40,7 @@ namespace MOE.Common.Models
 
         [Required]
         [Column(Order = 7)]
-        public int PedActuations { get; set; }
+        public int PedRequests { get; set; }
 
         [Required]
         public int ImputedPedCallsRegistered { get; set; }
@@ -65,7 +65,7 @@ namespace MOE.Common.Models
                 Map(m => m.PedDelaySum).Name("Ped Delay Sum");
                 Map(m => m.MinPedDelay).Name("Min Ped Delay");
                 Map(m => m.MaxPedDelay).Name("Max Ped Delay");
-                Map(m => m.PedActuations).Name("Ped Actuations");
+                Map(m => m.PedRequests).Name("Ped Requests");
                 Map(m => m.ImputedPedCallsRegistered).Name("Imputed Ped Calls Registered");
                 Map(m => m.UniquePedDetections).Name("Unique Ped Detections");
                 Map(m => m.PedBeginWalkCount).Name("Ped Begin Walk Count");

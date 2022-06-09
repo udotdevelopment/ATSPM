@@ -57,7 +57,6 @@ namespace MOE.Common.Business.PEDDelay
 
         public int PhaseNumber { get; }
         public string SignalID { get; }
-        public double PedActuations { get; private set; }
         public List<PedCycle> Cycles { get; }
         public List<PedPlan> Plans { get; }
         public List<PedHourlyTotal> HourlyTotals { get; }
@@ -66,8 +65,10 @@ namespace MOE.Common.Business.PEDDelay
         public double MaxDelay { get; private set; }
         public double TotalDelay { get; set; }
         public int TimeBuffer { get; set; }
-        public int ImputedPedCallsRegistered { get; set; }
+        public int PedPresses { get; private set; }
         public int UniquePedDetections { get; set; }
+        public int PedRequests { get; private set; }
+        public int ImputedPedCallsRegistered { get; set; }
         public int PedBeginWalkCount { get; set; }
         public List<Controller_Event_Log> PedBeginWalkEvents { get; set; }
         public int PedCallsRegisteredCount { get; set; }
@@ -88,10 +89,12 @@ namespace MOE.Common.Business.PEDDelay
         {
             //count before combining 90s
             UniquePedDetections = CountUniquePedDetections(Events);
+            PedPresses = Events.Count(e => e.EventCode == 90);
 
             CombineSequential90s();
 
-            PedActuations = Convert.ToDouble(Events.Count(e => e.EventCode == 90));
+            PedRequests = (Events.Count(e => e.EventCode == 90));
+
             PedCallsRegisteredCount = Events.Count(e => e.EventCode == 45);
 
             Remove45s();
