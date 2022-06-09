@@ -25,13 +25,13 @@ namespace MOE.Common.Business.PEDDelay
         public double PedCallsRegisteredCount { get; set; }
         public int ImputedPedCallsRegistered { get; set; }
 
-        public double PedPresses => Cycles.Count;
+        public double CyclesWithPedRequests => Cycles.Count;
 
         public double MinDelay
         {
             get
             {
-                if (PedPresses > 0)
+                if (CyclesWithPedRequests > 0)
                     return Cycles.Min(c => c.Delay);
                 return 0;
             }
@@ -41,7 +41,7 @@ namespace MOE.Common.Business.PEDDelay
         {
             get
             {
-                if (PedPresses > 0)
+                if (CyclesWithPedRequests > 0)
                     return Cycles.Max(c => c.Delay);
                 return 0;
             }
@@ -51,7 +51,7 @@ namespace MOE.Common.Business.PEDDelay
         {
             get
             {
-                if (PedPresses > 0)
+                if (CyclesWithPedRequests > 0)
                     return Cycles.Average(c => c.Delay);
                 return 0;
             }
