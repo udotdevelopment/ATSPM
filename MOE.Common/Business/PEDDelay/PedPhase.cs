@@ -136,9 +136,9 @@ namespace MOE.Common.Business.PEDDelay
                     Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));  // this is case 4
                     i++;
                 } 
-                else if (Events[i].EventCode == 21)
+                else if (Cycles.Count == 0 || Events[i].EventCode == 21 && Events[i].Timestamp != Cycles.Last().BeginWalk)
                 {
-                    PedBeginWalkEvents.Add(Events[i]); // collected for chart
+                    PedBeginWalkEvents.Add(Events[i]); // collected loose 21s for chart
                 }
             }
         }
