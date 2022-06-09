@@ -55,20 +55,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
             var pedDelaySignal = new PedDelaySignal(signal, TimeBuffer, StartDate, EndDate);
 
-            SPM db = new SPM();
-            var cel = ControllerEventLogRepositoryFactory.Create(db);
-
             foreach (var pedPhase in pedDelaySignal.PedPhases)
                 if (pedPhase.Cycles.Count > 0)
                 {
                     var approach = signal.Approaches.Where(a => a.ProtectedPhaseNumber == pedPhase.PhaseNumber).FirstOrDefault();
-                    var cycleEventNumbers = approach.IsPermissivePhaseOverlap
-                        ? new List<int> { 61, 63, 64 }
-                        : new List<int> { 1, 8, 9 };
-                    var cycleEvents = cel.GetEventsByEventCodesParam(approach.SignalID, StartDate, EndDate.AddSeconds(900),
-                        cycleEventNumbers,
-                        approach.ProtectedPhaseNumber);
-                    var cycleLength = CycleFactory.GetRedToRedCycles(approach, StartDate, EndDate, false, cycleEvents);
+                    var cycleLength = CycleFactory.GetRedToRedCycles(approach, StartDate, EndDate);
                     var pdc = new PEDDelayChart(this, pedPhase, cycleLength);
                     var chart = pdc.Chart;
                     var chartName = CreateFileName();
