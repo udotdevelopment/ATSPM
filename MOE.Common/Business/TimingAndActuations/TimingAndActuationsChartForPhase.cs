@@ -87,7 +87,7 @@ namespace MOE.Common.Business.TimingAndActuations
                 && (!getPermissivePhase
                 || TimingAndActuationsForPhase.Options.ShowRawEventData))
             {
-                SetPedestrianActuation(timingAndActuationsForPhase.PhaseNumber, String.Join(",", TimingAndActuationsForPhase.GetPedDetectorsFromApproach()));
+                SetPedestrianActuation(timingAndActuationsForPhase.PhaseNumber, String.Join(",", TimingAndActuationsForPhase.Approach.GetPedDetectorsFromApproach()));
             }
             if (TimingAndActuationsForPhase.Options.ShowPedestrianIntervals
                 && (!getPermissivePhase || TimingAndActuationsForPhase.Options.ShowRawEventData))

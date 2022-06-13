@@ -77,7 +77,26 @@ namespace MOE.Common.Business
 
             Events = events.ToList();
             Events = Events.OrderBy(e => e.Timestamp).ThenBy(e => e.EventCode).ToList();
-            //Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
+        }
+
+        public ControllerEventLogs(string signalID, DateTime startDate, DateTime endDate, List<int> eventParams,
+          List<int> eventCodes)
+        {
+            SignalId = signalID;
+            StartDate = startDate;
+            EndDate = endDate;
+            EventCodes = eventCodes;
+
+            var events = from s in _db.Controller_Event_Log
+                         where s.SignalID == signalID &&
+                               s.Timestamp >= startDate &&
+                               s.Timestamp <= endDate &&
+                               eventCodes.Contains(s.EventCode) &&
+                               eventParams.Contains(s.EventParam)
+                         select s;
+
+            Events = events.ToList();
+            Events = Events.OrderBy(e => e.Timestamp).ThenBy(e => e.EventCode).ToList();
         }
 
         public string SignalId { get; }

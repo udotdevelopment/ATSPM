@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using MOE.Common.Models;
+using MOE.Common.Business;
 
 namespace MOE.Common.Business.PEDDelay
 {
     public class PedPhase : ControllerEventLogs
     {
-        public PedPhase(int phaseNumber, Models.Signal signal, int timeBuffer, DateTime startDate, DateTime endDate,
-            PlansBase plansData) : base(signal.SignalID, startDate, endDate, phaseNumber, new List<int> { 21, 22, 45, 90 })
+        public PedPhase(Approach approach, Models.Signal signal, int timeBuffer, DateTime startDate, DateTime endDate,
+            PlansBase plansData) : base(signal.SignalID, startDate, endDate, approach.GetPedDetectorsFromApproach(), new List<int> { 21, 22, 45, 90 })
         {
             SignalID = signal.SignalID;
             TimeBuffer = timeBuffer;
             StartDate = startDate;
             EndDate = endDate;
-            PhaseNumber = phaseNumber;
+            Approach = approach;
+            PhaseNumber = approach.ProtectedPhaseNumber;
             EndDate = endDate;
             Plans = new List<PedPlan>();
             Cycles = new List<PedCycle>();
@@ -27,7 +29,7 @@ namespace MOE.Common.Business.PEDDelay
                 //to coincide with the end of the graph
                 var endTime = i == plansData.Events.Count - 1 ? endDate : plansData.Events[i + 1].Timestamp;
 
-                var plan = new PedPlan(SignalID, phaseNumber, plansData.Events[i].Timestamp, endTime,
+                var plan = new PedPlan(SignalID, PhaseNumber, plansData.Events[i].Timestamp, endTime,
                     plansData.Events[i].EventParam);
 
                 plan.Events = (from e in Events
@@ -42,7 +44,7 @@ namespace MOE.Common.Business.PEDDelay
             AddCyclesToPlans();
             SetHourlyTotals();
         }
-
+        public Approach Approach { get; set; }
         public int PhaseNumber { get; }
         public string SignalID { get; }
         public List<PedCycle> Cycles { get; }

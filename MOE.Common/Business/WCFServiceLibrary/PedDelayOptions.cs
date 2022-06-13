@@ -58,8 +58,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             foreach (var pedPhase in pedDelaySignal.PedPhases)
                 if (pedPhase.Cycles.Count > 0)
                 {
-                    var approach = signal.Approaches.Where(a => a.ProtectedPhaseNumber == pedPhase.PhaseNumber).FirstOrDefault();
-                    var cycleLength = CycleFactory.GetRedToRedCycles(approach, StartDate, EndDate);
+                    var cycleLength = CycleFactory.GetRedToRedCycles(pedPhase.Approach, StartDate, EndDate);
                     var pdc = new PEDDelayChart(this, pedPhase, cycleLength);
                     var chart = pdc.Chart;
                     var chartName = CreateFileName();

@@ -480,7 +480,7 @@ namespace MOE.Common.Business.TimingAndActuations
 
         private void GetPedestrianEvents()
         {
-            var pedDetectors = GetPedDetectorsFromApproach();
+            var pedDetectors = Approach.GetPedDetectorsFromApproach();
             var extendStartTime = Options.ExtendVsdSearch * 60.0;
             var controllerEventLogRepository = ControllerEventLogRepositoryFactory.Create();
             PedestrianEvents = new List<Controller_Event_Log>();
@@ -490,11 +490,6 @@ namespace MOE.Common.Business.TimingAndActuations
                     Options.StartDate.AddSeconds(-extendStartTime), Options.EndDate,
                             new List<int> { 89, 90 }, pedDetector));
             }
-        }
-
-        public List<int> GetPedDetectorsFromApproach()
-        {
-            return !String.IsNullOrEmpty(Approach.PedestrianDetectors) ? Approach.PedestrianDetectors.Split(',').Select(Int32.Parse).ToList() : new List<int>() { Approach.ProtectedPhaseNumber };
         }
 
         public void GetPedestrianIntervals(bool phaseOrOverlap)
