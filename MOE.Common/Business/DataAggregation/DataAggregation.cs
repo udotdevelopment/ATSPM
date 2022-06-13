@@ -659,7 +659,6 @@ namespace MOE.Common.Business.DataAggregation
             var dbRepository = MOE.Common.Models.Repositories.ApplicationSettingsRepositoryFactory.Create();
             var settings = dbRepository.GetGeneralSettings();
             if (settings != null)
-                _startDate = DateTime.Parse("2020-01-09 17:00:00");
             for (var startDateTime = _startDate; startDateTime < _endDate; startDateTime = startDateTime.AddMinutes(_binSize))
             {
                 Console.WriteLine("Starting Aggregation:for {0} to {1} ",
