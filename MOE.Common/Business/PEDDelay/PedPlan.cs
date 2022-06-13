@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MOE.Common.Models;
 
 namespace MOE.Common.Business.PEDDelay
 {
@@ -20,9 +21,23 @@ namespace MOE.Common.Business.PEDDelay
         public int PlanNumber { get; }
 
         public int PhaseNumber { get; }
+        public List<Controller_Event_Log> Events { get; set; }
+        public List<PedCycle> Cycles { get; set; } = new List<PedCycle>();
 
-        public double PedBeginWalkCount { get; set; }
-        public double PedCallsRegisteredCount { get; set; }
+        public double PedBeginWalkCount 
+        { 
+            get
+            {
+                return Events.Where(e => e.EventCode == 21).Count();
+            }
+        }
+        public double PedCallsRegisteredCount
+        {
+            get
+            {
+                return Events.Where(e => e.EventCode == 45).Count();
+            }
+        }
         public int ImputedPedCallsRegistered { get; set; }
 
         public double CyclesWithPedRequests => Cycles.Count;
@@ -56,7 +71,5 @@ namespace MOE.Common.Business.PEDDelay
                 return 0;
             }
         }
-
-        public List<PedCycle> Cycles { get; set; } = new List<PedCycle>();
     }
 }
