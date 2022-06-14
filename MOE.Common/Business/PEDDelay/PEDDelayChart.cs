@@ -298,9 +298,16 @@ namespace MOE.Common.Business.PEDDelay
                     var cycleLengthLabel = new CustomLabel();
                     cycleLengthLabel.FromPosition = plan.StartDate.ToOADate();
                     cycleLengthLabel.ToPosition = plan.EndDate.ToOADate();
-                    cycleLengthLabel.Text = "avg CL: " + Math.Round(RedToRedCycles.Where(r => r.StartTime >= plan.StartDate && r.EndTime < plan.EndDate).Average(r => r.RedLineY)).ToString() + "s";
                     cycleLengthLabel.LabelMark = LabelMarkStyle.LineSideMark;
                     cycleLengthLabel.RowIndex = 1;
+                    if (RedToRedCycles.Count > 0)
+                    {
+                        cycleLengthLabel.Text = "avg CL: " + Math.Round(RedToRedCycles.Where(r => r.StartTime >= plan.StartDate && r.EndTime < plan.EndDate).Average(r => r.RedLineY)).ToString() + "s";                      
+                    }
+                    else
+                    {
+                        cycleLengthLabel.Text = "No Cycles Found";
+                    }
                     Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(cycleLengthLabel);
                 }
 
