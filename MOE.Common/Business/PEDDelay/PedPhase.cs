@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using MOE.Common.Models;
-using MOE.Common.Business;
 
 namespace MOE.Common.Business.PEDDelay
 {
     public class PedPhase : ControllerEventLogs
     {
-        public PedPhase(Approach approach, Models.Signal signal, int timeBuffer, DateTime startDate, DateTime endDate,
+        public PedPhase(Approach approach, Signal signal, int timeBuffer, DateTime startDate, DateTime endDate,
             PlansBase plansData) : base(signal.SignalID, startDate, endDate, approach.GetPedDetectorsFromApproach(), new List<int> { 21, 22, 45, 90 })
         {
             SignalID = signal.SignalID;
@@ -36,7 +35,7 @@ namespace MOE.Common.Business.PEDDelay
                                 where e.Timestamp >= plan.StartDate && e.Timestamp < plan.EndDate
                                 select e).ToList();
 
-                plan.ImputedPedCallsRegistered = CountUniquePedDetections(plan.Events);
+                plan.ImputedPedCallsRegistered = CountImputedPedCalls(plan.Events);
                 Plans.Add(plan);
             }
 
@@ -77,7 +76,6 @@ namespace MOE.Common.Business.PEDDelay
 
         private void GetCycles()
         {
-            //count before combining 90s
             PedPresses = Events.Count(e => e.EventCode == 90);
             UniquePedDetections = CountUniquePedDetections(Events);
 
@@ -129,10 +127,20 @@ namespace MOE.Common.Business.PEDDelay
                     Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));  // this is case 4
                     i++;
                 } 
-                else if (Cycles.Count == 0 || Events[i].EventCode == 21 && Events[i].Timestamp != Cycles.Last().BeginWalk)
+                else if (Events[i].EventCode == 21 && (Cycles.Count == 0 || Events[i].Timestamp != Cycles.Last().BeginWalk))
                 {
                     PedBeginWalkEvents.Add(Events[i]); // collected loose 21s for chart
                 }
+            }
+            if (Events.Count >= 1)
+            {
+                if (Events[Events.Count - 1].EventCode == 21)
+                    PedBeginWalkEvents.Add(Events[Events.Count - 1]);
+            }
+            if (Events.Count >= 2)
+            {
+                if (Events[Events.Count - 2].EventCode == 21)
+                    PedBeginWalkEvents.Add(Events[Events.Count - 2]);
             }
         }
 
@@ -186,24 +194,24 @@ namespace MOE.Common.Business.PEDDelay
 
         private int CountUniquePedDetections(List<Controller_Event_Log> events)
         {
-            List<Controller_Event_Log> list = new List<Controller_Event_Log>();
+            var tempEvents = events.Where(e => e.EventCode == 90).ToList();
 
             for (var i = 0; i < events.Count; i++)
             {
                 if (events[i].EventCode == 90)
                 {
-                    list.Add(events[i]);
+                    tempEvents.Add(events[i]);
                 }
             }
 
-            if (list.Count == 0) return 0;
+            if (tempEvents.Count == 0) return 0;
 
             int pedDetections = 0;
             var previousEventCode = GetEventFromPreviousBin(SignalID, PhaseNumber, events.FirstOrDefault().Timestamp, new List<int> { 90 }, TimeSpan.FromSeconds(TimeBuffer));
 
             if (previousEventCode != null)
             {
-                list.Insert(0, previousEventCode);
+                tempEvents.Insert(0, previousEventCode);
             }
             else
             {
@@ -212,9 +220,9 @@ namespace MOE.Common.Business.PEDDelay
 
             var previousSelectedTimestamp = 0;
 
-            for (var i = 1; i < list.Count; i++)
+            for (var i = 1; i < tempEvents.Count; i++)
             {
-                if (list[i].Timestamp.Subtract(list[previousSelectedTimestamp].Timestamp).TotalSeconds >= TimeBuffer)
+                if (tempEvents[i].Timestamp.Subtract(tempEvents[previousSelectedTimestamp].Timestamp).TotalSeconds >= TimeBuffer)
                 {
                     pedDetections++;
                     previousSelectedTimestamp = i;
