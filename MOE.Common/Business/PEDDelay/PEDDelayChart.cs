@@ -107,7 +107,7 @@ namespace MOE.Common.Business.PEDDelay
             var statistics = new Dictionary<string, string>();
             statistics.Add("Ped Presses(PP)", pedPhase.PedPresses.ToString());
             statistics.Add("Cycles With Ped Requests(PR)", pedPhase.Plans.Sum(p => p.CyclesWithPedRequests).ToString());
-            statistics.Add("Ped Requests(PR)", pedPhase.PedRequests.ToString());
+            //statistics.Add("Ped Requests(PR)", pedPhase.PedRequests.ToString());
             statistics.Add("Time Buffered " + pedPhase.TimeBuffer + "s Presses(TBP)", pedPhase.UniquePedDetections.ToString());
             statistics.Add("Min Delay", Math.Round(pedPhase.MinDelay) + "s");
             statistics.Add("Max Delay", Math.Round(pedPhase.MaxDelay) + "s");
@@ -197,7 +197,7 @@ namespace MOE.Common.Business.PEDDelay
         {
             var bins = new Dictionary<DateTime, double>();
             var startTime = PedPhase.StartDate;
-            while (startTime < PedPhase.EndDate)
+            while (startTime <= PedPhase.EndDate)
             {
                 var endTime = startTime.AddMinutes(30);
                 var cycles = stepChart.Where(c => c.Key >= startTime && c.Key < endTime).ToList();
