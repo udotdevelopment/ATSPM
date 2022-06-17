@@ -121,14 +121,6 @@ namespace MOE.Common.Business.PEDDelay
             int i = 0;
             var stepChart = new Dictionary<DateTime, double>();
 
-            if (Options.ShowCycleLength)
-            {
-                foreach (var cycle in RedToRedCycles)
-                {
-                    Chart.Series["Cycle Length"].Points.AddXY(cycle.EndTime, cycle.RedLineY);
-                }
-            }
-
             foreach (var pedPlan in PedPhase.Plans)
             {
                 foreach (var pedCycle in pedPlan.Cycles)
@@ -144,8 +136,16 @@ namespace MOE.Common.Business.PEDDelay
 
                     if (Options.ShowPercentDelay)
                     {
-                        AddDataPointToStepChart(pedCycle, i, stepChart);
+                        AddDataPointToStepChart(pedCycle, ref i, stepChart);
                     }
+                }
+            }
+
+            if (Options.ShowCycleLength)
+            {
+                foreach (var cycle in RedToRedCycles)
+                {
+                    Chart.Series["Cycle Length"].Points.AddXY(cycle.EndTime, cycle.RedLineY);
                 }
             }
 
@@ -154,7 +154,7 @@ namespace MOE.Common.Business.PEDDelay
                 foreach (var e in PedPhase.PedBeginWalkEvents)
                 {
                     Chart.Series["Start of Begin Walk"].Points
-                            .AddXY(e.Timestamp, 2);
+                            .AddXY(e.Timestamp, 3);
                 }
             }
 
@@ -169,7 +169,7 @@ namespace MOE.Common.Business.PEDDelay
             }
         }
 
-        protected void AddDataPointToStepChart(PedCycle pc, int i, Dictionary<DateTime, double> stepChart)
+        protected void AddDataPointToStepChart(PedCycle pc, ref int i, Dictionary<DateTime, double> stepChart)
         {
             while (i < RedToRedCycles.Count)
             {
@@ -184,6 +184,7 @@ namespace MOE.Common.Business.PEDDelay
                     {
                         cycle1 = RedToRedCycles[i].RedLineY;
                     }
+
                     var cycle2 = RedToRedCycles[i].RedLineY;
                     var average = (cycle1 + cycle2) / 2;
                     stepChart.Add(pc.BeginWalk, pc.Delay / average * 100);
@@ -236,7 +237,7 @@ namespace MOE.Common.Business.PEDDelay
                 Chart.ChartAreas["ChartArea1"].AxisX2.LabelAutoFitStyle = LabelAutoFitStyles.DecreaseFont;
 
                 //Add a corresponding custom label for each strip
-                if (plan.PedBeginWalkCount / (plan.PedCallsRegisteredCount + plan.PedBeginWalkCount) * 100 >= 80)
+                if (plan.PedRecallOn)
                 {
                     var pedRecallLabel = new CustomLabel();
                     pedRecallLabel.FromPosition = plan.StartDate.ToOADate();

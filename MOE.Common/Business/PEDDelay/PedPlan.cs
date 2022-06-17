@@ -12,20 +12,19 @@ namespace MOE.Common.Business.PEDDelay
             StartDate = startDate;
             EndDate = endDate;
             PlanNumber = planNumber;
+            PhaseNumber = phaseNumber;
         }
 
         public DateTime StartDate { get; }
-
         public DateTime EndDate { get; }
-
         public int PlanNumber { get; }
-
         public int PhaseNumber { get; }
         public List<Controller_Event_Log> Events { get; set; }
         public List<PedCycle> Cycles { get; set; } = new List<PedCycle>();
-
-        public double PedBeginWalkCount 
-        { 
+        public int ImputedPedCallsRegistered { get; set; }
+        public double CyclesWithPedRequests => Cycles.Count;
+        public double PedBeginWalkCount
+        {
             get
             {
                 return Events.Where(e => e.EventCode == 21).Count();
@@ -38,10 +37,6 @@ namespace MOE.Common.Business.PEDDelay
                 return Events.Where(e => e.EventCode == 45).Count();
             }
         }
-        public int ImputedPedCallsRegistered { get; set; }
-
-        public double CyclesWithPedRequests => Cycles.Count;
-
         public double MinDelay
         {
             get
@@ -69,6 +64,13 @@ namespace MOE.Common.Business.PEDDelay
                 if (CyclesWithPedRequests > 0)
                     return Cycles.Average(c => c.Delay);
                 return 0;
+            }
+        }
+        public bool PedRecallOn
+        {
+            get
+            {
+                return (double)PedBeginWalkCount / ((double)PedCallsRegisteredCount + PedBeginWalkCount) * 100 >= 65;
             }
         }
     }
