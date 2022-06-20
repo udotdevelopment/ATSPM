@@ -32,7 +32,7 @@ namespace MOE.Common.Business.PEDDelay
                     plansData.Events[i].EventParam);
 
                 plan.Events = (from e in Events
-                                where e.Timestamp >= plan.StartDate && e.Timestamp < plan.EndDate
+                                where e.Timestamp > plan.StartDate && e.Timestamp < plan.EndDate
                                 select e).ToList();
 
                 plan.ImputedPedCallsRegistered = CountImputedPedCalls(plan.Events);
