@@ -151,7 +151,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             List<Models.PhaseCycleAggregation> cycleAggregations)
         {
             Dictionary<DateTime, double> cycleList = new Dictionary<DateTime, double>();
-            for (var tempDate = start.Date; tempDate < end; tempDate = tempDate.AddDays(1))
+            for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
             {
                 if (daysOfWeek.Contains((int)start.DayOfWeek))
                     for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(15))

@@ -50,9 +50,9 @@ namespace MOE.Common.Business
             }
 
             if (protectedPhaseNumber == 1 && permissivePhaseNumber == 6 ||
-                protectedPhaseNumber == 3 && permissivePhaseNumber == 8 ||
-                protectedPhaseNumber == 5 && permissivePhaseNumber == 6 ||
-                protectedPhaseNumber == 7 && permissivePhaseNumber == 8)
+                 protectedPhaseNumber == 3 && permissivePhaseNumber == 8 ||
+                 protectedPhaseNumber == 5 && permissivePhaseNumber == 2 ||
+                 protectedPhaseNumber == 7 && permissivePhaseNumber == 4)
             {
                 return SignalHeadType.FiveHead;
             }

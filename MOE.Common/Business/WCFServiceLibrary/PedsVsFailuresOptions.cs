@@ -128,7 +128,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             var gapSeries = new Series();
             gapSeries.ChartType = SeriesChartType.Line;
             gapSeries.Color = Color.FromArgb(92,136,218);
-            gapSeries.Name = "% of Acceptable Cycles w/ Peds";
+            gapSeries.Name = "% of Cycles w/ Peds";
             gapSeries.XValueType = ChartValueType.DateTime;
             gapSeries.Font = new Font("Arial", 10f);
             gapSeries.BorderWidth = 3;

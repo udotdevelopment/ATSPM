@@ -29,10 +29,10 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
             var count = 0;
             //if (_db.DetectorEventCountAggregations.Any(r => r.DetectorId.Contains(detectorId.ToString())
             if (_db.DetectorEventCountAggregations.Any(r => r.DetectorPrimaryId == detectorId
-                                                            && r.BinStartTime >= start && r.BinStartTime <= end))
+                                                            && r.BinStartTime >= start && r.BinStartTime < end))
             {
                 count = _db.DetectorEventCountAggregations.Where(r => r.DetectorPrimaryId == detectorId
-                                                                      && r.BinStartTime >= start && r.BinStartTime <= end)
+                                                                      && r.BinStartTime >= start && r.BinStartTime < end)
                     .Sum(r => r.EventCount);
             }
 
@@ -48,11 +48,11 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
             // Does it make sense to compare the id field to the detectorID?  I don't see why this was compared, other than they were both ints!
 
             if (_db.DetectorEventCountAggregations.Any(r => r.DetectorPrimaryId == detectorId
-                                                             && r.BinStartTime >= start && r.BinStartTime <= end))
+                                                             && r.BinStartTime >= start && r.BinStartTime < end))
             {
                 return _db.DetectorEventCountAggregations.Where(r => r.DetectorPrimaryId == detectorId
                                                                   && r.BinStartTime >= start &&
-                                                                  r.BinStartTime <= end).ToList();
+                                                                  r.BinStartTime < end).ToList();
             }
             return new List<DetectorEventCountAggregation>();
         }
@@ -62,7 +62,7 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
         {
             return _db.DetectorEventCountAggregations.Where(r => r.DetectorPrimaryId == detectorId
                                                                   && r.BinStartTime >= start &&
-                                                                  r.BinStartTime <= end).Any();
+                                                                  r.BinStartTime < end).Any();
         }
     }
 
