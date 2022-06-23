@@ -28,14 +28,14 @@ namespace MOE.Common.Business.PEDDelay
                 //to coincide with the end of the graph
                 var endTime = i == plansData.Events.Count - 1 ? endDate : plansData.Events[i + 1].Timestamp;
 
-                var plan = new PedPlan(SignalID, PhaseNumber, plansData.Events[i].Timestamp, endTime,
+                var plan = new PedPlan(PhaseNumber, plansData.Events[i].Timestamp, endTime,
                     plansData.Events[i].EventParam);
 
                 plan.Events = (from e in Events
                                 where e.Timestamp > plan.StartDate && e.Timestamp < plan.EndDate
                                 select e).ToList();
 
-                plan.ImputedPedCallsRegistered = CountImputedPedCalls(plan.Events);
+                plan.UniquePedDetections = CountUniquePedDetections(plan.Events);
                 Plans.Add(plan);
             }
 
@@ -195,14 +195,6 @@ namespace MOE.Common.Business.PEDDelay
         private int CountUniquePedDetections(List<Controller_Event_Log> events)
         {
             var tempEvents = events.Where(e => e.EventCode == 90).ToList();
-
-            for (var i = 0; i < events.Count; i++)
-            {
-                if (events[i].EventCode == 90)
-                {
-                    tempEvents.Add(events[i]);
-                }
-            }
 
             if (tempEvents.Count == 0) return 0;
 

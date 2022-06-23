@@ -280,7 +280,7 @@ namespace MOE.Common.Business.PEDDelay
                 var timeBufferedPressesLabel = new CustomLabel();
                 timeBufferedPressesLabel.FromPosition = plan.StartDate.ToOADate();
                 timeBufferedPressesLabel.ToPosition = plan.EndDate.ToOADate();
-                timeBufferedPressesLabel.Text = plan.ImputedPedCallsRegistered + " TBP";
+                timeBufferedPressesLabel.Text = plan.UniquePedDetections + " TBP";
                 timeBufferedPressesLabel.RowIndex = 3;
                 timeBufferedPressesLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(timeBufferedPressesLabel);

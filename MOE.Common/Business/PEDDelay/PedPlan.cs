@@ -7,7 +7,7 @@ namespace MOE.Common.Business.PEDDelay
 {
     public class PedPlan
     {
-        public PedPlan(string signalID, int phaseNumber, DateTime startDate, DateTime endDate, int planNumber)
+        public PedPlan(int phaseNumber, DateTime startDate, DateTime endDate, int planNumber)
         {
             StartDate = startDate;
             EndDate = endDate;
@@ -21,7 +21,7 @@ namespace MOE.Common.Business.PEDDelay
         public int PhaseNumber { get; }
         public List<Controller_Event_Log> Events { get; set; }
         public List<PedCycle> Cycles { get; set; } = new List<PedCycle>();
-        public int ImputedPedCallsRegistered { get; set; }
+        public int UniquePedDetections { get; set; }
         public double CyclesWithPedRequests => Cycles.Count;
         public double PedBeginWalkCount
         {
