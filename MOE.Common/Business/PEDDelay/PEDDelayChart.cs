@@ -12,7 +12,7 @@ namespace MOE.Common.Business.PEDDelay
         public Chart Chart;
         private readonly PedPhase PedPhase;
         private readonly List<RedToRedCycle> RedToRedCycles;
-        private Dictionary<DateTime, double> PedDelayCycles;
+        private Dictionary<DateTime, double> DelayByCycleLengthStepChart;
         private readonly PedDelayOptions Options;
 
         public PEDDelayChart(PedDelayOptions options,
@@ -60,30 +60,29 @@ namespace MOE.Common.Business.PEDDelay
             Chart.ChartAreas[0].AxisY2.Maximum = 100;
 
             //Add the point series
-            var PedestrianDelaySeries = new Series();
-            PedestrianDelaySeries.ChartType = SeriesChartType.Column;
-            PedestrianDelaySeries.Color = Color.Blue;
-            PedestrianDelaySeries.Name = "Pedestrian Delay per Ped Requests";
-            PedestrianDelaySeries.XValueType = ChartValueType.DateTime;
-            Chart.Series.Add(PedestrianDelaySeries);
+            var CycleLength = new Series();
+            CycleLength.ChartType = SeriesChartType.Line;
+            CycleLength.Color = Color.Red;
+            CycleLength.Name = "Cycle Length";
+            CycleLength.XValueType = ChartValueType.DateTime;
+            Chart.Series.Add(CycleLength);
+
+            var PedestrianDelay = new Series();
+            PedestrianDelay.ChartType = SeriesChartType.Column;
+            PedestrianDelay.Color = Color.Blue;
+            PedestrianDelay.Name = "Pedestrian Delay per Ped Requests";
+            PedestrianDelay.XValueType = ChartValueType.DateTime;
+            Chart.Series.Add(PedestrianDelay);
             Chart.Series["Pedestrian Delay per Ped Requests"]["PixelPointWidth"] = "2";
 
-
-            var PedWalkSeries = new Series();
-            PedWalkSeries.ChartType = SeriesChartType.Point;
-            PedWalkSeries.MarkerStyle = MarkerStyle.Circle;
-            PedWalkSeries.MarkerColor = Color.Orange;
-            PedWalkSeries.Name = "Start of Begin Walk";
-            PedWalkSeries.XValueType = ChartValueType.DateTime;
-            PedWalkSeries.MarkerSize = 5;
-            Chart.Series.Add(PedWalkSeries);
-
-            var CycleDelay = new Series();
-            CycleDelay.ChartType = SeriesChartType.Line;
-            CycleDelay.Color = Color.Red;
-            CycleDelay.Name = "Cycle Length";
-            CycleDelay.XValueType = ChartValueType.DateTime;
-            Chart.Series.Add(CycleDelay);
+            var PedWalk = new Series();
+            PedWalk.ChartType = SeriesChartType.Point;
+            PedWalk.MarkerStyle = MarkerStyle.Circle;
+            PedWalk.MarkerColor = Color.Orange;
+            PedWalk.Name = "Start of Begin Walk";
+            PedWalk.XValueType = ChartValueType.DateTime;
+            PedWalk.MarkerSize = 5;
+            Chart.Series.Add(PedWalk);
 
             var DelayByCycleLength = new Series();
             DelayByCycleLength.ChartType = SeriesChartType.StepLine;
@@ -118,8 +117,8 @@ namespace MOE.Common.Business.PEDDelay
 
         protected void AddDataToChart()
         {
-            int i = 0;
-            var stepChart = new Dictionary<DateTime, double>();
+            int currentRedToRedCycle = 0;
+            var delayByCycleLengthDataPoints = new Dictionary<PedCycle, double>();
 
             foreach (var pedPlan in PedPhase.Plans)
             {
@@ -136,7 +135,7 @@ namespace MOE.Common.Business.PEDDelay
 
                     if (Options.ShowPercentDelay)
                     {
-                        AddDataPointToStepChart(pedCycle, ref i, stepChart);
+                        AddDelayByCycleLengthDataPoint(pedCycle, ref currentRedToRedCycle, delayByCycleLengthDataPoints);
                     }
                 }
             }
@@ -154,14 +153,14 @@ namespace MOE.Common.Business.PEDDelay
                 foreach (var e in PedPhase.PedBeginWalkEvents)
                 {
                     Chart.Series["Start of Begin Walk"].Points
-                            .AddXY(e.Timestamp, 3);
+                            .AddXY(e.Timestamp, 2);
                 }
             }
 
             if (Options.ShowPercentDelay)
             {
-                CreatePedDelayList(stepChart);
-                foreach (var cycle in PedDelayCycles)
+                CreateDelayByCycleLengthStepChart(delayByCycleLengthDataPoints);
+                foreach (var cycle in DelayByCycleLengthStepChart)
                 {
                     Chart.Series["% Delay By Cycle Length"].Points
                                     .AddXY(cycle.Key, cycle.Value);
@@ -169,48 +168,48 @@ namespace MOE.Common.Business.PEDDelay
             }
         }
 
-        protected void AddDataPointToStepChart(PedCycle pc, ref int i, Dictionary<DateTime, double> stepChart)
+        protected void AddDelayByCycleLengthDataPoint(PedCycle pc, ref int currentRedToRedCycle, 
+            Dictionary<PedCycle, double> delayByCycleLengthDataPoints)
         {
-            while (i < RedToRedCycles.Count)
+            while (currentRedToRedCycle < RedToRedCycles.Count)
             {
-                if (RedToRedCycles[i].EndTime > pc.BeginWalk)
+                if (RedToRedCycles[currentRedToRedCycle].EndTime > pc.BeginWalk)
                 {
                     double cycle1;
-                    if (i > 0)
+                    if (currentRedToRedCycle > 0)
                     {
-                        cycle1 = RedToRedCycles[i - 1].RedLineY;
+                        cycle1 = RedToRedCycles[currentRedToRedCycle - 1].RedLineY;
                     }
                     else
                     {
-                        cycle1 = RedToRedCycles[i].RedLineY;
+                        cycle1 = RedToRedCycles[currentRedToRedCycle].RedLineY;
                     }
 
-                    var cycle2 = RedToRedCycles[i].RedLineY;
+                    var cycle2 = RedToRedCycles[currentRedToRedCycle].RedLineY;
                     var average = (cycle1 + cycle2) / 2;
-                    stepChart.Add(pc.BeginWalk, pc.Delay / average * 100);
+                    delayByCycleLengthDataPoints.Add(pc, pc.Delay / average * 100);
                     break;
                 }
-                i++;
+                currentRedToRedCycle++;
             }
         }
 
-        protected void CreatePedDelayList(Dictionary<DateTime, double> stepChart)
+        protected void CreateDelayByCycleLengthStepChart(Dictionary<PedCycle, double> delayByCycleLengthDataPoints)
         {
-            var bins = new Dictionary<DateTime, double>();
+            DelayByCycleLengthStepChart = new Dictionary<DateTime, double>();
             var startTime = PedPhase.StartDate;
             while (startTime <= PedPhase.EndDate)
             {
                 var endTime = startTime.AddMinutes(30);
-                var cycles = stepChart.Where(c => c.Key >= startTime && c.Key < endTime).ToList();
+                var cycles = delayByCycleLengthDataPoints.Where(c => c.Key.BeginWalk >= startTime && c.Key.BeginWalk < endTime).ToList();
                 double average = 0;
                 if (cycles.Count > 0)
                 {
                     average = cycles.Average(c => c.Value);
                 }
-                bins.Add(startTime, average);
+                DelayByCycleLengthStepChart.Add(startTime, average);
                 startTime = startTime.AddMinutes(30);
             }
-            PedDelayCycles = bins;
         }
 
 
@@ -303,7 +302,8 @@ namespace MOE.Common.Business.PEDDelay
                     cycleLengthLabel.RowIndex = 1;
                     if (RedToRedCycles.Count > 0)
                     {
-                        cycleLengthLabel.Text = "avg CL: " + Math.Round(RedToRedCycles.Where(r => r.StartTime >= plan.StartDate && r.EndTime < plan.EndDate).Average(r => r.RedLineY)).ToString() + "s";                      
+                        var cycles = RedToRedCycles.Where(r => r.StartTime >= plan.StartDate && r.EndTime < plan.EndDate).ToList();
+                        cycleLengthLabel.Text = "avg CL: " + (cycles.Count > 0 ? Math.Round(cycles.Average(r => r.RedLineY)) + "s" : "");                      
                     }
                     else
                     {
