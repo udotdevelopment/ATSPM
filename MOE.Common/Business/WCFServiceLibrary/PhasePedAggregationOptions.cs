@@ -21,7 +21,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = PhasePedAggregationByPhase.PED_DELAY_SUM });
             AggregatedDataTypes.Add(new AggregatedDataType { Id = 2, DataName = PhasePedAggregationByPhase.MIN_PED_DELAY });
             AggregatedDataTypes.Add(new AggregatedDataType { Id = 3, DataName = PhasePedAggregationByPhase.MAX_PED_DELAY });
-            AggregatedDataTypes.Add(new AggregatedDataType { Id = 4, DataName = PhasePedAggregationByPhase.PED_ACTUATIONS });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 4, DataName = PhasePedAggregationByPhase.PED_REQUESTS });
         }
 
         public override string ChartTitle

@@ -562,7 +562,11 @@ namespace MOE.Common.Migrations
                 new MeasuresDefaults { Measure = "PCD", OptionName = "Y2AxisMax", Value = "2000" },
                 new MeasuresDefaults { Measure = "PCD", OptionName = "YAxisMax", Value = "150" },
 
-                new MeasuresDefaults { Measure = "PedDelay", OptionName = "YAxisMax", Value = "3" },
+                new MeasuresDefaults { Measure = "PedDelay", OptionName = "YAxisMax", Value = "180" },
+                new MeasuresDefaults { Measure = "PedDelay", OptionName = "TimeBuffer", Value = "15" },
+                new MeasuresDefaults { Measure = "PedDelay", OptionName = "ShowPedBeginWalk", Value = "True" },
+                new MeasuresDefaults { Measure = "PedDelay", OptionName = "ShowCycleLength", Value = "True" },
+                new MeasuresDefaults { Measure = "PedDelay", OptionName = "ShowPercentDelay", Value = "True" },
 
                 new MeasuresDefaults { Measure = "PhaseTermination", OptionName = "SelectedConsecutiveCount", Value = "3" },
                 new MeasuresDefaults { Measure = "PhaseTermination", OptionName = "ShowPedActivity", Value = "True" },

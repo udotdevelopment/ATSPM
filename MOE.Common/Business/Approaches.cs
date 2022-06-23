@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.ComponentModel;
+using System.Linq;
 using MOE.Common.Models;
 
 
@@ -75,6 +76,11 @@ namespace MOE.Common.Business
             }
 
             return PhaseType.ProtectedPermissive;
+        }
+
+        public static List<int> GetPedDetectorsFromApproach(this Approach approach)
+        {
+            return !String.IsNullOrEmpty(approach.PedestrianDetectors) ? approach.PedestrianDetectors.Split( new char[] { ',', '-' } ).Select(Int32.Parse).ToList() : new List<int>() { approach.ProtectedPhaseNumber };
         }
     }
 }

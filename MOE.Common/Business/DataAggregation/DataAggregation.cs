@@ -274,6 +274,7 @@ namespace MOE.Common.Business.DataAggregation
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
+            int _timeBuffer = Convert.ToInt32(appSettings["TimeBuffer"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
             SetStartEndDate(args);
 
@@ -299,7 +300,7 @@ namespace MOE.Common.Business.DataAggregation
                     {
                         Parallel.ForEach(signals, options, signal =>
                         {
-                            ProcessSignalPedDelayData(signal, startDateTime, startDateTime.AddMinutes(_binSize), options);
+                            ProcessSignalPedDelayData(signal, startDateTime, startDateTime.AddMinutes(_binSize), _timeBuffer, options);
                         });
                         signals = new List<Signal>();
                     }
@@ -1995,7 +1996,7 @@ namespace MOE.Common.Business.DataAggregation
             phasePedAggregationTable.Columns.Add(new DataColumn("PedDelaySum", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("MinPedDelay", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("MaxPedDelay", typeof(int)));
-            phasePedAggregationTable.Columns.Add(new DataColumn("PedActuations", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("PedRequests", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("ImputedPedCallsRegistered", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("UniquePedDetections", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("PedBeginWalkCount", typeof(int)));
@@ -2010,7 +2011,7 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["PedDelaySum"] = phasePedAggregation.PedDelaySum;
                 dataRow["MinPedDelay"] = phasePedAggregation.MinPedDelay;
                 dataRow["MaxPedDelay"] = phasePedAggregation.MaxPedDelay;
-                dataRow["PedActuations"] = phasePedAggregation.PedActuations;
+                dataRow["PedRequests"] = phasePedAggregation.PedRequests;
                 dataRow["ImputedPedCallsRegistered"] = phasePedAggregation.ImputedPedCallsRegistered;
                 dataRow["UniquePedDetections"] = phasePedAggregation.UniquePedDetections;
                 dataRow["PedBeginWalkCount"] = phasePedAggregation.PedBeginWalkCount;
@@ -2312,14 +2313,14 @@ namespace MOE.Common.Business.DataAggregation
             // );
         }
 
-        private void ProcessSignalPedDelayData(Signal signal, DateTime startTime, DateTime endTime, ParallelOptions options)
+        private void ProcessSignalPedDelayData(Signal signal, DateTime startTime, DateTime endTime, int _timeBuffer, ParallelOptions options)
         {
             Console.Write(signal.SignalID + "    \r");
             try
             {
                 if (!string.IsNullOrEmpty(signal.SignalID) && signal.SignalID != "null")
                 {
-                    AggregatePedDelay(startTime, endTime, signal);
+                    AggregatePedDelay(startTime, endTime, signal, _timeBuffer);
                 }
             }
             catch (Exception e)
@@ -2505,9 +2506,9 @@ namespace MOE.Common.Business.DataAggregation
         }
 
 
-        private void AggregatePedDelay(DateTime startTime, DateTime endTime, Models.Signal signal)
+        private void AggregatePedDelay(DateTime startTime, DateTime endTime, Models.Signal signal, int timeBuffer)
         {
-            PedDelaySignal pedDelaySignal = new PedDelaySignal(signal, startTime, endTime);
+            PedDelaySignal pedDelaySignal = new PedDelaySignal(signal, timeBuffer, startTime, endTime);
             foreach (var pedPhase in pedDelaySignal.PedPhases)
             {
                 PhasePedAggregation pedAggregation = new PhasePedAggregation
@@ -2519,7 +2520,7 @@ namespace MOE.Common.Business.DataAggregation
                     PedDelaySum = Convert.ToInt32(Math.Round(pedPhase.TotalDelay)),
                     MinPedDelay = Convert.ToInt32(Math.Round(pedPhase.MinDelay)),
                     MaxPedDelay = Convert.ToInt32(Math.Round(pedPhase.MaxDelay)),
-                    PedActuations = Convert.ToInt32(Math.Round(pedPhase.PedActuations)),
+                    PedRequests = Convert.ToInt32(pedPhase.PedRequests),
                     ImputedPedCallsRegistered = Convert.ToInt32(pedPhase.ImputedPedCallsRegistered),
                     UniquePedDetections = Convert.ToInt32(pedPhase.UniquePedDetections),
                     PedBeginWalkCount = Convert.ToInt32(pedPhase.PedBeginWalkCount),

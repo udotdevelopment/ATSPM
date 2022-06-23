@@ -32,7 +32,35 @@ namespace MOE.Common.Business
             return cycles.Where(c => (c.EndTime >= startTime && c.EndTime <= endTime) || (c.StartTime <= endTime && c.StartTime >= startTime)).ToList();
         }
 
-        
+        public static List<RedToRedCycle> GetRedToRedCycles(Approach approach, DateTime startTime, DateTime endTime)
+        {
+            SPM db = new SPM();
+            var cel = ControllerEventLogRepositoryFactory.Create(db);
+
+            var cycleEventNumbers = approach.IsPermissivePhaseOverlap
+                      ? new List<int> { 61, 63, 64 }
+                      : new List<int> { 1, 8, 9 };
+            var cycleEvents = cel.GetEventsByEventCodesParam(approach.SignalID, startTime, endTime.AddSeconds(900),
+                cycleEventNumbers,
+                approach.ProtectedPhaseNumber);
+            var cycles = new List<RedToRedCycle>();
+
+            for (var i = 0; i < cycleEvents.Count; i++)
+                if (i < cycleEvents.Count - 3
+                    && GetEventType(cycleEvents[i].EventCode) == RedToRedCycle.EventType.ChangeToRed
+                    && GetEventType(cycleEvents[i + 1].EventCode) == RedToRedCycle.EventType.ChangeToGreen
+                    && GetEventType(cycleEvents[i + 2].EventCode) == RedToRedCycle.EventType.ChangeToYellow
+                    && GetEventType(cycleEvents[i + 3].EventCode) == RedToRedCycle.EventType.ChangeToRed)
+                {
+                    cycles.Add(new RedToRedCycle(cycleEvents[i].Timestamp, cycleEvents[i + 1].Timestamp,
+                        cycleEvents[i + 2].Timestamp, cycleEvents[i + 3].Timestamp));
+                    i += 2;
+                }
+
+            return cycles.Where(c => (c.EndTime >= startTime && c.EndTime <= endTime) || (c.StartTime <= endTime && c.StartTime >= startTime)).ToList();
+        }
+
+
 
         public static List<GreenToGreenCycle> GetGreenToGreenCycles(Approach approach, DateTime startTime, DateTime endTime,
             bool getPermissivePhase, List<Controller_Event_Log> cycleEvents)

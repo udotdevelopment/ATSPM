@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MOE.Common.Models;
 
 namespace MOE.Common.Business.PEDDelay
 {
@@ -11,23 +12,36 @@ namespace MOE.Common.Business.PEDDelay
             StartDate = startDate;
             EndDate = endDate;
             PlanNumber = planNumber;
+            PhaseNumber = phaseNumber;
         }
 
         public DateTime StartDate { get; }
-
         public DateTime EndDate { get; }
-
         public int PlanNumber { get; }
-
         public int PhaseNumber { get; }
-
-        public double PedActuations => Cycles.Count;
-
+        public List<Controller_Event_Log> Events { get; set; }
+        public List<PedCycle> Cycles { get; set; } = new List<PedCycle>();
+        public int ImputedPedCallsRegistered { get; set; }
+        public double CyclesWithPedRequests => Cycles.Count;
+        public double PedBeginWalkCount
+        {
+            get
+            {
+                return Events.Where(e => e.EventCode == 21).Count();
+            }
+        }
+        public double PedCallsRegisteredCount
+        {
+            get
+            {
+                return Events.Where(e => e.EventCode == 45).Count();
+            }
+        }
         public double MinDelay
         {
             get
             {
-                if (PedActuations > 0)
+                if (CyclesWithPedRequests > 0)
                     return Cycles.Min(c => c.Delay);
                 return 0;
             }
@@ -37,7 +51,7 @@ namespace MOE.Common.Business.PEDDelay
         {
             get
             {
-                if (PedActuations > 0)
+                if (CyclesWithPedRequests > 0)
                     return Cycles.Max(c => c.Delay);
                 return 0;
             }
@@ -47,12 +61,17 @@ namespace MOE.Common.Business.PEDDelay
         {
             get
             {
-                if (PedActuations > 0)
+                if (CyclesWithPedRequests > 0)
                     return Cycles.Average(c => c.Delay);
                 return 0;
             }
         }
-
-        public List<PedCycle> Cycles { get; set; } = new List<PedCycle>();
+        public bool PedRecallOn
+        {
+            get
+            {
+                return (double)PedBeginWalkCount / ((double)PedCallsRegisteredCount + PedBeginWalkCount) * 100 >= 65;
+            }
+        }
     }
 }

@@ -151,6 +151,14 @@ namespace SPM.Models
     {
         [Display(Name = "Y-axis Max")]
         public double? YAxisMax { get; set; }
+        [Display(Name = "Time Buffer Between Unique Pedestrian Detections")]
+        public int TimeBuffer { get; set; }
+        [Display(Name = "Show Ped Begin Walk")]
+        public bool ShowPedBeginWalk { get; set; }
+        [Display(Name = "Show Cycle Length")]
+        public bool ShowCycleLength { get; set; }
+        [Display(Name = "Show Percent Delay")]
+        public bool ShowPercentDelay { get; set; }
     }
 
     public class SplitFailDefaultValuesViewModel

@@ -101,6 +101,10 @@ function GetPreemptMetric(metricTypeID) {
 function GetPedDelayMetric(metricTypeID) {
     var tosend = GetCommonValues();
     tosend.MetricTypeID = metricTypeID;
+    tosend.TimeBuffer = $("#TimeBuffer").val();
+    tosend.ShowPedBeginWalk = $("#ShowPedBeginWalk").is(":checked");
+    tosend.ShowCycleLength = $("#ShowCycleLength").is(":checked");
+    tosend.ShowPercentDelay = $("#ShowPercentDelay").is(":checked");
     GetMetric(urlpathPedDelay, tosend);
 }
 
