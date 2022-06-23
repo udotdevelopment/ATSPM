@@ -2,15 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
-using System.Web.Mvc.Routing.Constraints;
 using System.Web.UI.DataVisualization.Charting;
-using AjaxControlToolkit;
 using MOE.Common.Business.TimingAndActuations;
-using MOE.Common.Migrations;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 
@@ -149,7 +144,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
         public TimingAndActuationsOptions()
         {
             MetricTypeID = 17;
-            //ExtendSearch = 0;
             SetDefaults();
         }
 
@@ -170,19 +164,19 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     if (PhaseFilterList.Any() && PhaseFilterList.Contains(approach.ProtectedPhaseNumber) || PhaseFilterList.Count == 0)
                     {
-                        var phaseOrOverlap = true;
+                        var phaseOrOverlap = false;
                         timingAndActuationsForPhases.Add(new TimingAndActuationsForPhase(approach, approach.ProtectedPhaseNumber, phaseOrOverlap, this));
                         timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort = "Phase - " + approach.ProtectedPhaseNumber.ToString("D2");
-                        phaseOrOverlap = false;
+                        phaseOrOverlap = true;
                         timingAndActuationsForPhases.Add(new TimingAndActuationsForPhase(approach, approach.ProtectedPhaseNumber, phaseOrOverlap, this));
                         timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort = "zOverlap - " + approach.ProtectedPhaseNumber.ToString("D2");
                     }
                     if (approach.PermissivePhaseNumber.HasValue && (PhaseFilterList.Any() && PhaseFilterList.Contains(approach.PermissivePhaseNumber.Value) || PhaseFilterList.Count == 0))
                     {
-                        var phaseOrOverlap = true;
+                        var phaseOrOverlap = false;
                         timingAndActuationsForPhases.Add(new TimingAndActuationsForPhase(approach, approach.PermissivePhaseNumber.Value, phaseOrOverlap, this));
                         timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort = "Phase - " + approach.PermissivePhaseNumber.Value.ToString("D2");
-                        phaseOrOverlap = false;
+                        phaseOrOverlap = true;
                         timingAndActuationsForPhases.Add(new TimingAndActuationsForPhase(approach, approach.PermissivePhaseNumber.Value, phaseOrOverlap, this));
                         timingAndActuationsForPhases[phaseCounter++].PhaseNumberSort = "zOverlap - " + approach.PermissivePhaseNumber.Value.ToString("D2");
                     }
@@ -190,10 +184,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
             else
             {
-                //var approachNumber = 1;
                 if (Signal.Approaches.Count > 0)
                 {
-                    //Parallel.ForEach(Signal.Approaches, approach =>
                     foreach (var approach in Signal.Approaches)
                     {
                         bool permissivePhase;
@@ -224,24 +216,21 @@ namespace MOE.Common.Business.WCFServiceLibrary
                             }
                         }
                     }
-                    //});
                 }
             }
 
             timingAndActuationsForPhases = timingAndActuationsForPhases.OrderBy(t => t.PhaseNumberSort).ToList();
             //  Can not add parrallelism because of contention for the same chart.
-            //Parallel.ForEach(timingAndActuationsForPhases, timingAndActutionsForPhase =>
-                foreach (var timingAndActutionsForPhase in timingAndActuationsForPhases)
+            foreach (var timingAndActutionsForPhase in timingAndActuationsForPhases)
             {
                 if (timingAndActutionsForPhase.GetPermissivePhase==false ||
                     ShowPermissivePhases)
                 {
                     GetChart(timingAndActutionsForPhase);
                 }
-           // });
             }
 
-        GlobalEventCodesList = ExtractListOfNumbers(GlobalCustomEventCodes);
+            GlobalEventCodesList = ExtractListOfNumbers(GlobalCustomEventCodes);
             GlobalEventParamsList = ExtractListOfNumbers(GlobalCustomEventParams);
             GlobalEventCounter = 0;
             if (GlobalEventCodesList != null && GlobalEventParamsList != null &&
@@ -257,180 +246,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             }
             return ReturnList;
         }
-
-        //private void CreateFilesForPartitions()
-        //{
-        //    string path = @"C:\temp\PFunction_ControllerAndSpeed.txt";
-        //    //using (var PF = new StreamWriter(path, false))
-            //{
-            //    PF.WriteLine("USE [MOE]");
-            //    PF.WriteLine("GO");
-            //    PF.WriteLine();
-            //    PF.WriteLine("CREATE PARTITION FUNCTION [PF_MOE_ControllerAndSpeed](datetime2(7)) AS RANGE RIGHT FOR VALUES ");
-            //    PF.Write("(");
-            //    var inTheBegining = this.StartDate;
-            //    var inTheEnd = this.EndDate;
-            //    for (int i = 0; i < 265; i++)
-            //    {
-            //        PF.Write("N'");
-            //        PF.WriteLine(inTheBegining.ToString("s") + "',");
-            //        inTheBegining = inTheBegining.AddDays(7);
-            //    }
-            //    PF.WriteLine();
-            //    PF.WriteLine("GO");
-            //    PF.Close();
-            //}
-
-            //path = @"C:\temp\PSchema_ControllerAndSpeed.txt";
-            //using (var PS = new StreamWriter(path, false))
-            //{
-            //    var inTheBegining = this.StartDate;
-            //    PS.WriteLine("USE [MOE]");
-            //    PS.WriteLine("GO");
-            //    PS.WriteLine();
-            //    PS.WriteLine("CREATE PARTITION SCHEME [PS_MOE_ControllerAndSpeed] AS PARTITION [PF_MOE_ControllerAndSpeed] TO (");
-            //    for (int i = 0; i < 265; i++)
-            //    {
-                    
-            //        PS.Write("[MOE_");
-            //        PS.WriteLine(inTheBegining.ToString("yyyy-MM-dd") + "],");
-            //        inTheBegining = inTheBegining.AddDays(7);
-            //    }
-            //    PS.WriteLine(")");
-            //    PS.WriteLine("GO");
-            //    PS.Close();
-            //}
-
-            //path = @"C:\temp\Files_ControllerAndSpeed.txt";
-            //using (var PF = new StreamWriter(path, false))
-            //{
-            //    PF.WriteLine("USE [MOE]");
-            //    PF.WriteLine("GO");
-            //    PF.WriteLine();
-            //    var inTheBegining = this.StartDate;
-            //    var inTheEnd = this.EndDate;
-            //    for (int i = 0; i < 265; i++)
-            //    {
-            //        PF.Write("ALTER DATABASE [MOE] ADD FILE (NAME = N'MOE_ControllerAndSpeed_");
-            //        PF.WriteLine(inTheBegining.ToString("yyyy-MM-dd")
-            //                 + @"', FILENAME = N'E:\MSSQL\DATA\MOE_PARTITIONS\ControllerAndSpeed\ControllerAndSpeed_"
-            //                 + inTheBegining.ToString("yyyy-MM-dd")
-            //                 + ".NDF', SIZE = 8192MB, MAXSIZE = UNLIMITED, FILEGROWTH = 64MB) TO FILEGROUP "
-            //                 + "[MOE_ControllerAndSpeed_" + inTheBegining.ToString("yyyy-MM-dd") + "]");
-            //        inTheBegining = inTheBegining.AddDays(7);
-            //    }
-            //    PF.WriteLine();
-            //    PF.WriteLine("GO");
-            //    PF.Close();
-            //}
-
-
-            //path = @"C:\temp\FileGroup_ControllerAndSpeed.txt";
-            //using (var PS = new StreamWriter(path, false))
-            //{
-            //    var inTheBegining = this.StartDate;
-            //    PS.WriteLine("USE [MOE]");
-            //    PS.WriteLine("GO");
-            //    PS.WriteLine();
-            //    for (int i = 0; i < 265; i++)
-            //    {
-            //        PS.Write("ALTER DATABASE [MOE] ADD FILEGROUP [MOE_ControllerAndSpeed_");
-            //        PS.WriteLine(inTheBegining.ToString("yyyy-MM-dd") + "]");
-            //        inTheBegining = inTheBegining.AddDays(7);
-            //    }
-            //    PS.WriteLine();
-            //    PS.WriteLine("GO");
-            //    PS.Close();
-            //}
-
-
-
-
-        //    path = @"C:\temp\PFunction_Aggregation.txt";
-        //    using (var PF = new StreamWriter(path, false))
-        //    {
-        //        PF.WriteLine("USE [MOE]");
-        //        PF.WriteLine("GO");
-        //        PF.WriteLine();
-        //        PF.WriteLine("CREATE PARTITION FUNCTION [PF_MOE_Aggregation](datetime2(7)) AS RANGE RIGHT FOR VALUES ");
-        //        PF.Write("(");
-        //        var inTheBegining = this.EndDate;
-        //        for (int i = 0; i < 100; i++)
-        //        {
-        //            PF.Write("N'");
-        //            PF.WriteLine(inTheBegining.ToString("s") + "',");
-        //            inTheBegining = inTheBegining.AddMonths(1);
-        //        }
-        //        PF.WriteLine();
-        //        PF.WriteLine("GO");
-        //        PF.Close();
-        //    }
-
-        //    path = @"C:\temp\PSchema_Aggregation.txt";
-        //    using (var PS = new StreamWriter(path, false))
-        //    {
-        //        var inTheBegining = this.EndDate;
-        //        PS.WriteLine("USE [MOE]");
-        //        PS.WriteLine("GO");
-        //        PS.WriteLine();
-        //        PS.WriteLine("CREATE PARTITION SCHEME [PS_MOE_Aggregation] AS PARTITION [PF_MOE_Aggregation] TO (");
-        //        for (int i = 0; i < 100; i++)
-        //        {
-                    
-        //            PS.Write("[MOE_Aggregation_");
-        //            PS.WriteLine(inTheBegining.ToString("yyyy-MM-dd") + "],");
-        //            inTheBegining = inTheBegining.AddMonths(1);
-        //        }
-        //        PS.WriteLine(")");
-        //        PS.WriteLine("GO");
-        //        PS.Close();
-        //    }
-
-        //    path = @"C:\temp\Files_Aggregation.txt";
-        //    using (var PF = new StreamWriter(path, false))
-        //    {
-        //        PF.WriteLine("USE [MOE]");
-        //        PF.WriteLine("GO");
-        //        PF.WriteLine();
-        //        var inTheBegining = this.EndDate;
-        //        for (int i = 0; i < 100; i++)
-        //        {
-        //            PF.Write("ALTER DATABASE [MOE] ADD FILE (NAME = N'MOE_Aggregation_");
-        //            PF.WriteLine(inTheBegining.ToString("yyyy-MM-dd")
-        //                         + @"', FILENAME = N'E:\MSSQL\DATA\MOE_PARTITIONS\Aggregation\Aggregation_"
-        //                         + inTheBegining.ToString("yyyy-MM-dd")
-        //                         + ".NDF', SIZE = 2048MB, MAXSIZE = UNLIMITED, FILEGROWTH = 64MB) TO FILEGROUP "
-        //                         + "[MOE_Aggregation_" + inTheBegining.ToString("yyyy-MM-dd") + "]");
-               
-        //            inTheBegining = inTheBegining.AddMonths(1);
-        //        }
-        //        PF.WriteLine();
-        //        PF.WriteLine("GO");
-        //        PF.Close();
-        //    }
-
-
-        //    path = @"C:\temp\FileGroup_Aggregation.txt";
-        //    using (var PS = new StreamWriter(path, false))
-        //    {
-        //        var inTheBegining = this.EndDate;
-        //        PS.WriteLine("USE [MOE]");
-        //        PS.WriteLine("GO");
-        //        PS.WriteLine();
-        //        for (int i = 0; i < 100; i++)
-        //        {
-        //            PS.WriteLine("ALTER DATABASE [MOE] ADD FILEGROUP [MOE_Aggregation_" + inTheBegining.ToString("yyyy-MM-dd") + "]");
-        //            inTheBegining = inTheBegining.AddMonths(1);
-        //        }
-        //        PS.WriteLine();
-        //        PS.WriteLine("GO");
-        //        PS.Close();
-        //    }
-        //}
-
-
-
-
 
         private void GetChartLegend()
         {

@@ -106,6 +106,12 @@ function GetCheckBoxes(){
 
 function RunReports() {
     StartReportSpinner();
+    
+    var form = $("#MainForm")[0];
+    if (!$(form).valid()) {
+        StopReportSpinner();
+        return alert("Please select a signal");
+    }
     var timeOptions = $("input:radio[name='TimeOptions']:checked").val();
     var GetGapReport = $('#finalGapAnalysisCheck').is(":checked");
     var GetSplitFail = $('#splitFailAnalysisCheck').is(":checked");

@@ -28,7 +28,7 @@ namespace InstallerLibrary
     {
 
 
-        [CustomAction]
+       [CustomAction]
        public static ActionResult InitDatabase(Session session)
         {
             
@@ -95,7 +95,7 @@ namespace InstallerLibrary
 
         private static void WriteConfigLines(string connectionString)
         {
-            var updateAppSettings = @"UPDATE [dbo].[ApplicationSettings] set ImageUrl = 'http://localhost/atspm/ChartImages/',ImagePath = 'C:\inetpub\wwwroot\ATSPM\ChartImages\' where ApplicationID = 4";
+            var updateAppSettings = @"UPDATE [dbo].[ApplicationSettings] set ImageUrl = 'http://localhost/atspm/ChartImages/', ImagePath = 'C:\inetpub\wwwroot\ATSPM\ChartImages\' where ApplicationID = 1";
             RunSQL(connectionString, updateAppSettings); 
         }
 
