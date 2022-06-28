@@ -77,6 +77,11 @@ namespace MOE.Common.Models
 
         public List<int> GetPhasesForSignal()
         {
+            if (this.Approaches == null)
+            {
+                var approachRepository = ApproachRepositoryFactory.Create();
+                this.Approaches = approachRepository.GetApproachesForSignal(this.VersionID);
+            }
             var phases = new List<int>();
             foreach (var a in Approaches)
             {
@@ -323,6 +328,24 @@ namespace MOE.Common.Models
         {
             var directions = Approaches.Select(a => a.DirectionType).Distinct().ToList();
             return directions;
+        }
+
+        internal List<Approach> GetApproachesForAggregation()
+        {
+            List<Approach> approachesToReturn = new List<Approach>();
+            if (Approaches != null)
+            {
+                var approaches = Approaches.Where(a => a.IsPedestrianPhaseOverlap == false && a.IsPermissivePhaseOverlap == false && a.IsProtectedPhaseOverlap == false);
+                foreach(var approach in approaches)
+                {
+                    if ((!approachesToReturn.Select(a => a.ProtectedPhaseNumber).Contains(approach.ProtectedPhaseNumber) && approach.ProtectedPhaseNumber != 0) 
+                        || (approach.PermissivePhaseNumber != null && !approachesToReturn.Select(a => a.PermissivePhaseNumber).Contains(approach.PermissivePhaseNumber)))
+                    {
+                        approachesToReturn.Add(approach);
+                    }
+                }
+            }
+            return approachesToReturn;
         }
     }
 }

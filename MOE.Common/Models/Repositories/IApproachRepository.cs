@@ -14,5 +14,6 @@ namespace MOE.Common.Models.Repositories
         void Remove(Approach approach);
         void Remove(int approachID);
         List<Approach> GetApproachesByIds(List<int> excludedApproachIds);
+        ICollection<Approach> GetApproachesForSignal(int versionID);
     }
 }
