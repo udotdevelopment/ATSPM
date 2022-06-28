@@ -50,7 +50,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         
 
-        public void SetDefaults()
+        public new void SetDefaults()
         {
             YAxisMax = 100;
             YAxisMin = 0;
