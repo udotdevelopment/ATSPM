@@ -425,33 +425,27 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     case BinFactoryOptions.BinSize.FifteenMinute:
                         chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                            this.TimeOptions.Start.AddHours(TimeOptions.TimeOfDayStartHour.Value)
-                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-15).ToOADate();
+                            this.TimeOptions.Start.AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-15).ToOADate();
                         break;
                     case BinFactoryOptions.BinSize.ThirtyMinute:
                         chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                            this.TimeOptions.Start.AddHours(TimeOptions.TimeOfDayStartHour.Value)
-                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-30).ToOADate();
+                            this.TimeOptions.Start.AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-30).ToOADate();
                         break;
                     case BinFactoryOptions.BinSize.Hour:
                         chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                            this.TimeOptions.Start.AddHours(TimeOptions.TimeOfDayStartHour.Value)
-                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-60).ToOADate();
+                            this.TimeOptions.Start.AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-60).ToOADate();
                         break;
                     case BinFactoryOptions.BinSize.Day:
                         chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                            this.TimeOptions.Start.AddHours(TimeOptions.TimeOfDayStartHour.Value)
-                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddDays(-1).ToOADate();
+                            this.TimeOptions.Start.AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddDays(-1).ToOADate();
                         break;
                     case BinFactoryOptions.BinSize.Month:
                         chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                            this.TimeOptions.Start.AddHours(TimeOptions.TimeOfDayStartHour.Value)
-                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMonths(-1).ToOADate();
+                            this.TimeOptions.Start.AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMonths(-1).ToOADate();
                         break;
                     case BinFactoryOptions.BinSize.Year:
                         chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                            this.TimeOptions.Start.AddHours(TimeOptions.TimeOfDayStartHour.Value)
-                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddYears(-1).ToOADate();
+                            this.TimeOptions.Start.AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddYears(-1).ToOADate();
                         break;
                 }
             }
