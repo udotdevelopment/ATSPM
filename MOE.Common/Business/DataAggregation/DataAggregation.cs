@@ -78,7 +78,7 @@ namespace MOE.Common.Business.DataAggregation
         private long _maxMemoryLimit;
         private DateTime _testDate;
         public int _binSize;
-        private bool _restrictSignals;
+        private string[] _restrictSignals;
 
         public void StartAggregationSignalPlan(string[] args)
         {
@@ -1136,11 +1136,10 @@ namespace MOE.Common.Business.DataAggregation
             var db = new SPM();
             db.Configuration.LazyLoadingEnabled = false;
             List<int> versionIds = new List<int>();
-            if (_restrictSignals)
+            if (_restrictSignals != null)
             {
-                List<string> restrictedSignalList = db.SignalsToAggregate.Select(s => s.SignalID).ToList();
                 versionIds = db.Signals.Where(
-                        r => r.VersionActionId != 3 && r.Start < dt && restrictedSignalList.Contains(r.SignalID)
+                        r => r.VersionActionId != 3 && r.Start < dt && _restrictSignals.Contains(r.SignalID)
                     ).GroupBy(r => r.SignalID).Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault())
                     .Select(s => s.VersionID).ToList();
             }
@@ -1162,11 +1161,10 @@ namespace MOE.Common.Business.DataAggregation
             db.Configuration.LazyLoadingEnabled = false;
 
             List<int> versionIds = new List<int>();
-            if (_restrictSignals)
+            if (_restrictSignals != null)
             {
-                List<string> restrictedSignalList = db.SignalsToAggregate.Select(s => s.SignalID).ToList();
                 versionIds = db.Signals.Where(
-                        r => r.VersionActionId != 3 && r.Start < dt && restrictedSignalList.Contains(r.SignalID)
+                        r => r.VersionActionId != 3 && r.Start < dt && _restrictSignals.Contains(r.SignalID)
                     ).GroupBy(r => r.SignalID).Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault())
                     .Select(s => s.VersionID).ToList();
             }
@@ -1191,18 +1189,17 @@ namespace MOE.Common.Business.DataAggregation
                 db.Configuration.LazyLoadingEnabled = false;
 
                 List<int> versionIds = new List<int>();
-                if (_restrictSignals)
+                if (_restrictSignals != null)
                 {
-                    List<string> restrictedSignalList = db.SignalsToAggregate.Select(s => s.SignalID).ToList();
                     versionIds = db.Signals.Where(
-                            r => r.VersionActionId != 3 && r.Start < dt && restrictedSignalList.Contains(r.SignalID) && (r.SignalID == "4509")
+                            r => r.VersionActionId != 3 && r.Start < dt && _restrictSignals.Contains(r.SignalID)
                         ).GroupBy(r => r.SignalID).Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault())
                         .Select(s => s.VersionID).ToList();
                 }
                 else
                 {
                     versionIds = db.Signals.Where(
-                            r => r.VersionActionId != 3 && r.Start < dt && (r.SignalID == "1095")
+                            r => r.VersionActionId != 3 && r.Start < dt 
                         ).GroupBy(r => r.SignalID).Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault())
                         .Select(s => s.VersionID).ToList();
                 }
@@ -2123,10 +2120,7 @@ namespace MOE.Common.Business.DataAggregation
             {
                 _startDate = Convert.ToDateTime(args[0]);
                 _endDate = Convert.ToDateTime(args[1]);
-                bool isValidBoolean = false;
-                Boolean.TryParse(args[2], out isValidBoolean);
-                if (isValidBoolean)
-                    _restrictSignals = Convert.ToBoolean(args[2]);
+                _restrictSignals = fl_remove_Escape_Sequences(args[2].ToString()).Split(',');
             }
             else
             {
@@ -2135,7 +2129,38 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
-        private DateTime GetNextTime()
+
+        public static string fl_remove_Escape_Sequences(string sText, string sReplace = "")
+
+{
+sText = sText.Replace("\a", sReplace); // Warning
+
+sText = sText.Replace("\b", sReplace); // BACKSPACE
+
+sText = sText.Replace("\f", sReplace); // Form-feed
+
+sText = sText.Replace("\n", sReplace); // Line reverse
+
+sText = sText.Replace("\r", sReplace); // Carriage return
+
+sText = sText.Replace("\t", sReplace); // Horizontal tab
+
+sText = sText.Replace("\v", sReplace); // Vertical tab
+
+sText = sText.Replace("\'", sReplace); // Single quote
+
+sText = sText.Replace("\"", sReplace); // Double quote
+
+sText = sText.Replace("\\", sReplace); // Backslash
+
+
+
+    return sText;
+
+}
+
+
+    private DateTime GetNextTime()
         {
             var db = new SPM();
             if (db.SignalEventCountAggregations.Any())

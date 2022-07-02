@@ -1346,16 +1346,16 @@ namespace MOE.Common.Migrations
                 }
             );
 
-            //context.GeneralSettings.AddOrUpdate(
-            //    c => c.ApplicationID,
-            //    new Models.GeneralSettings
-            //    {
-            //        ApplicationID = 4,
-            //        RawDataCountLimit = 1048576,
-            //        ImageUrl = "http://defaultWebServer/spmimages/",
-            //        ImagePath = @"\\defaultWebserver\SPMImages\"
-            //    }
-            //);
+            context.GeneralSettings.AddOrUpdate(
+                c => c.ApplicationID,
+                new Models.GeneralSettings
+                {
+                    ApplicationID = 4,
+                    RawDataCountLimit = 1048576,
+                    ImageUrl = "http://defaultWebServer/spmimages/",
+                    ImagePath = @"\\defaultWebserver\SPMImages\"
+                }
+            );
 
             context.LaneTypes.AddOrUpdate(
                 new LaneType { LaneTypeID = 1, Description = "Vehicle", Abbreviation = "V" },
