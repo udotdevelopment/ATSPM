@@ -10,11 +10,6 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
     {
         private readonly MOEContext _db;
 
-        //public ApproachCycleAggregationRepository()
-        //{
-        //    _db = new MOEContext();
-        //}
-
         public ApproachCycleAggregationRepository(MOEContext context)
         {
             _db = context;
@@ -30,10 +25,10 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
         {
             var cycles = 0;
             if (_db.PhaseCycleAggregations.Any(r => r.ApproachId == approachId
-                                                       && r.BinStartTime >= start && r.BinStartTime <= end))
+                                                       && r.BinStartTime >= start && r.BinStartTime < end))
                 cycles = _db.PhaseCycleAggregations.Where(r => r.ApproachId == approachId
                                                                   && r.BinStartTime >= start &&
-                                                                  r.BinStartTime <= end)
+                                                                  r.BinStartTime < end)
                     .Sum(r => r.TotalRedToRedCycles);
             return cycles;
         }
@@ -47,10 +42,10 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
             DateTime end)
         {
             if (_db.PhaseCycleAggregations.Any(r => r.ApproachId == approachId
-                                                       && r.BinStartTime >= start && r.BinStartTime <= end))
+                                                       && r.BinStartTime >= start && r.BinStartTime < end))
                 return _db.PhaseCycleAggregations.Where(r => r.ApproachId == approachId
                                                                  && r.BinStartTime >= start &&
-                                                                 r.BinStartTime <= end)
+                                                                 r.BinStartTime < end)
                     .ToList();
             else
                 return new List<PhaseCycleAggregation>();
@@ -61,18 +56,18 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
         {
             return _db.PhaseCycleAggregations.Any(r => r.SignalId == signalId && r.PhaseNumber == phaseNumber
                                                              && r.BinStartTime >= start &&
-                                                             r.BinStartTime <= end);
+                                                             r.BinStartTime < end);
         }
 
         public List<PhaseCycleAggregation> GetApproachCyclesAggregationBySignalIdPhaseAndDateRange(string signalId, int phase, DateTime start,
             DateTime end)
         {
             if (_db.PhaseCycleAggregations.Any(r => r.SignalId == signalId
-            && r.PhaseNumber == phase && r.BinStartTime >= start && r.BinStartTime <= end))
+            && r.PhaseNumber == phase && r.BinStartTime >= start && r.BinStartTime < end))
                 return _db.PhaseCycleAggregations.Where(r => r.SignalId == signalId
                                                                  && r.PhaseNumber == phase
                                                                  && r.BinStartTime >= start
-                                                                 && r.BinStartTime <= end)
+                                                                 && r.BinStartTime < end)
                     .ToList();
             else
                 return new List<PhaseCycleAggregation>();
@@ -82,11 +77,11 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
             DateTime end)
         {
             if (_db.PhaseCycleAggregations.Any(r => r.SignalId == signalId && r.PhaseNumber == phaseNumber
-                                                       && r.BinStartTime >= start && r.BinStartTime <= end))
+                                                       && r.BinStartTime >= start && r.BinStartTime < end))
                 return _db.PhaseCycleAggregations.Where(r => r.SignalId == signalId
                                                             && r.PhaseNumber == phaseNumber
                                                             && r.BinStartTime >= start
-                                                            && r.BinStartTime <= end)
+                                                            && r.BinStartTime < end)
                                                   .Average(r => r.TotalRedToRedCycles);
 
             else
@@ -98,7 +93,7 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
         //{
         //    return _db.PhaseCycleAggregations.Where(r => r.ApproachId == approachId
         //                                                    && r.BinStartTime >= startDate &&
-        //                                                    r.BinStartTime <= endDate
+        //                                                    r.BinStartTime < endDate
         //                                                    && r.IsProtectedPhase == getProtectedPhase).ToList();
         //}
 
@@ -113,7 +108,7 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
             return _db.PhaseCycleAggregations.Where(r => r.SignalId == signalId
                                                             && r.PhaseNumber == phaseNumber
                                                             && r.BinStartTime >= dateTime1 &&
-                                                            r.BinStartTime <= dateTime2).ToList().Sum(p => p.TotalGreenToGreenCycles);
+                                                            r.BinStartTime < dateTime2).ToList().Sum(p => p.TotalGreenToGreenCycles);
         }
     }
 }

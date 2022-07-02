@@ -25,24 +25,29 @@ function RunChecks() {
     GetCheckBoxes();
     if (!signalID) {
         $('#SignalDataCheckPlaceHolder').html("<h3 class='text-danger'>Signal Not Found</h3");
+        StopChecksSpinner();
     }
     else if (!cyclesWithPedCalls) {
         $('#SignalDataCheckPlaceHolder').html("<h3 class='text-danger'>Cycles With Ped Calls Not Found</h3");
+        StopChecksSpinner();
     }
     else if (!cyclesWithGapOuts) {
         $('#SignalDataCheckPlaceHolder').html("<h3 class='text-danger'>Cycles With Gap Outs Not Found</h3");
+        StopChecksSpinner();
     }
     else if (!leftTurnVolume) {
         $('#SignalDataCheckPlaceHolder').html("<h3 class='text-danger'>Left Turn Volume Not Found</h3");
+        StopChecksSpinner();
     }
     else if (!startDate) {
         $('#SignalDataCheckPlaceHolder').html("<h3 class='text-danger'>Start Date Not Found</h3");
+        StopChecksSpinner();
     }
     else if (!endDate) {
         $('#SignalDataCheckPlaceHolder').html("<h3 class='text-danger'>End Date Not Found</h3");
+        StopChecksSpinner();
     }
     else {
-        //var checkboxes = document.getElementsByName('turn.Checked');
         var approachIds = getApproachIds();
         var tosend = {};
         tosend.signalId = signalID;
@@ -61,13 +66,12 @@ function RunChecks() {
             success: function (data) {
                 StopChecksSpinner();
                 $('#FinalGapAnalysisPlaceHolder').html(data);
+            },
+            error: function (data) {
+                StopChecksSpinner();
+                $('#FinalGapAnalysisPlaceHolder').html(data.responseText);
             }
         });
-        //$.get(urlpathGetSignalDataCheckReport,
-        //    tosend,
-        //    function (data) {
-        //        $('#SignalDataCheckPlaceHolder').html(data);
-        //    });
     }
 }
 
@@ -102,6 +106,12 @@ function GetCheckBoxes(){
 
 function RunReports() {
     StartReportSpinner();
+    
+    var form = $("#MainForm")[0];
+    if (!$(form).valid()) {
+        StopReportSpinner();
+        return alert("Please select a signal");
+    }
     var timeOptions = $("input:radio[name='TimeOptions']:checked").val();
     var GetGapReport = $('#finalGapAnalysisCheck').is(":checked");
     var GetSplitFail = $('#splitFailAnalysisCheck').is(":checked");
@@ -117,11 +127,13 @@ function RunReports() {
     if (timeOptions == "customTimeRadiobutton") {
         StartHour = $("#StartTimeHour :selected").val();
         var StartAMPM = $("#StartAMPM :selected").val();
+        StartHour = parseInt(StartHour);
         if (StartAMPM == "PM") {
             StartHour += 12;
         }
         EndHour = $("#EndTimeHour :selected").val();
         var EndAMPM = $("#EndAMPM :selected").val();
+        EndHour = parseInt(EndHour)
         if (EndAMPM == "PM") {
             EndHour += 12;
         }
@@ -251,13 +263,6 @@ function SetControlValues(signalID, selectedMetricID) {
 }
 
 function GetSignalLocation() {
-    //if (selectedMetricID === null || selectedMetricID === undefined) {
-    //    var metricsList = $("#MetricsList");
-    //    if (metricsList !== null) {
-    //        selectedMetricID = metricsList.val();
-    //    }
-    //}
-
     var tosend = {};
     var signalID = $("#SignalID").val();
     tosend.signalID = signalID;
@@ -272,6 +277,7 @@ function GetSignalLocation() {
     });
 }
 $("#ResetDate").click(function () { ResetDates(); });
+
 function ResetDates() {
     var d = new Date();
     var month = d.getMonth() + 1;

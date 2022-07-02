@@ -5,10 +5,12 @@
 
     th {
         font-weight: normal;
+        font-size: smaller;
     }
 
     td {
         font-weight: bold;
+        font-size: smaller;
     }
 
     .recommendation {
@@ -42,7 +44,7 @@
 <table class="table table-borderless border-bottom border-primary">
     <tr class="col-8">
         <th class="text-left">
-            <img src="C:\projects\avenue\ATSPM\SPM\Images\NewUDOTLogo.png" width="200" />
+            <img src="@Server.MapPath("~/Images/NewUDOTLogo.png")" width="200" />
         </th>
         <th class="pr-4 mr-4 pl-0">
             <h3>Left Turn Phase</h3>
@@ -195,13 +197,13 @@
                         Capacity:
                     </th>
                     <td>
-                        @(result.GapDurationConsiderForStudy.HasValue ? result.Capacity.ToString("N") : "–")
+                        @(result.GapDurationConsiderForStudy.HasValue ? Math.Round(result.Capacity).ToString() : "–")
                     </td>
                     <th>
                         Demand:
                     </th>
                     <td>
-                        @(result.GapDurationConsiderForStudy.HasValue ? result.Demand.ToString("N") : "–")
+                        @(result.GapDurationConsiderForStudy.HasValue ? Math.Round(result.Demand).ToString() : "–")
                     </td>
                     <th>
                         V/C Ratio:
@@ -248,7 +250,7 @@
                 </tr>
                 <tr>
                     <th colspan="3" class="text-center" style="font-weight: bolder">
-                        Split Failure and Pedestrains
+                        Split Failure and Pedestrians
                     </th>
                     <th colspan="5" class="text-center" style="font-weight: bolder">
                         Volume Cross Product and Boundries
@@ -259,7 +261,7 @@
                         Cycles With Split Failure:
                     </th>
                     <td>
-                        @(result.SplitFailsConsiderForStudy.HasValue ? result.CyclesWithSplitFailNum + "|" + result.CyclesWithSplitFailPercent : "–")
+                        @(result.SplitFailsConsiderForStudy.HasValue ? result.CyclesWithSplitFailNum + " (" + result.CyclesWithSplitFailPercent.ToString("#0.##%") + ")" : "–")
                     </td>
                     <th class="text-left">
                         Left Turn Movement Volume:
@@ -295,10 +297,10 @@
                 </tr>
                 <tr>
                     <th>
-                        Cycles With Pedestrain Calls:
+                        Cycles With Pedestrian Calls:
                     </th>
                     <td colspan="2">
-                        @(result.PedActuationsConsiderForStudy.HasValue ? result.CyclesWithPedCallNum.ToString() : "–")
+                        @(result.PedActuationsConsiderForStudy.HasValue ? result.CyclesWithPedCallNum + " (" + result.CyclesWithPedCallPercent.ToString("#0.##%") + ")" : "–")
                     </td>
                     <th class="text-left">
                         Cross Product Value:

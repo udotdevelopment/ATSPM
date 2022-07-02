@@ -101,10 +101,8 @@
                     </div>
                     <div class="form-group-configuration-tool  form-group col-md-2">
                         @Html.LabelFor(model => model.Areas, htmlAttributes: new { @class = "control-label" })
-                        <div class="">
-                            @Html.ListBoxFor(model => model.AreaIds, (MultiSelectList)ViewBag.Areas, new { @class = "form-control signal-areas" })
-                            @Html.ValidationMessageFor(model => model.Areas, "", new { id = "Area-error", @class = "text-danger" })
-                        </div>
+                        @Html.ListBoxFor(model => model.AreaIds, (MultiSelectList)ViewBag.Areas, new { @class = "form-control signal-areas" })
+                        @Html.ValidationMessageFor(model => model.Areas, "", new { id = "Area-error", @class = "text-danger" })
                     </div>
                     <div class="form-group-configuration-tool  form-group col-md-2">
                         @Html.LabelFor(model => model.JurisdictionId, htmlAttributes: new { @class = "control-label" })

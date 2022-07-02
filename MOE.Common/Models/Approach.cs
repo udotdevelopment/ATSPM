@@ -42,7 +42,7 @@ namespace MOE.Common.Models
         public string Description { get;
             set; }
 
-        [Display(Name = "Approach Speed (MPH)s")]
+        [Display(Name = "Approach Speed (MPH)")]
         [DataMember]
         public int? MPH { get; set; }
 

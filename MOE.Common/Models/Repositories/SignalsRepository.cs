@@ -451,6 +451,16 @@ namespace MOE.Common.Models.Repositories
 
         }
 
+        public IQueryable<Signal> GetLatestVersionOfAllSignalsAsQueryable()
+        {
+            var activeSignals = _db.Signals.Where(r => r.VersionActionId != 3)
+                    .GroupBy(r => r.SignalID)
+                    .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault());
+
+            return activeSignals;
+
+        }
+
         public List<Signal> GetLatestVersionOfAllSignalsForFtp()
         {
             List<int> controllerTypes = new List<int>{4,5};

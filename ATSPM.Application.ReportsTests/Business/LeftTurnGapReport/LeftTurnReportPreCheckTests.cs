@@ -252,7 +252,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport.Tests
                     distinctTimeSpans.Add(new TimeSpan(i, m, 0));
                 }
             }
-            var result = LeftTurnReportPreCheck.GetAveragesForBins(volumeAggregations, distinctTimeSpans);
+            var result = LeftTurnReportPreCheck.GetAveragesForBinsByTimeSpan(volumeAggregations, distinctTimeSpans);
             foreach (var avg in result)
             {
                 Assert.Equal(5, avg.Value);

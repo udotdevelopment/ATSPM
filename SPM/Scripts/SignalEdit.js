@@ -294,6 +294,9 @@ function PostCreateDetectorComment(ID) {
 
 function CreateNewSignal() {
     var newSignalID = prompt("Please enter the new SignalID", "123456");
+
+    if (newSignalID == null) return;
+
     $.ajax({
         type: "POST",
         cache: false,
@@ -660,6 +663,20 @@ function UpdatePedsare1to1() {
             peddetectors[i].value = "";
             //pedoverlap[i].removeAttribute("readonly");
             pedoverlap[i].checked = false;
+        }
+    }
+}
+
+function onProtectedPhaseNumberInput() {
+    var pedchecked = document.getElementById('Pedsare1to1-value');
+    var pedphases = document.getElementsByClassName('ped-phase-value');
+    var protphases = document.getElementsByClassName('protected-phase-value');
+    var peddetectors = document.getElementsByClassName('ped-detectors-string');
+
+    if (pedchecked.checked) {
+        for (let i = 0; i < pedphases.length; i++) {
+            pedphases[i].value = protphases[i].value
+            peddetectors[i].value = protphases[i].value
         }
     }
 }

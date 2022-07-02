@@ -57,7 +57,7 @@ namespace ATSPM.Application.Reports.Controllers
             var amStartTime = new TimeSpan(6, 0, 0);
             var amEndTime = new TimeSpan(9, 0, 0);
             var pmStartTime = new TimeSpan(15, 0, 0);
-            var pmEndTime = new TimeSpan(18, 0, 0);
+            var pmEndTime = new TimeSpan(19, 0, 0);
 
             var approach = _approachRepository.GetApproachByApproachID(parameters.ApproachId);
             var dataCheck = new DataCheckResult();
@@ -101,7 +101,7 @@ namespace ATSPM.Application.Reports.Controllers
             var flowRate = LeftTurnReportPreCheck.GetAMPMPeakFlowRate(parameters.SignalId, parameters.ApproachId, parameters.StartDate, parameters.EndDate, amStartTime,
             amEndTime, pmStartTime, pmEndTime, parameters.DaysOfWeek, _signalRepository, _approachRepository, _detectorEventCountAggregationRepository);
             dataCheck.LeftTurnVolumeOk = flowRate.First().Value >= parameters.VolumePerHourThreshold
-                && flowRate.Last().Value >= parameters.VolumePerHourThreshold;
+                || flowRate.Last().Value >= parameters.VolumePerHourThreshold;
 
             var gapOut = leftTurnReportPreCheck.GetAMPMPeakGapOut(parameters.SignalId, parameters.ApproachId, parameters.StartDate, parameters.EndDate, amStartTime,
             amEndTime, pmStartTime, pmEndTime, parameters.DaysOfWeek);

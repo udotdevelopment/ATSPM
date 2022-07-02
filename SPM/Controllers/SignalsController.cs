@@ -585,7 +585,7 @@ namespace SPM.Controllers
                             approachRepository.AddOrUpdate(approach);
                         }
                     }
-                    return Content("Save Successful!" + DateTime.Now.ToString());
+                    return Content("Save Successful! " + DateTime.Now.ToString());
                 }
                 return Content("There was a validation error.");
             }

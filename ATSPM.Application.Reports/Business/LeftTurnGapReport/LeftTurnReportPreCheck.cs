@@ -320,13 +320,13 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             }
             List<TimeSpan> distinctTimeSpans = volumeAggregations.Select(v => v.BinStartTime.TimeOfDay).Distinct().OrderBy(v => v).ToList();
 
-            Dictionary<TimeSpan, int> averageByBin = GetAveragesForBins(volumeAggregations, distinctTimeSpans);
+            Dictionary<TimeSpan, int> averageByBin = GetAveragesForBinsByTimeSpan(volumeAggregations, distinctTimeSpans);
 
             Dictionary<TimeSpan, int> hourlyFlowRates = GetHourlyFlowRates(distinctTimeSpans, averageByBin);
 
             var allDetectorsFlowRate = GetAmPmPeaks(amStartTime, amEndTime, pmStartTime, pmEndTime, hourlyFlowRates);
 
-            return GetLeftTurnAMPMPeakFlowRates(signalId, startDate, endDate, amStartTime, amEndTime, pmStartTime, pmEndTime, daysOfWeek, signalsRepository, detectorEventCountAggregationRepository, distinctTimeSpans, allDetectorsFlowRate);
+            return GetLeftTurnAMPMPeakFlowRates(signalId, startDate, endDate, amStartTime, amEndTime, pmStartTime, pmEndTime, daysOfWeek, signalsRepository, detectorEventCountAggregationRepository, distinctTimeSpans, allDetectorsFlowRate, approachId);
         }
 
         private static Dictionary<TimeSpan, int> GetLeftTurnAMPMPeakFlowRates(string signalId,
@@ -340,7 +340,8 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                                                                               ISignalsRepository signalsRepository,
                                                                               IDetectorEventCountAggregationRepository detectorEventCountAggregationRepository,
                                                                               List<TimeSpan> distinctTimeSpans,
-                                                                              Dictionary<TimeSpan, int> allDetectorsFlowRate)
+                                                                              Dictionary<TimeSpan, int> allDetectorsFlowRate,
+                                                                              int approachId)
         {
             List<Models.Detector> leftTurndetectors = GetLeftTurnLaneByLaneDetectorsForSignal(signalId, startDate, signalsRepository);
             if (!leftTurndetectors.Any())
@@ -354,7 +355,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             {
                 throw new NotSupportedException("No Left Turn Detector Activation Aggregations found");
             }
-            Dictionary<TimeSpan, int> leftTurnAverageByBin = GetAveragesForBins(leftTurnVolumeAggregations, distinctTimeSpans);
+            Dictionary<TimeSpan, int> leftTurnAverageByBin = GetAveragesForBinsByApproach(leftTurnVolumeAggregations, distinctTimeSpans, approachId); //add approach id
             Dictionary<TimeSpan, int> leftTurnHourlyFlowRates = GetHourlyFlowRates(distinctTimeSpans, leftTurnAverageByBin);
             Dictionary<TimeSpan, int> leftTurnAmPmPeaks = new Dictionary<TimeSpan, int>();
             leftTurnAmPmPeaks.Add(allDetectorsFlowRate.First().Key,
@@ -397,8 +398,28 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             return hourlyFlowRates;
         }
 
-        public static Dictionary<TimeSpan, int> GetAveragesForBins(List<DetectorEventCountAggregation> volumeAggregations,
-                                                                   List<TimeSpan> distinctTimeSpans)
+        public static Dictionary<TimeSpan, int> GetAveragesForBinsByTimeSpan(List<DetectorEventCountAggregation> volumeAggregations,
+                                                           List<TimeSpan> distinctTimeSpans)
+        {
+            Dictionary<TimeSpan, int> averageByBin = new Dictionary<TimeSpan, int>();
+            foreach (TimeSpan time in distinctTimeSpans)
+            {
+                var average = Convert.ToInt32(volumeAggregations
+                    .Where(v => v.BinStartTime.TimeOfDay == time)
+                    .GroupBy(v => v.BinStartTime.Day).Select(v => new
+                    {
+                        sum = v.Sum(a => a.EventCount)
+                    }).Average(v => v.sum)
+                );
+
+                averageByBin.Add(time, average);
+            };
+            return averageByBin;
+        }
+
+        public static Dictionary<TimeSpan, int> GetAveragesForBinsByApproach(List<DetectorEventCountAggregation> volumeAggregations,
+                                                                   List<TimeSpan> distinctTimeSpans,
+                                                                   int approachId)
         {
             Dictionary<TimeSpan, int> averageByBin = new Dictionary<TimeSpan, int>();
 
@@ -407,6 +428,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                 int average = Convert.ToInt32(
                     Math.Round(volumeAggregations
                     .Where(v => v.BinStartTime.TimeOfDay == time)
+                    .Where(v => v.ApproachId == approachId)
                     .Average(v => v.EventCount)
                     ));
                 averageByBin.Add(time, average);

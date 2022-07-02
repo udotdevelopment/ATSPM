@@ -2,17 +2,26 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using MOE.Common.Business.PEDDelay;
+using System.ComponentModel.DataAnnotations;
+using MOE.Common.Models;
+using System.Linq;
+using System.Data;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
     [DataContract]
     public class PedDelayOptions : MetricOptions
     {
-        public PedDelayOptions(string signalId, DateTime startDate, DateTime endDate, double? yAxisMax)
+        public PedDelayOptions(string signalId, DateTime startDate, DateTime endDate, int timeBuffer, bool showPedBeginWalk, bool showCycleLength, bool showPercentDelay, double? yAxisMax)
         {
             SignalID = signalId;
             StartDate = startDate;
             EndDate = endDate;
+            TimeBuffer = timeBuffer;
+            ShowPedBeginWalk = showPedBeginWalk;
+            ShowCycleLength = showCycleLength;
+            ShowPercentDelay = showPercentDelay;
             YAxisMax = yAxisMax;
         }
 
@@ -22,17 +31,35 @@ namespace MOE.Common.Business.WCFServiceLibrary
             SetDefaults();
         }
 
+        [DataMember]
+        [Display(Name = "Time Buffer Between Unique Ped Detections")]
+        public int TimeBuffer { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Ped Begin Walk")]
+        public bool ShowPedBeginWalk { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Cycle Length")]
+        public bool ShowCycleLength { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Percent Delay")]
+        public bool ShowPercentDelay { get; set; }
+
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
-            var signalRepository = Models.Repositories.SignalsRepositoryFactory.Create();
-            Models.Signal signal= signalRepository.GetVersionOfSignalByDate(SignalID, StartDate);
+            var signalRepository = SignalsRepositoryFactory.Create();
+            Signal signal = signalRepository.GetVersionOfSignalByDate(SignalID, StartDate);
 
-            var pds = new PedDelaySignal(signal, StartDate, EndDate);
-            foreach (var p in pds.PedPhases)
-                if (p.Cycles.Count > 0)
+            var pedDelaySignal = new PedDelaySignal(signal, TimeBuffer, StartDate, EndDate);
+
+            foreach (var pedPhase in pedDelaySignal.PedPhases)
+                if (pedPhase.Cycles.Count > 0)
                 {
-                    var pdc = new PEDDelayChart(this, p);
+                    var cycleLength = CycleFactory.GetRedToRedCycles(pedPhase.Approach, StartDate, EndDate);
+                    var pdc = new PEDDelayChart(this, pedPhase, cycleLength);
                     var chart = pdc.Chart;
                     var chartName = CreateFileName();
                     chart.SaveImage(MetricFileLocation + chartName);

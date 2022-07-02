@@ -497,7 +497,7 @@ namespace MOE.CommonTests.Models
             var mt9 = new MetricType
             {
                 MetricID = 9,
-                ChartName = "Arrivals On Red",
+                ChartName = "Arrivals on Red",
                 Abbreviation = "AoR",
                 ShowOnWebsite = true
             };
@@ -1076,7 +1076,7 @@ namespace MOE.CommonTests.Models
             var b9 = new MetricType
             {
                 MetricID = 9,
-                ChartName = "Arrivals On Red",
+                ChartName = "Arrivals on Red",
                 Abbreviation = "AoR",
                 ShowOnWebsite = true
             };

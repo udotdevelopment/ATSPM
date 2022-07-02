@@ -10,22 +10,19 @@
 .chosen-container {
   position: relative;
   display: inline-block;
-  font-size: 14px;
   vertical-align: middle;
+  max-width: 100%;
 }
 
 .chosen-container .chosen-drop {
-  position: absolute;
-  top: 100%;
-  left: -9000px;
-  z-index: 1060;
-  margin-top: -1px;
-  background: #ffffff;
-  border: 1px solid #999999;
-  border-top-color: #d9d9d9;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
-  -webkit-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.25);
+    position: absolute;
+    top: 100%;
+    left: -9000px;
+    z-index: 1060;
+    margin-top: -1px;
+    background: #ffffff;
+    border: 1px solid #ced4da;
+     -webkit-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.25);
           box-shadow: 0 8px 8px rgba(0, 0, 0, 0.25);
 }
 
@@ -76,7 +73,7 @@
 
 .chosen-container .chosen-results li.highlighted {
   color: white;
-  background-color: #428bca;
+  background-color: #007bff;
 }
 
 .chosen-container .chosen-results li.highlighted em {
@@ -90,7 +87,7 @@
 
 .chosen-container .chosen-results .no-results {
   display: list-item;
-  background: #eeeeee;
+  background: #e9ecef;
 }
 
 .chosen-container .chosen-results-scroll {
@@ -122,28 +119,21 @@
 }
 
 .chosen-container-single .chosen-single {
-  position: relative;
-  display: block;
-  height: 34px;
-  padding: 0 0 0 8px;
-  overflow: hidden;
-  line-height: 34px;
-  color: #555555;
-  text-decoration: none;
-  white-space: nowrap;
-  background-color: #ffffff;
-  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#ffffff), to(#eeeeee));
-  background-image: -webkit-linear-gradient(top, #ffffff, 0%, #eeeeee, 100%);
-  background-image: -moz-linear-gradient(top, #ffffff 0%, #eeeeee 100%);
-  background-image: linear-gradient(to bottom, #ffffff 0%, #eeeeee 100%);
-  background-repeat: repeat-x;
-  border: 1px solid #cccccc;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffeeeeee', GradientType=0);
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  -webkit-background-clip: padding-box;
-     -moz-background-clip: padding;
-          background-clip: padding-box;
+    position: relative;
+    display: block;
+    height: 34px;
+    padding: 0 0 0 8px;
+    overflow: hidden;
+    line-height: 34px;
+    color: #555555;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: #ffffff;
+    background-repeat: repeat-x;
+    border: 1px solid #ced4da;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
 }
 
 .chosen-container-single .chosen-single span {
@@ -202,23 +192,19 @@
 }
 
 .chosen-container-single .chosen-search input {
-  width: 100%;
-  padding: 4px 20px 4px 4px;
-  margin: 1px 0;
-  background: url("chosen-sprite.png") no-repeat 100% -20px, #ffffff;
-  border: 1px solid #cccccc;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
-  border-top-left-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    width: 100%;
+    padding: 4px 20px 4px 4px;
+    margin: 1px 0;
+    background: url("chosen-sprite.png") no-repeat 100% -20px, #ffffff;
+    border: 1px solid #ced4da;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
 }
 
 .chosen-container-single .chosen-drop {
   margin-top: -1px;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
   -webkit-background-clip: padding-box;
      -moz-background-clip: padding;
           background-clip: padding-box;
@@ -230,21 +216,16 @@
 }
 
 .chosen-container-multi .chosen-choices {
-  position: relative;
-  height: auto !important;
-  height: 1%;
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-  cursor: text;
-  background-color: #ffffff;
-  border: 1px solid #cccccc;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    position: relative;
+    height: auto !important;
+    height: 1%;
+    padding: 1px;
+    margin: 0;
+    overflow: hidden;
+    cursor: text;
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
 }
 
 .chosen-container-multi .chosen-choices li {
@@ -276,25 +257,18 @@
 
 .chosen-container-multi .chosen-choices .search-choice {
   position: relative;
-  padding: 3px 20px 3px 5px;
+  padding: 6px 20px 6px 5px;
   margin: 6px 0 3px 5px;
   line-height: 13px;
   color: #333333;
   cursor: default;
-  background-color: #eeeeee;
-  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#ffffff), to(#eeeeee));
-  background-image: -webkit-linear-gradient(top, #ffffff, 0%, #eeeeee, 100%);
-  background-image: -moz-linear-gradient(top, #ffffff 0%, #eeeeee 100%);
-  background-image: linear-gradient(to bottom, #ffffff 0%, #eeeeee 100%);
+  background-color: #e9ecef;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   background-repeat: repeat-x;
-  border: 1px solid #cccccc;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
-  border-top-left-radius: 4px;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffeeeeee', GradientType=0);
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  border-top-right-radius: .25rem;
+  border-bottom-right-radius: .25rem;
+  border-bottom-left-radius: .25rem;
+  border-top-left-radius: .25rem;
   -webkit-background-clip: padding-box;
      -moz-background-clip: padding;
           background-clip: padding-box;
@@ -334,19 +308,16 @@
 
 .chosen-container-active .chosen-single {
   border: 1px solid rgba(82, 168, 236, 0.8);
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
-          transition: border linear 0.2s, box-shadow linear 0.2s;
 }
 
 .chosen-container-active.chosen-with-drop .chosen-single {
-  background-color: #eeeeee;
-  border: 1px solid rgba(82, 168, 236, 0.8);
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
-          transition: border linear 0.2s, box-shadow linear 0.2s;
+    background-color: #e9ecef;
+    border: 1px solid rgba(82, 168, 236, 0.8);
+    border-radius: .25rem;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+    -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+    transition: border linear 0.2s, box-shadow linear 0.2s;
 }
 
 .chosen-container-active.chosen-with-drop .chosen-single div {
@@ -359,13 +330,9 @@
 }
 
 .chosen-container-active .chosen-choices {
-  border: 1px solid rgba(82, 168, 236, 0.8);
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
-          transition: border linear 0.2s, box-shadow linear 0.2s;
+    border: 1px solid #80bdff;
+    box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 .chosen-container-active .chosen-choices .search-field input {

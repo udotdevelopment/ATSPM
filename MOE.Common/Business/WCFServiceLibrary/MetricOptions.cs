@@ -134,7 +134,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 var type = GetType().GetProperty(option.Key)?.PropertyType;
 
-                if (option.Value == null || option.Value == "null") continue;
+                if (option.Value == null || option.Value.ToLower() == "null") continue;
 
                 if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {

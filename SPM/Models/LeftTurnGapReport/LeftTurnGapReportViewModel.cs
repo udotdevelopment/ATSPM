@@ -90,7 +90,7 @@ namespace SPM.Models
         [Display(Name = "Left-turn Volume (vph)")]
         public int LeftTurnVolume { get; set; }
 
-        [Display(Name = "% Acceptable Gaps/LT Vehicles")]
+        [Display(Name = "LT Vehicles/% Acceptable Gaps")]
         public int AcceptableGaps { get; set; }
 
         [Display(Name = "% Cycles with Split Failure")]

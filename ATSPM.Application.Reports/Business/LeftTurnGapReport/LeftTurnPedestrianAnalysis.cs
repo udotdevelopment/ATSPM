@@ -48,10 +48,15 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             }
             var result = new PedActuationResult();
             if (cycleAverage.CycleAverage == 0)
-                result.CyclesWithPedCalls = 0;
+            {
+                result.CyclesWithPedCallsPercent = 0;
+                result.CyclesWithPedCallsNum = 0;
+            }
             else
-                //result.PedActuationPercent = pedCycleAverage.PedCycleAverage / cycleAverage.CycleAverage;
-            result.CyclesWithPedCalls = pedCycleAverage.PedCycleAverage / cycleAverage.CycleAverage;
+            {
+                result.CyclesWithPedCallsPercent = pedCycleAverage.PedCycleAverage / cycleAverage.CycleAverage;
+                result.CyclesWithPedCallsNum = (int)pedCycleAverage.PedCycleAverage;
+            }
             result.PercentCyclesWithPedsList = cycleList;
             result.Direction = approach.DirectionType.Abbreviation + approach.Detectors.FirstOrDefault()?.MovementType.Abbreviation;
             result.OpposingDirection = signal.Approaches.Where(a => a.ProtectedPhaseNumber == opposingPhase).FirstOrDefault()?.DirectionType.Abbreviation;
@@ -88,7 +93,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
             {
                 if (daysOfWeek.Contains((int)start.DayOfWeek))
-                    for (var tempstart = tempDate.Date.Add(startTime); tempstart <= tempDate.Add(endTime); tempstart = tempstart.AddMinutes(15))
+                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(15))
                     {
                         if (cycleAggregations.Where(c => c.BinStartTime >= tempstart && c.BinStartTime < tempstart.AddMinutes(15)).Any())
                         {
@@ -146,7 +151,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             List<Models.PhaseCycleAggregation> cycleAggregations)
         {
             Dictionary<DateTime, double> cycleList = new Dictionary<DateTime, double>();
-            for (var tempDate = start.Date; tempDate < end; tempDate = tempDate.AddDays(1))
+            for (var tempDate = start.Date; tempDate <= end; tempDate = tempDate.AddDays(1))
             {
                 if (daysOfWeek.Contains((int)start.DayOfWeek))
                     for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(15))

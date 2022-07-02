@@ -246,8 +246,8 @@ namespace SPM.Controllers
                 0,
                 0,
                 31,
-                approachResult.AcceptableGapList,
-                approachResult.DemandList);
+                approachResult.PercentCyclesWithPedsList,
+                approachResult.PercentCyclesWithSplitFailList);
             approachResult.PedSplitFailChartImg = pedsVsFailuresOptions.CreateMetric().FirstOrDefault();
         }
 
@@ -291,7 +291,8 @@ namespace SPM.Controllers
             {
                 var PedResult = GetPedActuationResult(parameters, approachId);
 
-                approachResult.CyclesWithPedCallNum = PedResult.CyclesWithPedCalls;
+                approachResult.CyclesWithPedCallNum = PedResult.CyclesWithPedCallsNum;
+                approachResult.CyclesWithPedCallPercent = PedResult.CyclesWithPedCallsPercent;
                 approachResult.PedActuationsConsiderForStudy = PedResult.ConsiderForStudy;
                 approachResult.PercentCyclesWithPedsList = PedResult.PercentCyclesWithPedsList;
                 approachResult.Direction = PedResult.Direction;
@@ -335,7 +336,7 @@ namespace SPM.Controllers
             string url = "PedActuation";
             var result = GetResult(parameters, approachId, url);
             PedActuationResultViewModel pedActuationResult = JsonConvert.DeserializeObject<PedActuationResultViewModel>(result.Content);
-            pedActuationResult.ConsiderForStudy = pedActuationResult.CyclesWithPedCalls > 0.3d;
+            pedActuationResult.ConsiderForStudy = pedActuationResult.CyclesWithPedCallsPercent > 0.3d;
             return pedActuationResult;
         }
 

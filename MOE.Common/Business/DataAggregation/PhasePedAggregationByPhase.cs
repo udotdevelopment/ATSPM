@@ -11,7 +11,7 @@ namespace MOE.Common.Business.DataAggregation
 {
     public class PhasePedAggregationByPhase : AggregationByPhase
     {
-        public const string PED_ACTUATIONS = "PedActuations";
+        public const string PED_REQUESTS = "PedRequests";
         public const string MAX_PED_DELAY = "MaxPedDelay";
         public const string MIN_PED_DELAY = "MinPedDelay";
         public const string PED_DELAY_SUM = "PedDelaySum";
@@ -66,10 +66,10 @@ namespace MOE.Common.Business.DataAggregation
                                         pedAggs.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
                                             .Sum(s => s.MaxPedDelay);
                                     break;
-                                case PED_ACTUATIONS:
+                                case PED_REQUESTS:
                                     pedAggCount =
                                         pedAggs.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.PedActuations);
+                                            .Sum(s => s.PedRequests);
                                     break;
                                 default:
 
