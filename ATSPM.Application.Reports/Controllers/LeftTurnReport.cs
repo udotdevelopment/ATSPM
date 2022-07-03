@@ -143,7 +143,7 @@ namespace ATSPM.Application.Reports.Controllers
             {
                 dataCheck.InsufficientSplitFailAggregations = true;
             }
-            if (!_phaseLeftTurnGapAggregationRepository.Exists(signalId, phaseNumber,
+            if (!_phaseLeftTurnGapAggregationRepository.Exists(signalId, opposingPhase,
                 parameters.StartDate.Add(amStartTime), parameters.StartDate.Add(amEndTime)) &&
                    !_phasePedAggregationRepository.Exists(signalId, phaseNumber,
                 parameters.StartDate.Add(pmStartTime), parameters.StartDate.Add(pmEndTime)))

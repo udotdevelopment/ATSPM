@@ -84,10 +84,13 @@ namespace SPM.Controllers
                 if (result.ResponseStatus == ResponseStatus.Completed)
                 {
                     signalDataCheckReportViewModel = JsonConvert.DeserializeObject<SignalDataCheckReportViewModel>(result.Content);
-                    checkResults.Add(signalDataCheckReportViewModel);
-                    signalDataCheckReportViewModel.VolumeThreshold = dataCheckPayload.VolumePerHourThreshold;
-                    signalDataCheckReportViewModel.PedThreshold = dataCheckPayload.PedestrianThreshold;
-                    signalDataCheckReportViewModel.GapOutThreshold = dataCheckPayload.GapOutThreshold;
+                    if (signalDataCheckReportViewModel != null)
+                    {
+                        checkResults.Add(signalDataCheckReportViewModel);
+                        signalDataCheckReportViewModel.VolumeThreshold = dataCheckPayload.VolumePerHourThreshold;
+                        signalDataCheckReportViewModel.PedThreshold = dataCheckPayload.PedestrianThreshold;
+                        signalDataCheckReportViewModel.GapOutThreshold = dataCheckPayload.GapOutThreshold;
+                    }
                 }                
             }
             return PartialView("SignalDataCheckReport", checkResults);

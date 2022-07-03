@@ -274,7 +274,7 @@ namespace MOE.Common.Business.DataAggregation
             Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
             ParallelOptions options =
                 new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"]) };
-            List<Signal> signals = GetSignalOnlyVersionByDate(_startDate);
+            List<Signal> signals = GetSignalApproachVersionByDate(_startDate);
             List<Signal> nextSignals = new List<Signal>();
             for (var startDateTime = _startDate; startDateTime < _endDate; startDateTime = startDateTime.AddMinutes(_binSize))
             {

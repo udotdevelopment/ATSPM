@@ -14,6 +14,10 @@ namespace ATSPM.Application.Models
         public int PedDelaySum { get; set; }
         public int MinPedDelay { get; set; }
         public int MaxPedDelay { get; set; }
-        public int PedActuations { get; set; }
+        public int ImputedPedCallsRegistered { get; set; }
+        public int UniquePedDetections { get; set; }
+        public int PedBeginWalkCount { get; set; }
+        public int PedCallsRegisteredCount { get; set; }
+        public int PedRequests { get; set; }
     }
 }
