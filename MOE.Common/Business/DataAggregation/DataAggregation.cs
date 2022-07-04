@@ -307,7 +307,7 @@ namespace MOE.Common.Business.DataAggregation
                         throw e;
                     }
                 },
-                () => { nextSignals = GetSignalOnlyVersionByDate(startDateTime.AddMinutes(_binSize)); });
+                () => { nextSignals = GetSignalApproachVersionByDate(startDateTime.AddMinutes(_binSize)); });
 
                 Console.WriteLine(
                     "At {0}, the data for {1}, is being written to the database.",
@@ -2004,11 +2004,11 @@ namespace MOE.Common.Business.DataAggregation
             phasePedAggregationTable.Columns.Add(new DataColumn("PedDelaySum", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("MinPedDelay", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("MaxPedDelay", typeof(int)));
-            phasePedAggregationTable.Columns.Add(new DataColumn("PedRequests", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("ImputedPedCallsRegistered", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("UniquePedDetections", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("PedBeginWalkCount", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("PedCallsRegisteredCount", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("PedRequests", typeof(int)));
             while (_phasePedAggregations.TryDequeue(out var phasePedAggregation))
             {
                 var dataRow = phasePedAggregationTable.NewRow();
@@ -2019,11 +2019,11 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["PedDelaySum"] = phasePedAggregation.PedDelaySum;
                 dataRow["MinPedDelay"] = phasePedAggregation.MinPedDelay;
                 dataRow["MaxPedDelay"] = phasePedAggregation.MaxPedDelay;
-                dataRow["PedRequests"] = phasePedAggregation.PedRequests;
                 dataRow["ImputedPedCallsRegistered"] = phasePedAggregation.ImputedPedCallsRegistered;
                 dataRow["UniquePedDetections"] = phasePedAggregation.UniquePedDetections;
                 dataRow["PedBeginWalkCount"] = phasePedAggregation.PedBeginWalkCount;
                 dataRow["PedCallsRegisteredCount"] = phasePedAggregation.PedCallsRegisteredCount;
+                dataRow["PedRequests"] = phasePedAggregation.PedRequests;
                 phasePedAggregationTable.Rows.Add(dataRow);
             }
 

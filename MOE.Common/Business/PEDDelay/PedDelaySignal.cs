@@ -32,8 +32,11 @@ namespace MOE.Common.Business.PEDDelay
 
                 foreach (var approach in signal.Approaches)
                 {
-                    var pedPhase = new PedPhase(approach, signal, timeBuffer, startDate, endDate, _Plans);
-                    pedPhases.Add(pedPhase);
+                    if (approach.ProtectedPhaseNumber != 0)
+                    {
+                        var pedPhase = new PedPhase(approach, signal, timeBuffer, startDate, endDate, _Plans);
+                        pedPhases.Add(pedPhase);
+                    }
                 }
 
                 _PedPhases = pedPhases.OrderBy(x => x.PhaseNumber).ToList();
