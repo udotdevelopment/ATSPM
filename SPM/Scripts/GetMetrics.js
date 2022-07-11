@@ -105,6 +105,8 @@ function GetPedDelayMetric(metricTypeID) {
     tosend.ShowPedBeginWalk = $("#ShowPedBeginWalk").is(":checked");
     tosend.ShowCycleLength = $("#ShowCycleLength").is(":checked");
     tosend.ShowPercentDelay = $("#ShowPercentDelay").is(":checked");
+    tosend.ShowPedRecall = $("#ShowPedRecall").is(":checked");
+    tosend.PedRecallThreshold = $("#PedRecallThreshold").val();
     GetMetric(urlpathPedDelay, tosend);
 }
 

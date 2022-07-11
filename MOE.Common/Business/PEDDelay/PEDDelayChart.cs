@@ -105,8 +105,7 @@ namespace MOE.Common.Business.PEDDelay
             chart.Titles.Add(ChartTitleFactory.GetPhase(pedPhase.PhaseNumber));
             var statistics = new Dictionary<string, string>();
             statistics.Add("Ped Presses(PP)", pedPhase.PedPresses.ToString());
-            statistics.Add("Cycles With Ped Requests(PR)", pedPhase.Plans.Sum(p => p.CyclesWithPedRequests).ToString());
-            //statistics.Add("Ped Requests(PR)", pedPhase.PedRequests.ToString());
+            statistics.Add("Cycles With Ped Requests(CPR)", pedPhase.Plans.Sum(p => p.CyclesWithPedRequests).ToString());
             statistics.Add("Time Buffered " + pedPhase.TimeBuffer + "s Presses(TBP)", pedPhase.UniquePedDetections.ToString());
             statistics.Add("Min Delay", Math.Round(pedPhase.MinDelay) + "s");
             statistics.Add("Max Delay", Math.Round(pedPhase.MaxDelay) + "s");
@@ -130,7 +129,7 @@ namespace MOE.Common.Business.PEDDelay
                     if (Options.ShowPedBeginWalk)
                     {
                         Chart.Series["Start of Begin Walk"].Points
-                            .AddXY(pedCycle.BeginWalk, pedCycle.Delay + 3); //add ped walk to top of delay
+                            .AddXY(pedCycle.BeginWalk, pedCycle.Delay); //add ped walk to top of delay
                     }
 
                     if (Options.ShowPercentDelay)
@@ -153,7 +152,7 @@ namespace MOE.Common.Business.PEDDelay
                 foreach (var e in PedPhase.PedBeginWalkEvents)
                 {
                     Chart.Series["Start of Begin Walk"].Points
-                            .AddXY(e.Timestamp, 2);
+                            .AddXY(e.Timestamp, 0);
                 }
             }
 
@@ -236,15 +235,20 @@ namespace MOE.Common.Business.PEDDelay
                 Chart.ChartAreas["ChartArea1"].AxisX2.LabelAutoFitStyle = LabelAutoFitStyles.DecreaseFont;
 
                 //Add a corresponding custom label for each strip
-                if (plan.PedRecallOn)
+
+                if (Options.ShowPedRecall)
                 {
-                    var pedRecallLabel = new CustomLabel();
-                    pedRecallLabel.FromPosition = plan.StartDate.ToOADate();
-                    pedRecallLabel.ToPosition = plan.EndDate.ToOADate();
-                    pedRecallLabel.LabelMark = LabelMarkStyle.LineSideMark;
-                    pedRecallLabel.Text = "Ped Recall On";
-                    pedRecallLabel.RowIndex = 6;
-                    Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(pedRecallLabel);
+                    var vehicleCycles = RedToRedCycles.Where(r => r.StartTime >= plan.StartDate && r.EndTime < plan.EndDate).ToList();
+                    if ((double)plan.PedBeginWalkCount / (double)vehicleCycles.Count * 100 >= Options.PedRecallThreshold)
+                    {
+                        var pedRecallLabel = new CustomLabel();
+                        pedRecallLabel.FromPosition = plan.StartDate.ToOADate();
+                        pedRecallLabel.ToPosition = plan.EndDate.ToOADate();
+                        pedRecallLabel.LabelMark = LabelMarkStyle.LineSideMark;
+                        pedRecallLabel.Text = "Ped Recall On";
+                        pedRecallLabel.RowIndex = 6;
+                        Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(pedRecallLabel);
+                    }
                 }
 
                 var Plannumberlabel = new CustomLabel();
@@ -272,7 +276,7 @@ namespace MOE.Common.Business.PEDDelay
                 var pedPressesLabel = new CustomLabel();
                 pedPressesLabel.FromPosition = plan.StartDate.ToOADate();
                 pedPressesLabel.ToPosition = plan.EndDate.ToOADate();
-                pedPressesLabel.Text = plan.CyclesWithPedRequests + " PR";
+                pedPressesLabel.Text = plan.CyclesWithPedRequests + " CPR";
                 pedPressesLabel.LabelMark = LabelMarkStyle.LineSideMark;
                 pedPressesLabel.RowIndex = 4;
                 Chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(pedPressesLabel);

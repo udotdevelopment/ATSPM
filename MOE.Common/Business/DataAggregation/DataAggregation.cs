@@ -1,4 +1,4 @@
-﻿using MOE.Common.Business.PEDDelay;
+using MOE.Common.Business.PEDDelay;
 using MOE.Common.Business.Speed;
 using MOE.Common.Business.SplitFail;
 using MOE.Common.Business.WCFServiceLibrary;

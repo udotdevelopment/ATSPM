@@ -32,14 +32,14 @@ namespace MOE.Common.Business.PEDDelay
 
                 foreach (var approach in signal.Approaches)
                 {
-                    if (approach.ProtectedPhaseNumber != 0)
+                    if (approach.PedestrianPhaseNumber != null || approach.ProtectedPhaseNumber != 0)
                     {
                         var pedPhase = new PedPhase(approach, signal, timeBuffer, startDate, endDate, _Plans);
                         pedPhases.Add(pedPhase);
                     }
                 }
 
-                _PedPhases = pedPhases.OrderBy(x => x.PhaseNumber).ToList();
+                _PedPhases = pedPhases.Where(p => p.Events.Count > 0).OrderBy(x => x.PhaseNumber).ToList();
             }
             catch (Exception e)
             {

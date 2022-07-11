@@ -13,7 +13,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [DataContract]
     public class PedDelayOptions : MetricOptions
     {
-        public PedDelayOptions(string signalId, DateTime startDate, DateTime endDate, int timeBuffer, bool showPedBeginWalk, bool showCycleLength, bool showPercentDelay, double? yAxisMax)
+        public PedDelayOptions(string signalId, DateTime startDate, DateTime endDate, int timeBuffer, bool showPedBeginWalk, bool showCycleLength, bool showPercentDelay, bool showPedRecall, int pedRecallThreshold, double? yAxisMax)
         {
             SignalID = signalId;
             StartDate = startDate;
@@ -22,6 +22,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             ShowPedBeginWalk = showPedBeginWalk;
             ShowCycleLength = showCycleLength;
             ShowPercentDelay = showPercentDelay;
+            ShowPedRecall = showPedRecall;
+            PedRecallThreshold = pedRecallThreshold;
             YAxisMax = yAxisMax;
         }
 
@@ -46,6 +48,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         [Display(Name = "Show Percent Delay")]
         public bool ShowPercentDelay { get; set; }
+
+        [DataMember]
+        [Display(Name = "Show Ped Recall")]
+        public bool ShowPedRecall { get; set; }
+
+        [DataMember]
+        [Display(Name = "Ped Recall Threshold (Percent)")]
+        public int PedRecallThreshold { get; set; }
 
         public override List<string> CreateMetric()
         {

@@ -185,6 +185,8 @@
 			<xs:element minOccurs="0" name="ShowPedBeginWalk" type="xs:boolean" />
 			<xs:element minOccurs="0" name="ShowCycleLength" type="xs:boolean" />
 			<xs:element minOccurs="0" name="ShowPercentDelay" type="xs:boolean" />
+			<xs:element minOccurs="0" name="ShowPedRecall" type="xs:boolean" />
+			<xs:element minOccurs="0" name="PedRecallThreshold" type="xs:int" />
 		</xs:sequence>
       </xs:extension>
     </xs:complexContent>

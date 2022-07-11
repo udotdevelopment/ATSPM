@@ -27,7 +27,7 @@ namespace MOE.Common.Business.PEDDelay
         {
             get
             {
-                return Events.Where(e => e.EventCode == 21).Count();
+                return Events.Where(e => e.EventCode == 21 || e.EventCode == 67).Count();
             }
         }
         public double PedCallsRegisteredCount
@@ -64,13 +64,6 @@ namespace MOE.Common.Business.PEDDelay
                 if (CyclesWithPedRequests > 0)
                     return Cycles.Average(c => c.Delay);
                 return 0;
-            }
-        }
-        public bool PedRecallOn
-        {
-            get
-            {
-                return (double)PedBeginWalkCount / ((double)PedCallsRegisteredCount + PedBeginWalkCount) * 100 >= 65;
             }
         }
     }

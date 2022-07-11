@@ -8,7 +8,7 @@ namespace MOE.Common.Business.PEDDelay
     public class PedPhase : ControllerEventLogs
     {
         public PedPhase(Approach approach, Signal signal, int timeBuffer, DateTime startDate, DateTime endDate,
-            PlansBase plansData) : base(signal.SignalID, startDate, endDate, approach.GetPedDetectorsFromApproach(), new List<int> { 21, 22, 45, 90 })
+            PlansBase plansData) : base(signal.SignalID, startDate, endDate, approach.GetPedDetectorsFromApproach(), approach.IsPedestrianPhaseOverlap ? new List<int> {67, 68, 45, 90} : new List<int> { 21, 22, 45, 90 })
         {
             SignalID = signal.SignalID;
             TimeBuffer = timeBuffer;
@@ -39,6 +39,17 @@ namespace MOE.Common.Business.PEDDelay
                 Plans.Add(plan);
             }
 
+            if (Approach.IsPedestrianPhaseOverlap)
+            {
+                BeginWalkEvent = 67;
+                BeginClearanceEvent = 68;
+            }
+            else
+            {
+                BeginWalkEvent = 21;
+                BeginClearanceEvent = 22;
+            }
+
             GetCycles();
             AddCyclesToPlans();
             SetHourlyTotals();
@@ -61,6 +72,8 @@ namespace MOE.Common.Business.PEDDelay
         public int PedBeginWalkCount { get; set; }
         public List<Controller_Event_Log> PedBeginWalkEvents { get; set; }
         public int PedCallsRegisteredCount { get; set; }
+        private int BeginWalkEvent { get; set; }
+        private int BeginClearanceEvent { get; set; }
 
         private void AddCyclesToPlans()
         {
@@ -86,10 +99,10 @@ namespace MOE.Common.Business.PEDDelay
 
             Remove45s();
 
-            PedBeginWalkCount = Events.Count(e => e.EventCode == 21);
+            PedBeginWalkCount = Events.Count(e => e.EventCode == BeginWalkEvent);
             ImputedPedCallsRegistered = CountImputedPedCalls(Events);
 
-            if (Events.Count > 1 && Events[0].EventCode == 90 && Events[1].EventCode == 21)
+            if (Events.Count > 1 && Events[0].EventCode == 90 && Events[1].EventCode == BeginWalkEvent)
             {
                 Cycles.Add(new PedCycle(Events[1].Timestamp, Events[0].Timestamp));  // Middle of the event
             }
@@ -106,40 +119,40 @@ namespace MOE.Common.Business.PEDDelay
                 // 4) 21, 90, 21
                 //    time betweeen 90 and last 21, count++
                 //
-                if (Events[i].EventCode == 22 &&
+                if (Events[i].EventCode == BeginClearanceEvent &&
                     Events[i + 1].EventCode == 90 &&
-                    Events[i + 2].EventCode == 21)
+                    Events[i + 2].EventCode == BeginWalkEvent)
                 {
                     Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));  // this is case 1
                     i++;
                 }
-                else if (Events[i].EventCode == 21 &&
+                else if (Events[i].EventCode == BeginWalkEvent &&
                          Events[i + 1].EventCode == 90 &&
-                         Events[i + 2].EventCode == 22)
+                         Events[i + 2].EventCode == BeginClearanceEvent)
                 {
                     Cycles.Add(new PedCycle(Events[i + 1].Timestamp, Events[i + 1].Timestamp));  // this is case 2
                     i++;
                 }
-                else if (Events[i].EventCode == 21 &&
-                         Events[i + 1].EventCode == 90 && 
-                         Events[i + 2].EventCode == 21)
+                else if (Events[i].EventCode == BeginWalkEvent &&
+                         Events[i + 1].EventCode == 90 &&
+                         Events[i + 2].EventCode == BeginWalkEvent)
                 {
                     Cycles.Add(new PedCycle(Events[i + 2].Timestamp, Events[i + 1].Timestamp));  // this is case 4
                     i++;
-                } 
-                else if (Events[i].EventCode == 21 && (Cycles.Count == 0 || Events[i].Timestamp != Cycles.Last().BeginWalk))
+                }
+                else if (Events[i].EventCode == BeginWalkEvent && (Cycles.Count == 0 || Events[i].Timestamp != Cycles.Last().BeginWalk))
                 {
-                    PedBeginWalkEvents.Add(Events[i]); // collected loose 21s for chart
+                    PedBeginWalkEvents.Add(Events[i]); // collected loose BeginWalkEvents for chart
                 }
             }
             if (Events.Count >= 1)
             {
-                if (Events[Events.Count - 1].EventCode == 21)
+                if (Events[Events.Count - 1].EventCode == BeginWalkEvent)
                     PedBeginWalkEvents.Add(Events[Events.Count - 1]);
             }
             if (Events.Count >= 2)
             {
-                if (Events[Events.Count - 2].EventCode == 21)
+                if (Events[Events.Count - 2].EventCode == BeginWalkEvent)
                     PedBeginWalkEvents.Add(Events[Events.Count - 2]);
             }
         }
@@ -173,18 +186,18 @@ namespace MOE.Common.Business.PEDDelay
 
         private int CountImputedPedCalls(List<Controller_Event_Log> events)
         {
-            var tempEvents = events.Where(e => e.EventCode == 90 || e.EventCode == 21).ToList();
+            var tempEvents = events.Where(e => e.EventCode == 90 || e.EventCode == BeginWalkEvent).ToList();
             
             if (tempEvents.Count == 0) return 0;
 
-            var previousEventCode = GetEventFromPreviousBin(SignalID, PhaseNumber, events.FirstOrDefault().Timestamp, new List<int> { 21, 90 }, TimeSpan.FromMinutes(15));
+            var previousEventCode = GetEventFromPreviousBin(SignalID, PhaseNumber, events.FirstOrDefault().Timestamp, new List<int> { BeginWalkEvent, 90 }, TimeSpan.FromMinutes(15));
             tempEvents.Insert(0, previousEventCode);
 
             int pedCalls = 0;
 
             for (var i = 1; i < tempEvents.Count; i++)
             {
-                if (tempEvents[i].EventCode == 90 && tempEvents[i - 1]?.EventCode == 21)
+                if (tempEvents[i].EventCode == 90 && tempEvents[i - 1]?.EventCode == BeginWalkEvent)
                 {
                     pedCalls++;
                 }

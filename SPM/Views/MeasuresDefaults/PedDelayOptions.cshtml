@@ -53,6 +53,24 @@
                     @Html.ValidationMessageFor(model => model.PedDelay.ShowPercentDelay, "", new { id = "Description-error", @class = "text-danger" })
                 </div>
             </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PedDelay.ShowPedRecall, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.PedDelay.ShowPedRecall)
+                    @Html.ValidationMessageFor(model => model.PedDelay.ShowPedRecall, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PedDelay.PedRecallThreshold, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.PedDelay.PedRecallThreshold, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PedDelay.PedRecallThreshold, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
         </div>
     </div>
 </div>

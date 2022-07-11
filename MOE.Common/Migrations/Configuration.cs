@@ -567,6 +567,8 @@ namespace MOE.Common.Migrations
                 new MeasuresDefaults { Measure = "PedDelay", OptionName = "ShowPedBeginWalk", Value = "True" },
                 new MeasuresDefaults { Measure = "PedDelay", OptionName = "ShowCycleLength", Value = "True" },
                 new MeasuresDefaults { Measure = "PedDelay", OptionName = "ShowPercentDelay", Value = "True" },
+                new MeasuresDefaults { Measure = "PedDelay", OptionName = "ShowPedRecall", Value = "False" },
+                new MeasuresDefaults { Measure = "PedDelay", OptionName = "PedRecallThreshold", Value = "75" },
 
                 new MeasuresDefaults { Measure = "PhaseTermination", OptionName = "SelectedConsecutiveCount", Value = "3" },
                 new MeasuresDefaults { Measure = "PhaseTermination", OptionName = "ShowPedActivity", Value = "True" },

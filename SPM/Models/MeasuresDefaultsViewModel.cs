@@ -159,6 +159,10 @@ namespace SPM.Models
         public bool ShowCycleLength { get; set; }
         [Display(Name = "Show Percent Delay")]
         public bool ShowPercentDelay { get; set; }
+        [Display(Name = "Show Ped Recall")]
+        public bool ShowPedRecall { get; set; }
+        [Display(Name = "Ped Recall Threshold (Percent)")]
+        public int PedRecallThreshold { get; set; }
     }
 
     public class SplitFailDefaultValuesViewModel
