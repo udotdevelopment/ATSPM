@@ -2009,6 +2009,7 @@ namespace MOE.Common.Business.DataAggregation
             phasePedAggregationTable.Columns.Add(new DataColumn("PedBeginWalkCount", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("PedCallsRegisteredCount", typeof(int)));
             phasePedAggregationTable.Columns.Add(new DataColumn("PedRequests", typeof(int)));
+            phasePedAggregationTable.Columns.Add(new DataColumn("ApproachId", typeof(int)));
             while (_phasePedAggregations.TryDequeue(out var phasePedAggregation))
             {
                 var dataRow = phasePedAggregationTable.NewRow();
@@ -2024,6 +2025,7 @@ namespace MOE.Common.Business.DataAggregation
                 dataRow["PedBeginWalkCount"] = phasePedAggregation.PedBeginWalkCount;
                 dataRow["PedCallsRegisteredCount"] = phasePedAggregation.PedCallsRegisteredCount;
                 dataRow["PedRequests"] = phasePedAggregation.PedRequests;
+                dataRow["ApproachId"] = phasePedAggregation.ApproachId;
                 phasePedAggregationTable.Rows.Add(dataRow);
             }
 
@@ -2550,6 +2552,7 @@ sText = sText.Replace("\\", sReplace); // Backslash
                 PhasePedAggregation pedAggregation = new PhasePedAggregation
                 {
                     SignalId = signal.SignalID,
+                    ApproachId = pedPhase.ApproachID,
                     PhaseNumber = pedPhase.PhaseNumber,
                     BinStartTime = startTime,
                     PedCycles = pedPhase.Cycles.Count,

@@ -20,26 +20,30 @@ namespace MOE.Common.Models
         [Key]
         [Required]
         [Column(Order = 2)]
-        public int PhaseNumber { get; set; }
+        public int ApproachId { get; set; }
 
         [Required]
         [Column(Order = 3)]
-        public int PedCycles { get; set; }
+        public int PhaseNumber { get; set; }
 
         [Required]
         [Column(Order = 4)]
-        public int PedDelaySum { get; set; }
+        public int PedCycles { get; set; }
 
         [Required]
         [Column(Order = 5)]
-        public int MinPedDelay { get; set; }
+        public int PedDelaySum { get; set; }
 
         [Required]
         [Column(Order = 6)]
-        public int MaxPedDelay { get; set; }
+        public int MinPedDelay { get; set; }
 
         [Required]
         [Column(Order = 7)]
+        public int MaxPedDelay { get; set; }
+
+        [Required]
+        [Column(Order = 8)]
         public int PedRequests { get; set; }
 
         [Required]
@@ -59,6 +63,7 @@ namespace MOE.Common.Models
             public PhasePedAggregationClassMap()
             {
                 Map(m => m.SignalId).Name("Signal Id");
+                Map(m => m.ApproachId).Name("Approach Id");
                 Map(m => m.PhaseNumber).Name("Phase Number");
                 Map(m => m.BinStartTime).Name("Bin Start Time");
                 Map(m => m.PedCycles).Name("Ped Cycles");
