@@ -198,7 +198,7 @@ function RunReports() {
         },
         error: function (data) {
             StopReportSpinner();
-            $('#FinalGapAnalysisPlaceHolder').html(data.responseText);
+            $('#FinalGapAnalysisPlaceHolder').html("<h1 class='text-danger'>Unable to process this report. Please click the Run Check button and correct any issues.</h1>");
         }
     });
 }
