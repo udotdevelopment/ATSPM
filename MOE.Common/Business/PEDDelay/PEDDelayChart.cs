@@ -239,7 +239,7 @@ namespace MOE.Common.Business.PEDDelay
                 if (Options.ShowPedRecall)
                 {
                     var vehicleCycles = RedToRedCycles.Where(r => r.StartTime >= plan.StartDate && r.EndTime < plan.EndDate).ToList();
-                    if ((double)plan.PedBeginWalkCount / (double)vehicleCycles.Count * 100 >= Options.PedRecallThreshold)
+                    if (vehicleCycles.Count > 0 && ((double)plan.PedBeginWalkCount / (double)vehicleCycles.Count * 100 >= Options.PedRecallThreshold))
                     {
                         var pedRecallLabel = new CustomLabel();
                         pedRecallLabel.FromPosition = plan.StartDate.ToOADate();

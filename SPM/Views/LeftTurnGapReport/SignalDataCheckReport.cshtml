@@ -117,7 +117,7 @@ Signal data check complete please note the following results:
     </tr>
     <tr>
         <td>Left Turn Volume</td>
-        <td> @Convert.ToInt32(Model.First().VolumeThreshold) vph</td>
+        <td> > @Convert.ToInt32(Model.FirstOrDefault().VolumeThreshold) vph</td>
         @foreach (var check in Model)
         {
     <td>
@@ -134,7 +134,7 @@ Signal data check complete please note the following results:
     </tr>
     <tr>
         <td>Gap Out %</td>
-        <td>< @Convert.ToInt32(Model.First().GapOutThreshold*100)%</td>
+        <td> < @Convert.ToInt32(Model.FirstOrDefault().GapOutThreshold * 100) %</td>
         @foreach (var check in Model)
         {
     <td>
@@ -151,7 +151,7 @@ Signal data check complete please note the following results:
     </tr>
     <tr>
         <td>% Cycles with Peds</td>
-        <td> < @Convert.ToInt32(Model.First().PedThreshold*100)%</td>
+        <td> < @Convert.ToInt32(Model.FirstOrDefault().PedThreshold * 100) %</td>
         @foreach (var check in Model)
         {
     <td>

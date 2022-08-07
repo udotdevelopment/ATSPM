@@ -11,6 +11,10 @@
     $(".datepicker").datepicker();
 });
 
+$( "#StartDate" ).change(function () {
+    GetSignalLocation()
+})
+
 $('#RunChecks').click(function () { RunChecks(); });
 
 function RunChecks() {
@@ -265,7 +269,9 @@ function SetControlValues(signalID, selectedMetricID) {
 function GetSignalLocation() {
     var tosend = {};
     var signalID = $("#SignalID").val();
+    var startDate = $("#StartDate").val();
     tosend.signalID = signalID;
+    tosend.date = startDate;
     $.get(urlpathGetLeftTurnCheckBoxes, tosend, function (data) {
         $('#LeftTurnCheckBoxesDiv').html(data);
     });
