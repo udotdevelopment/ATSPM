@@ -32,7 +32,7 @@
                     <div class="dropdown-menu">
                         @foreach (var s in m.SubMenuItems)
                         {
-                            if (s.MenuObject.MenuName == "Left Turn Gap Analysis" && !m.IsConfiguration) { continue; }
+                            if (s.MenuObject.MenuName == "Left Turn Gap Analysis" && !m.IsRestrictedConfiguration) { continue; }
                             @RenderMenuItems(s)
                         }
                         @if (m.MenuObject.MenuName == "Links")
@@ -54,7 +54,11 @@
                         <ul class="dropdown-menu">
                             @foreach (var s in m.SubMenuItems)
                             {
-                                if (s.MenuObject.MenuName == "Signal Configuration" || s.MenuObject.MenuName == "Route Configuration" || (s.MenuObject.MenuName == "Raw Data Export" && m.IsData))
+                                if (s.MenuObject.MenuName == "Signal Configuration" 
+                                    || s.MenuObject.MenuName == "Route Configuration" 
+                                    || (s.MenuObject.MenuName == "Area Configuration" && m.IsConfiguration) 
+                                    || (s.MenuObject.MenuName == "Jurisdiction Configuration" && m.IsConfiguration) 
+                                    || (s.MenuObject.MenuName == "Raw Data Export" && m.IsData))
                                 {
                                     @RenderMenuItems(s)
                                 }
