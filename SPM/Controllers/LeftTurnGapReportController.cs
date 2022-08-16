@@ -28,20 +28,20 @@ namespace SPM.Controllers
         }
 
         // GET: LeftTurnCheckBoxes
-        public ActionResult GetLeftTurnCheckBoxes(string signalID)
+        public ActionResult GetLeftTurnCheckBoxes(string signalID, DateTime date)
         {
             var signalRepository = SignalsRepositoryFactory.Create();
-            var signal = signalRepository.GetLatestVersionOfSignalBySignalID(signalID);
+            var signal = signalRepository.GetVersionOfSignalByDate(signalID, date);
             List<CheckModel> checkModels = new List<CheckModel>{
                 new CheckModel{Id=0, Name = "All Left Turns", Checked = true} };
             foreach (var approach in signal.Approaches)
             {
-                if(approach.Detectors.Any(d => (d.MovementTypeID == 3) && d.DetectionTypeIDs.Contains(4)))
+                if (approach.Detectors.Any(d => (d.MovementTypeID == 3) && d.DetectionTypeIDs.Contains(4)))
                 {
-                    checkModels.Add(new CheckModel { Id = approach.ApproachID, Checked = true, Name = approach.Description});
+                    checkModels.Add(new CheckModel { Id = approach.ApproachID, Checked = true, Name = approach.Description });
                 }
             }
-            return PartialView("LeftTurnCheckBoxes",checkModels);
+            return PartialView("LeftTurnCheckBoxes", checkModels);
         }
 
         static async Task<IRestResponse> SendURI(Uri u, string c)

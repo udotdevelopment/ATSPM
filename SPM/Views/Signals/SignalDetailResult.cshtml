@@ -83,10 +83,10 @@
                         @Html.DisplayFor(model => model.Longitude)
                     </td>
                     <td>
-                        @Html.CheckBoxFor(model => model.Enabled, new { aria_labelledby = "EnabledHeader" })
+                        @Html.CheckBoxFor(model => model.Enabled, new { aria_labelledby = "EnabledHeader", onclick = "return false", style="pointer-events:none" })
                     </td>
                     <td>
-                        @Html.CheckBoxFor(model => model.Pedsare1to1, new { aria_labelledby = "Pedsare1to1Header" })
+                        @Html.CheckBoxFor(model => model.Pedsare1to1, new { aria_labelledby = "Pedsare1to1Header", onclick = "return false", style = "pointer-events:none" })
                     </td>
                 </tr>
             </table>
@@ -109,7 +109,7 @@
                         @Html.DisplayNameFor(model => model.Approaches.First().PedestrianPhaseNumber)
                     </th>
                     <th>
-                        @Html.LabelFor(model => model.Approaches.First().IsProtectedPhaseOverlap, new { id = "IsProtectedPhaseOverlapHeader", })
+                        @Html.LabelFor(model => model.Approaches.First().IsProtectedPhaseOverlap, new { id = "IsProtectedPhaseOverlapHeader" })
                     </th>
                     <th>
                         @Html.LabelFor(model => model.Approaches.First().IsPermissivePhaseOverlap, new { id = "IsPermissivePhaseOverlapHeader" })
@@ -144,13 +144,13 @@
                             @Html.DisplayFor(modelItem => item.PedestrianPhaseNumber)
                         </td>
                         <td>
-                            @Html.CheckBoxFor(modelItem => item.IsProtectedPhaseOverlap, new { aria_labelledby = "IsProtectedPhaseOverlapHeader" })
+                            @Html.CheckBoxFor(modelItem => item.IsProtectedPhaseOverlap, new { aria_labelledby = "IsProtectedPhaseOverlapHeader", onclick = "return false", style = "pointer-events:none" })
                         </td>
                         <td>
-                            @Html.CheckBoxFor(modelItem => item.IsPermissivePhaseOverlap, new { aria_labelledby = "IsPermissivePhaseOverlapHeader" })
+                            @Html.CheckBoxFor(modelItem => item.IsPermissivePhaseOverlap, new { aria_labelledby = "IsPermissivePhaseOverlapHeader", onclick = "return false", style = "pointer-events:none" })
                         </td>
                         <td>
-                            @Html.CheckBoxFor(modelItem => item.IsPedestrianPhaseOverlap, new { aria_labelledby = "IsPedestrianPhaseOverlapHeader" })
+                            @Html.CheckBoxFor(modelItem => item.IsPedestrianPhaseOverlap, new { aria_labelledby = "IsPedestrianPhaseOverlapHeader", onclick="return false", style = "pointer-events:none" })
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.PedestrianDetectors)

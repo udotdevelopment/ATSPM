@@ -41,15 +41,22 @@ namespace MOE.Common.Models.Repositories
                 .Where(signal => signal.VersionActionId != 3)
                 .ToList();
 
+            Signal versionSignal;
             if (signals.Count > 1)
             {
                 var orderedSignals = signals.OrderByDescending(signal => signal.Start);
-                return orderedSignals.First();
+                versionSignal = orderedSignals.First();
             }
             else
             {
-                return signals.FirstOrDefault();
+                versionSignal = signals.FirstOrDefault();
             }
+
+            if (versionSignal != null)
+            {
+                AddSignalAndDetectorLists(versionSignal);
+            }
+            return versionSignal;
         }
 
         public Signal GetVersionOfSignalByDateWithDetectionTypes(string signalId, DateTime startDate)

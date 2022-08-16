@@ -232,7 +232,7 @@ function EndRequest(sender, args) {
 function PinFilterCheck(regionFilter, reportTypeFilter, jurisdictionFilter, areaFilter, pinRegion, pinJurisdiction, areas, pinMetricTypes) {
     if (regionFilter != -1 && regionFilter != pinRegion) return false;
     if (jurisdictionFilter != -1 && jurisdictionFilter != pinJurisdiction) return false;
-    if (areaFilter != -1 && areas.indexOf(areaFilter) == -1) return false;
+    if (areaFilter != -1 && areas.indexOf("," + areaFilter + ",") == -1) return false;
     if (reportTypeFilter != -1 && pinMetricTypes.indexOf(reportTypeFilter) == -1) return false;
     return true;
 }
