@@ -8,13 +8,11 @@
         @Html.LabelFor(model => model.SignalID, htmlAttributes: new { id="SignalId-error", @class = "control-label" })
         <div class="input-group-custom">
             @Html.EditorFor(model => model.SignalID, new { htmlAttributes = new { @onkeypress = "SignalIdPress(event)", id = "SignalID", @class = "form-control  signalID-width", placeholder = "Signal ID" } })
-            @Html.ValidationMessageFor(model => model.SignalID, "", new { id = "SignalID-error", @class = "text-danger" } )
             <input id="selectButton" aria-labelledby="SignalLocation" type="button" class="btn btn-dark" value="Select" onclick="GetSignalLocation()">
             <label id="SignalLocation">Press Enter to select signal</label>
-        </div>@Html.ValidationMessageFor(model => model.SignalID, "", new { id = "SignalId-error", @class = "text-danger" })
-        <br />
- 
-        
+        </div>
+        @Html.ValidationMessageFor(model => model.SignalID, "", new { id = "SignalID-error", @class = "text-danger" })
+        <br />    
         <div id="accordion" class="col-12">
             <div class="card">
                 <div class="card-header" role="tab" id="headingOne">
@@ -37,10 +35,27 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
+                                <label class="control-label" for="AreaList">Area</label>
+                                @Html.DropDownListFor(model => model.SelectedAreaID,
+                                         new SelectList(Model.AreasList, "Id", "AreaName"),
+                                         "--Select an Area--",
+                                         new { @id = "Areas", @class = "form-control", @onchange = "ReportTypeChange()" })
+                            </div>
+                            <div class="col-md-6">
+                                <label class="control-label" for="JurisdictionList">Jurisdiction</label>
+                                @Html.DropDownListFor(model => model.SelectedJurisdictionId,
+                                         new SelectList(Model.JurisdictionList, "Id", "JurisdictionName"),
+                                         "--Select a Jurisdiction--",
+                                         new { @id = "Jurisdictions", @class = "form-control", @onchange = "ReportTypeChange()" })
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
                                 <label class="control-label" for="Regions" id="Regions-error">Region</label>
                                 @Html.DropDownListFor(model => model.SelectedRegionID,
-                                    new SelectList(Model.Regions, "ID", "Description"),
-                                    "--Select Region--", new {@id = "Regions", @class = "form-control", @onchange = "RegionChange(this)"})
+                                         new SelectList(Model.Regions, "ID", "Description"),
+                                         "--Select Region--", new { @id = "Regions", @class = "form-control", @onchange = "RegionChange(this)" })
                                 @Html.ValidationMessageFor(model => model.SelectedRegionID, "", new { id = "SelectedRegionID-error", @class = "text-danger" })
                             </div>
                             <div class="col-md-6">
@@ -54,8 +69,8 @@
                                 <div id="mapDiv" class="MapDiv"></div>
                             </div>
                         </div>
-                        </div>
                     </div>
+                </div>
             </div>
         </div>
     </div>

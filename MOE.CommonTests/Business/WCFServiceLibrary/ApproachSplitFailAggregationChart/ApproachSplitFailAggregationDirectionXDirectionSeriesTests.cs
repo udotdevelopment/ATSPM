@@ -32,8 +32,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachSplitFailAggregatio
         {
             Db.PopulateApproachSplitFailAggregationsWithRandomRecords(Convert.ToDateTime("1/1/2016"),
                 Convert.ToDateTime("1/1/2018"), approach);
-            Db.PopulateApproachEventCountwithRandomValues(Convert.ToDateTime("1/1/2016"),
-                Convert.ToDateTime("1/1/2018"), approach);
+           
         }
 
         [TestMethod]

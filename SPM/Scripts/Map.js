@@ -152,80 +152,14 @@ function ZoomIn(e) {
     if (e.targetType == 'pushpin') {
         var location = e.target.getLocation();
         var pixelOffset = 0;
-        var zoomLevel = map.getZoom();
-        //The inforboxes are too large to fit in the map if the push-pin is dead center.
-        //we need to apply an offset so the infobox is in frame.
-        //The offset for a low zoom level is defferent than at a high zoom level
-        //There is perhaps some equation that will work for all levels, but this method is pretty good.
-        //switch (zoomLevel) {
-        //    case 1:
-        //        pixelOffset = .02;
-        //        break;
-        //    case 2:
-        //        pixelOffset = .05;
-        //        break;
-        //    case 3:
-        //        pixelOffset = .1;
-        //        break;
-        //    case 4:
-        //        pixelOffset = .37;
-        //        break;
-        //    case 5:
-        //        pixelOffset = .6;
-        //        break;
-        //    case 6:
-        //        pixelOffset = 1;
-        //        break;
-        //    case 7:
-        //        pixelOffset = 1.5;
-        //        break;
-        //    case 8:
-        //        pixelOffset = 3;
-        //        break;
-        //    case 9:
-        //        pixelOffset = 6;
-        //        break;
-        //    case 10:
-        //        pixelOffset = 13;
-        //        break;
-        //    case 11:
-        //        pixelOffset = 27;
-        //        break;
-        //    case 12:
-        //        pixelOffset = 50;
-        //        break;
-        //    case 13:
-        //        pixelOffset = 90;
-        //        break;
-        //    case 14:
-        //        pixelOffset = 180;
-        //        break;
-        //    case 15:
-        //        pixelOffset = 360;
-        //        break;
-        //    case 16:
-        //        pixelOffset = 720;
-        //        break;
-        //    case 17:
-        //        pixelOffset = 1440;
-        //        break;
-        //    case 18:
-        //        pixelOffset = 2880;
-        //        break;
-        //    case 19:
-        //        pixelOffset = 5760;
-        //        break;
-        //    case 20:
-        //        pixelOffset = 11520;
-        //        break;
-        //    default:
-        //        pixelOffset = 100;
-        //}
         var centerpixel = map.tryLocationToPixel(location);
         centerpixel.y = centerpixel.y - pixelOffset;
-        var newLocation = map.tryPixelToLocation(centerpixel)
+        var newLocation = map.tryPixelToLocation(centerpixel);
+        var zoomLevel = map.getZoom();
+        if (zoomLevel < 13) zoomLevel = 13;
+
         map.setView({
-            zoom: 13,
+            zoom: zoomLevel,
             center: newLocation
         });
     }
@@ -294,4 +228,13 @@ function EndRequest(sender, args) {
         $get('UpdateProgress1').style.display = 'none';
     }
 }
+
+function PinFilterCheck(regionFilter, reportTypeFilter, jurisdictionFilter, areaFilter, pinRegion, pinJurisdiction, areas, pinMetricTypes) {
+    if (regionFilter != -1 && regionFilter != pinRegion) return false;
+    if (jurisdictionFilter != -1 && jurisdictionFilter != pinJurisdiction) return false;
+    if (areaFilter != -1 && areas.indexOf("," + areaFilter + ",") == -1) return false;
+    if (reportTypeFilter != -1 && pinMetricTypes.indexOf(reportTypeFilter) == -1) return false;
+    return true;
+}
+
 

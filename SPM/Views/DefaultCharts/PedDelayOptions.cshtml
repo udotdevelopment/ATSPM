@@ -6,4 +6,28 @@
             @Html.LabelFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "control-label" } })
             @Html.EditorFor(model => model.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
         </div>
-        </div></div>
+        <div class="">
+            @Html.LabelFor(model => model.TimeBuffer, new { htmlAttributes = new { @id = "TimeBuffer", @class = "control-label" } })
+            @Html.EditorFor(model => model.TimeBuffer, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowPedBeginWalk)
+            @Html.LabelFor(model => model.ShowPedBeginWalk, new { htmlAttributes = new { @id = "ShowPedBeginWalk", @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowCycleLength)
+            @Html.LabelFor(model => model.ShowCycleLength, new { htmlAttributes = new { @id = "ShowCycleLength", @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowPercentDelay)
+            @Html.LabelFor(model => model.ShowPercentDelay, new { htmlAttributes = new { @id = "ShowPercentDelay", @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.ShowPedRecall)
+            @Html.LabelFor(model => model.ShowPedRecall, new { htmlAttributes = new { @id = "ShowPedRecall", @class = "control-label" } })
+        </div>
+        <div class="">
+            @Html.EditorFor(model => model.PedRecallThreshold)
+            @Html.LabelFor(model => model.PedRecallThreshold, new { htmlAttributes = new { @id = "PedRecallThreshold", @class = "control-label" } })
+        </div>
+    </div></div>

@@ -1,0 +1,46 @@
+﻿@model MOE.Common.Models.Jurisdiction
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Jurisdiction</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.JurisdictionName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.JurisdictionName)
+        </dd>
+    </dl>
+    @if (Model.Signals.Count > 0)
+    {
+        <h4 class="alert-warning text-center">Warning: This Jurisdiction is connected to @Model.Signals.Count signal@(Model.Signals.Count > 1 ? "s" : ""). Please assign the following signal@(Model.Signals.Count > 1 ? "s" : "") to a different jurisdiction before deleting:</h4>
+        <table class="table table-bordered">
+            @foreach (var signal in Model.Signals)
+            {
+                <tr>
+                    <td>@signal.SignalDescription</td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" />
+            </div>
+        }
+    }
+    @Html.ActionLink("Back to List", "Index")
+</div>

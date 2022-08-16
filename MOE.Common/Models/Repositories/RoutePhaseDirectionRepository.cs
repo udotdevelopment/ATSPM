@@ -44,7 +44,7 @@ namespace MOE.Common.Models.Repositories
                 {
                     var errorLog = ApplicationEventRepositoryFactory.Create();
                     errorLog.QuickAdd(Assembly.GetExecutingAssembly().GetName().ToString(),
-                        GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
+                        GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High,
                         e.Message);
                     throw new Exception("");
                 }
@@ -63,7 +63,7 @@ namespace MOE.Common.Models.Repositories
             {
                 var errorLog = ApplicationEventRepositoryFactory.Create();
                 errorLog.QuickAdd(Assembly.GetExecutingAssembly().GetName().ToString(),
-                    GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
                 throw new Exception("");
             }
         }

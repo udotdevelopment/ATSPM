@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.WCFServiceLibrary;
 
@@ -78,13 +79,12 @@ namespace MOE.Common.Business
             var redSeries = new Series();
             redSeries.ChartType = SeriesChartType.Area;
             redSeries.Color = redish;
-            //redSeries.BackGradientStyle = GradientStyle.VerticalCenter;
             redSeries.Name = "Red";
             redSeries.XValueType = ChartValueType.DateTime;
 
             chart.Series.Add(redSeries);
 
-            //Add the yellow series
+            //Add the red series
             var redClearanceSeries = new Series();
             redClearanceSeries.ChartType = SeriesChartType.Area;
             redClearanceSeries.Color = darkRedish;
@@ -92,17 +92,16 @@ namespace MOE.Common.Business
             redClearanceSeries.XValueType = ChartValueType.DateTime;
             chart.Series.Add(redClearanceSeries);
 
-            //Add the green series
+            //Add the yellow series
             var yellowClearanceSeries = new Series();
             yellowClearanceSeries.ChartType = SeriesChartType.Area;
             yellowClearanceSeries.Color = yelowish;
-            //yellowClearanceSeries.BackGradientStyle = GradientStyle.DiagonalLeft;
             yellowClearanceSeries.BackSecondaryColor = yelowish;
             yellowClearanceSeries.Name = "Yellow Change";
             yellowClearanceSeries.XValueType = ChartValueType.DateTime;
             chart.Series.Add(yellowClearanceSeries);
 
-            //Add the point series
+            //Add the point series;
             var pointSeries = new Series();
             pointSeries.ChartType = SeriesChartType.Point;
             pointSeries.Color = Color.Black;
@@ -115,8 +114,8 @@ namespace MOE.Common.Business
             //Add points at the start and and of the x axis to ensure
             //the graph covers the entire period selected by the user
             //whether there is data or not
-            chart.Series["Detector Activation"].Points.AddXY(Options.StartDate, 0);
-            chart.Series["Detector Activation"].Points.AddXY(Options.EndDate, 0);
+            chart.Series["Detector Activation"].Points.AddXY(signalPhase.Cycles.Any() ? signalPhase.Cycles.First().StartTime : Options.StartDate, 0);
+            chart.Series["Detector Activation"].Points.AddXY(signalPhase.Cycles.Any()?signalPhase.Cycles.Last().EndTime: Options.EndDate, 0);
 
             AddDataToChart(chart, signalPhase);
             return chart;

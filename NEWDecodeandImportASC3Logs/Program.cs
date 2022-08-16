@@ -26,40 +26,57 @@ namespace NEWDecodeandImportASC3Logs
             var appSettings = ConfigurationManager.AppSettings;
             List<string> dirList = new List<string>();
             string cwd = appSettings["ASC3LogsPath"];
+            int maxFilesToImportPerSignal = Convert.ToInt32(appSettings["MaxFilesPerSignalToImport"]);
+            string startSignal = null;
+            string endSignal = null;
+            if (args.Length == 2)
+            {
+                startSignal = args[0];
+                endSignal = args[1];
+            }
             foreach (string s in Directory.GetDirectories(cwd))
             {
                 dirList.Add(s);
             }
             SimplePartitioner<string> sp = new SimplePartitioner<string>(dirList);
-            ParallelOptions optionsMain = new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreadsMain"]) };
+            ParallelOptions optionsMain = new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"]) };
             Parallel.ForEach(sp, optionsMain, dir =>
             {
-                var toDelete = new ConcurrentBag<string>();
-                var mergedEventsTable = new BlockingCollection<MOE.Common.Data.MOE.Controller_Event_LogRow>();
-                if (Convert.ToBoolean(appSettings["WriteToConsole"]))
-                {
-                    Console.WriteLine("-----------------------------Starting Signal " + dir);
-                }
+               
                 string signalId;
                 string[] fileNames;
                 GetFileNamesAndSignalId(dir, out signalId, out fileNames);
-                foreach (var fileName in fileNames)
+                if ((args.Length == 2 && (String.Compare(signalId, startSignal, comparisonType:StringComparison.OrdinalIgnoreCase) > 0 ||
+                                          String.Compare(signalId, startSignal, comparisonType: StringComparison.OrdinalIgnoreCase) == 0 ) &&
+                    (String.Compare(signalId, endSignal, comparisonType: StringComparison.OrdinalIgnoreCase) < 0 || 
+                     String.Compare(signalId, endSignal, comparisonType: StringComparison.OrdinalIgnoreCase) == 0)) || args.Length ==0)
                 {
-                    try
+                    var toDelete = new ConcurrentBag<string>();
+                    var mergedEventsTable = new BlockingCollection<MOE.Common.Data.MOE.Controller_Event_LogRow>();
+                    if (Convert.ToBoolean(appSettings["WriteToConsole"]))
                     {
-                        MOE.Common.Business.LogDecoder.Asc3Decoder.DecodeAsc3File(fileName, signalId,
-                            mergedEventsTable, Convert.ToDateTime(appSettings["EarliestAcceptableDate"]));
-                        toDelete.Add(fileName);
+                        Console.WriteLine("-----------------------------Starting Signal " + dir);
                     }
-                    catch (Exception ex)
+                    //foreach (var fileName in fileNames)
+                        for(int i = 0; i < maxFilesToImportPerSignal && i < fileNames.Length; i++)
                     {
-                        Console.WriteLine(ex.Message);
+                        try
+                        {
+                            MOE.Common.Business.LogDecoder.Asc3Decoder.DecodeAsc3File(fileNames[i], signalId,
+                                mergedEventsTable, Convert.ToDateTime(appSettings["EarliestAcceptableDate"]));
+                            toDelete.Add(fileNames[i]);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
                     }
+
+                    MOE.Common.Data.MOE.Controller_Event_LogDataTable elTable = CreateDataTableForImport();
+                    AddEventsToImportTable(mergedEventsTable, elTable);
+                    mergedEventsTable.Dispose();
+                    BulkImportRecordsAndDeleteFiles(appSettings, toDelete, elTable);
                 }
-                MOE.Common.Data.MOE.Controller_Event_LogDataTable elTable = CreateDataTableForImport();
-                AddEventsToImportTable(mergedEventsTable, elTable);
-                mergedEventsTable.Dispose();
-                BulkImportRecordsAndDeleteFiles(appSettings, toDelete, elTable);
             });
         }
 
