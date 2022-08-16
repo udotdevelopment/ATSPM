@@ -77,11 +77,9 @@ namespace MOE.Common.Business.ApproachVolume
                     var primaryBin = approachVolume.PrimaryDirectionVolume.Items[i];
                     var opposingBin = approachVolume.OpposingDirectionVolume.Items[i];
                     var combinedBin = approachVolume.CombinedDirectionsVolumes.Items[i];
-                    double direction1DFactor = Convert.ToDouble(primaryBin.YAxis) /
-                                               (Convert.ToDouble(opposingBin.YAxis) +
-                                                Convert.ToDouble(combinedBin.YAxis));
+                    double direction1DFactor = Convert.ToDouble(primaryBin.YAxis) / Convert.ToDouble(combinedBin.YAxis);
                     d1DfactorSeries.Points.AddXY(primaryBin.StartTime.ToOADate(), direction1DFactor);
-                    d2DfactorSeries.Points.AddXY(primaryBin.StartTime.ToOADate(), Convert.ToDouble(opposingBin.YAxis) / (Convert.ToDouble(primaryBin.YAxis) + Convert.ToDouble(combinedBin.YAxis)));
+                    d2DfactorSeries.Points.AddXY(primaryBin.StartTime.ToOADate(), Convert.ToDouble(opposingBin.YAxis) / Convert.ToDouble(combinedBin.YAxis));
                 }
                 Chart.Series.Add(d1DfactorSeries);
                 Chart.Series.Add(d2DfactorSeries);

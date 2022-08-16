@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Web.UI.DataVisualization.Charting;
@@ -43,8 +44,8 @@ namespace MOE.Common.Business.TimingAndActuations
                 myCount = TimingAndActuationsForPhase.PedestrianIntervals.Count;
             }
             if (TimingAndActuationsForPhase.Options.ShowRawEventData
-                && TimingAndActuationsForPhase.CycleAllEvents.Values.Count == 0 
-                && myCount <= 0) 
+                && TimingAndActuationsForPhase.CycleAllEvents.Values.Count == 0
+                && myCount <= 0)
             {
                 TimingAndActuationsForPhase.Options.EndDate = orginalEndDate;
                 return;
@@ -52,7 +53,7 @@ namespace MOE.Common.Business.TimingAndActuations
             Chart = ChartFactory.CreateDefaultChart(TimingAndActuationsForPhase.Options);
             Chart.ChartAreas[0].AxisX2.Enabled = AxisEnabled.False;
             SetChartTitle();
-            if (TimingAndActuationsForPhase.Options.ShowVehicleSignalDisplay  
+            if (TimingAndActuationsForPhase.Options.ShowVehicleSignalDisplay
                 || TimingAndActuationsForPhase.Options.ShowRawEventData)
             {
                 SetCycleStrips();
@@ -63,7 +64,7 @@ namespace MOE.Common.Business.TimingAndActuations
                 SetPhaseCustomEvents();
             }
             if (TimingAndActuationsForPhase.Options.ShowAdvancedCount
-                && ! TimingAndActuationsForPhase.Options.ShowRawEventData)
+                && !TimingAndActuationsForPhase.Options.ShowRawEventData)
             {
                 SetAdvanceCountEvents();
             }
@@ -230,7 +231,7 @@ namespace MOE.Common.Business.TimingAndActuations
             var rowNumber = 5.0;
             //var rowNumber = Chart.ChartAreas[0].AxisY.CustomLabels.Count;
             var labelNameForLegend = "Gray Fill Box: Pedestrian Begin Solid Don't Walk, Event Codes 23 & 69 ";
-            MakeLineColorForLegendLine (Color.Gray, labelNameForLegend, rowNumber);
+            MakeLineColorForLegendLine(Color.Gray, labelNameForLegend, rowNumber);
             rowNumber += 1.0;
             labelNameForLegend = "Deep Blue Fill Box: Pedestrian Begin Clearance, Event Codes 22 & 68";
             MakeLineColorForLegendLine(Color.DeepSkyBlue, labelNameForLegend, rowNumber);
@@ -239,7 +240,7 @@ namespace MOE.Common.Business.TimingAndActuations
             MakeLineColorForLegendLine(Color.LightSkyBlue, labelNameForLegend, rowNumber);
         }
 
-        private void MakeLineColorForLegendLine (Color lineColorForLegend, string labelNameForLegend, double rowNumber)
+        private void MakeLineColorForLegendLine(Color lineColorForLegend, string labelNameForLegend, double rowNumber)
         {
             var legendLineSeries = new Series
             {
@@ -332,7 +333,7 @@ namespace MOE.Common.Business.TimingAndActuations
                 }
                 else
                 {
-                    _laneOffset = (double) ++_lanesProcessed * 0.2 - 0.3;
+                    _laneOffset = (double)++_lanesProcessed * 0.2 - 0.3;
                     if (_laneOffset > _yValue + 0.5) _laneOffset = _yValue + 0.5;
                 }
 
@@ -369,7 +370,7 @@ namespace MOE.Common.Business.TimingAndActuations
 
         private void SetChartTitle()
         {
-            
+
             Chart.ChartAreas[0].AxisY.Title = "";
             Chart.ChartAreas[0].AxisY2.Enabled = AxisEnabled.False;
             Chart.ChartAreas[0].AxisY2.Title = "";
@@ -389,8 +390,8 @@ namespace MOE.Common.Business.TimingAndActuations
                 {
                     Chart.Titles.Add(ChartTitleFactory.GetChartName(TimingAndActuationsForPhase.Options.MetricTypeID));
                     //Chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
-                        //TimingAndActuationsForPhase.Options.SignalID, TimingAndActuationsForPhase.Options.StartDate,
-                        //TimingAndActuationsForPhase.Options.EndDate));
+                    //TimingAndActuationsForPhase.Options.SignalID, TimingAndActuationsForPhase.Options.StartDate,
+                    //TimingAndActuationsForPhase.Options.EndDate));
 
                     Chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(
                         TimingAndActuationsForPhase.Options.SignalID, TimingAndActuationsForPhase.Options.StartDate,
@@ -462,70 +463,76 @@ namespace MOE.Common.Business.TimingAndActuations
         private void SetPedestrianActuation()
         {
             if (TimingAndActuationsForPhase.PedestrianEvents == null) return;
-            if (!TimingAndActuationsForPhase.PedestrianEvents.Any()) return;
-            var pedestrianActuation = new Series
+            var pedPhaseOrOverLap = TimingAndActuationsForPhase.Approach.IsPedestrianPhaseOverlap ? "Ovl" : "ph";
+            var pedPhase = TimingAndActuationsForPhase.Approach.PedestrianPhaseNumber ?? TimingAndActuationsForPhase.Approach.ProtectedPhaseNumber;
+            foreach (var pedEventElement in TimingAndActuationsForPhase.PedestrianEvents)
             {
-                ChartType = SeriesChartType.Point,
-                XValueType = ChartValueType.DateTime,
-                Name = "Pedestrian Detector Actuations"
-            };
-            if (TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
-            {
-                pedestrianActuation.ChartType = SeriesChartType.Line;
-            }
-            if (TimingAndActuationsForPhase.Options.ShowEventPairs)
-            {
-                for (var i = 0; i < TimingAndActuationsForPhase.PedestrianEvents.Count; i++)
+                if (pedEventElement.Value.Count == 0) continue;
+                var pedestrianActuation = new Series
                 {
-                    var seriesPointIndex = new int();
-                    if (TimingAndActuationsForPhase.PedestrianEvents[i].EventCode == 90)
+                    ChartType = SeriesChartType.Point,
+                    XValueType = ChartValueType.DateTime,
+                    Name = $"Ped Det. Actuations Ped {pedPhaseOrOverLap} {pedPhase}, ch {pedEventElement.Key}"
+                };
+                var pedEvents = pedEventElement.Value;
+                if (TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
+                {
+                    pedestrianActuation.ChartType = SeriesChartType.Line;
+                }
+                if (TimingAndActuationsForPhase.Options.ShowEventPairs)
+                {
+                    for (var i = 0; i < pedEvents.Count; i++)
                     {
-                        seriesPointIndex = pedestrianActuation.Points.AddXY(
-                            TimingAndActuationsForPhase.PedestrianEvents[i].Timestamp.ToOADate(), _yValue);
-                        pedestrianActuation.Points[seriesPointIndex].Color = Color.Transparent;
-                        pedestrianActuation.Points[seriesPointIndex].MarkerStyle = MarkerStyle.Triangle;
-                        pedestrianActuation.Points[seriesPointIndex].MarkerColor = Color.Black;
-                        pedestrianActuation.Points[seriesPointIndex].MarkerSize = _dotSize;
-                    }
-                    else if (TimingAndActuationsForPhase.PedestrianEvents[i].EventCode == 89)
-                    {
-                        seriesPointIndex = pedestrianActuation.Points.AddXY(
-                            TimingAndActuationsForPhase.PedestrianEvents[i].Timestamp.ToOADate(), _yValue);
-                        pedestrianActuation.Points[seriesPointIndex].Color = Color.Black;
-                        pedestrianActuation.Points[seriesPointIndex].MarkerStyle = MarkerStyle.Square;
-                        pedestrianActuation.Points[seriesPointIndex].MarkerColor = Color.LightSlateGray;
-                        pedestrianActuation.Points[seriesPointIndex].MarkerSize = _dotSize;
+                        var seriesPointIndex = new int();
+                        if (pedEvents[i].EventCode == 90)
+                        {
+                            seriesPointIndex = pedestrianActuation.Points.AddXY(
+                                pedEvents[i].Timestamp.ToOADate(), _yValue);
+                            pedestrianActuation.Points[seriesPointIndex].Color = Color.Transparent;
+                            pedestrianActuation.Points[seriesPointIndex].MarkerStyle = MarkerStyle.Triangle;
+                            pedestrianActuation.Points[seriesPointIndex].MarkerColor = Color.Black;
+                            pedestrianActuation.Points[seriesPointIndex].MarkerSize = _dotSize;
+                        }
+                        else if (pedEvents[i].EventCode == 89)
+                        {
+                            seriesPointIndex = pedestrianActuation.Points.AddXY(
+                                pedEvents[i].Timestamp.ToOADate(), _yValue);
+                            pedestrianActuation.Points[seriesPointIndex].Color = Color.Black;
+                            pedestrianActuation.Points[seriesPointIndex].MarkerStyle = MarkerStyle.Square;
+                            pedestrianActuation.Points[seriesPointIndex].MarkerColor = Color.LightSlateGray;
+                            pedestrianActuation.Points[seriesPointIndex].MarkerSize = _dotSize;
+                        }
                     }
                 }
-            }
-            else 
-            {
-                var lastItem = TimingAndActuationsForPhase.PedestrianEvents.Count - 1;
-                if (lastItem <= 0) return;
-                for (var i = 0; i < lastItem; i++)
+                else
                 {
-                    if (TimingAndActuationsForPhase.PedestrianEvents[i].EventCode == 90 &&
-                        TimingAndActuationsForPhase.PedestrianEvents[i + 1].EventCode == 89)
+                    var lastItem = pedEvents.Count - 1;
+                    if (lastItem <= 0) return;
+                    for (var i = 0; i < lastItem; i++)
                     {
-                        var p0 = pedestrianActuation.Points.AddXY(
-                            TimingAndActuationsForPhase.PedestrianEvents[i].Timestamp.ToOADate(), _yValue);
-                        pedestrianActuation.Points[p0].Color = Color.Transparent;
-                        pedestrianActuation.Points[p0].MarkerStyle = MarkerStyle.Triangle;
-                        pedestrianActuation.Points[p0].MarkerColor = Color.Black;
-                        pedestrianActuation.Points[p0].MarkerSize = _dotSize;
-                        var p1 = pedestrianActuation.Points.AddXY(
-                            TimingAndActuationsForPhase.PedestrianEvents[i + 1].Timestamp.ToOADate(), _yValue);
-                        pedestrianActuation.Points[p1].Color = Color.Black;
-                        pedestrianActuation.Points[p1].MarkerStyle = MarkerStyle.Square;
-                        pedestrianActuation.Points[p1].MarkerColor = Color.LightSlateGray;
-                        pedestrianActuation.Points[p1].MarkerSize = _dotSize;
+                        if (pedEvents[i].EventCode == 90 &&
+                            pedEvents[i + 1].EventCode == 89)
+                        {
+                            var p0 = pedestrianActuation.Points.AddXY(
+                                pedEvents[i].Timestamp.ToOADate(), _yValue);
+                            pedestrianActuation.Points[p0].Color = Color.Transparent;
+                            pedestrianActuation.Points[p0].MarkerStyle = MarkerStyle.Triangle;
+                            pedestrianActuation.Points[p0].MarkerColor = Color.Black;
+                            pedestrianActuation.Points[p0].MarkerSize = _dotSize;
+                            var p1 = pedestrianActuation.Points.AddXY(
+                                pedEvents[i + 1].Timestamp.ToOADate(), _yValue);
+                            pedestrianActuation.Points[p1].Color = Color.Black;
+                            pedestrianActuation.Points[p1].MarkerStyle = MarkerStyle.Square;
+                            pedestrianActuation.Points[p1].MarkerColor = Color.LightSlateGray;
+                            pedestrianActuation.Points[p1].MarkerSize = _dotSize;
+                        }
                     }
                 }
-            }
-            if (pedestrianActuation.Points.Count > 0)
-            {
-                Chart.Series.Add(pedestrianActuation);
-                _yValue += 1.0;
+                if (pedestrianActuation.Points.Count > 0)
+                {
+                    Chart.Series.Add(pedestrianActuation);
+                    _yValue += 1.0;
+                }
             }
         }
 
@@ -539,7 +546,7 @@ namespace MOE.Common.Business.TimingAndActuations
                 ChartType = SeriesChartType.Point,
                 XValueType = ChartValueType.DateTime
             };
-            if(TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
+            if (TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
             {
                 stopBarSeries.ChartType = SeriesChartType.Line;
             }
@@ -695,9 +702,9 @@ namespace MOE.Common.Business.TimingAndActuations
                 }
                 if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == false && laneByLaneSeries.Points.Count > 0)
                 {
-                        laneByLaneSeries.Name = laneByLaneElement.Key;
-                        Chart.Series.Add(laneByLaneSeries);
-                        _yValue += 1.0;
+                    laneByLaneSeries.Name = laneByLaneElement.Key;
+                    Chart.Series.Add(laneByLaneSeries);
+                    _yValue += 1.0;
                 }
             }
             if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup && laneByLaneSeries.Points.Count > 0)
@@ -742,11 +749,11 @@ namespace MOE.Common.Business.TimingAndActuations
             {
                 height *= 1.5;
             }
-            Chart.Height = new Unit(height); 
+            Chart.Height = new Unit(height);
             Chart.ChartAreas[0].AxisY.Interval = 1;
             for (var i = 1; i < Chart.Series.Count; i++)
             {
-                var bottomLabelOffset = (int) Chart.Series[i].Points[0].YValues[0];
+                var bottomLabelOffset = (int)Chart.Series[i].Points[0].YValues[0];
                 var topLabelOffset = bottomLabelOffset + 1;
                 var sideLabel = Chart.Series[i].Name;
                 var timingAxisLabel = new CustomLabel(bottomLabelOffset, topLabelOffset, Chart.Series[i].Name, 0,
@@ -771,10 +778,9 @@ namespace MOE.Common.Business.TimingAndActuations
             {
                 advanceCountSeries.ChartType = SeriesChartType.Line;
             }
-            if (TimingAndActuationsForPhase.Options.AdvancedOffset != null &&
-                TimingAndActuationsForPhase.Options.AdvancedOffset != 0.0)
+            if (TimingAndActuationsForPhase.Options.AdvancedOffset != 0.0)
             {
-                advancedOffset = (float) TimingAndActuationsForPhase.Options.AdvancedOffset;
+                advancedOffset = (float)TimingAndActuationsForPhase.Options.AdvancedOffset;
                 darkColor = Color.DarkViolet;
                 lightColor = Color.MediumPurple;
             }
@@ -784,7 +790,7 @@ namespace MOE.Common.Business.TimingAndActuations
                 {
                     if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup)
                     {
-                        _laneOffset = (double) ++_lanesProcessed * 0.2 - 0.2;
+                        _laneOffset = (double)++_lanesProcessed * 0.2 - 0.2;
                         _laneOffset = (_laneOffset > _yValue + 0.5) ? _yValue + 0.5 : _laneOffset;
                     }
                     else
@@ -794,8 +800,8 @@ namespace MOE.Common.Business.TimingAndActuations
                             ChartType = SeriesChartType.Point,
                             XValueType = ChartValueType.DateTime
                         };
-                        if(TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
-                        
+                        if (TimingAndActuationsForPhase.Options.ShowLinesStartEnd)
+
                         {
                             advanceCountSeries.ChartType = SeriesChartType.Line;
                         }
@@ -870,7 +876,7 @@ namespace MOE.Common.Business.TimingAndActuations
             }
         }
 
-    private void SetAdvancePresenceEvents()
+        private void SetAdvancePresenceEvents()
         {
             _lanesProcessed = 0;
             var advancePresenceSeries = new Series
@@ -899,7 +905,7 @@ namespace MOE.Common.Business.TimingAndActuations
                 }
                 else
                 {
-                    _laneOffset = (double) ++_lanesProcessed * 0.2 - 0.3;
+                    _laneOffset = (double)++_lanesProcessed * 0.2 - 0.3;
                     if (_laneOffset > _yValue + 0.5) _laneOffset = _yValue + 0.5;
                 }
                 var advancePresenceEvents = advancePresenceElement.Value;
@@ -952,8 +958,8 @@ namespace MOE.Common.Business.TimingAndActuations
                 if (TimingAndActuationsForPhase.Options.CombineLanesForEachGroup == false && advancePresenceSeries.Points.Count > 0)
                 {
                     advancePresenceSeries.Name = advancePresenceElement.Key;
-                        Chart.Series.Add(advancePresenceSeries);
-                        _yValue += 1.0;
+                    Chart.Series.Add(advancePresenceSeries);
+                    _yValue += 1.0;
                 }
             }
             if (advancePresenceSeries.Points.Count > 0 && TimingAndActuationsForPhase.Options.CombineLanesForEachGroup)
@@ -976,7 +982,7 @@ namespace MOE.Common.Business.TimingAndActuations
             var localColorBlack = Color.Black;
             var localColor61Green = Color.LimeGreen;  // code 61
             var localColor62Green = Color.LightGreen; // code 62
-            
+
             var blackDot = new Series
             {
                 ChartType = SeriesChartType.Point,
@@ -1015,43 +1021,43 @@ namespace MOE.Common.Business.TimingAndActuations
                         switch (vehicleDisplayCycleValue[i].EventCode)
                         {
                             case 1:
-                            {
-                                vehicleStripeLine.BackColor = localColorDarkGreen;
-                                break;
-                            }
+                                {
+                                    vehicleStripeLine.BackColor = localColorDarkGreen;
+                                    break;
+                                }
                             case 61:
-                            {
-                                vehicleStripeLine.BackColor = localColor61Green;
-                                break;
-                            }
+                                {
+                                    vehicleStripeLine.BackColor = localColor61Green;
+                                    break;
+                                }
                             case 3:
-                            {
-                                vehicleStripeLine.BackColor = localColorGreen;
-                                break;
-                            }
+                                {
+                                    vehicleStripeLine.BackColor = localColorGreen;
+                                    break;
+                                }
                             case 62:
-                            {
-                                vehicleStripeLine.BackColor = localColor62Green;
-                                break;
-                            }
+                                {
+                                    vehicleStripeLine.BackColor = localColor62Green;
+                                    break;
+                                }
                             case 8:
                             case 63:
-                            {
-                                vehicleStripeLine.BackColor = localColorYellow;
-                                break;
-                            }
+                                {
+                                    vehicleStripeLine.BackColor = localColorYellow;
+                                    break;
+                                }
                             case 9:
                             case 64:
-                            {
-                                vehicleStripeLine.BackColor = localColorDarkRed;
-                                break;
-                            }
+                                {
+                                    vehicleStripeLine.BackColor = localColorDarkRed;
+                                    break;
+                                }
                             case 11:
                             case 65:
-                            {
-                                vehicleStripeLine.BackColor = localColorRed;
-                                break;
-                            }
+                                {
+                                    vehicleStripeLine.BackColor = localColorRed;
+                                    break;
+                                }
                         }
                         //var startTime = TimingAndActuationsForPhase.Options.StartDate.AddMinutes(-TimingAndActuationsForPhase.Options.ExtendSearch);
                         //var endTime = TimingAndActuationsForPhase.Options.EndDate.AddMinutes(TimingAndActuationsForPhase.Options.ExtendSearch);
@@ -1064,29 +1070,29 @@ namespace MOE.Common.Business.TimingAndActuations
                         switch (Chart.ChartAreas[0].AxisX.IntervalType)
                         {
                             case DateTimeIntervalType.Seconds:
-                            {
-                                stripOffest = timeSpanStartOffset.TotalSeconds;
-                                stripWidth = timeSpanWidth.TotalSeconds;
-                                break;
-                            }
+                                {
+                                    stripOffest = timeSpanStartOffset.TotalSeconds;
+                                    stripWidth = timeSpanWidth.TotalSeconds;
+                                    break;
+                                }
                             case DateTimeIntervalType.Minutes:
-                            {
-                                stripOffest = timeSpanStartOffset.TotalMinutes;
-                                stripWidth = timeSpanWidth.TotalMinutes;
-                                break;
-                            }
+                                {
+                                    stripOffest = timeSpanStartOffset.TotalMinutes;
+                                    stripWidth = timeSpanWidth.TotalMinutes;
+                                    break;
+                                }
                             case DateTimeIntervalType.Hours:
-                            {
-                                stripOffest = timeSpanStartOffset.TotalHours;
-                                stripWidth = timeSpanWidth.TotalHours;
-                                break;
-                            }
+                                {
+                                    stripOffest = timeSpanStartOffset.TotalHours;
+                                    stripWidth = timeSpanWidth.TotalHours;
+                                    break;
+                                }
                             case DateTimeIntervalType.Days:
-                            {
-                                stripOffest = timeSpanStartOffset.TotalDays;
-                                stripWidth = timeSpanWidth.TotalDays;
-                                break;
-                            }
+                                {
+                                    stripOffest = timeSpanStartOffset.TotalDays;
+                                    stripWidth = timeSpanWidth.TotalDays;
+                                    break;
+                                }
                         }
                         vehicleStripeLine.IntervalOffset = stripOffest;
                         vehicleStripeLine.StripWidth = (stripWidth > 0.0) ? stripWidth : 0.0;

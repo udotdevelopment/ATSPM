@@ -16,5 +16,7 @@ namespace SPM.Models
         public double CalculatedVolumeBoundary { get; set; }
         public bool ConsiderForStudy { get;  set; }
         public Dictionary<DateTime, double> DemandList { get; set; }
+        public string Direction { get; set; }
+        public string OpposingDirection { get; set; }
     }
 }

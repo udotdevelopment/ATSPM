@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ATSPM.IRepositories;
 
 namespace ATSPM.Application.Reports.Business.LeftTurnGapReport.Tests
 {
@@ -158,11 +159,9 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport.Tests
         [Fact()]
         public void LoadGapOutAveragesTest()
         {
-            var aggregations = new List<PhaseTerminationAggregation>
+            var aggregations = new List<double>
             {
-                {new PhaseTerminationAggregation{GapOuts=5}},
-                {new PhaseTerminationAggregation{GapOuts=6}},
-                {new PhaseTerminationAggregation{GapOuts=7}}
+                5,6,7
             };
             var dictionary = new Dictionary<TimeSpan, double>();
             LeftTurnReportPreCheck.LoadGapOutAverages(dictionary, new TimeSpan(8, 0, 0), aggregations);
@@ -253,13 +252,165 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport.Tests
                     distinctTimeSpans.Add(new TimeSpan(i, m, 0));
                 }
             }
-            var result = LeftTurnReportPreCheck.GetAveragesForBins(volumeAggregations, distinctTimeSpans);
+            var result = LeftTurnReportPreCheck.GetAveragesForBinsByTimeSpan(volumeAggregations, distinctTimeSpans);
             foreach (var avg in result)
             {
                 Assert.Equal(5, avg.Value);
             }
         }
 
-        
+        [Fact()]
+        public void GetAllDetectorsForSignalTest()
+        {
+            var testSignalRepository = new TestSignalRepository();
+            var result = LeftTurnReportPreCheck.GetAllLaneByLaneDetectorsForSignal("1", DateTime.Now, testSignalRepository);
+            Assert.Single(result);
+        }
+    }
+
+    class TestSignalRepository : ISignalsRepository
+    {
+        public void AddList(List<Signal> signals)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddOrUpdate(Signal signal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddSignalAndDetectorLists(Signal returnSignal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int CheckVersionWithFirstDate(string signalId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Signal CopySignalToNewVersion(Signal originalVersion)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Signal> EagerLoadAllSignals()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Exists(string signalId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Signal> GetAllEnabledSignals()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Signal> GetAllSignals()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Signal> GetAllVersionsOfSignalBySignalID(string signalID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Signal> GetLatestVerionOfAllSignalsByControllerType(int controllerTypeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Signal> GetLatestVersionOfAllSignals()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Signal> GetLatestVersionOfAllSignalsForFtp()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Signal GetLatestVersionOfSignalBySignalID(string signalID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetSignalDescription(string signalId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetSignalLocation(string signalID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Signal> GetSignalsBetweenDates(string signalId, DateTime startDate, DateTime endDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Signal GetSignalVersionByVersionId(int versionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Signal GetVersionOfSignalByDate(string signalId, DateTime startDate)
+        {
+
+            var detector1 = new Detector {
+                DetectionTypeDetectors = new List<DetectionTypeDetector> {
+                                            new DetectionTypeDetector { DetectionTypeId = 1 },
+                                            new DetectionTypeDetector { DetectionTypeId = 2 },
+                                            },
+                DetectionHardwareId = 1
+            };
+            var detector2 = new Detector
+            {
+                DetectionTypeDetectors = new List<DetectionTypeDetector> {
+                                            new DetectionTypeDetector { DetectionTypeId = 3 },
+                                            new DetectionTypeDetector { DetectionTypeId = 4 },
+                                            },
+                DetectionHardwareId = 2
+            };
+            var detector3 = new Detector
+            {
+                DetectionTypeDetectors = new List<DetectionTypeDetector> {
+                                            new DetectionTypeDetector { DetectionTypeId = 5 },
+                                            new DetectionTypeDetector { DetectionTypeId = 6 }
+                                            },
+                DetectionHardwareId = 6
+            };
+
+            var approach1 = new Approach
+            {
+                Detectors = new List<Detector> { detector1, detector2, detector3 }
+            };
+            var signal = new Signal
+            {
+                Approaches = new List<Approach> { approach1 }
+            };
+            return signal;
+        }
+
+        public Signal GetVersionOfSignalByDateWithDetectionTypes(string signalId, DateTime startDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetAllVersionsOfASignalToDeleted(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetVersionToDeleted(int versionId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

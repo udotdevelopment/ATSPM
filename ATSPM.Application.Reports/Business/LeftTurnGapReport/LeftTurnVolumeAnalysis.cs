@@ -37,11 +37,11 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                 approachRepository,
                 detectorEventCountAggregationRepository);
             //Need a test that looks at the volume and the opposing volume
+            var signal = signalsRepository.GetVersionOfSignalByDate(signalId, start);
+            var approach = signal.Approaches.Where(a => a.ApproachId == approachId).FirstOrDefault();
             LeftTurnVolumeValue leftTurnVolumeValue = new LeftTurnVolumeValue();
             var detectors = LeftTurnReportPreCheck.GetLeftTurnDetectors(approachId, approachRepository);
-            var approach = approachRepository.GetApproachByApproachID(detectors.First().ApproachId);
             int opposingPhase = LeftTurnReportPreCheck.GetOpposingPhase(approach);
-            var signal = signalsRepository.GetVersionOfSignalByDate(signalId, start);
             List<int> movementTypes = new List<int>() { 1, 4, 5 };
             List<Models.Detector> opposingDetectors =
                 GetOpposingDetectors(opposingPhase, signal, movementTypes);//GetDetectorsByPhase(signalId, opposingPhase, detectorRepository);
@@ -55,11 +55,13 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             double crossVolumeProduct = GetCrossProduct(leftTurnVolume, opposingVolume);
             leftTurnVolumeValue.CrossProductValue = crossVolumeProduct;
             leftTurnVolumeValue.LeftTurnVolume = leftTurnVolume;
-            leftTurnVolumeValue.OpposingThroughVolume = opposingPhase;
+            leftTurnVolumeValue.OpposingThroughVolume = opposingVolume;
             leftTurnVolumeValue.CrossProductReview = GetCrossProductReview(crossVolumeProduct, leftTurnVolumeValue.OpposingLanes);
             ApproachType approachType = GetApproachType(approach);
             SetDecisionBoundariesReview(leftTurnVolumeValue, leftTurnVolume, opposingVolume, approachType);
             leftTurnVolumeValue.DemandList = GetDemandList(start, end, startTime, endTime, daysOfWeek, leftTurnVolumeAggregation);
+            leftTurnVolumeValue.Direction = approach.DirectionType.Abbreviation + approach.Detectors.FirstOrDefault()?.MovementType.Abbreviation;
+            leftTurnVolumeValue.OpposingDirection = signal.Approaches.Where(a => a.ProtectedPhaseNumber == opposingPhase).FirstOrDefault()?.DirectionType.Abbreviation;
             return leftTurnVolumeValue;
         }
 
@@ -70,9 +72,9 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
             {
                 if (daysOfWeek.Contains((int)tempDate.DayOfWeek))
                 {
-                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(30))
+                    for (var tempstart = tempDate.Date.Add(startTime); tempstart < tempDate.Add(endTime); tempstart = tempstart.AddMinutes(15))
                     {
-                        demandList.Add(tempstart, leftTurnVolumeAggregation.Where(v => v.BinStartTime >= tempstart && v.BinStartTime < tempstart.AddMinutes(30)).Sum(v => v.EventCount));
+                        demandList.Add(tempstart, leftTurnVolumeAggregation.Where(v => v.BinStartTime >= tempstart && v.BinStartTime < tempstart.AddMinutes(15)).Sum(v => v.EventCount));
                     }
                 }
             }
@@ -90,7 +92,7 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
                             .Approaches
                             .Where(a => a.ProtectedPhaseNumber == opposingPhase)
                             .SelectMany(a => a.Detectors)
-                            .Where(d => d.MovementTypeId.HasValue && movementTypes.Contains(d.MovementTypeId.Value))
+                            .Where(d => d.MovementTypeId.HasValue && movementTypes.Contains(d.MovementTypeId.Value) && d.DetectionTypeDetectors.First().DetectionTypeId == 4)
                             .ToList();
         }
 
@@ -201,7 +203,8 @@ namespace ATSPM.Application.Reports.Business.LeftTurnGapReport
         public double CrossProductValue { get; set; }
         public double CalculatedVolumeBoundary { get; set; }
         public Dictionary<DateTime, double> DemandList { get; set; }
-
+        public string Direction { get; internal set; }
+        public string OpposingDirection { get; internal set; }
     }
 
     public enum ApproachType { Permissive, Protected, PermissiveProtected };

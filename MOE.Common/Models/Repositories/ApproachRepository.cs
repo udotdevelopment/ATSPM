@@ -249,5 +249,10 @@ namespace MOE.Common.Models.Repositories
                 throw;
             }
         }
+
+        ICollection<Approach> IApproachRepository.GetApproachesForSignal(int versionID)
+        {
+            return _db.Approaches.Where(a => a.VersionID == versionID).ToList();
+        }
     }
 }

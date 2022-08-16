@@ -717,6 +717,7 @@ namespace MOE.Common.Business
             chartArea.AxisY2.MajorTickMark.Enabled = false;
             chartArea.AxisY2.MajorGrid.Enabled = false;
             chartArea.AxisY2.IntervalType = DateTimeIntervalType.Number;
+            chartArea.AxisY2.TitleFont = new Font("Microsoft Sans Serif", 9);
             chartArea.AxisY2.Title = options.Y2AxisTitle??"";
         }
         private static void SetUpY2Axis(ChartArea chartArea, SignalAggregationMetricOptions options)
@@ -726,6 +727,7 @@ namespace MOE.Common.Business
             chartArea.AxisY2.MajorTickMark.Enabled = false;
             chartArea.AxisY2.MajorGrid.Enabled = false;
             chartArea.AxisY2.IntervalType = DateTimeIntervalType.Number;
+            chartArea.AxisY2.TitleFont = new Font("Microsoft Sans Serif", 9);
             chartArea.AxisY2.Title = options.Y2AxisTitle ?? "";
         }
 

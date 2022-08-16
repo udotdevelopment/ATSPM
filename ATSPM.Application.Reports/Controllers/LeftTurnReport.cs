@@ -57,7 +57,7 @@ namespace ATSPM.Application.Reports.Controllers
             var amStartTime = new TimeSpan(6, 0, 0);
             var amEndTime = new TimeSpan(9, 0, 0);
             var pmStartTime = new TimeSpan(15, 0, 0);
-            var pmEndTime = new TimeSpan(18, 0, 0);
+            var pmEndTime = new TimeSpan(19, 0, 0);
 
             var approach = _approachRepository.GetApproachByApproachID(parameters.ApproachId);
             var dataCheck = new DataCheckResult();
@@ -101,7 +101,7 @@ namespace ATSPM.Application.Reports.Controllers
             var flowRate = LeftTurnReportPreCheck.GetAMPMPeakFlowRate(parameters.SignalId, parameters.ApproachId, parameters.StartDate, parameters.EndDate, amStartTime,
             amEndTime, pmStartTime, pmEndTime, parameters.DaysOfWeek, _signalRepository, _approachRepository, _detectorEventCountAggregationRepository);
             dataCheck.LeftTurnVolumeOk = flowRate.First().Value >= parameters.VolumePerHourThreshold
-                && flowRate.Last().Value >= parameters.VolumePerHourThreshold;
+                || flowRate.Last().Value >= parameters.VolumePerHourThreshold;
 
             var gapOut = leftTurnReportPreCheck.GetAMPMPeakGapOut(parameters.SignalId, parameters.ApproachId, parameters.StartDate, parameters.EndDate, amStartTime,
             amEndTime, pmStartTime, pmEndTime, parameters.DaysOfWeek);
@@ -143,7 +143,7 @@ namespace ATSPM.Application.Reports.Controllers
             {
                 dataCheck.InsufficientSplitFailAggregations = true;
             }
-            if (!_phaseLeftTurnGapAggregationRepository.Exists(signalId, phaseNumber,
+            if (!_phaseLeftTurnGapAggregationRepository.Exists(signalId, opposingPhase,
                 parameters.StartDate.Add(amStartTime), parameters.StartDate.Add(amEndTime)) &&
                    !_phasePedAggregationRepository.Exists(signalId, phaseNumber,
                 parameters.StartDate.Add(pmStartTime), parameters.StartDate.Add(pmEndTime)))
@@ -177,18 +177,17 @@ namespace ATSPM.Application.Reports.Controllers
             return result;
         }
 
-            [HttpPost("/GapOut")]
-        public GapOutResult GetGapOutAnalysis(ReportParameters parameters)
+            [HttpPost("/GapDuration")]
+        public GapDurationResult GetGapDurationAnalysis(ReportParameters parameters)
         {
             var startTime = new TimeSpan(parameters.StartHour, parameters.StartMinute, 0);
             var endTime = new TimeSpan(parameters.EndHour, parameters.EndMinute, 0);
-            var gapOutResult = new GapOutResult();
-            var gapOutAnalysis = new LeftTurnGapOutAnalysis(_approachRepository, _detectorRepository, _detectorEventCountAggregationRepository,
+            var gapOutAnalysis = new LeftTurnGapDurationAnalysis(_approachRepository, _detectorRepository, _detectorEventCountAggregationRepository,
                 _phaseLeftTurnGapAggregationRepository, _signalRepository);
-            gapOutResult = gapOutAnalysis.GetPercentOfGapDuration(parameters.SignalId, parameters.ApproachId, parameters.StartDate, parameters.EndDate,
+            GapDurationResult gapDurationResult = gapOutAnalysis.GetPercentOfGapDuration(parameters.SignalId, parameters.ApproachId, parameters.StartDate, parameters.EndDate,
                 startTime, endTime, parameters.DaysOfWeek);
 
-           return gapOutResult;
+            return gapDurationResult;
         }
 
         [HttpPost("/SplitFail")]
@@ -197,7 +196,7 @@ namespace ATSPM.Application.Reports.Controllers
             var startTime = new TimeSpan(parameters.StartHour, parameters.StartMinute, 0);
             var endTime = new TimeSpan(parameters.EndHour, parameters.EndMinute, 0);
             var splitFailResult = new SplitFailResult();
-            var splitFailAnalysis = new LeftTurnSplitFailAnalysis(_approachRepository,_approachSplitFailAggregationRepository);
+            var splitFailAnalysis = new LeftTurnSplitFailAnalysis(_approachRepository, _approachSplitFailAggregationRepository);
             splitFailResult = splitFailAnalysis.GetSplitFailPercent(parameters.ApproachId, parameters.StartDate, parameters.EndDate, startTime, endTime, parameters.DaysOfWeek);
 
             return splitFailResult;
@@ -209,7 +208,7 @@ namespace ATSPM.Application.Reports.Controllers
             var startTime = new TimeSpan(parameters.StartHour, parameters.StartMinute, 0);
             var endTime = new TimeSpan(parameters.EndHour, parameters.EndMinute, 0);
 
-            var pedAnalysis = new LeftTurnPedestrianAnalysis(_approachRepository, _detectorRepository, _phasePedAggregationRepository,
+            var pedAnalysis = new LeftTurnPedestrianAnalysis(_signalRepository, _approachRepository, _phasePedAggregationRepository,
                 _approachCycleAggregationRepository);
             var pedActuationResult = new PedActuationResult();
             pedActuationResult = pedAnalysis.GetPedestrianPercentage(parameters.SignalId, parameters.ApproachId, parameters.StartDate, parameters.EndDate, startTime, endTime, parameters.DaysOfWeek);

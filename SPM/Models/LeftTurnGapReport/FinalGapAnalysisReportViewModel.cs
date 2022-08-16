@@ -9,11 +9,15 @@ namespace SPM.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string ApproachDescription { get; set; }
-        //public string PhaseType { get; set; }
-        //public string OpposingApproach { get; set; }
+        public string SignalId { get; set; }
+        public string Location { get; set; }
+        public bool Get24HourPeriod { get; set; }
+        public string PhaseType { get; set; }
+        public string SignalType { get; set; }
+        public string OpposingApproach { get; set; }
         //public int NumberOfThruLanes { get; set; }
-        //public int SpeedLimit { get; set; }
-        //public string PeakPeriodDescription { get; set; }
+        public int? SpeedLimit { get; set; }
+        public string PeakPeriodDescription { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public int CyclesWithSplitFailNum { get; set; }
@@ -34,13 +38,15 @@ namespace SPM.Models
         public bool DecisionBoundariesReview { get; internal set; }
         public double LeftTurnVolume { get; internal set; }
         public double OpposingThroughVolume { get; internal set; }
-        public bool ConsiderForStudy { get; internal set; }
+        public bool? CrossProductConsiderForStudy { get; internal set; }
         public Dictionary<DateTime, double> AcceptableGapList { get; internal set; }
         public Dictionary<DateTime, double> PercentCyclesWithPedsList { get; internal set; }
         public Dictionary<DateTime, double> DemandList { get; internal set; }
         public Dictionary<DateTime, double> PercentCyclesWithSplitFailList { get; internal set; }
         public String GapDemandChartImg { get; set; }
         public String PedSplitFailChartImg { get; set; }
+        public string Direction { get; internal set; }
+        public string OpposingDirection { get; internal set; }
 
         public FinalGapAnalysisReportViewModel(bool? gapDurationConsiderForStudy, 
             bool? splitFailsConsiderForStudy, bool? pedActuationsConsiderForStudy,

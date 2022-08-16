@@ -368,6 +368,7 @@
     <Compile Include="Business\ActionLog\ChartData.cs" />
     <Compile Include="Business\AnalysisPhaseCycle.cs" />
     <Compile Include="Business\AnalysisPhaseCycleCollection.cs" />
+    <Compile Include="Business\Approaches.cs" />
     <Compile Include="Business\ApproachVolume\ApproachVolume.cs" />
     <Compile Include="Business\ApproachVolume\ApproachVolumeViewModel.cs" />
     <Compile Include="Business\ApproachVolume\MetricInfo.cs" />
@@ -389,6 +390,7 @@
     <Compile Include="Business\DataAggregation\PhaseLeftTurnGapAggregationBySignal.cs" />
     <Compile Include="Business\DataAggregation\PhaseSplitMonitorAggregationByPhase.cs" />
     <Compile Include="Business\DataAggregation\PhaseSplitMonitorAggregationBySignal.cs" />
+    <Compile Include="Business\ExtensionMethods.cs" />
     <Compile Include="Business\LeftTurnGapAnalysis\LeftTurnGapAnalysis.cs" />
     <Compile Include="Business\LeftTurnGapReport\LeftTurnGapOutAnalysis.cs" />
     <Compile Include="Business\LeftTurnGapReport\LeftTurnPedestrianAnalysis.cs" />
@@ -495,6 +497,19 @@
     <Compile Include="Business\WCFServiceLibrary\ApproachAggregationMetricOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\ApproachSplitFailAggregationOptions.cs" />
     <Compile Include="Business\WCFServiceLibrary\WaitTimeOptions.cs" />
+    <Compile Include="Migrations\202205122134008_PhasePedAggregationUpdate.cs" />
+    <Compile Include="Migrations\202205122134008_PhasePedAggregationUpdate.designer.cs">
+      <DependentUpon>202205122134008_PhasePedAggregationUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202206091913388_ChangePedActuationsToPedRequests.cs" />
+    <Compile Include="Migrations\202206091913388_ChangePedActuationsToPedRequests.designer.cs">
+      <DependentUpon>202206091913388_ChangePedActuationsToPedRequests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202207061520118_AddApproachToPhasePedAgg.cs" />
+    <Compile Include="Migrations\202207061520118_AddApproachToPhasePedAgg.designer.cs">
+      <DependentUpon>202207061520118_AddApproachToPhasePedAgg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Area.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>
     </Compile>
@@ -684,27 +699,30 @@
     <Compile Include="Migrations\202105132005112_ReCreateAggTables.designer.cs">
       <DependentUpon>202105132005112_ReCreateAggTables.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202203290134007_Jurisdiction.cs" />
-    <Compile Include="Migrations\202203290134007_Jurisdiction.designer.cs">
-      <DependentUpon>202203290134007_Jurisdiction.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202204091703032_SignalJurisdiction.cs" />
-    <Compile Include="Migrations\202204091703032_SignalJurisdiction.designer.cs">
-      <DependentUpon>202204091703032_SignalJurisdiction.cs</DependentUpon>
+    <Compile Include="Migrations\202204300103177_4_3.cs" />
+    <Compile Include="Migrations\202204300103177_4_3.designer.cs">
+      <DependentUpon>202204300103177_4_3.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Jurisdiction.cs" />
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
+    <Compile Include="Models\MeasuresDefaults.cs" />
     <Compile Include="Models\PhasePedAggregation.cs" />
     <Compile Include="Models\PhaseSplitMonitorAggregation.cs" />
     <Compile Include="Models\PhaseLeftTurnGapAggregation.cs" />
     <Compile Include="Models\PhaseTerminationAggregation.cs" />
     <Compile Include="Models\DetectorEventCountAggregation.cs" />
     <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\Repositories\IMeasuresDefaultsRepository.cs" />
+    <Compile Include="Models\Repositories\AreaRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\AreaRepository.cs" />
+    <Compile Include="Models\Repositories\IAreaRepository.cs" />
     <Compile Include="Models\Repositories\IPhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IPhaseLeftTurnGapAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IJurisdictionRepository.cs" />
     <Compile Include="Models\Repositories\IPhaseSplitMonitorAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\MeasuresDefaultsRepositortFactory.cs" />
+    <Compile Include="Models\Repositories\MeasuresDefaultsRepository.cs" />
     <Compile Include="Models\Repositories\PhasePedAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseLeftTurnGapAggregationRepository.cs" />
     <Compile Include="Models\Repositories\PhaseSplitMonitorAggregationRepository .cs" />
@@ -1157,11 +1175,17 @@
     <EmbeddedResource Include="Migrations\202105132005112_ReCreateAggTables.resx">
       <DependentUpon>202105132005112_ReCreateAggTables.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202203290134007_Jurisdiction.resx">
-      <DependentUpon>202203290134007_Jurisdiction.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202204300103177_4_3.resx">
+      <DependentUpon>202204300103177_4_3.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202204091703032_SignalJurisdiction.resx">
-      <DependentUpon>202204091703032_SignalJurisdiction.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202205122134008_PhasePedAggregationUpdate.resx">
+      <DependentUpon>202205122134008_PhasePedAggregationUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202206091913388_ChangePedActuationsToPedRequests.resx">
+      <DependentUpon>202206091913388_ChangePedActuationsToPedRequests.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202207061520118_AddApproachToPhasePedAgg.resx">
+      <DependentUpon>202207061520118_AddApproachToPhasePedAgg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />

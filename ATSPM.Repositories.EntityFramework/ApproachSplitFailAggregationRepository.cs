@@ -30,10 +30,10 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
         {
             var splitFails = 0;
             if (_db.ApproachSplitFailAggregations.Any(r => r.ApproachId == approachId
-                                                           && r.BinStartTime >= start && r.BinStartTime <= end))
+                                                           && r.BinStartTime >= start && r.BinStartTime < end))
                 splitFails = _db.ApproachSplitFailAggregations.Where(r => r.ApproachId == approachId
                                                                           && r.BinStartTime >= start &&
-                                                                          r.BinStartTime <= end)
+                                                                          r.BinStartTime < end)
                     .Sum(r => r.SplitFailures);
             return splitFails;
         }
@@ -44,12 +44,13 @@ namespace ATSPM.Infrastructure.Repositories.EntityFramework
         }
 
         public List<ApproachSplitFailAggregation> GetApproachSplitFailsAggregationBySignalIdPhaseDateRange(
-            string signalId, int phase, DateTime startDate, DateTime endDate)
+            string signalId, int approachID, int phase, DateTime startDate, DateTime endDate)
         {
             return _db.ApproachSplitFailAggregations.Where(r => r.SignalId == signalId
+                                                                && r.ApproachId == approachID
                                                                 && r.PhaseNumber == phase
                                                                 && r.BinStartTime >= startDate &&
-                                                                r.BinStartTime <= endDate).ToList();
+                                                                r.BinStartTime < endDate).ToList();
         }
 
         public bool Exists(string signalId, int phaseNumber, DateTime startDate, DateTime endDate)

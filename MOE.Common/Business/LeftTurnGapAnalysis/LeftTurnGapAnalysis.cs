@@ -72,7 +72,7 @@ namespace MOE.Common.Business.LeftTurnGapAnalysis
                 (x.EventCode == EVENT_GREEN || x.EventCode == EVENT_RED)));
 
             var detectorsToUse = new List<Models.Detector>();
-            DetectionTypeStr = "Lane-By-Lane Count";
+            DetectionTypeStr = "Detector Type: Lane-By-Lane Count";
 
             //Use only lane-by-lane count detectors if they exists, otherwise check for stop bar
             detectorsToUse = approach.GetAllDetectorsOfDetectionType(4);
@@ -80,7 +80,7 @@ namespace MOE.Common.Business.LeftTurnGapAnalysis
             if (!detectorsToUse.Any())
             {
                 detectorsToUse = approach.GetAllDetectorsOfDetectionType(6);
-                DetectionTypeStr = "Stop Bar Presence";
+                DetectionTypeStr = "Detector Type: Stop Bar Presence";
 
                 //If no detectors of either type for this approach, skip it
                 if (!detectorsToUse.Any())

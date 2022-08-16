@@ -13,7 +13,7 @@ namespace ATSPM.IRepositories
         void Update(ApproachSplitFailAggregation priorityAggregation);
         void Remove(ApproachSplitFailAggregation priorityAggregation);
 
-        List<ApproachSplitFailAggregation> GetApproachSplitFailsAggregationBySignalIdPhaseDateRange(string signalId,
+        List<ApproachSplitFailAggregation> GetApproachSplitFailsAggregationBySignalIdPhaseDateRange(string signalId, int approachID,
             int phase, DateTime startDate, DateTime endDate);
         bool Exists(string signalId, int phaseNumber, DateTime dateTime1, DateTime dateTime2);
     }

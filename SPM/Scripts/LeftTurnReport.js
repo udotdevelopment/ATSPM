@@ -11,9 +11,14 @@
     $(".datepicker").datepicker();
 });
 
+$( "#StartDate" ).change(function () {
+    GetSignalLocation()
+})
+
 $('#RunChecks').click(function () { RunChecks(); });
 
 function RunChecks() {
+    StartChecksSpinner();
     var signalID = $("#SignalID").val(); 
     var cyclesWithPedCalls = $("#CyclesWithPedCalls").val();
     var cyclesWithGapOuts = $("#CyclesWithGapOuts").val();
@@ -24,24 +29,29 @@ function RunChecks() {
     GetCheckBoxes();
     if (!signalID) {
         $('#SignalDataCheckPlaceHolder').html("<h3 class='text-danger'>Signal Not Found</h3");
+        StopChecksSpinner();
     }
     else if (!cyclesWithPedCalls) {
         $('#SignalDataCheckPlaceHolder').html("<h3 class='text-danger'>Cycles With Ped Calls Not Found</h3");
+        StopChecksSpinner();
     }
     else if (!cyclesWithGapOuts) {
         $('#SignalDataCheckPlaceHolder').html("<h3 class='text-danger'>Cycles With Gap Outs Not Found</h3");
+        StopChecksSpinner();
     }
     else if (!leftTurnVolume) {
         $('#SignalDataCheckPlaceHolder').html("<h3 class='text-danger'>Left Turn Volume Not Found</h3");
+        StopChecksSpinner();
     }
     else if (!startDate) {
         $('#SignalDataCheckPlaceHolder').html("<h3 class='text-danger'>Start Date Not Found</h3");
+        StopChecksSpinner();
     }
     else if (!endDate) {
         $('#SignalDataCheckPlaceHolder').html("<h3 class='text-danger'>End Date Not Found</h3");
+        StopChecksSpinner();
     }
     else {
-        //var checkboxes = document.getElementsByName('turn.Checked');
         var approachIds = getApproachIds();
         var tosend = {};
         tosend.signalId = signalID;
@@ -58,14 +68,14 @@ function RunChecks() {
             data: tosend,
             traditional: true,
             success: function (data) {
+                StopChecksSpinner();
                 $('#FinalGapAnalysisPlaceHolder').html(data);
+            },
+            error: function (data) {
+                StopChecksSpinner();
+                $('#FinalGapAnalysisPlaceHolder').html(data.responseText);
             }
         });
-        //$.get(urlpathGetSignalDataCheckReport,
-        //    tosend,
-        //    function (data) {
-        //        $('#SignalDataCheckPlaceHolder').html(data);
-        //    });
     }
 }
 
@@ -99,6 +109,13 @@ function GetCheckBoxes(){
 }
 
 function RunReports() {
+    StartReportSpinner();
+    
+    var form = $("#MainForm")[0];
+    if (!$(form).valid()) {
+        StopReportSpinner();
+        return alert("Please select a signal");
+    }
     var timeOptions = $("input:radio[name='TimeOptions']:checked").val();
     var GetGapReport = $('#finalGapAnalysisCheck').is(":checked");
     var GetSplitFail = $('#splitFailAnalysisCheck').is(":checked");
@@ -110,14 +127,17 @@ function RunReports() {
     var EndMinute;
     var GetAMPMPeakHour = false;
     var GetAMPMPeakPeriod = false;
+    var Get24HourPeriod = false;
     if (timeOptions == "customTimeRadiobutton") {
         StartHour = $("#StartTimeHour :selected").val();
         var StartAMPM = $("#StartAMPM :selected").val();
+        StartHour = parseInt(StartHour);
         if (StartAMPM == "PM") {
             StartHour += 12;
         }
         EndHour = $("#EndTimeHour :selected").val();
         var EndAMPM = $("#EndAMPM :selected").val();
+        EndHour = parseInt(EndHour)
         if (EndAMPM == "PM") {
             EndHour += 12;
         }
@@ -131,6 +151,7 @@ function RunReports() {
         GetAMPMPeakPeriod = true;
     }
     else if (timeOptions == "FullDayRadiobutton") {
+        Get24HourPeriod = true;
         StartHour = 0;
         EndHour = 24;
         StartMinute = 0;
@@ -157,6 +178,7 @@ function RunReports() {
     tosend.EndMinute = EndMinute;
     tosend.GetAMPMPeakPeriod = GetAMPMPeakPeriod;
     tosend.GetAMPMPeakHour = GetAMPMPeakHour;
+    tosend.Get24HourPeriod = Get24HourPeriod;
     tosend.AcceptableGapPercentage = AcceptableGapPercentage;
     tosend.GetGapReport = GetGapReport;
     tosend.GetSplitFail = GetSplitFail;
@@ -171,15 +193,15 @@ function RunReports() {
         traditional: true,
        
         success: function (data) {
+            StopReportSpinner();
             var result = data.pdfResult;
             $('#FinalGapAnalysisPlaceHolder').html(result.HTML);
             //$('#FinalGapAnalysisPlaceHolder').html("<iframe src=\"http://localhost/spmImages/" + data +
             //    "\"style=\"width:100%; height:600px;\" frameborder=\"0\"></iframe>");
             deleteTempFile(result.FileName);
-        
-    },
-        
+        },
         error: function (data) {
+            StopReportSpinner();
             $('#FinalGapAnalysisPlaceHolder').html(data.responseText);
         }
     });
@@ -245,16 +267,11 @@ function SetControlValues(signalID, selectedMetricID) {
 }
 
 function GetSignalLocation() {
-    //if (selectedMetricID === null || selectedMetricID === undefined) {
-    //    var metricsList = $("#MetricsList");
-    //    if (metricsList !== null) {
-    //        selectedMetricID = metricsList.val();
-    //    }
-    //}
-
     var tosend = {};
     var signalID = $("#SignalID").val();
+    var startDate = $("#StartDate").val();
     tosend.signalID = signalID;
+    tosend.date = startDate;
     $.get(urlpathGetLeftTurnCheckBoxes, tosend, function (data) {
         $('#LeftTurnCheckBoxesDiv').html(data);
     });
@@ -266,6 +283,7 @@ function GetSignalLocation() {
     });
 }
 $("#ResetDate").click(function () { ResetDates(); });
+
 function ResetDates() {
     var d = new Date();
     var month = d.getMonth() + 1;
@@ -276,6 +294,22 @@ function ResetDates() {
         + d.getFullYear();
     $("#StartDate").val(output);
     $("#EndDate").val(output);
+}
+
+function StartReportSpinner() {
+    $("#RunReportSpinner").addClass("fa fa-circle-o-notch fa-spin");
+}
+
+function StopReportSpinner() {
+    $("#RunReportSpinner").removeClass("fa fa-circle-o-notch fa-spin");
+}
+
+function StartChecksSpinner() {
+    $("#RunChecksSpinner").addClass("fa fa-circle-o-notch fa-spin");
+}
+
+function StopChecksSpinner() {
+    $("#RunChecksSpinner").removeClass("fa fa-circle-o-notch fa-spin");
 }
 
 

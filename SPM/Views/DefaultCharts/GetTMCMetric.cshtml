@@ -3,7 +3,8 @@
 <script type="text/javascript">
     function ShowMetricUrl() {
         @Html.Raw(Model.ShowMetricUrlJavascript)
-    }</script>
+    }
+</script>
 
 @if (Model.ShowDataTable)
 {
@@ -129,10 +130,9 @@
     {
         <h1>No Data Found</h1>
     }
-    }
+}
     
-    @foreach (var record in Model.ImageLocations)
-    {
-          <img src=@record alt="TMC Chart" />
-    }
+@foreach (var record in Model.ImageLocations)
+{
+      <img src=@record alt="TMC Chart" />
 }

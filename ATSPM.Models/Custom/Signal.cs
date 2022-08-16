@@ -218,6 +218,7 @@ namespace ATSPM.Application.Models
                 && RegionId == signalToCompare.RegionId
                 && ControllerTypeId == signalToCompare.ControllerTypeId
                 && Enabled == signalToCompare.Enabled
+                && Pedsare1to1 == signalToCompare.Pedsare1to1
                 && Approaches.Count() == signalToCompare.Approaches.Count()
             )
                 return true;

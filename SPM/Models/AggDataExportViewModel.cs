@@ -248,6 +248,8 @@ namespace SPM.Models
 
         public void SetDefaultDates()
         {
+            StartTime = "12:00";
+            EndTime = "11:59";
             StartAMPMList = new List<SelectListItem>();
             StartAMPMList.Add(new SelectListItem { Value = "AM", Text = "AM", Selected = true });
             StartAMPMList.Add(new SelectListItem { Value = "PM", Text = "PM" });
