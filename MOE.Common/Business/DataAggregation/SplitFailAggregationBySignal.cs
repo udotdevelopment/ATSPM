@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MOE.Common.Business.Bins;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Models;
 
@@ -80,7 +81,8 @@ namespace MOE.Common.Business.DataAggregation
                 {
                     var bin = BinsContainers[i].Bins[binIndex];
                     foreach (var approachSplitFailAggregationContainer in ApproachSplitFailures)
-                        bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                        if(approachSplitFailAggregationContainer.BinsContainers.Count > 0 )
+                            bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
                     bin.Average = ApproachSplitFailures.Count > 0 ? bin.Sum / ApproachSplitFailures.Count : 0;
                 }
             }

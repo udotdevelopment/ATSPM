@@ -110,3 +110,13 @@ function DeleteSignal(signalID) {
         });
     }
 }
+
+function CheckboxReadOnly() {
+    var pedchecked = document.getElementById('Pedsare1to1-value');
+    var pedoverlap = document.getElementsByClassName('ped-overlap-checkbox');
+    if (pedchecked.checked) {
+        for (var i = 0; i < pedoverlap.length; i++) {
+            pedoverlap[i].checked = false;
+        }
+    }
+}

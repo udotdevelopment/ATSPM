@@ -216,16 +216,16 @@ namespace SPM.Models
                         AggregatedDataTypes = new ApproachPcdAggregationOptions().AggregatedDataTypes;
                         break;
                     case 19:
-                        AggregatedDataTypes = new ApproachCycleAggregationOptions().AggregatedDataTypes;
+                        AggregatedDataTypes = new PhaseCycleAggregationOptions().AggregatedDataTypes;
                         break;
                     case 20:
                         AggregatedDataTypes = new ApproachSplitFailAggregationOptions().AggregatedDataTypes;
                         break;
                     case 22:
-                        AggregatedDataTypes = new SignalPreemptionAggregationOptions().AggregatedDataTypes;
+                        AggregatedDataTypes = new PreemptionAggregationOptions().AggregatedDataTypes;
                         break;
                     case 24:
-                        AggregatedDataTypes = new SignalPriorityAggregationOptions().AggregatedDataTypes;
+                        AggregatedDataTypes = new PriorityAggregationOptions().AggregatedDataTypes;
                         break;
                     case 25:
                         AggregatedDataTypes = new ApproachSpeedAggregationOptions().AggregatedDataTypes;
@@ -236,9 +236,9 @@ namespace SPM.Models
                     case 27:
                         AggregatedDataTypes = new SignalEventCountAggregationOptions().AggregatedDataTypes;
                         break;
-                    case 28:
-                        AggregatedDataTypes = new ApproachEventCountAggregationOptions().AggregatedDataTypes;
-                        break;
+                    //case 28:
+                    //    AggregatedDataTypes = new ApproachEventCountAggregationOptions().AggregatedDataTypes;
+                    //    break;
                     default:
                         throw new Exception("Invalid Metric Type");
                         break;
@@ -248,6 +248,8 @@ namespace SPM.Models
 
         public void SetDefaultDates()
         {
+            StartTime = "12:00";
+            EndTime = "11:59";
             StartAMPMList = new List<SelectListItem>();
             StartAMPMList.Add(new SelectListItem { Value = "AM", Text = "AM", Selected = true });
             StartAMPMList.Add(new SelectListItem { Value = "PM", Text = "PM" });

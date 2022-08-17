@@ -34,8 +34,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
                 new InMemoryApplicationEventRepository(Db));
             Models.Repositories.DirectionTypeRepositoryFactory.SetDirectionsRepository(
                 new InMemoryDirectionTypeRepository());
-            MOE.Common.Models.Repositories.ApproachEventCountAggregationRepositoryFactory.SetRepository
-                (new InMemoryApproachEventCountAggregationRepository(Db));
+           
 
             MOE.Common.Models.Repositories.SignalEventCountAggregationRepositoryFactory.SetRepository
                 (new InMemorySignalEventCountAggregationRepository(Db));
@@ -257,7 +256,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             return true;
         }
 
-        public void CreateAllCharts(ApproachCycleAggregationOptions options)
+        public void CreateAllCharts(PhaseCycleAggregationOptions options)
         {
             options.SelectedChartType = SeriesChartType.Column;
             options.SelectedAggregationType = AggregationType.Sum;

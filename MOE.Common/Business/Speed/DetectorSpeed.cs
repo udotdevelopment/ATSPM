@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.Speed
 {
@@ -12,6 +14,15 @@ namespace MOE.Common.Business.Speed
             StartDate = startDate;
             EndDate = endDate;
             Cycles = CycleFactory.GetSpeedCycles(startDate, endDate, getPermissivePhase, detector);
+            var speedEventRepository = SpeedEventRepositoryFactory.Create();
+            SpeedEvents = speedEventRepository.GetSpeedEventsByDetector(startDate,
+                    endDate, detector, detector.MinSpeedFilter ?? 5);
+            if (Cycles.Any())
+            {
+                foreach (var cycle in Cycles)
+                    cycle.FindSpeedEventsForCycle(SpeedEvents);
+            }
+
             TotalDetectorHits = Cycles.Sum(c => c.SpeedEvents.Count);
             Plans = PlanFactory.GetSpeedPlans(Cycles, startDate, endDate, detector.Approach);
             var movementDelay = 0;
@@ -25,6 +36,7 @@ namespace MOE.Common.Business.Speed
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public List<CycleSpeed> Cycles { get; set; }
+        public List<Speed_Events> SpeedEvents { get; set; }
         public AvgSpeedBucketCollection AvgSpeedBucketCollection { get; set; }
     }
 }

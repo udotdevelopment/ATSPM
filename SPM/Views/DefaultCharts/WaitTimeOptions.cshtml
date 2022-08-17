@@ -1,0 +1,11 @@
+﻿@model MOE.Common.Business.WCFServiceLibrary.WaitTimeOptions
+
+<div class="card">
+    <div class="card-header">Wait Time Options</div>
+    <div class="card-body">
+        <div class="">
+            @Html.EditorFor(model => model.ShowPlanStripes, new { htmlAttributes = new { @class = "" } })
+            @Html.LabelFor(model => model.ShowPlanStripes, new { htmlAttributes = new { @class = "control-label" } })
+        </div>
+    </div>
+</div>

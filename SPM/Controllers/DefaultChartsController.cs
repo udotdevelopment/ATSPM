@@ -7,6 +7,7 @@ using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Business.ApproachVolume;
 using System.Data.Entity.Migrations;
 using System.Text;
+using MOE.Common.Models;
 
 namespace SPM.Controllers
 {
@@ -84,14 +85,12 @@ namespace SPM.Controllers
             {
                 case 1:
                     PhaseTerminationOptions phaseTerminationOptions = new PhaseTerminationOptions();
-                    phaseTerminationOptions.SetDefaults();
                     return PartialView("PhaseTerminationOptions", phaseTerminationOptions);
                 case 2:
                     SplitMonitorOptions SplitMonitorOptions = new SplitMonitorOptions();
                     return PartialView("SplitMonitorOptions", SplitMonitorOptions);
                 case 3:
                     PedDelayOptions pedDelayOptions = new PedDelayOptions();
-                    pedDelayOptions.SetDefaults();
                     return PartialView("PedDelayOptions", pedDelayOptions);
                 case 4:
                     MetricOptions preemptOptions = new MetricOptions();
@@ -100,7 +99,6 @@ namespace SPM.Controllers
                     return PartialView("PreemptOptions", preemptOptions);
                 case 5:
                     TMCOptions tMCOptions = new TMCOptions();
-                    tMCOptions.SetDefaults();
                     return PartialView("TMCOptions", tMCOptions);
                 case 6:
                     PCDOptions pcdOptions = new PCDOptions();
@@ -110,30 +108,27 @@ namespace SPM.Controllers
                     return PartialView("ApproachVolumeOptions", approachVolumeOptions);
                 case 8:
                     ApproachDelayOptions approachDelayOptions = new ApproachDelayOptions();
-                    approachDelayOptions.SetDefaults();
                     return PartialView("ApproachDelayOptions", approachDelayOptions);
                 case 9:
                     AoROptions aoROptions = new AoROptions();
-                    aoROptions.SetDefaults();
                     return PartialView("AoROptions", aoROptions);
                 case 10:
                     ApproachSpeedOptions approachSpeedOptions = new ApproachSpeedOptions();
-                    approachSpeedOptions.SetDefaults();
                     return PartialView("ApproachSpeedOptions", approachSpeedOptions);
                 case 11:
                     YellowAndRedOptions yellowAndRedOptions = new YellowAndRedOptions();
-                    yellowAndRedOptions.SetDefaults();
                     return PartialView("YellowAndRedOptions", yellowAndRedOptions);
                 case 31:
                     LeftTurnGapAnalysisOptions leftTurnGapAnalysisOptions = new LeftTurnGapAnalysisOptions();
-                    leftTurnGapAnalysisOptions.SetDefaults();
                     return PartialView("LeftTurnGapAnalysisOptions", leftTurnGapAnalysisOptions);
+                case 32:
+                    WaitTimeOptions waitTimeOptions = new WaitTimeOptions();
+                    return PartialView("WaitTimeOptions", waitTimeOptions);
                 case 17:
                     TimingAndActuationsOptions timingAndActuationsOptions = new TimingAndActuationsOptions();
                     return PartialView("TimingAndActuationsOptions", timingAndActuationsOptions);
                 case 12: default:
                     SplitFailOptions splitFailOptions = new SplitFailOptions();
-                    splitFailOptions.SetDefaults();
                     return PartialView("SplitFailOptions", splitFailOptions);
             }
         }
@@ -177,6 +172,7 @@ namespace SPM.Controllers
                                                           metricOptions.ShowLinesStartEnd.ToString().ToLower() + "," +
                                                           metricOptions.ShowEventPairs.ToString().ToLower() +
                                                           metricOptions.ShowRawEventData.ToString().ToLower() + "," +
+
                                                           "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
@@ -202,7 +198,13 @@ namespace SPM.Controllers
             DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
             defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
             defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 3); " +
-                                                          "CreateMetric();";
+                                                          "SetPedDelayMetric(" + metricOptions.TimeBuffer.ToString() + "," +
+                                                          metricOptions.ShowPedBeginWalk.ToString().ToLower() + "," +
+                                                          metricOptions.ShowCycleLength.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPercentDelay.ToString().ToLower() + "," +
+                                                          metricOptions.ShowPedRecall.ToString().ToLower() + "," +
+                                                          metricOptions.PedRecallThreshold.ToString() +
+                                                          "); CreateMetric();";
             return View("Index", defaultChartsViewModel);
         }
 
@@ -336,6 +338,15 @@ namespace SPM.Controllers
             return View("Index", defaultChartsViewModel);
         }
 
+        public ActionResult GetWaitTimeMetricByURL(WaitTimeOptions metricOptions)
+        {
+            DefaultChartsViewModel defaultChartsViewModel = new DefaultChartsViewModel();
+            defaultChartsViewModel.RunMetricJavascript = GetCommonJavascriptProperties(metricOptions);
+            defaultChartsViewModel.RunMetricJavascript += "GetMetricsList('" + metricOptions.SignalID + "', 32);";
+
+            return View("Index", defaultChartsViewModel);
+        }
+
 
         private string GetCommonJavascriptProperties(MetricOptions metricOptions)
         {
@@ -349,9 +360,7 @@ namespace SPM.Controllers
 
         public ActionResult YellowAndRedOptions(int id)
         {
-            YellowAndRedOptions yellowAndRedOptions =
-                new YellowAndRedOptions();
-            yellowAndRedOptions.SetDefaults();
+            YellowAndRedOptions yellowAndRedOptions = new YellowAndRedOptions();
             return PartialView("YellowAndRedOptions", yellowAndRedOptions);
         }
 
@@ -407,7 +416,6 @@ namespace SPM.Controllers
         public ActionResult SplitFailOptions(int id)
         {
             SplitFailOptions splitFailOptions = new SplitFailOptions();
-            splitFailOptions.SetDefaults();
             return PartialView("SplitFailOptions", splitFailOptions);
         }
 
@@ -454,7 +462,6 @@ namespace SPM.Controllers
         {
             ApproachSpeedOptions approachSpeedOptions =
                 new ApproachSpeedOptions();
-            approachSpeedOptions.SetDefaults();
             return PartialView("ApproachSpeedOptions", approachSpeedOptions);
         }
 
@@ -502,7 +509,6 @@ namespace SPM.Controllers
         public ActionResult AoROptions(int id)
         {
             AoROptions aoROptions = new AoROptions();
-            aoROptions.SetDefaults();
             return PartialView("AoROptions", aoROptions);
         }
 
@@ -547,7 +553,6 @@ namespace SPM.Controllers
         public ActionResult ApproachDelayOptions(int id)
         {
             ApproachDelayOptions approachDelayOptions = new ApproachDelayOptions();
-            approachDelayOptions.SetDefaults();
             return PartialView("ApproachDelayOptions", approachDelayOptions);
         }
 
@@ -593,7 +598,6 @@ namespace SPM.Controllers
         public ActionResult PhaseTerminationOptions(int id)
         {
             PhaseTerminationOptions phaseTerminationOptions = new PhaseTerminationOptions(); 
-            phaseTerminationOptions.SetDefaults();
             return PartialView("PhaseTerminationOptions", phaseTerminationOptions);
         }
 
@@ -719,7 +723,6 @@ namespace SPM.Controllers
         public ActionResult TMCOptions(int id)
         {
             TMCOptions tMCOptions = new TMCOptions();
-            tMCOptions.SetDefaults();
             return PartialView("TMCOptions", tMCOptions);
         }
 
@@ -772,7 +775,6 @@ namespace SPM.Controllers
         public ActionResult ApproachVolumeOptions(int id)
         {
             ApproachVolumeOptions approachVolumeOptions = new ApproachVolumeOptions();
-            approachVolumeOptions.SetDefaults();
             return PartialView("ApproachVolumeOptions", approachVolumeOptions);
         }
 
@@ -863,7 +865,6 @@ namespace SPM.Controllers
         public ActionResult PedDelayOptions(int id)
         {
             PedDelayOptions pedDelayOptions = new PedDelayOptions();
-            pedDelayOptions.SetDefaults();
             return PartialView("PedDelayOptions", pedDelayOptions);
         }
 
@@ -889,6 +890,13 @@ namespace SPM.Controllers
             StringBuilder sb = new StringBuilder();
             sb.Append("/DefaultCharts/GetPedDelayMetricByUrl?");
             sb.Append("&SignalID=" + metricOptions.SignalID);
+            sb.Append("&TimeBuffer=" + metricOptions.TimeBuffer);
+            sb.Append("&ShowPedBeginWalk=" + metricOptions.ShowPedBeginWalk);
+            sb.Append("&ShowCycleLength=" + metricOptions.ShowCycleLength);
+            sb.Append("&ShowPercentDelay=" + metricOptions.ShowPercentDelay);
+            sb.Append("&ShowPedRecall=" + metricOptions.ShowPedRecall);
+            sb.Append("&PedRecallThreshold=" + metricOptions.PedRecallThreshold);
+
             string _startDate = metricOptions.StartDate.ToString().Trim();
             _startDate = _startDate.Replace(" ", "%20");
             string _endDate = metricOptions.EndDate.ToString().Trim();
@@ -902,7 +910,7 @@ namespace SPM.Controllers
             return PartialView("MetricResult", result);
         }
 
-public ActionResult GetLeftTurnGapAnalysisMetric(LeftTurnGapAnalysisOptions metricOptions)
+        public ActionResult GetLeftTurnGapAnalysisMetric(LeftTurnGapAnalysisOptions metricOptions)
         {
             metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
             Models.MetricResultViewModel result = new Models.MetricResultViewModel();
@@ -926,6 +934,49 @@ public ActionResult GetLeftTurnGapAnalysisMetric(LeftTurnGapAnalysisOptions metr
             StringBuilder sb = new StringBuilder();
 
             sb.Append("/DefaultCharts/GetLeftTurnGapAnalysisMetricByUrl?");
+
+            sb.Append("&SignalID=" + metricOptions.SignalID);
+            string _startDate = metricOptions.StartDate.ToString().Trim();
+            _startDate = _startDate.Replace(" ", "%20");
+            string _endDate = metricOptions.EndDate.ToString().Trim();
+            _endDate = _endDate.Replace(" ", "%20");
+
+            sb.Append("&StartDate=" + _startDate);
+            sb.Append("&EndDate=" + _endDate);
+
+            string fullUri = Request.Url.AbsoluteUri;
+            int placeCounter = fullUri.IndexOf("/DefaultCharts/");
+            string hostname = fullUri.Substring(0, placeCounter);
+
+            result.ShowMetricUrlJavascript = "window.history.pushState(\"none\", \"none\", \"" + hostname.Trim() + sb + "\");";
+
+            return PartialView("MetricResult", result);
+        }
+
+        public ActionResult GetWaitTimeMetric(WaitTimeOptions metricOptions)
+        {
+            metricOptions.MetricType = GetMetricType(metricOptions.MetricTypeID);
+            Models.MetricResultViewModel result = new Models.MetricResultViewModel();
+            if (ModelState.IsValid)
+            {
+                MetricGeneratorService.MetricGeneratorClient client =
+                        new MetricGeneratorService.MetricGeneratorClient();
+                try
+                {
+                    client.Open();
+                    result.ChartPaths = client.CreateMetric(metricOptions);
+                    client.Close();
+                }
+                catch (Exception ex)
+                {
+                    client.Close();
+                    return Content("<h1>" + ex.Message + "</h1>");
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("/DefaultCharts/GetWaitTimeMetricByUrl?");
 
             sb.Append("&SignalID=" + metricOptions.SignalID);
             string _startDate = metricOptions.StartDate.ToString().Trim();

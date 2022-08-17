@@ -332,9 +332,13 @@ namespace MOE.Common.Models.Repositories
         public List<Controller_Event_Log> GetTopEventsAfterDateByEventCodesParam(string signalId,
             DateTime timestamp, List<int> eventCodes, int param, int top)
         {
+            var settings = _db.GeneralSettings.FirstOrDefault();
+            var secondsToCompleteCycle = 900;
+            if (settings != null)
+                secondsToCompleteCycle = Convert.ToInt32(settings.CycleCompletionSeconds);
             try
             {
-                var endDate = timestamp.AddHours(1);
+                var endDate = timestamp.AddSeconds(secondsToCompleteCycle);
                 var events = _db.Controller_Event_Log.Where(c =>
                     c.SignalID == signalId &&
                     c.Timestamp > timestamp &&
@@ -349,7 +353,36 @@ namespace MOE.Common.Models.Repositories
             {
                 var errorLog = ApplicationEventRepositoryFactory.Create();
                 errorLog.QuickAdd(Assembly.GetExecutingAssembly().FullName,
-                    GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.Low, e.Message);
+                    GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.Low, e.Message);
+                return null;
+            }
+        }
+
+        public List<Controller_Event_Log> GetTopEventsBeforeDateByEventCodesParam(string signalId,
+            DateTime timestamp, List<int> eventCodes, int param, int top)
+        {
+            var settings = _db.GeneralSettings.FirstOrDefault();
+            var secondsToCompleteCycle = 900;
+            if (settings != null)
+                secondsToCompleteCycle = Convert.ToInt32(settings.CycleCompletionSeconds);
+            try
+            {
+                var start = timestamp.AddSeconds(secondsToCompleteCycle *-1);
+                var events = _db.Controller_Event_Log.Where(c =>
+                    c.SignalID == signalId &&
+                    c.Timestamp < timestamp &&
+                    c.Timestamp > start &&
+                    c.EventParam == param &&
+                    eventCodes.Contains(c.EventCode)).ToList();
+                return events
+                    .OrderByDescending(s => s.Timestamp)
+                    .Take(top).ToList();
+            }
+            catch (Exception e)
+            {
+                var errorLog = ApplicationEventRepositoryFactory.Create();
+                errorLog.QuickAdd(Assembly.GetExecutingAssembly().FullName,
+                    GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.Low, e.Message);
                 return null;
             }
         }
@@ -532,6 +565,43 @@ namespace MOE.Common.Models.Repositories
                 logRepository.Add(e);
                 return null;
             }
+        }
+
+        public Controller_Event_Log GetFirstEventAfterDateByEventCodesAndParameter(string signalId, List<int> eventCodes,
+            int eventParam, DateTime start, int secondsToSearch)
+        {
+            
+            if (!String.IsNullOrEmpty(signalId))
+            {
+                try
+                {
+                    _db.Database.CommandTimeout = 10;
+                    var tempDate = start.AddSeconds(secondsToSearch);
+                    var controllerEvent = _db.Controller_Event_Log.Where(c => c.SignalID == signalId &&
+                                                                        c.Timestamp > start &&
+                                                                        c.Timestamp <= tempDate && 
+                                                                        c.EventParam == eventParam&&
+                                                                        eventCodes.Contains(c.EventCode)  )
+                        .OrderBy(c => c.Timestamp).FirstOrDefault();
+                    return controllerEvent;
+                }
+
+                catch (Exception ex)
+                {
+                    var logRepository = ApplicationEventRepositoryFactory.Create();
+                    var e = new ApplicationEvent();
+                    e.ApplicationName = "MOE.Common";
+                    e.Class = GetType().ToString();
+                    e.Function = "GetEventsByEventCodesParamWithOffsetAndLatencyCorrection";
+                    e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
+                    e.Description = ex.Message;
+                    e.Timestamp = DateTime.Now;
+                    logRepository.Add(e);
+                    return null;
+                }
+            }
+
+            return null;
         }
 
         public Controller_Event_Log GetFirstEventBeforeDateByEventCodeAndParameter(string signalId, int eventCode,
