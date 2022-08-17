@@ -12,6 +12,7 @@ namespace MOE.Common.Models.ViewModel._MainMenu
             IsTechnician = HttpContext.Current.User.IsInRole("Technician");
             IsData = HttpContext.Current.User.IsInRole("Data");
             IsConfiguration = HttpContext.Current.User.IsInRole("Configuration");
+            IsRestrictedConfiguration = HttpContext.Current.User.IsInRole("Restricted Configuration");
             SubMenuItems = new List<MenuItem>();
             MenuObject = menuItem;
 
@@ -37,5 +38,6 @@ namespace MOE.Common.Models.ViewModel._MainMenu
         public bool IsTechnician { get; set; }
         public bool IsData { get; set; }
         public bool IsConfiguration { get; set; }
+        public bool IsRestrictedConfiguration { get; set; }
     }
 }

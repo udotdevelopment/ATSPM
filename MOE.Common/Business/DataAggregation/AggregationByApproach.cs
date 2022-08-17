@@ -11,7 +11,6 @@ namespace MOE.Common.Business.DataAggregation
 {
     public abstract class AggregationByApproach
     {
-        protected List<ApproachEventCountAggregation> ApproachEventCountAggregations { get; set; }
         public double Total
         {
             get { return BinsContainers.Sum(c => c.SumValue); }
@@ -37,27 +36,11 @@ namespace MOE.Common.Business.DataAggregation
         public AggregationByApproach(Approach approach, ApproachAggregationMetricOptions options, DateTime startDate,
             DateTime endDate, bool getProtectedPhase, AggregatedDataType dataType)
         {
-            BinsContainers = BinFactory.GetBins(options.TimeOptions);
             Approach = approach;
-            if (options.ShowEventCount)
-            {
-                ApproachEventCountAggregations = GetApproachEventCountAggregations(options, approach, true);
-                if (approach.PermissivePhaseNumber != null)
-                {
-                    ApproachEventCountAggregations.AddRange(GetApproachEventCountAggregations(options, approach, false));
-                }
-            }
-            LoadBins(approach, options, getProtectedPhase, dataType);
+            BinsContainers = BinFactory.GetBins(options.TimeOptions);
         }
 
-        protected List<ApproachEventCountAggregation> GetApproachEventCountAggregations(ApproachAggregationMetricOptions options, Approach approach, bool getProtectedPhase)
-        {
-            var approachEventCountAggregationRepository =
-                MOE.Common.Models.Repositories.ApproachEventCountAggregationRepositoryFactory.Create();
-            return
-                approachEventCountAggregationRepository.GetPhaseEventCountAggregationByPhaseIdAndDateRange(
-                    Approach.ApproachID, options.TimeOptions.Start, options.TimeOptions.End, getProtectedPhase);
-        }
+       
         
 
         protected abstract void LoadBins(Approach approach, ApproachAggregationMetricOptions options,

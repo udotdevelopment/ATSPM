@@ -320,11 +320,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void SetTimeofDayAxisSignalSeriesForEventCount(Models.Signal signal, Chart chart)
         {
-            var eventCountOptions = new  ApproachEventCountAggregationOptions(this);
-            var binsContainers = eventCountOptions.GetBinsContainersByRoute(new List<Models.Signal> { signal });
-            Series series = CreateEventCountSeries();
-            eventCountOptions.SetTimeAggregateSeries(series, binsContainers);
-            chart.Series.Add(series);
+            //var eventCountOptions = new  ApproachEventCountAggregationOptions(this);
+            //var binsContainers = eventCountOptions.GetBinsContainersByRoute(new List<Models.Signal> { signal });
+            //Series series = CreateEventCountSeries();
+            //eventCountOptions.SetTimeAggregateSeries(series, binsContainers);
+            //chart.Series.Add(series);
         }
 
 
@@ -553,50 +553,50 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public virtual void SetDirectionXAxisSignalSeriesForEventCount(Chart chart, Models.Signal signal)
         {
-            var eventCountOptions = new ApproachEventCountAggregationOptions(this);
-            Series series = eventCountOptions.GetDirectionXAxisDirectionSeries(signal);
-            chart.Series.Add(SetEventCountSeries(series));
+        //    var eventCountOptions = new ApproachEventCountAggregationOptions(this);
+        //    Series series = eventCountOptions.GetDirectionXAxisDirectionSeries(signal);
+        //    chart.Series.Add(SetEventCountSeries(series));
         }
 
 
         public virtual void SetApproachXAxisSignalSeriesForEventCount(Chart chart, Models.Signal signal)
         {
-            var eventCountOptions = new ApproachEventCountAggregationOptions(this);
-            Series series = eventCountOptions.GetApproachXAxisApproachSeries(signal, -1);
+            //var eventCountOptions = new ApproachEventCountAggregationOptions(this);
+            //Series series = eventCountOptions.GetApproachXAxisApproachSeries(signal, -1);
             
-            chart.Series.Add(SetEventCountSeries(series));
+            //chart.Series.Add(SetEventCountSeries(series));
         }
 
 
         public virtual void SetTimeXAxisSignalSeriesForEventCount(Chart chart, Models.Signal signal)
         {
-            var eventCountOptions = new ApproachEventCountAggregationOptions(this);
-            Series series = eventCountOptions.GetTimeXAxisSignalSeries(signal);
+            //var eventCountOptions = new ApproachEventCountAggregationOptions(this);
+            //Series series = eventCountOptions.GetTimeXAxisSignalSeries(signal);
             
-            chart.Series.Add(SetEventCountSeries(series));
+            //chart.Series.Add(SetEventCountSeries(series));
         }
 
         public override void SetSignalsXAxisSignalSeriesForEventCount(List<Models.Signal> signals, Chart chart)
         {
-            var eventCountOptions = new ApproachEventCountAggregationOptions(this);
-            Series series = eventCountOptions.GetSignalsXAxisSignalSeries(signals, "Event Count");
-            chart.Series.Add(SetEventCountSeries(series));
+            //var eventCountOptions = new ApproachEventCountAggregationOptions(this);
+            //Series series = eventCountOptions.GetSignalsXAxisSignalSeries(signals, "Event Count");
+            //chart.Series.Add(SetEventCountSeries(series));
         }
 
         public override void SetTimeXAxisRouteSeriesForEventCount(List<Models.Signal> signals, Chart chart)
         {
-            var eventCountOptions = new ApproachEventCountAggregationOptions(this);
-            Series series = eventCountOptions.GetTimeXAxisRouteSeries(signals);
-            chart.Series.Add(SetEventCountSeries(series));
+            //var eventCountOptions = new ApproachEventCountAggregationOptions(this);
+            //Series series = eventCountOptions.GetTimeXAxisRouteSeries(signals);
+            //chart.Series.Add(SetEventCountSeries(series));
         }
 
         public override void SetTimeOfDayAxisRouteSeriesForEventCount(List<Models.Signal> signals, Chart chart)
         {
-            var eventCountOptions = new ApproachEventCountAggregationOptions(this);
-            Series eventCountSeries = CreateEventCountSeries();
-            var eventBinsContainers = eventCountOptions.GetBinsContainersByRoute(signals);
-            eventCountOptions.SetTimeAggregateSeries(eventCountSeries, eventBinsContainers);
-            chart.Series.Add(eventCountSeries);
+            //var eventCountOptions = new ApproachEventCountAggregationOptions(this);
+            //Series eventCountSeries = CreateEventCountSeries();
+            //var eventBinsContainers = eventCountOptions.GetBinsContainersByRoute(signals);
+            //eventCountOptions.SetTimeAggregateSeries(eventCountSeries, eventBinsContainers);
+            //chart.Series.Add(eventCountSeries);
         }
 
         protected abstract List<BinsContainer> GetBinsContainersByApproach(Approach approach, bool getprotectedPhase);

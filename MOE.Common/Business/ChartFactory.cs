@@ -686,7 +686,7 @@ namespace MOE.Common.Business
                 chartArea.AxisX.LabelStyle.Format = "HH:mm";
                 chartArea.AxisX.Title = "Time (Hours:Minutes of Day)";
             }
-            else if (totalMinutesRounded > 2.0 * 60.0 && totalMinutesRounded <= 24.0 * 60.0)
+            else if (totalMinutesRounded > 120 && totalMinutesRounded <= 1441)
             {
                 chartArea.AxisX.IntervalType = DateTimeIntervalType.Hours;
                 chartArea.AxisX.Interval = 1;
@@ -717,6 +717,7 @@ namespace MOE.Common.Business
             chartArea.AxisY2.MajorTickMark.Enabled = false;
             chartArea.AxisY2.MajorGrid.Enabled = false;
             chartArea.AxisY2.IntervalType = DateTimeIntervalType.Number;
+            chartArea.AxisY2.TitleFont = new Font("Microsoft Sans Serif", 9);
             chartArea.AxisY2.Title = options.Y2AxisTitle??"";
         }
         private static void SetUpY2Axis(ChartArea chartArea, SignalAggregationMetricOptions options)
@@ -726,6 +727,7 @@ namespace MOE.Common.Business
             chartArea.AxisY2.MajorTickMark.Enabled = false;
             chartArea.AxisY2.MajorGrid.Enabled = false;
             chartArea.AxisY2.IntervalType = DateTimeIntervalType.Number;
+            chartArea.AxisY2.TitleFont = new Font("Microsoft Sans Serif", 9);
             chartArea.AxisY2.Title = options.Y2AxisTitle ?? "";
         }
 

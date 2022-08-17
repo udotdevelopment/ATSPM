@@ -24,15 +24,13 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
             Db.PopulateSignal();
             Db.PopulateSignalsWithApproaches();
             Db.PopulateApproachesWithDetectors();
-            MOE.Common.Models.Repositories.ApproachEventCountAggregationRepositoryFactory.SetRepository
-                (new InMemoryApproachEventCountAggregationRepository(Db));
+            
             MOE.Common.Models.Repositories.SignalsRepositoryFactory.SetSignalsRepository(
                 new InMemorySignalsRepository(Db));
             MetricTypeRepositoryFactory.SetMetricsRepository(new InMemoryMetricTypeRepository(Db));
             ApplicationEventRepositoryFactory.SetApplicationEventRepository(
                 new InMemoryApplicationEventRepository(Db));
-            MOE.Common.Models.Repositories.ApproachEventCountAggregationRepositoryFactory.SetRepository
-                (new InMemoryApproachEventCountAggregationRepository(Db));
+            
 
             MOE.Common.Models.Repositories.SignalEventCountAggregationRepositoryFactory.SetRepository
                 (new InMemorySignalEventCountAggregationRepository(Db));

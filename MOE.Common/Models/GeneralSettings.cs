@@ -20,5 +20,8 @@ namespace MOE.Common.Models
 
         [Display(Name = "Raw Data Count Limit")]
         public int? RawDataCountLimit { get; set; }
+
+        [Display(Name = "Seconds After Chart End Date to Complete Cycle")]
+        public int? CycleCompletionSeconds { get; set; }
     }
 }

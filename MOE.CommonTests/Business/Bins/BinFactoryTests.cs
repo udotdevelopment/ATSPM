@@ -118,7 +118,7 @@ namespace MOE.Common.Business.Bins.Tests
                 BinFactoryOptions.TimeOptions.StartToEnd);
             var binsContainers = BinFactory.GetBins(binFactoryOptions);
             Assert.IsTrue(binsContainers.Count == 1);
-            Assert.IsTrue(binsContainers.First().Bins.Count == 4);
+            Assert.IsTrue(binsContainers.First().Bins.Count == 5);
         }
 
         //[TestMethod()]

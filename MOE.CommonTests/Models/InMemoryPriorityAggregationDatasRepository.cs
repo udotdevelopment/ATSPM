@@ -28,10 +28,10 @@ namespace MOE.CommonTests.Models
             throw new NotImplementedException();
         }
 
-        public List<PriorityAggregation> GetPriorityAggregationByVersionIdAndDateRange(int versionId, DateTime start, DateTime end)
+        public List<PriorityAggregation> GetPriorityAggregationByVersionIdAndDateRange(string signalId, DateTime start, DateTime end)
         {
             var records = (from r in this._db.PriorityAggregations
-                where r.VersionId == versionId
+                where r.SignalId == signalId
                       && r.BinStartTime >= start && r.BinStartTime <= end
                 select r).ToList();
 
@@ -46,10 +46,15 @@ namespace MOE.CommonTests.Models
         public List<PriorityAggregation> GetPriorityBySignalIdAndDateRange(string signalId, DateTime start, DateTime end)
         {
             return _db.PriorityAggregations
-                .Where(p => p.SignalID == signalId && p.BinStartTime >= start && p.BinStartTime < end).ToList();
+                .Where(p => p.SignalId == signalId && p.BinStartTime >= start && p.BinStartTime < end).ToList();
         }
 
         public void Update(PriorityAggregation priorityAggregation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<PriorityAggregation> GetPriorityAggregationByVersionIdAndDateRange(int versionId, DateTime start, DateTime end)
         {
             throw new NotImplementedException();
         }

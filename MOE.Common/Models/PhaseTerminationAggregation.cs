@@ -7,10 +7,6 @@ namespace MOE.Common.Models
 {
     public class PhaseTerminationAggregation : Aggregation
     {
-        [Key]
-        [Column(Order = 7)]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
 
         [Key]
         [Required]
@@ -48,7 +44,6 @@ namespace MOE.Common.Models
         {
             public PhaseTerminationAggregationClassMap()
             {
-                Map(m => m.Id).Name("Record Number");
                 Map(m => m.SignalId).Name("Signal Id");
                 Map(m => m.PhaseNumber).Name("Phase Number");
                 Map(m => m.BinStartTime).Name("Bin Start Time");
@@ -56,6 +51,7 @@ namespace MOE.Common.Models
                 Map(m => m.MaxOuts).Name("Max Outs");
                 Map(m => m.ForceOffs).Name("Force OFfs");
                 Map(m => m.UnknownTerminationTypes).Name("Unknown Termination Types");
+                //Map(m => m.PhaseSkipped).Name("Phase Skipped");
             }
         }
     }
