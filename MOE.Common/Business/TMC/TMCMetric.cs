@@ -110,7 +110,7 @@ namespace MOE.Common.Business.TMC
             chart.Titles.Add(ChartTitleFactory.GetBoldTitle(direction.Description + " " +
                                                             movementType.Description + " " + laneType.Description +
                                                             " Lanes"));
-            if (movementType.MovementTypeID == 2 || movementType.MovementTypeID == 3)
+            if (Options.Y2AxisMax != null && (movementType.MovementTypeID == 2 || movementType.MovementTypeID == 3))
                 chart.ChartAreas[0].AxisY.Maximum = Options.Y2AxisMax.Value;
         }
 
