@@ -46,8 +46,7 @@ namespace MOE.Common.Business.Tests
                 new InMemorySignalsRepository(Db));
             MetricTypeRepositoryFactory.SetMetricsRepository(new InMemoryMetricTypeRepository(Db));
             ApplicationEventRepositoryFactory.SetApplicationEventRepository(new InMemoryApplicationEventRepository(Db));
-            DetectorEventCountAggregationRepositoryFactory.SetApplicationEventRepository(new InMemoryDetectorAggregationsRepository(Db));
-            
+            DetectorAggregationsRepositoryFactory.SetDetectorAggregationRepository(new InMemoryDetectorAggregationsRepository(Db));
 
             Models.Repositories.DirectionTypeRepositoryFactory.SetDirectionsRepository(
                 new InMemoryDirectionTypeRepository());

@@ -44,7 +44,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod]
         public void CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest()
         {
-            var options = new PriorityAggregationOptions();
+            var options = new SignalPriorityAggregationOptions();
             base.CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest(options);
         }
     }

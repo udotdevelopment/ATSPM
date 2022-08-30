@@ -8,7 +8,7 @@ using MOE.CommonTests.Models;
 
 namespace MOE.CommonTests.Models
 {
-    public class InMemoryDetectorAggregationsRepository : IDetectorEventCountAggregationRepository
+    public class InMemoryDetectorAggregationsRepository : IDetectorAggregationsRepository
     {
         private InMemoryMOEDatabase _db;
 
@@ -23,19 +23,19 @@ namespace MOE.CommonTests.Models
             _db = context;
         }
 
-        public List<DetectorEventCountAggregation> GetActivationsByDetectorIDandDateRange(string detectorId, DateTime Start, DateTime End)
+        public List<DetectorAggregation> GetActivationsByDetectorIDandDateRange(string detectorId, DateTime Start, DateTime End)
         {
             throw new NotImplementedException();
         }
 
-        public DetectorEventCountAggregation Add(DetectorEventCountAggregation DetectorAggregation)
+        public DetectorAggregation Add(DetectorAggregation DetectorAggregation)
         {
             throw new NotImplementedException();
         }
 
-        public List<DetectorEventCountAggregation> GetActivationsByDetectorIDandDateRange(int detectorPrimaryId, DateTime start, DateTime end)
+        public List<DetectorAggregation> GetActivationsByDetectorIDandDateRange(int detectorPrimaryId, DateTime start, DateTime end)
         {
-            List<DetectorEventCountAggregation> activationsList = (from r in this._db.DetectorAggregations
+            List<DetectorAggregation> activationsList = (from r in this._db.DetectorAggregations
                 where r.DetectorPrimaryId == detectorPrimaryId
                       && r.BinStartTime >= start && r.BinStartTime <= end
                                                          select r).ToList();
@@ -43,29 +43,19 @@ namespace MOE.CommonTests.Models
             return activationsList;
         }
 
-        public void Remove(DetectorEventCountAggregation DetectorAggregation)
+        public void Remove(DetectorAggregation DetectorAggregation)
         {
             throw new NotImplementedException();
         }
 
-        public List<DetectorEventCountAggregation> GetDetectorAggregationByApproachIdAndDateRange(int detectorId, DateTime startDate, DateTime endDate)
+        public List<DetectorAggregation> GetDetectorAggregationByApproachIdAndDateRange(int detectorId, DateTime startDate, DateTime endDate)
         {
             return _db.DetectorAggregations.Where(r => r.DetectorPrimaryId == detectorId
                                                                 && r.BinStartTime >= startDate &&
                                                                 r.BinStartTime <= endDate).ToList();
         }
 
-        public void Update(DetectorEventCountAggregation DetectorAggregation)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int GetDetectorEventCountSumAggregationByDetectorIdAndDateRange(int detectorId, DateTime start, DateTime end)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<DetectorEventCountAggregation> GetDetectorEventCountAggregationByDetectorIdAndDateRange(int detectorId, DateTime start, DateTime end)
+        public void Update(DetectorAggregation DetectorAggregation)
         {
             throw new NotImplementedException();
         }

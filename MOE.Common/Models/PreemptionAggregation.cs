@@ -7,6 +7,10 @@ namespace MOE.Common.Models
 {
     public class PreemptionAggregation : Aggregation
     {
+        [Key]
+        [Column(Order = 6)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
         [Key]
         [Required]
@@ -18,6 +22,13 @@ namespace MOE.Common.Models
         [StringLength(10)]
         [Column(Order = 1)]
         public string SignalId { get; set; }
+
+        [Key]
+        [ForeignKey("Signal")]
+        [Column(Order = 2)]
+        public int VersionId { get; set; }
+
+        public virtual Signal Signal { get; set; }
 
         [Required]
         [Column(Order = 3)]
@@ -35,7 +46,10 @@ namespace MOE.Common.Models
         {
             public PreemptionAggregationClassMap()
             {
+                Map(m => m.Signal).Ignore();
+                Map(m => m.Id).Name("Record Number");
                 Map(m => m.BinStartTime).Name("Bin Start Time");
+                Map(m => m.VersionId).Name("Version ID");
                 Map(m => m.PreemptNumber).Name("Preempt Number");
                 Map(m => m.PreemptRequests).Name("Preempt Requests");
                 Map(m => m.PreemptServices).Name("Preempt Services");

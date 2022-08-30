@@ -16,7 +16,7 @@ namespace MOE.Common.Business.WCFServiceLibrary.Tests
         [TestMethod()]
         public void SetEventCountSeriesTest()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             Series y = new Series();
             Series s = options.SetEventCountSeries(y);
 

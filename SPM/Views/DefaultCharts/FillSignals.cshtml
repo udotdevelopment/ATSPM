@@ -22,7 +22,7 @@ new SelectList(Model.Filters, "FilterID", "FilterName"),
 </div>
 <table class="table table-striped table-bordered table-hover">
     <thead>
-        <tr class="text-center">
+        <tr>
             <th>Signal ID</th>
             <th>Primary Name</th>
             <th>Secondary Name</th>
@@ -46,7 +46,8 @@ new SelectList(Model.Filters, "FilterID", "FilterName"),
                 <table>
                     <tr>
                         <td>
-                            <a href="javascript:GetSignals(1)"><i class="fa fa-fast-backward"></i></a>
+                            <a class="glyphicon glyphicon-fast-backward"  href="javascript:GetSignals(1)"></a>
+                            &nbsp;&nbsp;
                         </td>
                         @{
                             int pageNumber = 0;
@@ -64,14 +65,14 @@ new SelectList(Model.Filters, "FilterID", "FilterName"),
                                 if (pageNumber <= Model.Signals.PageCount)
                                 {
                                     <td>
-                                        <a href="javascript:GetSignals(@pageNumber)">@pageNumber</a>
+                                        <a href="javascript:GetSignals(@pageNumber)">@pageNumber</a>|
                                     </td>
                                 }
                                 pageNumber++;
                             }
                         }
                         <td>
-                            <a href="javascript:GetSignals(@Model.Signals.PageCount)"><i class="fa fa-fast-forward"></i></a>
+                            &nbsp;&nbsp;<a class="glyphicon glyphicon-fast-forward" href="javascript:GetSignals(@Model.Signals.PageCount)"></a>
                         </td>
                         <td>
                             &nbsp;&nbsp;@Model.Signals.TotalCount.ToString() Signals

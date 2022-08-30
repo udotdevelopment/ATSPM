@@ -521,10 +521,5 @@ namespace MOE.CommonTests.Models
         {
             throw new NotImplementedException();
         }
-
-        IQueryable<Signal> ISignalsRepository.GetLatestVersionOfAllSignalsAsQueryable()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

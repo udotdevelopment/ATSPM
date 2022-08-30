@@ -61,26 +61,26 @@ namespace MOE.Common.Business.Bins
             var binsContainer = new BinsContainer(timeOptions.Start, timeOptions.End);
             for (var startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month, timeOptions.Start.Day, 0,
                     0, 0);
-                startTime.Date < timeOptions.End.Date;
+                startTime.Date <= timeOptions.End.Date;
                 startTime = startTime.AddDays(1))
                 if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd && timeOptions.DaysOfWeek.Contains(startTime.DayOfWeek))
                 {
-                    binsContainer.Bins.Add(new Bin { Start = startTime, End = startTime.AddDays(1) });
+                    binsContainer.Bins.Add(new Bin {Start = startTime, End = startTime.AddDays(1)});
                 }
                 else
                 {
                     if (timeOptions.TimeOfDayStartHour != null && timeOptions.TimeOfDayStartMinute != null &&
                         timeOptions.TimeOfDayEndHour != null && timeOptions.TimeOfDayEndMinute != null)
-                        if (timeOptions.DaysOfWeek.Contains(startTime.DayOfWeek))
+                        if(timeOptions.DaysOfWeek.Contains(startTime.DayOfWeek))
+                        { 
+                        binsContainer.Bins.Add(new Bin
                         {
-                            binsContainer.Bins.Add(new Bin
-                            {
-                                Start = startTime.AddHours(timeOptions.TimeOfDayStartHour.Value)
-                                    .AddMinutes(timeOptions.TimeOfDayStartMinute.Value),
-                                End = startTime.AddHours(timeOptions.TimeOfDayEndHour.Value)
-                                    .AddMinutes(timeOptions.TimeOfDayEndMinute.Value)
-                            });
-                        }
+                            Start = startTime.AddHours(timeOptions.TimeOfDayStartHour.Value)
+                                .AddMinutes(timeOptions.TimeOfDayStartMinute.Value),
+                            End = startTime.AddHours(timeOptions.TimeOfDayEndHour.Value)
+                                .AddMinutes(timeOptions.TimeOfDayEndMinute.Value)
+                        });
+                            }
                 }
             binsContainers.Add(binsContainer);
             return binsContainers;
@@ -96,7 +96,7 @@ namespace MOE.Common.Business.Bins
                 for (var startTime = new DateTime(timeOptions.Start.Year, 1, 1);
                     startTime.Date < new DateTime(timeOptions.End.Year, 1, 1);
                     startTime = startTime.AddYears(1))
-                    binsContainer.Bins.Add(new Bin { Start = startTime, End = startTime.AddYears(1) });
+                    binsContainer.Bins.Add(new Bin {Start = startTime, End = startTime.AddYears(1)});
                 binsContainers.Add(binsContainer);
             }
             else
@@ -115,7 +115,7 @@ namespace MOE.Common.Business.Bins
             return binsContainers;
         }
 
-        public static List<BinsContainer> GetMonthBinsForRange(BinFactoryOptions timeOptions)
+        private static List<BinsContainer> GetMonthBinsForRange(BinFactoryOptions timeOptions)
         {
             var binsContainers = new List<BinsContainer>();
             if (timeOptions.TimeOption == BinFactoryOptions.TimeOptions.StartToEnd)
@@ -124,7 +124,7 @@ namespace MOE.Common.Business.Bins
                 for (var startTime = new DateTime(timeOptions.Start.Year, timeOptions.Start.Month, 1);
                     startTime.Date < timeOptions.End.Date;
                     startTime = startTime.AddMonths(1))
-                    binsContainer.Bins.Add(new Bin { Start = startTime, End = startTime.AddMonths(1) });
+                    binsContainer.Bins.Add(new Bin {Start = startTime, End = startTime.AddMonths(1)});
                 binsContainers.Add(binsContainer);
             }
             else
@@ -144,16 +144,15 @@ namespace MOE.Common.Business.Bins
         }
 
 
-        public static List<BinsContainer> GetBinsForRange(
-            BinFactoryOptions timeOptions,
-            int minutes)
+        private static List<BinsContainer> GetBinsForRange(BinFactoryOptions timeOptions, int minutes)
         {
             var binsContainers = new List<BinsContainer>();
             var startTimeSpan = new TimeSpan();
             var endTimeSpan = new TimeSpan();
             var tempStart = timeOptions.Start;
             var tempEnd = timeOptions.End;
-            if (timeOptions.TimeOfDayStartHour != null &&
+            if (//timeOptions.TimeOption == BinFactoryOptions.TimeOptions.TimePeriod &&
+                timeOptions.TimeOfDayStartHour != null &&
                 timeOptions.TimeOfDayStartMinute != null &&
                 timeOptions.TimeOfDayEndHour != null &&
                 timeOptions.TimeOfDayEndMinute != null)
@@ -164,19 +163,21 @@ namespace MOE.Common.Business.Bins
                     timeOptions.TimeOfDayEndMinute.Value, 0);
             }
             var binsContainer = new BinsContainer(timeOptions.Start, timeOptions.End);
-            for (var startTime = tempStart; startTime < tempEnd; startTime = startTime.AddMinutes(minutes))
+            for (var startTime = tempStart;
+                startTime < tempEnd;
+                startTime = startTime.AddMinutes(minutes))
                 switch (timeOptions.TimeOption)
                 {
                     case BinFactoryOptions.TimeOptions.StartToEnd:
-                        binsContainer.Bins.Add(new Bin { Start = startTime, End = startTime.AddMinutes(minutes) });
+                        binsContainer.Bins.Add(new Bin {Start = startTime, End = startTime.AddMinutes(minutes)});
                         break;
                     case BinFactoryOptions.TimeOptions.TimePeriod:
                         var periodStartTimeSpan = new TimeSpan(0, startTime.Hour,
                             startTime.Minute, 0);
-                        if (timeOptions.DaysOfWeek.Contains(startTime.DayOfWeek)
-                            && periodStartTimeSpan >= startTimeSpan
-                            && periodStartTimeSpan < endTimeSpan)
-                            binsContainer.Bins.Add(new Bin { Start = startTime, End = startTime.AddMinutes(minutes) });
+                        if (timeOptions.DaysOfWeek.Contains(startTime.DayOfWeek) &&
+                            periodStartTimeSpan >= startTimeSpan &&
+                            periodStartTimeSpan < endTimeSpan)
+                            binsContainer.Bins.Add(new Bin {Start = startTime, End = startTime.AddMinutes(minutes)});
                         break;
                 }
             binsContainers.Add(binsContainer);

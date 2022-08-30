@@ -27,7 +27,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public ApproachDelayOptions()
         {
-            BinSizeList = new List<int>() { 5, 15 };
+            BinSizeList = new List<int>();
+            BinSizeList.Add(15);
+            BinSizeList.Add(5);
             MetricTypeID = 8;
             SetDefaults();
         }
@@ -51,6 +53,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         [Display(Name = "Show Delay Per Vehicle")]
         public bool ShowDelayPerVehicle { get; set; }
+
+        public void SetDefaults()
+        {
+            YAxisMax = 15;
+            Y2AxisMax = 10;
+            ShowPlanStatistics = true;
+            ShowTotalDelayPerHour = true;
+            ShowDelayPerVehicle = true;
+        }
 
         public override List<string> CreateMetric()
         {

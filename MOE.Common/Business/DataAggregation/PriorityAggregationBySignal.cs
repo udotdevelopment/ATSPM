@@ -19,15 +19,10 @@ namespace MOE.Common.Business.DataAggregation
         protected override void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal)
         {
             var priorityAggregationRepository =
-                PriorityAggregationDatasRepositoryFactory.Create(); var selectionEndDate = BinsContainers.Max(b => b.End);
-            //Add a day so that it gets all the data for the entire end day instead of stoping at 12:00AM
-            if (options.TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Day)
-            {
-                selectionEndDate = selectionEndDate.AddDays(1);
-            }
+                PriorityAggregationDatasRepositoryFactory.Create();
             var priorityAggregations =
                 priorityAggregationRepository.GetPriorityBySignalIdAndDateRange(
-                    signal.SignalID, BinsContainers.Min(b => b.Start), selectionEndDate);
+                    signal.SignalID, BinsContainers.Min(b => b.Start), BinsContainers.Max(b => b.End));
             if (priorityAggregations != null)
             {
                 var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
@@ -46,6 +41,12 @@ namespace MOE.Common.Business.DataAggregation
 
                             switch (options.SelectedAggregatedDataType.DataName)
                             {
+                                case "TotalCycles":
+                                    preemptionSum = priorityAggregations.Where(s =>
+                                            s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                        .Sum(s => s.TotalCycles);
+                                    break;
+
                                 case "PriorityNumber":
                                     preemptionSum = priorityAggregations.Where(s =>
                                             s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)

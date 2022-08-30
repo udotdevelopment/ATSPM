@@ -22,7 +22,7 @@ namespace MOE.Common.Business.DataAggregation
         }
 
         public Models.Detector Detector { get; }
-        public List<BinsContainer> BinsContainers { get; set; }
+        public List<BinsContainer> BinsContainers { get; set; } = new List<BinsContainer>();
 
         protected List<DetectorEventCountAggregation> GetdetectorEventCountAggregations(DetectorAggregationMetricOptions options, Models.Detector detector)
         {
@@ -33,6 +33,6 @@ namespace MOE.Common.Business.DataAggregation
                     Detector.ID, options.StartDate, options.EndDate);
         }
 
-        public abstract void LoadBins(Models.Detector detector, DetectorAggregationMetricOptions options);
+        protected abstract void LoadBins(Models.Detector detector, DetectorAggregationMetricOptions options);
     }
 }

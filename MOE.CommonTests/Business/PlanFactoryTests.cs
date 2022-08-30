@@ -36,11 +36,10 @@ namespace MOE.Common.Business.Tests
 
 
 
-            //AddEasyPlanEvents(DateTime.Now.AddDays(-1), DateTime.Now, "1001", _db);
-            //var plans = PlanFactory.GetBasicPlans(DateTime.Now.AddDays(-1), DateTime.Now, "1001", _db);
+            AddEasyPlanEvents(DateTime.Now.AddDays(-1), DateTime.Now, "1001", _db);
+            var plans = PlanFactory.GetBasicPlans(DateTime.Now.AddDays(-1), DateTime.Now, "1001");
 
-            //Assert.IsTrue(plans.Count == 12);
-            Assert.IsTrue(false);
+            Assert.IsTrue(plans.Count == 12);
 
 
 
@@ -52,23 +51,22 @@ namespace MOE.Common.Business.Tests
 
 
 
-            //AddDuplicatePlanEvents(DateTime.Now.AddDays(-1), DateTime.Now, "1001", _db);
-            //var plans = PlanFactory.GetBasicPlans(DateTime.Now.AddDays(-1), DateTime.Now, "1001");
+            AddDuplicatePlanEvents(DateTime.Now.AddDays(-1), DateTime.Now, "1001", _db);
+            var plans = PlanFactory.GetBasicPlans(DateTime.Now.AddDays(-1), DateTime.Now, "1001");
 
-            //Assert.IsTrue(plans.Count == 13);
+            Assert.IsTrue(plans.Count == 13);
 
-            //bool adjDupPlans = false;
+            bool adjDupPlans = false;
 
-            //for(int i = 0; i > plans.Count; i++)
-            //{
-            //    if (plans[i].PlanNumber == plans[i + i].PlanNumber)
-            //    {
-            //        adjDupPlans = true;
-            //    }
-            //}
+            for(int i = 0; i > plans.Count; i++)
+            {
+                if (plans[i].PlanNumber == plans[i + i].PlanNumber)
+                {
+                    adjDupPlans = true;
+                }
+            }
 
-            //Assert.IsFalse(adjDupPlans);
-            Assert.IsTrue(false);
+            Assert.IsFalse(adjDupPlans);
 
 
         }
@@ -79,36 +77,35 @@ namespace MOE.Common.Business.Tests
 
 
 
-            //AddDuplicatePlanEvents(DateTime.Now.AddDays(-1), DateTime.Now, "1001", _db);
-            //var lastplan = (from r in _db.Controller_Event_Log
-            //                where r.EventCode == 131
-            //                orderby r.Timestamp
-            //                select r).Last();
+            AddDuplicatePlanEvents(DateTime.Now.AddDays(-1), DateTime.Now, "1001", _db);
+            var lastplan = (from r in _db.Controller_Event_Log
+                            where r.EventCode == 131
+                            orderby r.Timestamp
+                            select r).Last();
 
-            //var NextToLastPlan = new Controller_Event_Log();
-            //NextToLastPlan.Timestamp = lastplan.Timestamp.AddMinutes(-30);
-            //NextToLastPlan.SignalID = lastplan.SignalID;
-            //NextToLastPlan.EventCode = lastplan.EventCode;
-            //NextToLastPlan.EventParam = lastplan.EventParam;
+            var NextToLastPlan = new Controller_Event_Log();
+            NextToLastPlan.Timestamp = lastplan.Timestamp.AddMinutes(-30);
+            NextToLastPlan.SignalID = lastplan.SignalID;
+            NextToLastPlan.EventCode = lastplan.EventCode;
+            NextToLastPlan.EventParam = lastplan.EventParam;
 
-            //_db.Controller_Event_Log.Add(NextToLastPlan);
+            _db.Controller_Event_Log.Add(NextToLastPlan);
 
-            //var plans = PlanFactory.GetBasicPlans(DateTime.Now.AddDays(-1), DateTime.Now, "1001");
+            var plans = PlanFactory.GetBasicPlans(DateTime.Now.AddDays(-1), DateTime.Now, "1001");
 
-            //Assert.IsTrue(plans.Count == 14);
+            Assert.IsTrue(plans.Count == 14);
 
-            //bool adjDupPlans = false;
+            bool adjDupPlans = false;
 
-            //for (int i = 0; i > plans.Count; i++)
-            //{
-            //    if (plans[i].PlanNumber == plans[i + i].PlanNumber)
-            //    {
-            //        adjDupPlans = true;
-            //    }
-            //}
+            for (int i = 0; i > plans.Count; i++)
+            {
+                if (plans[i].PlanNumber == plans[i + i].PlanNumber)
+                {
+                    adjDupPlans = true;
+                }
+            }
 
-            //Assert.IsFalse(adjDupPlans);
-            Assert.IsTrue(false);
+            Assert.IsFalse(adjDupPlans);
 
 
         }

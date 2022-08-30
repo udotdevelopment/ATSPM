@@ -1,12 +1,10 @@
-﻿using MOE.Common.Business.Bins;
-using MOE.Common.Business.WCFServiceLibrary;
-using MOE.Common.Models;
-using MOE.Common.Models.Repositories;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MOE.Common.Business.Bins;
+using MOE.Common.Business.WCFServiceLibrary;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.DataAggregation
 {
@@ -15,28 +13,20 @@ namespace MOE.Common.Business.DataAggregation
         public DetectorAggregationByDetector(Models.Detector detector, DetectorVolumeAggregationOptions options) : base(
             detector, options)
         {
-            LoadBins(detector, options);
         }
 
-        public override void LoadBins(Models.Detector detector, DetectorAggregationMetricOptions options)
+        protected override void LoadBins(Models.Detector detector, DetectorAggregationMetricOptions options)
         {
-            var detectorAggregationRepository = DetectorEventCountAggregationRepositoryFactory.Create();
-            var detectorAggregations = detectorAggregationRepository.GetDetectorEventCountAggregationByDetectorIdAndDateRange(
+            var detectorAggregationRepository =
+                DetectorAggregationsRepositoryFactory.Create();
+            var detectorAggregations =
+                detectorAggregationRepository.GetDetectorAggregationByApproachIdAndDateRange(
                     detector.ID, options.StartDate, options.EndDate);
-            BinsContainers = GetBinsContainers(options, detectorAggregations, BinsContainers);
-        }
-
-        public static List<BinsContainer> GetBinsContainers(
-            DetectorAggregationMetricOptions options,
-            List<DetectorEventCountAggregation> detectorAggregations,
-            List<BinsContainer> binsContainers
-            )
-        {
-            var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
             if (detectorAggregations != null)
             {
+                var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
                 //foreach (var binsContainer in binsContainers)
-                Parallel.ForEach(binsContainers, binsContainer =>
+                Parallel.ForEach(BinsContainers, binsContainer =>
                 {
                     var tempBinsContainer =
                         new BinsContainer(binsContainer.Start, binsContainer.End);
@@ -53,7 +43,7 @@ namespace MOE.Common.Business.DataAggregation
                                     volume =
                                         detectorAggregations.Where(s =>
                                                 s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.EventCount);
+                                            .Sum(s => s.Volume);
                                     break;
                                 default:
                                     throw new Exception("Unknown Aggregate Data Type for Split Failure");
@@ -81,8 +71,9 @@ namespace MOE.Common.Business.DataAggregation
                     tempBinsContainer.Bins = concurrentBins.OrderBy(c => c.Start).ToList();
                     concurrentBinContainers.Add(tempBinsContainer);
                 });
+                BinsContainers = concurrentBinContainers.OrderBy(b => b.Start).ToList();
             }
-            return concurrentBinContainers.OrderBy(b => b.Start).ToList();
         }
+        
     }
 }

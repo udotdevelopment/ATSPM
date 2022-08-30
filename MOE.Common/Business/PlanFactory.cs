@@ -50,16 +50,26 @@ namespace MOE.Common.Business
                 celRepository = ControllerEventLogRepositoryFactory.Create(db);
             }
             var planEvents = new List<Controller_Event_Log>();
+            var firstPlanEvent = celRepository.GetFirstEventBeforeDate(signalId, 131, startDate);
+            if (firstPlanEvent != null)
+            {
+                firstPlanEvent.Timestamp = startDate;
+                planEvents.Add(firstPlanEvent);
+            }
+            else
+            {
+                firstPlanEvent = new Controller_Event_Log
+                {
+                    Timestamp = startDate,
+                    EventCode = 131,
+                    EventParam = 0,
+                    SignalID = signalId
+                };
+                planEvents.Add(firstPlanEvent);
+            }
             var tempPlanEvents = celRepository.GetSignalEventsByEventCode(signalId, startDate, endDate, 131)
                 .OrderBy(e => e.Timestamp).ToList();
-            if(tempPlanEvents.Any() &&  tempPlanEvents.First().Timestamp != startDate)
-            {
-                GetFirstPlan(startDate, signalId, celRepository, planEvents);
-            }
-            else if (!planEvents.Any())
-            {
-                GetFirstPlan(startDate, signalId, celRepository, planEvents);
-            }
+
             tempPlanEvents.Add(new Controller_Event_Log { SignalID = signalId, EventCode = 131, EventParam = 254, Timestamp = endDate });
 
             for (var x = 0; x < tempPlanEvents.Count(); x++)
@@ -87,30 +97,9 @@ namespace MOE.Common.Business
             return planEvents;
         }
 
-        private static void GetFirstPlan(DateTime startDate, string signalId, IControllerEventLogRepository celRepository, List<Controller_Event_Log> planEvents)
+        public static List<Plan> GetBasicPlans(DateTime startDate, DateTime endDate, string signalId)
         {
-            var firstPlanEvent = celRepository.GetFirstEventBeforeDate(signalId, 131, startDate);
-            if (firstPlanEvent != null)
-            {
-                firstPlanEvent.Timestamp = startDate;
-                planEvents.Add(firstPlanEvent);
-            }
-            else
-            {
-                firstPlanEvent = new Controller_Event_Log
-                {
-                    Timestamp = startDate,
-                    EventCode = 131,
-                    EventParam = 0,
-                    SignalID = signalId
-                };
-                planEvents.Insert(0,firstPlanEvent);
-            }
-        }
-
-        public static List<Plan> GetBasicPlans(DateTime startDate, DateTime endDate, string signalId, SPM db)
-        {
-            var planEvents = GetPlanEvents(startDate, endDate, signalId, db);
+            var planEvents = GetPlanEvents(startDate, endDate, signalId, null);
             var plans = new List<Plan>();
             for (var i = 0; i < planEvents.Count; i++)
                 if (planEvents.Count - 1 == i)

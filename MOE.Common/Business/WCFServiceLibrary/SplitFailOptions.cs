@@ -53,6 +53,14 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [Display(Name = "Show Percent Fail Lines")]
         public bool ShowPercentFailLines { get; set; }
 
+        public void SetDefaults()
+        {
+            FirstSecondsOfRed = 5;
+            ShowFailLines = true;
+            ShowAvgLines = true;
+            ShowPercentFailLines = false;
+        }
+
         public override List<string> CreateMetric()
         {
             base.CreateMetric();

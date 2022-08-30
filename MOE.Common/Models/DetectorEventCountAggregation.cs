@@ -8,30 +8,22 @@ namespace MOE.Common.Models
     //public class DetectorEventCountAggregation : Aggregation
     public class DetectorEventCountAggregation 
     {
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public int Id { get; set; }
 
         [Key]
         [Required]
         [Column(Order = 0)]
         public  DateTime BinStartTime { get; set; }
 
+        [Key]
         [Required]
         [Column(Order = 1)]
-        [StringLength(10)]
-        public string SignalId { get; set; }
-
-
-        [Key]
-        [Required]
-        [Column(Order = 2)]
-        public int ApproachId { get; set; }
-
-        [Key]
-        [Required]
-        [Column(Order = 3)]
         public int DetectorPrimaryId { get; set; }
 
         [Required]
-        [Column(Order = 4)]
+        [Column(Order = 2)]
         public int EventCount { get; set; }
         
         public sealed class

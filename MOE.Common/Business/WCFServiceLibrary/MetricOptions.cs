@@ -27,30 +27,26 @@ namespace MOE.Common.Business.WCFServiceLibrary
     [KnownType(typeof(SplitMonitorOptions))]
     [KnownType(typeof(PedDelayOptions))]
     [KnownType(typeof(LeftTurnGapAnalysisOptions))]
-    [KnownType(typeof(WaitTimeOptions))]
     [KnownType(typeof(ApproachVolumeOptions))]
     [KnownType(typeof(SignalAggregationMetricOptions))]
     [KnownType(typeof(ApproachAggregationMetricOptions))]
     [KnownType(typeof(ApproachSplitFailAggregationOptions))]
-    [KnownType(typeof(PreemptionAggregationOptions))]
-    [KnownType(typeof(PriorityAggregationOptions))]
+    [KnownType(typeof(SignalPreemptionAggregationOptions))]
+    [KnownType(typeof(SignalPriorityAggregationOptions))]
     [KnownType(typeof(ApproachPcdAggregationOptions))]
     [KnownType(typeof(ApproachYellowRedActivationsAggregationOptions))]
     [KnownType(typeof(DetectorAggregationMetricOptions))]
     [KnownType(typeof(DetectorVolumeAggregationOptions))]
     [KnownType(typeof(ApproachSpeedAggregationOptions))]
-    [KnownType(typeof(PhaseCycleAggregationOptions))]
+    [KnownType(typeof(ApproachCycleAggregationOptions))]
     [KnownType(typeof(SignalEventCountAggregationOptions))]
+    [KnownType(typeof(ApproachEventCountAggregationOptions))]
     [KnownType(typeof(PhaseTerminationAggregationOptions))]
     [KnownType(typeof(PhasePedAggregationOptions))]
     [KnownType(typeof(TimingAndActuationsOptions))]
-    [KnownType(typeof(PhaseLeftTurnGapAggregationOptions))]
-    [KnownType(typeof(PhaseSplitMonitorAggregationOptions))]
     [KnownType(typeof(string[]))]
     public class MetricOptions
     {
-        MOE.Common.Models.Repositories.IMeasuresDefaultsRepository measuresDefaultsRepository =
-           MOE.Common.Models.Repositories.MeasuresDefaultsRepositoryFactory.Create();
         public MetricOptions()
         {
             var applicationSettingRepository = ApplicationSettingsRepositoryFactory.Create();
@@ -126,25 +122,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return new List<string>();
         }
 
-        public void SetDefaults()
-        {
-            var measure = GetType().Name.Replace("Options", "");
-            var defaults = measuresDefaultsRepository.GetMeasureDefaultsAsDictionary(measure);
-            foreach (var option in defaults)
-            {
-                var type = GetType().GetProperty(option.Key)?.PropertyType;
-
-                if (option.Value == null || option.Value.ToLower() == "null") continue;
-
-                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
-                {
-                    type = Nullable.GetUnderlyingType(type);
-                }
-
-                var converted = Convert.ChangeType(option.Value, type);
-                GetType().GetProperty(option.Key).SetValue(this, converted);
-            }
-        }
 
         protected void LogMetricRun()
         {

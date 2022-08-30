@@ -20,32 +20,34 @@ namespace MOE.Common.Models.Repositories
             _db = context;
         }
 
-        public int GetPreemptAggregationTotalByVersionIdAndDateRange( DateTime start, DateTime end)
+        public int GetPreemptAggregationTotalByVersionIdAndDateRange(int versionId, DateTime start, DateTime end)
         {
             var serviced = (from r in _db.PreemptionAggregations
-                where  r.BinStartTime >= start && r.BinStartTime <= end
-                select r.PreemptServices).Sum();
-
-            return serviced;
-        }
-
-        public int GetPreemptAggregationTotalByVersionIdPreemptNumberAndDateRange(DateTime start,
-            DateTime end,
-            int preemptNumber)
-        {
-            var serviced = (from r in _db.PreemptionAggregations
-                where  r.PreemptNumber == preemptNumber
+                where r.VersionId == versionId
                       && r.BinStartTime >= start && r.BinStartTime <= end
                 select r.PreemptServices).Sum();
 
             return serviced;
         }
 
-        public List<PreemptionAggregation> GetPreemptAggregationByVersionIdAndDateRange( DateTime start,
+        public int GetPreemptAggregationTotalByVersionIdPreemptNumberAndDateRange(int versionId, DateTime start,
+            DateTime end,
+            int preemptNumber)
+        {
+            var serviced = (from r in _db.PreemptionAggregations
+                where r.VersionId == versionId && r.PreemptNumber == preemptNumber
+                      && r.BinStartTime >= start && r.BinStartTime <= end
+                select r.PreemptServices).Sum();
+
+            return serviced;
+        }
+
+        public List<PreemptionAggregation> GetPreemptAggregationByVersionIdAndDateRange(int versionId, DateTime start,
             DateTime end)
         {
             var records = (from r in _db.PreemptionAggregations
-                where r.BinStartTime >= start && r.BinStartTime <= end
+                where r.VersionId == versionId
+                      && r.BinStartTime >= start && r.BinStartTime <= end
                 select r).ToList();
 
             return records;
@@ -82,7 +84,7 @@ namespace MOE.Common.Models.Repositories
         }
 
 
-        public List<DetectorEventCountAggregation> GetActivationsByDetectorIDandDateRange(string detectorId, DateTime Start,
+        public List<DetectorAggregation> GetActivationsByDetectorIDandDateRange(string detectorId, DateTime Start,
             DateTime End)
         {
             throw new NotImplementedException();

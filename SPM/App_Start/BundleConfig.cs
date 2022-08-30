@@ -34,10 +34,6 @@ namespace SPM
                       //,"~/Content/themes/base/jquery-ui.css"
                       //,"~/Content/themes/base/datepicker.css"
                       ));
-
-            bundles.Add(new ScriptBundle("~/bundles/chosen").Include(
-                "~/Scripts/chosen/chosen.jquery.min.js"
-                ));
         }
     }
 }

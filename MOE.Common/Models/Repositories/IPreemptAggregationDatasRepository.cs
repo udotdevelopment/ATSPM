@@ -5,14 +5,14 @@ namespace MOE.Common.Models.Repositories
 {
     public interface IPreemptAggregationDatasRepository
     {
-        List<PreemptionAggregation> GetPreemptAggregationByVersionIdAndDateRange(DateTime start,
+        List<PreemptionAggregation> GetPreemptAggregationByVersionIdAndDateRange(int versionId, DateTime start,
             DateTime end);
 
-        int GetPreemptAggregationTotalByVersionIdAndDateRange(DateTime start,
+        int GetPreemptAggregationTotalByVersionIdAndDateRange(int versionId, DateTime start,
             DateTime end);
 
 
-        int GetPreemptAggregationTotalByVersionIdPreemptNumberAndDateRange(DateTime start,
+        int GetPreemptAggregationTotalByVersionIdPreemptNumberAndDateRange(int versionId, DateTime start,
             DateTime end, int preemptNumber);
 
 

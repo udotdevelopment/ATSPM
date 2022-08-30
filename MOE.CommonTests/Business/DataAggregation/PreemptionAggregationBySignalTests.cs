@@ -43,7 +43,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void PreemptionAggregationBySignalSartToEnd15MinuteBinAllDayTypesTest()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -97,7 +97,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void SignalPreemptionAggregationBySignalTimePeriod15MinuteBinAllDayTypesTest()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -149,7 +149,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void PreemptionAggregationBySignalSartToEnd30MinuteBinAllDayTypesTest()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -201,7 +201,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void PreemptionAggregationBySignalTimePeriod30MinuteBinAllDayTypesTest()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -253,7 +253,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void PreemptionAggregationBySignalSartToEndHourMinuteBinAllDayTypesTest()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -305,7 +305,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void PreemptionAggregationBySignalTimePeriodHourBinAllDayTypesTest()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -357,7 +357,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void PreemptionAggregationBySignalSartToEndDayBinAllDayTypesTest()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("11/1/2017");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -390,8 +390,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                     Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                     Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                    Assert.IsTrue(signalBinsContainer.SumValue == 9216);
-                    //TODO:Last bucket is zero. Check end date comparison 
+                    Assert.IsTrue(signalBinsContainer.SumValue == 8928);
                     Assert.IsTrue(signalBinsContainer.AverageValue == 288);
                     for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                     {
@@ -402,7 +401,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         Assert.IsTrue(signalBin.Sum == 288);
                     }
                 }
-                Assert.IsTrue(splitAggregationBySignal.Total == 9216);
+                Assert.IsTrue(splitAggregationBySignal.Total == 8928);
                 Assert.IsTrue(splitAggregationBySignal.Average == 288);
             }
         }
@@ -410,7 +409,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void PreemptionAggregationBySignalTimePeriodDayBinAllDayTypesTest()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/1/2017");
             options.EndDate = Convert.ToDateTime("11/1/2017");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -443,8 +442,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     var signalBinsContainer = splitAggregationBySignal.BinsContainers[i];
                     Assert.IsTrue(binsContainer.Start == signalBinsContainer.Start);
                     Assert.IsTrue(binsContainer.End == signalBinsContainer.End);
-                    Assert.IsTrue(signalBinsContainer.SumValue == 1536);
-                    //TODO:Last bucket is zero. Check end date comparison 
+                    Assert.IsTrue(signalBinsContainer.SumValue == 1488);
                     Assert.IsTrue(signalBinsContainer.AverageValue == 48);
                     for (int binIndex = 0; binIndex < binsContainer.Bins.Count; binIndex++)
                     {
@@ -455,7 +453,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                         Assert.IsTrue(signalBin.Sum == 48);
                     }
                 }
-                Assert.IsTrue(splitAggregationBySignal.Total == 1536);
+                Assert.IsTrue(splitAggregationBySignal.Total == 1488);
                 Assert.IsTrue(splitAggregationBySignal.Average == 48);
             }
         }
@@ -463,7 +461,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void PreemptionAggregationBySignalSartToEndMonthBinAllDayTypesTest()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -515,7 +513,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void PreemptionAggregationBySignalTimePeriodMonthBinAllDayTypesTest()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -569,7 +567,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void PreemptionAggregationBySignalSartToEndYearBinAllDayTypesTest()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("1/1/2018");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -628,7 +626,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void PreemptionAggregationBySignalTimePeriodYearBinAllDayTypesTest()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2016");
             options.EndDate = Convert.ToDateTime("1/1/2018");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -689,7 +687,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void PreemptionAggregationBySignalTestByPhaseTimePeriod()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("10/17/2017");
             options.EndDate = Convert.ToDateTime("10/18/2017");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -743,7 +741,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         [TestMethod()]
         public void TestSumValuesOnDifferentBinSizesTest()
         {
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/1/2018");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -757,6 +755,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
             options.FilterSignals.Add(new FilterSignal{SignalId = "102", Exclude = false});
             options.Signals.Add(SignalsRepository.GetLatestVersionOfSignalBySignalID("102"));
             options.SelectedChartType = SeriesChartType.Column;
+            List<BinsContainer> binsContainers = BinFactory.GetBins(options.TimeOptions);
             var preemptionDatas = options.AggregatedDataTypes;
             foreach (var preemptionData in preemptionDatas)
             {
@@ -768,7 +767,9 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 {
                     fifteenMinuteSum += binsContainer.SumValue;
                 }
+                splitAggregationBySignal15Minute = null;
                 options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.ThirtyMinute;
+                binsContainers = BinFactory.GetBins(options.TimeOptions);
                 PreemptionAggregationBySignal splitAggregationBySignal30Minute =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
                 double thirtyMinuteSum = 0;
@@ -776,9 +777,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 {
                     thirtyMinuteSum += binsContainer.SumValue;
                 }
+                splitAggregationBySignal30Minute = null;
                 Assert.IsTrue(fifteenMinuteSum == thirtyMinuteSum);
-
                 options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.Hour;
+                binsContainers = BinFactory.GetBins(options.TimeOptions);
                 PreemptionAggregationBySignal splitAggregationBySignalHour =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
                 double hourSum = 0;
@@ -786,9 +788,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 {
                     hourSum += binsContainer.SumValue;
                 }
+                splitAggregationBySignalHour = null;
                 Assert.IsTrue(fifteenMinuteSum == hourSum);
-
                 options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.Day;
+                binsContainers = BinFactory.GetBins(options.TimeOptions);
                 PreemptionAggregationBySignal splitAggregationBySignalDay =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
                 double daySum = 0;
@@ -796,8 +799,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 {
                     daySum += binsContainer.SumValue;
                 }
+                splitAggregationBySignalDay = null;
                 Assert.IsTrue(fifteenMinuteSum == daySum);
                 options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.Month;
+                binsContainers = BinFactory.GetBins(options.TimeOptions);
                 PreemptionAggregationBySignal splitAggregationBySignalMonth =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
                 double monthSum = 0;
@@ -805,9 +810,10 @@ namespace MOE.Common.Business.DataAggregation.Tests
                 {
                     monthSum += binsContainer.SumValue;
                 }
+                splitAggregationBySignalMonth = null;
                 Assert.IsTrue(fifteenMinuteSum == monthSum);
-
                 options.TimeOptions.SelectedBinSize = BinFactoryOptions.BinSize.Year;
+                binsContainers = BinFactory.GetBins(options.TimeOptions);
                 PreemptionAggregationBySignal splitAggregationBySignalYear =
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
                 double yearSum = 0;
@@ -823,7 +829,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
         public void TimeSumToSignalSumTest()
         {
             var signalsRepository = SignalsRepositoryFactory.Create();
-            PreemptionAggregationOptions options = new PreemptionAggregationOptions();
+            SignalPreemptionAggregationOptions options = new SignalPreemptionAggregationOptions();
             options.StartDate = Convert.ToDateTime("1/1/2017");
             options.EndDate = Convert.ToDateTime("1/2/2017");
             options.SelectedAggregationType =AggregationType.Sum;
@@ -850,7 +856,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
                     new PreemptionAggregationBySignal(options, options.Signals[0]);
 
 
-                PreemptionAggregationOptions options2 = new PreemptionAggregationOptions();
+                SignalPreemptionAggregationOptions options2 = new SignalPreemptionAggregationOptions();
                 options2.StartDate = Convert.ToDateTime("1/1/2017");
                 options2.EndDate = Convert.ToDateTime("1/2/2017");
                 options2.SelectedAggregationType = AggregationType.Sum;

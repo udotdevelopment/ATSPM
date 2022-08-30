@@ -100,10 +100,5 @@ namespace MOE.CommonTests.Models
         {
             throw new NotImplementedException();
         }
-
-        public List<Detector> GetDetectorsBySignalIdMovementTypeIdDirectionTypeId(string signalId, int directionTypeId, List<int> movementTypeIds)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

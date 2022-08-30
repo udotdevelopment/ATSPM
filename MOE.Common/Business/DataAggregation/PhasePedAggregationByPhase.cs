@@ -11,25 +11,18 @@ namespace MOE.Common.Business.DataAggregation
 {
     public class PhasePedAggregationByPhase : AggregationByPhase
     {
-        public const string PED_REQUESTS = "PedRequests";
-        public const string MAX_PED_DELAY = "MaxPedDelay";
-        public const string MIN_PED_DELAY = "MinPedDelay";
-        public const string PED_DELAY_SUM = "PedDelaySum";
-        public const string PED_CYCLES = "PedCycles";
-
-        public PhasePedAggregationByPhase(Models.Signal signal, int phaseNumber, PhasePedAggregationOptions options, AggregatedDataType dataType) 
+        public PhasePedAggregationByPhase(Models.Signal signal, int phaseNumber, PhaseTerminationAggregationOptions options, AggregatedDataType dataType) 
             : base(signal, phaseNumber, options, dataType)
         {
-            LoadBins(signal, phaseNumber, options, dataType);
         }
 
         protected override void LoadBins(Models.Signal signal, int phaseNumber, PhaseAggregationMetricOptions options,
             AggregatedDataType dataType)
         {
-            var phasePedAggregationRepository =  PhasePedAggregationRepositoryFactory.Create();
-            var pedAggs = phasePedAggregationRepository.GetPhasePedsAggregationBySignalIdPhaseNumberAndDateRange(
+            var phasePedAggregationRepository =  PhaseTerminationAggregationRepositoryFactory.Create();
+            var splitFails = phasePedAggregationRepository.GetPhaseTerminationsAggregationBySignalIdPhaseNumberAndDateRange(
                 signal.SignalID, phaseNumber, options.StartDate, options.EndDate);
-            if (pedAggs != null)
+            if (splitFails != null)
             {
                 var concurrentBinContainers = new ConcurrentBag<BinsContainer>();
                 //foreach (var binsContainer in binsContainers)
@@ -41,35 +34,30 @@ namespace MOE.Common.Business.DataAggregation
                     //foreach (var bin in binsContainer.Bins)
                     Parallel.ForEach(binsContainer.Bins, bin =>
                     {
-                        if (pedAggs.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
+                        if (splitFails.Any(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End))
                         {
-                            var pedAggCount = 0;
+                            var terminationCount = 0;
                             switch (dataType.DataName)
                             {
-                                case PED_CYCLES:
-                                    pedAggCount =
-                                        pedAggs.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.PedCycles);
+                                case "GapOuts":
+                                    terminationCount =
+                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.GapOuts);
                                     break;
-                                case PED_DELAY_SUM:
-                                    pedAggCount =
-                                        pedAggs.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.PedDelaySum);
+                                case "ForceOffs":
+                                    terminationCount =
+                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.ForceOffs);
                                     break;
-                                case MIN_PED_DELAY:
-                                    pedAggCount =
-                                        pedAggs.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.MinPedDelay);
+                                case "MaxOuts":
+                                    terminationCount =
+                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.MaxOuts);
                                     break;
-                                case MAX_PED_DELAY:
-                                    pedAggCount =
-                                        pedAggs.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.MaxPedDelay);
-                                    break;
-                                case PED_REQUESTS:
-                                    pedAggCount =
-                                        pedAggs.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
-                                            .Sum(s => s.PedRequests);
+                                case "Unknown":
+                                    terminationCount =
+                                        splitFails.Where(s => s.BinStartTime >= bin.Start && s.BinStartTime < bin.End)
+                                            .Sum(s => s.UnknownTerminationTypes);
                                     break;
                                 default:
 
@@ -80,8 +68,8 @@ namespace MOE.Common.Business.DataAggregation
                             {
                                 Start = bin.Start,
                                 End = bin.End,
-                                Sum = pedAggCount,
-                                Average = pedAggCount
+                                Sum = terminationCount,
+                                Average = terminationCount
                             });
                         }
                         else

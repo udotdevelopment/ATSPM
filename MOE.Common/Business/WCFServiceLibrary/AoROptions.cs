@@ -11,15 +11,13 @@ namespace MOE.Common.Business.WCFServiceLibrary
     {
         public AoROptions()
         {
-            BinSizeList = new List<int>() { 5, 15 };
-            MetricTypeID = 9;
+
             SetDefaults();
         }
 
         public AoROptions(string signalId, DateTime start, DateTime end,  bool showPlanStatistics, int selectedBinSize)
         {
-            BinSizeList = new List<int>() { 5, 15 };
-            MetricTypeID = 9;
+            SetDefaults();
             StartDate = start;
             EndDate = end;
             SignalID = signalId;
@@ -41,6 +39,19 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         [Display(Name = "Show Plans")]
         public bool ShowPlanStatistics { get; set; }
+
+        public void SetDefaults()
+        {
+            BinSizeList = new List<int>();
+            BinSizeList.Add(15);
+            BinSizeList.Add(5);
+            MetricTypeID = 9;
+            YAxisMax = null;
+            ShowPlanStatistics = true;
+            SelectedBinSize = 15;
+        }
+
+        
 
         public override List<string> CreateMetric()
         {

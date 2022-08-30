@@ -273,13 +273,6 @@ namespace MOE.Common.Models.Repositories
             return detectors;
         }
 
-        public List<Detector> GetDetectorsBySignalIdMovementTypeIdDirectionTypeId(string signalId, int directionTypeId, List<int> movementTypeIds)
-        {
-            return _db.Approaches
-                .Where(a => a.DirectionTypeID == directionTypeId)
-                .SelectMany(a => a.Detectors)
-                .Where(d => movementTypeIds.Contains(d.MovementTypeID??-1))
-                .ToList();
-        }
+ 
     }
 }

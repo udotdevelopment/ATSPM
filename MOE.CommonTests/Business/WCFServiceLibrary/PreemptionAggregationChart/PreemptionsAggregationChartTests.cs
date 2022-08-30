@@ -34,7 +34,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.PreemptionAggregationChart
         [TestMethod]
         public void CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest()
         {
-            var options = new PreemptionAggregationOptions();
+            var options = new SignalPreemptionAggregationOptions();
             base.CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest(options);
         }
     }

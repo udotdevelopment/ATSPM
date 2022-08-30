@@ -19,15 +19,9 @@ namespace MOE.Common.Business.DataAggregation
         {
             var signalEventCountAggregationRepository = SignalEventCountAggregationRepositoryFactory
                 .Create();
-            var selectionEndDate = BinsContainers.Max(b => b.End);
-            //Add a day so that it gets all the data for the entire end day instead of stoping at 12:00AM
-            if (options.TimeOptions.SelectedBinSize == BinFactoryOptions.BinSize.Day)
-            {
-                selectionEndDate = selectionEndDate.AddDays(1);
-            }
             var signalEventCounts =
                 signalEventCountAggregationRepository.GetSignalEventCountAggregationBySignalIdAndDateRange(
-                    signal.SignalID, BinsContainers.Min(b => b.Start), selectionEndDate);
+                    signal.SignalID, BinsContainers.Min(b => b.Start), BinsContainers.Max(b => b.End));
             if (signalEventCounts != null)
             {
                 var concurrentBinContainers = new ConcurrentBag<BinsContainer>();

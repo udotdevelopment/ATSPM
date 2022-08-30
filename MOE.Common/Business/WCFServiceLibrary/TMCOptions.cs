@@ -35,7 +35,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public TMCOptions()
         {
-            BinSizeList = new List<int>() { 5, 15, 60 };
+            BinSizeList = new List<int>();
+            BinSizeList.Add(60);
+            BinSizeList.Add(15);
+            BinSizeList.Add(5);
+            SelectedBinSize = 15;
             MetricTypeID = 5;
             SetDefaults();
         }
@@ -60,6 +64,15 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [Display(Name = "Show Data Table")]
         public bool ShowDataTable { get; set; }
 
+        public void SetDefaults()
+        {
+            Y2AxisMax = 300;
+            YAxisMax = 1000;
+            ShowLaneVolumes = true;
+            ShowTotalVolumes = true;
+            ShowDataTable = false;
+        }
+
         public TMCInfo CreateMetric()
         {
             base.CreateMetric();
@@ -68,7 +81,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 SignalsRepositoryFactory.Create();
             var signal = repository.GetVersionOfSignalByDate(SignalID, StartDate);
             TmcInfo = new TMCInfo();
-            var plans = PlanFactory.GetBasicPlans(StartDate, EndDate, SignalID, null);
+            var plans = PlanFactory.GetBasicPlans(StartDate, EndDate, SignalID);
 
 
             var ltr = LaneTypeRepositoryFactory.Create();
@@ -84,10 +97,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
             CreateLaneTypeCharts(signal, "Vehicle", laneTypes, movementTypes, directions, plans, TmcInfo);
             CreateLaneTypeCharts(signal, "Exit", laneTypes, movementTypes, directions, plans, TmcInfo);
             CreateLaneTypeCharts(signal, "Bike", laneTypes, movementTypes, directions, plans, TmcInfo);
-            CreateLaneTypeCharts(signal, "Pedestrian", laneTypes, movementTypes, directions, plans, TmcInfo);
-            CreateLaneTypeCharts(signal, "Bus", laneTypes, movementTypes, directions, plans, TmcInfo);
-            CreateLaneTypeCharts(signal, "Light Rail Transit", laneTypes, movementTypes, directions, plans, TmcInfo);
-            CreateLaneTypeCharts(signal, "High Occupancy Vehicle", laneTypes, movementTypes, directions, plans, TmcInfo);
+
+
             return TmcInfo;
         }
 

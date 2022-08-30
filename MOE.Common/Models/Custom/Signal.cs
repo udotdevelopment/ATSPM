@@ -61,22 +61,8 @@ namespace MOE.Common.Models
             return metricTypesString;
         }
 
-        public string GetAreasString()
-        {
-            var areasString = ",";
-            foreach (var area in GetAreas())
-                areasString += area.Id + ",";
-
-            return areasString;
-        }
-
         public List<int> GetPhasesForSignal()
         {
-            if (this.Approaches == null)
-            {
-                var approachRepository = ApproachRepositoryFactory.Create();
-                this.Approaches = approachRepository.GetApproachesForSignal(this.VersionID);
-            }
             var phases = new List<int>();
             foreach (var a in Approaches)
             {
@@ -96,13 +82,9 @@ namespace MOE.Common.Models
         public List<Detector> GetDetectorsForSignal()
         {
             var detectors = new List<Detector>();
-            if (Approaches != null)
-            {
-                foreach (var a in Approaches.OrderBy(a => a.ProtectedPhaseNumber))
-                foreach (var d in a.Detectors)
-                    detectors.Add(d);
-            }
-
+            foreach (var a in Approaches.OrderBy(a => a.ProtectedPhaseNumber))
+            foreach (var d in a.Detectors)
+                detectors.Add(d);
             return detectors.OrderBy(d => d.DetectorID).ToList();
         }
 
@@ -216,15 +198,6 @@ namespace MOE.Common.Models
             return availableMetrics.Distinct().ToList();
         }
 
-        public List<Area> GetAreas()
-        {
-            var repository =
-                AreaRepositoryFactory.Create();
-
-            var areas = repository.GetListOfAreasForSignal(SignalID);
-            return areas.ToList();
-        }
-
         private List<MetricType> GetBasicMetrics()
         {
             var repository =
@@ -249,7 +222,6 @@ namespace MOE.Common.Models
                 && RegionID == signalToCompare.RegionID
                 && ControllerTypeID == signalToCompare.ControllerTypeID
                 && Enabled == signalToCompare.Enabled
-                && Pedsare1to1 == signalToCompare.Pedsare1to1
                 && Approaches.Count() == signalToCompare.Approaches.Count()
             )
                 return true;
@@ -280,9 +252,7 @@ namespace MOE.Common.Models
             newSignal.RegionID = origSignal.RegionID;
             newSignal.ControllerTypeID = origSignal.ControllerTypeID;
             newSignal.Enabled = origSignal.Enabled;
-            newSignal.Pedsare1to1 = origSignal.Pedsare1to1;
             newSignal.Approaches = new List<Approach>();
-            newSignal.JurisdictionId = origSignal.JurisdictionId;
 
             if (origSignal.Approaches != null)
                 foreach (var a in origSignal.Approaches)
@@ -323,24 +293,6 @@ namespace MOE.Common.Models
         {
             var directions = Approaches.Select(a => a.DirectionType).Distinct().ToList();
             return directions;
-        }
-
-        internal List<Approach> GetApproachesForAggregation()
-        {
-            List<Approach> approachesToReturn = new List<Approach>();
-            if (Approaches != null)
-            {
-                var approaches = Approaches.Where(a => a.IsPedestrianPhaseOverlap == false && a.IsPermissivePhaseOverlap == false && a.IsProtectedPhaseOverlap == false);
-                foreach(var approach in approaches)
-                {
-                    if ((!approachesToReturn.Select(a => a.ProtectedPhaseNumber).Contains(approach.ProtectedPhaseNumber) && approach.ProtectedPhaseNumber != 0) 
-                        || (approach.PermissivePhaseNumber != null && !approachesToReturn.Select(a => a.PermissivePhaseNumber).Contains(approach.PermissivePhaseNumber)))
-                    {
-                        approachesToReturn.Add(approach);
-                    }
-                }
-            }
-            return approachesToReturn;
         }
     }
 }

@@ -51,13 +51,8 @@ function SetSplitMonitorMetric(selectedPercentileSplit, showPlanStripes, showPed
 
 }
 
-function SetPedDelayMetric(timeBuffer, showPedBeginWalk, showCycleLength, showPercentDelay, showPedRecall, pedRecallThreshold) {
-    $("#TimeBuffer").val(timeBuffer);
-    $("#ShowPedBeginWalk").prop('checked', showPedBeginWalk);
-    $("#ShowCycleLength").prop('checked', showCycleLength);
-    $("#ShowPercentDelay").prop('checked', showPercentDelay);
-    $("#showPedRecall").prop('checked', showPedRecall);
-    $("#pedRecallThreshold").val(pedRecallThreshold);
+function SetPedDelayMetric() {
+
 }
 
 function SetPreemptionDetailsMetric() {

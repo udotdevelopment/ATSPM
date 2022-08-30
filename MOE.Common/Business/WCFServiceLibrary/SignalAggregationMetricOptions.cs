@@ -1,17 +1,20 @@
-﻿using MOE.Common.Business.Bins;
-using MOE.Common.Business.DataAggregation;
-using MOE.Common.Business.FilterExtensions;
-using MOE.Common.Models;
-using MOE.Common.Models.Repositories;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
 using System.Xml;
+using Microsoft.EntityFrameworkCore.Internal;
+using MOE.Common.Business.Bins;
+using MOE.Common.Business.DataAggregation;
+using MOE.Common.Business.FilterExtensions;
+using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
 {
@@ -221,7 +224,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             {
                 var errorLog = ApplicationEventRepositoryFactory.Create();
                 errorLog.QuickAdd(Assembly.GetExecutingAssembly().GetName().ToString(),
-                    GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
                 throw new Exception("Unable to apply signal filter");
             }
         }
@@ -425,27 +428,33 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 {
                     case BinFactoryOptions.BinSize.FifteenMinute:
                         chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                            this.TimeOptions.Start.AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-15).ToOADate();
+                            this.TimeOptions.Start.AddHours(TimeOptions.TimeOfDayStartHour.Value)
+                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-15).ToOADate();
                         break;
                     case BinFactoryOptions.BinSize.ThirtyMinute:
                         chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                            this.TimeOptions.Start.AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-30).ToOADate();
+                            this.TimeOptions.Start.AddHours(TimeOptions.TimeOfDayStartHour.Value)
+                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-30).ToOADate();
                         break;
                     case BinFactoryOptions.BinSize.Hour:
                         chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                            this.TimeOptions.Start.AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-60).ToOADate();
+                            this.TimeOptions.Start.AddHours(TimeOptions.TimeOfDayStartHour.Value)
+                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMinutes(-60).ToOADate();
                         break;
                     case BinFactoryOptions.BinSize.Day:
                         chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                            this.TimeOptions.Start.AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddDays(-1).ToOADate();
+                            this.TimeOptions.Start.AddHours(TimeOptions.TimeOfDayStartHour.Value)
+                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddDays(-1).ToOADate();
                         break;
                     case BinFactoryOptions.BinSize.Month:
                         chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                            this.TimeOptions.Start.AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMonths(-1).ToOADate();
+                            this.TimeOptions.Start.AddHours(TimeOptions.TimeOfDayStartHour.Value)
+                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddMonths(-1).ToOADate();
                         break;
                     case BinFactoryOptions.BinSize.Year:
                         chart.ChartAreas.FirstOrDefault().AxisX.Minimum =
-                            this.TimeOptions.Start.AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddYears(-1).ToOADate();
+                            this.TimeOptions.Start.AddHours(TimeOptions.TimeOfDayStartHour.Value)
+                                .AddMinutes(TimeOptions.TimeOfDayStartMinute.Value).AddYears(-1).ToOADate();
                         break;
                 }
             }
@@ -468,7 +477,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var eventCountOptions = new SignalEventCountAggregationOptions(this);
             Series eventCountSeries = eventCountOptions.GetSignalsXAxisSignalSeries(signals, "Event Count");
-
+            
             chart.Series.Add(SetEventCountSeries(eventCountSeries));
         }
 
@@ -476,7 +485,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
         {
             var eventCountOptions = new SignalEventCountAggregationOptions(this);
             Series series = eventCountOptions.GetTimeXAxisRouteSeries(signals);
-
+            
             chart.Series.Add(SetEventCountSeries(series));
         }
 
@@ -558,8 +567,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 foreach (var approachToExclude in approachesToExclude)
                     signal.Approaches.Remove(approachToExclude);
                 foreach (var approach in signal.Approaches)
-                    foreach (var filterApproach in filterSignal.FilterApproaches.Where(f => !f.Exclude))
-                        RemoveDetectorsFromApproachByFilter(filterApproach, approach);
+                foreach (var filterApproach in filterSignal.FilterApproaches.Where(f => !f.Exclude))
+                    RemoveDetectorsFromApproachByFilter(filterApproach, approach);
             }
         }
 
@@ -644,7 +653,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
             SetEndTimeAndMinutes(out var endTime, out var minutes);
             SetDataPointsForTimeAggregationSeries(binsContainers, series, endTime, minutes);
         }
-
+        
 
         private void SetEndTimeAndMinutes(out DateTime endTime, out int minutes)
         {
@@ -662,10 +671,10 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     minutes = 60;
                     break;
                 case BinFactoryOptions.BinSize.Day:
-                    minutes = 60 * 24;
+                    minutes = 60*24;
                     break;
                 case BinFactoryOptions.BinSize.Month:
-                    minutes = 60 * 24 * 30;
+                    minutes = 60 * 24*30;
                     break;
                 case BinFactoryOptions.BinSize.Year:
                     minutes = 60 * 24 * 365;
@@ -681,89 +690,89 @@ namespace MOE.Common.Business.WCFServiceLibrary
             switch (TimeOptions.SelectedBinSize)
             {
                 case BinFactoryOptions.BinSize.Year:
+                {
+                    foreach (var binContainer in binsContainers)
                     {
-                        foreach (var binContainer in binsContainers)
+                        if (SelectedAggregationType == AggregationType.Sum)
                         {
-                            if (SelectedAggregationType == AggregationType.Sum)
-                            {
-                                series.Points.AddXY(binContainer.Start.Date, binContainer.SumValue);
-                            }
-                            else
-                            {
-                                series.Points.AddXY(binContainer.Start.Date, binContainer.AverageValue);
-                            }
+                            series.Points.AddXY(binContainer.Start.Date, binContainer.SumValue);
                         }
-                        break;
+                        else
+                        {
+                            series.Points.AddXY(binContainer.Start.Date, binContainer.AverageValue);
+                        }
                     }
+                    break;
+                }
                 case BinFactoryOptions.BinSize.Month:
+                {
+                    foreach(var binContainer in binsContainers)
                     {
-                        foreach (var binContainer in binsContainers)
+                        if (SelectedAggregationType == AggregationType.Sum)
                         {
-                            if (SelectedAggregationType == AggregationType.Sum)
-                            {
-                                series.Points.AddXY(binContainer.Start.Date, binContainer.SumValue);
-                            }
-                            else
-                            {
-                                series.Points.AddXY(binContainer.Start.Date, binContainer.AverageValue);
-                            }
+                            series.Points.AddXY(binContainer.Start.Date, binContainer.SumValue);
                         }
-                        break;
+                        else
+                        {
+                            series.Points.AddXY(binContainer.Start.Date, binContainer.AverageValue);
+                        }
                     }
+                    break;
+                }
                 case BinFactoryOptions.BinSize.Day:
+                {
+                    for (var startTime = new DateTime(TimeOptions.Start.Year, TimeOptions.Start.Month,
+                            TimeOptions.Start.Day,
+                            TimeOptions.TimeOfDayStartHour ?? 0, TimeOptions.TimeOfDayStartMinute ?? 0, 0);
+                        startTime.Date <= this.TimeOptions.End.Date;
+                        startTime = startTime.AddMinutes(minutes))
                     {
-                        for (var startTime = new DateTime(TimeOptions.Start.Year, TimeOptions.Start.Month,
-                                TimeOptions.Start.Day,
-                                TimeOptions.TimeOfDayStartHour ?? 0, TimeOptions.TimeOfDayStartMinute ?? 0, 0);
-                            startTime.Date <= this.TimeOptions.End.Date;
-                            startTime = startTime.AddMinutes(minutes))
+                        if (SelectedAggregationType == AggregationType.Sum)
                         {
-                            if (SelectedAggregationType == AggregationType.Sum)
-                            {
-                                var sumValue = binsContainers.FirstOrDefault().Bins.Where(b =>
-                                    b.Start.Date == startTime.Date).Sum(b => b.Sum);
-                                series.Points.AddXY(startTime.Date, sumValue);
-                            }
-                            else
-                            {
-                                double averageValue = 0;
-                                if (binsContainers.FirstOrDefault().Bins.Any(b =>
-                                    b.Start.Date == startTime.Date))
-                                    averageValue = binsContainers.FirstOrDefault().Bins.Where(b =>
-                                            b.Start.Date == startTime.Date)
-                                        .Average(b => b.Sum);
-                                series.Points.AddXY(startTime.Date, Convert.ToInt32(Math.Round(averageValue)));
-                            }
+                            var sumValue = binsContainers.FirstOrDefault().Bins.Where(b =>
+                                b.Start.Date == startTime.Date).Sum(b => b.Sum);
+                            series.Points.AddXY(startTime.Date, sumValue);
                         }
-                        break;
+                        else
+                        {
+                            double averageValue = 0;
+                            if (binsContainers.FirstOrDefault().Bins.Any(b =>
+                                b.Start.Date == startTime.Date))
+                                averageValue = binsContainers.FirstOrDefault().Bins.Where(b =>
+                                        b.Start.Date == startTime.Date)
+                                    .Average(b => b.Sum);
+                            series.Points.AddXY(startTime.Date, Convert.ToInt32(Math.Round(averageValue)));
+                        }
                     }
+                        break;
+                }
                 default:
+                {
+                    for (var startTime = new DateTime(TimeOptions.Start.Year, TimeOptions.Start.Month,
+                            TimeOptions.Start.Day,
+                            TimeOptions.TimeOfDayStartHour ?? 0, TimeOptions.TimeOfDayStartMinute ?? 0, 0);
+                        startTime < endTime;
+                        startTime = startTime.AddMinutes(minutes))
                     {
-                        for (var startTime = new DateTime(TimeOptions.Start.Year, TimeOptions.Start.Month,
-                                TimeOptions.Start.Day,
-                                TimeOptions.TimeOfDayStartHour ?? 0, TimeOptions.TimeOfDayStartMinute ?? 0, 0);
-                            startTime < endTime;
-                            startTime = startTime.AddMinutes(minutes))
+                        if (SelectedAggregationType == AggregationType.Sum)
                         {
-                            if (SelectedAggregationType == AggregationType.Sum)
-                            {
-                                var sumValue = binsContainers.FirstOrDefault().Bins.Where(b =>
-                                    b.Start.Hour == startTime.Hour && b.Start.Minute == startTime.Minute).Sum(b => b.Sum);
-                                series.Points.AddXY(startTime, sumValue);
-                            }
-                            else
-                            {
-                                double averageValue = 0;
-                                if (binsContainers.FirstOrDefault().Bins.Any(b =>
-                                    b.Start.Hour == startTime.Hour && b.Start.Minute == startTime.Minute))
-                                    averageValue = binsContainers.FirstOrDefault().Bins.Where(b =>
-                                            b.Start.Hour == startTime.Hour && b.Start.Minute == startTime.Minute)
-                                        .Average(b => b.Sum);
-                                series.Points.AddXY(startTime, Convert.ToInt32(Math.Round(averageValue)));
-                            }
+                            var sumValue = binsContainers.FirstOrDefault().Bins.Where(b =>
+                                b.Start.Hour == startTime.Hour && b.Start.Minute == startTime.Minute).Sum(b => b.Sum);
+                            series.Points.AddXY(startTime, sumValue);
                         }
-                        break;
+                        else
+                        {
+                            double averageValue = 0;
+                            if (binsContainers.FirstOrDefault().Bins.Any(b =>
+                                b.Start.Hour == startTime.Hour && b.Start.Minute == startTime.Minute))
+                                averageValue = binsContainers.FirstOrDefault().Bins.Where(b =>
+                                        b.Start.Hour == startTime.Hour && b.Start.Minute == startTime.Minute)
+                                    .Average(b => b.Sum);
+                            series.Points.AddXY(startTime, Convert.ToInt32(Math.Round(averageValue)));
+                        }
                     }
+                    break;
+                }
             }
         }
 

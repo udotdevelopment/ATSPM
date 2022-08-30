@@ -79,7 +79,7 @@ namespace MOE.Common.Business.Preempt
             //chart.Series["Posts"].Points.AddXY(Options.EndDate, 0);
 
             AddDataToChart(PreemptServiceRequestChart, Options.StartDate, Options.EndDate, dttb, Options.SignalID);
-            var plans = PlanFactory.GetBasicPlans(Options.StartDate, Options.EndDate, Options.SignalID, null);
+            var plans = PlanFactory.GetBasicPlans(Options.StartDate, Options.EndDate, Options.SignalID);
             SetSimplePlanStrips(plans, PreemptServiceRequestChart, Options.StartDate, dttb);
         }
 

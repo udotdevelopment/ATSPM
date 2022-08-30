@@ -6,7 +6,7 @@ using MOE.Common.Models.Repositories;
 
 namespace MOE.CommonTests.Models
 {
-    public partial class InMemoryApproachCycleAggregationRepository: IPhaseCycleAggregationRepository
+    public partial class InMemoryApproachCycleAggregationRepository: IApproachCycleAggregationRepository
     {
         private InMemoryMOEDatabase _db;
 
@@ -26,43 +26,26 @@ namespace MOE.CommonTests.Models
             throw new NotImplementedException();
         }
 
-        public PhaseCycleAggregation Add(PhaseCycleAggregation priorityAggregation)
+        public ApproachCycleAggregation Add(ApproachCycleAggregation priorityAggregation)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(PhaseCycleAggregation priorityAggregation)
+        public void Update(ApproachCycleAggregation priorityAggregation)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(PhaseCycleAggregation priorityAggregation)
+        public void Remove(ApproachCycleAggregation priorityAggregation)
         {
             throw new NotImplementedException();
         }
 
-        public List<PhaseCycleAggregation> GetApproachCyclesAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate, int phaseNumber)
+        public List<ApproachCycleAggregation> GetApproachCyclesAggregationByApproachIdAndDateRange(int approachId, DateTime startDate, DateTime endDate, bool getProtectedPhase)
         {
             return _db.ApproachCycleAggregations.Where(r => r.ApproachId == approachId
                                                                 && r.BinStartTime >= startDate &&
-                                                                r.BinStartTime < endDate && r.PhaseNumber == phaseNumber).ToList();
-        }
-
-        public List<PhaseCycleAggregation> GetApproachCyclesAggregationByApproachIdAndDateRange(int approachId, DateTime start, DateTime end)
-        {
-            return _db.ApproachCycleAggregations.Where(r => r.ApproachId == approachId
-                                                                && r.BinStartTime >= start &&
-                                                                r.BinStartTime < end).ToList();
-        }
-
-        public double GetAverageRedToRedCyclesBySignalIdPhase(string signalId, int phaseNumber, DateTime start, DateTime end)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<PhaseCycleAggregation> GetApproachCyclesAggregationBySignalIdPhaseAndDateRange(string signalId, int phase, DateTime start, DateTime end)
-        {
-            throw new NotImplementedException();
+                                                                r.BinStartTime < endDate && r.IsProtectedPhase == getProtectedPhase).ToList();
         }
     }
 }
