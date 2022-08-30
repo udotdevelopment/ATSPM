@@ -490,6 +490,11 @@ namespace MOE.CommonTests.Models
             }
         }
 
+        public List<Controller_Event_Log> GetEventsBetweenDates(DateTime startTime, DateTime endTime)
+        {
+            throw new NotImplementedException();
+        }
+
         public int GetSignalEventsCountBetweenDates(string signalId, DateTime startTime, DateTime endTime)
         {
             throw new NotImplementedException();
