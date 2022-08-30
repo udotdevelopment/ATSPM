@@ -53,16 +53,29 @@ namespace MOE.Common.Models.ViewModel.Chart
                 SignalsRepositoryFactory.Create();
             //MOE.Common.Models.Repositories.SignalsRepositoryTest repository = 
             //    new MOE.Common.Models.Repositories.SignalsRepositoryTest();
-            var queryable = repository.GetAllEnabledSignals().AsQueryable();
+            var queryable = repository.GetLatestVersionOfAllSignalsAsQueryable();
             if (SelectedFilterID != null)
-                if (SelectedFilterID == 1)
-                    queryable = queryable.Where(q => q.SignalID.Contains(FilterCriteria)).Select(q => q);
-                else if (SelectedFilterID == 2)
-                    queryable = queryable.Where(q => q.PrimaryName.ToUpper().Contains(FilterCriteria.ToUpper()))
-                        .Select(q => q);
-                else if (SelectedFilterID == 3)
-                    queryable = queryable.Where(q => q.SecondaryName.ToUpper().Contains(FilterCriteria.ToUpper()))
-                        .Select(q => q);
+                switch (SelectedFilterID)
+                {
+                    case 1:
+                        queryable = queryable.Where(q => q.SignalID.Contains(FilterCriteria)).Select(q => q);
+                        break;
+                    case 2:
+                        queryable = queryable.Where(q => q.PrimaryName.ToUpper().Contains(FilterCriteria.ToUpper()))
+                            .Select(q => q);
+                        break;
+                    case 3:
+                        queryable = queryable.Where(q => q.SecondaryName.ToUpper().Contains(FilterCriteria.ToUpper()))
+                            .Select(q => q);
+                        break;
+                    case 4:
+                        queryable = queryable.Where(q => q.Jurisdiction.JurisdictionName.ToUpper().Contains(FilterCriteria.ToUpper()))
+                            .Select(q => q);
+                        break;
+                    default:
+                        queryable = queryable.Select(q => q);
+                        break;
+                }
             Signals = queryable.ToPagedList(Page, 5, OrderField, OrderDirection);
         }
 

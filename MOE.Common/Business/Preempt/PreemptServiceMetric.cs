@@ -59,7 +59,7 @@ namespace MOE.Common.Business.Preempt
             ServiceChart.Series.Add(PreemptSeries);
             ServiceChart.Height = 200;
             AddDataToChart(ServiceChart, Options.StartDate, Options.EndDate, DTTB, Options.SignalID);
-            var plans = PlanFactory.GetBasicPlans(Options.StartDate, Options.EndDate, Options.SignalID);
+            var plans = PlanFactory.GetBasicPlans(Options.StartDate, Options.EndDate, Options.SignalID,null);
             SetSimplePlanStrips(plans, ServiceChart, Options.StartDate, DTTB);
         }
 

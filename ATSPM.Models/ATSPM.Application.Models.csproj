@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Old\Accordian.cs" />
+    <Compile Remove="Old\Action.cs" />
+    <Compile Remove="Old\ActionLog.cs" />
+    <Compile Remove="Old\Agency.cs" />
+    <Compile Remove="Old\Aggregation.cs" />
+    <Compile Remove="Old\Application.cs" />
+    <Compile Remove="Old\ApplicationSettings.cs" />
+    <Compile Remove="Old\Approach.cs" />
+    <Compile Remove="Old\ApproachPcdAggregation.cs" />
+    <Compile Remove="Old\ApproachSpeedAggregation.cs" />
+    <Compile Remove="Old\ApproachSplitFailAggregation.cs" />
+    <Compile Remove="Old\ApproachYellowRedActivationsAggregation.cs" />
+    <Compile Remove="Old\Comment.cs" />
+    <Compile Remove="Old\ControllerType.cs" />
+    <Compile Remove="Old\Controller_Event_Log.cs" />
+    <Compile Remove="Old\DatabaseArchiveExcludedSignal.cs" />
+    <Compile Remove="Old\DatabaseArchiveSettings.cs" />
+    <Compile Remove="Old\DetectionHardware.cs" />
+    <Compile Remove="Old\DetectionType.cs" />
+    <Compile Remove="Old\DetectionTypeGraph_Detectors.cs" />
+    <Compile Remove="Old\Detector.cs" />
+    <Compile Remove="Old\DetectorComment.cs" />
+    <Compile Remove="Old\DetectorEventCountAggregation.cs" />
+    <Compile Remove="Old\DetectorMetrics.cs" />
+    <Compile Remove="Old\DirectionType.cs" />
+    <Compile Remove="Old\ExternalLink.cs" />
+    <Compile Remove="Old\FAQ.cs" />
+    <Compile Remove="Old\GeneralSettings.cs" />
+    <Compile Remove="Old\LaneType.cs" />
+    <Compile Remove="Old\Menu.cs" />
+    <Compile Remove="Old\MetricComment.cs" />
+    <Compile Remove="Old\MetricsFilterType.cs" />
+    <Compile Remove="Old\MetricType.cs" />
+    <Compile Remove="Old\MovementType.cs" />
+    <Compile Remove="Old\PhaseCycleAggregation.cs" />
+    <Compile Remove="Old\PhaseLeftTurnGapAggregation.cs" />
+    <Compile Remove="Old\PhasePedAggregation.cs" />
+    <Compile Remove="Old\PhaseSplitMonitorAggregation.cs" />
+    <Compile Remove="Old\PhaseTerminationAggregation.cs" />
+    <Compile Remove="Old\PreemptionAggregation.cs" />
+    <Compile Remove="Old\PriorityAggregation.cs" />
+    <Compile Remove="Old\Region.cs" />
+    <Compile Remove="Old\Route.cs" />
+    <Compile Remove="Old\RoutePhaseDirection.cs" />
+    <Compile Remove="Old\RouteSignal.cs" />
+    <Compile Remove="Old\Signal.cs" />
+    <Compile Remove="Old\SignalEventCountAggregation.cs" />
+    <Compile Remove="Old\SignalPlanAggregation.cs" />
+    <Compile Remove="Old\SignalToAggregate.cs" />
+    <Compile Remove="Old\Speed_Events.cs" />
+    <Compile Remove="Old\SPMWatchDogErrorEvent.cs" />
+    <Compile Remove="Old\StatusOfProcessedTable.cs" />
+    <Compile Remove="Old\TablePartitionProcessed.cs" />
+    <Compile Remove="Old\ToBeProcessedTable.cs" />
+    <Compile Remove="Old\ToBeProcessedTableIndex.cs" />
+    <Compile Remove="Old\VersionAction.cs" />
+    <Compile Remove="Old\WatchDogApplicationSettings.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+  </ItemGroup>
+
+</Project>
