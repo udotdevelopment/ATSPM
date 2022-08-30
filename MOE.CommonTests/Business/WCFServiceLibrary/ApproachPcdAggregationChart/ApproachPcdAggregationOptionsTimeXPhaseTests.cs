@@ -31,7 +31,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachPcdAggregation
         }
         ApproachPcdAggregationRepositoryFactory.SetApplicationEventRepository(
             new InMemoryApproachPcdAggregationRepository(Db));
-        ApproachEventCountAggregationRepositoryFactory.SetRepository(new InMemoryApproachEventCountAggregationRepository(Db));
+        
     }
 
  
@@ -40,7 +40,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachPcdAggregation
     {
         Db.PopulateApproachPcdAggregations(Convert.ToDateTime("1/1/2016"),
             Convert.ToDateTime("1/1/2018"), approach.ApproachID);
-        Db.PopulateApproachEventCountwithRandomValues(Convert.ToDateTime("1/1/2016"), Convert.ToDateTime("1/1/2018"), approach);
+       
     }
 
     [TestMethod]

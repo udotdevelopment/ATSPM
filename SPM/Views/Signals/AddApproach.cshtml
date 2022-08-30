@@ -16,51 +16,78 @@
             @Html.HiddenFor(model => model.SignalID, htmlAttributes: new { Name = Model.Index + "SignalID" })
             @Html.HiddenFor(model => model.VersionID, htmlAttributes: new { Name = Model.Index + "VersionID" })
             @Html.HiddenFor(model => model.Index, new { @id = "Index" + Model.ApproachID })
-            @Html.HiddenFor(model => model.MPH, new { @class = "mph_" + @Model.ApproachID, Name = Model.Index + "MPH" })
             <div class="row">
-            <div class="form-group-configuration-tool  form-group col-md-2">
-                @Html.LabelFor(model => model.DirectionTypeID, "Direction", htmlAttributes: new { @class = "control-label" })
-                <div class="">
-                    @Html.DropDownListFor(model => model.DirectionTypeID, (SelectList)ViewBag.DirectionType, htmlAttributes: new { Name = Model.Index + "DirectionTypeID", @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.DirectionTypeID, "", new { id = "DirectionTypeID-error", @class = "text-danger" })
+                <div class="form-group-configuration-tool  form-group col-md-2">
+                    @Html.LabelFor(model => model.DirectionTypeID, "Direction", htmlAttributes: new { @class = "control-label" })
+                    <div class="">
+                        @Html.DropDownListFor(model => model.DirectionTypeID, (SelectList)ViewBag.DirectionType, htmlAttributes: new { Name = Model.Index + "DirectionTypeID", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DirectionTypeID, "", new { id = "DirectionTypeID-error", @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group-configuration-tool  form-group col-md-2">
-                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
-                <div class="">
-                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { Name = Model.Index + "Description", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Description, "", new { id = "Description-error", @class = "text-danger" })
+                <div class="form-group-configuration-tool  form-group col-md-2">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+                    <div class="">
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { Name = Model.Index + "Description", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { id = "Description-error", @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group-configuration-tool  form-group col-md-2">
-                @Html.LabelFor(model => model.ProtectedPhaseNumber, htmlAttributes: new { @class = "control-label" })
-                <div class="input-group">
-                    @Html.EditorFor(model => model.ProtectedPhaseNumber, new { htmlAttributes = new { Name = Model.Index + "ProtectedPhaseNumber", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.ProtectedPhaseNumber, "", new { id = "ProtectedPhaseNumber-error", @class = "text-danger" })
+                <div class="form-group-configuration-tool  form-group col-md-2">
+                    @Html.LabelFor(model => model.ProtectedPhaseNumber, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.ProtectedPhaseNumber, new { htmlAttributes = new { Name = Model.Index + "ProtectedPhaseNumber", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ProtectedPhaseNumber, "", new { id = "ProtectedPhaseNumber-error", @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
-            <br />
-            <div class="form-group-configuration-tool  form-group col-md-2">
-                @Html.LabelFor(model => model.PermissivePhaseNumber, htmlAttributes: new { @class = "control-label" })
-                <div class="input-group">
-                    @Html.EditorFor(model => model.PermissivePhaseNumber, new { htmlAttributes = new { Name = Model.Index + "PermissivePhaseNumber", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PermissivePhaseNumber, "", new { id = "PermissivePhaseNumber-error", @class = "text-danger" })
+                <div class="form-group-configuration-tool  form-group col-md-2">
+                    @Html.LabelFor(model => model.PedestrianPhaseNumber, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.PedestrianPhaseNumber, new { htmlAttributes = new { Name = Model.Index + "PedestrianPhaseNumber", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PedestrianPhaseNumber, "", new { id = "PedestrianPhaseNumber-error", @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
-            <div class="form-group-configuration-tool  text-center form-group col-md-2">
-                @Html.LabelFor(model => model.IsProtectedPhaseOverlap, htmlAttributes: new { @class = "control-label" })
-                <div style="text-align:center;">
-                    @Html.EditorFor(model => model.IsProtectedPhaseOverlap, new { htmlAttributes = new { Name = Model.Index + "IsProtectedPhaseOverlap", @class = "form -control" } })
-                    @Html.ValidationMessageFor(model => model.IsProtectedPhaseOverlap, "", new { id = "IsProtectedPhaseOverlap-error", @class = "text-danger" })
+                <br />
+                <div class="form-group-configuration-tool  form-group col-md-2">
+                    @Html.LabelFor(model => model.PermissivePhaseNumber, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.PermissivePhaseNumber, new { htmlAttributes = new { Name = Model.Index + "PermissivePhaseNumber", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PermissivePhaseNumber, "", new { id = "PermissivePhaseNumber-error", @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
+                <div class="form-group-configuration-tool  text-center form-group col-md-2">
+                    @Html.LabelFor(model => model.IsProtectedPhaseOverlap, htmlAttributes: new { @class = "control-label" })
+                    <div style="text-align:center;">
+                        @Html.EditorFor(model => model.IsProtectedPhaseOverlap, new { htmlAttributes = new { Name = Model.Index + "IsProtectedPhaseOverlap", @class = "form -control" } })
+                        @Html.ValidationMessageFor(model => model.IsProtectedPhaseOverlap, "", new { id = "IsProtectedPhaseOverlap-error", @class = "text-danger" })
+                    </div>
+                </div>
                 <div class="form-group-configuration-tool  text-center form-group col-md-2">
                     @Html.LabelFor(model => model.IsPermissivePhaseOverlap, htmlAttributes: new { @class = "control-label" })
                     <div style="text-align:center;">
                         @Html.EditorFor(model => model.IsPermissivePhaseOverlap, new { htmlAttributes = new { Name = Model.Index + "IsPermissivePhaseOverlap", @class = "form -control" } })
                         @Html.ValidationMessageFor(model => model.IsPermissivePhaseOverlap, "", new { id = "IsPermissivePhaseOverlap-error", @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group-configuration-tool  text-center form-group col-md-2">
+                    @Html.LabelFor(model => model.IsPedestrianPhaseOverlap, htmlAttributes: new { @class = "control-label" })
+                    <div style="text-align:center;">
+                        @Html.EditorFor(model => model.IsPedestrianPhaseOverlap, new { htmlAttributes = new { Name = Model.Index + "IsPedestrianPhaseOverlap", @class = "form -control" } })
+                        @Html.ValidationMessageFor(model => model.IsPedestrianPhaseOverlap, "", new { id = "IsPedestrianPhaseOverlap-error", @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group-configuration-tool  form-group col-md-2">
+                    @Html.LabelFor(model => model.PedestrianDetectors, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.PedestrianDetectors, new { htmlAttributes = new { Name = Model.Index + "PedestrianDetectors", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PedestrianDetectors, "", new { id = "PedestrianDetectors-error", @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group-configuration-tool  form-group col-md-2">
+                    @Html.LabelFor(model => model.MPH, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.MPH, new { htmlAttributes = new { Name = Model.Index + "Approach Speed MPH", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MPH, "", new { id = "MPH-error", @class = "text-danger" })
                     </div>
                 </div>
             </div>

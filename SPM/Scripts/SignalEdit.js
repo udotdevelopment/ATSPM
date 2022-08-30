@@ -294,6 +294,9 @@ function PostCreateDetectorComment(ID) {
 
 function CreateNewSignal() {
     var newSignalID = prompt("Please enter the new SignalID", "123456");
+
+    if (newSignalID == null) return;
+
     $.ajax({
         type: "POST",
         cache: false,
@@ -629,6 +632,62 @@ function ShowHideControl(obj, checked) {
     else {
         if (!$(obj).hasClass("invisible")) {
             $(obj).addClass("invisible");
+        }
+    }
+}
+
+function UpdatePedsare1to1() {
+    var pedchecked = document.getElementById('Pedsare1to1-value');
+    var pedphases = document.getElementsByClassName('ped-phase-value');
+    var protphases = document.getElementsByClassName('protected-phase-value');
+    var peddetectors = document.getElementsByClassName('ped-detectors-string');
+    var pedoverlap = document.getElementsByClassName('ped-overlap-checkbox');
+    //if All Peds are 1:1 is checked, then disable ped fields and set ped phase equal to protected phase
+    if (pedchecked.checked) {
+        for (var i = 0; i < pedphases.length; i++) {
+            pedphases[i].setAttribute("readonly", "readonly");
+            pedphases[i].value = protphases[i].value;
+            peddetectors[i].setAttribute("readonly", "readonly");
+            peddetectors[i].value = protphases[i].value;
+            //pedoverlap[i].setAttribute("readonly", "readonly");
+            pedoverlap[i].checked = false;
+            //pedoverlap[i].addClass("greycheckbox");
+        }
+    }
+    //if All Peds are 1:1 is not checked, then enable editing for ped fields and make them blank
+    else {
+        for (var i = 0; i < pedphases.length; i++) {
+            pedphases[i].removeAttribute("readonly");
+            pedphases[i].value = "";
+            peddetectors[i].removeAttribute("readonly");
+            peddetectors[i].value = "";
+            //pedoverlap[i].removeAttribute("readonly");
+            pedoverlap[i].checked = false;
+        }
+    }
+}
+
+function onProtectedPhaseNumberInput() {
+    var pedchecked = document.getElementById('Pedsare1to1-value');
+    var pedphases = document.getElementsByClassName('ped-phase-value');
+    var protphases = document.getElementsByClassName('protected-phase-value');
+    var peddetectors = document.getElementsByClassName('ped-detectors-string');
+
+    if (pedchecked.checked) {
+        for (let i = 0; i < pedphases.length; i++) {
+            pedphases[i].value = protphases[i].value
+            peddetectors[i].value = protphases[i].value
+        }
+    }
+}
+
+function CheckboxReadOnly() {
+    var pedchecked = document.getElementById('Pedsare1to1-value');
+    var pedoverlap = document.getElementsByClassName('ped-overlap-checkbox');
+    if (pedchecked.checked) {
+       // return false;
+        for (var i = 0; i < pedoverlap.length; i++) {
+            pedoverlap[i].checked = false;
         }
     }
 }

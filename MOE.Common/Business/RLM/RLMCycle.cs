@@ -150,7 +150,7 @@ namespace MOE.Common.Business
                 {
                     yellowOccurrences = 0;
                     foreach (var d in DetectorCollection)
-                        if (d.TimeStamp < RedClearanceEvent)
+                        if (d.TimeStamp <= RedClearanceEvent)
                         {
                             yellowOccurrences++;
                             totalYellowTime += (d.TimeStamp - RedClearanceEvent).TotalSeconds;

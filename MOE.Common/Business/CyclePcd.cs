@@ -21,7 +21,7 @@ namespace MOE.Common.Business
         public double TotalArrivalOnYellow => DetectorEvents.Count(d => d.ArrivalType == ArrivalType.ArrivalOnYellow);
         public double TotalArrivalOnRed => DetectorEvents.Count(d => d.ArrivalType == ArrivalType.ArrivalOnRed);
         public double TotalDelay => DetectorEvents.Sum(d => d.Delay);
-        public double TotalVolume => DetectorEvents.Count(d => d.TimeStamp >= StartTime && d.TimeStamp <= EndTime);
+        public double TotalVolume => DetectorEvents.Count(d => d.TimeStamp >= StartTime && d.TimeStamp < EndTime);
 
         public void AddDetectorData(DetectorDataPoint ddp)
         {

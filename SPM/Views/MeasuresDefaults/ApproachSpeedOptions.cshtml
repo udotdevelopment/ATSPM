@@ -1,0 +1,85 @@
+﻿@model SPM.Models.MeasuresDefaultsViewModel
+
+<div id="approach-speed-options" role="tablist" aria-multiselectable="true" class="card mr-4 ml-4">
+    <div class="card-header" role="tab">
+        <a onclick="rotate(this)" data-toggle="collapse" data-parent="#approach-speed-options" href="#approach-speed-options-collapse" aria-expanded="false" aria-controls="approach-speed-options-collapse">
+            <i class="fa fa-chevron-right mr-3" aria-hidden="true"></i>  Approach Speed
+        </a>
+    </div>
+    <div id="approach-speed-options-collapse" class="collapse" role="tabpanel">
+        <div class="card-body">
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachSpeed.YAxisMin, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachSpeed.YAxisMin, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ApproachSpeed.YAxisMin, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachSpeed.YAxisMax, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachSpeed.YAxisMax, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ApproachSpeed.YAxisMax, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachSpeed.SelectedBinSize, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.DropDownListFor(model => model.ApproachSpeed.SelectedBinSize, (SelectList)ViewBag.BinSize, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ApproachSpeed.SelectedBinSize, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachSpeed.ShowPlanStatistics, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachSpeed.ShowPlanStatistics)
+                    @Html.ValidationMessageFor(model => model.ApproachSpeed.ShowPlanStatistics, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachSpeed.ShowAverageSpeed, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachSpeed.ShowAverageSpeed)
+                    @Html.ValidationMessageFor(model => model.ApproachSpeed.ShowAverageSpeed, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachSpeed.ShowPostedSpeed, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachSpeed.ShowPostedSpeed)
+                    @Html.ValidationMessageFor(model => model.ApproachSpeed.ShowPostedSpeed, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachSpeed.Show85Percentile, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachSpeed.Show85Percentile)
+                    @Html.ValidationMessageFor(model => model.ApproachSpeed.Show85Percentile, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachSpeed.Show15Percentile, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachSpeed.Show15Percentile)
+                    @Html.ValidationMessageFor(model => model.ApproachSpeed.Show15Percentile, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

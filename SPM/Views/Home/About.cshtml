@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewBag.Title = "Home Page";
 }
 <div class="container">
@@ -25,37 +25,51 @@
         </div>
         <div class="col-md-4">
             <h2>What's New</h2>
-            <p>Version 4.2.4 (January 2021)</p>
+            <p>Version 4.3 (May 2022)</p>
             <p>Changes:</p>
             <ul>
-                <li>Build fixes for MOE.Common and AsyncGetMaxTimeRecords. *Note: Test products have to be unloaded for solution to build</li>
-                <Li>Remove SpmApi project - seems to have been replaced by AtspmApi project but was still referenced in sln file.</Li>
-                <li>Change Left Turn Gap Analysis Options display to use cards instead of panels to support bootstrap update.</li>
-                <li>Change seed method and get metric type by signal to only include Left Turn Gap Analysis report for signals with detection types 4 or 6. </li>
-                <li>Update to Left Turn Gap Analysis calculations. Report had been using rolling 15-minute windows regardless of the bin size the user specified - this update changes the rolling window to match the user's bin size.</li>
-                <li>New installer provided by Georgia Department of Transportation. This will be located in the Installer folder in the download.</li>
-                <li>Installations/Updates will only update core menu items reducing duplication and changes to customization of menus.</li>
-                <li>Re-order of metric type in the metric selection.</li>
+                <li>
+                    <b>Wait Time Measure</b>
+                    <p>New measure calculating the average wait time for vehicles by approach and movement.</p>
+                </li>
+                <li>
+                    <b>Left Turn Gap Report</b>
+                    <p>Left turn phasing analysis based on existing gaps, volumes, and critical gap.</p>
+                </li>
+                <li>
+                    <b>Options and Thresholds</b>
+                    <p>New admin page with the ability to modify default options and thresholds for all measures.</p>
+                </li>
+                <li>
+                    <b>Additional Improvements</b>
+                    <p>- Signals are able to be filtered by Jurisdiction (ownership) and Area (customizable groups)</p>
+                    <p>- Added additional information for pedestrian phases in the Signal Configurations page; updates also reflected in the Timing and Actuation measure</p>
+                    <p>- Added option to exclude permissive phases from the Timing an Actuation measure charts</p>
+                    <p>- Clarified chart text on Left Turn Gap Analysis measure</p>
+                    <p>- Additional bug fixes and changes</p>
+                </li>
             </ul>
         </div>
         <div class="col-md-4">
             <h2>What's Next</h2>
-            <p>Version 4.2.5 (Anticipated Release Spring 2021)</p>
+            <p>Version 5.0 (Anticipated Release: 2023)</p>
             <ul>
-                <li>All pull requests from other entities</li>
-                <li>Fix Minor Bugs</li>
-                <li>GDOT Enhancements including</li>
-                <ul>
-                    <li>New metric "Wait Time".</li>
-                    <li>Old to New MVID migration and updates.</li>
-                    <li>Some SIGOPS (previously MARK1) integration.</li>
-                    </ul>
-            </ul>
-            <p>Version 4.2.6 (Anticipated Summer/Fall 2021)</p>
-            <ul>
-                <li>SIGOPS Dashboard & Reports integration into ATSPM.</li>
-                <li>Adding an Area & Jurisdiction category to ATSPM Configuration.</li>
-                <li>Adding a new ATSPM Report titled, "Left Turn Gap Analyzer</li>
+                <li>
+                    <b>Backend</b>
+                    <p>-Migrate to .NET 6.0</p>
+                    <p>-Migrate to Entity Framework Core 6.0</p>
+                    <p>-Improved API</p>
+                </li>
+                <li>
+                    <b>New Measures</b>
+                    <p>-Green-Time Distribution</p> 
+                    <p>-Time-Space Diagram</p>
+                </li>
+                <li>
+                    <b>Additional Features</b>
+                    <p>-Options to download data in raw or 15-minute aggregated forms</p>
+                    <p>-Improved data compression</p>
+                </li>
             </ul>
         </div>
     </div>

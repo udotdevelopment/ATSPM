@@ -1,0 +1,94 @@
+﻿@model SPM.Models.MeasuresDefaultsViewModel
+
+<div id="approach-volume-options" role="tablist" aria-multiselectable="true" class="card mr-4 ml-4">
+    <div class="card-header" role="tab">
+        <a onclick="rotate(this)" data-toggle="collapse" data-parent="#approach-volume-options" href="#approach-volume-options-collapse" aria-expanded="false" aria-controls="approach-volume-options-collapse">
+            <i class="fa fa-chevron-right mr-3" aria-hidden="true"></i> Approach Volume
+        </a>
+    </div>
+    <div id="approach-volume-options-collapse" class="collapse" role="tabpanel">
+        <div class="card-body">
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachVolume.YAxisMin, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachVolume.YAxisMin, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ApproachVolume.YAxisMin, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachVolume.YAxisMax, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachVolume.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
+                    @Html.ValidationMessageFor(model => model.ApproachVolume.YAxisMax, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachVolume.SelectedBinSize, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.DropDownListFor(model => model.ApproachVolume.SelectedBinSize, (SelectList)ViewBag.BinSize, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ApproachVolume.SelectedBinSize, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachVolume.ShowDirectionalSplits, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachVolume.ShowDirectionalSplits)
+                    @Html.ValidationMessageFor(model => model.ApproachVolume.ShowDirectionalSplits, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachVolume.ShowTotalVolume, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachVolume.ShowTotalVolume)
+                    @Html.ValidationMessageFor(model => model.ApproachVolume.ShowTotalVolume, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachVolume.ShowSbWbVolume, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachVolume.ShowSbWbVolume)
+                    @Html.ValidationMessageFor(model => model.ApproachVolume.ShowSbWbVolume, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachVolume.ShowNbEbVolume, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachVolume.ShowNbEbVolume)
+                    @Html.ValidationMessageFor(model => model.ApproachVolume.ShowNbEbVolume, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachVolume.ShowTMCDetection, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachVolume.ShowTMCDetection)
+                    @Html.ValidationMessageFor(model => model.ApproachVolume.ShowTMCDetection, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.ApproachVolume.ShowAdvanceDetection, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.ApproachVolume.ShowAdvanceDetection)
+                    @Html.ValidationMessageFor(model => model.ApproachVolume.ShowAdvanceDetection, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ using System.Configuration;
 using System.Security;
 using MOE.Common.Business;
 using MOE.Common.Data;
+using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 
 namespace FTPfromAllControllers
@@ -36,11 +38,15 @@ namespace FTPfromAllControllers
                     Convert.ToInt32(ConfigurationManager.AppSettings["waitBetweenFileDownloadMilliseconds"]),
                     Convert.ToInt32(ConfigurationManager.AppSettings["MaximumNumberOfFilesTransferAtOneTime"])
                 );
+
+                SPM db = new MOE.Common.Models.SPM();
+                ISignalsRepository signalsRepository = SignalsRepositoryFactory.Create(db);
+                List<Signal> signals = signalsRepository.GetLatestVersionOfAllSignalsForFtp().Where(s=> s.SignalID == "8638").ToList();
+
+
                 int maxThreads = Convert.ToInt32(ConfigurationManager.AppSettings["MaxThreads"]);
                 int minutesToWait = Convert.ToInt32(ConfigurationManager.AppSettings["MinutesToWait"]);
-                MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
-                ISignalsRepository signalsRepository = SignalsRepositoryFactory.Create(db);
-                var signals = signalsRepository.GetLatestVersionOfAllSignalsForFtp();
+                
                     //.Where(s =>s.SignalID =="7060");
                     // EOS Signal at Bangerter and 3500 South
                 var options = new ParallelOptions { MaxDegreeOfParallelism = maxThreads };

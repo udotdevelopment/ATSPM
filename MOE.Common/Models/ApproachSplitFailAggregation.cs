@@ -9,11 +9,6 @@ namespace MOE.Common.Models
     public class ApproachSplitFailAggregation : Aggregation
     {
         [Key]
-        [Column(Order = 5)]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        [Key]
         [Required]
         [Column(Order = 0)]
         public override DateTime BinStartTime { get; set; }
@@ -21,11 +16,18 @@ namespace MOE.Common.Models
         [Key]
         [Required]
         [Column(Order = 1)]
-        public int ApproachId { get; set; }
+        [StringLength(10)]
+        public string SignalId { get; set; }
 
-        
-        [Column(Order= 2)]
-        public virtual Approach Approach { get; set; }
+        [Key]
+        [Required]
+        [Column(Order = 10)]
+        public int PhaseNumber { get; set; }
+
+        [Key]
+        [Required]
+        [Column(Order = 2)]
+        public int ApproachId { get; set; }
 
         [Required]
         [Column(Order = 3)]
@@ -36,16 +38,40 @@ namespace MOE.Common.Models
         [Column(Order = 4)]
         public bool IsProtectedPhase { get; set; }
 
+        [Required]
+        [Column(Order = 5)]
+        public int GreenOccupancySum { get; set; }
+
+        [Required]
+        [Column(Order = 6)]
+        public int RedOccupancySum { get; set; }
+
+        [Required]
+        [Column(Order = 7)]
+        public int GreenTimeSum { get; set; }
+
+        [Required]
+        [Column(Order = 8)]
+        public int RedTimeSum { get; set; }
+
+        [Required]
+        [Column(Order = 9)]
+        public int Cycles { get; set; }
+
         public sealed class ApproachSplitFailAggregationClassMap : ClassMap<ApproachSplitFailAggregation>
         {
             public ApproachSplitFailAggregationClassMap()
             {
-                Map(m => m.Approach).Ignore();
-                Map(m => m.Id).Name("Record Number");
                 Map(m => m.BinStartTime).Name("Bin Start Time");
+                Map(m => m.SignalId).Name("Signal ID");
                 Map(m => m.ApproachId).Name("Approach ID");
                 Map(m => m.SplitFailures).Name("Split Failures");
                 Map(m => m.IsProtectedPhase).Name("Is Protected Phase");
+                Map(m => m.GreenOccupancySum).Name("Green Occupancy Sum");
+                Map(m => m.RedOccupancySum).Name("Red Occupancy Sum");
+                Map(m => m.GreenTimeSum).Name("Green Detection Sum");
+                Map(m => m.RedTimeSum).Name("Red Detection Sum");
+                Map(m => m.Cycles).Name("Cycles");
             }
         }
     }
