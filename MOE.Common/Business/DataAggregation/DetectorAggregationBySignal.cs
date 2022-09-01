@@ -50,15 +50,15 @@ namespace MOE.Common.Business.DataAggregation
         protected override void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal)
         {
             for (var i = 0; i < BinsContainers.Count; i++)
-            for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
-            {
-                var bin = BinsContainers[i].Bins[binIndex];
-                foreach (var approachSplitFailAggregationContainer in ApproachDetectorVolumes)
+                for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
                 {
-                    bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                    var bin = BinsContainers[i].Bins[binIndex];
+                    foreach (var detectorEventAggregationContainer in ApproachDetectorVolumes)
+                    {
+                        bin.Sum += detectorEventAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                    }
+                    bin.Average = ApproachDetectorVolumes.Count > 0 ? bin.Sum / ApproachDetectorVolumes.Count : 0;
                 }
-                bin.Average = ApproachDetectorVolumes.Count > 0 ? bin.Sum / ApproachDetectorVolumes.Count : 0;
-            }
         }
 
         protected override void LoadBins(ApproachAggregationMetricOptions options, Models.Signal signal)
@@ -67,9 +67,12 @@ namespace MOE.Common.Business.DataAggregation
             for (var binIndex = 0; binIndex < BinsContainers[i].Bins.Count; binIndex++)
             {
                 var bin = BinsContainers[i].Bins[binIndex];
-                foreach (var approachSplitFailAggregationContainer in ApproachDetectorVolumes)
+                foreach (var detectorAggregationContainer in ApproachDetectorVolumes)
                 {
-                    bin.Sum += approachSplitFailAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                        if (detectorAggregationContainer.BinsContainers.Count > 0)
+                        {
+                            bin.Sum += detectorAggregationContainer.BinsContainers[i].Bins[binIndex].Sum;
+                        }
                 }
                 bin.Average = ApproachDetectorVolumes.Count > 0 ? bin.Sum / ApproachDetectorVolumes.Count : 0;
             }

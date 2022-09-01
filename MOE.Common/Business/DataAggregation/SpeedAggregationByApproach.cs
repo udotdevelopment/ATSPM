@@ -15,6 +15,7 @@ namespace MOE.Common.Business.DataAggregation
             DateTime endDate, bool getProtectedPhase, AggregatedDataType dataType) : base(approach, options, startDate, endDate,
             getProtectedPhase, dataType)
         {
+            LoadBins(approach, options, getProtectedPhase, dataType);
         }
 
         protected override void LoadBins(Approach approach, ApproachAggregationMetricOptions options,

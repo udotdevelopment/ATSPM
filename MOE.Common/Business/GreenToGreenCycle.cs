@@ -2,9 +2,6 @@
 
 namespace MOE.Common.Business
 {
-    /// <summary>
-    ///     Data that represents a red to red cycle for a signal phase
-    /// </summary>
     public class GreenToGreenCycle
     {
         public enum EventType

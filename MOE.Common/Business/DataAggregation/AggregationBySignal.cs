@@ -9,12 +9,6 @@ namespace MOE.Common.Business.DataAggregation
 {
     public abstract class AggregationBySignal
     {
-        public List<SignalEventCountAggregation> SignalEventCountAggregations { get; set; }
-        public AggregationBySignal(SignalAggregationMetricOptions options, Models.Signal signal)
-        {
-            BinsContainers = BinFactory.GetBins(options.TimeOptions);
-            Signal = signal;
-        }
 
         public Models.Signal Signal { get; }
 
@@ -24,6 +18,7 @@ namespace MOE.Common.Business.DataAggregation
         }
 
         public List<BinsContainer> BinsContainers { get; protected set; }
+        public List<SignalEventCountAggregation> SignalEventCountAggregations { get; set; }
 
         public int Average
         {
@@ -36,9 +31,13 @@ namespace MOE.Common.Business.DataAggregation
                     numberOfBins += binsContainer.Bins.Count;
                 return numberOfBins > 0 ? Convert.ToInt32(Math.Round(Total / numberOfBins)) : 0;
             }
-        }
-        
+        }        
 
+        public AggregationBySignal(SignalAggregationMetricOptions options, Models.Signal signal)
+        {
+            BinsContainers = BinFactory.GetBins(options.TimeOptions);
+            Signal = signal;
+        }
 
         protected abstract void LoadBins(SignalAggregationMetricOptions options, Models.Signal signal);
 

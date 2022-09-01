@@ -35,6 +35,7 @@ namespace BuildDeployPackage
             ModifyConnectionStrings();
             CreateParentFolder();
             CreateAsyncGetMaxTimeRecordsDeploy();
+            CreateGetMaxTimeRecordsDeploy();
             CreateATSPMAPIDeploy();
             CreateDecodePeekLogsDeploy();
             CreateDecodeSiemensLogsDeploy();
@@ -47,6 +48,7 @@ namespace BuildDeployPackage
             CreateSPMDeploy();
             CreateWatchDogDeploy();
             CreateWavetronicsSpeedListenerDeploy();
+            CreateAggregateDeploy();
             CreateInstallerDeploy();
         }
 
@@ -203,6 +205,29 @@ namespace BuildDeployPackage
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             string appLocation = appSettings["AsyncGetMaxTimeRecordsProjectFolderLocation"];
             CopyBinFiles(appLocation,true);
+        }
+
+        private static void CreateGetMaxTimeRecordsDeploy()
+        {
+            NameValueCollection appSettings = ConfigurationManager.AppSettings;
+            string appLocation = appSettings["GetMaxTimeRecordsProjectFolderLocation"];
+            CopyBinFiles(appLocation, true);
+        }
+
+        private static void CreateAggregateDeploy()
+        {
+            //NameValueCollection appSettings = ConfigurationManager.AppSettings;
+            //string appLocation = appSettings["AggregateApproachEventProjectLocation"];
+            foreach (string key in ConfigurationManager.AppSettings)
+            {
+                if (key.StartsWith("Aggregate"))
+                {
+                    string appLocation = ConfigurationManager.AppSettings[key];
+                    CopyBinFiles(appLocation, true);
+                }
+
+            }
+            
         }
 
         private static void CopyBinFiles(string appLocation, bool isConsoleApp)

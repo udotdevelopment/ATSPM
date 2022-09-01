@@ -23,7 +23,7 @@ namespace MOE.Common.Models.Repositories
         bool CheckReportAvialbility(string detectorID, int metricID);
         bool CheckReportAvialbilityByDetector(Detector gd, int metricID);
         int GetMaximumDetectorChannel(int versionId);
-
         List<Detector> GetDetectorsByIds(List<int> excludedDetectorIds);
+        List<Detector> GetDetectorsBySignalIdMovementTypeIdDirectionTypeId(string signalId, int directionTypeId, List<int> movementTypeIds);
     }
 }

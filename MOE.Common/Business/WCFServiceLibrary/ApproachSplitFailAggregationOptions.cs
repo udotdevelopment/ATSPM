@@ -18,6 +18,11 @@ namespace MOE.Common.Business.WCFServiceLibrary
             MetricTypeID = 20;
             AggregatedDataTypes = new List<AggregatedDataType>();
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "SplitFailures"});
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 1, DataName = "GreenOccupancySum" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 2, DataName = "RedOccupancySum" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 3, DataName = "GreenTimeSum" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 4, DataName = "RedTimeSum" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 5, DataName = "Cycles" });
         }
 
         public override string ChartTitle

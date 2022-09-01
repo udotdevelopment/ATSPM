@@ -49,8 +49,10 @@ namespace MOE.Common.Business
                           c.StartTime && r.Timestamp <= c.EndTime
                     select r).ToList();
 
-
-                SetPedTimesForCycle(PedEventsForCycle, c);
+                if ((c.EndTime - c.StartTime).Seconds > PedEventsForCycle.Count)
+                {
+                    SetPedTimesForCycle(PedEventsForCycle, c);
+                }
             }
         }
 

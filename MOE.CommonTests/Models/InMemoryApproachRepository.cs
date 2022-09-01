@@ -104,5 +104,10 @@ namespace MOE.CommonTests.Models
         {
             return _db.Approaches.Where(a => excludedApproachIds.Contains(a.ApproachID)).ToList();
         }
+
+        ICollection<Approach> IApproachRepository.GetApproachesForSignal(int versionID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
