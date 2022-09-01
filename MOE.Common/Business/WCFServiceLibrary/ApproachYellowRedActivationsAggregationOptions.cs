@@ -19,6 +19,9 @@ namespace MOE.Common.Business.WCFServiceLibrary
             AggregatedDataTypes = new List<AggregatedDataType>();
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 0, DataName = "SevereRedLightViolations" });
             AggregatedDataTypes.Add(new AggregatedDataType {Id = 1, DataName = "TotalRedLightViolations" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 2, DataName = "YellowActivations" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 3, DataName = "ViolationTime" });
+            AggregatedDataTypes.Add(new AggregatedDataType { Id = 4, DataName = "Cycles" });
         }
 
         public override string ChartTitle

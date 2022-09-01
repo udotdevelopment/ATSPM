@@ -510,5 +510,20 @@ namespace MOE.CommonTests.Models
         {
             throw new NotImplementedException();
         }
+
+        public List<Controller_Event_Log> GetTopEventsBeforeDateByEventCodesParam(string signalId, DateTime timestamp, List<int> eventCodes, int param, int top)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Controller_Event_Log> GetEventsBetweenDates(DateTime startTime, DateTime endTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Controller_Event_Log GetFirstEventAfterDateByEventCodesAndParameter(string signalId, List<int> eventCodes, int eventParam, DateTime start, int secondsToSearch)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

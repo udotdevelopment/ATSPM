@@ -67,6 +67,7 @@ namespace MOE.Common.Models
         [Display(Name = "Version Start")]
         [DataMember]
         [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Start { get; set; }
 
         [Required]
@@ -106,6 +107,21 @@ namespace MOE.Common.Models
         public virtual Region Region { get; set; }
 
         [Required]
+        [Display(Name = "Jurisdiction")]
+        [DataMember]
+        public int JurisdictionId { get; set; }
+
+        [DataMember]
+        public virtual Jurisdiction Jurisdiction { get; set; }
+
+        [Display(Name = "Areas")]
+        [DataMember]
+        public virtual ICollection<Area> Areas { get; set; }
+
+        [DataMember]
+        public List<int> AreaIds { get; set; }
+
+        [Required]
         [Display(Name = "ControllerType Type")]
         [DataMember]
         public int ControllerTypeID { get; set; }
@@ -118,6 +134,11 @@ namespace MOE.Common.Models
         [DataMember]
         public bool Enabled { get; set; }
 
+        [Required]
+        [Display(Name = "All Peds are 1:1")]
+        [DataMember]
+        public bool Pedsare1to1 { get; set; }
+
         [Display(Name = "Chart Notes")]
         public virtual ICollection<MetricComment> Comments { get; set; }
 
@@ -125,5 +146,7 @@ namespace MOE.Common.Models
         [Display(Name = "Phase/Direction")]
         [DataMember]
         public virtual ICollection<Approach> Approaches { get; set; }
+
+        
     }
 }

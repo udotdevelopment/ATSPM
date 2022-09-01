@@ -287,7 +287,7 @@ namespace SPM.Controllers
         private void SetLists()
         {
             ViewBag.AgencyID = new SelectList(agencyRepository.GetAll(), "AgencyID", "Description");
-            ViewBag.SignalID = new SelectList(signalRepository.GetAllSignals(), "SignalId", "SignalDescription");
+            ViewBag.SignalID = new SelectList(signalRepository.GetLatestVersionOfAllSignalsAsQueryable(), "SignalId", "SignalDescription");
         }
 
         //// GET: ActionLogs/Edit/5

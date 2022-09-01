@@ -422,6 +422,10 @@ textarea {
     padding-left:0;
 }
 
+.LeftTurnThreshold {
+    width: 50px;
+}
+
 .DayWidth
 {
     width:115px;
@@ -437,9 +441,20 @@ textarea {
     min-width:400px;
 }
 
+.panel-min-width-lt {
+    min-width: 500px;
+}
+
 .chart-selection-min-width
 {
     min-width:310px;
+}
+.signal-data-check-min-width {
+    /*min-width: 310px;*/
+}
+
+.report-Info-min-width {
+    min-width: 340px;
 }
 .options-selection-min-width {
     min-width: 285px;
@@ -802,3 +817,8 @@ button.bg-warning:focus {
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 0.25rem;
 }
+
+.fa {
+    transition: all .35s ease;
+}
+

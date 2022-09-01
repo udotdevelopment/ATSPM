@@ -15,39 +15,43 @@ namespace MOE.Common.Business.PEDDelay
         protected List<PedPhase> _PedPhases = new List<PedPhase>();
         protected PlansBase _Plans;
         protected string _SignalID;
+        protected int _TimeBuffer;
         protected DateTime _StartDate;
 
-        public PedDelaySignal(Signal signal, DateTime startDate,
+        public PedDelaySignal(Signal signal, int timeBuffer, DateTime startDate,
             DateTime endDate)
         {
             _SignalID = signal.SignalID;
+            _TimeBuffer = timeBuffer;
             _StartDate = startDate;
             _EndDate = endDate;
             try
             {
                 _Plans = new PlansBase(_SignalID, startDate, endDate);
-                var pedPhaseNumbers = ControllerEventLogs.GetPedPhases(_SignalID, startDate, endDate);
                 ConcurrentBag<PedPhase> pedPhases = new ConcurrentBag<PedPhase>();
-                //Parallel.ForEach(pedPhaseNumbers, currentPhase =>
-                foreach (int currentPhase in pedPhaseNumbers)
+
+                foreach (var approach in signal.Approaches)
                 {
-                    var pedPhase = new PedPhase(currentPhase, signal, startDate, endDate, _Plans);
-                    pedPhases.Add(pedPhase);
-                    //});
+                    if (approach.PedestrianPhaseNumber != null || approach.ProtectedPhaseNumber != 0)
+                    {
+                        var pedPhase = new PedPhase(approach, signal, timeBuffer, startDate, endDate, _Plans);
+                        pedPhases.Add(pedPhase);
+                    }
                 }
 
-                _PedPhases = pedPhases.OrderBy(x => x.PhaseNumber).ToList();
+                _PedPhases = pedPhases.Where(p => p.Events.Count > 0).OrderBy(x => x.PhaseNumber).ToList();
             }
             catch (Exception e)
             {
                 var errorLog = ApplicationEventRepositoryFactory.Create();
                 errorLog.QuickAdd(System.Reflection.Assembly.GetExecutingAssembly().GetName().ToString(),
-                    this.GetType().DisplayName(), e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
+                    this.GetType().Name, e.TargetSite.ToString(), ApplicationEvent.SeverityLevels.High, e.Message);
                 
             }
         }
 
         public string SignalID => _SignalID;
+        public int TimeBuffer => _TimeBuffer;
         public DateTime StartDate => _StartDate;
         public DateTime EndDate => _EndDate;
         public List<PedPhase> PedPhases => _PedPhases;

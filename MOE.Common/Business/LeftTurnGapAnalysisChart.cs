@@ -11,44 +11,43 @@ namespace MOE.Common.Business
     public class LeftTurnGapAnalysisChart
     {
         public Chart Chart;
-        private Signal _signal;
-        private Approach _approach;
         private readonly List<Controller_Event_Log> _events;
         private readonly int _opposingPhase;
         private readonly DateTime _startDate;
         private readonly DateTime _endDate;
         private readonly LeftTurnGapAnalysisOptions _options;
-        private readonly string _detectionType;
 
-        private const int CYCLE_GROUP_COUNT = 10;
+        public LeftTurnGapAnalysis.LeftTurnGapAnalysis GapData { get; }
 
         public class PhaseLeftTurnGapTracker
         {
             public DateTime GreenTime;
-            public int ShortGapCounter;
-            public int MediumGapCounter;
-            public int LargeGapCounter;
-            public int HugeGapCounter;
+            public int GapCounter1;
+            public int GapCounter2;
+            public int GapCounter3;
+            public int GapCounter4;
+            public int GapCounter5;
+            public int GapCounter6;
+            public int GapCounter7;
+            public int GapCounter8;
+            public int GapCounter9;
+            public int GapCounter10;
+            public int GapCounter11;
             public double PercentPhaseTurnable;
         }
 
-        public LeftTurnGapAnalysisChart(LeftTurnGapAnalysisOptions options, Signal signal, Approach approach,
-            List<Controller_Event_Log> events, int opposingPhase, DateTime startDate, DateTime endDate, string detectionType)
+        public LeftTurnGapAnalysisChart(LeftTurnGapAnalysisOptions options, LeftTurnGapAnalysis.LeftTurnGapAnalysis gapData,
+             int opposingPhase)
         {
-            _signal = signal;
             _options = options;
-            _approach = approach;
-            _events = events;
+            GapData = gapData;
             _opposingPhase = opposingPhase;
-            _startDate = startDate;
-            _endDate = endDate;
-            _detectionType = detectionType;
 
             options.Y2AxisMax = 100;
-            options.Y2AxisTitle = $"% Of Gap Time > {options.TrendLineGapThreshold} seconds";
+            options.Y2AxisTitle = $"% of Green Time where Gap ≥ {options.TrendLineGapThreshold} seconds";
 
             Chart = ChartFactory.CreateDefaultChartNoX2Axis(options);
-            SetChartTitle(Chart, options, signal, approach, detectionType);
+            SetChartTitle(Chart, options, GapData.Approach.Signal, GapData.Approach, GapData.DetectionTypeStr);
             ChartFactory.SetImageProperties(Chart);
 
             Chart.ChartAreas[0].AxisY.Title = "# Gaps";
@@ -63,7 +62,9 @@ namespace MOE.Common.Business
             chart.Titles.Add(ChartTitleFactory.GetChartName(options.MetricTypeID));
             chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(signal.SignalID, options.StartDate,
                 options.EndDate));
-            chart.Titles.Add(ChartTitleFactory.GetPhase(_opposingPhase));
+            Title phaseTitle = ChartTitleFactory.GetPhase(_opposingPhase);
+            phaseTitle.Text = ("Left Turn Crossing " + phaseTitle.Text);
+            chart.Titles.Add(phaseTitle);
             chart.Titles.Add(detectionType);
         }
 
@@ -94,40 +95,30 @@ namespace MOE.Common.Business
 
             #endregion
 
-            var greenList = _events.Where(x => x.EventCode == LeftTurnGapAnalysisOptions.EVENT_GREEN)
-                .OrderBy(x => x.Timestamp);
-            var redList = _events.Where(x => x.EventCode == LeftTurnGapAnalysisOptions.EVENT_RED)
-                .OrderBy(x => x.Timestamp).ToList();
-            var orderedDetectorCallList = _events.Where(x => x.EventCode == LeftTurnGapAnalysisOptions.EVENT_DET)
-                .OrderBy(x => x.Timestamp).ToList();
-            
-            var phaseTrackerList = GetGapsFromControllerData(greenList, redList, orderedDetectorCallList);
-
-            var highestTotal = 0;
-
-            for (var lowerTimeLimit = _startDate; lowerTimeLimit < _endDate; lowerTimeLimit = lowerTimeLimit.AddMinutes(_options.BinSize))
+            foreach (var gap in GapData.Gaps1)
             {
-                var upperTimeLimit = lowerTimeLimit.AddMinutes(_options.BinSize);
-                var items = phaseTrackerList.Where(x => x.GreenTime >= lowerTimeLimit && x.GreenTime < upperTimeLimit).ToList();
-
-                if (!items.Any()) continue;
-
-                shortGapSeries.Points.AddXY(upperTimeLimit, items.Sum(x => x.ShortGapCounter));
-                mediumGapSeries.Points.AddXY(upperTimeLimit, items.Sum(x => x.MediumGapCounter));
-                largeGapSeries.Points.AddXY(upperTimeLimit, items.Sum(x => x.LargeGapCounter));
-                hugeGapSeries.Points.AddXY(upperTimeLimit, items.Sum(x => x.HugeGapCounter));
-
-                var localTotal = items.Sum(x => x.ShortGapCounter) + items.Sum(x => x.MediumGapCounter)
-                                                                   + items.Sum(x => x.LargeGapCounter) +
-                                                                   items.Sum(x => x.HugeGapCounter);
-                percentTurnableSeries.Points.AddXY(upperTimeLimit,
-                    items.Average(x => x.PercentPhaseTurnable) * 100);
-                if (localTotal > highestTotal)
-                    highestTotal = localTotal;
+                shortGapSeries.Points.AddXY(gap.Key, gap.Value);
             }
+            foreach (var gap in GapData.Gaps2)
+            {
+                mediumGapSeries.Points.AddXY(gap.Key, gap.Value);
+            }
+            foreach (var gap in GapData.Gaps3)
+            {
+                largeGapSeries.Points.AddXY(gap.Key, gap.Value);
+            }
+            foreach (var gap in GapData.Gaps4)
+            {
+                hugeGapSeries.Points.AddXY(gap.Key, gap.Value);
+            }
+            foreach (var percent in GapData.PercentTurnableSeries)
+            {
+                percentTurnableSeries.Points.AddXY(percent.Key, percent.Value);
+            }
+            
 
             //Find the highest max and round up to the next 100
-            Chart.ChartAreas[0].AxisY.Maximum = Math.Ceiling(highestTotal / 100d) * 100;
+            Chart.ChartAreas[0].AxisY.Maximum = Math.Ceiling(GapData.HighestTotal / 100d) * 100;
 
             //Y1
             Chart.Series.Add(shortGapSeries);
@@ -139,72 +130,72 @@ namespace MOE.Common.Business
             Chart.Series.Add(percentTurnableSeries);
         }
 
-        private List<PhaseLeftTurnGapTracker> GetGapsFromControllerData(IEnumerable<Controller_Event_Log> greenList,
-            List<Controller_Event_Log> redList, List<Controller_Event_Log> orderedDetectorCallList)
-        {
-            var phaseTrackerList = new List<PhaseLeftTurnGapTracker>();
+        //private List<PhaseLeftTurnGapTracker> GetGapsFromControllerData(IEnumerable<Controller_Event_Log> greenList,
+        //    List<Controller_Event_Log> redList, List<Controller_Event_Log> orderedDetectorCallList)
+        //{
+        //    var phaseTrackerList = new List<PhaseLeftTurnGapTracker>();
 
-            foreach (var green in greenList)
-            {
-                //Find the corresponding red
-                var red = redList.Where(x => x.Timestamp > green.Timestamp).OrderBy(x => x.Timestamp).FirstOrDefault();
-                if (red == null)
-                    continue;
+        //    foreach (var green in greenList)
+        //    {
+        //        //Find the corresponding red
+        //        var red = redList.Where(x => x.Timestamp > green.Timestamp).OrderBy(x => x.Timestamp).FirstOrDefault();
+        //        if (red == null)
+        //            continue;
 
-                double trendLineGapTimeCounter = 0;
+        //        double trendLineGapTimeCounter = 0;
 
-                var phaseTracker = new PhaseLeftTurnGapTracker {GreenTime = green.Timestamp};
+        //        var phaseTracker = new PhaseLeftTurnGapTracker {GreenTime = green.Timestamp};
 
-                var gapsList = new List<Controller_Event_Log>();
-                gapsList.Add(green);
-                gapsList.AddRange(orderedDetectorCallList.Where(x =>
-                    x.Timestamp > green.Timestamp && x.Timestamp < red.Timestamp));
-                gapsList.Add(red);
+        //        var gapsList = new List<Controller_Event_Log>();
+        //        gapsList.Add(green);
+        //        gapsList.AddRange(orderedDetectorCallList.Where(x =>
+        //            x.Timestamp > green.Timestamp && x.Timestamp < red.Timestamp));
+        //        gapsList.Add(red);
 
-                for (var i = 1; i < gapsList.Count; i++)
-                {
-                    var gap = gapsList[i].Timestamp.TimeOfDay.TotalSeconds -
-                              gapsList[i - 1].Timestamp.TimeOfDay.TotalSeconds;
+        //        for (var i = 1; i < gapsList.Count; i++)
+        //        {
+        //            var gap = gapsList[i].Timestamp.TimeOfDay.TotalSeconds -
+        //                      gapsList[i - 1].Timestamp.TimeOfDay.TotalSeconds;
 
-                    if (gap < 0) continue;
+        //            if (gap < 0) continue;
 
-                    AddGapToCounters(phaseTracker, gap);
+        //            AddGapToCounters(phaseTracker, gap);
 
-                    if (gap >= _options.TrendLineGapThreshold)
-                    {
-                        trendLineGapTimeCounter += gap;
-                    }
-                }
+        //            if (gap >= _options.TrendLineGapThreshold)
+        //            {
+        //                trendLineGapTimeCounter += gap;
+        //            }
+        //        }
 
-                //Decimal rounding errors can cause the number to be > 100
-                var percentTurnable =
-                    Math.Min(trendLineGapTimeCounter / (red.Timestamp - green.Timestamp).TotalSeconds, 100);
-                phaseTracker.PercentPhaseTurnable = percentTurnable;
+        //        //Decimal rounding errors can cause the number to be > 100
+        //        var percentTurnable =
+        //            Math.Min(trendLineGapTimeCounter / (red.Timestamp - green.Timestamp).TotalSeconds, 100);
+        //        phaseTracker.PercentPhaseTurnable = percentTurnable;
 
-                phaseTrackerList.Add(phaseTracker);
-            }
+        //        phaseTrackerList.Add(phaseTracker);
+        //    }
 
-            return phaseTrackerList;
-        }
+        //    return phaseTrackerList;
+        //}
 
-        public void AddGapToCounters(PhaseLeftTurnGapTracker phaseTracker, double gap)
-        {
-            if (gap > _options.Gap1Min && gap <= _options.Gap1Max)
-            {
-                phaseTracker.ShortGapCounter++;
-            }
-            else if (gap > _options.Gap2Min && gap <= _options.Gap2Max)
-            {
-                phaseTracker.MediumGapCounter++;
-            }
-            else if (gap > _options.Gap3Min && gap <= _options.Gap3Max)
-            {
-                phaseTracker.LargeGapCounter++;
-            }
-            else if (gap > _options.Gap4Min)
-            {
-                phaseTracker.HugeGapCounter++;
-            }
-        }
+        //public void AddGapToCounters(PhaseLeftTurnGapTracker phaseTracker, double gap)
+        //{
+        //    if (gap > _options.Gap1Min && gap <= _options.Gap1Max)
+        //    {
+        //        phaseTracker.GapCounter1++;
+        //    }
+        //    else if (gap > _options.Gap2Min && gap <= _options.Gap2Max)
+        //    {
+        //        phaseTracker.GapCounter2++;
+        //    }
+        //    else if (gap > _options.Gap3Min && gap <= _options.Gap3Max)
+        //    {
+        //        phaseTracker.GapCounter3++;
+        //    }
+        //    else if (gap > _options.Gap4Min)
+        //    {
+        //        phaseTracker.GapCounter4++;
+        //    }
+        //}
     }
 }

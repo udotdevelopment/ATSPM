@@ -1,0 +1,19 @@
+﻿@model IEnumerable<SPM.Models.CheckModel>
+
+
+        @foreach (var turn in Model)
+        {
+            <table>
+                <tr>
+                    <td>
+                        @Html.CheckBoxFor(it => turn.Checked, new { @Class = "{vertical- align:3px}", approachId = turn.Id  })
+                    </td>
+                    <td>
+                        @Html.HiddenFor(it => turn.Id)
+                        @Html.DisplayFor(it => turn.Name)
+                    </td>
+                </tr>
+            </table>
+
+
+        }

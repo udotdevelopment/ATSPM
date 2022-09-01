@@ -1,0 +1,99 @@
+﻿@using MvcCheckBoxList.Model
+@model SPM.Models.DateSelectorViewModel
+
+@{List<SelectListItem> HourlistItems = new List<SelectListItem>();
+    HourlistItems.Add(new SelectListItem { Text = "1", Value = "1", Selected = true });
+    HourlistItems.Add(new SelectListItem { Text = "2", Value = "2" });
+    HourlistItems.Add(new SelectListItem { Text = "3", Value = "3" });
+    HourlistItems.Add(new SelectListItem { Text = "4", Value = "4" });
+    HourlistItems.Add(new SelectListItem { Text = "5", Value = "5" });
+    HourlistItems.Add(new SelectListItem { Text = "6", Value = "6" });
+    HourlistItems.Add(new SelectListItem { Text = "7", Value = "7" });
+    HourlistItems.Add(new SelectListItem { Text = "8", Value = "8" });
+    HourlistItems.Add(new SelectListItem { Text = "9", Value = "9" });
+    HourlistItems.Add(new SelectListItem { Text = "10", Value = "10" });
+    HourlistItems.Add(new SelectListItem { Text = "11", Value = "11" });
+    HourlistItems.Add(new SelectListItem { Text = "12", Value = "12" }); }
+
+@{List<SelectListItem> MinutelistItems = new List<SelectListItem>();
+    MinutelistItems.Add(new SelectListItem { Text = "00", Value = "00", Selected = true });
+    MinutelistItems.Add(new SelectListItem { Text = "15", Value = "15" });
+    MinutelistItems.Add(new SelectListItem { Text = "30", Value = "30" });
+    MinutelistItems.Add(new SelectListItem { Text = "45", Value = "45" }); }
+
+@{List<SelectListItem> AMPMlistItems = new List<SelectListItem>();
+    AMPMlistItems.Add(new SelectListItem { Text = "AM", Value = "AM", Selected = true });
+    AMPMlistItems.Add(new SelectListItem { Text = "PM", Value = "PM" });}
+<div class="row">
+    <div class="col-3">
+        <div class="row">
+            <div class="col-12">
+                @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group-custom">
+                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
+                </div>
+            </div>
+            <div class="col-12">
+                @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group-custom">
+                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control DayWidth datepicker" } })
+                </div>
+            </div>
+
+            <div class="col-md-12 col-sm-12 ">
+                <button id="ResetDate" type="button" class="btn">Reset Date</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-2 col-left col-nomargin dateSelector">
+        <div class="row">
+            <div id="StartEndDaySelector" class="col-nomargin col-left jquery-datepickermoveleft"></div>
+        </div>
+    </div>
+    <div class="col-3">
+        <h3>Days to Include</h3>
+        <div class="row">
+            <div id="DaysDiv" class="DaysDiv">
+                @Html.CheckBoxListFor(x => x.PostedDays.DayIDs,
+                    x => x.AvailableDays,
+                    x => x.DayId,
+                    x => x.Name,
+                    x => x.SelectedDays,
+                    Position.Vertical)
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">Time Options</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-3">@Html.RadioButton("TimeOptions", "customTimeRadiobutton", new { onclick = "customTimeClick()", @class = "" }) Custom
+                <div id="customTimeDiv" class="d-none" >
+                    @Html.LabelFor(model => model.StartTimeHour, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group-custom">
+                        @Html.DropDownListFor(model => model.StartTimeHour, HourlistItems, new { @class = "form-control timeWidth" })
+                        @Html.DropDownListFor(model => model.StartTimeMinute, MinutelistItems, new { @class = "form-control timeWidth" })
+                        @Html.DropDownListFor(model => model.StartAMPM, AMPMlistItems, new { id = "StartAMPM", @class = "form-control timeWidth", aria_labelledby = "StartAMPM" })
+                    </div>
+                    @Html.LabelFor(model => model.EndTimeHour, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group-custom">
+                        @Html.DropDownListFor(model => model.EndTimeHour, HourlistItems, new { @class = "form-control timeWidth" })
+                        @Html.DropDownListFor(model => model.EndTimeMinute, MinutelistItems, new { @class = "form-control timeWidth" })
+                        @Html.DropDownListFor(model => model.EndAMPM, AMPMlistItems, new { id = "EndAMPM", @class = "form-control timeWidth", aria_labelledby = "EndAMPM" })
+                    </div>
+                </div>
+                </div>
+            <div class="col-3">@Html.RadioButton("TimeOptions", "PeakHourRadiobutton", true, new { onclick = "customTimeClick()", @class = "" }) Peak Hour (AM & PM) </div>
+            <div class="col-3">@Html.RadioButton("TimeOptions", "PeakPeriodRadiobutton", new { onclick = "customTimeClick()", @class = "" }) Peak Periods (6AM-9AM & 3PM-6PM)</div>
+            <div class="col-3">@Html.RadioButton("TimeOptions", "FullDayRadiobutton", new { onclick = "customTimeClick()", @class = "" }) 24-Hour Period (hourly reports 12:00AM - 11:59PM</div>
+        </div>
+        <div class="row">
+           
+        </div>
+    </div>
+</div>
+
+
+

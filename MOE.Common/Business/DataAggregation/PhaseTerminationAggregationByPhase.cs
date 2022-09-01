@@ -14,6 +14,7 @@ namespace MOE.Common.Business.DataAggregation
         public PhaseTerminationAggregationByPhase(Models.Signal signal, int phaseNumber, PhaseTerminationAggregationOptions options, AggregatedDataType dataType) 
             : base(signal, phaseNumber, options, dataType)
         {
+            LoadBins(signal, phaseNumber, options, dataType);
         }
 
         protected override void LoadBins(Models.Signal signal, int phaseNumber, PhaseAggregationMetricOptions options,

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MOE.Common.Business;
+using System.Linq;
 
 namespace MOE.Common.Models.Repositories
 {
@@ -14,12 +15,13 @@ namespace MOE.Common.Models.Repositories
         SignalFTPInfo GetSignalFTPInfoByID(string signalID);
         List<SignalFTPInfo> GetSignalFTPInfoForAllFTPSignals();
         void AddOrUpdate(Signal signal);
-        List<Pin> GetPinInfo();
+        //List<Pin> GetPinInfo();
         string GetSignalLocation(string signalID);
         void AddList(List<Signal> signals);
         Signal CopySignalToNewVersion(Signal originalVersion);
         List<Signal> GetAllVersionsOfSignalBySignalID(string signalID);
         List<Signal> GetLatestVersionOfAllSignals();
+        IQueryable<Signal> GetLatestVersionOfAllSignalsAsQueryable();
         List<Signal> GetLatestVersionOfAllSignalsForFtp();
         int CheckVersionWithFirstDate(string signalId);
         List<Signal> GetLatestVerionOfAllSignalsByControllerType(int controllerTypeId);
