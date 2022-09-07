@@ -281,7 +281,7 @@ namespace ParquetArchiver
         {
             try
             {
-                Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\carter.liu\\OneDrive - KH\\Shared Documents\\remote access\\Castle Rock\\castle-rock-service-account.json");
+                Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", ConfigurationManager.AppSettings["GoogleAppCredentialsLocation"]);
                 var storage = StorageClient.Create();
                 var bucketName = ConfigurationManager.AppSettings["BucketName"];
                 Console.WriteLine($"Data acquired for Signal {signal.SignalID}");
