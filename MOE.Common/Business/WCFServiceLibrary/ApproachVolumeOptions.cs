@@ -37,9 +37,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public ApproachVolumeOptions()
         {
-            BinSizeList = new List<int>();
-            BinSizeList.Add(15);
-            BinSizeList.Add(5);
+            BinSizeList = new List<int>() { 5, 15 };
             SetDefaults();
         }
 
@@ -74,18 +72,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
         [DataMember]
         [Display(Name = "Show Advance Detection")]
         public bool ShowAdvanceDetection { get; set; }
-
-        public void SetDefaults()
-        {
-            YAxisMin = 0;
-            YAxisMax = null;
-            ShowDirectionalSplits = true;
-            ShowTotalVolume = false;
-            ShowNbEbVolume = true;
-            ShowSbWbVolume = true;
-            ShowTMCDetection = true;
-            ShowAdvanceDetection = true;
-        }
 
         public override List<string> CreateMetric()
         {

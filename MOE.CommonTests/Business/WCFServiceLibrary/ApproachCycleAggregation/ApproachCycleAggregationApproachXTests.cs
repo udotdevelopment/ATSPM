@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MOE.Common.Business.Bins;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MOE.Common.Business.WCFServiceLibrary;
 using MOE.Common.Business.WCFServiceLibrary.Tests;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using MOE.CommonTests.Models;
+using System;
 
 namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachCycleAggregation
 {
     [TestClass]
-    public class ApproachCycleAggregationApproachOptionsTests : ApproachAggregationCreateMetricTestsBase
+    public class PhaseCycleAggregationApproachOptionsTests : ApproachAggregationCreateMetricTestsBase
     {
 
-        
+
 
         protected override void SetSpecificAggregateRepositoriesForTest()
         {
@@ -28,7 +24,7 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachCycleAggregation
                     PopulateApproachData(approach);
                 }
             }
-            ApproachCycleAggregationRepositoryFactory.SetApplicationEventRepository(
+            PhaseCycleAggregationsRepositoryFactory.SetApplicationEventRepository(
                 new InMemoryApproachCycleAggregationRepository(Db));
         }
 
@@ -42,8 +38,8 @@ namespace MOE.CommonTests.Business.WCFServiceLibrary.ApproachCycleAggregation
         public void CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest()
         {
 
-             ApproachCycleAggregationOptions options = new ApproachCycleAggregationOptions();
-           
+            PhaseCycleAggregationOptions options = new PhaseCycleAggregationOptions();
+
             base.CreateTimeMetricStartToFinishAllBinSizesAllAggregateDataTypesTest(options);
         }
     }

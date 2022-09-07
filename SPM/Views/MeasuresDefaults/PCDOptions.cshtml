@@ -1,0 +1,77 @@
+﻿@model SPM.Models.MeasuresDefaultsViewModel
+
+<div id="pcd-options" role="tablist" aria-multiselectable="true" class="card mr-4 ml-4">
+    <div class="card-header" role="tab">
+        <a onclick="rotate(this)" data-toggle="collapse" data-parent="#pcd-options" href="#pcd-options-collapse" aria-expanded="false" aria-controls="pcd-optionsCollapse">
+            <i class="fa fa-chevron-right mr-3" aria-hidden="true"></i> Purdue Coordination Diagram
+        </a>
+    </div>
+    <div id="pcd-options-collapse" class="collapse" role="tabpanel">
+        <div class="card-body">
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PCD.YAxisMax, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.PCD.YAxisMax, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PCD.YAxisMax, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PCD.Y2AxisMax, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.PCD.Y2AxisMax, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PCD.Y2AxisMax, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PCD.SelectedBinSize, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.DropDownListFor(model => model.PCD.SelectedBinSize, (SelectList)ViewBag.BinSize, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PCD.SelectedBinSize, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PCD.SelectedLineSize, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.DropDownListFor(model => model.PCD.SelectedLineSize, (SelectList)ViewBag.LineAndDotSize, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PCD.SelectedLineSize, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PCD.SelectedDotSize, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.DropDownListFor(model => model.PCD.SelectedDotSize, (SelectList)ViewBag.LineAndDotSize, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PCD.SelectedDotSize, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PCD.ShowPlanStatistics, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.PCD.ShowPlanStatistics)
+                    @Html.ValidationMessageFor(model => model.PCD.ShowPlanStatistics, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.PCD.ShowVolumes, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.PCD.ShowVolumes)
+                    @Html.ValidationMessageFor(model => model.PCD.ShowVolumes, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

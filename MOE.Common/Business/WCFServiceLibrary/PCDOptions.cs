@@ -34,9 +34,7 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public PCDOptions()
         {
-            VolumeBinSizeList = new List<int>();
-            VolumeBinSizeList.Add(15);
-            VolumeBinSizeList.Add(5);
+            VolumeBinSizeList = new List<int>() { 5, 15 };
             DotSizeList = new List<DotSizeItem>();
             DotSizeList.Add(new DotSizeItem(1, "Small"));
             DotSizeList.Add(new DotSizeItem(2, "Large"));
@@ -76,15 +74,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         public Models.Signal Signal { get; set; }
 
-        public void SetDefaults()
-        {
-            YAxisMax = 150;
-            Y2AxisMax = 2000;
-            ShowPlanStatistics = true;
-            ShowVolumes = true;
-            MetricTypeID = 6;
-        }
-
         public override List<string> CreateMetric()
         {
             base.CreateMetric();
@@ -99,6 +88,8 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     var signalPhase = new SignalPhase(StartDate, EndDate, approach, ShowVolumes, SelectedBinSize,
                         MetricTypeID, false);
                     chart = GetNewChart();
+                    chart.ChartAreas[0].AxisX.Minimum = signalPhase.Cycles.Any()? signalPhase.Cycles.First().StartTime.ToOADate():StartDate.ToOADate();
+                    chart.ChartAreas[0].AxisX.Maximum = signalPhase.Cycles.Any() ? signalPhase.Cycles.Last().EndTime.ToOADate():EndDate.ToOADate();
                     AddDataToChart(chart, signalPhase);
                     var chartName = CreateFileName();
                     chart.ImageLocation = MetricFileLocation + chartName;

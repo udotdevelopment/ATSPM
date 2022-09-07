@@ -38,39 +38,19 @@ namespace MOE.Common.Business
 
 
         public RLMPlan(DateTime start, DateTime end, int planNumber,
-            List<Controller_Event_Log> cycleEvents,
+            List<RLMCycle> cycles,
             double srlvSeconds, Approach approach)
         {
             Approach = approach;
             startTime = start;
             endTime = end;
             this.planNumber = planNumber;
-            var usePermissivePhase = false;
-            var db = new SPM();
-            var l = new List<int> {1, 8, 9, 10, 11};
-            List<Controller_Event_Log> permEvents = null;
-            if (Approach.PermissivePhaseNumber != null)
-            {
-                usePermissivePhase = true;
-                var cveRepository =
-                    ControllerEventLogRepositoryFactory.Create();
-                permEvents = cveRepository.GetEventsByEventCodesParam(Approach.SignalID,
-                    start, end, l, Approach.ProtectedPhaseNumber);
-                foreach (var row in cycleEvents)
-                    if (row.Timestamp >= start && row.Timestamp <= end &&
-                        GetEventType(row.EventCode) == RLMCycle.EventType.BeginYellowClearance)
-                        foreach (var permRow in permEvents)
-                            if (GetEventType(permRow.EventCode) == RLMCycle.EventType.BeginYellowClearance)
-                                if (row.Timestamp == permRow.Timestamp)
-                                    usePermissivePhase = false;
-            }
             SRLVSeconds = srlvSeconds;
             startTime = start;
             endTime = end;
-            if (usePermissivePhase)
-                GetRedCycle(start, end, permEvents);
-            else
-                GetRedCycle(start, end, cycleEvents);
+            RLMCycleCollection = cycles.Where(c => c.StartTime >= startTime && c.StartTime < endTime).ToList();
+            //GetRedCycle(start, end, cycleEvents);
+            CycleCount = RLMCycleCollection.Count;
         }
 
         public RLMPlan(DateTime start, DateTime end, int plan, double srlvSeconds, Approach approach)
@@ -94,7 +74,11 @@ namespace MOE.Common.Business
             get { return RLMCycleCollection.Sum(d => d.YellowOccurrences); }
         }
 
-        public List<RLMCycle> RLMCycleCollection => rlmCycleCollection;
+        public List<RLMCycle> RLMCycleCollection
+        {
+            get => rlmCycleCollection;
+            set => rlmCycleCollection = value;
+        }
 
         public DateTime EndTime => endTime;
 
@@ -165,6 +149,10 @@ namespace MOE.Common.Business
         }
 
         public Approach Approach { get; set; }
+        public double ViolationTime
+        {
+            get { return rlmCycleCollection.Sum(c => c.TotalViolationTime); }
+        }
 
         private RLMCycle.EventType GetEventType(int EventCode)
         {
@@ -182,6 +170,8 @@ namespace MOE.Common.Business
                 case 64:
                     return RLMCycle.EventType.BeginRedClearance;
 
+                case 65:
+                    return RLMCycle.EventType.BeginRed;
                 case 11:
                     return RLMCycle.EventType.BeginRed;
 

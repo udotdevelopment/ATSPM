@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="..\packages\xunit.core.2.4.1\build\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="..\packages\Microsoft.Extensions.Configuration.UserSecrets.2.2.0\build\netstandard2.0\Microsoft.Extensions.Configuration.UserSecrets.props" Condition="Exists('..\packages\Microsoft.Extensions.Configuration.UserSecrets.2.2.0\build\netstandard2.0\Microsoft.Extensions.Configuration.UserSecrets.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -53,6 +54,9 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="AuthorizedActionLink, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AuthorizedActionLink.2.2.0.0\lib\net40\AuthorizedActionLink.dll</HintPath>
+    </Reference>
     <Reference Include="Caseiro.Mvc.PagedList, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Caseiro.Mvc.PagedList.1.0.2\lib\net40\Caseiro.Mvc.PagedList.dll</HintPath>
       <Private>True</Private>
@@ -65,6 +69,9 @@
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Identity.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Identity.Extensions.1.0.4\lib\net45\Identity.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -123,9 +130,6 @@
     </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.EntityFrameworkCore.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.EntityFrameworkCore.Relational, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.EntityFrameworkCore.Relational.2.2.0\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Caching.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
@@ -250,6 +254,15 @@
     <Reference Include="Microsoft.Win32.Registry, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Registry.4.5.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
     </Reference>
+    <Reference Include="MigraDoc.DocumentObjectModel-gdi, Version=1.50.5147.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp-MigraDoc-gdi.1.50.5147\lib\net20\MigraDoc.DocumentObjectModel-gdi.dll</HintPath>
+    </Reference>
+    <Reference Include="MigraDoc.Rendering-gdi, Version=1.50.5147.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp-MigraDoc-gdi.1.50.5147\lib\net20\MigraDoc.Rendering-gdi.dll</HintPath>
+    </Reference>
+    <Reference Include="MigraDoc.RtfRendering-gdi, Version=1.50.5147.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp-MigraDoc-gdi.1.50.5147\lib\net20\MigraDoc.RtfRendering-gdi.dll</HintPath>
+    </Reference>
     <Reference Include="MvcCheckBoxList, Version=1.4.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MvcCheckBoxList.1.4.5\lib\net45\MvcCheckBoxList.dll</HintPath>
       <Private>True</Private>
@@ -257,8 +270,20 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PdfSharp-gdi, Version=1.50.5147.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp-MigraDoc-gdi.1.50.5147\lib\net20\PdfSharp-gdi.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Charting-gdi, Version=1.50.5147.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp-MigraDoc-gdi.1.50.5147\lib\net20\PdfSharp.Charting-gdi.dll</HintPath>
+    </Reference>
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\packages\Remotion.Linq.2.2.0\lib\net45\Remotion.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=106.15.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.15.0\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.1.7.3\lib\net461\Rotativa.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -287,6 +312,9 @@
       <HintPath>..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
     </Reference>
     <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
@@ -371,6 +399,18 @@
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.abstractions.2.0.3\lib\net35\xunit.abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.assert, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.assert.2.4.1\lib\netstandard1.1\xunit.assert.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.core, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.core.2.4.1\lib\net452\xunit.core.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.execution.desktop, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.execution.2.4.1\lib\net452\xunit.execution.desktop.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Owin">
@@ -388,14 +428,36 @@
     <Compile Include="Controllers\AggregateDataExportController.cs" />
     <Compile Include="Controllers\ApproachesController.cs" />
     <Compile Include="Controllers\ArchiveSettingsOldController.cs" />
+    <Compile Include="Controllers\AreasController.cs" />
     <Compile Include="Controllers\ConfigurationTableController.cs" />
+    <Compile Include="Controllers\JurisdictionsController.cs" />
+    <Compile Include="Controllers\MeasuresDefaultsController.cs" />
+    <Compile Include="Models\ConflictingVolumesAnalysisReportParameters.cs" />
+    <Compile Include="Models\ConflictingVolumesAnalysisReportViewModel.cs" />
     <Compile Include="Controllers\DatabaseArchiveSettingsController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\DefaultChartsController.cs" />
     <Compile Include="Controllers\DetectorCommentsController.cs" />
     <Compile Include="Controllers\DetectorsController.cs" />
     <Compile Include="Controllers\FAQsController.cs" />
+    <Compile Include="Models\LeftTurnGapReport\DataCheckPayload.cs" />
+    <Compile Include="Models\LeftTurnGapReport\LeftTurnGapDurationViewModel.cs" />
+    <Compile Include="Models\LeftTurnGapReport\LeftTurnPeakHourResultViewModel.cs" />
+    <Compile Include="Models\LeftTurnGapReport\LeftTurnVolumeResultViewModel.cs" />
+    <Compile Include="Models\LeftTurnGapReport\PdfResult.cs" />
+    <Compile Include="Models\LeftTurnGapReport\PeakHourParameters.cs" />
+    <Compile Include="Models\LeftTurnGapReport\ReportParameters.cs" />
+    <Compile Include="Models\MeasuresDefaultsViewModel.cs" />
+    <Compile Include="Models\PedActuationResultViewModel.cs" />
+    <Compile Include="Models\LeftTurnGapReport\SplitFailResultViewModel.cs" />
+    <Compile Include="Models\PedestrianCallAnalysisReportParameters.cs" />
+    <Compile Include="Models\PedestrianCallAnalysisReportViewModel.cs" />
+    <Compile Include="Models\SplitFailAnalysisReportParameters.cs" />
+    <Compile Include="Models\SplitFailAnalysisReportViewModel.cs" />
+    <Compile Include="Models\LeftTurnGapReport\FinalGapAnalysisReportParameters.cs" />
+    <Compile Include="Models\LeftTurnGapReport\FinalGapAnalysisReportViewModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LeftTurnGapReportController.cs" />
     <Compile Include="Controllers\LinkPivotController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MenusController.cs" />
@@ -404,6 +466,8 @@
     <Compile Include="Controllers\RoutePhaseDirectionsController.cs" />
     <Compile Include="Controllers\RoutesController.cs" />
     <Compile Include="Controllers\RouteSignalsController.cs" />
+    <Compile Include="Models\LeftTurnGapReport\SignalDataCheckReportViewModel.cs" />
+    <Compile Include="Models\SignalDataCheckReportParameters.cs" />
     <Compile Include="Controllers\SignalsController.cs" />
     <Compile Include="Controllers\SPMUsersController.cs" />
     <Compile Include="Controllers\GeneralSettingsController.cs" />
@@ -415,6 +479,8 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArchiveSettingsViewModel.cs" />
     <Compile Include="Models\AggDataExportViewModel.cs" />
+    <Compile Include="Models\LeftTurnGapReport\DateSelectorViewModel.cs" />
+    <Compile Include="Models\LeftTurnGapReport\LeftTurnGapReportViewModel.cs" />
     <Compile Include="Models\MetricAndXmlResultViewModel.cs" />
     <Compile Include="Models\MetricResultViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -422,6 +488,11 @@
     <Compile Include="Models\SPMConfigurationTableViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Result.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Result.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Service References\LinkPivotServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -435,12 +506,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-chosen.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\chosen-sprite%402x.png" />
+    <Content Include="Content\chosen-sprite.png" />
+    <Content Include="Content\chosen.css" />
+    <Content Include="Content\chosen.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -517,6 +593,10 @@
     <Content Include="Images\SPMLogo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
+    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
+    <Content Include="Rotativa\wkhtmltoimage.exe" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\ActionLog.js" />
     <Content Include="Scripts\AddData.js" />
     <Content Include="Scripts\AddRouteData.js" />
@@ -526,8 +606,13 @@
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\ChangeDefaultsMenu.js" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
+    <Content Include="Scripts\chosen.jquery.js" />
+    <Content Include="Scripts\chosen.jquery.min.js" />
+    <Content Include="Scripts\chosen.proto.js" />
+    <Content Include="Scripts\chosen.proto.min.js" />
     <Content Include="Scripts\DefaultCharts.js" />
     <Content Include="Images\DetectorAccuracyInformation.pdf" />
     <Content Include="Images\TTTDerekLoweShaneJohnson.pdf" />
@@ -567,12 +652,23 @@
     <Content Include="Images\ATSPM_Reporting_Details_20200121.pdf" />
     <Content Include="Images\ATSPM_User Case Examples_Manual_20200128.pdf" />
     <Content Include="Images\Configuration-Detection Type-Log Action Taken.pdf" />
-    <Content Include="Images\ATSPM_Installation_Manual_2020-01-28.pdf" />
+    <Content Include="App_Browsers\qt.browser" />
+    <Content Include="Content\bootstrap-chosen.scss" />
+    <Content Include="Content\bootstrap-chosen.less" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\GitHubDeploy.pubxml" />
-    <None Include="Properties\PublishProfiles\Historical.pubxml" />
-    <None Include="Properties\PublishProfiles\srtcns61-Staging.pubxml" />
+    <Content Include="Result.xsc">
+      <DependentUpon>Result.xsd</DependentUpon>
+    </Content>
+    <None Include="Result.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Result.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Result.xss">
+      <DependentUpon>Result.xsd</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -589,10 +685,12 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\LeftTurnReport.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\prototype.js" />
     <Content Include="Scripts\RawDataExport.js" />
     <Content Include="Scripts\RouteEdit.js" />
     <Content Include="Scripts\RouteMap.js" />
@@ -823,6 +921,43 @@
     <Content Include="Views\DatabaseArchiveSettings\Edit.cshtml" />
     <Content Include="Views\DatabaseArchiveSettings\EditorTemplates\DatabaseArchiveExcludedSignal.cshtml" />
     <Content Include="Views\DefaultCharts\LeftTurnGapAnalysisOptions.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\Index.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\DateSelection.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\LeftTurnCheckBoxes.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\SignalDataCheckReport.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\FinalGapAnalysisReport.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\SplitFailAnalysisReport.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\PedestrianCallAnalysisReport.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\ConflictingVolumesAnalysisReport.cshtml" />
+    <Content Include="Views\LeftTurnGapReport\ResultAsPdf.cshtml" />
+    <Content Include="Views\Jurisdictions\Create.cshtml" />
+    <Content Include="Views\Jurisdictions\Delete.cshtml" />
+    <Content Include="Views\Jurisdictions\Details.cshtml" />
+    <Content Include="Views\Jurisdictions\Edit.cshtml" />
+    <Content Include="Views\Jurisdictions\EditorTemplates\AgencyPhaseDirection.cshtml" />
+    <Content Include="Views\Jurisdictions\EditorTemplates\AgencySignal.cshtml" />
+    <Content Include="Views\Jurisdictions\Index.cshtml" />
+    <Content Include="Views\DefaultCharts\WaitTimeOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\Index.cshtml" />
+    <Content Include="Views\MeasuresDefaults\PhaseTerminationOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\SplitMonitorOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\PedDelayOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\SplitFailOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\ApproachDelayOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\ApproachSpeedOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\YellowAndRedOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\LeftTurnGapAnalysisOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\TMCOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\ApproachVolumeOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\AoROptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\PCDOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\WaitTimeOptions.cshtml" />
+    <Content Include="Views\MeasuresDefaults\TimingAndActuationsOptions.cshtml" />
+    <Content Include="Views\Areas\Create.cshtml" />
+    <Content Include="Views\Areas\Delete.cshtml" />
+    <Content Include="Views\Areas\Details.cshtml" />
+    <Content Include="Views\Areas\Edit.cshtml" />
+    <Content Include="Views\Areas\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1002,6 +1137,8 @@
     <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Extensions.Configuration.UserSecrets.2.2.0\build\netstandard2.0\Microsoft.Extensions.Configuration.UserSecrets.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Extensions.Configuration.UserSecrets.2.2.0\build\netstandard2.0\Microsoft.Extensions.Configuration.UserSecrets.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Extensions.Configuration.UserSecrets.2.2.0\build\netstandard2.0\Microsoft.Extensions.Configuration.UserSecrets.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Extensions.Configuration.UserSecrets.2.2.0\build\netstandard2.0\Microsoft.Extensions.Configuration.UserSecrets.targets'))" />
+    <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.props'))" />
+    <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.targets'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
   </Target>
@@ -1012,6 +1149,7 @@
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
   <Import Project="..\packages\Microsoft.Extensions.Configuration.UserSecrets.2.2.0\build\netstandard2.0\Microsoft.Extensions.Configuration.UserSecrets.targets" Condition="Exists('..\packages\Microsoft.Extensions.Configuration.UserSecrets.2.2.0\build\netstandard2.0\Microsoft.Extensions.Configuration.UserSecrets.targets')" />
+  <Import Project="..\packages\xunit.core.2.4.1\build\xunit.core.targets" Condition="Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" />
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

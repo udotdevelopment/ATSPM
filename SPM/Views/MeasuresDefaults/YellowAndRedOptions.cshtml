@@ -1,0 +1,103 @@
+﻿@model SPM.Models.MeasuresDefaultsViewModel
+
+<div id="yellow-and-red-options" role="tablist" aria-multiselectable="true" class="card mr-4 ml-4">
+    <div class="card-header" role="tab">
+        <a onclick="rotate(this)" data-toggle="collapse" data-parent="#yellow-and-red-options" href="#yellow-and-red-options-collapse" aria-expanded="false" aria-controls="yellow-and-red-options-collapse">
+            <i class="fa fa-chevron-right mr-3" aria-hidden="true"></i> Yellow and Red Actuations
+        </a>
+    </div>
+    <div id="yellow-and-red-options-collapse" class="collapse" role="tabpanel">
+        <div class="card-body">
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.YellowAndRed.YAxisMax, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.YellowAndRed.YAxisMax, new { htmlAttributes = new { @class = "form-control", placeholder = "Auto" } })
+                    @Html.ValidationMessageFor(model => model.YellowAndRed.YAxisMax, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.YellowAndRed.SevereLevelSeconds, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.YellowAndRed.SevereLevelSeconds, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.YellowAndRed.SevereLevelSeconds, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.YellowAndRed.ShowRedLightViolations, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.YellowAndRed.ShowRedLightViolations)
+                    @Html.ValidationMessageFor(model => model.YellowAndRed.ShowRedLightViolations, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.YellowAndRed.ShowSevereRedLightViolations, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.YellowAndRed.ShowSevereRedLightViolations)
+                    @Html.ValidationMessageFor(model => model.YellowAndRed.ShowSevereRedLightViolations, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.YellowAndRed.ShowPercentRedLightViolations, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.YellowAndRed.ShowPercentRedLightViolations)
+                    @Html.ValidationMessageFor(model => model.YellowAndRed.ShowPercentRedLightViolations, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.YellowAndRed.ShowPercentSevereRedLightViolations, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.YellowAndRed.ShowPercentSevereRedLightViolations)
+                    @Html.ValidationMessageFor(model => model.YellowAndRed.ShowPercentSevereRedLightViolations, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.YellowAndRed.ShowAverageTimeRedLightViolations, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.YellowAndRed.ShowAverageTimeRedLightViolations)
+                    @Html.ValidationMessageFor(model => model.YellowAndRed.ShowAverageTimeRedLightViolations, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.YellowAndRed.ShowYellowLightOccurrences, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.YellowAndRed.ShowYellowLightOccurrences)
+                    @Html.ValidationMessageFor(model => model.YellowAndRed.ShowYellowLightOccurrences, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.YellowAndRed.ShowPercentYellowLightOccurrences, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.YellowAndRed.ShowPercentYellowLightOccurrences)
+                    @Html.ValidationMessageFor(model => model.YellowAndRed.ShowPercentYellowLightOccurrences, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-9">
+                    @Html.LabelFor(model => model.YellowAndRed.ShowAverageTimeYellowOccurences, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-3 text-right">
+                    @Html.EditorFor(model => model.YellowAndRed.ShowAverageTimeYellowOccurences)
+                    @Html.ValidationMessageFor(model => model.YellowAndRed.ShowAverageTimeYellowOccurences, "", new { id = "Description-error", @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

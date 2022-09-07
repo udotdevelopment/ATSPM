@@ -29,11 +29,7 @@ namespace MOE.Common.Business
         {
             PhaseNumber = phasenumber;
             TerminationEvents = FindTerminationEvents(terminationeventstable, PhaseNumber);
-
-
             PedestrianEvents = FindPedEvents(terminationeventstable, PhaseNumber);
-
-
             ConsecutiveGapOuts = FindConsecutiveEvents(TerminationEvents, 4, consecutiveCount);
             ConsecutiveMaxOut = FindConsecutiveEvents(TerminationEvents, 5, consecutiveCount);
             ConsecutiveForceOff = FindConsecutiveEvents(TerminationEvents, 6, consecutiveCount);
@@ -89,6 +85,24 @@ namespace MOE.Common.Business
                 select row).ToList();
 
             var sortedEvents = events.OrderBy(x => x.Timestamp).ThenBy(y => y.EventCode).ToList();
+            var duplicateList = new List<Controller_Event_Log>();
+            for (int i = 0; i < sortedEvents.Count - 1; i++)
+            {
+                var event1 = sortedEvents[i];
+                var event2 = sortedEvents[i + 1];
+                if (event1.Timestamp == event2.Timestamp)
+                {
+                    if(event1.EventCode == 7)
+                        duplicateList.Add(event1);
+                    if(event2.EventCode == 7)
+                        duplicateList.Add(event2);
+                }
+            }
+
+            foreach (var e in duplicateList)
+            {
+                sortedEvents.Remove(e);
+            }
             return sortedEvents;
         }
 
@@ -136,16 +150,7 @@ namespace MOE.Common.Business
 
         private List<Controller_Event_Log> FindUnknownTerminationEvents(List<Controller_Event_Log> terminationEvents)
         {
-            var unknownTermEvents = new List<Controller_Event_Log>();
-            for (var x = 0; x + 1 < terminationEvents.Count; x++)
-            {
-                var currentEvent = terminationEvents[x];
-                var nextEvent = terminationEvents[x + 1];
-
-                if (currentEvent.EventCode == 7 && nextEvent.EventCode == 7)
-                    unknownTermEvents.Add(currentEvent);
-            }
-            return unknownTermEvents;
+            return terminationEvents.Where(t => t.EventCode == 7).ToList();
         }
 
 
@@ -153,12 +158,11 @@ namespace MOE.Common.Business
             int consecutiveCount)
         {
             double percentile = 0;
-            double total = terminationEvents.Where(t => t.EventCode != 7).Count();
+            double total = terminationEvents.Count(t => t.EventCode != 7);
             //Get all termination events of the event type
-            var terminationEventsOfType = terminationEvents.Where(
-                TerminationEvent => TerminationEvent.EventCode == eventtype).Count();
+            var terminationEventsOfType = terminationEvents.Count(terminationEvent => terminationEvent.EventCode == eventtype);
 
-            if (terminationEvents.Count() > 0)
+            if (terminationEvents.Any())
                 percentile = terminationEventsOfType / total;
             return percentile;
         }

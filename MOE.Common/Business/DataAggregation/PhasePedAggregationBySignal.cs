@@ -9,11 +9,11 @@ namespace MOE.Common.Business.DataAggregation
     public class PhasePedAggregationBySignal : AggregationBySignal
     {
 
-        public List<PhasePedAggregationBySignal> PedAggregations { get; }
+        public List<PhasePedAggregationByPhase> PedAggregations { get; }
         public PhasePedAggregationBySignal(PhasePedAggregationOptions options, Models.Signal signal) : base(
             options, signal)
         {
-            PedAggregations = new List<PhasePedAggregationBySignal>();
+            PedAggregations = new List<PhasePedAggregationByPhase>();
             GetPhasePedAggregationContainersForAllPhases(options, signal);
             LoadBins(null, null);
         }
@@ -21,8 +21,8 @@ namespace MOE.Common.Business.DataAggregation
         public PhasePedAggregationBySignal(PhasePedAggregationOptions options, Models.Signal signal,
             int phaseNumber) : base(options, signal)
         {
-            PedAggregations = new List<PhasePedAggregationBySignal>();
-            PedAggregations.Add(new PhasePedAggregationBySignal(options, signal, phaseNumber));
+            PedAggregations = new List<PhasePedAggregationByPhase>();
+            PedAggregations.Add(new PhasePedAggregationByPhase(signal, phaseNumber, options, options.SelectedAggregatedDataType));
             LoadBins(null, null);
         }
 
@@ -61,7 +61,7 @@ namespace MOE.Common.Business.DataAggregation
             foreach (var phaseNumber in availablePhases)
             {
                 PedAggregations.Add(
-                    new PhasePedAggregationBySignal(options, signal, phaseNumber));
+                    new PhasePedAggregationByPhase(signal, phaseNumber, options, options.SelectedAggregatedDataType));
             }
         }
 
