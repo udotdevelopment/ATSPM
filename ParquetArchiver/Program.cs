@@ -29,7 +29,6 @@ namespace ParquetArchiver
         private static readonly string AccessKey = ConfigurationManager.AppSettings["S3_ACCESSKEY"];
         private static readonly string SecretKey = ConfigurationManager.AppSettings["S3_SECRETKEY"];
         private static readonly string BucketName = ConfigurationManager.AppSettings["S3_BUCKETNAME"];
-        private static readonly RegionEndpoint BucketRegion = RegionEndpoint.GetBySystemName(ConfigurationManager.AppSettings["S3_REGION"]);
 
         private const string MAX_DEGREES_OF_PARALLELISM = "MaxDegreesOfParallelism";
         private const string START_DATE = "StartDate";
@@ -50,6 +49,10 @@ namespace ParquetArchiver
 
         static void Main(string[] args)
         {
+            var storageLocation = ConfigurationManager.AppSettings["StorageLocation"];
+            if (storageLocation == "-1")
+                return;
+
             var db = new SPM();
 
             var signalsRepository = SignalsRepositoryFactory.Create(db);
@@ -120,7 +123,7 @@ namespace ParquetArchiver
             var options = new ParallelOptions
             { MaxDegreeOfParallelism = Convert.ToInt32(ParquetArchive.GetSetting(MAX_DEGREES_OF_PARALLELISM)) };
 
-            Archive(dateList, signals, options, ConfigurationManager.AppSettings["StorageLocation"]);
+            Archive(dateList, signals, options, storageLocation);
 
             totalWatch.Stop();
             Console.WriteLine($"All data converted in {totalWatch.ElapsedMilliseconds / 1000} seconds");
@@ -176,6 +179,9 @@ namespace ParquetArchiver
                             case "3": 
                                 await SaveToAzure(signal, events, date);
                                 break;
+                            default:
+                                Console.WriteLine("Invalid storage location specified, returning");
+                                return;
                         }
                     }
 
@@ -315,6 +321,7 @@ namespace ParquetArchiver
             {
                 using (var ms = new MemoryStream())
                 {
+                    var bucketRegion = RegionEndpoint.GetBySystemName(ConfigurationManager.AppSettings["S3_REGION"]);
                     Console.WriteLine($"Data acquired for Signal {signal.SignalID}");
                     var parquetEvents = ConvertToParquetEventLogList(events);
                     Console.WriteLine($"Data converted to ParquetEventLog for Signal {signal.SignalID}");
@@ -322,7 +329,7 @@ namespace ParquetArchiver
                     Console.WriteLine("Uploading parquet file to S3 bucket.");
                     ms.Position = 0;
                     var fileName = $"kimley-horn/date={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
-                    using (var client = new AmazonS3Client(AccessKey, SecretKey, BucketRegion))
+                    using (var client = new AmazonS3Client(AccessKey, SecretKey, bucketRegion))
                     {
                         var uploadRequest = new TransferUtilityUploadRequest
                         {
