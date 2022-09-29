@@ -19,7 +19,6 @@ namespace MOE.Common.Business.Parquet
     {
         private static readonly string Destination = ConfigurationManager.AppSettings["StorageLocation"];
         private static readonly string GoogleBucketName = ConfigurationManager.AppSettings["BucketName"];
-        private static readonly RegionEndpoint BucketRegion = RegionEndpoint.GetBySystemName(ConfigurationManager.AppSettings["S3_REGION"]);
         private static readonly string AwsBucketName = ConfigurationManager.AppSettings["S3_BUCKETNAME"];
         private static readonly string AwsAccessKey = ConfigurationManager.AppSettings["S3_ACCESSKEY"];
         private static readonly string AwsSecretKey = ConfigurationManager.AppSettings["S3_SECRETKEY"];
@@ -51,6 +50,8 @@ namespace MOE.Common.Business.Parquet
                     case "3":
                         events = GetEventsFromAzure(signalId, dateRange);
                         break;
+                    default:
+                        return events;
                 }
 
                 return events.Where(x => x.Timestamp >= startTime && x.Timestamp < endTime).ToList();
@@ -109,8 +110,9 @@ namespace MOE.Common.Business.Parquet
 
         private static List<Controller_Event_Log> GetEventsFromAws(string signalId, IEnumerable<DateTime> dateRange)
         {
+            var bucketRegion = RegionEndpoint.GetBySystemName(ConfigurationManager.AppSettings["S3_REGION"]);
             var events = new List<Controller_Event_Log>();
-            using (var client = new AmazonS3Client(AwsAccessKey, AwsSecretKey, BucketRegion))
+            using (var client = new AmazonS3Client(AwsAccessKey, AwsSecretKey, bucketRegion))
             {
                 foreach (var date in dateRange)
                 {
