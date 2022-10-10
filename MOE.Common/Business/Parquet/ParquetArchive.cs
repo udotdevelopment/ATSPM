@@ -19,6 +19,7 @@ namespace MOE.Common.Business.Parquet
     {
         private static readonly string Destination = ConfigurationManager.AppSettings["StorageLocation"];
         private static readonly string GoogleBucketName = ConfigurationManager.AppSettings["BucketName"];
+        private static readonly string FolderName = ConfigurationManager.AppSettings["FolderName"];
         private static readonly string AwsBucketName = ConfigurationManager.AppSettings["S3_BUCKETNAME"];
         private static readonly string AwsAccessKey = ConfigurationManager.AppSettings["S3_ACCESSKEY"];
         private static readonly string AwsSecretKey = ConfigurationManager.AppSettings["S3_SECRETKEY"];
@@ -83,7 +84,7 @@ namespace MOE.Common.Business.Parquet
 
             foreach (var date in dateRange)
             {
-                var fileName = $"kimley-horn/date={date:yyyy-MM-dd}/{signalId}_{date:yyyy-MM-dd}.parquet";
+                var fileName = $"{FolderName}date={date:yyyy-MM-dd}/{signalId}_{date:yyyy-MM-dd}.parquet";
                 var blobClient = container.GetBlobClient(fileName);
                 if (blobClient.Exists())
                 {
@@ -116,7 +117,7 @@ namespace MOE.Common.Business.Parquet
             {
                 foreach (var date in dateRange)
                 {
-                    var fileName = $"kimley-horn/date={date:yyyy-MM-dd}/{signalId}_{date:yyyy-MM-dd}.parquet";
+                    var fileName = $"{FolderName}date={date:yyyy-MM-dd}/{signalId}_{date:yyyy-MM-dd}.parquet";
 
                     var info = new S3FileInfo(client, AwsBucketName, fileName);
                     if (info.Exists)
@@ -156,7 +157,7 @@ namespace MOE.Common.Business.Parquet
             var storage = StorageClient.Create();
             foreach (var date in dateRange)
             {
-                var objName = $"kimley-horn/date={date:yyyy-MM-dd}/{signalId}_{date:yyyy-MM-dd}.parquet";
+                var objName = $"{FolderName}date={date:yyyy-MM-dd}/{signalId}_{date:yyyy-MM-dd}.parquet";
                 var obj = storage.ListObjects(GoogleBucketName, objName);
                 if (obj.Any())
                 {
