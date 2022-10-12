@@ -48,6 +48,16 @@ namespace MOE.Common.Business
             }
         }
 
+        public double PercentArrivalOnRed
+        {
+            get
+            {
+                if (TotalVolume > 0)
+                    return Math.Round(TotalArrivalOnRed / TotalVolume * 100);
+                return 0;
+            }
+        }
+
         public double PlatoonRatio
         {
             get
