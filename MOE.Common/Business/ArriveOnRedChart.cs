@@ -222,7 +222,7 @@ namespace MOE.Common.Business
                     var statisticlabel = new CustomLabel();
                     statisticlabel.FromPosition = plan.StartTime.ToOADate();
                     statisticlabel.ToPosition = plan.EndTime.ToOADate();
-                    statisticlabel.Text = 100 - plan.PercentGreenTime + "% RT";
+                    statisticlabel.Text = plan.PercentRedTime + "% RT";
                     statisticlabel.ForeColor = Color.Red;
                     statisticlabel.RowIndex = 1;
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(statisticlabel);
