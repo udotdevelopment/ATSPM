@@ -123,7 +123,7 @@ namespace MOE.Common.Business
                     {
                         // Filter cycle events to only include timestamps within the bin
                         var binEvents = cycle.DetectorEvents.Where(e => e.TimeStamp >= dt 
-                                                                     && e.TimeStamp < dt.AddMinutes(Options.SelectedBinSize));
+                        && e.TimeStamp < dt.AddMinutes(Options.SelectedBinSize));
                         totalDetectorHits += binEvents.Count();
                         binDetectorHits += binEvents.Count();
                         foreach (var detectorPoint in binEvents)
@@ -212,7 +212,7 @@ namespace MOE.Common.Business
                     var aogLabel = new CustomLabel();
                     aogLabel.FromPosition = plan.StartTime.ToOADate();
                     aogLabel.ToPosition = plan.EndTime.ToOADate();
-                    aogLabel.Text = 100 - plan.PercentArrivalOnGreen + "% AoR\n";
+                    aogLabel.Text = plan.PercentArrivalOnRed + "% AoR\n";
                     aogLabel.LabelMark = LabelMarkStyle.LineSideMark;
                     aogLabel.ForeColor = Color.Blue;
                     aogLabel.RowIndex = 2;
@@ -221,7 +221,7 @@ namespace MOE.Common.Business
                     var statisticlabel = new CustomLabel();
                     statisticlabel.FromPosition = plan.StartTime.ToOADate();
                     statisticlabel.ToPosition = plan.EndTime.ToOADate();
-                    statisticlabel.Text = 100 - plan.PercentGreenTime + "% RT";
+                    statisticlabel.Text = plan.PercentRedTime + "% RT";
                     statisticlabel.ForeColor = Color.Red;
                     statisticlabel.RowIndex = 1;
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(statisticlabel);
