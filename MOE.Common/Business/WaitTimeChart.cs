@@ -48,7 +48,7 @@ namespace MOE.Common.Business
             if (hasAdvanceDetection && hasStopBarDetection)
             {
                 detectionTypesForApproach = "Advance + Stop Bar Detection";
-                useDroppingAlgorithm = false;
+                useDroppingAlgorithm = true;
             }
             else if (hasAdvanceDetection)
             {
@@ -198,15 +198,19 @@ namespace MOE.Common.Business
                             };
                         }
                     }
-                    else
+                    else if (phaseCallList.Any(x => x.EventCode == WaitTimeOptions.PHASE_CALL_REGISTERED))
                     {
-                        var firstPhaseCall = phaseCallList.First();
+                        var firstPhaseCall = phaseCallList.First(x => x.EventCode == WaitTimeOptions.PHASE_CALL_REGISTERED);
                         //waitTimeTrackerList.Add(new WaitTimeTracker { Time = green.Timestamp, WaitTimeSeconds = (green.Timestamp - firstPhaseCall.Timestamp).TotalSeconds });
                         waitTimeTrackerToFill = new WaitTimeTracker
                         {
                             Time = green.Timestamp,
                             WaitTimeSeconds = (green.Timestamp - firstPhaseCall.Timestamp).TotalSeconds
                         };
+                    }
+                    else
+                    {
+                        continue;
                     }
 
                     //Toss anything longer than 6 minutes - usually a bad value as a result of missing data
