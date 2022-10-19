@@ -6,12 +6,12 @@
         public bool GapOutOk { get; set; }
         public bool PedCycleOk { get; set; }   
         public string ApproachDescriptions { get; set; }
-        public bool InsufficientDetectorEventCount { get; set; }
-        public bool InsufficientCycleAggregation { get; set; }
-        public bool InsufficientPhaseTermination { get; set; }
-        public bool InsufficientPedAggregations { get; set; }
-        public bool InsufficientSplitFailAggregations { get; set; }
-        public bool InsufficientLeftTurnGapAggregations { get; set; }
+        public bool InsufficientDetectorEventCount { get; set; } = true;
+        public bool InsufficientCycleAggregation { get; set; } = true;
+        public bool InsufficientPhaseTermination { get; set; } = true;
+        public bool InsufficientPedAggregations { get; set; } = true;
+        public bool InsufficientSplitFailAggregations { get; set; } = true;
+        public bool InsufficientLeftTurnGapAggregations { get; set; } = true;
         public double VolumeThreshold { get; set; }
         public double GapOutThreshold { get; set; }
         public double PedThreshold { get; set; }
