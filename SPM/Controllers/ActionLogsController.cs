@@ -63,7 +63,7 @@ namespace SPM.Controllers
             var events = eventRepository.GetEventsByDateDescriptions(startDate, endDate, descriptions);
             foreach(ApplicationEvent ae in events)
             {
-                var chartData = reportData.ChartData.Where(r => ae.Description == r.Description + " Executed").FirstOrDefault();
+                var chartData = reportData.ChartData.Where(r => ae.Description.ToLower() == r.Description.ToLower() + " executed").FirstOrDefault();
                 chartData.Value++;
             }
             SetColors(reportData);
