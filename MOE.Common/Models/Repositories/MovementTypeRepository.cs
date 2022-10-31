@@ -27,6 +27,11 @@ namespace MOE.Common.Models.Repositories
             return movementType.FirstOrDefault();
         }
 
+        public MovementType GetMovementTypeByDesc(string desc)
+        {
+            return db.MovementTypes.FirstOrDefault(x => x.Description == desc);
+        }
+
         public void Update(MovementType movementType)
         {
             var g = (from r in db.MovementTypes
