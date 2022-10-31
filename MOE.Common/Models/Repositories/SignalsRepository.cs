@@ -572,9 +572,12 @@ namespace MOE.Common.Models.Repositories
                                       select r).FirstOrDefault();
             if (signalFromDatabase != null)
             {
-                foreach (var area in signalFromDatabase.Areas.ToList())
+                if (signalFromDatabase.Areas != null)
                 {
-                    signalFromDatabase.Areas.Remove(area);
+                    foreach (var area in signalFromDatabase.Areas.ToList())
+                    {
+                        signalFromDatabase.Areas.Remove(area);
+                    }
                 }
                 if (incomingSignal.AreaIds != null && incomingSignal.AreaIds.Count > 0)
                 {
