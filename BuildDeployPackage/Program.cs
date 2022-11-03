@@ -50,6 +50,7 @@ namespace BuildDeployPackage
             CreateWavetronicsSpeedListenerDeploy();
             CreateAggregateDeploy();
             CreateInstallerDeploy();
+            CreateConvertDBForHistoricalConfigurationsDeploy();
         }
 
         private static void CreateFTPFromAllControllersDeploy()
@@ -211,6 +212,13 @@ namespace BuildDeployPackage
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             string appLocation = appSettings["GetMaxTimeRecordsProjectFolderLocation"];
+            CopyBinFiles(appLocation, true);
+        }
+
+        private static void CreateConvertDBForHistoricalConfigurationsDeploy()
+        {
+            NameValueCollection appSettings = ConfigurationManager.AppSettings;
+            string appLocation = appSettings["ConvertDBForHistoricalConfigurationsProjectFolderLocation"];
             CopyBinFiles(appLocation, true);
         }
 
