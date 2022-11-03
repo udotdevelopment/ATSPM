@@ -24,6 +24,7 @@ namespace ParquetArchiver
 {
     class Program
     {
+        private static readonly string FolderName = ConfigurationManager.AppSettings["FolderName"];
         private static readonly string Container = ConfigurationManager.AppSettings["AZURE_CONTAINER"];
 
         private static readonly string AccessKey = ConfigurationManager.AppSettings["S3_ACCESSKEY"];
@@ -153,7 +154,7 @@ namespace ParquetArchiver
             foreach (var date in dateList)
             {
                 WriteToLog($"Starting data conversion for {date.ToLongDateString()}");
-
+                Console.WriteLine($"Starting data conversion for {date.ToLongDateString()}");
                 Parallel.ForEach(signals, options, async signal =>
                 {
                     var watch = new Stopwatch();
@@ -189,7 +190,7 @@ namespace ParquetArchiver
                     Console.WriteLine(
                         $"Finished writing {signal.SignalID}: {signal.PrimaryName} {signal.SecondaryName} for {date.ToShortDateString()} in {watch.ElapsedMilliseconds / 1000} seconds");
                 });
-
+                Console.WriteLine($"Data conversion complete for {date.ToLongDateString()}");
                 WriteToLog($"Data conversion complete for {date.ToLongDateString()}");
             }
         }
@@ -290,6 +291,7 @@ namespace ParquetArchiver
                 Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", ConfigurationManager.AppSettings["GoogleAppCredentialsLocation"]);
                 var storage = StorageClient.Create();
                 var bucketName = ConfigurationManager.AppSettings["BucketName"];
+                
                 Console.WriteLine($"Data acquired for Signal {signal.SignalID}");
                 var parquetEvents = ConvertToParquetEventLogList(events);
                 Console.WriteLine($"Data converted to ParquetEventLog for Signal {signal.SignalID}");
@@ -297,7 +299,7 @@ namespace ParquetArchiver
                 {
                     ParquetConvert.Serialize(parquetEvents, ms);
                     ms.Position = 0;
-                    var fileName = $"kimley-horn/date={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
+                    var fileName = $"{FolderName}date={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
                     await storage.UploadObjectAsync(bucketName, fileName, null, ms);
                     Console.WriteLine($"{fileName} uploaded.");
                 }
@@ -328,7 +330,7 @@ namespace ParquetArchiver
                     ParquetConvert.Serialize(parquetEvents, ms);
                     Console.WriteLine("Uploading parquet file to S3 bucket.");
                     ms.Position = 0;
-                    var fileName = $"kimley-horn/date={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
+                    var fileName = $"{FolderName}date={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
                     using (var client = new AmazonS3Client(AccessKey, SecretKey, bucketRegion))
                     {
                         var uploadRequest = new TransferUtilityUploadRequest
@@ -368,7 +370,7 @@ namespace ParquetArchiver
                     ParquetConvert.Serialize(parquetEvents, ms);
                     Console.WriteLine("Uploading parquet file to Azure.");
                     ms.Position = 0;
-                    var fileName = $"kimley-horn/date={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
+                    var fileName = $"{FolderName}date={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
                     var blobServiceClient = new BlobServiceClient(ConfigurationManager.AppSettings["AZURE_CONN_STRING"]);
                     var container = blobServiceClient.GetBlobContainerClient(Container);
                     var blobClient = container.GetBlobClient(fileName);
