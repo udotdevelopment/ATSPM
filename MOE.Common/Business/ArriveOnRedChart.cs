@@ -112,13 +112,21 @@ namespace MOE.Common.Business
                     double binTotalStops = 0;
                     double binPercentAoR = 0;
                     double binDetectorHits = 0;
+                    // Get cycles that start and end within the bin, and the cycle that starts before and ends
+                    // within the bin, and the cycle that starts within and ends after the bin
                     var cycles = signalPhase.Cycles.Where(c =>
-                        c.StartTime >= dt && c.EndTime < dt.AddMinutes(Options.SelectedBinSize));
+                        c.StartTime >= dt && c.EndTime < dt.AddMinutes(Options.SelectedBinSize) 
+                        || c.StartTime < dt && c.EndTime >= dt
+                        || c.EndTime >= dt.AddMinutes(Options.SelectedBinSize) 
+                           && c.StartTime < dt.AddMinutes(Options.SelectedBinSize));
                     foreach (var cycle in cycles)
                     {
-                        totalDetectorHits += cycle.DetectorEvents.Count;
-                        binDetectorHits += cycle.DetectorEvents.Count;
-                        foreach (var detectorPoint in cycle.DetectorEvents)
+                        // Filter cycle events to only include timestamps within the bin
+                        var binEvents = cycle.DetectorEvents.Where(e => e.TimeStamp >= dt 
+                        && e.TimeStamp < dt.AddMinutes(Options.SelectedBinSize));
+                        totalDetectorHits += binEvents.Count();
+                        binDetectorHits += binEvents.Count();
+                        foreach (var detectorPoint in binEvents)
                             if (detectorPoint.YPoint < cycle.GreenLineY)
                             {
                                 binTotalStops++;
@@ -204,7 +212,7 @@ namespace MOE.Common.Business
                     var aogLabel = new CustomLabel();
                     aogLabel.FromPosition = plan.StartTime.ToOADate();
                     aogLabel.ToPosition = plan.EndTime.ToOADate();
-                    aogLabel.Text = 100 - plan.PercentArrivalOnGreen + "% AoR\n";
+                    aogLabel.Text = plan.PercentArrivalOnRed + "% AoR\n";
                     aogLabel.LabelMark = LabelMarkStyle.LineSideMark;
                     aogLabel.ForeColor = Color.Blue;
                     aogLabel.RowIndex = 2;
@@ -213,7 +221,7 @@ namespace MOE.Common.Business
                     var statisticlabel = new CustomLabel();
                     statisticlabel.FromPosition = plan.StartTime.ToOADate();
                     statisticlabel.ToPosition = plan.EndTime.ToOADate();
-                    statisticlabel.Text = 100 - plan.PercentGreenTime + "% RT";
+                    statisticlabel.Text = plan.PercentRedTime + "% RT";
                     statisticlabel.ForeColor = Color.Red;
                     statisticlabel.RowIndex = 1;
                     chart.ChartAreas["ChartArea1"].AxisX2.CustomLabels.Add(statisticlabel);
