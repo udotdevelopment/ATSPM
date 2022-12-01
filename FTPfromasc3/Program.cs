@@ -41,7 +41,7 @@ namespace FTPfromAllControllers
 
                 SPM db = new MOE.Common.Models.SPM();
                 ISignalsRepository signalsRepository = SignalsRepositoryFactory.Create(db);
-                List<Signal> signals = signalsRepository.GetLatestVersionOfAllSignalsForFtp();
+                List<Signal> signals = signalsRepository.GetLatestVersionOfAllSignalsForFtp().ToList();
 
 
                 int maxThreads = Convert.ToInt32(ConfigurationManager.AppSettings["MaxThreads"]);

@@ -36,6 +36,16 @@ namespace MOE.Common.Business
             }
         }
 
+        public double PercentRedTime
+        {
+            get
+            {
+                if (TotalTime > 0)
+                    return Math.Round(TotalRedTime / TotalTime * 100);
+                return 0;
+            }
+        }
+
         public double AvgDelay => TotalDelay / TotalVolume;
 
         public double PercentArrivalOnGreen
@@ -44,6 +54,16 @@ namespace MOE.Common.Business
             {
                 if (TotalVolume > 0)
                     return Math.Round(TotalArrivalOnGreen / TotalVolume * 100);
+                return 0;
+            }
+        }
+
+        public double PercentArrivalOnRed
+        {
+            get
+            {
+                if (TotalVolume > 0)
+                    return Math.Round(TotalArrivalOnRed / TotalVolume * 100);
                 return 0;
             }
         }
