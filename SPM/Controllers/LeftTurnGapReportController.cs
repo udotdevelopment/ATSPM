@@ -60,19 +60,15 @@ namespace SPM.Controllers
         public ActionResult GetSignalDataCheckReport(string signalId, double cyclesWithPedCalls, double cyclesWithGapOuts,
             int leftTurnVolume, DateTime startDate, DateTime endDate, int[] approachIds, int[] daysOfWeek)
         {
-            var volumePerHourThreshold = leftTurnVolume;
-            var pedestrianThreshold = cyclesWithPedCalls / 100;
-            var gapOutThreshold = cyclesWithGapOuts / 100;
-
             DataCheckPayload dataCheckPayload = new DataCheckPayload()
             {
                 SignalId = signalId,
                 DaysOfWeek = daysOfWeek,
-                VolumePerHourThreshold = volumePerHourThreshold,
-                PedestrianThreshold = pedestrianThreshold,
+                VolumePerHourThreshold = leftTurnVolume,
+                PedestrianThreshold = cyclesWithPedCalls / 100,
                 StartDate = startDate,
                 EndDate = endDate,
-                GapOutThreshold = gapOutThreshold
+                GapOutThreshold = cyclesWithGapOuts/100
             };
             var checkResults = new List<SignalDataCheckReportViewModel>();
             foreach (int approachId in approachIds)
@@ -88,16 +84,16 @@ namespace SPM.Controllers
                 if (result.ResponseStatus == ResponseStatus.Completed)
                 {
                     signalDataCheckReportViewModel = JsonConvert.DeserializeObject<SignalDataCheckReportViewModel>(result.Content);
-                    
-                    if (signalDataCheckReportViewModel == null)
-                        signalDataCheckReportViewModel = new SignalDataCheckReportViewModel();
-                }
-                signalDataCheckReportViewModel.VolumeThreshold = volumePerHourThreshold;
-                signalDataCheckReportViewModel.PedThreshold = pedestrianThreshold;
-                signalDataCheckReportViewModel.GapOutThreshold = gapOutThreshold;
-                checkResults.Add(signalDataCheckReportViewModel);
+                    if (signalDataCheckReportViewModel != null)
+                    {
+                        checkResults.Add(signalDataCheckReportViewModel);
+                        signalDataCheckReportViewModel.VolumeThreshold = dataCheckPayload.VolumePerHourThreshold;
+                        signalDataCheckReportViewModel.PedThreshold = dataCheckPayload.PedestrianThreshold;
+                        signalDataCheckReportViewModel.GapOutThreshold = dataCheckPayload.GapOutThreshold;
+                    }
+                }                
             }
-                return PartialView("SignalDataCheckReport", checkResults);
+            return PartialView("SignalDataCheckReport", checkResults);
         }
 
         [HttpDelete]
@@ -394,6 +390,28 @@ namespace SPM.Controllers
                 StartMinute = parameters.StartMinute ?? 0
             };
             return toSendParameters;
+        }
+
+        private static string GetUrl(FinalGapAnalysisReportParameters parameters, string url)
+        {
+            url += "?signalId=" + parameters.SignalId;
+            url += "&startDate=" + parameters.StartDate.ToString("M-d-yyyy");
+            url += "&endDate=" + parameters.EndDate.ToString("M-d-yyyy");
+            url += "&startHour=" + parameters.StartHour;
+            url += "&startMinute=" + parameters.StartMinute;
+            url += "&endHour=" + parameters.EndHour;
+            url += "&endMinute=" + parameters.EndMinute;
+            url += "&approachId={0}";
+            return url;
+        }
+
+        private static string GetPeakUrl(FinalGapAnalysisReportParameters parameters)
+        {
+            var PeakUrl = "PeakHours?signalId=" + parameters.SignalId;
+            PeakUrl += "&startDate=" + parameters.StartDate.ToString("M-d-yyyy");
+            PeakUrl += "&endDate=" + parameters.EndDate.ToString("M-d-yyyy");
+            PeakUrl += "&approachId={0}";
+            return PeakUrl;
         }
     }
 }
