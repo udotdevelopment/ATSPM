@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
-    public interface IPriorityAggregationDatasRepository
+    public interface IPriorityAggregationDatasRepository:IAggregationRepositoryBase
     {
         List<PriorityAggregation> GetPriorityAggregationByVersionIdAndDateRange(int versionId, DateTime start,
             DateTime end);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
-    public interface IPhaseLeftTurnGapAggregationRepository
+    public interface IPhaseLeftTurnGapAggregationRepository:IAggregationRepositoryBase
     {
         PhaseLeftTurnGapAggregation Add(PhaseLeftTurnGapAggregation phaseLeftTurnGapAggregation);
         void Update(PhaseLeftTurnGapAggregation phaseLeftTurnGapAggregation);

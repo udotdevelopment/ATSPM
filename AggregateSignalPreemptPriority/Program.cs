@@ -10,8 +10,9 @@ namespace AggregateSignalPreemptPriority
     {
         static void Main(string[] args)
         {
+            var repository = MOE.Common.Models.Repositories.PreemptAggregationDatasRepositoryFactory.Create();
             var dataAggregation = new MOE.Common.Business.DataAggregation.DataAggregation();
-            dataAggregation.StartAggregationSignalPreemptPriority(args);
+            dataAggregation.StartAggregationSignalPreemptPriority(args, repository);
         }
     }
 }

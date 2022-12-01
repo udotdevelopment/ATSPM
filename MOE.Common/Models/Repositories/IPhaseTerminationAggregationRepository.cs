@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
-    public interface IPhaseTerminationAggregationRepository
+    public interface IPhaseTerminationAggregationRepository:IAggregationRepositoryBase
     {
 
         PhaseTerminationAggregation Add(PhaseTerminationAggregation priorityAggregation);

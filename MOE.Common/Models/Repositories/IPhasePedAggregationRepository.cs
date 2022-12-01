@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
-    public interface IPhasePedAggregationRepository
+    public interface IPhasePedAggregationRepository:IAggregationRepositoryBase
     {
         PhasePedAggregation Add(PhasePedAggregation pedAggregation);
         void Update(PhasePedAggregation pedAggregation);
