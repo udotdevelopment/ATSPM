@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
-    public interface IPhaseSplitMonitorAggregationRepository
+    public interface IPhaseSplitMonitorAggregationRepository:IAggregationRepositoryBase
     {
 
         PhaseSplitMonitorAggregation Add(PhaseSplitMonitorAggregation splitMonitorAggregation);

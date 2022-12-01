@@ -80,12 +80,12 @@ namespace MOE.Common.Business.DataAggregation
         public int _binSize;
         private string[] _restrictSignals;
 
-        public void StartAggregationSignalPlan(string[] args)
+        public void StartAggregationSignalPlan(string[] args, IAggregationRepositoryBase aggregationRepositoryBase)
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
-            SetStartEndDate(args);
+            SetStartEndDate(args, aggregationRepositoryBase);
 
             Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
             ParallelOptions options =
@@ -153,12 +153,12 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
-        public void StartAggregationSignalEventData(string[] args)
+        public void StartAggregationSignalEventData(string[] args, ISignalEventCountAggregationRepository signalEventCountAggregationRepository)
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
-            SetStartEndDate(args);
+            SetStartEndDate(args, signalEventCountAggregationRepository);
 
             Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
             ParallelOptions options =
@@ -209,12 +209,12 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
-        public void StartAggregationSignalPhaseTermination(string[] args)
+        public void StartAggregationSignalPhaseTermination(string[] args, IPhaseTerminationAggregationRepository phaseTerminationAggregationRepository)
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
-            SetStartEndDate(args);
+            SetStartEndDate(args, phaseTerminationAggregationRepository);
 
             Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
             ParallelOptions options =
@@ -263,13 +263,13 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
-        public void StartAggregationSignalPedDelay(string[] args)
+        public void StartAggregationSignalPedDelay(string[] args, IPhasePedAggregationRepository phasePedAggregationRepository)
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
             int _timeBuffer = Convert.ToInt32(appSettings["TimeBuffer"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
-            SetStartEndDate(args);
+            SetStartEndDate(args, phasePedAggregationRepository);
 
             Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
             ParallelOptions options =
@@ -317,12 +317,12 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
-        public void StartAggregationSignalPreemptPriority(string[] args)
+        public void StartAggregationSignalPreemptPriority(string[] args, IPreemptAggregationDatasRepository preemptAggregationDatasRepository)
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
-            SetStartEndDate(args);
+            SetStartEndDate(args, preemptAggregationDatasRepository);
 
             Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
             ParallelOptions options =
@@ -371,12 +371,12 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
-        public void StartAggregationApproachSpeed(string[] args)
+        public void StartAggregationApproachSpeed(string[] args, IApproachSpeedAggregationRepository approachSpeedAggregationRepository)
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
-            SetStartEndDate(args);
+            SetStartEndDate(args, approachSpeedAggregationRepository);
 
             Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
             ParallelOptions options =
@@ -419,18 +419,18 @@ namespace MOE.Common.Business.DataAggregation
                 Console.WriteLine(
                     "At {0}, the data for {1}, is being written to the database.",
                     DateTime.Now.ToString("HH:mm"), startDateTime.ToString("MM-dd HH:mm"));
-                BulkSaveApproachSpeedData();
+               BulkSaveApproachSpeedData();
 
             }
         }
 
 
-        public void StartAggregationLeftTurnAnalysis(string[] args)
+        public void StartAggregationLeftTurnAnalysis(string[] args, IPhaseLeftTurnGapAggregationRepository phaseLeftTurnGapAggregationRepository)
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
-            SetStartEndDate(args);
+            SetStartEndDate(args, phaseLeftTurnGapAggregationRepository);
 
             Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
             ParallelOptions options =
@@ -594,12 +594,12 @@ namespace MOE.Common.Business.DataAggregation
 
 
 
-        public void StartAggregationApproachSignalPhase(string[] args)
+        public void StartAggregationApproachSignalPhase(string[] args, IApproachPcdAggregationRepository approachPcdAggregationRepository)
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
-            SetStartEndDate(args);
+            SetStartEndDate(args, approachPcdAggregationRepository);
 
             Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
             ParallelOptions options =
@@ -651,12 +651,12 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
-        public void StartAggregationApproachCycle(string[] args)
+        public void StartAggregationApproachCycle(string[] args, IPhaseCycleAggregationRepository phaseCycleAggregationRepository)
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
-            SetStartEndDate(args);
+            SetStartEndDate(args, phaseCycleAggregationRepository);
 
             Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
             ParallelOptions options =
@@ -717,74 +717,74 @@ namespace MOE.Common.Business.DataAggregation
         }
 
 
-        public void StartAggregationApproachTurningMovementCountsForDashboard(string[] args)
+        //public void StartAggregationApproachTurningMovementCountsForDashboard(string[] args, ITMC)
+        //{
+        //    NameValueCollection appSettings = ConfigurationManager.AppSettings;
+        //    _binSize = Convert.ToInt32(appSettings["BinSize"]);
+        //    _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
+        //    SetStartEndDate(args);
+
+        //    Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
+        //    ParallelOptions options =
+        //        new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"]) };
+        //    List<Signal> signals = GetSignalVersionByDate(_startDate);
+        //    List<Signal> nextSignals = new List<Signal>();
+        //    for (var startDateTime = _startDate; startDateTime < _endDate; startDateTime = startDateTime.AddDays(1))//.AddMinutes(_binSize))
+        //    {
+        //        Console.WriteLine("Starting Aggregation:for {0} to {1} ",
+        //            startDateTime.ToString("yyyy-MM-dd HH:mm"), startDateTime.AddMinutes(_binSize).ToString("yyyy-MM-dd HH:mm"));
+
+        //        if (nextSignals.Any())
+        //        {
+        //            signals = nextSignals;
+        //            nextSignals = new List<Signal>();
+        //        }
+        //        Parallel.Invoke(
+        //        () =>
+        //        {
+        //            try
+        //            {
+        //                Parallel.ForEach(signals, options, signal =>
+        //                {
+
+        //                    var phases = signal.Approaches.Select(a => a.ProtectedPhaseNumber).Distinct();
+        //                    Console.Write(signal.SignalID + "    \r");
+        //                    Parallel.ForEach(phases, options, phase =>
+        //                    {
+        //                        if (phase > 0)
+        //                        {
+        //                            SetApproachSignalPhase(startDateTime, startDateTime.AddMinutes(_binSize),
+        //                                signal.Approaches.FirstOrDefault(a => a.ProtectedPhaseNumber == phase));
+        //                        }
+        //                    });
+        //                });
+        //                signals = new List<Signal>();
+        //            }
+        //            catch (Exception e)
+        //            {
+        //                ClearCollections(DateTime.Now);
+        //                Console.WriteLine("Inside ProcessSignal Catch: " +
+        //                                  "was Processing Signals, an execption has occurred.");
+        //                Console.WriteLine("e.TargetSite: " + e.TargetSite + " Message is: " +
+        //                                  e.Message);
+        //                throw e;
+        //            }
+        //        },
+        //        () => { nextSignals = GetSignalVersionByDate(startDateTime.AddMinutes(_binSize)); });
+
+        //        Console.WriteLine(
+        //            "At {0}, the data for {1}, is being written to the database.",
+        //            DateTime.Now.ToString("HH:mm"), startDateTime.ToString("MM-dd HH:mm"));
+        //        BulkSaveApproachPcdData();
+        //    }
+        //}
+
+        public void StartAggregationApproachSplitFail(string[] args, IApproachSplitFailAggregationRepository splitFailAggregationRepository)
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
-            SetStartEndDate(args);
-
-            Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
-            ParallelOptions options =
-                new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(appSettings["MaxThreads"]) };
-            List<Signal> signals = GetSignalVersionByDate(_startDate);
-            List<Signal> nextSignals = new List<Signal>();
-            for (var startDateTime = _startDate; startDateTime < _endDate; startDateTime = startDateTime.AddDays(1))//.AddMinutes(_binSize))
-            {
-                Console.WriteLine("Starting Aggregation:for {0} to {1} ",
-                    startDateTime.ToString("yyyy-MM-dd HH:mm"), startDateTime.AddMinutes(_binSize).ToString("yyyy-MM-dd HH:mm"));
-
-                if (nextSignals.Any())
-                {
-                    signals = nextSignals;
-                    nextSignals = new List<Signal>();
-                }
-                Parallel.Invoke(
-                () =>
-                {
-                    try
-                    {
-                        Parallel.ForEach(signals, options, signal =>
-                        {
-
-                            var phases = signal.Approaches.Select(a => a.ProtectedPhaseNumber).Distinct();
-                            Console.Write(signal.SignalID + "    \r");
-                            Parallel.ForEach(phases, options, phase =>
-                            {
-                                if (phase > 0)
-                                {
-                                    SetApproachSignalPhase(startDateTime, startDateTime.AddMinutes(_binSize),
-                                        signal.Approaches.FirstOrDefault(a => a.ProtectedPhaseNumber == phase));
-                                }
-                            });
-                        });
-                        signals = new List<Signal>();
-                    }
-                    catch (Exception e)
-                    {
-                        ClearCollections(DateTime.Now);
-                        Console.WriteLine("Inside ProcessSignal Catch: " +
-                                          "was Processing Signals, an execption has occurred.");
-                        Console.WriteLine("e.TargetSite: " + e.TargetSite + " Message is: " +
-                                          e.Message);
-                        throw e;
-                    }
-                },
-                () => { nextSignals = GetSignalVersionByDate(startDateTime.AddMinutes(_binSize)); });
-
-                Console.WriteLine(
-                    "At {0}, the data for {1}, is being written to the database.",
-                    DateTime.Now.ToString("HH:mm"), startDateTime.ToString("MM-dd HH:mm"));
-                BulkSaveApproachPcdData();
-            }
-        }
-
-        public void StartAggregationApproachSplitFail(string[] args)
-        {
-            NameValueCollection appSettings = ConfigurationManager.AppSettings;
-            _binSize = Convert.ToInt32(appSettings["BinSize"]);
-            _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
-            SetStartEndDate(args);
+            SetStartEndDate(args, splitFailAggregationRepository);
 
             Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
             ParallelOptions options =
@@ -840,12 +840,12 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
-        public void StartAggregationSplitMonitor(string[] args)
+        public void StartAggregationSplitMonitor(string[] args, IPhaseSplitMonitorAggregationRepository phaseSplitMonitorAggregationRepository)
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
-            SetStartEndDate(args);
+            SetStartEndDate(args, phaseSplitMonitorAggregationRepository);
 
             Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
             ParallelOptions options =
@@ -905,12 +905,12 @@ namespace MOE.Common.Business.DataAggregation
 
 
 
-        public void StartAggregationApproachYellowRedActivation(string[] args)
+        public void StartAggregationApproachYellowRedActivation(string[] args, IApproachYellowRedActivationsAggregationRepository approachYellowRedActivationsAggregationRepository)
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
-            SetStartEndDate(args);
+            SetStartEndDate(args, approachYellowRedActivationsAggregationRepository);
 
             Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
             ParallelOptions options =
@@ -967,12 +967,12 @@ namespace MOE.Common.Business.DataAggregation
             }
         }
 
-        public void StartAggregationDetectorActivation(string[] args)
+        public void StartAggregationDetectorActivation(string[] args, IDetectorEventCountAggregationRepository detectorEventCountAggregationRepository )
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             _binSize = Convert.ToInt32(appSettings["BinSize"]);
             _maxMemoryLimit = Convert.ToInt64(appSettings["MaxMemoryLimit"]);
-            SetStartEndDate(args);
+            SetStartEndDate(args, detectorEventCountAggregationRepository);
 
             Console.WriteLine("Begining of Data Aggregation  " + _startDate.ToString("yyyy-MM-dd HH:mm"));
             ParallelOptions options =
@@ -1205,7 +1205,8 @@ namespace MOE.Common.Business.DataAggregation
                         .Select(s => s.VersionID).ToList();
                 }
 
-                var signals = db.Signals.Where(signal => versionIds.Contains(signal.VersionID))
+                var signals = db.Signals//.Where(signal => signal.SignalID == "6561")
+                    .Where(signal => versionIds.Contains(signal.VersionID))
                     .Include(signal => signal.Approaches.Select(a => a.Detectors.Select(d => d.DetectionTypes)))
                     .Include(signal => signal.Approaches.Select(a =>
                         a.Detectors.Select(d => d.DetectionTypes.Select(det => det.MetricTypes))))
@@ -2114,9 +2115,14 @@ namespace MOE.Common.Business.DataAggregation
         }
 
 
-        public void SetStartEndDate(string[] args)
+        public void SetStartEndDate(string[] args, IAggregationRepositoryBase repository)
         {
-            _startDate = DateTime.Today;
+            NameValueCollection appSettings = ConfigurationManager.AppSettings;
+            var lastAggregationDate = repository.GetLastAggregationDate();
+            var minAggregationDate = Convert.ToDateTime(appSettings["EndBackwardTIme"]);
+            _startDate = lastAggregationDate == null
+                ? minAggregationDate
+                : lastAggregationDate > minAggregationDate ? Convert.ToDateTime(lastAggregationDate).AddMinutes(15) : minAggregationDate;
             if (args.Length == 1)
             {
                 _startDate = Convert.ToDateTime(args[0]);
@@ -2135,8 +2141,11 @@ namespace MOE.Common.Business.DataAggregation
             }
             else
             {
-                _startDate = GetNextTime();
                 _endDate = _startDate.AddDays(1);
+                if(_endDate > DateTime.Today.AddDays(-1))
+                {
+                    _endDate = DateTime.Today.AddDays(-1);
+                }
             }
         }
 
@@ -2842,28 +2851,27 @@ sText = sText.Replace("\\", sReplace); // Backslash
 
         private void SetApproachSpeedAggregationData(DateTime startTime, DateTime endTime, Approach signalApproach, bool getPermissivePhase)
         {
-            var speedDetectors = signalApproach.GetDetectorsForMetricType(10);
-            if (speedDetectors.Count > 0)
-                foreach (var detector in speedDetectors)
+            var speedDetector = signalApproach.GetDetectorsForMetricType(10).OrderBy(d => d.DistanceFromStopBar).FirstOrDefault();
+            if (speedDetector != null)
+            {
+                var detectorSpeed = new DetectorSpeed(speedDetector, startTime, endTime, 15, getPermissivePhase);
+                if (detectorSpeed.AvgSpeedBucketCollection.AvgSpeedBuckets.Any())
                 {
-                    var detectorSpeed = new DetectorSpeed(detector, startTime, endTime, 15, getPermissivePhase);
-                    if (detectorSpeed.AvgSpeedBucketCollection.AvgSpeedBuckets.Any())
-                    {
-                        var speedBucket = detectorSpeed.AvgSpeedBucketCollection.AvgSpeedBuckets.FirstOrDefault();
-                        var approachSpeedAggregation =
-                            new ApproachSpeedAggregation
-                            {
-                                ApproachId = signalApproach.ApproachID,
-                                SignalId = signalApproach.SignalID,
-                                BinStartTime = startTime,
-                                Speed85Th = speedBucket.EightyFifth,
-                                Speed15Th = speedBucket.FifteenthPercentile,
-                                SpeedVolume = speedBucket.SpeedVolume,
-                                SummedSpeed = speedBucket.SummedSpeed
-                            };
-                        _approachSpeedAggregationConcurrentQueue.Enqueue(approachSpeedAggregation);
-                    }
+                    var speedBucket = detectorSpeed.AvgSpeedBucketCollection.AvgSpeedBuckets.FirstOrDefault();
+                    var approachSpeedAggregation =
+                        new ApproachSpeedAggregation
+                        {
+                            ApproachId = signalApproach.ApproachID,
+                            SignalId = signalApproach.SignalID,
+                            BinStartTime = startTime,
+                            Speed85Th = speedBucket.EightyFifth,
+                            Speed15Th = speedBucket.FifteenthPercentile,
+                            SpeedVolume = speedBucket.SpeedVolume,
+                            SummedSpeed = speedBucket.SummedSpeed
+                        };
+                    _approachSpeedAggregationConcurrentQueue.Enqueue(approachSpeedAggregation);
                 }
+            }
         }
 
         private void AggregatePriorityCodes(DateTime startTime, List<Controller_Event_Log> records,

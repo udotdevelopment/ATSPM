@@ -576,7 +576,7 @@ namespace MOE.Common.Business
                         {
                             options.Connection.Open();
                         }
-                        catch
+                        catch(Exception ex)
                         {
                             Thread.Sleep(Settings.Default.SleepTime);
                         }

@@ -494,7 +494,7 @@ namespace MOE.Common.Migrations
                     ControllerTypeID = 9,
                     Description = "EOS",
                     SNMPPort = 161,
-                    FTPDirectory = "/set1",
+                    FTPDirectory = "/econolite/set1",
                     ActiveFTP = true,
                     UserName = "econolite",
                     Password = "ecpi2ecpi"
