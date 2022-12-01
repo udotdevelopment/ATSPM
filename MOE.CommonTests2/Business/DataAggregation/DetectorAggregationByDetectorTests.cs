@@ -35,4 +35,9 @@ public class DetectorEventCountAggregationRepositoryTest : IDetectorEventCountAg
     {
         throw new NotImplementedException();
     }
+
+    public DateTime? GetLastAggregationDate()
+    {
+        throw new NotImplementedException();
+    }
 }

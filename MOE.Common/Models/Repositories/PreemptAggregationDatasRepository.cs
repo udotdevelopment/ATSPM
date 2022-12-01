@@ -87,5 +87,10 @@ namespace MOE.Common.Models.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public DateTime? GetLastAggregationDate()
+        {
+            return _db.PreemptionAggregations.Max(s => (DateTime?)s.BinStartTime);
+        }
     }
 }

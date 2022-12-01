@@ -4,7 +4,7 @@ using MOE.Common.Business.DataAggregation;
 
 namespace MOE.Common.Models.Repositories
 {
-    public interface IApproachYellowRedActivationsAggregationRepository
+    public interface IApproachYellowRedActivationsAggregationRepository: IAggregationRepositoryBase
     {
         int GetApproachYellowRedActivationsCountAggregationByApproachIdAndDateRange(int versionId, DateTime start,
             DateTime end);

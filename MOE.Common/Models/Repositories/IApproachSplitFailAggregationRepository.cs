@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MOE.Common.Models.Repositories
 {
-    public interface IApproachSplitFailAggregationRepository
+    public interface IApproachSplitFailAggregationRepository:IAggregationRepositoryBase
     {
         int GetApproachSplitFailCountAggregationByApproachIdAndDateRange(int versionId, DateTime start,
             DateTime end);

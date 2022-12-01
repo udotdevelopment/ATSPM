@@ -59,6 +59,11 @@ namespace MOE.Common.Models.Repositories
                 }
             return new List<DetectorEventCountAggregation>();
         }
+
+        public DateTime? GetLastAggregationDate()
+        {
+            return _db.DetectorEventCountAggregations.Max(s => (DateTime?)s.BinStartTime);
+        }
     }
 
     

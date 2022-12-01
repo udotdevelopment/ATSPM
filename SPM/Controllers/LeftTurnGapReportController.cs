@@ -93,7 +93,14 @@ namespace SPM.Controllers
                     }
                 }                
             }
-            return PartialView("SignalDataCheckReport", checkResults);
+            if (checkResults.Count > 0)
+            {
+                return PartialView("SignalDataCheckReport", checkResults);
+            }
+            else
+            {
+                return Content("<b class='alert-danger'>No data found</b>");
+            }
         }
 
         [HttpDelete]

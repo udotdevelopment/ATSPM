@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MOE.Common.Models.Repositories;
 
 namespace AggregateApproachSpeed
 {
@@ -10,8 +6,9 @@ namespace AggregateApproachSpeed
     {
         static void Main(string[] args)
         {
+            var repository = ApproachSpeedAggregationRepositoryFactory.Create();
             var dataAggregation = new MOE.Common.Business.DataAggregation.DataAggregation();
-            dataAggregation.StartAggregationApproachSpeed(args);
+            dataAggregation.StartAggregationApproachSpeed(args, repository);
         }
     }
 }

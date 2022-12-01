@@ -51,5 +51,10 @@ namespace MOE.Common.Models.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public DateTime? GetLastAggregationDate()
+        {
+            return _db.PhaseTerminationAggregations.Max(s => (DateTime?)s.BinStartTime);
+        }
     }
 }
