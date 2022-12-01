@@ -2851,28 +2851,27 @@ sText = sText.Replace("\\", sReplace); // Backslash
 
         private void SetApproachSpeedAggregationData(DateTime startTime, DateTime endTime, Approach signalApproach, bool getPermissivePhase)
         {
-            var speedDetectors = signalApproach.GetDetectorsForMetricType(10);
-            if (speedDetectors.Count > 0)
-                foreach (var detector in speedDetectors)
+            var speedDetector = signalApproach.GetDetectorsForMetricType(10).OrderBy(d => d.DistanceFromStopBar).FirstOrDefault();
+            if (speedDetector != null)
+            {
+                var detectorSpeed = new DetectorSpeed(speedDetector, startTime, endTime, 15, getPermissivePhase);
+                if (detectorSpeed.AvgSpeedBucketCollection.AvgSpeedBuckets.Any())
                 {
-                    var detectorSpeed = new DetectorSpeed(detector, startTime, endTime, 15, getPermissivePhase);
-                    if (detectorSpeed.AvgSpeedBucketCollection.AvgSpeedBuckets.Any())
-                    {
-                        var speedBucket = detectorSpeed.AvgSpeedBucketCollection.AvgSpeedBuckets.FirstOrDefault();
-                        var approachSpeedAggregation =
-                            new ApproachSpeedAggregation
-                            {
-                                ApproachId = signalApproach.ApproachID,
-                                SignalId = signalApproach.SignalID,
-                                BinStartTime = startTime,
-                                Speed85Th = speedBucket.EightyFifth,
-                                Speed15Th = speedBucket.FifteenthPercentile,
-                                SpeedVolume = speedBucket.SpeedVolume,
-                                SummedSpeed = speedBucket.SummedSpeed
-                            };
-                        _approachSpeedAggregationConcurrentQueue.Enqueue(approachSpeedAggregation);
-                    }
+                    var speedBucket = detectorSpeed.AvgSpeedBucketCollection.AvgSpeedBuckets.FirstOrDefault();
+                    var approachSpeedAggregation =
+                        new ApproachSpeedAggregation
+                        {
+                            ApproachId = signalApproach.ApproachID,
+                            SignalId = signalApproach.SignalID,
+                            BinStartTime = startTime,
+                            Speed85Th = speedBucket.EightyFifth,
+                            Speed15Th = speedBucket.FifteenthPercentile,
+                            SpeedVolume = speedBucket.SpeedVolume,
+                            SummedSpeed = speedBucket.SummedSpeed
+                        };
+                    _approachSpeedAggregationConcurrentQueue.Enqueue(approachSpeedAggregation);
                 }
+            }
         }
 
         private void AggregatePriorityCodes(DateTime startTime, List<Controller_Event_Log> records,
