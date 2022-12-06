@@ -509,6 +509,10 @@
     <Compile Include="Migrations\202207061520118_AddApproachToPhasePedAgg.designer.cs">
       <DependentUpon>202207061520118_AddApproachToPhasePedAgg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202212060255479_YellowRedActivationsAggregation.cs" />
+    <Compile Include="Migrations\202212060255479_YellowRedActivationsAggregation.designer.cs">
+      <DependentUpon>202212060255479_YellowRedActivationsAggregation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Area.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>
@@ -1190,6 +1194,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202207061520118_AddApproachToPhasePedAgg.resx">
       <DependentUpon>202207061520118_AddApproachToPhasePedAgg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202212060255479_YellowRedActivationsAggregation.resx">
+      <DependentUpon>202212060255479_YellowRedActivationsAggregation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
