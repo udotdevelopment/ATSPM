@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core;
-using System.Data.Entity.Core.Objects;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
-using System.Web.Management;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace MOE.Common.Models.Repositories
 {
     public class ControllerEventLogRepository : IControllerEventLogRepository
     {
-       
+
         private readonly SPM _db = new SPM();
         public ControllerEventLogRepository(SPM db)
         {
@@ -196,7 +191,7 @@ namespace MOE.Common.Models.Repositories
                                                            && r.Timestamp >= startTime
                                                            && r.Timestamp < endTime);
             }
-             catch (Exception ex)
+            catch (Exception ex)
             {
                 var logRepository =
                     ApplicationEventRepositoryFactory.Create();
@@ -206,7 +201,7 @@ namespace MOE.Common.Models.Repositories
                 e.Function = "GetRecordCount";
                 e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
                 e.Timestamp = DateTime.Now;
-                e.Description = signalId + " - " +ex.Message;
+                e.Description = signalId + " - " + ex.Message;
                 logRepository.Add(e);
                 throw ex;
             }
@@ -281,9 +276,9 @@ namespace MOE.Common.Models.Repositories
             }
             //catch (EntityCommandExecutionException ex)
             //{
-                
+
             //}
-            
+
             catch (Exception ex)
             {
                 var logRepository =
@@ -347,7 +342,7 @@ namespace MOE.Common.Models.Repositories
                     eventCodes.Contains(c.EventCode)).ToList();
                 return events
                     .OrderBy(s => s.Timestamp)
-                    .Take(top).ToList(); 
+                    .Take(top).ToList();
             }
             catch (Exception e)
             {
@@ -367,7 +362,7 @@ namespace MOE.Common.Models.Repositories
                 secondsToCompleteCycle = Convert.ToInt32(settings.CycleCompletionSeconds);
             try
             {
-                var start = timestamp.AddSeconds(secondsToCompleteCycle *-1);
+                var start = timestamp.AddSeconds(secondsToCompleteCycle * -1);
                 var events = _db.Controller_Event_Log.Where(c =>
                     c.SignalID == signalId &&
                     c.Timestamp < timestamp &&
@@ -570,7 +565,7 @@ namespace MOE.Common.Models.Repositories
         public Controller_Event_Log GetFirstEventAfterDateByEventCodesAndParameter(string signalId, List<int> eventCodes,
             int eventParam, DateTime start, int secondsToSearch)
         {
-            
+
             if (!String.IsNullOrEmpty(signalId))
             {
                 try
@@ -579,9 +574,9 @@ namespace MOE.Common.Models.Repositories
                     var tempDate = start.AddSeconds(secondsToSearch);
                     var controllerEvent = _db.Controller_Event_Log.Where(c => c.SignalID == signalId &&
                                                                         c.Timestamp > start &&
-                                                                        c.Timestamp <= tempDate && 
-                                                                        c.EventParam == eventParam&&
-                                                                        eventCodes.Contains(c.EventCode)  )
+                                                                        c.Timestamp <= tempDate &&
+                                                                        c.EventParam == eventParam &&
+                                                                        eventCodes.Contains(c.EventCode))
                         .OrderBy(c => c.Timestamp).FirstOrDefault();
                     return controllerEvent;
                 }
@@ -670,9 +665,9 @@ namespace MOE.Common.Models.Repositories
         public DateTime GetMostRecentRecordTimestamp(string signalID)
         {
             MOE.Common.Models.Controller_Event_Log row = (from r in _db.Controller_Event_Log
-                where r.SignalID == signalID
-                orderby r.Timestamp descending
-                select r).Take(1).FirstOrDefault();
+                                                          where r.SignalID == signalID
+                                                          orderby r.Timestamp descending
+                                                          select r).Take(1).FirstOrDefault();
             if (row != null)
             {
                 return row.Timestamp;
@@ -681,6 +676,25 @@ namespace MOE.Common.Models.Repositories
             {
                 return new DateTime();
             }
+        }
+
+        public List<Controller_Event_Log> GetSignalEventsByEventCodesParams(string signalID, DateTime startDate, DateTime endDate, List<int> eventCodes, List<int> eventParams)
+        {
+            return _db.Controller_Event_Log.Where(s =>
+                          s.SignalID == signalID &&
+                               s.Timestamp >= startDate &&
+                               s.Timestamp <= endDate &&
+                               eventCodes.Contains(s.EventCode) &&
+                               eventParams.Contains(s.EventParam)).ToList();
+        }
+
+        public Controller_Event_Log GetTopEventAfterDate(string signalID, DateTime twoDaysAgo)
+        {
+            return _db.Controller_Event_Log
+                .Where(r => r.SignalID == signalID && r.Timestamp > twoDaysAgo)
+                .OrderByDescending(r => r.Timestamp)
+                .Take(1)
+                .FirstOrDefault();
         }
     }
 }
