@@ -654,6 +654,7 @@
     <Content Include="App_Browsers\qt.browser" />
     <Content Include="Content\bootstrap-chosen.scss" />
     <Content Include="Content\bootstrap-chosen.less" />
+    <Content Include="Images\ATSPMMethodsandAssumptions.pdf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\GitHubDeploy.pubxml" />
