@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MOE.Common.Models.Repositories;
 
 namespace AggregateApproachSplitFail
 {
@@ -10,8 +6,9 @@ namespace AggregateApproachSplitFail
     {
         static void Main(string[] args)
         {
+            var repository = ApproachSplitFailAggregationRepositoryFactory.Create();
             var dataAggregation = new MOE.Common.Business.DataAggregation.DataAggregation();
-            dataAggregation.StartAggregationApproachSplitFail(args);
+            dataAggregation.StartAggregationApproachSplitFail(args, repository);
         }
     }
 }

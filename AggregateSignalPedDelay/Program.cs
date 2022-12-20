@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MOE.Common.Migrations;
+using MOE.Common.Models.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +12,9 @@ namespace AggregateSignalPedDelay
     {
         static void Main(string[] args)
         {
+            var repository = PhasePedAggregationRepositoryFactory.Create();
             var dataAggregation = new MOE.Common.Business.DataAggregation.DataAggregation();
-            dataAggregation.StartAggregationSignalPedDelay(args);
+            dataAggregation.StartAggregationSignalPedDelay(args, repository);
         }
     }
 }

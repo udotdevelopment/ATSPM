@@ -670,6 +670,7 @@
     <Content Include="App_Browsers\qt.browser" />
     <Content Include="Content\bootstrap-chosen.scss" />
     <Content Include="Content\bootstrap-chosen.less" />
+    <Content Include="Images\ATSPMMethodsandAssumptions.pdf" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

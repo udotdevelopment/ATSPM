@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MOE.Common.Business;
+using MOE.Common.Models.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +12,9 @@ namespace AggregateSplitMonitor
     {
         static void Main(string[] args)
         {
+            var repository = PhaseSplitMonitorAggregationRepositoryFactory.Create();
             var dataAggregation = new MOE.Common.Business.DataAggregation.DataAggregation();
-            dataAggregation.StartAggregationSplitMonitor(args);
+            dataAggregation.StartAggregationSplitMonitor(args, repository);
         }
     }
 }

@@ -42,6 +42,11 @@ namespace MOE.Common.Models.Repositories
                                                             && r.BinStartTime >= startDate &&
                                                             r.BinStartTime <= endDate).ToList();
         }
+
+        public DateTime? GetLastAggregationDate()
+        {
+            return _db.SignalEventCountAggregations.Max(s => (DateTime?)s.BinStartTime);
+        }
     }
 
     

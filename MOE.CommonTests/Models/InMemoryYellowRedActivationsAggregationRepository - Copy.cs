@@ -50,5 +50,9 @@ namespace MOE.CommonTests.Models
             return list;
         }
 
+        public DateTime? GetLastAggregationDate()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
