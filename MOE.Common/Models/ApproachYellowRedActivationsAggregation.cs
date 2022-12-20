@@ -16,6 +16,7 @@ namespace MOE.Common.Models
         [Column(Order = 0)]
         public override DateTime BinStartTime { get; set; }
 
+        [Key]
         [Required]
         [Column(Order= 1)]
         public int ApproachId { get; set; }

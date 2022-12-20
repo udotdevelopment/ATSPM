@@ -85,5 +85,10 @@ namespace MOE.Common.Models.Repositories
             else
                 return new List<PhaseLeftTurnGapAggregation>();
         }
+
+        public DateTime? GetLastAggregationDate()
+        {
+            return _db.PhaseLeftTurnGapAggregations.Max(s => (DateTime?)s.BinStartTime);
+        }
     }
 }

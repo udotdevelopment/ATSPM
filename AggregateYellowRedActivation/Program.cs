@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MOE.Common.Models.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,9 @@ namespace AggregateYellowRedActivation
     {
         static void Main(string[] args)
         {
+            var repository = ApproachYellowRedActivationsAggregationRepositoryFactory.Create();
             var dataAggregation = new MOE.Common.Business.DataAggregation.DataAggregation();
-            dataAggregation.StartAggregationApproachYellowRedActivation(args);
+            dataAggregation.StartAggregationApproachYellowRedActivation(args, repository);
         }
     }
 }

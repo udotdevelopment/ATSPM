@@ -10,8 +10,9 @@ namespace AggregateSignalPlan
     {
         static void Main(string[] args)
         {
+            var repository = MOE.Common.Models.Repositories.SignalPlanAggregationRepositoryFactory.Create();
             var dataAggregation = new MOE.Common.Business.DataAggregation.DataAggregation();
-            dataAggregation.StartAggregationSignalPlan(args);
+            dataAggregation.StartAggregationSignalPlan(args, repository);
         }
     }
 }

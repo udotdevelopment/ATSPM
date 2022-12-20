@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MOE.Common.Models.Repositories;
 
 namespace AggregateApproachPCDCycle
 {
@@ -10,8 +6,9 @@ namespace AggregateApproachPCDCycle
     {
         static void Main(string[] args)
         {
+            var repository = ApproachPcdAggregationRepositoryFactory.Create();
             var dataAggregation = new MOE.Common.Business.DataAggregation.DataAggregation();
-            dataAggregation.StartAggregationApproachSignalPhase(args);
+            dataAggregation.StartAggregationApproachSignalPhase(args, repository);
         }
     }
 }

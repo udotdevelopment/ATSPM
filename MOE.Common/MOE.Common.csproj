@@ -606,6 +606,10 @@
     <Compile Include="Migrations\202207061520118_AddApproachToPhasePedAgg.designer.cs">
       <DependentUpon>202207061520118_AddApproachToPhasePedAgg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202212060255479_YellowRedActivationsAggregation.cs" />
+    <Compile Include="Migrations\202212060255479_YellowRedActivationsAggregation.designer.cs">
+      <DependentUpon>202212060255479_YellowRedActivationsAggregation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Area.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>
@@ -810,6 +814,7 @@
     <Compile Include="Models\PhaseTerminationAggregation.cs" />
     <Compile Include="Models\DetectorEventCountAggregation.cs" />
     <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\Repositories\IAggregationRepositoryBase.cs" />
     <Compile Include="Models\Repositories\IMeasuresDefaultsRepository.cs" />
     <Compile Include="Models\Repositories\AreaRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\AreaRepository.cs" />
@@ -818,6 +823,7 @@
     <Compile Include="Models\Repositories\IPhaseLeftTurnGapAggregationRepository.cs" />
     <Compile Include="Models\Repositories\IJurisdictionRepository.cs" />
     <Compile Include="Models\Repositories\IPhaseSplitMonitorAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\ISignalPlanAggregationRepository.cs" />
     <Compile Include="Models\Repositories\MeasuresDefaultsRepositortFactory.cs" />
     <Compile Include="Models\Repositories\MeasuresDefaultsRepository.cs" />
     <Compile Include="Models\Repositories\PhasePedAggregationRepository.cs" />
@@ -835,6 +841,8 @@
     <Compile Include="Models\Repositories\DetectorEventCountAggregationRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\JurisdictionRepository.cs" />
     <Compile Include="Models\Repositories\JurisdictionRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\SignalPlanAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\SignalPlanAggregationRepositoryFactory.cs" />
     <Compile Include="Models\SignalToAggregate.cs" />
     <Compile Include="Models\SignalPlanAggregation.cs" />
     <Compile Include="Models\SignalEventCountAggregation.cs" />
@@ -1280,6 +1288,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202207061520118_AddApproachToPhasePedAgg.resx">
       <DependentUpon>202207061520118_AddApproachToPhasePedAgg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202212060255479_YellowRedActivationsAggregation.resx">
+      <DependentUpon>202212060255479_YellowRedActivationsAggregation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
