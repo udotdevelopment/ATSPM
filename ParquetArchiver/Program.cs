@@ -26,6 +26,7 @@ namespace ParquetArchiver
     {
         private static readonly string FolderName = ConfigurationManager.AppSettings["FolderName"];
         private static readonly string Container = ConfigurationManager.AppSettings["AZURE_CONTAINER"];
+        private static readonly string FilePathPrefix = ConfigurationManager.AppSettings["FILE_PATH_PREFIX"];
 
         private static readonly string AccessKey = ConfigurationManager.AppSettings["S3_ACCESSKEY"];
         private static readonly string SecretKey = ConfigurationManager.AppSettings["S3_SECRETKEY"];
@@ -58,8 +59,8 @@ namespace ParquetArchiver
 
             var signalsRepository = SignalsRepositoryFactory.Create(db);
             var signals = signalsRepository.GetLatestVersionOfAllSignals();
-            DateTime start = DateTime.MinValue;
-            DateTime end = DateTime.MinValue;
+            DateTime start;
+            DateTime end;
             bool useStartAndEndDates;
 
             try
@@ -200,13 +201,13 @@ namespace ParquetArchiver
             var localPath = ParquetArchive.GetSetting(LOCAL_ARCHIVE_DIRECTORY);
             Console.WriteLine($"Data acquired for Signal {signal.SignalID}");
 
-            if (!Directory.Exists($"{localPath}\\date={events.First().Timestamp.Date:yyyy-MM-dd}"))
+            if (!Directory.Exists($"{localPath}\\{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}"))
                 Directory.CreateDirectory(
-                    $"{localPath}\\date={events.First().Timestamp.Date:yyyy-MM-dd}");
+                    $"{localPath}\\{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}");
 
             using (var stream =
                    File.Create(
-                       $"{localPath}\\date={events.First().Timestamp.Date:yyyy-MM-dd}\\{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet")
+                       $"{localPath}\\{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}\\{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet")
                   )
             {
                 var parquetEvents = ConvertToParquetEventLogList(events);
@@ -299,7 +300,7 @@ namespace ParquetArchiver
                 {
                     ParquetConvert.Serialize(parquetEvents, ms);
                     ms.Position = 0;
-                    var fileName = $"{FolderName}date={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
+                    var fileName = $"{FolderName}{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
                     await storage.UploadObjectAsync(bucketName, fileName, null, ms);
                     Console.WriteLine($"{fileName} uploaded.");
                 }
@@ -330,7 +331,7 @@ namespace ParquetArchiver
                     ParquetConvert.Serialize(parquetEvents, ms);
                     Console.WriteLine("Uploading parquet file to S3 bucket.");
                     ms.Position = 0;
-                    var fileName = $"{FolderName}date={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
+                    var fileName = $"{FolderName}{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
                     using (var client = new AmazonS3Client(AccessKey, SecretKey, bucketRegion))
                     {
                         var uploadRequest = new TransferUtilityUploadRequest
@@ -370,7 +371,7 @@ namespace ParquetArchiver
                     ParquetConvert.Serialize(parquetEvents, ms);
                     Console.WriteLine("Uploading parquet file to Azure.");
                     ms.Position = 0;
-                    var fileName = $"{FolderName}date={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
+                    var fileName = $"{FolderName}{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
                     var blobServiceClient = new BlobServiceClient(ConfigurationManager.AppSettings["AZURE_CONN_STRING"]);
                     var container = blobServiceClient.GetBlobContainerClient(Container);
                     var blobClient = container.GetBlobClient(fileName);
@@ -404,7 +405,7 @@ namespace ParquetArchiver
 
             foreach (var date in dateRange)
             {
-                if (!Directory.Exists($"{localPath}\\date={date.Date:yyyy-MM-dd}"))
+                if (!Directory.Exists($"{localPath}\\{FilePathPrefix}={date.Date:yyyy-MM-dd}"))
                 {
                     retVal.Add(date);
                     _missingDaysStr += $"{date.ToLongDateString()}\n";
