@@ -17,7 +17,7 @@ namespace MOE.Common.Business.TMC
             LaneType laneType, MovementType movementType,
             TMCOptions options, TMCInfo tmcInfo)
         {
-            chart = ChartFactory.CreateDefaultChart(options);
+            chart = ChartFactory.CreateDefaultChartNoX2Axis(options);
             Options = options;
             var extendedDirection = string.Empty;
             var reportTimespan = graphEndDate - graphStartDate;
