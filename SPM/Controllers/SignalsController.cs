@@ -587,6 +587,10 @@ namespace SPM.Controllers
                     }
                     return Content("Save Successful! " + DateTime.Now.ToString());
                 }
+                if (signal.Latitude.Contains("°") || signal.Longitude.Contains("°"))
+                {
+                    return Content("Latitude/Longitude must be typed in decimal format. Do not include degree symbols or minute/second indicators.");
+                }
                 return Content("There was a validation error.");
             }
 
