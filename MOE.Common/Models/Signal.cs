@@ -91,11 +91,13 @@ namespace MOE.Common.Models
         [Required]
         [StringLength(30)]
         [DataMember]
+        [RegularExpression(@"^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,10})?$")]
         public string Latitude { get; set; }
 
         [Required]
         [StringLength(30)]
         [DataMember]
+        [RegularExpression(@"^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,10})?$")]
         public string Longitude { get; set; }
 
         [Required]
