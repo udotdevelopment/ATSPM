@@ -15,12 +15,17 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using System.Timers;
+using MOE.Common.Models.Repositories;
 
 
 namespace DecodeTrafficwareLogs
 {
     class Program
     {
+        private IApplicationEventRepository errorRepository = ApplicationEventRepositoryFactory.Create();
+        private const int retryMax = 3;
+        private const int retryTime = 2000;
+
         static void Main(string[] args)
         {
             new Program().FindFiles();
@@ -139,20 +144,26 @@ namespace DecodeTrafficwareLogs
             //If the Delete flag is checking in settings, and the file has been decoded, then delte the file.
             if (Properties.Settings.Default.DeleteFiles && fileDecoded)
             {
-                try
+                for (int i = 1; i <= retryMax; i++)
                 {
-                    File.Delete(file);
-                }
-                catch (Exception ex)
-                {
-                    if (Properties.Settings.Default.WriteToConsole)
+                    try
                     {
-                        Console.WriteLine("Exception {0} while deleting file {1}", ex, file);
+                        File.Delete(file);
+                        break;
                     }
+                    catch (Exception ex)
+                    {
+                        errorRepository.QuickAdd("DecodeTrafficwareLogs", "Signal", "DecodeTW - Delete",
+                            MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium, file + " - " + ex.Message);
+                        if (Properties.Settings.Default.WriteToConsole)
+                        {
+                            Console.WriteLine("Exception {0} while deleting file {1}", ex, file);
+                        }
 
+                        Thread.Sleep(retryTime);
+                    }
                 }
             }
-
         }
 
 //subroutine to write the decoded log to the database.

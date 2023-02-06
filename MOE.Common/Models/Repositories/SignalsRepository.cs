@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
@@ -235,7 +235,23 @@ namespace MOE.Common.Models.Repositories
             return location;
         }
 
-        
+        public List<Pin> GetPinInfo()
+        {
+            var pins = new List<Pin>();
+            //foreach (var signal in GetLatestVersionOfAllSignals().Where(s => s.Enabled //&& s.SignalID == "7063"
+            //).ToList())
+            List<Signal> signals = GetLatestVersionOfAllSignals().Where(s => s.Enabled).ToList();
+            foreach (var signal in signals)
+                {
+                var pin = new Pin(signal.SignalID, signal.Latitude,
+                    signal.Longitude,
+                    signal.PrimaryName + " " + signal.SecondaryName, signal.RegionID.ToString());
+                pin.MetricTypes = signal.GetMetricTypesString();
+                pins.Add(pin);
+                //Console.WriteLine(pin.SignalID);
+            }
+            return pins;
+        }
 
         public void AddOrUpdate(Signal signal)
         {

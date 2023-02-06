@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
 using SPM.Filters;
 
 namespace SPM.Controllers
@@ -27,6 +28,17 @@ namespace SPM.Controllers
         private MOE.Common.Models.Repositories.IDetectionTypeRepository _detectionTypeRepository; 
         private MOE.Common.Models.Repositories.IApproachRepository _approachRepository; 
         private MOE.Common.Models.Repositories.IMetricTypeRepository _metricTypeRepository;
+        private IControllerTypeRepository controllerTypeRepository;
+        private IRegionsRepository regionRepository;
+        private IDirectionTypeRepository directionTypeRepository;
+        private IMovementTypeRepository movementTypeRepository;
+        private ILaneTypeRepository laneTypeRepository;
+        private IDetectionHardwareRepository detectionHardwareRepository;
+        private ISignalsRepository signalsRepository;
+        private IDetectorRepository detectorRepository;
+        private IDetectionTypeRepository detectionTypeRepository;
+        private IApproachRepository approachRepository;
+        private IMetricTypeRepository metricTypeRepository;
 
         public SignalsController()
         {
@@ -74,6 +86,21 @@ namespace SPM.Controllers
             _detectionHardwareRepository = detectionHardwareRepository;
             _metricTypeRepository = metricTypeRepository;
             _jurisdictionRepository = jurisdictionRepository;
+        }
+
+        public SignalsController(IControllerTypeRepository controllerTypeRepository, IRegionsRepository regionRepository, IDirectionTypeRepository directionTypeRepository, IMovementTypeRepository movementTypeRepository, ILaneTypeRepository laneTypeRepository, IDetectionHardwareRepository detectionHardwareRepository, ISignalsRepository signalsRepository, IDetectorRepository detectorRepository, IDetectionTypeRepository detectionTypeRepository, IApproachRepository approachRepository, IMetricTypeRepository metricTypeRepository)
+        {
+            this.controllerTypeRepository = controllerTypeRepository;
+            this.regionRepository = regionRepository;
+            this.directionTypeRepository = directionTypeRepository;
+            this.movementTypeRepository = movementTypeRepository;
+            this.laneTypeRepository = laneTypeRepository;
+            this.detectionHardwareRepository = detectionHardwareRepository;
+            this.signalsRepository = signalsRepository;
+            this.detectorRepository = detectorRepository;
+            this.detectionTypeRepository = detectionTypeRepository;
+            this.approachRepository = approachRepository;
+            this.metricTypeRepository = metricTypeRepository;
         }
 
         public ActionResult Index()
