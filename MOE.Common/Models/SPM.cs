@@ -33,6 +33,7 @@ namespace MOE.Common.Models
         public DbSet<SPMRole> IdentityRoles { get; set; }
         public virtual DbSet<ApplicationEvent> ApplicationEvents { get; set; }
         public virtual DbSet<SPMWatchDogErrorEvent> SPMWatchDogErrorEvents { get; set; }
+        public virtual DbSet<SPMWatchdogExclusions> SPMWatchdogExclusions { get; set; }
         public virtual DbSet<MetricComment> MetricComments { get; set; }
         public virtual DbSet<DetectorComment> DetectorComments { get; set; }
         public virtual DbSet<MovementType> MovementTypes { get; set; }
