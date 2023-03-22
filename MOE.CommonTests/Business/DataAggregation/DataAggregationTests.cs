@@ -32,7 +32,7 @@ namespace MOE.Common.Business.DataAggregation.Tests
 
             DataAggregation dag = new DataAggregation();
 
-            dag.SetStartEndDate(dates);
+            dag.SetStartEndDate(dates, null);
         }
     }
 }

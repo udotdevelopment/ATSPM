@@ -24,6 +24,11 @@ namespace MOE.Common.Models.Repositories
             return laneType.FirstOrDefault();
         }
 
+        public LaneType GetLaneTypeByLaneDesc(string desc)
+        {
+            return db.LaneTypes.FirstOrDefault(x => x.Description == desc);
+        }
+
         public void Update(LaneType laneType)
         {
             var g = (from r in db.LaneTypes

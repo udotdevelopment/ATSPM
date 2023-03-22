@@ -12,11 +12,11 @@
     @Html.AntiForgeryToken()
     <div class="card panel-signal">
         <div class="card-header">
-            Signal @Model.SignalID
-            <button type="submit" class="float-right btn btn-success" onclick="javascript:UpdateVersionDropdown()" value="Save">Save &nbsp;<span class="" aria-hidden="true"></span></button>
-            <button type="button" class="float-right btn btn-danger" onclick="DeleteSignal()">Delete This Signal &nbsp;<span class="" aria-hidden="true"></span></button>
-            <button type="button" class="float-right btn btn-dark" onclick="CopySignal()">Copy Signal&nbsp;<span class="" aria-hidden="true"></span></button>
-            <Button type="button" onclick="AddNewVersion()" class="float-right btn btn-info">Add New Version &nbsp;<span class="" aria-hidden="true"></span></Button>
+            <div id="signalLabel">Signal @Model.SignalID</div>
+            <button type="submit" class="float-right btn btn-success" onclick="javascript:UpdateVersionDropdown()" value="Save" style="margin-left: 10px">Save &nbsp;<span class="" aria-hidden="true"></span></button>
+            <button type="button" class="float-right btn btn-danger" onclick="DeleteSignal()" style="margin-left: 10px">Delete This Signal &nbsp;<span class="" aria-hidden="true"></span></button>
+            <button type="button" class="float-right btn btn-dark" onclick="CopySignal()" style="margin-left: 10px">Copy Signal&nbsp;<span class="" aria-hidden="true"></span></button>
+            <Button type="button" onclick="AddNewVersion()" class="float-right btn btn-info" style="margin-left: 10px">Add New Version &nbsp;<span class="" aria-hidden="true"></span></Button>
             <Button type="button" onclick="DeleteVersion()" class="float-right btn btn-warning">Delete This Version &nbsp;<span class="" aria-hidden="true"></span></Button>
             <span class="pull-right" id="ActionMessage"></span>
         </div>

@@ -6,6 +6,7 @@ namespace MOE.Common.Models.Repositories
     {
         List<LaneType> GetAllLaneTypes();
         LaneType GetLaneTypeByLaneTypeID(int laneTypeID);
+        LaneType GetLaneTypeByLaneDesc(string desc);
         void Update(LaneType laneType);
         void Add(LaneType laneType);
         void Remove(LaneType laneType);

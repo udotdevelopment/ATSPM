@@ -52,6 +52,11 @@ namespace MOE.CommonTests.Models
             return DetectionHardware.FirstOrDefault();
         }
 
+        public DetectionHardware GetDetectionHardwareByName(string name)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public List<DetectionHardware> GetDetectionHardwareByIDs(List<int> IDs)
         {
             return (from r in _MOE.DetectionHardwares

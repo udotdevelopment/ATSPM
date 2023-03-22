@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+
 namespace SPMWatchDogNew
 {
     class Program
@@ -6,13 +8,14 @@ namespace SPMWatchDogNew
         static void Main(string[] args)
         {
             DateTime startTime = DateTime.Today;
+            var hideIp = bool.Parse(ConfigurationManager.AppSettings["HideIp"]);
             // find the analysis timespan
             if (args.Length > 0)
             {
                 try
                 {
                     startTime = DateTime.Parse(args[0]);
-                    MOE.Common.Business.WatchDog.WatchDogScan scan = new MOE.Common.Business.WatchDog.WatchDogScan(startTime);
+                    MOE.Common.Business.WatchDog.WatchDogScan scan = new MOE.Common.Business.WatchDog.WatchDogScan(startTime, hideIp);
                     scan.StartScan();
                 }
                 catch (Exception ex)
@@ -25,7 +28,7 @@ namespace SPMWatchDogNew
             {
                 try
                 {
-                    MOE.Common.Business.WatchDog.WatchDogScan scan = new MOE.Common.Business.WatchDog.WatchDogScan(startTime);
+                    MOE.Common.Business.WatchDog.WatchDogScan scan = new MOE.Common.Business.WatchDog.WatchDogScan(startTime, hideIp);
                     scan.StartScan();
                 }
                 catch (Exception ex)

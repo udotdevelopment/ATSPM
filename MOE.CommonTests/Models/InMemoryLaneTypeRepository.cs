@@ -42,6 +42,11 @@ namespace MOE.CommonTests.Models
             return laneType.FirstOrDefault();
         }
 
+        public LaneType GetLaneTypeByLaneDesc(string desc)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Remove(LaneType laneType)
         {
             throw new System.NotImplementedException();

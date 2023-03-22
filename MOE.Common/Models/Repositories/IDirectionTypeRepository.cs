@@ -13,5 +13,6 @@ namespace MOE.Common.Models.Repositories
 
         List<DirectionType> GetDirectionsByIDs(List<int> includedDirections);
         DirectionType GetByDescription(string directionDescription);
+        DirectionType GetByAbbreviation(string abbreviation);
     }
 }

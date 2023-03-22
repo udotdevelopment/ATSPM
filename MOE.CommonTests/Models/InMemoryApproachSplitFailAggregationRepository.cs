@@ -60,5 +60,10 @@ namespace MOE.CommonTests.Models
                                                                 && r.BinStartTime >= startDate &&
                                                                 r.BinStartTime < endDate && r.IsProtectedPhase == getProtectedPhase).ToList();
         }
+
+        public DateTime? GetLastAggregationDate()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
