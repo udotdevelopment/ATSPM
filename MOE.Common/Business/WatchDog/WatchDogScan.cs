@@ -16,6 +16,7 @@ namespace MOE.Common.Business.WatchDog
 {
     public class WatchDogScan
     {
+        private readonly bool _hideIp;
         private readonly ConcurrentBag<SPMWatchDogErrorEvent> ForceOffErrors = new ConcurrentBag<SPMWatchDogErrorEvent>();
         //private readonly object eventRepository;
         public ConcurrentBag<SPMWatchDogErrorEvent> LowHitCountErrors = new ConcurrentBag<SPMWatchDogErrorEvent>();
@@ -27,8 +28,9 @@ namespace MOE.Common.Business.WatchDog
         public ConcurrentBag<Models.Signal> SignalsWithRecords = new ConcurrentBag<Models.Signal>();
         public ConcurrentBag<SPMWatchDogErrorEvent> StuckPedErrors = new ConcurrentBag<SPMWatchDogErrorEvent>();
 
-        public WatchDogScan(DateTime scanDate)
+        public WatchDogScan(DateTime scanDate, bool hideIp)
         {
+            _hideIp = hideIp;
             ScanDate = scanDate;
             var settingsRepository = ApplicationSettingsRepositoryFactory.Create();
             Settings = settingsRepository.GetWatchDogSettings();
@@ -240,7 +242,10 @@ namespace MOE.Common.Business.WatchDog
                 error.Phase = 0;
                 error.Direction = "";
                 error.TimeStamp = ScanDate;
-                error.Message = "Missing Records - IP: " + signal.IPAddress;
+                if (_hideIp)
+                    error.Message = "Missing Records";
+                else
+                    error.Message = "Missing Records - IP: " + signal.IPAddress;
                 error.ErrorCode = 1;
                 MissingRecords.Add(error);
             }
@@ -305,7 +310,7 @@ namespace MOE.Common.Business.WatchDog
                                 Settings.ScanDayStartHour + ":00 and " +
                                 Settings.ScanDayEndHour + ":00: \n";
                 message.Body += maxErrors;
-            }
+            } 
             else
             {
                 message.Body += "\n --No new max out errors were found between " +
