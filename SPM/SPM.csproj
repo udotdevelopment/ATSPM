@@ -671,6 +671,7 @@
     <Content Include="Content\bootstrap-chosen.scss" />
     <Content Include="Content\bootstrap-chosen.less" />
     <Content Include="Images\ATSPMMethodsandAssumptions.pdf" />
+    <Content Include="Scripts\WatchdogExclusions.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1033,6 +1034,7 @@
     <Content Include="Views\Menus\Index.cshtml" />
     <Content Include="Views\Menus\_MainMenuPartial.cshtml" />
     <Content Include="Views\DefaultCharts\TimingAndActuationsOptions.cshtml" />
+    <Content Include="Views\WatchdogExclusions\WatchdogExclusionsList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

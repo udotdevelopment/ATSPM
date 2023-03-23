@@ -610,6 +610,10 @@
     <Compile Include="Migrations\202212060255479_YellowRedActivationsAggregation.designer.cs">
       <DependentUpon>202212060255479_YellowRedActivationsAggregation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202302211809141_SPMWatchdogExclusionsInitialModelChanges.cs" />
+    <Compile Include="Migrations\202302211809141_SPMWatchdogExclusionsInitialModelChanges.designer.cs">
+      <DependentUpon>202302211809141_SPMWatchdogExclusionsInitialModelChanges.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Area.cs" />
     <Compile Include="Data\MOE.cs">
       <DependentUpon>MOE.xsd</DependentUpon>
@@ -824,6 +828,7 @@
     <Compile Include="Models\Repositories\IJurisdictionRepository.cs" />
     <Compile Include="Models\Repositories\IPhaseSplitMonitorAggregationRepository.cs" />
     <Compile Include="Models\Repositories\ISignalPlanAggregationRepository.cs" />
+    <Compile Include="Models\Repositories\ISPMWatchdogExclusionsRepository.cs" />
     <Compile Include="Models\Repositories\MeasuresDefaultsRepositortFactory.cs" />
     <Compile Include="Models\Repositories\MeasuresDefaultsRepository.cs" />
     <Compile Include="Models\Repositories\PhasePedAggregationRepository.cs" />
@@ -843,6 +848,8 @@
     <Compile Include="Models\Repositories\JurisdictionRepositoryFactory.cs" />
     <Compile Include="Models\Repositories\SignalPlanAggregationRepository.cs" />
     <Compile Include="Models\Repositories\SignalPlanAggregationRepositoryFactory.cs" />
+    <Compile Include="Models\Repositories\SPMWatchdogExclusionsRepository.cs" />
+    <Compile Include="Models\Repositories\SPMWatchdogExclusionsRepositoryFactory.cs" />
     <Compile Include="Models\SignalToAggregate.cs" />
     <Compile Include="Models\SignalPlanAggregation.cs" />
     <Compile Include="Models\SignalEventCountAggregation.cs" />
@@ -1151,6 +1158,7 @@
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\MetricComment.cs" />
     <Compile Include="Models\SPMWatchDogErrorEvent.cs" />
+    <Compile Include="Models\SPMWatchdogExclusions.cs" />
     <Compile Include="Models\StatusOfProcessedTable.cs" />
     <Compile Include="Models\TablePartitionProcessed.cs" />
     <Compile Include="Models\ToBeProcessedTable.cs" />
@@ -1178,6 +1186,7 @@
     <Compile Include="Models\ViewModel\RouteEdit\ApproachRouteDetailViewModel.cs" />
     <Compile Include="Models\ViewModel\RouteEdit\RouteCreateViewModel.cs" />
     <Compile Include="Models\ViewModel\RouteEdit\RouteMapViewModel.cs" />
+    <Compile Include="Models\ViewModel\WatchdogExclusionsViewModel.cs" />
     <Compile Include="Models\ViewModel\WebConfigTool\WebConfigToolViewModel.cs" />
     <Compile Include="Models\ViewModel\_MainMenu\MenuItem.cs" />
     <Compile Include="Models\DatabaseArchiveSettings.cs" />
@@ -1291,6 +1300,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202212060255479_YellowRedActivationsAggregation.resx">
       <DependentUpon>202212060255479_YellowRedActivationsAggregation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302211809141_SPMWatchdogExclusionsInitialModelChanges.resx">
+      <DependentUpon>202302211809141_SPMWatchdogExclusionsInitialModelChanges.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
