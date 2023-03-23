@@ -24,6 +24,7 @@ namespace MOE.Common.Business.Parquet
         private static readonly string AwsAccessKey = ConfigurationManager.AppSettings["S3_ACCESSKEY"];
         private static readonly string AwsSecretKey = ConfigurationManager.AppSettings["S3_SECRETKEY"];
         private static readonly string Container = ConfigurationManager.AppSettings["AZURE_CONTAINER"];
+        private static readonly string FilePathPrefix = ConfigurationManager.AppSettings["FILE_PATH_PREFIX"];
 
         public static List<Controller_Event_Log> GetDataFromArchive(string localPath, string signalId,
             DateTime startTime, DateTime endTime)
@@ -84,7 +85,7 @@ namespace MOE.Common.Business.Parquet
 
             foreach (var date in dateRange)
             {
-                var fileName = $"{FolderName}date={date:yyyy-MM-dd}/{signalId}_{date:yyyy-MM-dd}.parquet";
+                var fileName = $"{FolderName}{FilePathPrefix}={date:yyyy-MM-dd}/{signalId}_{date:yyyy-MM-dd}.parquet";
                 var blobClient = container.GetBlobClient(fileName);
                 if (blobClient.Exists())
                 {
@@ -117,8 +118,8 @@ namespace MOE.Common.Business.Parquet
             {
                 foreach (var date in dateRange)
                 {
-                    var fileName = $"{FolderName}date={date:yyyy-MM-dd}/{signalId}_{date:yyyy-MM-dd}.parquet";
-
+                    var fileName = $"{FolderName}{FilePathPrefix}={date:yyyy-MM-dd}/{signalId}_{date:yyyy-MM-dd}.parquet";
+                    
                     var info = new S3FileInfo(client, AwsBucketName, fileName);
                     if (info.Exists)
                     {
@@ -153,11 +154,12 @@ namespace MOE.Common.Business.Parquet
 
         private static List<Controller_Event_Log> GetEventsFromGoogleCloud(string signalId, IEnumerable<DateTime> dateRange)
         {
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", ConfigurationManager.AppSettings["GoogleAppCredentialsLocation"]);
             var events = new List<Controller_Event_Log>();
             var storage = StorageClient.Create();
             foreach (var date in dateRange)
             {
-                var objName = $"{FolderName}date={date:yyyy-MM-dd}/{signalId}_{date:yyyy-MM-dd}.parquet";
+                var objName = $"{FolderName}{FilePathPrefix}={date:yyyy-MM-dd}/{signalId}_{date:yyyy-MM-dd}.parquet";
                 var obj = storage.ListObjects(GoogleBucketName, objName);
                 if (obj.Any())
                 {
@@ -188,11 +190,11 @@ namespace MOE.Common.Business.Parquet
             foreach (var date in dateRange)
             {
                 if (File.Exists(
-                        $"{localPath}\\date={date.Date:yyyy-MM-dd}\\{signalId}_{date.Date:yyyy-MM-dd}.parquet"))
+                        $"{localPath}\\{FilePathPrefix}={date.Date:yyyy-MM-dd}\\{signalId}_{date.Date:yyyy-MM-dd}.parquet"))
                 {
                     using (var stream =
                            File.OpenRead(
-                               $"{localPath}\\date={date.Date:yyyy-MM-dd}\\{signalId}_{date.Date:yyyy-MM-dd}.parquet"))
+                               $"{localPath}\\{FilePathPrefix}={date.Date:yyyy-MM-dd}\\{signalId}_{date.Date:yyyy-MM-dd}.parquet"))
                     {
                         var newEvents = ParquetConvert.Deserialize<ParquetEventLog>(stream);
                         foreach (var parquetEvent in newEvents)
@@ -217,7 +219,7 @@ namespace MOE.Common.Business.Parquet
                         Function = "GetDataFromArchive",
                         SeverityLevel = ApplicationEvent.SeverityLevels.High,
                         Description =
-                            $"File {localPath}\\date={date.Date:yyyy-MM-dd}\\{signalId}_{date.Date:yyyy-MM-dd}.parquet does not exist",
+                            $"File {localPath}\\{FilePathPrefix}={date.Date:yyyy-MM-dd}\\{signalId}_{date.Date:yyyy-MM-dd}.parquet does not exist",
                         Timestamp = DateTime.Now
                     };
                     logRepository.Add(e);
