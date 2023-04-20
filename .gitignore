@@ -26,8 +26,8 @@
 
 
 #Config
-*.config
-
+App.config
+Web.config
 
 # Build results
 

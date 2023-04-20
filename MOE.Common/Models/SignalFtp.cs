@@ -20,6 +20,8 @@ using Microsoft.EntityFrameworkCore.Internal;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using MOE.Common.Properties;
+using Renci.SshNet;
+using Renci.SshNet.Sftp;
 
 namespace MOE.Common.Business
 {
@@ -931,6 +933,107 @@ namespace MOE.Common.Business
                 if (snmpState == 1)
                     break;
                 Thread.Sleep(SignalFtpOptions.SnmpTimeout);
+            }
+        }
+
+        public void GetCubicFilesAsync(string filePath)
+        {
+            string username = null;
+            string password = null;
+
+            try
+            {
+                // Create a new StreamReader instance with the file path
+                using (var reader = new StreamReader(filePath))
+                {
+                    // Read the first two lines of the file and store them as the username and password
+                    username = reader.ReadLine();
+                    password = reader.ReadLine();
+                }
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("An error occurred while reading the file:");
+                Console.WriteLine(e.Message);
+            }
+
+            // run the sftp fetch operation async
+            Thread sftpFetch = new Thread(delegate ()
+            {
+                // to-do: replace with common data access to access signal IP in batch from ATSPM DB
+                string host = Signal.IPAddress;
+                //string username = Signal.ControllerType.UserName;
+                //string password = Signal.ControllerType.Password;
+                string remoteDirectory = Signal.ControllerType.FTPDirectory;
+                string localDirectory = SignalFtpOptions.LocalDirectory;
+                using (SftpClient sftp = new SftpClient(host, username, password))
+                {
+                    try
+                    {
+                        sftp.Connect();
+
+                        var files = sftp.ListDirectory(remoteDirectory);
+                        var cubicFiles = files.Where(x => x.FullName.Contains(".dat")).ToList();
+
+                        //download current files, remove files from remote directory
+                        TransferCubicFiles(cubicFiles, localDirectory, sftp);
+                        sftp.Disconnect();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //to-do: add some custom error handling as fit 
+                        throw ex;
+                    }
+                }
+            });
+            sftpFetch.Start();
+        }
+
+        private void TransferCubicFiles(List<SftpFile> receivedFiles, string directory, SftpClient client)
+        {
+            var errorRepository = ApplicationEventRepositoryFactory.Create();
+            try
+            {
+                foreach (var ret in receivedFiles)
+                {
+                    // FullName will include full path in sFTP
+                    // Name will just include the file name without path
+
+                    string fileName = ret.Name;
+                    string remoteFileName = ret.FullName;
+
+                    using (Stream fileStream = File.OpenWrite(Path.Combine(directory, fileName)))
+                    {
+                        Console.WriteLine("Downloading {0}", fileName);
+                        //copy file and get to local diretory
+                        client.DownloadFile(remoteFileName, fileStream);
+
+
+                        //remove file in remote directory
+                        Console.WriteLine("deleting {0} in sFTP instance", remoteFileName);
+                        //delete file in remote sFTP directory
+                        if (client.Exists(remoteFileName))
+                        {
+                            client.DeleteFile(remoteFileName);
+                        }
+                    }
+
+                    //string newFileName = RenameDatFiles(fileName, Signal.SignalID);
+                    //File.Move(Path.Combine(directory, fileName), Path.Combine(directory, newFileName));
+                }
+            }
+            catch (FtpException ex)
+            {
+                //capture if there is any sFTP related exception
+                errorRepository.QuickAdd("sFTPFromControllers", "SignalFtp", "TransferCubicFiles", ApplicationEvent.SeverityLevels.Medium, Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
+                Console.WriteLine(Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
+            }
+            catch (IOException ex)
+            {
+                //capture if there is any file IO exception
+                errorRepository.QuickAdd("sFTPFromControllers", "SignalFtp", "TransferCubicFiles", ApplicationEvent.SeverityLevels.Medium, Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
+                Console.WriteLine(Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
             }
         }
     }
