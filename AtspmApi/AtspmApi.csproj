@@ -83,6 +83,9 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
@@ -189,6 +192,7 @@
     <Compile Include="Models\DetectorAggregation.cs" />
     <Compile Include="Models\DetectorEventCountAggregation.cs" />
     <Compile Include="Models\DirectionType.cs" />
+    <Compile Include="Models\EventLogFromSignalRequest.cs" />
     <Compile Include="Models\LaneType.cs" />
     <Compile Include="Models\MetricType.cs" />
     <Compile Include="Models\MovementType.cs" />
@@ -306,6 +310,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MOE.Common\MOE.Common.csproj">
+      <Project>{87951632-A7BE-4E04-B62C-C4FC2FC0CD5A}</Project>
+      <Name>MOE.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
