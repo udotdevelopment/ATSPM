@@ -7,12 +7,15 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Management;
 using AtspmApi.Models;
+using MOE.Common.Business.Parquet;
 
 namespace AtspmApi.Repositories
 {
     public class ControllerEventLogRepository : IControllerEventLogRepository
     {
         private readonly AtspmApi.Models.AtspmApi _db = new AtspmApi.Models.AtspmApi();
+        private const string LOCAL_ARCHIVE_DIRECTORY = "LocalArchiveDirectory";
+        private readonly string _localPath = ParquetArchive.GetSetting(LOCAL_ARCHIVE_DIRECTORY);
 
         public ControllerEventLogRepository()
         {
@@ -108,11 +111,22 @@ namespace AtspmApi.Repositories
         {
             try
             {
-                return (from r in _db.Controller_Event_Log
+                var events = (from r in _db.Controller_Event_Log
                         where r.SignalID == signalId
                               && r.Timestamp >= startTime
                               && r.Timestamp < endTime
                         select r).ToList();
+
+                if (events.Any()) return events;
+
+                var archivedEvents = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
+                return archivedEvents.ConvertAll(x => new Controller_Event_Log
+                {
+                    EventCode = x.EventCode,
+                    EventParam = x.EventParam,
+                    SignalID = x.SignalID,
+                    Timestamp = x.Timestamp
+                });
             }
             catch (Exception ex)
             {
@@ -167,9 +181,15 @@ namespace AtspmApi.Repositories
         {
             try
             {
-                return _db.Controller_Event_Log.Count(r => r.SignalID == signalId
+                var count = _db.Controller_Event_Log.Count(r => r.SignalID == signalId
                                                            && r.Timestamp >= startTime
                                                            && r.Timestamp < endTime);
+
+                if (count > 0)
+                    return count;
+
+                var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
+                return archivedData.Count;
             }
             catch (Exception ex)
             {

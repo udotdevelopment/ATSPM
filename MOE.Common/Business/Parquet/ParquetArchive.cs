@@ -189,24 +189,21 @@ namespace MOE.Common.Business.Parquet
             var events = new List<Controller_Event_Log>();
             foreach (var date in dateRange)
             {
-                if (File.Exists(
-                        $"{localPath}\\{FilePathPrefix}={date.Date:yyyy-MM-dd}\\{signalId}_{date.Date:yyyy-MM-dd}.parquet"))
+                var path =
+                    $"{localPath}\\{FilePathPrefix}={date.Date:yyyy-MM-dd}\\{signalId}_{date.Date:yyyy-MM-dd}.parquet";
+                if (File.Exists(path))
                 {
                     using (var stream =
-                           File.OpenRead(
-                               $"{localPath}\\{FilePathPrefix}={date.Date:yyyy-MM-dd}\\{signalId}_{date.Date:yyyy-MM-dd}.parquet"))
+                           File.OpenRead(path))
                     {
                         var newEvents = ParquetConvert.Deserialize<ParquetEventLog>(stream);
-                        foreach (var parquetEvent in newEvents)
+                        events.AddRange(newEvents.Select(parquetEvent => new Controller_Event_Log
                         {
-                            events.Add(new Controller_Event_Log
-                            {
-                                SignalID = parquetEvent.SignalID,
-                                Timestamp = date.Date.AddMilliseconds(parquetEvent.TimestampMs),
-                                EventCode = parquetEvent.EventCode,
-                                EventParam = parquetEvent.EventParam
-                            });
-                        }
+                            SignalID = parquetEvent.SignalID,
+                            Timestamp = date.Date.AddMilliseconds(parquetEvent.TimestampMs),
+                            EventCode = parquetEvent.EventCode,
+                            EventParam = parquetEvent.EventParam
+                        }));
                     }
                 }
                 else
@@ -219,7 +216,7 @@ namespace MOE.Common.Business.Parquet
                         Function = "GetDataFromArchive",
                         SeverityLevel = ApplicationEvent.SeverityLevels.High,
                         Description =
-                            $"File {localPath}\\{FilePathPrefix}={date.Date:yyyy-MM-dd}\\{signalId}_{date.Date:yyyy-MM-dd}.parquet does not exist",
+                            $"File {path} does not exist",
                         Timestamp = DateTime.Now
                     };
                     logRepository.Add(e);
