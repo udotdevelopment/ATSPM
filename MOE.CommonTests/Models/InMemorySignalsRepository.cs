@@ -388,6 +388,11 @@ namespace MOE.CommonTests.Models
             throw new NotImplementedException();
         }
 
+        public List<Signal> GetLatestVersionOfAllSignalsForSftp()
+        {
+            throw new NotImplementedException();
+        }
+
 
         public int CheckVersionWithFirstDate(string signalId)
         {

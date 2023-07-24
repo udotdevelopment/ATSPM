@@ -289,7 +289,8 @@ namespace ParquetArchiver
         {
             try
             {
-                Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", ConfigurationManager.AppSettings["GoogleAppCredentialsLocation"]);
+                // Needed if running on a server without google cloud sdk installed
+                // Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", ConfigurationManager.AppSettings["GoogleAppCredentialsLocation"]);
                 var storage = StorageClient.Create();
                 var bucketName = ConfigurationManager.AppSettings["BucketName"];
                 

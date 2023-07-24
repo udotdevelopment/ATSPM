@@ -23,6 +23,7 @@ namespace MOE.Common.Models.Repositories
         List<Signal> GetLatestVersionOfAllSignals();
         IQueryable<Signal> GetLatestVersionOfAllSignalsAsQueryable();
         List<Signal> GetLatestVersionOfAllSignalsForFtp();
+        List<Signal> GetLatestVersionOfAllSignalsForSftp();
         int CheckVersionWithFirstDate(string signalId);
         List<Signal> GetLatestVerionOfAllSignalsByControllerType(int controllerTypeId);
         Signal GetVersionOfSignalByDate(string signalId, DateTime startDate);
