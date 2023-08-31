@@ -20,13 +20,14 @@
 
 *.sln.docstates
 
-
-
 # User-specific files (MonoDevelop/Xamarin Studio)
 
 *.userprefs
 
 
+#Config
+App.config
+Web.config
 
 # Build results
 

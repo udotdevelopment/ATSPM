@@ -13,7 +13,7 @@ namespace MOE.Common.Models.ViewModel.Chart
         public FillSignalsViewModel()
         {
             Page = 1;
-            OrderField = "SignalID";
+            OrderField = "PrimaryName";
             OrderDirection = OrderDirection.Ascending;
             GetFilters();
             SetPagedList();
@@ -22,7 +22,7 @@ namespace MOE.Common.Models.ViewModel.Chart
         public FillSignalsViewModel(int page, int? filterType, string filterCriteria)
         {
             Page = page;
-            OrderField = "SignalID";
+            OrderField = "PrimaryName";
             OrderDirection = OrderDirection.Ascending;
             if (filterType != null)
             {

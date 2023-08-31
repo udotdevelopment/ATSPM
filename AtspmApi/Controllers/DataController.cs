@@ -117,34 +117,32 @@ namespace AtspmApi.Controllers
             return detectorThis;
         }
 
-        [Authorize]
-        [HttpGet]
-        [Route("api/data/controllerEventLogsFromSignal/{SignalId=Id}/{StartTime=StartTime}/{EndTime=EndTime}")]  //here id is SignalID first
-        public List<Controller_Event_Log> controllerEventLogsFromSignal(string id, DateTime StartTime, DateTime EndTime)
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("api/data/ControllerEventLogsFromSignal")]
+        public List<Controller_Event_Log> ControllerEventLogsFromSignal([FromBody] EventLogFromSignalRequest request)
         {
             //var identity = (ClaimsIdentity)User.Identity;
-            DateTime StartDate = StartTime; 
+            var startDate = DateTime.Parse(request.StartTime); 
             //StartDate = new DateTime(2019, 10, 1, 0, 0, 0);
-            DateTime EndDate = EndTime;
+            var endDate = DateTime.Parse(request.EndTime);
             //EndDate = new DateTime(2019, 10, 1, 0, 5, 0);
 
             var controllerEventLogRepository = Repositories.ControllerEventLogRepositoryFactory.Create();
-            var singleSignalCount = controllerEventLogRepository.GetRecordCount(id, StartDate, EndDate);
-            int NumberRecordsThreshold = Convert.ToInt32(ConfigurationManager.AppSettings["NumberRecordsThreshold"]);
-            if (singleSignalCount > NumberRecordsThreshold)
+            var singleSignalCount = controllerEventLogRepository.GetRecordCount(request.SignalId, startDate, endDate);
+            var numberRecordsThreshold = Convert.ToInt32(ConfigurationManager.AppSettings["NumberRecordsThreshold"]);
+            if (singleSignalCount > numberRecordsThreshold)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
                     Content = new StringContent("Request returns too many records. Please shorten timespan.")
                 });
             }
-            else
-            {
-                var events = controllerEventLogRepository.GetSignalEventsBetweenDates(id, StartDate, EndDate);
-                //var eventsTable = new MOE.Common.Business.ControllerEventLogs();
-                //eventsTable.FillforPreempt(id, StartDate, EndDate);
-                return events;
-            }
+
+            var events = controllerEventLogRepository.GetSignalEventsBetweenDates(request.SignalId, startDate, endDate);
+            //var eventsTable = new MOE.Common.Business.ControllerEventLogs();
+            //eventsTable.FillforPreempt(id, StartDate, EndDate);
+            return events;
         }
 
         //[Authorize]

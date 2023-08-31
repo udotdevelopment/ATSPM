@@ -88,8 +88,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
                     var signalPhase = new SignalPhase(StartDate, EndDate, approach, ShowVolumes, SelectedBinSize,
                         MetricTypeID, false);
                     chart = GetNewChart();
-                    chart.ChartAreas[0].AxisX.Minimum = signalPhase.Cycles.Any()? signalPhase.Cycles.First().StartTime.ToOADate():StartDate.ToOADate();
-                    chart.ChartAreas[0].AxisX.Maximum = signalPhase.Cycles.Any() ? signalPhase.Cycles.Last().EndTime.ToOADate():EndDate.ToOADate();
                     AddDataToChart(chart, signalPhase);
                     var chartName = CreateFileName();
                     chart.ImageLocation = MetricFileLocation + chartName;
