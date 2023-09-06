@@ -1,34 +1,24 @@
 ﻿@model MOE.Common.Models.MetricComment
 
+<tr data-comment-id="@Model.CommentID">
+    <td>
+        @Html.HiddenFor(model => model.CommentID)
+        @Html.HiddenFor(model => model.SignalID)
+        @Model.TimeStamp
+    </td>
 
-            @Html.HiddenFor(model => model.CommentID)
-            @Html.HiddenFor(model => model.SignalID)
-<div class="row">
-    <div class="col-md-6">
-        @Model.TimeStamp -
-    </div>
-
-    <div class="col-md-6">
+    <td>
         @Model.CommentText
-    </div>
+    </td>
 
-    <div class="col-md-12">
-        Applies to the Following Metrics:
-        @{string chartstring = string.Empty;
-        foreach (var item in @Model.MetricTypes)
-        {
-            chartstring += item.Abbreviation + ",";
-
+    <td>
+        @{
+            string chartstring = string.Join(", ", Model.MetricTypes.Select(item => item.Abbreviation));
         }
+        @chartstring
+    </td>
 
-        @chartstring.TrimEnd(',');
-
-        }
-
-
-    </div>
-</div>
-
-
-
-        
+    <td>
+        <button class="btn btn-danger" onclick="DeleteComment(@Model.CommentID)">Delete</button>
+    </td>
+</tr>

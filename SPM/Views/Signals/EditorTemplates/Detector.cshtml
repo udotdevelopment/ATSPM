@@ -118,10 +118,11 @@
                         @Html.LabelFor(model => model.DetectorComments, htmlAttributes: new { @class = "control-label" })
                         <a class="" href="javascript:GetCreateDetectorComment('@Model.ID')"><span class="fa fa-plus" style='font-size:14px' aria-hidden="true"> Add Detector Comment</span></a>
                         <div id="NewDetectorComment_@Model.ID"></div>
-                        <div class="comments col-md-12">
-                            <div id="AddedDetectorComment_@Model.ID"></div>
-                            @Html.EditorFor(model => model.DetectorComments, new { htmlAttributes = new { @class = "form-control" } })
-                        </div>
+                        <table class="table table-hover">
+                            <tbody id="AddedDetectorComment_@Model.ID">
+                                @Html.EditorFor(model => model.DetectorComments, new { htmlAttributes = new { @class = "form-control" } })
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

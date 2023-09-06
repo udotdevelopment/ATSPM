@@ -97,12 +97,19 @@ namespace SPM.Controllers
 
         // POST: MetricComments/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [ValidateJsonAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
-            commentRepository.Remove(commentRepository.GetMetricCommentByMetricCommentID(id));
-            return RedirectToAction("Index");
+            try
+            {
+                commentRepository.Remove(commentRepository.GetMetricCommentByMetricCommentID(id));
+                return null;
+            }
+            catch (Exception e)
+            {
+                return HttpNotFound();
+            }
         }
 
         protected override void Dispose(bool disposing)
