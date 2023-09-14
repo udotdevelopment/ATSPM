@@ -113,15 +113,22 @@ namespace SPM.Controllers
         //    return View(detectorComment);
         //}
 
-        //// POST: DetectorComments/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Admin")]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    DetectorComment detectorComment = detectorCommentRepository.GetDetectorCommentByDetectorCommentID(id);
-        //    detectorCommentRepository.Remove(detectorComment);
-        //    return RedirectToAction("Index");
-        //}
+        // POST: DetectorComments/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateJsonAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            try
+            {
+                DetectorComment detectorComment = detectorCommentRepository.GetDetectorCommentByDetectorCommentID(id);
+                detectorCommentRepository.Remove(detectorComment);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return HttpNotFound();
+            }
+        }
     }
 }

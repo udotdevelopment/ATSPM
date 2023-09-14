@@ -191,10 +191,10 @@ textarea {
 
 .comments
 {
-    height:125px;
-    overflow-y:scroll;
-    border-width:1px;
-    border-style:solid;
+    max-height:350px;
+    height:auto;
+    overflow-y:auto;
+    border-style:none;
 }
 
 .roles

@@ -203,6 +203,10 @@ function UpdateVersionDropdown() {
     dd.options[selIndex].text = newVersionDescription;
 }
 
+function CancelComment() {
+    $('#NewComment').html("");
+}
+
 function PostCreateComment() {
     var tosend = {};
 
@@ -230,7 +234,7 @@ function PostCreateComment() {
             data: JSON.stringify(tosend),
             success: function (data) {
                 $('#NewComment').html("");
-                $('#AddedComment').html(data + $('#AddedComment').html());
+                $('#AddedComment').prepend(data);
             },
             statusCode: {
                 404: function (content) { alert('cannot find resource'); },
@@ -243,7 +247,59 @@ function PostCreateComment() {
     }
 }
 
+function DeleteDetectorComment(id) {
+    var parameters = {};
+    parameters.ID = id;
+    if (confirm("Are you sure you want to delete this comment?")) {
+        $.ajax({
+            type: "POST",
+            cache: false,
+            async: true,
+            headers: GetRequestVerificationTokenObject(),
+            data: JSON.stringify(parameters),
+            url: urlpathDeleteDetectorComment,
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function () {
+                $("tr[data-det-comment-id='" + id + "']").remove();
+            },
+            statusCode: {
+                404: function (content) { alert('cannot find resource'); },
+                500: function (content) { alert('internal server error'); }
+            },
+            error: function (req, status, errorObj) {
+                alert("Error");
+            }
+        });
+    }
+}
 
+function DeleteComment(id) {
+    var parameters = {};
+    parameters.ID = id;
+    if (confirm("Are you sure you want to delete this comment?")) {
+        $.ajax({
+            type: "POST",
+            cache: false,
+            async: true,
+            headers: GetRequestVerificationTokenObject(),
+            data: JSON.stringify(parameters),
+            url: urlpathDeleteComment,
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function () {
+                $("tr[data-comment-id='" + id + "']").remove();
+            },
+            statusCode: {
+                404: function (content) { alert('cannot find resource'); },
+                500: function (content) { alert('internal server error'); }
+            },
+            error: function (req, status, errorObj) {
+                alert("Error");
+            }
+        });
+    }
+}
 
 function GetCreateDetectorComment(ID) {
     var metricPath = urlpathCreateDetectorComments + '/' + ID;
@@ -294,7 +350,7 @@ function ImportSignal() {
     var input = document.createElement("input");
     input.type = "file";
     input.setAttribute("accept", ".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel");
-    
+
     input.onchange = e => {
 
         // getting a hold of the file reference
