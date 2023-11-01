@@ -25,12 +25,14 @@ namespace ParquetArchiver
     class Program
     {
         private static readonly string FolderName = ConfigurationManager.AppSettings["FolderName"];
+        private static readonly string GoogleBucketName = ConfigurationManager.AppSettings["BucketName"];
         private static readonly string Container = ConfigurationManager.AppSettings["AZURE_CONTAINER"];
         private static readonly string FilePathPrefix = ConfigurationManager.AppSettings["FILE_PATH_PREFIX"];
 
         private static readonly string AccessKey = ConfigurationManager.AppSettings["S3_ACCESSKEY"];
         private static readonly string SecretKey = ConfigurationManager.AppSettings["S3_SECRETKEY"];
         private static readonly string BucketName = ConfigurationManager.AppSettings["S3_BUCKETNAME"];
+        private static readonly string StorageLocation = ConfigurationManager.AppSettings["StorageLocation"];
 
         private const string MAX_DEGREES_OF_PARALLELISM = "MaxDegreesOfParallelism";
         private const string START_DATE = "StartDate";
@@ -51,8 +53,7 @@ namespace ParquetArchiver
 
         static void Main(string[] args)
         {
-            var storageLocation = ConfigurationManager.AppSettings["StorageLocation"];
-            if (storageLocation == "-1")
+            if (StorageLocation == "-1")
                 return;
 
             var db = new SPM();
@@ -125,7 +126,7 @@ namespace ParquetArchiver
             var options = new ParallelOptions
             { MaxDegreeOfParallelism = Convert.ToInt32(ParquetArchive.GetSetting(MAX_DEGREES_OF_PARALLELISM)) };
 
-            Archive(dateList, signals, options, storageLocation);
+            Archive(dateList, signals, options, StorageLocation);
 
             totalWatch.Stop();
             Console.WriteLine($"All data converted in {totalWatch.ElapsedMilliseconds / 1000} seconds");
@@ -172,13 +173,13 @@ namespace ParquetArchiver
                             case "0":
                                 SaveToLocalStorage(signal, events, date);
                                 break;
-                            case "1":  
+                            case "1":
                                 await SaveToGoogleCloud(signal, events, date);
                                 break;
                             case "2":
                                 await SaveToAws(signal, events, date);
                                 break;
-                            case "3": 
+                            case "3":
                                 await SaveToAzure(signal, events, date);
                                 break;
                             default:
@@ -198,91 +199,100 @@ namespace ParquetArchiver
 
         private static void SaveToLocalStorage(Signal signal, List<Controller_Event_Log> events, DateTime date)
         {
-            var localPath = ParquetArchive.GetSetting(LOCAL_ARCHIVE_DIRECTORY);
-            Console.WriteLine($"Data acquired for Signal {signal.SignalID}");
-
-            if (!Directory.Exists($"{localPath}\\{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}"))
-                Directory.CreateDirectory(
-                    $"{localPath}\\{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}");
-
-            using (var stream =
-                   File.Create(
-                       $"{localPath}\\{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}\\{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet")
-                  )
+            try
             {
-                var parquetEvents = ConvertToParquetEventLogList(events);
+                var localPath = ParquetArchive.GetSetting(LOCAL_ARCHIVE_DIRECTORY);
+                Console.WriteLine($"Data acquired for Signal {signal.SignalID}");
 
+                if (!Directory.Exists($"{localPath}\\{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}"))
+                    Directory.CreateDirectory(
+                        $"{localPath}\\{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}");
 
-                Console.WriteLine($"Data converted to ParquetEventLog for Signal {signal.SignalID}");
-
-                var signalIdColumn = new DataColumn(new DataField<string>("SignalID"),
-                    parquetEvents.Select(x => x.SignalID).ToArray());
-                var dateColumn = new DataColumn(new DataField<string>("Date"),
-                    parquetEvents.Select(x => x.Date).ToArray());
-                var timestampColumn = new DataColumn(new DataField<double>("TimestampMs"),
-                    parquetEvents.Select(x => x.TimestampMs).ToArray());
-
-                var eventCodeColumn = new DataColumn(new DataField<int>("EventCode"),
-                    parquetEvents.Select(x => x.EventCode).ToArray());
-                var eventParamColumn = new DataColumn(new DataField<int>("EventParam"),
-                    parquetEvents.Select(x => x.EventParam).ToArray());
-
-                var schema = new Schema(signalIdColumn.Field, dateColumn.Field, timestampColumn.Field,
-                    eventCodeColumn.Field, eventParamColumn.Field);
-                using (var parquetWriter = new ParquetWriter(schema, stream))
+                using (var stream =
+                       File.Create(
+                           $"{localPath}\\{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}\\{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet")
+                      )
                 {
-                    try
-                    {
-                        //create a new row group in the file
-                        using (var groupWriter = parquetWriter.CreateRowGroup())
-                        {
-                            groupWriter.WriteColumn(signalIdColumn);
-                            groupWriter.WriteColumn(dateColumn);
-                            groupWriter.WriteColumn(timestampColumn);
-                            groupWriter.WriteColumn(eventCodeColumn);
-                            groupWriter.WriteColumn(eventParamColumn);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        //Sleep and retry
-                        Console.WriteLine(ex.Message);
-                        WriteToLog(
-                            $"Initial save: Error saving {signal.SignalID} on {date.ToShortDateString()}");
-                        WriteToLog($"{ex.Message}");
-                        if (ex.InnerException?.Message != null)
-                        {
-                            WriteToLog(ex.InnerException?.Message);
-                        }
+                    var parquetEvents = ConvertToParquetEventLogList(events);
 
-                        Thread.Sleep(10000);
 
+                    Console.WriteLine($"Data converted to ParquetEventLog for Signal {signal.SignalID}");
+
+                    var signalIdColumn = new DataColumn(new DataField<string>("SignalID"),
+                        parquetEvents.Select(x => x.SignalID).ToArray());
+                    var dateColumn = new DataColumn(new DataField<string>("Date"),
+                        parquetEvents.Select(x => x.Date).ToArray());
+                    var timestampColumn = new DataColumn(new DataField<double>("TimestampMs"),
+                        parquetEvents.Select(x => x.TimestampMs).ToArray());
+
+                    var eventCodeColumn = new DataColumn(new DataField<int>("EventCode"),
+                        parquetEvents.Select(x => x.EventCode).ToArray());
+                    var eventParamColumn = new DataColumn(new DataField<int>("EventParam"),
+                        parquetEvents.Select(x => x.EventParam).ToArray());
+
+                    var schema = new Schema(signalIdColumn.Field, dateColumn.Field, timestampColumn.Field,
+                        eventCodeColumn.Field, eventParamColumn.Field);
+                    using (var parquetWriter = new ParquetWriter(schema, stream))
+                    {
                         try
                         {
-                            // create a new row group in the file
-                            using (ParquetRowGroupWriter groupWriter2 = parquetWriter.CreateRowGroup())
+                            //create a new row group in the file
+                            using (var groupWriter = parquetWriter.CreateRowGroup())
                             {
-                                groupWriter2.WriteColumn(signalIdColumn);
-                                groupWriter2.WriteColumn(dateColumn);
-                                groupWriter2.WriteColumn(timestampColumn);
-                                groupWriter2.WriteColumn(eventCodeColumn);
-                                groupWriter2.WriteColumn(eventParamColumn);
+                                groupWriter.WriteColumn(signalIdColumn);
+                                groupWriter.WriteColumn(dateColumn);
+                                groupWriter.WriteColumn(timestampColumn);
+                                groupWriter.WriteColumn(eventCodeColumn);
+                                groupWriter.WriteColumn(eventParamColumn);
                             }
                         }
-                        catch (Exception ex2)
+                        catch (Exception ex)
                         {
-                            Console.WriteLine(ex2.Message);
+                            //Sleep and retry
+                            Console.WriteLine(ex.Message);
                             WriteToLog(
-                                $"Retry: Error saving {signal.SignalID} on {date.ToShortDateString()}");
-                            WriteToLog($"{ex2.Message}");
-                            if (ex2.InnerException?.Message != null)
+                                $"Initial save: Error saving {signal.SignalID} on {date.ToShortDateString()}");
+                            WriteToLog($"{ex.Message}");
+                            if (ex.InnerException?.Message != null)
                             {
-                                WriteToLog(ex2.InnerException?.Message);
+                                WriteToLog(ex.InnerException?.Message);
+                            }
+
+                            Thread.Sleep(10000);
+
+                            try
+                            {
+                                // create a new row group in the file
+                                using (ParquetRowGroupWriter groupWriter2 = parquetWriter.CreateRowGroup())
+                                {
+                                    groupWriter2.WriteColumn(signalIdColumn);
+                                    groupWriter2.WriteColumn(dateColumn);
+                                    groupWriter2.WriteColumn(timestampColumn);
+                                    groupWriter2.WriteColumn(eventCodeColumn);
+                                    groupWriter2.WriteColumn(eventParamColumn);
+                                }
+                            }
+                            catch (Exception ex2)
+                            {
+                                Console.WriteLine(ex2.Message);
+                                WriteToLog(
+                                    $"Retry: Error saving {signal.SignalID} on {date.ToShortDateString()}");
+                                WriteToLog($"{ex2.Message}");
+                                if (ex2.InnerException?.Message != null)
+                                {
+                                    WriteToLog(ex2.InnerException?.Message);
+                                }
                             }
                         }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                WriteToLog(ex.Message + "\n" + ex.InnerException?.Message);
+            }
+
         }
 
         private static async Task SaveToGoogleCloud(Signal signal, List<Controller_Event_Log> events, DateTime date)
@@ -291,9 +301,8 @@ namespace ParquetArchiver
             {
                 // Needed if running on a server without google cloud sdk installed
                 // Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", ConfigurationManager.AppSettings["GoogleAppCredentialsLocation"]);
-                var storage = StorageClient.Create();
-                var bucketName = ConfigurationManager.AppSettings["BucketName"];
-                
+                var storage = await StorageClient.CreateAsync();
+
                 Console.WriteLine($"Data acquired for Signal {signal.SignalID}");
                 var parquetEvents = ConvertToParquetEventLogList(events);
                 Console.WriteLine($"Data converted to ParquetEventLog for Signal {signal.SignalID}");
@@ -301,8 +310,8 @@ namespace ParquetArchiver
                 {
                     ParquetConvert.Serialize(parquetEvents, ms);
                     ms.Position = 0;
-                    var fileName = $"{FolderName}{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
-                    await storage.UploadObjectAsync(bucketName, fileName, null, ms);
+                    var fileName = $"{FolderName}/{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
+                    await storage.UploadObjectAsync(GoogleBucketName, fileName, null, ms);
                     Console.WriteLine($"{fileName} uploaded.");
                 }
             }
@@ -399,9 +408,27 @@ namespace ParquetArchiver
             if (daysBackToCheck == 0)
                 return new List<DateTime>();
             WriteToLog($"Going back {daysBackToCheck} for missing days");
-            var localPath = ParquetArchive.GetSetting(LOCAL_ARCHIVE_DIRECTORY);
-
             var dateRange = GetDateRange(start.AddDays(-daysBackToCheck), start.AddDays(-1));
+            switch (StorageLocation)
+            {
+                case "0":
+                    return CheckLocalMissingFiles(dateRange);
+                case "1":
+                    return CheckGoogleMissingFiles(dateRange);
+                case "2":
+                    WriteToLog("Missing days for AWS Not implemented yet");
+                    break;
+                case "3":
+                    WriteToLog("Missing days for Azure Not implemented yet");
+                    break;
+            }
+            return new List<DateTime>();
+        }
+
+        private static List<DateTime> CheckLocalMissingFiles(IEnumerable<DateTime> dateRange)
+        {
+            WriteToLog("Checking local storage for missing days.");
+            var localPath = ParquetArchive.GetSetting(LOCAL_ARCHIVE_DIRECTORY);
             var retVal = new List<DateTime>();
 
             foreach (var date in dateRange)
@@ -413,9 +440,28 @@ namespace ParquetArchiver
                     _wereDaysMissing = true;
                     WriteToLog($"{date.ToLongDateString()} missing, adding to current run");
                 }
-
             }
 
+            return retVal;
+        }
+
+        private static List<DateTime> CheckGoogleMissingFiles(IEnumerable<DateTime> dateRange)
+        {
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", ConfigurationManager.AppSettings["GoogleAppCredentialsLocation"]);
+            WriteToLog("Checking Google Cloud storage for missing days.");
+            var storage = StorageClient.Create();
+            var retVal = new List<DateTime>();
+            foreach (var date in dateRange)
+            {
+                var storageObject = storage.ListObjects(GoogleBucketName).Where(x => x.Id.StartsWith($"{GoogleBucketName}/{FolderName}/{FilePathPrefix}={date.Date:yyyy-MM-dd}")).ToList();
+                if (!storageObject.Any())
+                {
+                    retVal.Add(date);
+                    _missingDaysStr += $"{date.ToLongDateString()}\n";
+                    _wereDaysMissing = true;
+                    WriteToLog($"{date.ToLongDateString()} missing, adding to current run");
+                }
+            }
             return retVal;
         }
 
