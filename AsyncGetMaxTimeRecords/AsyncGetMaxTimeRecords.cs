@@ -165,12 +165,22 @@ namespace AsyncGetMaxTimeRecords
             using (var semaphore = new SemaphoreSlim(MAX_DOWNLOADS))
             using (var httpClient = new HttpClient())
             {
-
+                httpClient.Timeout = TimeSpan.FromSeconds(10);
                 var tasks = signalsDT.Select(async (signal) => 
                 {
-  
-                    String since = GetMostRecentRecordTime(signal.SignalID).ToString("MM-dd-yyyy HH:mm:ss.f"); 
-                    String url = $"http://{signal.IPAddress}/v1/asclog/xml/full?since={since}"; 
+
+                    var mostRecentRecord = GetMostRecentRecordTime(signal.SignalID);
+                    string url;
+                    if (mostRecentRecord == null)
+                    {
+                        url = $"http://{signal.IPAddress}/v1/asclog/xml/full";
+                    }
+                    else
+                    {
+                        string since = GetMostRecentRecordTime(signal.SignalID).Value.ToString("MM-dd-yyyy HH:mm:ss.f");
+                        url = $"http://{signal.IPAddress}/v1/asclog/xml/full?since={since}";
+                    }
+
 
                     await semaphore.WaitAsync();
                     try
@@ -180,17 +190,7 @@ namespace AsyncGetMaxTimeRecords
                         xml.LoadXml(data);
 
                         XmlNodeList list = xml.SelectNodes("/EventResponses/EventResponse/Event");
-                        if(list.Count == 0)
-                        {
-                            try
-                            {
-                                url = $"http://{signal.IPAddress}/v1/asclog/xml/full";
-                                data = await httpClient.GetStringAsync(url);
-                                xml = new XmlDocument();
-                                xml.LoadXml(data);
-                            }
-                            catch { }
-                        }
+
                         // put the result on the processing pipeline 
                         processing.QueueItemAsync(signal, xml); 
                     }
@@ -210,19 +210,19 @@ namespace AsyncGetMaxTimeRecords
             }
         }
 
-        private static DateTime GetMostRecentRecordTime(string signalId)
+        private static DateTime? GetMostRecentRecordTime(string signalId)
         {
             var CELRepo = MOE.Common.Models.Repositories.ControllerEventLogRepositoryFactory.Create();
             DateTime mostRecentEventTime =  CELRepo.GetMostRecentRecordTimestamp(signalId);
 
-            if (mostRecentEventTime != null)
+            if (mostRecentEventTime == null || mostRecentEventTime == DateTime.MinValue)
             {
-
-                return (mostRecentEventTime);
+                return null;
+                
             }
             else
             {
-                return (DateTime.Now.AddDays(-2));
+                return (mostRecentEventTime);
             }
 
 
@@ -237,7 +237,7 @@ namespace AsyncGetMaxTimeRecords
             var signals = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
 
            
-                signalsDT = (from s in signals.GetAllSignals() 
+                signalsDT = (from s in signals.GetLatestVersionOfAllSignalsAsQueryable()
                              where s.ControllerTypeID == 4 
                              select s).ToList(); 
             

@@ -33,6 +33,7 @@ namespace WavetronicsSpeedLibrary
                 // Initialise the EndPoint for the clients
                 EndPoint epSender = (EndPoint)clients;
                 TcpListener listener = new TcpListener(IPAddress.Any, 10088);
+                listener.Start();
                 serverSocket = listener.AcceptSocket();
                 var childSocketThread = new Thread(() =>
                 {

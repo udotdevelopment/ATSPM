@@ -40,6 +40,10 @@ namespace WavetronicsSpeedListener
             eventLog1.Log = "SpeedListenerLog";
         }
 
+        public void ConsoleStart()
+        {
+            OnStart(null);
+        }
         protected override void OnStart(string[] args)
         {
             eventLog1.WriteEntry("In OnStart");
