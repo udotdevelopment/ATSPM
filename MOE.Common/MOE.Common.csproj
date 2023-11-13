@@ -1309,6 +1309,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\CustomStuffForExistingUpgrade.txt" />
     <EmbeddedResource Include="Migrations\FillDetectorTypeMetricTypesTable.SQL" />
+    <Content Include="Default.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
     <None Include="Data\LinkPivot.xsc">
@@ -1413,7 +1416,7 @@
     <Analyzer Include="..\packages\AWSSDK.S3.3.7.9.45\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App.config" Optional="True">
+    <Content Include="*.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
