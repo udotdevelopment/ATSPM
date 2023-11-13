@@ -14,6 +14,8 @@ namespace MOE.Common.Models.Repositories
         List<Controller_Event_Log> GetSignalEventsByEventCodes(string signalId,
             DateTime startTime, DateTime endTime, List<int> eventCodes);
 
+        List<string> GetSignalIdsInControllerEventLog(DateTime startTime, DateTime endTime);
+
         List<Controller_Event_Log> GetEventsByEventCodesParam(string signalId,
             DateTime startTime, DateTime endTime, List<int> eventCodes, int param);
 
@@ -65,6 +67,7 @@ namespace MOE.Common.Models.Repositories
             int eventParam, DateTime date);
 
         List<Controller_Event_Log> GetEventsBetweenDates(DateTime startTime, DateTime endTime);
+        List<string> GetDistinctSignalIds();
 
         int GetSignalEventsCountBetweenDates(string signalId, DateTime startTime, DateTime endTime);
 

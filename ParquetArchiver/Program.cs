@@ -51,15 +51,15 @@ namespace ParquetArchiver
         private static string _missingDaysStr = "Days missing from archive to be retried:\n";
         private static bool _wereDaysMissing = false;
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             if (StorageLocation == "-1")
                 return;
 
-            var db = new SPM();
+            //var db = new SPM();
 
-            var signalsRepository = SignalsRepositoryFactory.Create(db);
-            var signals = signalsRepository.GetLatestVersionOfAllSignals();
+            //var signalsRepository = SignalsRepositoryFactory.Create(db);
+            //var signals = signalsRepository.GetLatestVersionOfAllSignals();
             DateTime start;
             DateTime end;
             bool useStartAndEndDates;
@@ -70,7 +70,7 @@ namespace ParquetArchiver
             }
             catch (Exception)
             {
-                Console.WriteLine("UseStartAndEndDates was not a valid value. Values are 0 or 1.");
+                WriteToLog("UseStartAndEndDates was not a valid value. Values are 0 or 1.");
                 return;
             }
 
@@ -82,7 +82,7 @@ namespace ParquetArchiver
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("StartDate not in a valid format. Format must be mm/dd/yyyy");
+                    WriteToLog("StartDate not in a valid format. Format must be mm/dd/yyyy");
                     return;
                 }
 
@@ -92,7 +92,7 @@ namespace ParquetArchiver
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("EndDate not in a valid format. Format must be mm/dd/yyyy");
+                    WriteToLog("EndDate not in a valid format. Format must be mm/dd/yyyy");
                     return;
                 }
             }
@@ -107,7 +107,7 @@ namespace ParquetArchiver
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("DaysToKeep was not a whole number");
+                    WriteToLog("DaysToKeep was not a whole number");
                     return;
                 }
 
@@ -123,13 +123,10 @@ namespace ParquetArchiver
                 dateList.AddRange(missingDaysToAdd);
             }
 
-            var options = new ParallelOptions
-            { MaxDegreeOfParallelism = Convert.ToInt32(ParquetArchive.GetSetting(MAX_DEGREES_OF_PARALLELISM)) };
-
-            Archive(dateList, signals, options, StorageLocation);
+            await Archive(dateList, StorageLocation);
 
             totalWatch.Stop();
-            Console.WriteLine($"All data converted in {totalWatch.ElapsedMilliseconds / 1000} seconds");
+            WriteToLog($"All data converted in {totalWatch.ElapsedMilliseconds / 1000} seconds");
 
             try
             {
@@ -137,7 +134,6 @@ namespace ParquetArchiver
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error sending email. Check the log for more information.");
                 WriteToLog("Error sending email");
                 WriteToLog(ex.Message);
                 if (ex.InnerException?.Message != null)
@@ -151,58 +147,82 @@ namespace ParquetArchiver
 
         }
 
-        private static void Archive(List<DateTime> dateList, List<Signal> signals, ParallelOptions options, string destination)
+        private static async Task Archive(List<DateTime> dateList, string destination)
         {
+            var semaphore = new SemaphoreSlim(Convert.ToInt32(ParquetArchive.GetSetting(MAX_DEGREES_OF_PARALLELISM)));
             foreach (var date in dateList)
             {
-                WriteToLog($"Starting data conversion for {date.ToLongDateString()}");
-                Console.WriteLine($"Starting data conversion for {date.ToLongDateString()}");
-                Parallel.ForEach(signals, options, async signal =>
+                try
                 {
-                    var watch = new Stopwatch();
-                    watch.Start();
-                    Console.WriteLine(
-                        $"Started Writing {signal.SignalID}: {signal.PrimaryName} {signal.SecondaryName} for {date.ToShortDateString()}");
-
-                    var eventLogRepository = ControllerEventLogRepositoryFactory.Create();
-                    var events = eventLogRepository.GetSignalEventsBetweenDates(signal.SignalID, date, date.AddDays(1));
-                    if (events.Any())
+                    WriteToLog("Getting distinct signals in event log table.");
+                    var eventLogRepo = ControllerEventLogRepositoryFactory.Create();
+                    var signalsToArchive = eventLogRepo.GetSignalIdsInControllerEventLog(date, date + TimeSpan.FromDays(1));
+                    WriteToLog($"{signalsToArchive.Count} signals found on {date.ToLongDateString()}.");
+                    
+                    var tasks = signalsToArchive.Select(async signal =>
                     {
-                        switch (destination)
+                        await semaphore.WaitAsync();
+                        try
                         {
-                            case "0":
-                                SaveToLocalStorage(signal, events, date);
-                                break;
-                            case "1":
-                                await SaveToGoogleCloud(signal, events, date);
-                                break;
-                            case "2":
-                                await SaveToAws(signal, events, date);
-                                break;
-                            case "3":
-                                await SaveToAzure(signal, events, date);
-                                break;
-                            default:
-                                Console.WriteLine("Invalid storage location specified, returning");
-                                return;
-                        }
-                    }
+                            var watch = new Stopwatch();
+                            watch.Start();
+                            Console.WriteLine(
+                                $"Started Writing {signal}: for {date.ToShortDateString()}");
 
-                    watch.Stop();
-                    Console.WriteLine(
-                        $"Finished writing {signal.SignalID}: {signal.PrimaryName} {signal.SecondaryName} for {date.ToShortDateString()} in {watch.ElapsedMilliseconds / 1000} seconds");
-                });
-                Console.WriteLine($"Data conversion complete for {date.ToLongDateString()}");
-                WriteToLog($"Data conversion complete for {date.ToLongDateString()}");
+                            var eventLogRepository = ControllerEventLogRepositoryFactory.Create();
+                            var events = eventLogRepository.GetSignalEventsBetweenDates(signal, date, date.AddDays(1));
+                            if (events.Any())
+                            {
+                                switch (destination)
+                                {
+                                    case "0":
+                                        SaveToLocalStorage(signal, events, date);
+                                        break;
+                                    case "1":
+                                        await SaveToGoogleCloud(signal, events, date);
+                                        break;
+                                    case "2":
+                                        await SaveToAws(signal, events, date);
+                                        break;
+                                    case "3":
+                                        await SaveToAzure(signal, events, date);
+                                        break;
+                                    default:
+                                        Console.WriteLine("Invalid storage location specified, returning");
+                                        return;
+                                }
+                            }
+
+                            watch.Stop();
+                            Console.WriteLine(
+                                $"Finished writing {signal}: for {date.ToShortDateString()} in {watch.ElapsedMilliseconds / 1000} seconds");
+                        }
+                        catch (Exception ex)
+                        {
+                            WriteToLog($"Error archiving {signal} on {date.ToLongDateString()}: {ex.Message}");
+                        }
+                        finally
+                        {
+                            semaphore.Release();
+                        }
+                    });
+
+                    await Task.WhenAll(tasks);
+
+                    WriteToLog($"Data conversion complete for {date.ToLongDateString()}");
+                }
+                catch (Exception ex)
+                {
+                    WriteToLog($"Error archiving {date.ToLongDateString()}: {ex.Message}");
+                }
             }
         }
 
-        private static void SaveToLocalStorage(Signal signal, List<Controller_Event_Log> events, DateTime date)
+        private static void SaveToLocalStorage(string signal, List<Controller_Event_Log> events, DateTime date)
         {
             try
             {
                 var localPath = ParquetArchive.GetSetting(LOCAL_ARCHIVE_DIRECTORY);
-                Console.WriteLine($"Data acquired for Signal {signal.SignalID}");
 
                 if (!Directory.Exists($"{localPath}\\{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}"))
                     Directory.CreateDirectory(
@@ -210,13 +230,10 @@ namespace ParquetArchiver
 
                 using (var stream =
                        File.Create(
-                           $"{localPath}\\{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}\\{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet")
+                           $"{localPath}\\{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}\\{signal}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet")
                       )
                 {
                     var parquetEvents = ConvertToParquetEventLogList(events);
-
-
-                    Console.WriteLine($"Data converted to ParquetEventLog for Signal {signal.SignalID}");
 
                     var signalIdColumn = new DataColumn(new DataField<string>("SignalID"),
                         parquetEvents.Select(x => x.SignalID).ToArray());
@@ -249,9 +266,8 @@ namespace ParquetArchiver
                         catch (Exception ex)
                         {
                             //Sleep and retry
-                            Console.WriteLine(ex.Message);
                             WriteToLog(
-                                $"Initial save: Error saving {signal.SignalID} on {date.ToShortDateString()}");
+                                $"Initial save: Error saving {signal} on {date.ToShortDateString()}");
                             WriteToLog($"{ex.Message}");
                             if (ex.InnerException?.Message != null)
                             {
@@ -274,9 +290,8 @@ namespace ParquetArchiver
                             }
                             catch (Exception ex2)
                             {
-                                Console.WriteLine(ex2.Message);
                                 WriteToLog(
-                                    $"Retry: Error saving {signal.SignalID} on {date.ToShortDateString()}");
+                                    $"Retry: Error saving {signal} on {date.ToShortDateString()}");
                                 WriteToLog($"{ex2.Message}");
                                 if (ex2.InnerException?.Message != null)
                                 {
@@ -289,13 +304,12 @@ namespace ParquetArchiver
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
                 WriteToLog(ex.Message + "\n" + ex.InnerException?.Message);
             }
 
         }
 
-        private static async Task SaveToGoogleCloud(Signal signal, List<Controller_Event_Log> events, DateTime date)
+        private static async Task SaveToGoogleCloud(string signal, List<Controller_Event_Log> events, DateTime date)
         {
             try
             {
@@ -303,23 +317,19 @@ namespace ParquetArchiver
                 // Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", ConfigurationManager.AppSettings["GoogleAppCredentialsLocation"]);
                 var storage = await StorageClient.CreateAsync();
 
-                Console.WriteLine($"Data acquired for Signal {signal.SignalID}");
                 var parquetEvents = ConvertToParquetEventLogList(events);
-                Console.WriteLine($"Data converted to ParquetEventLog for Signal {signal.SignalID}");
+
                 using (var ms = new MemoryStream())
                 {
                     ParquetConvert.Serialize(parquetEvents, ms);
                     ms.Position = 0;
-                    var fileName = $"{FolderName}/{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
+                    var fileName = $"{FolderName}/{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}/{signal}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
                     await storage.UploadObjectAsync(GoogleBucketName, fileName, null, ms);
-                    Console.WriteLine($"{fileName} uploaded.");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                WriteToLog(
-                                $"Retry: Error saving {signal.SignalID} on {date.ToShortDateString()}");
+                WriteToLog($"Error saving {signal} on {date.ToShortDateString()}");
                 WriteToLog($"{ex.Message}");
                 if (ex.InnerException?.Message != null)
                 {
@@ -328,20 +338,18 @@ namespace ParquetArchiver
             }
         }
 
-        private static async Task SaveToAws(Signal signal, IReadOnlyCollection<Controller_Event_Log> events, DateTime date)
+        private static async Task SaveToAws(string signal, IReadOnlyCollection<Controller_Event_Log> events, DateTime date)
         {
             try
             {
                 using (var ms = new MemoryStream())
                 {
                     var bucketRegion = RegionEndpoint.GetBySystemName(ConfigurationManager.AppSettings["S3_REGION"]);
-                    Console.WriteLine($"Data acquired for Signal {signal.SignalID}");
+
                     var parquetEvents = ConvertToParquetEventLogList(events);
-                    Console.WriteLine($"Data converted to ParquetEventLog for Signal {signal.SignalID}");
                     ParquetConvert.Serialize(parquetEvents, ms);
-                    Console.WriteLine("Uploading parquet file to S3 bucket.");
                     ms.Position = 0;
-                    var fileName = $"{FolderName}{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
+                    var fileName = $"{FolderName}{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}/{signal}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
                     using (var client = new AmazonS3Client(AccessKey, SecretKey, bucketRegion))
                     {
                         var uploadRequest = new TransferUtilityUploadRequest
@@ -352,15 +360,13 @@ namespace ParquetArchiver
                         };
                         var fileTransferUtility = new TransferUtility(client);
                         await fileTransferUtility.UploadAsync(uploadRequest);
-                        Console.WriteLine($"Upload complete: {uploadRequest.Key}");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
                 WriteToLog(
-                $"Retry: Error saving {signal.SignalID} on {date.ToShortDateString()}");
+                $"Retry: Error saving {signal} on {date.ToShortDateString()}");
                 WriteToLog($"{ex.Message}");
                 if (ex.InnerException?.Message != null)
                 {
@@ -369,31 +375,26 @@ namespace ParquetArchiver
             }
         }
 
-        private static async Task SaveToAzure(Signal signal, List<Controller_Event_Log> events, DateTime date)
+        private static async Task SaveToAzure(string signal, List<Controller_Event_Log> events, DateTime date)
         {
             try
             {
                 using (var ms = new MemoryStream())
                 {
-                    Console.WriteLine($"Data acquired for Signal {signal.SignalID}");
                     var parquetEvents = ConvertToParquetEventLogList(events);
-                    Console.WriteLine($"Data converted to ParquetEventLog for Signal {signal.SignalID}");
                     ParquetConvert.Serialize(parquetEvents, ms);
-                    Console.WriteLine("Uploading parquet file to Azure.");
                     ms.Position = 0;
-                    var fileName = $"{FolderName}{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}/{signal.SignalID}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
+                    var fileName = $"{FolderName}{FilePathPrefix}={events.First().Timestamp.Date:yyyy-MM-dd}/{signal}_{events.First().Timestamp.Date:yyyy-MM-dd}.parquet";
                     var blobServiceClient = new BlobServiceClient(ConfigurationManager.AppSettings["AZURE_CONN_STRING"]);
                     var container = blobServiceClient.GetBlobContainerClient(Container);
                     var blobClient = container.GetBlobClient(fileName);
                     await blobClient.UploadAsync(ms, true);
-                    Console.WriteLine($"Upload complete: {blobClient.Name}");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
                 WriteToLog(
-                $"Retry: Error saving {signal.SignalID} on {date.ToShortDateString()}");
+                $"Retry: Error saving {signal} on {date.ToShortDateString()}");
                 WriteToLog($"{ex.Message}");
                 if (ex.InnerException?.Message != null)
                 {
@@ -536,6 +537,7 @@ namespace ParquetArchiver
             {
                 writer.WriteLine($"{DateTime.Now}: {message}");
             }
+            Console.WriteLine(message);
         }
     }
 }

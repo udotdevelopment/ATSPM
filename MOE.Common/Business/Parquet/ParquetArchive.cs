@@ -31,7 +31,7 @@ namespace MOE.Common.Business.Parquet
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(localPath)) return new List<Controller_Event_Log>();
+                
                 var dateRange = startTime.Date == endTime.Date
                     ? new List<DateTime> { startTime.Date }
                     : GetDateRange(startTime, endTime);
@@ -41,6 +41,7 @@ namespace MOE.Common.Business.Parquet
                 switch (Destination)
                 {
                     case "0":
+                        if (string.IsNullOrWhiteSpace(localPath)) return new List<Controller_Event_Log>();
                         events = GetEventsFromLocalFile(localPath, signalId, dateRange);
                         break;
                     case "1":
@@ -154,7 +155,9 @@ namespace MOE.Common.Business.Parquet
 
         private static List<Controller_Event_Log> GetEventsFromGoogleCloud(string signalId, IEnumerable<DateTime> dateRange)
         {
+#if DEBUG
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", ConfigurationManager.AppSettings["GoogleAppCredentialsLocation"]);
+            #endif
             var events = new List<Controller_Event_Log>();
             var storage = StorageClient.Create();
             foreach (var date in dateRange)
