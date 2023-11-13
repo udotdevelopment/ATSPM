@@ -18,7 +18,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1
 
     - name: Setup NuGet
-      uses: NuGet/setup-nuget@v4.0
+      uses: NuGet/setup-nuget@v3.5
       
     - name: Navigate to Workspace
       run: cd $GITHUB_WORKSPACE
