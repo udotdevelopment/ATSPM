@@ -14,13 +14,23 @@ namespace WavetronicsSpeedListener
         /// </summary>
         static void Main()
         {
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[] 
-            { 
-                new SpeedListenerService() 
-            };
+            if (Environment.UserInteractive)
+            {
+                var service = new SpeedListenerService();
+                service.ConsoleStart();
+                Console.ReadLine();
+            }
+            else
+            {
+                ServiceBase[] ServicesToRun;
+                ServicesToRun = new ServiceBase[]
+                {
+                    new SpeedListenerService()
+                };
 
-            ServiceBase.Run(ServicesToRun);
+                ServiceBase.Run(ServicesToRun);
+            }
+
         }
     }
 }
