@@ -265,6 +265,31 @@ namespace MOE.CommonTests.Models
             }
         }
 
+        public List<string> GetSignalIdsInControllerEventLog(DateTime startTime, DateTime endTime)
+        {
+            try
+            {
+                var ids = (from s in _db.Controller_Event_Log
+                           where s.Timestamp >= startTime && s.Timestamp <= endTime
+                           select s.SignalID).Distinct().ToList();
+                return ids;
+            }
+            catch (Exception ex)
+            {
+                var logRepository =
+                    ApplicationEventRepositoryFactory.Create();
+                var e = new ApplicationEvent();
+                e.ApplicationName = "MOE.TMC";
+                e.Class = GetType().ToString();
+                e.Function = "GetSignalIdsInControllerEventLog";
+                e.SeverityLevel = ApplicationEvent.SeverityLevels.High;
+                e.Timestamp = DateTime.Now;
+                e.Description = ex.Message;
+                logRepository.Add(e);
+                throw ex;
+            }
+        }
+
         public List<Controller_Event_Log> GetEventsByEventCodesParam(string signalId, DateTime startTime, DateTime endTime, List<int> eventCodes, int param)
         {
             try
@@ -491,6 +516,11 @@ namespace MOE.CommonTests.Models
         }
 
         public List<Controller_Event_Log> GetEventsBetweenDates(DateTime startTime, DateTime endTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<string> GetDistinctSignalIds()
         {
             throw new NotImplementedException();
         }
