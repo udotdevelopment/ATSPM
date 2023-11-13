@@ -672,7 +672,7 @@
     <Content Include="Content\bootstrap-chosen.less" />
     <Content Include="Images\ATSPMMethodsandAssumptions.pdf" />
     <Content Include="Scripts\WatchdogExclusions.js" />
-    <Content Include="Web.config">
+    <Content Include="*.config">
       <SubType>Designer</SubType>
     </Content>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
@@ -1036,13 +1036,10 @@
     <Content Include="Views\DefaultCharts\TimingAndActuationsOptions.cshtml" />
     <Content Include="Views\WatchdogExclusions\WatchdogExclusionsList.cshtml" />
     <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
+      <DependentUpon>*.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
+      <DependentUpon>*.config</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
