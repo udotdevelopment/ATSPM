@@ -731,7 +731,7 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
-                var tempDate = date.AddHours(-1);
+                var tempDate = date.AddDays(-1);
                 var lastEvent = _db.Controller_Event_Log.Where(c => c.SignalID == signalId &&
                                                                     c.Timestamp >= tempDate &&
                                                                     c.Timestamp < date &&
