@@ -62,8 +62,8 @@ namespace MOE.Common.Business
             chart.Titles.Add(ChartTitleFactory.GetChartName(options.MetricTypeID));
             chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(signal.SignalID, options.StartDate,
                 options.EndDate));
-            Title phaseTitle = ChartTitleFactory.GetPhase(_opposingPhase);
-            phaseTitle.Text = ("Left Turn Crossing " + phaseTitle.Text);
+            Title phaseTitle = ChartTitleFactory.GetPhaseAndPhaseDescriptions(approach, false);
+            phaseTitle.Text = (phaseTitle.Text + " Approach Gaps");
             chart.Titles.Add(phaseTitle);
             chart.Titles.Add(detectionType);
         }
