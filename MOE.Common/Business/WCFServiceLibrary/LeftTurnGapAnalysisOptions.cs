@@ -228,37 +228,6 @@ namespace MOE.Common.Business.WCFServiceLibrary
 
         private void CreateChart(LeftTurnGapAnalysis.LeftTurnGapAnalysis gapData)
         {
-            //var phaseEvents = new List<Controller_Event_Log>();
-
-            //phaseEvents.AddRange(eventLogs.Events.Where(x =>
-            //    x.EventParam == approach.ProtectedPhaseNumber &&
-            //    (x.EventCode == EVENT_GREEN || x.EventCode == EVENT_RED)));
-
-            //var detectorsToUse = new List<Models.Detector>();
-            //var detectionTypeStr = "Lane-By-Lane Count";
-
-            ////Use only lane-by-lane count detectors if they exists, otherwise check for stop bar
-            //detectorsToUse = approach.GetAllDetectorsOfDetectionType(4);
-
-            //if (!detectorsToUse.Any())
-            //{
-            //    detectorsToUse = approach.GetAllDetectorsOfDetectionType(6);
-            //    detectionTypeStr = "Stop Bar Presence";
-
-            //    //If no detectors of either type for this approach, skip it
-            //    if (!detectorsToUse.Any())
-            //        return;
-            //}
-
-            //foreach (var detector in detectorsToUse)
-            //{
-            //    // Check for thru, right, thru-right, and thru-left
-            //    if (!IsThruDetector(detector)) continue;
-
-            //    phaseEvents.AddRange(eventLogs.Events.Where(x =>
-            //        x.EventCode == EVENT_DET && x.EventParam == detector.DetChannel));
-            //}
-
             if (gapData.Gaps1.Any() || gapData.Gaps2.Any() || gapData.Gaps3.Any() || gapData.Gaps4.Any())
             {
                 var leftTurnChart = new LeftTurnGapAnalysisChart(this, gapData,
