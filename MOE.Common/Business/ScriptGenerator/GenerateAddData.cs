@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
@@ -23,7 +24,7 @@ namespace MOE.Common.Business.ScriptGenerator
 
         public static List<Pin> GetPinInfo()
         {
-            var pins = new List<Pin>();
+            var pins = new ConcurrentBag<Pin>();
             List<Signal> signals = GetSignalVersionByDate(DateTime.Now);
             //foreach (var signal in signals)
             Parallel.ForEach(signals, signal =>
@@ -39,7 +40,7 @@ namespace MOE.Common.Business.ScriptGenerator
                 pins.Add(pin);
                 //Console.WriteLine(pin.SignalID);
                 });
-            return pins;
+            return pins.ToList();
         }
 
 

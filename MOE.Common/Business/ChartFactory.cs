@@ -562,6 +562,7 @@ namespace MOE.Common.Business
             chartArea.AxisX2.Enabled = AxisEnabled.True;
             chartArea.AxisX2.Minimum = options.StartDate.ToOADate();
             chartArea.AxisX2.Maximum = options.EndDate.ToOADate();
+            chartArea.AxisX2.LabelStyle.Format = "  ";
             var reportTimespan = options.EndDate - options.StartDate;
             double totalMinutesRounded = Math.Round(reportTimespan.TotalMinutes);
             if (totalMinutesRounded <= 1)
