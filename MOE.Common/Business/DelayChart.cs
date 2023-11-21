@@ -16,7 +16,7 @@ namespace MOE.Common.Business
         {
             Options = options;
             //Set the chart properties
-            Chart = ChartFactory.CreateDefaultChart(options);
+            Chart = ChartFactory.CreateDefaultChartNoX2Axis(options);
             ChartFactory.SetImageProperties(Chart);
 
 

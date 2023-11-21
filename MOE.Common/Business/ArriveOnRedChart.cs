@@ -17,7 +17,7 @@ namespace MOE.Common.Business
         public ArriveOnRedChart(AoROptions options, SignalPhase signalPhase)
         {
             Options = options;
-            Chart = ChartFactory.CreateDefaultChart(options);
+            Chart = ChartFactory.CreateDefaultChartNoX2Axis(options);
             //Set the chart properties
             ChartFactory.SetImageProperties(Chart);
 
