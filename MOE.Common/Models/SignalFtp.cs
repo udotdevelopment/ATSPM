@@ -938,6 +938,7 @@ namespace MOE.Common.Business
 
         public void GetCubicFilesAsync(string filePath)
         {
+            var errorRepository = ApplicationEventRepositoryFactory.Create();
             string username = null;
             string password = null;
 
@@ -965,15 +966,17 @@ namespace MOE.Common.Business
                 //string username = Signal.ControllerType.UserName;
                 //string password = Signal.ControllerType.Password;
                 string remoteDirectory = Signal.ControllerType.FTPDirectory;
-                string localDirectory = SignalFtpOptions.LocalDirectory;
+                string localDirectory = SignalFtpOptions.LocalDirectory + Signal.SignalID + @"\";
                 using (SftpClient sftp = new SftpClient(host, username, password))
                 {
                     try
                     {
+                        Console.WriteLine($"Trying to connect to {Signal.SignalID}");
                         sftp.Connect();
+                        Console.WriteLine($"Connected to {Signal.SignalID}");
 
                         var files = sftp.ListDirectory(remoteDirectory);
-                        var cubicFiles = files.Where(x => x.FullName.Contains(".dat")).ToList();
+                        var cubicFiles = files.Where(x => x.FullName.Contains(".dat") || x.FullName.Contains(".datZ")).ToList();
 
                         //download current files, remove files from remote directory
                         TransferCubicFiles(cubicFiles, localDirectory, sftp);
@@ -983,11 +986,24 @@ namespace MOE.Common.Business
                     catch (Exception ex)
                     {
                         //to-do: add some custom error handling as fit 
-                        throw ex;
+                        Console.WriteLine(ex.Message);
+                        errorRepository.QuickAdd("sFTPFromControllers", "SignalFtp", "GetCubicFilesAsync",
+                            ApplicationEvent.SeverityLevels.Medium,
+                            Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
+
                     }
                 }
             });
-            sftpFetch.Start();
+            try
+            {
+                sftpFetch.Start();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
         }
 
         private void TransferCubicFiles(List<SftpFile> receivedFiles, string directory, SftpClient client)
