@@ -1,10 +1,9 @@
-﻿using System;
+﻿using MOE.Common.Business.WCFServiceLibrary;
+using MOE.Common.Models;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Web.UI.DataVisualization.Charting;
-using MOE.Common.Business.WCFServiceLibrary;
-using MOE.Common.Models;
 
 namespace MOE.Common.Business
 {
@@ -62,7 +61,7 @@ namespace MOE.Common.Business
             chart.Titles.Add(ChartTitleFactory.GetChartName(options.MetricTypeID));
             chart.Titles.Add(ChartTitleFactory.GetSignalLocationAndDateRange(signal.SignalID, options.StartDate,
                 options.EndDate));
-            Title phaseTitle = ChartTitleFactory.GetPhase(_opposingPhase);
+            Title phaseTitle = ChartTitleFactory.GetPhase(approach.ProtectedPhaseNumber);
             phaseTitle.Text = ("Left Turn Crossing " + phaseTitle.Text);
             chart.Titles.Add(phaseTitle);
             chart.Titles.Add(detectionType);
@@ -115,7 +114,7 @@ namespace MOE.Common.Business
             {
                 percentTurnableSeries.Points.AddXY(percent.Key, percent.Value);
             }
-            
+
 
             //Find the highest max and round up to the next 100
             Chart.ChartAreas[0].AxisY.Maximum = Math.Ceiling(GapData.HighestTotal / 100d) * 100;
