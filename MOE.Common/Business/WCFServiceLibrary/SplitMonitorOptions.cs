@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web.Mvc;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Models.Custom;
 using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
@@ -194,6 +195,142 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 }
             }
             return ReturnList;
+        }
+
+        public List<SplitMonitorSummary> CreateMeticDataWithoutGraph()
+        {
+            List<SplitMonitorSummary> splitMonitorSummaries = new List<SplitMonitorSummary>();
+            base.CreateMetric();
+            var analysisPhaseCollection = new AnalysisPhaseCollection(SignalID, StartDate, EndDate);
+            //If there are phases in the collection add the charts
+            if (analysisPhaseCollection.Items.Count > 0)
+            {
+                foreach (var plan in analysisPhaseCollection.Plans)
+                {
+                    plan.SetProgrammedSplits(SignalID);
+                    plan.SetHighCycleCount(analysisPhaseCollection);
+                }
+                if (analysisPhaseCollection.Items.Count > 0)
+                {
+                    var phasesInOrder = (analysisPhaseCollection.Items.Select(r => r)).OrderBy(r => r.PhaseNumber);
+                    foreach (var phase in phasesInOrder)
+                    {
+                        splitMonitorSummaries.AddRange(GetSplitMonitorStatisticsWithoutGraph(analysisPhaseCollection.Plans, phase));
+                    }
+                }
+            }
+            return splitMonitorSummaries;
+        }
+
+        private List<SplitMonitorSummary> GetSplitMonitorStatisticsWithoutGraph(List<PlanSplitMonitor> plans, AnalysisPhase phase)
+        {
+            List<SplitMonitorSummary> splitMonitorSummaries = new List<SplitMonitorSummary>();
+            //find the phase Cycles that occure during the plan.
+            foreach (var plan in plans)
+            {
+                SplitMonitorSummary splitMonitorSummary = new SplitMonitorSummary();
+                splitMonitorSummary.SignalId = phase.SignalID;
+                splitMonitorSummary.Plan = plan.PlanNumber;
+                splitMonitorSummary.Phase = phase.PhaseNumber;
+                splitMonitorSummary.Date = plan.StartTime.ToString("MM/dd/yyyy hh:mm tt");
+
+                var Cycles = from cycle in phase.Cycles.Items
+                             where cycle.StartTime >= plan.StartTime && cycle.EndTime < plan.EndTime
+                             orderby cycle.Duration
+                             select cycle;
+
+                // find % Skips
+                if (ShowPercentSkip)
+                    if (plan.CycleCount > 0)
+                    {
+                        double CycleCount = plan.CycleCount;
+                        double SkippedPhases = plan.CycleCount - Cycles.Count();
+                        double SkipPercent = 0;
+                        if (CycleCount > 0)
+                            SkipPercent = SkippedPhases / CycleCount;
+
+                        splitMonitorSummary.Skips = Math.Round(SkipPercent, 2);
+                    }
+
+                // find % GapOuts
+                if (ShowPercentGapOuts)
+                {
+                    var GapOuts = from cycle in Cycles
+                                  where cycle.TerminationEvent == 4
+                                  select cycle;
+
+                    double CycleCount = plan.CycleCount;
+                    double gapouts = GapOuts.Count();
+                    double GapPercent = 0;
+                    if (CycleCount > 0)
+                        GapPercent = gapouts / CycleCount;
+
+                    splitMonitorSummary.GapOuts = Math.Round(GapPercent, 2);
+                }
+
+                // Set Force Off
+                if (ShowPercentMaxOutForceOff && plan.PlanNumber != 254
+                )
+                {
+                    var ForceOffs = from cycle in Cycles
+                                    where cycle.TerminationEvent == 6
+                                    select cycle;
+
+                    double CycleCount = plan.CycleCount;
+                    double forceoffs = ForceOffs.Count();
+                    double ForcePercent = 0;
+                    if (CycleCount > 0)
+                        ForcePercent = forceoffs / CycleCount;
+
+                    splitMonitorSummary.ForceOffs = Math.Round(ForcePercent, 2);
+                }
+
+                //Average Split
+                if (ShowAverageSplit)
+                {
+                    double runningTotal = 0;
+                    double averageSplits = 0;
+                    foreach (var Cycle in Cycles)
+                        runningTotal = runningTotal + Cycle.Duration.TotalSeconds;
+
+                    if (Cycles.Count() > 0)
+                        averageSplits = runningTotal / Cycles.Count();
+
+                    splitMonitorSummary.AverageSplit = Math.Round(averageSplits, 2);
+
+                    //Percentile Split
+                    if (SelectedPercentileSplit != null && Cycles.Count() > 2)
+                    {
+                        double percentileResult = 0;
+                        var Percentile = Convert.ToDouble(SelectedPercentileSplit) / 100;
+                        var setCount = Cycles.Count();
+
+
+                        var PercentilIndex = Percentile * setCount;
+                        if (PercentilIndex % 1 == 0)
+                        {
+                            percentileResult = Cycles.ElementAt(Convert.ToInt16(PercentilIndex) - 1).Duration
+                                .TotalSeconds;
+                        }
+                        else
+                        {
+                            var indexMod = PercentilIndex % 1;
+                            //subtracting .5 leaves just the integer after the convert.
+                            //There was probably another way to do that, but this is easy.
+                            int indexInt = Convert.ToInt16(PercentilIndex - .5);
+
+                            var step1 = Cycles.ElementAt(Convert.ToInt16(indexInt) - 1).Duration.TotalSeconds;
+                            var step2 = Cycles.ElementAt(Convert.ToInt16(indexInt)).Duration.TotalSeconds;
+                            var stepDiff = step2 - step1;
+                            var step3 = stepDiff * indexMod;
+                            percentileResult = step1 + step3;
+                        }
+                        splitMonitorSummary.PercentileSplit = Math.Round(percentileResult, 2);
+                    }
+                }
+                splitMonitorSummaries.Add(splitMonitorSummary);
+            }
+            return splitMonitorSummaries;
         }
 
         private void SetSplitMonitorStatistics(List<PlanSplitMonitor> plans, AnalysisPhase phase, Chart chart)

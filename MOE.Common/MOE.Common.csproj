@@ -811,6 +811,9 @@
     <Compile Include="Migrations\202204300103177_4_3.designer.cs">
       <DependentUpon>202204300103177_4_3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Custom\PCDSummary.cs" />
+    <Compile Include="Models\Custom\SplitFailureSummary.cs" />
+    <Compile Include="Models\Custom\SplitMonitorSummary.cs" />
     <Compile Include="Models\Jurisdiction.cs" />
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
