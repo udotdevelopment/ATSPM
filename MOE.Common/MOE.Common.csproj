@@ -495,6 +495,7 @@
     <Compile Include="Business\LeftTurnGapReport\LeftTurnReportPreCheck.cs" />
     <Compile Include="Business\LeftTurnGapReport\LeftTurnSplitFailAnalysis.cs" />
     <Compile Include="Business\LeftTurnGapReport\LeftTurnVolumeAnalysis.cs" />
+    <Compile Include="Business\LogDecoder\D4Decoder.cs" />
     <Compile Include="Business\SplitMonitor\SplitMonitor.cs" />
     <Compile Include="Business\Parquet\ParquetArchive.cs" />
     <Compile Include="Business\Parquet\ParquetEventLog.cs" />

@@ -508,7 +508,7 @@ namespace SPM.Controllers
             signal.IPAddress = "10.10.10.10";
             signal.Latitude = "0";
             signal.Longitude = "0";
-            signal.RegionID = 2;
+            signal.RegionID = 1;
             signal.ControllerTypeID = 1;
             signal.Start = DateTime.Today;
             signal.Note = "Create New";
