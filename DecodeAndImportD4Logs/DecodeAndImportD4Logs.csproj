@@ -59,8 +59,7 @@
     <Compile Include="SimplePartitioner.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="*.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MOE.Common\MOE.Common.csproj">
