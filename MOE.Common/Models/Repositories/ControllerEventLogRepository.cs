@@ -56,8 +56,14 @@ namespace MOE.Common.Models.Repositories
             if (eventCodes != null && eventCodes.Count > 0)
                 query = query.Where(c => eventCodes.Contains(c.EventCode));
 
-            if (query.Any())
-                return query.Count();
+            var queryList = query.ToList();
+            if (queryList.Any())
+            {
+                var minTime = queryList.Min(x => x.Timestamp);
+                if (minTime.Date == startTime.Date)
+                    return queryList.Count();
+                endTime = minTime;
+            }
 
             //Check the archive if no data in DB
             var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
@@ -67,7 +73,7 @@ namespace MOE.Common.Models.Repositories
             if (eventCodes != null && eventCodes.Count > 0)
                 archivedData = archivedData.Where(c => eventCodes.Contains(c.EventCode)).ToList();
 
-            return archivedData.Count;
+            return archivedData.Count + queryList.Count;
         }
 
         public List<Controller_Event_Log> GetRecordsByParameterAndEvent(string signalId, DateTime startTime,
@@ -80,8 +86,14 @@ namespace MOE.Common.Models.Repositories
             if (eventCodes != null && eventCodes.Count > 0)
                 query = query.Where(c => eventCodes.Contains(c.EventCode));
 
-            if (query.Any())
-                return query.ToList();
+            var queryList = query.ToList();
+            if (queryList.Any())
+            {
+                var minTime = queryList.Min(x => x.Timestamp);
+                if (minTime.Date == startTime.Date)
+                    return queryList;
+                endTime = minTime;
+            }
 
             var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
 
@@ -90,7 +102,7 @@ namespace MOE.Common.Models.Repositories
             if (eventCodes != null && eventCodes.Count > 0)
                 archivedData = archivedData.Where(c => eventCodes.Contains(c.EventCode)).ToList();
 
-            return archivedData.ToList();
+            return archivedData.Concat(queryList).ToList();
         }
 
         public List<Controller_Event_Log> GetAllAggregationCodes(string signalId, DateTime startTime, DateTime endTime)
@@ -101,30 +113,42 @@ namespace MOE.Common.Models.Repositories
                             codes.Contains(c.EventCode))
                 .ToList();
 
-            if (records.Any()) return records;
+            if (records.Any())
+            {
+                var minTime = records.Min(x => x.Timestamp);
+                if (minTime.Date == startTime.Date)
+                    return records;
+                endTime = minTime;
+            }
 
             var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
-            records = archivedData.Where(x => codes.Contains(x.EventCode)).ToList();
+            archivedData = archivedData.Where(x => codes.Contains(x.EventCode)).ToList();
 
-            return records;
+            return records.Concat(archivedData).ToList();
         }
 
         public int GetDetectorActivationCount(string signalId,
             DateTime startTime, DateTime endTime, int detectorChannel)
         {
-            var count = (from cel in _db.Controller_Event_Log
-                         where cel.Timestamp >= startTime
-                               && cel.Timestamp < endTime
-                               && cel.SignalID == signalId
-                               && cel.EventParam == detectorChannel
-                               && cel.EventCode == 82
-                         select cel).Count();
+            var events = (from cel in _db.Controller_Event_Log
+                          where cel.Timestamp >= startTime
+                                && cel.Timestamp < endTime
+                                && cel.SignalID == signalId
+                                && cel.EventParam == detectorChannel
+                                && cel.EventCode == 82
+                          select cel);
 
-            if (count > 0) return count;
+            if (events.Any())
+            {
+                var minTime = events.Min(x => x.Timestamp);
+                if (minTime.Date == startTime.Date)
+                    return events.Count();
+                endTime = minTime;
+            }
 
             var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
-            count = archivedData.Count(x => x.EventParam == detectorChannel && x.EventCode == 82);
-            return count;
+            var num = archivedData.Count(x => x.EventParam == detectorChannel && x.EventCode == 82);
+            return events.Count() + num;
         }
 
         public double GetTmcVolume(DateTime startDate, DateTime endDate, string signalId, int phase)
@@ -141,20 +165,26 @@ namespace MOE.Common.Models.Repositories
                         tmcChannels.Add(gd.DetChannel);
 
 
-            double count = (from cel in _db.Controller_Event_Log
-                            where cel.Timestamp >= startDate
-                                  && cel.Timestamp < endDate
-                                  && cel.SignalID == signalId
-                                  && tmcChannels.Contains(cel.EventParam)
-                                  && cel.EventCode == 82
-                            select cel).Count();
+            var events = (from cel in _db.Controller_Event_Log
+                          where cel.Timestamp >= startDate
+                                && cel.Timestamp < endDate
+                                && cel.SignalID == signalId
+                                && tmcChannels.Contains(cel.EventParam)
+                                && cel.EventCode == 82
+                          select cel);
 
-            if (count > 0) return count;
+            if (events.Any())
+            {
+                var minTime = events.Min(x => x.Timestamp);
+                if (minTime.Date == startDate.Date)
+                    return events.Count();
+                endDate = minTime;
+            }
 
             var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startDate, endDate);
-            count = archivedData.Count(x => x.EventCode == 82 && tmcChannels.Contains(x.EventParam));
+            var num = archivedData.Count(x => x.EventCode == 82 && tmcChannels.Contains(x.EventParam));
 
-            return count;
+            return events.Count() + num;
         }
 
         public List<Controller_Event_Log> GetSplitEvents(string signalId, DateTime startTime, DateTime endTime)
@@ -164,12 +194,18 @@ namespace MOE.Common.Models.Repositories
                                  && r.EventCode > 130 && r.EventCode < 150
                            select r).ToList();
 
-            if (results.Any()) return results;
+            if (results.Any())
+            {
+                var minTime = results.Min(x => x.Timestamp);
+                if (minTime.Date == startTime.Date)
+                    return results;
+                endTime = minTime;
+            }
 
             var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
-            results = archivedData.Where(x => x.EventCode > 130 && x.EventCode < 150).ToList();
+            archivedData = archivedData.Where(x => x.EventCode > 130 && x.EventCode < 150).ToList();
 
-            return results;
+            return results.Concat(archivedData).ToList();
         }
 
         public List<Controller_Event_Log> GetSignalEventsBetweenDates(string signalId,
@@ -182,9 +218,16 @@ namespace MOE.Common.Models.Repositories
                                     && r.Timestamp >= startTime
                                     && r.Timestamp < endTime
                               select r).ToList();
-                if (events.Any()) return events;
 
-                return ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
+                if (events.Any())
+                {
+                    var minTime = events.Min(x => x.Timestamp);
+                    if (minTime.Date == startTime.Date)
+                        return events;
+                    endTime = minTime;
+                }
+
+                return events.Concat(ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime)).ToList();
             }
             catch (Exception ex)
             {
@@ -215,10 +258,16 @@ namespace MOE.Common.Models.Repositories
                  select r).Take(numberOfRecords).ToList();
 
                 if (events.Any())
-                    return events;
+                {
+                    var minTime = events.Min(x => x.Timestamp);
+                    if (minTime.Date == startTime.Date)
+                        return events;
+                    endTime = minTime;
+                }
 
                 var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
-                events = archivedData.Take(numberOfRecords).ToList();
+                var totalRecords = events.Concat(archivedData);
+                events = totalRecords.Take(numberOfRecords).ToList();
 
                 return events;
             }
@@ -242,15 +291,20 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
-                var count = _db.Controller_Event_Log.Count(r => r.SignalID == signalId
+                var events = _db.Controller_Event_Log.Where(r => r.SignalID == signalId
                                                            && r.Timestamp >= startTime
                                                            && r.Timestamp < endTime);
 
-                if (count > 0)
-                    return count;
+                if (events.Any())
+                {
+                    var minTime = events.Min(x => x.Timestamp);
+                    if (minTime.Date == startTime.Date)
+                        return events.Count();
+                    endTime = minTime;
+                }
 
                 var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
-                return archivedData.Count;
+                return events.Count() + archivedData.Count;
             }
             catch (Exception ex)
             {
@@ -276,7 +330,7 @@ namespace MOE.Common.Models.Repositories
                                                          && r.Timestamp >= startTime
                                                          && r.Timestamp < endTime);
                 if (hasRecords)
-                    return hasRecords;
+                    return true;
 
                 var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
                 return archivedData.Any();
@@ -310,18 +364,23 @@ namespace MOE.Common.Models.Repositories
                                     && r.EventCode == eventCode
                               select r).ToList();
 
-                if (!events.Any())
+                if (events.Any())
                 {
-                    var logs = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
-                    events = (from s in logs
-                              where s.SignalID == signalId &&
-                                    s.Timestamp >= startTime &&
-                                    s.Timestamp < endTime &&
-                                    s.EventCode == eventCode
-                              select s).ToList();
+                    var minTime = events.Min(x => x.Timestamp);
+                    if (minTime.Date == startTime.Date)
+                        return events;
+                    endTime = minTime;
                 }
 
-                return events;
+                var logs = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
+                logs = (from s in logs
+                        where s.SignalID == signalId &&
+                              s.Timestamp >= startTime &&
+                              s.Timestamp < endTime &&
+                              s.EventCode == eventCode
+                        select s).ToList();
+
+                return events.Concat(logs).ToList();
             }
             catch (Exception ex)
             {
@@ -351,18 +410,23 @@ namespace MOE.Common.Models.Repositories
                                     eventCodes.Contains(s.EventCode)
                               select s).ToList();
 
-                if (!events.Any())
+                if (events.Any())
                 {
-
-                    var logs = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
-                    events = (from s in logs
-                              where s.SignalID == signalId &&
-                                    s.Timestamp >= startTime &&
-                                    s.Timestamp <= endTime &&
-                                    eventCodes.Contains(s.EventCode)
-                              select s).ToList();
+                    var minTime = events.Min(x => x.Timestamp);
+                    if (minTime.Date == startTime.Date)
+                        return events;
+                    endTime = minTime;
                 }
 
+                var logs = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
+                logs = (from s in logs
+                        where s.SignalID == signalId &&
+                              s.Timestamp >= startTime &&
+                              s.Timestamp <= endTime &&
+                              eventCodes.Contains(s.EventCode)
+                        select s).ToList();
+
+                events = events.Concat(logs).ToList();
                 events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
                 return events;
             }
@@ -418,12 +482,17 @@ namespace MOE.Common.Models.Repositories
                                    s.EventParam == param &&
                                    eventCodes.Contains(s.EventCode)).ToList();
 
-                if (!events.Any())
+                if (events.Any())
                 {
-                    var logs = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
-                    events = logs.Where(x => x.EventParam == param && eventCodes.Contains(x.EventCode)).ToList();
+                    var minTime = events.Min(x => x.Timestamp);
+                    if (minTime.Date == startTime.Date)
+                        return events;
+                    endTime = minTime;
                 }
 
+                var logs = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
+                logs = logs.Where(x => x.EventParam == param && eventCodes.Contains(x.EventCode)).ToList();
+                events = events.Concat(logs).ToList();
                 events = events.OrderBy(e => e.Timestamp).ThenBy(e => e.EventParam).ToList();
                 return events;
             }
@@ -514,7 +583,7 @@ namespace MOE.Common.Models.Repositories
         {
             try
             {
-                var count =
+                var events =
                 (from s in _db.Controller_Event_Log
                  where s.SignalID == signalId &&
                        s.Timestamp >= startTime &&
@@ -529,29 +598,34 @@ namespace MOE.Common.Models.Repositories
                        &&
                        s.EventParam == param &&
                        eventCodes.Contains(s.EventCode)
-                 select s).Count();
+                 select s);
 
-                if (count <= 0)
+                if (events.Any())
                 {
-                    var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
-                    count = (from s in archivedData
-                             where s.SignalID == signalId &&
-                                   s.Timestamp >= startTime &&
-                                   s.Timestamp <= endTime &&
-                                   (s.Timestamp.Hour > startHour && s.Timestamp.Hour < endHour ||
-                                    s.Timestamp.Hour == startHour && s.Timestamp.Hour == endHour &&
-                                    s.Timestamp.Minute >= startMinute && s.Timestamp.Minute <= endMinute ||
-                                    s.Timestamp.Hour == startHour && s.Timestamp.Hour < endHour &&
-                                    s.Timestamp.Minute >= startMinute ||
-                                    s.Timestamp.Hour < startHour && s.Timestamp.Hour == endHour &&
-                                    s.Timestamp.Minute <= endMinute)
-                                   &&
-                                   s.EventParam == param &&
-                                   eventCodes.Contains(s.EventCode)
-                             select s).Count();
+                    var minTime = events.Min(x => x.Timestamp);
+                    if (minTime.Date == startTime.Date)
+                        return events.Count();
+                    endTime = minTime;
                 }
 
-                return count;
+                var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
+                var result = (from s in archivedData
+                              where s.SignalID == signalId &&
+                                    s.Timestamp >= startTime &&
+                                    s.Timestamp <= endTime &&
+                                    (s.Timestamp.Hour > startHour && s.Timestamp.Hour < endHour ||
+                                     s.Timestamp.Hour == startHour && s.Timestamp.Hour == endHour &&
+                                     s.Timestamp.Minute >= startMinute && s.Timestamp.Minute <= endMinute ||
+                                     s.Timestamp.Hour == startHour && s.Timestamp.Hour < endHour &&
+                                     s.Timestamp.Minute >= startMinute ||
+                                     s.Timestamp.Hour < startHour && s.Timestamp.Hour == endHour &&
+                                     s.Timestamp.Minute <= endMinute)
+                                    &&
+                                    s.EventParam == param &&
+                                    eventCodes.Contains(s.EventCode)
+                              select s);
+
+                return events.Count() + result.Count();
             }
             catch (Exception ex)
             {
@@ -592,26 +666,31 @@ namespace MOE.Common.Models.Repositories
                                     eventCodes.Contains(s.EventCode)
                               select s).ToList();
 
-                if (!events.Any())
+                if (events.Any())
                 {
-                    var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
-                    events = (from s in archivedData
-                              where s.SignalID == signalId &&
-                                    s.Timestamp >= startTime &&
-                                    s.Timestamp <= endTime &&
-                                    (s.Timestamp.Hour > startHour && s.Timestamp.Hour < endHour ||
-                                     s.Timestamp.Hour == startHour && s.Timestamp.Hour == endHour &&
-                                     s.Timestamp.Minute >= startMinute && s.Timestamp.Minute <= endMinute ||
-                                     s.Timestamp.Hour == startHour && s.Timestamp.Hour < endHour &&
-                                     s.Timestamp.Minute >= startMinute ||
-                                     s.Timestamp.Hour < startHour && s.Timestamp.Hour == endHour &&
-                                     s.Timestamp.Minute <= endMinute)
-                                    &&
-                                    s.EventParam == param &&
-                                    eventCodes.Contains(s.EventCode)
-                              select s).ToList();
+                    var minTime = events.Min(x => x.Timestamp);
+                    if (minTime.Date == startTime.Date)
+                        return events;
+                    endTime = minTime;
                 }
 
+                var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
+                archivedData = (from s in archivedData
+                                where s.SignalID == signalId &&
+                                      s.Timestamp >= startTime &&
+                                      s.Timestamp <= endTime &&
+                                      (s.Timestamp.Hour > startHour && s.Timestamp.Hour < endHour ||
+                                       s.Timestamp.Hour == startHour && s.Timestamp.Hour == endHour &&
+                                       s.Timestamp.Minute >= startMinute && s.Timestamp.Minute <= endMinute ||
+                                       s.Timestamp.Hour == startHour && s.Timestamp.Hour < endHour &&
+                                       s.Timestamp.Minute >= startMinute ||
+                                       s.Timestamp.Hour < startHour && s.Timestamp.Hour == endHour &&
+                                       s.Timestamp.Minute <= endMinute)
+                                      &&
+                                      s.EventParam == param &&
+                                      eventCodes.Contains(s.EventCode)
+                                select s).ToList();
+                events = events.Concat(archivedData).ToList();
                 events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
                 return events;
             }
@@ -647,18 +726,24 @@ namespace MOE.Common.Models.Repositories
                                     eventCodes.Contains(s.EventCode)
                               select s).ToList();
 
-                if (!events.Any())
+                if (events.Any())
                 {
-                    var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
-                    events = (from s in archivedData
-                              where s.SignalID == signalId &&
-                                    s.Timestamp >= startTime &&
-                                    s.Timestamp <= endTime &&
-                                    s.EventParam == param &&
-                                    eventCodes.Contains(s.EventCode)
-                              select s).ToList();
+                    var minTime = events.Min(x => x.Timestamp);
+                    if (minTime.Date == startTime.Date)
+                        return events;
+                    endTime = minTime;
                 }
 
+                var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
+                archivedData = (from s in archivedData
+                                where s.SignalID == signalId &&
+                                      s.Timestamp >= startTime &&
+                                      s.Timestamp <= endTime &&
+                                      s.EventParam == param &&
+                                      eventCodes.Contains(s.EventCode)
+                                select s).ToList();
+
+                events = events.Concat(archivedData).ToList();
                 events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
                 foreach (var cel in events)
                 {
@@ -694,16 +779,22 @@ namespace MOE.Common.Models.Repositories
                           s.EventParam == param &&
                           eventCodes.Contains(s.EventCode)).ToList();
 
-                if (!events.Any())
+                if (events.Any())
                 {
-                    var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
-                    events = archivedData.Where(s => s.SignalID == signalId &&
-                                                     s.Timestamp >= startTime &&
-                                                     s.Timestamp <= endTime &&
-                                                     s.EventParam == param &&
-                                                     eventCodes.Contains(s.EventCode)).ToList();
+                    var minTime = events.Min(x => x.Timestamp);
+                    if (minTime.Date == startTime.Date)
+                        return events;
+                    endTime = minTime;
                 }
 
+                var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
+                archivedData = archivedData.Where(s => s.SignalID == signalId &&
+                                                 s.Timestamp >= startTime &&
+                                                 s.Timestamp <= endTime &&
+                                                 s.EventParam == param &&
+                                                 eventCodes.Contains(s.EventCode)).ToList();
+
+                events = events.Concat(archivedData).ToList();
                 foreach (var cel in events)
                 {
                     cel.Timestamp = cel.Timestamp.AddSeconds(0 - latencyCorrection);
@@ -852,18 +943,23 @@ namespace MOE.Common.Models.Repositories
 
         public int GetSignalEventsCountBetweenDates(string signalId, DateTime startTime, DateTime endTime)
         {
-            var count = _db.Controller_Event_Log.Count(r => r.SignalID == signalId &&
+            var events = _db.Controller_Event_Log.Where(r => r.SignalID == signalId &&
                                                 r.Timestamp >= startTime
                                                 && r.Timestamp < endTime);
 
-            if (count <= 0)
+            if (events.Any())
             {
-                var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
-                count = archivedData.Count(r =>
-                    r.SignalID == signalId && r.Timestamp >= startTime && r.Timestamp < endTime);
+                var minTime = events.Min(x => x.Timestamp);
+                if (minTime.Date == startTime.Date)
+                    return events.Count();
+                endTime = minTime;
             }
 
-            return count;
+            var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startTime, endTime);
+            archivedData = archivedData.Where(r =>
+                r.SignalID == signalId && r.Timestamp >= startTime && r.Timestamp < endTime).ToList();
+
+            return events.Count() + archivedData.Count;
         }
 
         //Not used and not supported with Parquet
@@ -893,15 +989,20 @@ namespace MOE.Common.Models.Repositories
                 r.SignalID == approach.SignalID && r.Timestamp > startTime && r.Timestamp < endTime
                 && approachCodes.Contains(r.EventCode) && r.EventParam == phaseNumber).ToList();
 
-            if (!results.Any())
+            if (results.Any())
             {
-                var archivedData = ParquetArchive.GetDataFromArchive(_localPath, approach.SignalID, startTime, endTime);
-                results = archivedData.Where(r =>
-                    r.SignalID == approach.SignalID && r.Timestamp > startTime && r.Timestamp < endTime
-                    && approachCodes.Contains(r.EventCode) && r.EventParam == phaseNumber).ToList();
+                var minTime = results.Min(x => x.Timestamp);
+                if (minTime.Date == startTime.Date)
+                    return results.Count;
+                endTime = minTime;
             }
 
-            return results.Count();
+            var archivedData = ParquetArchive.GetDataFromArchive(_localPath, approach.SignalID, startTime, endTime);
+            archivedData = archivedData.Where(r =>
+                r.SignalID == approach.SignalID && r.Timestamp > startTime && r.Timestamp < endTime
+                && approachCodes.Contains(r.EventCode) && r.EventParam == phaseNumber).ToList();
+
+            return results.Count + archivedData.Count;
         }
 
         public DateTime GetMostRecentRecordTimestamp(string signalID)

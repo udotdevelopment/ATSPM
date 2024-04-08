@@ -145,12 +145,18 @@ namespace MOE.Common.Business
                         route.RouteSignals.FirstOrDefault().Signal.SignalDescription,
                         "", "", "", "", "", 0, 0, 0, 0, 1, 0, 0);
                 else
+                {
+                    var signalRepository = SignalsRepositoryFactory.Create();
+                    var routeSignal = route.RouteSignals.LastOrDefault();
+                    var signalDescription = signalRepository.GetSignalDescription(routeSignal?.SignalId);
+
                     Adjustment.AddLinkPivotAdjustmentRow(
-                        route.RouteSignals.LastOrDefault().SignalId, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, route.RouteSignals.LastOrDefault().Signal.SignalDescription, "", "",
+                        routeSignal?.SignalId, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        0, signalDescription, "", "",
                         "",
                         "", "", 0, 0, 0, 0,
                         route.RouteSignals.Count , 0, 0);
+                }
 
                 var cumulativeChange = 0;
 
