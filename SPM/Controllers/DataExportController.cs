@@ -12,6 +12,7 @@ using MOE.Common.Models;
 using SPM.Filters;
 using SPM.Models;
 using System.Configuration;
+using MOE.Common.Models.Repositories;
 using MOE.Common.Models.ViewModel;
 using Newtonsoft.Json.Linq;
 
@@ -63,10 +64,22 @@ namespace SPM.Controllers
                     List<Controller_Event_Log> events = controllerEventLogRepository.GetRecordsByParameterAndEvent(dataExportViewModel.SignalId,
                         dataExportViewModel.DateTimePickerViewModel.GetStartDateTime(), dataExportViewModel.DateTimePickerViewModel.GetEndDateTimePlusOneMinute(), eventParams, eventCodes);
                     byte[] file = Exporter.GetCsvFileForControllerEventLogs(events);
+                    LogMetricRun();
                     return File(file, "csv", "ControllerEventLogs.csv");
                 }
             }
             return Content("This request cannot be processed. You may be missing parameters");
+        }
+
+        protected void LogMetricRun()
+        {
+            var appEventRepository = ApplicationEventRepositoryFactory.Create();
+            var applicationEvent = new ApplicationEvent();
+            applicationEvent.ApplicationName = "SPM Website";
+            applicationEvent.Description = "Raw Data Export Executed";
+            applicationEvent.SeverityLevel = ApplicationEvent.SeverityLevels.Low;
+            applicationEvent.Timestamp = DateTime.Now;
+            appEventRepository.Add(applicationEvent);
         }
 
         private void GetEventCodesAndEventParameters(DataExportViewModel dataExportViewModel, out List<int> eventParams, out List<int> eventCodes)

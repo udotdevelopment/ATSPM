@@ -23,7 +23,7 @@ namespace MOEWcfServiceLibrary
         /// <param name="maxYAxis"></param>
         /// <returns>DisplayObject</returns>
         public DisplayObject DisplayLinkPivotPCD(string upstreamSignalID, string upstreamDirection,
-            string downstreamSignalID, string downstreamDirection, int delta, 
+            string downstreamSignalID, string downstreamDirection, int delta,
             DateTime startDate, DateTime endDate, int maxYAxis)
         {
             //Buid the Link Pivot PCD Object
@@ -68,80 +68,99 @@ namespace MOEWcfServiceLibrary
         /// <param name="friday"></param>
         /// <param name="saturday"></param>
         /// <returns>AdjustmentObject Array</returns>
-        public AdjustmentObject[] GetLinkPivot(int routeId, DateTime startDate, DateTime endDate, int cycleTime, 
+        public AdjustmentObject[] GetLinkPivot(int routeId, DateTime startDate, DateTime endDate, int cycleTime,
             string direction, double bias, string biasDirection, bool sunday, bool monday, bool tuesday, bool wednesday,
             bool thursday, bool friday, bool saturday)
         {
-            //Create a list of days of the week selected to be included in the analysis
-            List<DayOfWeek> daysList = new List<DayOfWeek>();
-            if (monday)
+            try
             {
-                daysList.Add(DayOfWeek.Monday);
-            }
-            if (tuesday)
-            {
-                daysList.Add(DayOfWeek.Tuesday);
-            }
-            if (wednesday)
-            {
-                daysList.Add(DayOfWeek.Wednesday);
-            }
-            if (thursday)
-            {
-                daysList.Add(DayOfWeek.Thursday);
-            }
-            if (friday)
-            {
-                daysList.Add(DayOfWeek.Friday);
-            }
-            if (saturday)
-            {
-                daysList.Add(DayOfWeek.Saturday);
-            }
-            if (sunday)
-            {
-                daysList.Add(DayOfWeek.Sunday);
-            }
+                //Create a list of days of the week selected to be included in the analysis
+                List<DayOfWeek> daysList = new List<DayOfWeek>();
+                if (monday)
+                {
+                    daysList.Add(DayOfWeek.Monday);
+                }
+                if (tuesday)
+                {
+                    daysList.Add(DayOfWeek.Tuesday);
+                }
+                if (wednesday)
+                {
+                    daysList.Add(DayOfWeek.Wednesday);
+                }
+                if (thursday)
+                {
+                    daysList.Add(DayOfWeek.Thursday);
+                }
+                if (friday)
+                {
+                    daysList.Add(DayOfWeek.Friday);
+                }
+                if (saturday)
+                {
+                    daysList.Add(DayOfWeek.Saturday);
+                }
+                if (sunday)
+                {
+                    daysList.Add(DayOfWeek.Sunday);
+                }
 
-            //Generate a Link Pivot Object
-            MOE.Common.Business.LinkPivot lp = new MOE.Common.Business.LinkPivot(routeId, startDate, endDate,
-                cycleTime, direction, bias, biasDirection, daysList);
+                //Generate a Link Pivot Object
+                MOE.Common.Business.LinkPivot lp = new MOE.Common.Business.LinkPivot(routeId, startDate, endDate,
+                    cycleTime, direction, bias, biasDirection, daysList);
 
-            //Instantiate the return object
-            List<AdjustmentObject> adjustments = new List<AdjustmentObject>();
+                //Instantiate the return object
+                List<AdjustmentObject> adjustments = new List<AdjustmentObject>();
 
-            //Add the data from the Link Pivot Object to the return object
-            foreach(MOE.Common.Data.LinkPivot.LinkPivotAdjustmentRow row in lp.Adjustment)
-            {
-                AdjustmentObject a = new AdjustmentObject();
-                a.SignalId = row.SignalId;
-                a.Location = row.Location;
-                a.DownstreamLocation = row.DownstreamLocation;
-                a.Delta = row.Delta;
-                a.Adjustment = row.Adjustment;
-                a.PAOGDownstreamBefore = row.PAOGDownstreamBefore;
-                a.PAOGDownstreamPredicted = row.PAOGDownstreamPredicted;
-                a.PAOGUpstreamBefore = row.PAOGUpstreamBefore;
-                a.PAOGUpstreamPredicted = row.PAOGUpstreamPredicted;
-                a.AOGDownstreamBefore = row.AOGDownstreamBefore;
-                a.AOGDownstreamPredicted = row.AOGDownstreamPredicted;
-                a.AOGUpstreamBefore = row.AOGUpstreamBefore;
-                a.AOGUpstreamPredicted = row.AOGUpstreamPredicted;
-                a.DownSignalId = row.DownstreamSignalID;
-                a.DownstreamApproachDirection = row.DownstreamApproachDirection;
-                a.UpstreamApproachDirection = row.UpstreamApproachDirection;
-                a.ResultChartLocation = row.ResultChartLocation;
-                a.AogTotalBefore = row.AOGTotalBefore;
-                a.PAogTotalBefore = row.PAOGToatalBefore;
-                a.AogTotalPredicted = row.AOGTotalPredicted;
-                a.PAogTotalPredicted = row.PAOGTotalPredicted;
-                a.LinkNumber = row.LinkNumber;
-                a.DownstreamVolume = row.DownstreamVolume;
-                a.UpstreamVolume = row.UpstreamVolume;
-                adjustments.Add(a);
+                //Add the data from the Link Pivot Object to the return object
+                foreach (MOE.Common.Data.LinkPivot.LinkPivotAdjustmentRow row in lp.Adjustment)
+                {
+                    AdjustmentObject a = new AdjustmentObject();
+                    a.SignalId = row.SignalId;
+                    a.Location = row.Location;
+                    a.DownstreamLocation = row.DownstreamLocation;
+                    a.Delta = row.Delta;
+                    a.Adjustment = row.Adjustment;
+                    a.PAOGDownstreamBefore = row.PAOGDownstreamBefore;
+                    a.PAOGDownstreamPredicted = row.PAOGDownstreamPredicted;
+                    a.PAOGUpstreamBefore = row.PAOGUpstreamBefore;
+                    a.PAOGUpstreamPredicted = row.PAOGUpstreamPredicted;
+                    a.AOGDownstreamBefore = row.AOGDownstreamBefore;
+                    a.AOGDownstreamPredicted = row.AOGDownstreamPredicted;
+                    a.AOGUpstreamBefore = row.AOGUpstreamBefore;
+                    a.AOGUpstreamPredicted = row.AOGUpstreamPredicted;
+                    a.DownSignalId = row.DownstreamSignalID;
+                    a.DownstreamApproachDirection = row.DownstreamApproachDirection;
+                    a.UpstreamApproachDirection = row.UpstreamApproachDirection;
+                    a.ResultChartLocation = row.ResultChartLocation;
+                    a.AogTotalBefore = row.AOGTotalBefore;
+                    a.PAogTotalBefore = row.PAOGToatalBefore;
+                    a.AogTotalPredicted = row.AOGTotalPredicted;
+                    a.PAogTotalPredicted = row.PAOGTotalPredicted;
+                    a.LinkNumber = row.LinkNumber;
+                    a.DownstreamVolume = row.DownstreamVolume;
+                    a.UpstreamVolume = row.UpstreamVolume;
+                    adjustments.Add(a);
+                }
+
+                return adjustments.ToArray();
             }
-
-           return adjustments.ToArray();
+            catch (Exception ex)
+            {
+                var logRepository =
+    MOE.Common.Models.Repositories.ApplicationEventRepositoryFactory.Create();
+                var e = new MOE.Common.Models.ApplicationEvent
+                {
+                    ApplicationName = "MOEWCFServiceLibrary",
+                    Class = this.GetType().ToString(),
+                    Function = "GetLinkPivot",
+                    SeverityLevel = MOE.Common.Models.ApplicationEvent.SeverityLevels.High,
+                    Description = ex.Message,
+                    Timestamp = DateTime.Now
+                };
+                logRepository.Add(e);
+                throw;
+            }
         }
 
         /// <summary>

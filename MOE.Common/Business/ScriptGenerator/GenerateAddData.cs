@@ -22,6 +22,19 @@ namespace MOE.Common.Business.ScriptGenerator
         //    return repository.GetPinInfo();
         //}
 
+        private static bool ValidateCoordinates(string latitudeStr, string longitudeStr)
+        {
+            if (!double.TryParse(latitudeStr, out var latitude) || !double.TryParse(longitudeStr, out var longitude))
+            {
+                // Unable to parse latitude or longitude from string
+                return false;
+            }
+
+            // Latitude ranges from -90 to 90
+            // Longitude ranges from -180 to 180
+            return (latitude >= -90 && latitude <= 90) && (longitude >= -180 && longitude <= 180);
+        }
+
         public static List<Pin> GetPinInfo()
         {
             var pins = new ConcurrentBag<Pin>();
@@ -29,6 +42,8 @@ namespace MOE.Common.Business.ScriptGenerator
             //foreach (var signal in signals)
             Parallel.ForEach(signals, signal =>
             {
+                if (!ValidateCoordinates(signal.Latitude, signal.Longitude))
+                    return;
                 var pin = new Pin(signal.SignalID, signal.Latitude,
                     signal.Longitude,
                     signal.PrimaryName + " " + signal.SecondaryName,

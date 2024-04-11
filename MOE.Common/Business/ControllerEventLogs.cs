@@ -47,6 +47,16 @@ namespace MOE.Common.Business
                 Events = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
                 Events = Events.Where(x => eventCodes.Contains(x.EventCode)).ToList();
             }
+            else
+            {
+                var minTime = Events.Min(x => x.Timestamp);
+                if (minTime.Date != startDate.Date)
+                {
+                    endDate = minTime;
+                    var archiveEvents = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
+                    Events = Events.Concat(archiveEvents.Where(x => eventCodes.Contains(x.EventCode))).ToList();
+                }
+            }
 
             Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
         }
@@ -71,6 +81,16 @@ namespace MOE.Common.Business
             {
                 Events = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
                 Events = Events.Where(x => eventCodes.Contains(x.EventCode)).ToList();
+            }
+            else
+            {
+                var minTime = Events.Min(x => x.Timestamp);
+                if (minTime.Date != startDate.Date)
+                {
+                    endDate = minTime;
+                    var archiveEvents = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
+                    Events = Events.Concat(archiveEvents.Where(x => eventCodes.Contains(x.EventCode))).ToList();
+                }
             }
 
             Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
@@ -99,6 +119,16 @@ namespace MOE.Common.Business
                 Events = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
                 Events = Events.Where(x => x.EventParam == eventParam && eventCodes.Contains(x.EventCode)).ToList();
             }
+            else
+            {
+                var minTime = Events.Min(x => x.Timestamp);
+                if (minTime.Date != startDate.Date)
+                {
+                    endDate = minTime;
+                    var archiveEvents = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
+                    Events = Events.Concat(archiveEvents.Where(x => x.EventParam == eventParam && eventCodes.Contains(x.EventCode))).ToList();
+                }
+            }
 
             Events = Events.OrderBy(e => e.Timestamp).ThenBy(e => e.EventCode).ToList();
         }
@@ -120,6 +150,23 @@ namespace MOE.Common.Business
                          select s;
 
             Events = events.ToList();
+
+            if (!Events.Any())
+            {
+                Events = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
+                Events = Events.Where(x => eventParams.Contains(x.EventParam) && eventCodes.Contains(x.EventCode)).ToList();
+            }
+            else
+            {
+                var minTime = Events.Min(x => x.Timestamp);
+                if (minTime.Date != startDate.Date)
+                {
+                    endDate = minTime;
+                    var archiveEvents = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
+                    Events = Events.Concat(archiveEvents.Where(x => eventParams.Contains(x.EventParam) && eventCodes.Contains(x.EventCode))).ToList();
+                }
+            }
+
             Events = Events.OrderBy(e => e.Timestamp).ThenBy(e => e.EventCode).ToList();
         }
 
@@ -150,6 +197,16 @@ namespace MOE.Common.Business
                 events = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
                 events = events.Where(x => Codes.Contains(x.EventCode)).ToList();
             }
+            else
+            {
+                var minTime = Events.Min(x => x.Timestamp);
+                if (minTime.Date != startDate.Date)
+                {
+                    endDate = minTime;
+                    var archiveEvents = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
+                    Events = archiveEvents.Where(x => Codes.Contains(x.EventCode)).ToList();
+                }
+            }
 
             Events.AddRange(events);
             OrderEventsBytimestamp();
@@ -170,6 +227,16 @@ namespace MOE.Common.Business
                 var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startDate, endDate);
                 archivedData = archivedData.Where(c => c.EventCode == 105 || c.EventCode == 111).ToList();
                 events = archivedData;
+            }
+            else
+            {
+                var minTime = Events.Min(x => x.Timestamp);
+                if (minTime.Date != startDate.Date)
+                {
+                    endDate = minTime;
+                    var archiveEvents = ParquetArchive.GetDataFromArchive(_localPath, signalId, startDate, endDate);
+                    events.AddRange(archiveEvents.Where(c => c.EventCode == 105 || c.EventCode == 111).ToList());
+                }
             }
 
             foreach (var v in events)
@@ -236,16 +303,25 @@ namespace MOE.Common.Business
                                 s.Timestamp >= startDate &&
                                 s.Timestamp <= endDate &&
                                 pedEventCodes.Contains(s.EventCode)
-                          select s.EventParam).Distinct().ToList();
+                          select s).ToList();
 
             if (!events.Any())
             {
                 //Check the archive if no data in DB
                 var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
-                events = archivedData.Where(c => pedEventCodes.Contains(c.EventCode)).Select(x => x.EventParam).Distinct().ToList();
+                return archivedData.Where(c => pedEventCodes.Contains(c.EventCode)).Select(x => x.EventParam).Distinct().ToList();
             }
-
-            return events.ToList();
+            else
+            {
+                var minTime = events.Min(x => x.Timestamp);
+                if (minTime.Date != startDate.Date)
+                {
+                    endDate = minTime;
+                    var archiveEvents = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
+                    events.AddRange(archiveEvents);
+                }
+            }
+            return events.Select(x => x.EventParam).Distinct().ToList();
         }
 
         public static int GetPreviousPlan(string signalID, DateTime startDate)
