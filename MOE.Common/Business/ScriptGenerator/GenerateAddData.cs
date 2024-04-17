@@ -43,7 +43,12 @@ namespace MOE.Common.Business.ScriptGenerator
             Parallel.ForEach(signals, signal =>
             {
                 if (!ValidateCoordinates(signal.Latitude, signal.Longitude))
+                {
+                    var repo = new ApplicationEventRepository();
+                    repo.QuickAdd("GenerateAddData", "Invalid Coordinates", "GetPinInfo", ApplicationEvent.SeverityLevels.Medium, "Invalid coordinates for signal " + signal.SignalID);
                     return;
+                }
+                    
                 var pin = new Pin(signal.SignalID, signal.Latitude,
                     signal.Longitude,
                     signal.PrimaryName + " " + signal.SecondaryName,
