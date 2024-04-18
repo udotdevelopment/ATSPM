@@ -407,7 +407,11 @@ namespace SPM.Controllers
                         }
 
                         detector.LatencyCorrection = sheet.GetValue<double>(row, 9);
-                        detector.LaneNumber = sheet.GetValue<int>(row, 10);
+                        var lnNumber = sheet.GetValue<string>(row, 10);
+                        if (!string.IsNullOrEmpty(lnNumber))
+                        {
+                            detector.LaneNumber = Convert.ToInt32(lnNumber);
+                        }
                         var mvmtType =
                             _movementTypeRepository.GetMovementTypeByDesc(sheet.GetValue<string>(row, 11));
                         if (mvmtType != null)

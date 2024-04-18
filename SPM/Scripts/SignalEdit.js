@@ -350,52 +350,54 @@ function ImportSignal() {
     var input = document.createElement("input");
     input.type = "file";
     input.setAttribute("accept", ".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel");
+    input.multiple = true;
 
-    input.onchange = e => {
+        input.onchange = e => {
+        var files = e.target.files;
 
-        // getting a hold of the file reference
-        var file = e.target.files[0];
+        for (var i = 0; i < files.length; i++) {
+            (function(file) {
+                var reader = new FileReader();
+                reader.readAsText(file, 'UTF-8');
+                var formData = new FormData();
+                formData.append("file", file);
 
-        // setting up the reader
-        var reader = new FileReader();
-        reader.readAsText(file, 'UTF-8');
-        var formData = new FormData();
-        formData.append("file", file);
-        // here we tell the reader what to do when it's done reading...
-        reader.onload = readerEvent => {
-            var content = readerEvent.target.result; // this is the content!
-            console.log(content);
+                reader.onload = function(readerEvent) {
+                    var content = readerEvent.target.result;
 
-            $.ajax({
-                type: "POST",
-                cache: false,
-                async: true,
-                url: urlpathImportSignal,
-                contentType: false,
-                processData: false,
-                data: formData,
-                headers: GetRequestVerificationTokenObject(),
-                success: function (data) {
-                    $('#SignalEdit').html(data);
-                    var lbl = $('#signalLabel');
-                    var id = lbl[0].innerText.split("Signal ");
-                    SetSignalID(id[1]);
-                    alert("Signal " + id[1] + " was imported.");
-                },
-                complete: function () {
-                    var startDate = $("#Start")[0].defaultValue;
-                    SetDatePicker();
-                    $("#Start").val(startDate);
-                },
-                statusCode: {
-                    404: function (content) { alert('cannot find resource'); },
-                    500: function (content) { alert(content.responseText); }
-                },
-                error: function (req, status, errorObj) {
-                }
-            });
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        async: true,
+                        url: urlpathImportSignal,
+                        contentType: false,
+                        processData: false,
+                        data: formData,
+                        headers: GetRequestVerificationTokenObject(),
+                        success: function (data) {
+                            $('#SignalEdit').html(data);
+                            var lbl = $('#signalLabel');
+                            var id = lbl[0].innerText.split("Signal ");
+                            SetSignalID(id[1]);
+                            alert("Signal " + id[1] + " was imported.");
+                        },
+                        complete: function () {
+                            var startDate = $("#Start")[0].defaultValue;
+                            SetDatePicker();
+                            $("#Start").val(startDate);
+                        },
+                        statusCode: {
+                            404: function (content) { alert('cannot find resource'); },
+                            500: function (content) { alert(content.responseText); }
+                        },
+                        error: function (req, status, errorObj) {
+                            console.error(errorObj);
+                        }
+                    });
+                };
+            })(files[i]);
         }
-    }
+    };
 
     input.click();
 }
