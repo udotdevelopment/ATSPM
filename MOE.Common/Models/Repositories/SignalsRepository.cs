@@ -148,13 +148,18 @@ namespace MOE.Common.Models.Repositories
             return _db.DatabaseArchiveExcludedSignals.Any(s => s.SignalId == signalId);
         }
 
-        public Signal CopySignalToNewVersion(Signal originalVersion)
+        public Signal CopySignalToNewVersion(Signal originalVersion, bool isImport, string user = "")
         {
             var newVersion = new Signal();
 
             //originalVersion.VersionAction = (from r in _db.VersionActions
             //    where r.ID == 4
             //    select r).FirstOrDefault();
+            string note;
+            if (isImport)
+                note = "Excel Import: " + user;
+            else
+                note = "Copy of " + originalVersion.Note;
 
             newVersion.VersionAction = (from r in _db.VersionActions
                                         where r.ID == 4
@@ -163,7 +168,7 @@ namespace MOE.Common.Models.Repositories
 
             newVersion.SignalID = originalVersion.SignalID;
             newVersion.Start = DateTime.Today;
-            newVersion.Note = "Copy of " + originalVersion.Note;
+            newVersion.Note = note;
             newVersion.PrimaryName = originalVersion.PrimaryName;
             newVersion.SecondaryName = originalVersion.SecondaryName;
             newVersion.IPAddress = originalVersion.IPAddress;

@@ -191,5 +191,19 @@ namespace SPM.Controllers
             }
             return Content("This request cannot be processed. You may be missing parameters");
         }
+
+        [HttpPost]
+        public ActionResult ExportSignal(string signalId)
+        {
+            try
+            {
+                var bytes = Exporter.ExportSignalConfig(signalId);
+                return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            }
+            catch (Exception e)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, e.Message);
+            }
+        }
     }
 }

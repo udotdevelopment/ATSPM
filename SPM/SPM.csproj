@@ -534,6 +534,7 @@
     <Content Include="Content\chosen.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\modal-popup.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -675,6 +676,7 @@
     <Content Include="*.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="ATSPMImport_Template.xlsx" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\GitHubDeploy.pubxml" />
@@ -1035,6 +1037,7 @@
     <Content Include="Views\Menus\_MainMenuPartial.cshtml" />
     <Content Include="Views\DefaultCharts\TimingAndActuationsOptions.cshtml" />
     <Content Include="Views\WatchdogExclusions\WatchdogExclusionsList.cshtml" />
+    <Content Include="Views\Signals\SignalMultiSelect.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>*.config</DependentUpon>
     </None>
