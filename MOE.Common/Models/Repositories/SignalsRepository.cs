@@ -148,7 +148,7 @@ namespace MOE.Common.Models.Repositories
             return _db.DatabaseArchiveExcludedSignals.Any(s => s.SignalId == signalId);
         }
 
-        public Signal CopySignalToNewVersion(Signal originalVersion, bool isImport, string user = "")
+        public Signal CopySignalToNewVersion(Signal originalVersion, bool isImport = false, string user = "")
         {
             var newVersion = new Signal();
 

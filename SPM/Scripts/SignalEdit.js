@@ -53,7 +53,7 @@ function AddNewVersion() {
         //headers: GetRequestVerificationTokenObject(),
         //data: jsonForm,
         //    dataType: 'json',
-        url: urlpathCopyVersion + "/" + signalId + "?isImport=false",
+        url: urlpathCopyVersion + "/" + signalId,
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             newVersionId = data;

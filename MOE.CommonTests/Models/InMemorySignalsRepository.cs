@@ -61,7 +61,7 @@ namespace MOE.CommonTests.Models
 
 
 
-        public Signal CopySignalToNewVersion(Signal originalVersion)
+        public Signal CopySignalToNewVersion(Signal originalVersion, bool isImport = false, string user = "")
         {
             Common.Models.Signal newVersion = new Signal();
 

@@ -121,7 +121,7 @@ namespace SPM.Controllers
         }
 
         [Authorize(Roles = "Admin, Configuration")]
-        public int AddNewVersion(string id, bool isImport)
+        public int AddNewVersion(string id, bool isImport = false)
         {
             var existingSignal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             //if (existingSignal == null)
