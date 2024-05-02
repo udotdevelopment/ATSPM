@@ -371,13 +371,21 @@ namespace SPM.Controllers
 
                     approach.DirectionTypeID = directionType.DirectionTypeID;
                     approach.Description = sheet.GetValue<string>(5, 2);
-                    approach.ProtectedPhaseNumber = sheet.GetValue<int>(4, 4);
-                    approach.PermissivePhaseNumber = sheet.GetValue<int>(5, 4);
+                    var protectedPhs = sheet.GetValue<string>(4, 4);
+                    if (protectedPhs != null)
+                        approach.ProtectedPhaseNumber = Convert.ToInt32(protectedPhs);
+                    var permissivePhs = sheet.GetValue<string>(5, 4);
+                    if (permissivePhs != null)
+                        approach.PermissivePhaseNumber = Convert.ToInt32(permissivePhs);
                     approach.IsProtectedPhaseOverlap = sheet.GetValue<bool>(4, 6);
                     approach.IsPermissivePhaseOverlap = sheet.GetValue<bool>(5, 6);
-                    approach.MPH = sheet.GetValue<int>(4, 8);
+                    var mph = sheet.GetValue<string>(4, 8);
+                    if (mph != null)
+                        approach.MPH = Convert.ToInt32(mph);
                     approach.IsPedestrianPhaseOverlap = sheet.GetValue<bool>(5, 8);
-                    approach.PedestrianPhaseNumber = sheet.GetValue<int>(4, 10);
+                    var pedPhs = sheet.GetValue<string>(4, 10);
+                    if (pedPhs != null)
+                        approach.PedestrianPhaseNumber = Convert.ToInt32(pedPhs);
                     approach.PedestrianDetectors = sheet.GetValue<string>(5, 10);
                     _approachRepository.AddOrUpdate(approach);
 

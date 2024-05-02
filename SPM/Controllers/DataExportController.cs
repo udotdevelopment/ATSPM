@@ -197,12 +197,16 @@ namespace SPM.Controllers
         {
             try
             {
+                var applicationEventRepository = ApplicationEventRepositoryFactory.Create();
+                applicationEventRepository.QuickAdd("SPM", "DataExportController", "ExportSignal", ApplicationEvent.SeverityLevels.Low, $"Signal Export executed for {signalId}");
                 var bytes = Exporter.ExportSignalConfig(signalId);
                 return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             }
             catch (Exception e)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, e.Message);
+                var applicationEventRepository = ApplicationEventRepositoryFactory.Create();
+                applicationEventRepository.QuickAdd("SPM", "DataExportController", "ExportSignal", ApplicationEvent.SeverityLevels.High, e.Message + ": " + e.StackTrace);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, e.Message + e.StackTrace);
             }
         }
     }

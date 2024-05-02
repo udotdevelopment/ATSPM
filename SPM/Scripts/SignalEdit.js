@@ -352,17 +352,17 @@ function ImportSignal() {
     input.setAttribute("accept", ".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel");
     input.multiple = true;
 
-        input.onchange = e => {
+    input.onchange = e => {
         var files = e.target.files;
 
         for (var i = 0; i < files.length; i++) {
-            (function(file) {
+            (function (file) {
                 var reader = new FileReader();
                 reader.readAsText(file, 'UTF-8');
                 var formData = new FormData();
                 formData.append("file", file);
 
-                reader.onload = function(readerEvent) {
+                reader.onload = function (readerEvent) {
                     var content = readerEvent.target.result;
 
                     $.ajax({
@@ -799,49 +799,61 @@ function CheckboxReadOnly() {
 
 // Function to open the popup
 function openPopup() {
-  document.getElementById("myModal").style.display = "block";
+    document.getElementById("myModal").style.display = "block";
 }
 
 // Function to close the popup
 function closePopup() {
-  document.getElementById("myModal").style.display = "none";
+    document.getElementById("myModal").style.display = "none";
 }
 
 // Function to handle the export confirmation
 function confirmExport() {
-  var selectedSignals = [];
-  var listBox = document.getElementById("signalListBox");
+    var selectedSignals = [];
+    var listBox = document.getElementById("signalListBox");
     for (var i = 0; i < listBox.options.length; i++) {
         if (listBox.options[i].selected) {
             selectedSignals.push(listBox.options[i].value);
         }
     }
-  
-  // Do something with the selected signals (e.g., export them)
-  selectedSignals.forEach(function(signalId) {
-        $.ajax({
-            url: urlpathExportSignal,
-            type: 'POST',
-            data: { signalId: signalId },
-            xhrFields: {
-                responseType: 'blob'
-            },
-            success: function (data) {
-                var a = document.createElement('a');
-                var url = window.URL.createObjectURL(data);
-                a.href = url;
-                a.download = signalId + '_AtspmConfig.xlsx';
-                a.click();
-                window.URL.revokeObjectURL(url);
-            },
-            error: function (xhr, status, error) {
-                alert("Error exporting signal " + signalId + ": " + error);
-            }
-        });
-  });
 
-  // Close the popup
-  closePopup();
+    // Call the function with selectedSignals array
+    downloadSignalsSequentially(selectedSignals.slice()); // Pass a copy to avoid modifying the original array
+
+    // Close the popup
+    closePopup();
+}
+
+function downloadSignalsSequentially(signals) {
+    if (signals.length === 0) {
+        // All signals downloaded, exit function
+        return;
+    }
+
+    var signalId = signals.shift();
+    $.ajax({
+        url: urlpathExportSignal,
+        type: 'POST',
+        data: { signalId: signalId },
+        xhrFields: {
+            responseType: 'blob'
+        },
+        success: function (data) {
+            var a = document.createElement('a');
+            var url = window.URL.createObjectURL(data);
+            a.href = url;
+            a.download = signalId + '_AtspmConfig.xlsx';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            // Download next signal after this one completes
+            downloadSignalsSequentially(signals);
+        },
+        error: function (xhr, status, error) {
+            alert("Error exporting signal " + signalId + ": " + error);
+            // Proceed to download next signal even if there's an error
+            downloadSignalsSequentially(signals);
+        }
+    });
 }
 
 function filterSignals() {

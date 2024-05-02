@@ -102,11 +102,11 @@ namespace MOE.Common.Business.Export
             for (var i = 1; i < 9; i++)
             {
                 var sheet = workbook.Worksheets[$"Approach {i}"];
-                var approachDetectors = detectors.Where(x => x.Approach.DirectionTypeID == i).ToList();
+                var approachDetectors = detectors.Where(x => x.Approach.ProtectedPhaseNumber == i).ToList();
                 if (!approachDetectors.Any()) continue;
                 var det = approachDetectors.First();
                 sheet.Cells[4, 2].Value = det.Approach.DirectionType.Abbreviation;
-                sheet.Cells[5, 2].Value = det.Approach.DirectionType.Abbreviation + (string.IsNullOrEmpty(det.MovementType.Description) ? "" : " " + det.MovementType.Description) + " Phase " + det.Approach.ProtectedPhaseNumber;
+                sheet.Cells[5, 2].Value = det.Approach.Description;
                 sheet.Cells[4, 4].Value = det.Approach.ProtectedPhaseNumber;
                 sheet.Cells[5, 4].Value = det.Approach.PermissivePhaseNumber;
                 sheet.Cells[4, 6].Value = det.Approach.IsProtectedPhaseOverlap;
@@ -132,11 +132,11 @@ namespace MOE.Common.Business.Export
                         sheet.Cells[row, 6].Value = true;
                     if (detector.DetectionTypeIDs.Contains(7))
                         sheet.Cells[row, 7].Value = true;
-                    sheet.Cells[row, 8].Value = detector.DetectionHardware.Name;
+                    sheet.Cells[row, 8].Value = detector.DetectionHardware?.Name;
                     sheet.Cells[row, 9].Value = detector.LatencyCorrection;
                     sheet.Cells[row, 10].Value = detector.LaneNumber;
-                    sheet.Cells[row, 11].Value = detector.MovementType.Description;
-                    sheet.Cells[row, 12].Value = detector.LaneType.Description;
+                    sheet.Cells[row, 11].Value = detector.MovementType?.Description;
+                    sheet.Cells[row, 12].Value = detector.LaneType?.Description;
                     sheet.Cells[row, 14].Value = detector.DistanceFromStopBar;
                     sheet.Cells[row, 15].Value = detector.MinSpeedFilter;
                     sheet.Cells[row, 16].Value = detector.DecisionPoint;
