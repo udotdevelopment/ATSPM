@@ -191,5 +191,23 @@ namespace SPM.Controllers
             }
             return Content("This request cannot be processed. You may be missing parameters");
         }
+
+        [HttpPost]
+        public ActionResult ExportSignal(string signalId)
+        {
+            try
+            {
+                var applicationEventRepository = ApplicationEventRepositoryFactory.Create();
+                applicationEventRepository.QuickAdd("SPM", "DataExportController", "ExportSignal", ApplicationEvent.SeverityLevels.Low, $"Signal Export executed for {signalId}");
+                var bytes = Exporter.ExportSignalConfig(signalId);
+                return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            }
+            catch (Exception e)
+            {
+                var applicationEventRepository = ApplicationEventRepositoryFactory.Create();
+                applicationEventRepository.QuickAdd("SPM", "DataExportController", "ExportSignal", ApplicationEvent.SeverityLevels.High, e.Message + ": " + e.StackTrace);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, e.Message + e.StackTrace);
+            }
+        }
     }
 }

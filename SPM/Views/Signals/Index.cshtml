@@ -12,6 +12,21 @@
     <form action="javascript:ImportSignal()" style="margin: 0 0 5px 10px">
         <input type="submit" value="Import Signal" class="btn btn-dark" />
     </form>
+    <!-- Button to trigger the popup -->
+    <button onclick="openPopup()" class="btn btn-dark" style="margin: 0 15px 5px auto;">Export Signals</button>
+
+    <!-- The modal popup -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div class="row pb-1" style="justify-content: space-between;">
+                <h4 style="padding-left: 10px;">Select Signals to Export</h4>
+                <span class="close" onclick="closePopup()" style="padding-right: 10px;">&times;</span>
+            </div>
+            @Html.Partial("~/Views/Signals/SignalMultiSelect.cshtml", new ViewDataDictionary(Model.SignalMultiSelect))
+            
+        </div>
+    </div>
+
 </div>
 
 @Html.Partial("~/Views/DefaultCharts/SignalSearch.cshtml", new ViewDataDictionary(Model.SignalSearch))
@@ -53,8 +68,10 @@
         var urlpathDeleteVersion = '@Url.Action("DeleteVersion", "Signals")';
         var urlpathDeleteComment = '@Url.Action("Delete", "MetricComments")';
         var urlpathDeleteDetectorComment = '@Url.Action("Delete", "DetectorComments")';
+        var urlpathExportSignal = '@Url.Action("ExportSignal", "DataExport")';
     </script>
 
     <link href="~/Content/bootstrap-chosen.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/modal-popup.css" rel="stylesheet" />
 }

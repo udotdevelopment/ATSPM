@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using MOE.Common.Models;
 using MOE.Common.Models.Repositories;
 using SPM.Filters;
-using System.Windows.Forms;
 using OfficeOpenXml;
 
 namespace SPM.Controllers
@@ -124,15 +121,14 @@ namespace SPM.Controllers
         }
 
         [Authorize(Roles = "Admin, Configuration")]
-        public int AddNewVersion(string id)
+        public int AddNewVersion(string id, bool isImport = false)
         {
             var existingSignal = _signalsRepository.GetLatestVersionOfSignalBySignalID(id);
             //if (existingSignal == null)
             //{
             //    return Content("<h1>" +"No Signal Matches this SignalID" + "</h1>");
             //}
-
-            Signal signal = _signalsRepository.CopySignalToNewVersion(existingSignal);
+            Signal signal = _signalsRepository.CopySignalToNewVersion(existingSignal, isImport, User.Identity.Name);
             signal.VersionList = _signalsRepository.GetAllVersionsOfSignalBySignalID(signal.SignalID);
             try
             {
@@ -301,7 +297,7 @@ namespace SPM.Controllers
                 if (existingSignal == null)
                 {
                     var signal = CreateNewSignal(signalId);
-                    signal.Note += " (Import)";
+                    signal.Note += $" (Excel Import: {User.Identity.Name})";
                     ImportSignal(signalInformation, signal);
                     ImportApproachesAndDetectors(package, signal);
 
@@ -313,7 +309,7 @@ namespace SPM.Controllers
                 }
 
                 // Add new version
-                var versionId = AddNewVersion(signalId);
+                var versionId = AddNewVersion(signalId, true);
                 // Load new version (copy of the original)
                 var newSignal = _signalsRepository.GetSignalVersionByVersionId(versionId);
                 
@@ -375,10 +371,22 @@ namespace SPM.Controllers
 
                     approach.DirectionTypeID = directionType.DirectionTypeID;
                     approach.Description = sheet.GetValue<string>(5, 2);
-                    approach.ProtectedPhaseNumber = sheet.GetValue<int>(4, 4);
-                    approach.PermissivePhaseNumber = sheet.GetValue<int>(5, 4);
+                    var protectedPhs = sheet.GetValue<string>(4, 4);
+                    if (protectedPhs != null)
+                        approach.ProtectedPhaseNumber = Convert.ToInt32(protectedPhs);
+                    var permissivePhs = sheet.GetValue<string>(5, 4);
+                    if (permissivePhs != null)
+                        approach.PermissivePhaseNumber = Convert.ToInt32(permissivePhs);
                     approach.IsProtectedPhaseOverlap = sheet.GetValue<bool>(4, 6);
                     approach.IsPermissivePhaseOverlap = sheet.GetValue<bool>(5, 6);
+                    var mph = sheet.GetValue<string>(4, 8);
+                    if (mph != null)
+                        approach.MPH = Convert.ToInt32(mph);
+                    approach.IsPedestrianPhaseOverlap = sheet.GetValue<bool>(5, 8);
+                    var pedPhs = sheet.GetValue<string>(4, 10);
+                    if (pedPhs != null)
+                        approach.PedestrianPhaseNumber = Convert.ToInt32(pedPhs);
+                    approach.PedestrianDetectors = sheet.GetValue<string>(5, 10);
                     _approachRepository.AddOrUpdate(approach);
 
                     var row = 10;
@@ -407,7 +415,11 @@ namespace SPM.Controllers
                         }
 
                         detector.LatencyCorrection = sheet.GetValue<double>(row, 9);
-                        detector.LaneNumber = sheet.GetValue<int>(row, 10);
+                        var lnNumber = sheet.GetValue<string>(row, 10);
+                        if (!string.IsNullOrEmpty(lnNumber))
+                        {
+                            detector.LaneNumber = Convert.ToInt32(lnNumber);
+                        }
                         var mvmtType =
                             _movementTypeRepository.GetMovementTypeByDesc(sheet.GetValue<string>(row, 11));
                         if (mvmtType != null)

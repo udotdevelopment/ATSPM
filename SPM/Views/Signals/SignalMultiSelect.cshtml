@@ -1,0 +1,11 @@
+﻿@model MOE.Common.Models.ViewModel.Chart.SignalMultiSelectViewModel
+
+<form id="exportForm">
+    <div class="pb-2"><input type="text" id="searchInput" onkeyup="filterSignals()" placeholder="Search for signals..." style="max-width: none; width: 100%"></div>
+    @Html.ListBoxFor(m => m.SelectedSignals, Model.Signals, new { @id = "signalListBox", @class = "form-control", @multiple = "multiple", style = "height: 200px; max-width: none;" })
+    <div class="row pt-2 justify-content-center"><button type="button" onclick="confirmExport()" class="btn btn-dark">Confirm</button></div>
+</form>
+
+@section Scripts {
+    
+}

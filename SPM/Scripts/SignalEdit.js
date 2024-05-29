@@ -350,52 +350,54 @@ function ImportSignal() {
     var input = document.createElement("input");
     input.type = "file";
     input.setAttribute("accept", ".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel");
+    input.multiple = true;
 
     input.onchange = e => {
+        var files = e.target.files;
 
-        // getting a hold of the file reference
-        var file = e.target.files[0];
+        for (var i = 0; i < files.length; i++) {
+            (function (file) {
+                var reader = new FileReader();
+                reader.readAsText(file, 'UTF-8');
+                var formData = new FormData();
+                formData.append("file", file);
 
-        // setting up the reader
-        var reader = new FileReader();
-        reader.readAsText(file, 'UTF-8');
-        var formData = new FormData();
-        formData.append("file", file);
-        // here we tell the reader what to do when it's done reading...
-        reader.onload = readerEvent => {
-            var content = readerEvent.target.result; // this is the content!
-            console.log(content);
+                reader.onload = function (readerEvent) {
+                    var content = readerEvent.target.result;
 
-            $.ajax({
-                type: "POST",
-                cache: false,
-                async: true,
-                url: urlpathImportSignal,
-                contentType: false,
-                processData: false,
-                data: formData,
-                headers: GetRequestVerificationTokenObject(),
-                success: function (data) {
-                    $('#SignalEdit').html(data);
-                    var lbl = $('#signalLabel');
-                    var id = lbl[0].innerText.split("Signal ");
-                    SetSignalID(id[1]);
-                    alert("Signal " + id[1] + " was imported.");
-                },
-                complete: function () {
-                    var startDate = $("#Start")[0].defaultValue;
-                    SetDatePicker();
-                    $("#Start").val(startDate);
-                },
-                statusCode: {
-                    404: function (content) { alert('cannot find resource'); },
-                    500: function (content) { alert(content.responseText); }
-                },
-                error: function (req, status, errorObj) {
-                }
-            });
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        async: true,
+                        url: urlpathImportSignal,
+                        contentType: false,
+                        processData: false,
+                        data: formData,
+                        headers: GetRequestVerificationTokenObject(),
+                        success: function (data) {
+                            $('#SignalEdit').html(data);
+                            var lbl = $('#signalLabel');
+                            var id = lbl[0].innerText.split("Signal ");
+                            SetSignalID(id[1]);
+                            alert("Signal " + id[1] + " was imported.");
+                        },
+                        complete: function () {
+                            var startDate = $("#Start")[0].defaultValue;
+                            SetDatePicker();
+                            $("#Start").val(startDate);
+                        },
+                        statusCode: {
+                            404: function (content) { alert('cannot find resource'); },
+                            500: function (content) { alert(content.responseText); }
+                        },
+                        error: function (req, status, errorObj) {
+                            console.error(errorObj);
+                        }
+                    });
+                };
+            })(files[i]);
         }
-    }
+    };
 
     input.click();
 }
@@ -791,6 +793,84 @@ function CheckboxReadOnly() {
         // return false;
         for (var i = 0; i < pedoverlap.length; i++) {
             pedoverlap[i].checked = false;
+        }
+    }
+}
+
+// Function to open the popup
+function openPopup() {
+    document.getElementById("myModal").style.display = "block";
+}
+
+// Function to close the popup
+function closePopup() {
+    document.getElementById("myModal").style.display = "none";
+}
+
+// Function to handle the export confirmation
+function confirmExport() {
+    var selectedSignals = [];
+    var listBox = document.getElementById("signalListBox");
+    for (var i = 0; i < listBox.options.length; i++) {
+        if (listBox.options[i].selected) {
+            selectedSignals.push(listBox.options[i].value);
+        }
+    }
+
+    // Call the function with selectedSignals array
+    downloadSignalsSequentially(selectedSignals.slice()); // Pass a copy to avoid modifying the original array
+
+    // Close the popup
+    closePopup();
+}
+
+function downloadSignalsSequentially(signals) {
+    if (signals.length === 0) {
+        // All signals downloaded, exit function
+        return;
+    }
+
+    var signalId = signals.shift();
+    $.ajax({
+        url: urlpathExportSignal,
+        type: 'POST',
+        data: { signalId: signalId },
+        xhrFields: {
+            responseType: 'blob'
+        },
+        success: function (data) {
+            var a = document.createElement('a');
+            var url = window.URL.createObjectURL(data);
+            a.href = url;
+            a.download = signalId + '_AtspmConfig.xlsx';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            // Download next signal after this one completes
+            downloadSignalsSequentially(signals);
+        },
+        error: function (xhr, status, error) {
+            alert("Error exporting signal " + signalId + ": " + error);
+            // Proceed to download next signal even if there's an error
+            downloadSignalsSequentially(signals);
+        }
+    });
+}
+
+function filterSignals() {
+    // Declare variables
+    var input, filter, listBox, option, i;
+    input = document.getElementById('searchInput');
+    filter = input.value.toUpperCase();
+    listBox = document.getElementById("signalListBox");
+    options = listBox.getElementsByTagName('option');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < options.length; i++) {
+        option = options[i];
+        if (option.textContent.toUpperCase().indexOf(filter) > -1) {
+            option.style.display = "";
+        } else {
+            option.style.display = "none";
         }
     }
 }

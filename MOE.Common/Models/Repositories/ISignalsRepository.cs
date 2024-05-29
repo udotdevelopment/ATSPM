@@ -18,7 +18,7 @@ namespace MOE.Common.Models.Repositories
         //List<Pin> GetPinInfo();
         string GetSignalLocation(string signalID);
         void AddList(List<Signal> signals);
-        Signal CopySignalToNewVersion(Signal originalVersion);
+        Signal CopySignalToNewVersion(Signal originalVersion, bool isImport, string user = "");
         List<Signal> GetAllVersionsOfSignalBySignalID(string signalID);
         List<Signal> GetLatestVersionOfAllSignals();
         IQueryable<Signal> GetLatestVersionOfAllSignalsAsQueryable();
