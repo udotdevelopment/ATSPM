@@ -199,7 +199,7 @@ namespace MOE.Common.Business
             }
             else
             {
-                var minTime = Events.Min(x => x.Timestamp);
+                var minTime = events.Min(x => x.Timestamp);
                 if (minTime.Date != startDate.Date)
                 {
                     endDate = minTime;
@@ -230,7 +230,7 @@ namespace MOE.Common.Business
             }
             else
             {
-                var minTime = Events.Min(x => x.Timestamp);
+                var minTime = events.Min(x => x.Timestamp);
                 if (minTime.Date != startDate.Date)
                 {
                     endDate = minTime;
