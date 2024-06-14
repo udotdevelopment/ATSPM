@@ -945,6 +945,7 @@ namespace MOE.Common.Migrations
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(4));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(14));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(15));
+                        detectionType.MetricTypes.Add(context.MetricTypes.Find(31));
                         detectionType.MetricTypes.Add(context.MetricTypes.Find(17));
                         break;
                     case 2:

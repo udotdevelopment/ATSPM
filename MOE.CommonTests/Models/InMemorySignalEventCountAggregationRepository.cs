@@ -40,6 +40,11 @@ namespace MOE.Common.Models.Repositories
                                                             && r.BinStartTime >= startDate &&
                                                             r.BinStartTime <= endDate).ToList();
         }
+
+        public DateTime? GetLastAggregationDate()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     
