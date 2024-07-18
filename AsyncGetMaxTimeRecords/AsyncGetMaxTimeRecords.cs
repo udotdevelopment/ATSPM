@@ -35,7 +35,7 @@ namespace AsyncGetMaxTimeRecords
         
         // This is where the magic happens 
         //: void doStuff(String url, String data)
-        void DoStuff(MOE.Common.Models.Signal signal, XmlDocument xml) 
+        void DoStuff(MOE.Common.Models.Signal signal, XmlDocument xml)
         {
             SaveToDB(xml, signal.SignalID);
         }
@@ -176,27 +176,38 @@ namespace AsyncGetMaxTimeRecords
                 httpClient.Timeout = TimeSpan.FromSeconds(10);
                 var tasks = signalsDT.Select(async (signal) =>
                 {
-
+                    var url = "";
                     var mostRecentRecord = GetMostRecentRecordTime(signal.SignalID);
-                    string url;
-                    if (mostRecentRecord == null)
+                    switch (signal.ControllerTypeID)
                     {
-                        url = $"http://{signal.IPAddress}/v1/asclog/xml/full";
-                    }
-                    else
-                    {
-                        string since = GetMostRecentRecordTime(signal.SignalID).Value.ToString("MM-dd-yyyy HH:mm:ss.f");
-                        url = $"http://{signal.IPAddress}/v1/asclog/xml/full?since={since}";
+                        case 4 when mostRecentRecord == null:
+                            url = $"http://{signal.IPAddress}/v1/asclog/xml/full";
+                            break;
+                        case 4:
+                        {
+                            var since = GetMostRecentRecordTime(signal.SignalID)?.ToString("MM-dd-yyyy HH:mm:ss.f");
+                            url = $"http://{signal.IPAddress}/v1/asclog/xml/full?since={since}";
+                            break;
+                        }
+                        case 10 when mostRecentRecord == null:
+                            url = $"http://{signal.IPAddress}/maxtime-rampmeter/v1/rmclog/xml/full";
+                            break;
+                        case 10:
+                        {
+                            var since = GetMostRecentRecordTime(signal.SignalID)?.ToString("MM-dd-yyyy HH:mm:ss.f");
+                            url = $"http://{signal.IPAddress}/maxtime-rampmeter/v1/rmclog/xml/full?since={since}";
+                            break;
+                        }
                     }
 
                     await semaphore.WaitAsync();
                     try
                     {
                         var data = await httpClient.GetStringAsync(url);
-                        XmlDocument xml = new XmlDocument();
+                        var xml = new XmlDocument();
                         xml.LoadXml(data);
 
-                        XmlNodeList list = xml.SelectNodes("/EventResponses/EventResponse/Event");
+                        var list = xml.SelectNodes("/EventResponses/EventResponse/Event");
 
                         // put the result on the processing pipeline 
                         processing.QueueItemAsync(signal, xml);
@@ -237,9 +248,11 @@ namespace AsyncGetMaxTimeRecords
             List<MOE.Common.Models.Signal> signalsDT;
             var signals = MOE.Common.Models.Repositories.SignalsRepositoryFactory.Create();
 
+
             signalsDT = (from s in signals.GetLatestVersionOfAllSignalsAsQueryable()
-                where s.ControllerTypeID == 4
-                select s).ToList();
+                         where s.ControllerTypeID == 4 || s.ControllerTypeID == 10
+                         select s).ToList();
+
             await DownloadAsync(signalsDT);
         }
 
