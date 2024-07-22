@@ -498,6 +498,16 @@ namespace MOE.Common.Migrations
                     ActiveFTP = true,
                     UserName = "econolite",
                     Password = "ecpi2ecpi"
+                },
+                new ControllerType
+                {
+                    ControllerTypeID = 10,
+                    Description = "MaxView - Ramp Meter",
+                    SNMPPort = 161,
+                    FTPDirectory = "none",
+                    ActiveFTP = false,
+                    UserName = "none",
+                    Password = "none"
                 }
             );
 
