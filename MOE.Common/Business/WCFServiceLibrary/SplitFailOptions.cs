@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
 using MOE.Common.Business.SplitFail;
 using MOE.Common.Models;
+using MOE.Common.Models.Custom;
 using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
@@ -82,6 +83,44 @@ namespace MOE.Common.Business.WCFServiceLibrary
                 }
             }
             return returnString;
+        }
+
+        public List<SplitFailureSummary> CreateMetricWithoutGraph()
+        {
+            base.CreateMetric();
+            var sr = SignalsRepositoryFactory.Create();
+            var signal = sr.GetVersionOfSignalByDate(SignalID, StartDate);
+            List<SplitFailureSummary> splitFailureSummaries = new List<SplitFailureSummary>();
+            var metricApproaches = signal.GetApproachesForSignalThatSupportMetric(MetricTypeID);
+            if (metricApproaches.Count > 0)
+            {
+                List<SplitFailPhase> splitFailPhases = new List<SplitFailPhase>();
+                foreach (Approach approach in metricApproaches)
+                {
+                    var splitFailPhase = new SplitFailPhase();
+                    if (approach.PermissivePhaseNumber != null && approach.PermissivePhaseNumber > 0)
+                    {
+                        splitFailPhase = new SplitFailPhase(approach, this, true);
+                    }
+                    if (approach.ProtectedPhaseNumber > 0)
+                    {
+                        splitFailPhase = new SplitFailPhase(approach, this, false);
+                    }
+                    foreach (var plan in splitFailPhase.Plans)
+                    {
+                        splitFailureSummaries.Add(new SplitFailureSummary()
+                        {
+                            SignalId = signal.SignalID,
+                            Phase = approach.ProtectedPhaseNumber,
+                            Plan = plan.PlanNumber,
+                            Date = plan.StartTime.ToString("MM/dd/yyyy hh:mm tt"),
+                            SplitFail = plan.FailsInPlan,
+                            SplitFailPercent = plan.PercentFails
+                        });
+                    }
+                }
+            }
+            return splitFailureSummaries;
         }
 
         private void GetChart(SplitFailPhase splitFailPhase, List<string> returnString)

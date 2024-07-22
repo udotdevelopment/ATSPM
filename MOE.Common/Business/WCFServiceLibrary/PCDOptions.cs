@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Web.UI.DataVisualization.Charting;
+using MOE.Common.Models.Custom;
 using MOE.Common.Models.Repositories;
 
 namespace MOE.Common.Business.WCFServiceLibrary
@@ -98,6 +99,38 @@ namespace MOE.Common.Business.WCFServiceLibrary
             return ReturnList;
         }
 
+        public List<PCDSummary> CreateMetricWithoutGraph()
+        {
+            base.CreateMetric();
+            var signalRepository = SignalsRepositoryFactory.Create();
+            Signal = signalRepository.GetVersionOfSignalByDate(SignalID, StartDate);
+            MetricTypeID = 6;
+            var metricApproaches = Signal.GetApproachesForSignalThatSupportMetric(MetricTypeID);
+            List<PCDSummary> pcdSummaries = new List<PCDSummary>();
+            if (metricApproaches.Count > 0)
+            {
+                foreach (var approach in metricApproaches)
+                {
+                    var signalPhase = new SignalPhase(StartDate, EndDate, approach, ShowVolumes, SelectedBinSize,
+                        MetricTypeID, false);
+
+                    foreach (var plan in signalPhase.Plans)
+                    {
+                        pcdSummaries.Add(new PCDSummary()
+                        {
+                            SignalId = Signal.SignalID,                            
+                            Date = plan.StartTime.ToString("MM/dd/yyyy hh:mm tt"),
+                            Phase = approach.ProtectedPhaseNumber,
+                            Plan = plan.PlanNumber,
+                            ArrivalOnGreenPercent = Math.Round(plan.PercentArrivalOnGreen, 2),
+                            GreenTimePercent = Math.Round(plan.PercentGreenTime, 2),
+                            PlatoonRatio = plan.PlatoonRatio
+                        });
+                    }
+                }
+            }
+            return pcdSummaries;
+        }
 
         Chart GetNewChart()
             {

@@ -18,6 +18,8 @@ namespace MOE.Common.Business.SplitFail
         public Dictionary<string, string> Statistics { get; }
         public string PhaseNumberSort { get; set; }
 
+        public SplitFailPhase() { }
+
         public SplitFailPhase(Approach approach, SplitFailOptions options, bool getPermissivePhase)
         {
             Approach = approach;
