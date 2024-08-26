@@ -88,9 +88,9 @@ namespace AsyncGetMaxTimeRecords
                 catch (Exception ex)
                 {
                     Console.WriteLine("Error in SaveToDB " + ex.Message);
-                    errorRepository.QuickAdd("AsyncGetMaxTimeRecordsProcessing", "Main", "SaveToDB",
-                        MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium,
-                        "Error in SaveToDB");
+                    //errorRepository.QuickAdd("AsyncGetMaxTimeRecordsProcessing", "Main", "SaveToDB",
+                    //    MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium,
+                    //    "Error in SaveToDB");
                 }
             }
 
@@ -173,7 +173,7 @@ namespace AsyncGetMaxTimeRecords
             using (var semaphore = new SemaphoreSlim(MAX_DOWNLOADS))
             using (var httpClient = new HttpClient())
             {
-                httpClient.Timeout = TimeSpan.FromSeconds(10);
+                httpClient.Timeout = TimeSpan.FromSeconds(30);
                 var tasks = signalsDT.Select(async (signal) =>
                 {
                     var url = "";
@@ -216,9 +216,9 @@ namespace AsyncGetMaxTimeRecords
                     {
                         //: Console.WriteLine($"{url}.-1"); // output -1 records to indicate an error with the url 
                         Console.WriteLine($"{signal.SignalID},{signal.IPAddress},-1");
-                        errorRepository.QuickAdd("AsyncGetMaxTimeRecords", "Main", "DownloadAsync",
-                            MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium,
-                            $"Error in DownloadAsync {signal.SignalID},{signal.IPAddress},-1: {exception.Message}");
+                        //errorRepository.QuickAdd("AsyncGetMaxTimeRecords", "Main", "DownloadAsync",
+                        //    MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium,
+                        //    $"Error in DownloadAsync {signal.SignalID},{signal.IPAddress},-1: {exception.Message}");
                     }
                     finally
                     {
