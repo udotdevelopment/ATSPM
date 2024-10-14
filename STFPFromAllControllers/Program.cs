@@ -28,57 +28,108 @@ namespace STFPFromAllControllers
                 Convert.ToBoolean(ConfigurationManager.AppSettings["skipCurrentLog"]),
                 Convert.ToBoolean(ConfigurationManager.AppSettings["RenameDuplicateFiles"]),
                 Convert.ToInt32(ConfigurationManager.AppSettings["waitBetweenFileDownloadMilliseconds"]),
-                Convert.ToInt32(ConfigurationManager.AppSettings["MaximumNumberOfFilesTransferAtOneTime"])
+                Convert.ToInt32(ConfigurationManager.AppSettings["MaximumNumberOfFilesTransferAtOneTime"]),
+                    Convert.ToBoolean(ConfigurationManager.AppSettings["RequiresPPK"]),
+                    ConfigurationManager.AppSettings["PPKLocation"],
+                    Convert.ToInt32(ConfigurationManager.AppSettings["RegionalControllerType"]),
+                        ConfigurationManager.AppSettings["SshFingerprint"]
             );
             int maxThreads = Convert.ToInt32(ConfigurationManager.AppSettings["MaxThreads"]);
 
 
             MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
             ISignalsRepository signalsRepository = SignalsRepositoryFactory.Create(db);
-            var signals = signalsRepository.GetLatestVersionOfAllSignalsForSftp();
+            
             var options = new ParallelOptions { MaxDegreeOfParallelism = maxThreads };
-            Parallel.ForEach(signals.AsEnumerable(), options, signal =>
-            //foreach (var signal in signals)
+            if (signalFtpOptions.RequiresPpk)
             {
-                try
+                var signals = signalsRepository.GetLatestVersionOfAllSignalsForSftp(signalFtpOptions.RegionControllerType);
+                //Parallel.ForEach(signals.AsEnumerable(), options, signal =>
+                    foreach (var signal in signals)
                 {
-                    MOE.Common.Business.SignalFtp signalFtp =
-                        new MOE.Common.Business.SignalFtp(signal, signalFtpOptions);
-
-                    if (!Directory.Exists(signalFtpOptions.LocalDirectory + signal.SignalID))
+                    try
                     {
-                        Directory.CreateDirectory(signalFtpOptions.LocalDirectory + signal.SignalID);
+                        MOE.Common.Business.SignalFtp signalFtp =
+                            new MOE.Common.Business.SignalFtp(signal, signalFtpOptions);
+
+                        if (!Directory.Exists(signalFtpOptions.LocalDirectory + signal.SignalID))
+                        {
+                            Directory.CreateDirectory(signalFtpOptions.LocalDirectory + signal.SignalID);
+                        }
+
+                        //Get the records over FTP
+                        if (CheckIfIPAddressIsValid(signal))
+                        {
+                            try
+                            {
+                                signalFtp.GetCubicFilesAsyncPpk(signalFtpOptions.PpkLocation, signalFtpOptions.SshFingerprint);
+                            }
+                            catch (AggregateException ex)
+                            {
+                                Console.WriteLine("Error At Highest Level for signal " + ex.Message);
+                                errorRepository.QuickAdd("FTPFromAllControllers", "Main", "Main Loop",
+                                    MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium,
+                                    "Error At Highest Level for signal " + signal.SignalID);
+                            }
+                        }
+                    }
+                    catch (AggregateException ex)
+                    {
+                        Console.WriteLine("Error At Highest Level for signal " + ex.Message);
+                        errorRepository.QuickAdd("FTPFromAllControllers", "Main", "Main Loop",
+                            MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium,
+                            "Error At Highest Level for signal " + signal.SignalID);
+
                     }
 
-                    //Get the records over FTP
-                    if (CheckIfIPAddressIsValid(signal))
+                    //}
+                };
+            }
+            else
+            {
+                var signals = signalsRepository.GetLatestVersionOfAllSignalsForSftp();
+                Parallel.ForEach(signals.AsEnumerable(), options, signal =>
+                    //foreach (var signal in signals)
+                {
+                    try
                     {
-                        try
+                        MOE.Common.Business.SignalFtp signalFtp =
+                            new MOE.Common.Business.SignalFtp(signal, signalFtpOptions);
+
+                        if (!Directory.Exists(signalFtpOptions.LocalDirectory + signal.SignalID))
                         {
+                            Directory.CreateDirectory(signalFtpOptions.LocalDirectory + signal.SignalID);
+                        }
+
+                        //Get the records over FTP
+                        if (CheckIfIPAddressIsValid(signal))
+                        {
+                            try
+                            {
                             signalFtp.GetCubicFilesAsync(ConfigurationManager.AppSettings["SFTP_CREDENTIALS_FILE_PATH"]);
-                        }
-                        catch (AggregateException ex)
-                        {
-                            Console.WriteLine("Error At Highest Level for signal " + ex.Message);
-                            errorRepository.QuickAdd("FTPFromAllControllers", "Main", "Main Loop",
-                                MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium,
-                                "Error At Highest Level for signal " + signal.SignalID);
+                            }
+                            catch (AggregateException ex)
+                            {
+                                Console.WriteLine("Error At Highest Level for signal " + ex.Message);
+                                errorRepository.QuickAdd("FTPFromAllControllers", "Main", "Main Loop",
+                                    MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium,
+                                    "Error At Highest Level for signal " + signal.SignalID);
+                            }
                         }
                     }
-                }
-                catch (AggregateException ex)
-                {
-                    Console.WriteLine("Error At Highest Level for signal " + ex.Message);
-                    errorRepository.QuickAdd("FTPFromAllControllers", "Main", "Main Loop",
-                        MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium,
-                        "Error At Highest Level for signal " + signal.SignalID);
+                    catch (AggregateException ex)
+                    {
+                        Console.WriteLine("Error At Highest Level for signal " + ex.Message);
+                        errorRepository.QuickAdd("FTPFromAllControllers", "Main", "Main Loop",
+                            MOE.Common.Models.ApplicationEvent.SeverityLevels.Medium,
+                            "Error At Highest Level for signal " + signal.SignalID);
 
-                }
+                    }
 
-                //}
-            });
-        }
-
+                    //}
+                });
+            }
+            
         public static bool CheckIfIPAddressIsValid(MOE.Common.Models.Signal signal)
         {
             bool hasValidIP = false;

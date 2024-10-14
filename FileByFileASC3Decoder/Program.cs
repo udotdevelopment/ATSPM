@@ -15,6 +15,9 @@ using System.Data.SqlClient;
 using System.ComponentModel;
 using System.Timers;
 using MOE.Common;
+using System;
+using System.IO;
+using System.IO.Compression;
 
 namespace FileByFileASC3Decoder
 {
@@ -30,10 +33,18 @@ namespace FileByFileASC3Decoder
             bool deleteFile = Convert.ToBoolean(appSettings["DeleteFile"]);
             bool writeToCsv = Convert.ToBoolean(appSettings["WriteToCsv"]);
 
-            foreach (string s in Directory.GetDirectories(cwd))
+            foreach (string s in Directory.GetFiles(cwd, "*"))
             {
-                dirList.Add(s);
+                if (Path.GetExtension(s) == ".gz")
+                {
+                    DecompressFile(s, cwd);
+                }
+                else
+                {
+                    dirList.Add(s);
+                }
             }
+            
             foreach (string dir in dirList)
             {
                 if (writeToConsole)
@@ -87,7 +98,7 @@ namespace FileByFileASC3Decoder
                                     }
                                     catch
                                     {
-                                        
+
                                     }
                                 }
 
@@ -118,6 +129,15 @@ namespace FileByFileASC3Decoder
 
                 }
             }
+        }
+
+        private static void DecompressFile(string CompressedFileName, string cwd)
+        {
+            var DecompressedFileName =  cwd + Path.GetFileNameWithoutExtension(CompressedFileName);
+            FileStream compressedFileStream = File.Open(CompressedFileName, FileMode.Open);
+            FileStream outputFileStream = File.Create(DecompressedFileName);
+            var decompressor = new GZipStream(compressedFileStream, CompressionMode.Decompress);
+            decompressor.CopyTo(outputFileStream);
         }
     }
 }

@@ -22,6 +22,8 @@ using MOE.Common.Models.Repositories;
 using MOE.Common.Properties;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
+using WinSCP;
+using Session = Renci.SshNet.Session;
 
 namespace MOE.Common.Business
 {
@@ -1006,6 +1008,103 @@ namespace MOE.Common.Business
             
         }
 
+        public void GetCubicFilesAsyncPpk(string filePath, string fingerprint)
+        {
+            var errorRepository = ApplicationEventRepositoryFactory.Create();
+            var PPKLocation = filePath;
+
+            // run the sftp fetch operation async
+            Thread sftpFetch = new Thread(delegate ()
+            {
+                // to-do: replace with common data access to access signal IP in batch from ATSPM DB
+                string host = Signal.IPAddress;
+                //string username = Signal.ControllerType.UserName;
+                //string password = Signal.ControllerType.Password;
+                string remoteDirectory = Signal.ControllerType.FTPDirectory;
+                string localDirectory = SignalFtpOptions.LocalDirectory + Signal.SignalID + @"\";
+
+                try
+                {
+                    WinSCP.SessionOptions sessionOptions = new WinSCP.SessionOptions
+                    {
+                        SshHostKeyFingerprint = fingerprint,
+                        Protocol = Protocol.Sftp,
+                        UserName = "tester",
+                        SshPrivateKeyPath = PPKLocation,
+                        HostName = Signal.IPAddress
+                    };
+                    sessionOptions.AddRawSettings("TryAgent", "0");
+                    sessionOptions.AddRawSettings("AuthKI", "0");
+                    sessionOptions.AddRawSettings("AuthGSSAPI", "0");
+                    sessionOptions.AddRawSettings("ProxyPort", "1");
+
+                    using (WinSCP.Session session = new WinSCP.Session())
+                    {
+                        session.Open(sessionOptions);
+
+                        TransferOptions transferOptions = new TransferOptions();
+                        transferOptions.TransferMode = TransferMode.Binary;
+
+                        TransferOperationResult transferResult;
+                        transferResult =
+                            session.GetFiles(remoteDirectory, localDirectory, false, transferOptions);
+
+                        // Throw on any error
+                        transferResult.Check();
+
+                        // Print results
+                        foreach (TransferEventArgs transfer in transferResult.Transfers)
+                        {
+                            Console.WriteLine("Download of {0} succeeded", transfer.FileName);
+                        }
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+
+                //using (SftpClient sftp = new SftpClient(host, username, password))
+                //{
+                //    try
+                //    {
+                //        Console.WriteLine($"Trying to connect to {Signal.SignalID}");
+                //        sftp.Connect();
+                //        Console.WriteLine($"Connected to {Signal.SignalID}");
+
+                //        var files = sftp.ListDirectory(remoteDirectory);
+                //        var cubicFiles = files.Where(x => x.FullName.Contains(".dat") || x.FullName.Contains(".datZ")).ToList();
+
+                //        //download current files, remove files from remote directory
+                //        TransferCubicFiles(cubicFiles, localDirectory, sftp);
+                //        sftp.Disconnect();
+
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        //to-do: add some custom error handling as fit 
+                //        Console.WriteLine(ex.Message);
+                //        errorRepository.QuickAdd("sFTPFromControllers", "SignalFtp", "GetCubicFilesAsync",
+                //            ApplicationEvent.SeverityLevels.Medium,
+                //            Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
+
+                //    }
+                //}
+            });
+            try
+            {
+                sftpFetch.Start();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+        }
+
         private void TransferCubicFiles(List<SftpFile> receivedFiles, string directory, SftpClient client)
         {
             var errorRepository = ApplicationEventRepositoryFactory.Create();
@@ -1024,7 +1123,6 @@ namespace MOE.Common.Business
                         Console.WriteLine("Downloading {0}", fileName);
                         //copy file and get to local diretory
                         client.DownloadFile(remoteFileName, fileStream);
-
 
                         //remove file in remote directory
                         Console.WriteLine("deleting {0} in sFTP instance", remoteFileName);
@@ -1067,7 +1165,11 @@ namespace MOE.Common.Business
             bool skipCurrentLog,
             bool renameDuplicateFiles,
             int waitBetweenFileDownloadInMilliseconds,
-            int maximumNumberOfFilesTransferAtOneTime)
+            int maximumNumberOfFilesTransferAtOneTime,
+            bool requiresPpk,
+            string ppkLocation,
+            int regionControllerType,
+            string sshFingerprint)
         {
             SnmpTimeout = snmpTimeout;
             SnmpRetry = snmpRetry;
@@ -1080,6 +1182,10 @@ namespace MOE.Common.Business
             RenameDuplicateFiles = renameDuplicateFiles;
             WaitBetweenFileDownloadInMilliseconds = waitBetweenFileDownloadInMilliseconds;
             MaximumNumberOfFilesTransferAtOneTime = maximumNumberOfFilesTransferAtOneTime;
+            RequiresPpk = requiresPpk;
+            PpkLocation = ppkLocation;
+            RegionControllerType = regionControllerType;
+            SshFingerprint = sshFingerprint;
         }
 
         public int SnmpTimeout { get; set; }
@@ -1093,6 +1199,10 @@ namespace MOE.Common.Business
         public int WaitBetweenFileDownloadInMilliseconds { get; set; }
         public string LocalDirectory { get; set; }
         public int MaximumNumberOfFilesTransferAtOneTime { get; set; }
+        public bool RequiresPpk { get; set; }
+        public string PpkLocation { get; set; }
+        public int RegionControllerType { get; set; }
+        public string SshFingerprint { get; set; }
 
     }
 
