@@ -29,23 +29,24 @@ namespace STFPFromAllControllers
                 Convert.ToBoolean(ConfigurationManager.AppSettings["RenameDuplicateFiles"]),
                 Convert.ToInt32(ConfigurationManager.AppSettings["waitBetweenFileDownloadMilliseconds"]),
                 Convert.ToInt32(ConfigurationManager.AppSettings["MaximumNumberOfFilesTransferAtOneTime"]),
-                    Convert.ToBoolean(ConfigurationManager.AppSettings["RequiresPPK"]),
-                    ConfigurationManager.AppSettings["PPKLocation"],
-                    Convert.ToInt32(ConfigurationManager.AppSettings["RegionalControllerType"]),
-                        ConfigurationManager.AppSettings["SshFingerprint"]
+                Convert.ToBoolean(ConfigurationManager.AppSettings["RequiresPPK"]),
+                ConfigurationManager.AppSettings["PPKLocation"],
+                Convert.ToInt32(ConfigurationManager.AppSettings["RegionalControllerType"]),
+                ConfigurationManager.AppSettings["SshFingerprint"]
             );
             int maxThreads = Convert.ToInt32(ConfigurationManager.AppSettings["MaxThreads"]);
 
 
             MOE.Common.Models.SPM db = new MOE.Common.Models.SPM();
             ISignalsRepository signalsRepository = SignalsRepositoryFactory.Create(db);
-            
+
             var options = new ParallelOptions { MaxDegreeOfParallelism = maxThreads };
             if (signalFtpOptions.RequiresPpk)
             {
-                var signals = signalsRepository.GetLatestVersionOfAllSignalsForSftp(signalFtpOptions.RegionControllerType);
+                var signals =
+                    signalsRepository.GetLatestVersionOfAllSignalsForSftp(signalFtpOptions.RegionControllerType);
                 //Parallel.ForEach(signals.AsEnumerable(), options, signal =>
-                    foreach (var signal in signals)
+                foreach (var signal in signals)
                 {
                     try
                     {
@@ -62,7 +63,8 @@ namespace STFPFromAllControllers
                         {
                             try
                             {
-                                signalFtp.GetCubicFilesAsyncPpk(signalFtpOptions.PpkLocation, signalFtpOptions.SshFingerprint);
+                                signalFtp.GetCubicFilesAsyncPpk(signalFtpOptions.PpkLocation,
+                                    signalFtpOptions.SshFingerprint);
                             }
                             catch (AggregateException ex)
                             {
@@ -83,7 +85,9 @@ namespace STFPFromAllControllers
                     }
 
                     //}
-                };
+                }
+
+                ;
             }
             else
             {
@@ -106,7 +110,8 @@ namespace STFPFromAllControllers
                         {
                             try
                             {
-                            signalFtp.GetCubicFilesAsync(ConfigurationManager.AppSettings["SFTP_CREDENTIALS_FILE_PATH"]);
+                                signalFtp.GetCubicFilesAsync(
+                                    ConfigurationManager.AppSettings["SFTP_CREDENTIALS_FILE_PATH"]);
                             }
                             catch (AggregateException ex)
                             {
@@ -129,7 +134,8 @@ namespace STFPFromAllControllers
                     //}
                 });
             }
-            
+        }
+
         public static bool CheckIfIPAddressIsValid(MOE.Common.Models.Signal signal)
         {
             bool hasValidIP = false;
