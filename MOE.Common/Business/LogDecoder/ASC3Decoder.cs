@@ -137,6 +137,174 @@ namespace MOE.Common.Business.LogDecoder
             }
         }
 
+        private static string DecompressFile(string CompressedFileName, string cwd)
+        {
+            var DecompressedFileName = cwd + Path.GetFileNameWithoutExtension(CompressedFileName);
+            FileStream compressedFileStream = File.Open(CompressedFileName, FileMode.Open);
+            FileStream outputFileStream = File.Create(DecompressedFileName);
+            var decompressor = new GZipStream(compressedFileStream, CompressionMode.Decompress);
+            decompressor.CopyTo(outputFileStream);
+            //open the csv file
+            outputFileStream.Close();
+            compressedFileStream.Close();
+            //open the csv file as a memory stream
+            StreamReader fileStream = new StreamReader(DecompressedFileName);
+
+            return DecompressedFileName;
+        }
+
+        public static void DecodeAsc3GzipFile(string fileName, string s, string signalId,
+            BlockingCollection<Data.MOE.Controller_Event_LogRow> rowBag, DateTime earliestAcceptableDate)
+        {
+            var encoding = Encoding.ASCII;
+
+
+
+            // load the file into memory stream
+
+            var fileStream = DecompressFile(fileName, s);
+            using (StreamReader csvReader = new StreamReader(fileStream))
+            {
+                var elTable = new Data.MOE.Controller_Event_LogDataTable();
+                string[] headers = csvReader.ReadLine().Split(',');
+                while (!csvReader.EndOfStream)
+                {
+                    string[] rows = csvReader.ReadLine().Split(',');
+
+                    var eventCode = Convert.ToInt32(rows[0]);
+                    var eventParam = Convert.ToInt32(rows[1]);
+                    var eventTime = Convert.ToDateTime(rows[2]);
+
+                    if (eventTime <= DateTime.Now && eventTime > earliestAcceptableDate)
+                    {
+                        try
+                        {
+                            var eventrow = elTable.NewController_Event_LogRow();
+                            eventrow.Timestamp = eventTime;
+                            eventrow.SignalID = signalId;
+                            eventrow.EventCode = eventCode;
+                            eventrow.EventParam = eventParam;
+                            rowBag.Add(eventrow);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+                    }
+                }
+            }
+
+            //var memoryStream = new MemoryStream();
+            //fileStream.CopyTo(memoryStream);
+            //fileStream.Close();
+
+            //// set the memory position to beggining
+            //memoryStream.Position = 0;
+
+            //// first let's check to see if the data is compressed
+            //if (IsCompressed(memoryStream))
+            //{
+            //    // ok it is compressed, let's decompress it before we procced
+            //    memoryStream = DecompessedStream(memoryStream);
+            //}
+
+            //using (var br = new BinaryReader(memoryStream, encoding))
+            //{
+            //    
+            //    //var custUnique =
+            //    //    new UniqueConstraint(new[]
+            //    //    {
+            //    //        elTable.Columns["SignalID"],
+            //    //        elTable.Columns["Timestamp"],
+            //    //        elTable.Columns["EventCode"],
+            //    //        elTable.Columns["EventParam"]
+            //    //    });
+
+            //    //elTable.Constraints.Add(custUnique);
+
+            //    if (br.BaseStream.Position + 21 < br.BaseStream.Length)
+            //    {
+            //        //Find the start Date
+            //        var dateString = "";
+            //        for (var i = 1; i < 21; i++)
+            //        {
+            //            var c = br.ReadChar();
+            //            dateString += c;
+            //        }
+
+            //        var startTime = new DateTime();
+            //        if (DateTime.TryParse(dateString, out startTime) && br.BaseStream.Position < br.BaseStream.Length)
+            //        {
+            //            //find  line feed characters, that should take us to the end of the header.
+            //            // First line break is after Version
+            //            // Second LF is after FileName
+            //            // Third LF is after Interseciton number, which isn't used as far as I can tell
+            //            // Fourth LF is after IP address
+            //            // Fifth is after MAC Address
+            //            // Sixth is after "Controller data log beginning:," and then the date
+            //            // Seven is after "Phases in use:," and then the list of phases, seperated by commas
+
+            //            var i = 0;
+
+            //            while (i < 7 && br.BaseStream.Position < br.BaseStream.Length)
+            //            {
+            //                var c = br.ReadChar();
+            //                if (c == '\n')
+            //                    i++;
+            //            }
+
+            //            // after that, we start reading until we reach the end 
+            //            while (br.BaseStream.Position + sizeof(byte) * 4 <= br.BaseStream.Length)
+            //            {
+            //                var eventTime = new DateTime();
+            //                var eventCode = new int();
+            //                var eventParam = new int();
+
+            //                for (var eventPart = 1; eventPart < 4; eventPart++)
+            //                {
+            //                    //getting the EventCode
+            //                    if (eventPart == 1)
+            //                        eventCode = Convert.ToInt32(br.ReadByte());
+
+            //                    if (eventPart == 2)
+            //                        eventParam = Convert.ToInt32(br.ReadByte());
+
+            //                    //getting the time offset
+            //                    if (eventPart == 3)
+            //                    {
+            //                        var rawoffset = new byte[2];
+            //                        rawoffset = br.ReadBytes(2);
+            //                        Array.Reverse(rawoffset);
+            //                        int offset = BitConverter.ToInt16(rawoffset, 0);
+            //                        var tenths = Convert.ToDouble(offset) / 10;
+            //                        eventTime = startTime.AddSeconds(tenths);
+            //                    }
+            //                }
+
+            //                if (eventTime <= DateTime.Now && eventTime > earliestAcceptableDate)
+            //                {
+            //                    try
+            //                    {
+            //                        var eventrow = elTable.NewController_Event_LogRow();
+            //                        eventrow.Timestamp = eventTime;
+            //                        eventrow.SignalID = signalId;
+            //                        eventrow.EventCode = eventCode;
+            //                        eventrow.EventParam = eventParam;
+            //                        rowBag.Add(eventrow);
+            //                    }
+            //                    catch (Exception ex)
+            //                    {
+            //                        Console.WriteLine(ex.Message);
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        //this is what we do when the datestring doesn't parse
+            //    }
+            //    //this is what we do when the datestring doesn't parse
+            //}
+        }
+
         /// <summary>
         /// Determines if filestream passed in contains a hex signature of one of the known compression algorithms
         /// </summary>
