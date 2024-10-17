@@ -1066,32 +1066,6 @@ namespace MOE.Common.Business
                     throw;
                 }
 
-                //using (SftpClient sftp = new SftpClient(host, username, password))
-                //{
-                //    try
-                //    {
-                //        Console.WriteLine($"Trying to connect to {Signal.SignalID}");
-                //        sftp.Connect();
-                //        Console.WriteLine($"Connected to {Signal.SignalID}");
-
-                //        var files = sftp.ListDirectory(remoteDirectory);
-                //        var cubicFiles = files.Where(x => x.FullName.Contains(".dat") || x.FullName.Contains(".datZ")).ToList();
-
-                //        //download current files, remove files from remote directory
-                //        TransferCubicFiles(cubicFiles, localDirectory, sftp);
-                //        sftp.Disconnect();
-
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        //to-do: add some custom error handling as fit 
-                //        Console.WriteLine(ex.Message);
-                //        errorRepository.QuickAdd("sFTPFromControllers", "SignalFtp", "GetCubicFilesAsync",
-                //            ApplicationEvent.SeverityLevels.Medium,
-                //            Signal.SignalID + " @ " + Signal.IPAddress + " - " + ex.Message);
-
-                //    }
-                //}
             });
             try
             {
