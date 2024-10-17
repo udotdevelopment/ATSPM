@@ -36,7 +36,11 @@ namespace FTPfromAllControllers
                     Convert.ToBoolean(ConfigurationManager.AppSettings["skipCurrentLog"]),
                     Convert.ToBoolean(ConfigurationManager.AppSettings["RenameDuplicateFiles"]),
                     Convert.ToInt32(ConfigurationManager.AppSettings["waitBetweenFileDownloadMilliseconds"]),
-                    Convert.ToInt32(ConfigurationManager.AppSettings["MaximumNumberOfFilesTransferAtOneTime"])
+                    Convert.ToInt32(ConfigurationManager.AppSettings["MaximumNumberOfFilesTransferAtOneTime"]),
+                    Convert.ToBoolean(ConfigurationManager.AppSettings["RequiresPPK"]),
+                    ConfigurationManager.AppSettings["PPKLocation"],
+                    Convert.ToInt32(ConfigurationManager.AppSettings["RegionalControllerType"]),
+                    ConfigurationManager.AppSettings["SshFingerprint"]
                 );
 
                 SPM db = new MOE.Common.Models.SPM();

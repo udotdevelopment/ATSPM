@@ -501,6 +501,21 @@ namespace MOE.Common.Models.Repositories
             return activeSignals;
         }
 
+        public List<Signal> GetLatestVersionOfAllSignalsForSftp(int controllerType)
+        {
+            List<int> controllerTypes = new List<int> { controllerType };
+            var activeSignals = _db.Signals.Where(r => r.VersionActionId != 3)
+                .Include(s => s.ControllerType)
+                //.Where(s => !controllerTypes.Contains(s.ControllerTypeID))
+                .ToList();
+            activeSignals = activeSignals
+                .GroupBy(r => r.SignalID)
+                .Select(g => g.OrderByDescending(r => r.Start).FirstOrDefault()).ToList();
+            activeSignals = activeSignals.Where(s => controllerTypes.Contains(s.ControllerTypeID)).ToList();
+
+            return activeSignals;
+        }
+
         public int CheckVersionWithFirstDate(string signalId)
         {
             var signals = GetAllVersionsOfSignalBySignalID(signalId);
