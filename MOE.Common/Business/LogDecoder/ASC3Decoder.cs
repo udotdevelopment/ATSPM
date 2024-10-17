@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using MOE.Common.Properties;
 
 namespace MOE.Common.Business.LogDecoder
@@ -135,6 +136,67 @@ namespace MOE.Common.Business.LogDecoder
                 }
                 //this is what we do when the datestring doesn't parse
             }
+        }
+
+        private static string DecompressFile(string CompressedFileName, string cwd)
+        {
+            var DecompressedFileName = cwd + Path.GetFileNameWithoutExtension(CompressedFileName);
+            FileStream compressedFileStream = File.Open(CompressedFileName, FileMode.Open);
+            FileStream outputFileStream = File.Create(DecompressedFileName);
+            var decompressor = new GZipStream(compressedFileStream, CompressionMode.Decompress);
+            decompressor.CopyTo(outputFileStream);
+            //open the csv file
+            outputFileStream.Close();
+            compressedFileStream.Close();
+            //open the csv file as a memory stream
+            return DecompressedFileName;
+        }
+
+        public static void DecodeAsc3GzipFile(string fileName, string cwd, string signalId,
+            BlockingCollection<Data.MOE.Controller_Event_LogRow> rowBag, DateTime earliestAcceptableDate)
+        {
+            var encoding = Encoding.ASCII;
+
+
+
+            // load the file into memory stream
+
+            var fileStream = DecompressFile(fileName, cwd);
+            using (StreamReader csvReader = new StreamReader(fileStream))
+            {
+                var elTable = new Data.MOE.Controller_Event_LogDataTable();
+                string[] headers = csvReader.ReadLine().Split(',');
+                while (!csvReader.EndOfStream)
+                {
+                    string[] rows = csvReader.ReadLine().Split(',');
+
+                    var eventCode = Convert.ToInt32(rows[0]);
+                    var eventParam = Convert.ToInt32(rows[1]);
+                    var eventTime = Convert.ToDateTime(rows[2]);
+
+                    if (eventTime <= DateTime.Now && eventTime > earliestAcceptableDate)
+                    {
+                        try
+                        {
+                            var eventrow = elTable.NewController_Event_LogRow();
+                            eventrow.Timestamp = eventTime;
+                            eventrow.SignalID = signalId;
+                            eventrow.EventCode = eventCode;
+                            eventrow.EventParam = eventParam;
+                            rowBag.Add(eventrow);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+                    }
+                }
+                csvReader.Close();
+            }
+            
+            //File.Delete(fileName);
+            File.Delete(fileStream);
+
         }
 
         /// <summary>
