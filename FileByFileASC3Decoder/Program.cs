@@ -34,17 +34,6 @@ namespace FileByFileASC3Decoder
             bool writeToCsv = Convert.ToBoolean(appSettings["WriteToCsv"]);
             bool isGzipAgency = Convert.ToBoolean(appSettings["IsGzipAgency"]);
 
-            //foreach (string s in Directory.GetFiles(cwd, "*"))
-            //{
-            //    if (Path.GetExtension(s) == ".gz")
-            //    {
-            //        DecompressFile(s, cwd);
-            //    }
-            //    else
-            //    {
-            //        dirList.Add(s);
-            //    }
-            //}
 
             foreach (string s in Directory.GetDirectories(cwd))
             {
