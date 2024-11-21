@@ -55,7 +55,7 @@ namespace MOE.Common.Models.Repositories
 
         int GetRecordCountByParameterAndEvent(string signalId, DateTime startTime, DateTime endTime,
             List<int> eventParameters, List<int> events);
-
+        List<Controller_Event_Log> GetSignalEventsByEventCodesParams(string signalID, DateTime startDate, DateTime endDate, List<int> eventCodes, List<int> eventParams);
         List<Controller_Event_Log> GetRecordsByParameterAndEvent(string signalId, DateTime startTime, DateTime endTime,
             List<int> eventParameters, List<int> eventCodes);
 
@@ -75,5 +75,6 @@ namespace MOE.Common.Models.Repositories
 
         Controller_Event_Log GetFirstEventAfterDateByEventCodesAndParameter(string signalId, List<int> eventCodes,
             int eventParam, DateTime start, int secondsToSearch);
+        Controller_Event_Log GetTopEventAfterDate(string signalID, DateTime twoDaysAgo);
     }
 }
