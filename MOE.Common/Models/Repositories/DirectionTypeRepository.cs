@@ -27,6 +27,11 @@ namespace MOE.Common.Models.Repositories
             return db.DirectionTypes.FirstOrDefault(d => d.Description == directionDescription);
         }
 
+        public DirectionType GetByAbbreviation(string abbreviation)
+        {
+            return db.DirectionTypes.FirstOrDefault(d => d.Abbreviation == abbreviation);
+        }
+
         public List<DirectionType> GetAllDirections()
         {
             var results = (from r in db.DirectionTypes

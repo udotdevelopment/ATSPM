@@ -64,5 +64,10 @@ namespace MOE.CommonTests.Models
         {
             throw new NotImplementedException();
         }
+
+        public DateTime? GetLastAggregationDate()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

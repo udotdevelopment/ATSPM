@@ -59,6 +59,11 @@ namespace MOE.CommonTests.Models
             throw new System.NotImplementedException();
         }
 
+        public DirectionType GetByAbbreviation(string abbreviation)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public DirectionType GetByDescription()
         {
             throw new System.NotImplementedException();

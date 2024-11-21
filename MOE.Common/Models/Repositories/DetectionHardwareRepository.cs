@@ -36,6 +36,11 @@ namespace MOE.Common.Models.Repositories
             return DetectionHardware.FirstOrDefault();
         }
 
+        public DetectionHardware GetDetectionHardwareByName(string name)
+        {
+            return db.DetectionHardwares.FirstOrDefault(x => x.Name == name);
+        }
+
         public void Update(DetectionHardware DetectionHardware)
         {
             var g = (from r in db.DetectionHardwares

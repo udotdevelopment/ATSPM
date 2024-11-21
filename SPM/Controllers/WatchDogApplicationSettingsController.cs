@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MOE.Common.Models;
+using MOE.Common.Models.Repositories;
+using MOE.Common.Models.ViewModel;
 
 namespace SPM.Controllers
 {
@@ -59,6 +61,36 @@ namespace SPM.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult FillExclusions()
+        {
+            var model = new WatchdogExclusionsViewModel();
+            return PartialView("~/Views/WatchdogExclusions/WatchdogExclusionsList.cshtml", model);
+        }
+
+        public PartialViewResult RemoveExclusion(int exclusion)
+        {
+            var repo = SPMWatchdogExclusionsRepositoryFactory.Create();
+            repo.Delete(exclusion);
+
+            var model = new WatchdogExclusionsViewModel();
+            return PartialView("~/Views/WatchdogExclusions/WatchdogExclusionsList.cshtml", model);
+        }
+
+        public ActionResult AddExclusion(string signalID, int? phaseID, AlertType type)
+        {
+            var newExclusion = new SPMWatchdogExclusions
+            {
+                SignalID = signalID,
+                PhaseID = phaseID,
+                TypeOfAlert = type,
+            };
+            var repo = SPMWatchdogExclusionsRepositoryFactory.Create();
+            repo.Add(newExclusion);
+
+            var model = new WatchdogExclusionsViewModel();
+            return PartialView("~/Views/WatchdogExclusions/WatchdogExclusionsList.cshtml", model);
         }
     }
 }

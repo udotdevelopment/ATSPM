@@ -1,0 +1,120 @@
+﻿@using MOE.Common.Models
+
+@model MOE.Common.Models.ViewModel.WatchdogExclusionsViewModel
+
+
+
+
+<label class="control-label">Exclude Signal from Reports</label>
+
+<div id="AddSignalExclusionsBox" class="panel-min-width">
+
+    <select id="AddSignalReportSelectBox" class="col-md-3">
+
+        <option>-Select-</option>
+
+        <option Value="0">All Watchdog Reports</option>
+
+        <option Value="1">Minimum Records</option>
+
+        <option Value="2">Force Off</option>
+
+        <option Value="3">Max Out</option>
+
+        <option Value="4">Low Advanced Detection Count</option>
+
+        <option Value="5">High Pedestrian Activation</option>
+
+        <option Value="6">FTP</option>
+
+    </select>
+
+    <input type="text" id="AddSignalIDBox" class="col-md-3" placeholder="Signal ID (required)" />
+
+    <input type="number" id="AddSignalPhaseBox" class="col-md-3" placeholder="Phase Number" />
+
+    <button id="AddExclusionButton" class="btn btn-primary" type="button" onclick="addExclusionOnClick()">Exclude Signal</button>
+
+</div>
+
+<table class="table table-striped" id="ExclusionsTable">
+
+    <tr>
+
+        <th class="text-center">Signal ID</th>
+
+        <th class="text-center">Phase ID</th>
+
+        <th class="text-center">Excluded From</th>
+
+        <th class="text-center">Remove?</th>
+
+    </tr>
+
+
+
+
+    @foreach (var item in Model.Exclusions)
+
+    {
+
+        <tr>
+
+            <td class="text-center">
+
+                @Html.DisplayFor(modelItem => item.SignalID)
+
+            </td>
+
+            @if (item.PhaseID != null)
+
+            {
+
+                <td class="text-center">@Html.DisplayFor(modelItem => item.PhaseID)</td>
+
+            }
+
+            else
+
+            {
+
+                <td class="text-center">N/A</td>
+
+            }
+
+            <td class="text-center">@Html.DisplayFor(modelItem => item.AlertDescription)</td>
+
+            <td>
+
+                @Ajax.ActionLink("Remove",
+
+                         "RemoveExclusion",
+
+                         "WatchDogApplicationSettings",
+
+                         new { exclusion = item.ID },
+
+                         new AjaxOptions
+
+                         {
+
+                             UpdateTargetId = "WatchdogExclusionsListContainer",
+
+                             InsertionMode = InsertionMode.Replace,
+
+                             HttpMethod = "GET",
+
+                         }
+
+                         )
+
+            </td>
+
+        </tr>
+
+    }
+
+
+
+
+</table>

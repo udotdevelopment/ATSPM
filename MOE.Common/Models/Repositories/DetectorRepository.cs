@@ -113,7 +113,7 @@ namespace MOE.Common.Models.Repositories
                 detector.DetectionTypes = new List<DetectionType>();
                 detector.DetectionTypes = _db.DetectionTypes
                     .Where(dt => detector.DetectionTypeIDs.Contains(dt.DetectionTypeID)).ToList();
-                ;
+                
                 try
                 {
                     _db.Detectors.Add(detector);

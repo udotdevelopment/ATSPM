@@ -44,6 +44,11 @@ namespace MOE.CommonTests.Models
             return movementType.FirstOrDefault();
         }
 
+        public MovementType GetMovementTypeByDesc(string desc)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Remove(MovementType movementType)
         {
             throw new System.NotImplementedException();

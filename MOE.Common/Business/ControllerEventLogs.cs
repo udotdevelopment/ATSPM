@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MOE.Common.Business.Parquet;
 using MOE.Common.Models;
 
 namespace MOE.Common.Business
@@ -8,6 +9,8 @@ namespace MOE.Common.Business
     public class ControllerEventLogs
     {
         private readonly SPM _db = new SPM();
+        private const string LocalArchiveDirectory = "LocalArchiveDirectory";
+        private static readonly string _localPath = ParquetArchive.GetSetting(LocalArchiveDirectory);
 
         public ControllerEventLogs(string signalId, DateTime startDate, DateTime endDate)
         {
@@ -38,6 +41,13 @@ namespace MOE.Common.Business
                          select s;
 
             Events = events.ToList();
+
+            if (!Events.Any())
+            {
+                Events = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
+                Events = Events.Where(x => eventCodes.Contains(x.EventCode)).ToList();
+            }
+
             Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
         }
 
@@ -56,6 +66,13 @@ namespace MOE.Common.Business
                          select s;
 
             Events = events.ToList();
+
+            if (!Events.Any())
+            {
+                Events = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
+                Events = Events.Where(x => eventCodes.Contains(x.EventCode)).ToList();
+            }
+
             Events.Sort((x, y) => DateTime.Compare(x.Timestamp, y.Timestamp));
         }
 
@@ -76,6 +93,13 @@ namespace MOE.Common.Business
                          select s;
 
             Events = events.ToList();
+
+            if (!Events.Any())
+            {
+                Events = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
+                Events = Events.Where(x => x.EventParam == eventParam && eventCodes.Contains(x.EventCode)).ToList();
+            }
+
             Events = Events.OrderBy(e => e.Timestamp).ThenBy(e => e.EventCode).ToList();
         }
 
@@ -121,6 +145,12 @@ namespace MOE.Common.Business
                                 Codes.Contains(s.EventCode)
                           select s).ToList();
 
+            if (!events.Any())
+            {
+                events = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
+                events = events.Where(x => Codes.Contains(x.EventCode)).ToList();
+            }
+
             Events.AddRange(events);
             OrderEventsBytimestamp();
         }
@@ -133,6 +163,15 @@ namespace MOE.Common.Business
                                 s.Timestamp <= endDate &&
                                 (s.EventCode == 105 || s.EventCode == 111)
                           select s).ToList();
+
+            if (!events.Any())
+            {
+                //Check the archive if no data in DB
+                var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalId, startDate, endDate);
+                archivedData = archivedData.Where(c => c.EventCode == 105 || c.EventCode == 111).ToList();
+                events = archivedData;
+            }
+
             foreach (var v in events)
             {
                 v.EventCode = 99;
@@ -197,7 +236,15 @@ namespace MOE.Common.Business
                                 s.Timestamp >= startDate &&
                                 s.Timestamp <= endDate &&
                                 pedEventCodes.Contains(s.EventCode)
-                          select s.EventParam).Distinct();
+                          select s.EventParam).Distinct().ToList();
+
+            if (!events.Any())
+            {
+                //Check the archive if no data in DB
+                var archivedData = ParquetArchive.GetDataFromArchive(_localPath, signalID, startDate, endDate);
+                events = archivedData.Where(c => pedEventCodes.Contains(c.EventCode)).Select(x => x.EventParam).Distinct().ToList();
+            }
+
             return events.ToList();
         }
 
@@ -246,6 +293,6 @@ namespace MOE.Common.Business
             ).FirstOrDefault();
 
             return eventRecord;
-        }  
+        }
     }
 }
